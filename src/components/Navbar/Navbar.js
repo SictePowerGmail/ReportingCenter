@@ -19,7 +19,6 @@ const Navbar = () => {
     <Container>
         <Wrapper>
             <IconContext.Provider value={{ style: {fontSize: "2em"}}}>
-
             
             <LogoContainer>
                 <p>
