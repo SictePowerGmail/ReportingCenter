@@ -96,7 +96,7 @@ const Navbar = () => {
                     <MenuItemLink to='/ReporteCorporativo'>
                         <div>
                             <FaGlasses />
-                            Reporte
+                            Reportes
                         </div>
                     </MenuItemLink>
                     <SubMenu>
