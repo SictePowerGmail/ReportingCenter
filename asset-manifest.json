@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/ReportingCenter/static/css/main.98a9da65.css",
+    "main.js": "/ReportingCenter/static/js/main.7e46f6de.js",
+    "index.html": "/ReportingCenter/index.html",
+    "main.98a9da65.css.map": "/ReportingCenter/static/css/main.98a9da65.css.map",
+    "main.7e46f6de.js.map": "/ReportingCenter/static/js/main.7e46f6de.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.98a9da65.css",
+    "static/js/main.7e46f6de.js"
+  ]
+}
