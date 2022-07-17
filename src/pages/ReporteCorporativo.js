@@ -2,7 +2,7 @@ import axios from 'axios';
 import "bootstrap/dist/css/bootstrap.min.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
-import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
+import { Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 import { Component } from 'react';
 
 const url = "https://sicte.herokuapp.com/api/tasks";
@@ -13,6 +13,7 @@ class ReporteCorporativo extends Component {
     state = {
         data: [],
         modalInsertar: false,
+        modalEliminar: false,
         form: {
             TipoTrabajo: '',
             OT: '',
@@ -44,11 +45,18 @@ class ReporteCorporativo extends Component {
     }
 
     peticionPut=()=>{
-        axios.put(url+this.state.form._id, this.state.form).then(response=>{
+        axios.put(url+"/"+this.state.form.id, this.state.form).then(response=>{
           this.modalInsertar();
           this.peticionGet();
         })
-      }
+    }
+
+    peticionDelete=()=>{
+        axios.delete(url+"/"+this.state.form.id).then(response=>{
+            this.setState({modalEliminar: false});
+            this.peticionGet();
+        })
+    }
 
     modalInsertar = () => {
         this.setState({ modalInsertar: !this.state.modalInsertar });
@@ -58,6 +66,7 @@ class ReporteCorporativo extends Component {
         this.setState({
             tipoModal: 'actualizar',
             form: {
+                id: task._id,
                 TipoTrabajo: task.TipoTrabajo,
                 OT: task.OT,
                 CM: task.CM,
@@ -120,7 +129,7 @@ class ReporteCorporativo extends Component {
                                     <td>
                                     <button className="btn btn-primary" onClick={()=>{this.seleccionarTask(task); this.modalInsertar()}}><FontAwesomeIcon icon={faEdit}/></button>
                                         {"   "}
-                                        <button className="btn btn-danger" ><FontAwesomeIcon icon={faTrashAlt} /></button>
+                                    <button className="btn btn-danger" onClick={()=>{this.seleccionarTask(task); this.setState({modalEliminar: true})}}><FontAwesomeIcon icon={faTrashAlt}/></button>
                                     </td>
                                 </tr>
                             )
@@ -170,7 +179,7 @@ class ReporteCorporativo extends Component {
                     </ModalBody>
 
                     <ModalFooter>
-                        {this.state.tipoModal == 'insertar' ?
+                        {this.state.tipoModal === 'insertar' ?
                             <button className="btn btn-success" onClick={() => this.peticionPost()}>
                                 Insertar
                             </button> : <button className="btn btn-primary" onClick={() => this.peticionPut()}>
@@ -178,6 +187,16 @@ class ReporteCorporativo extends Component {
                             </button>
                         }
                         <button className="btn btn-danger" onClick={() => this.modalInsertar()}>Cancelar</button>
+                    </ModalFooter>
+                </Modal>
+
+                <Modal isOpen={this.state.modalEliminar}>
+                    <ModalBody>
+                        Estás seguro que desar eliminar el registro
+                    </ModalBody>
+                    <ModalFooter>
+                        <button className="btn btn-danger" onClick={()=>this.peticionDelete()}>Sí</button>
+                        <button className="btn btn-secundary" onClick={()=>this.setState({modalEliminar: false})}>No</button>
                     </ModalFooter>
                 </Modal>
             </div>

@@ -18,11 +18,12 @@ function App() {
       <Navbar />
       <Routes>
         <Route path='/' exact element={<Inicio />} />
-        <Route path='/Inicio' element={<Inicio />} />
-        <Route path='/Planeacion' element={<Planeacion />} />
-        <Route path='/Corporativo' element={<Corporativo />} />
-        <Route path='/Mantenimiento' element={<Mantenimiento />} />
-        <Route path='/ReporteCorporativo' element={<ReporteCorporativo />} />
+        <Route path='/ReportingCenter' exact element={<Inicio />} />
+        <Route path='/Inicio' exact element={<Inicio />} />
+        <Route path='/Planeacion' exact element={<Planeacion />} />
+        <Route path='/Corporativo' exact element={<Corporativo />} />
+        <Route path='/Mantenimiento' exact element={<Mantenimiento />} />
+        <Route path='/ReporteCorporativo' exact element={<ReporteCorporativo />} />
       </Routes>
     </Router>
   );
