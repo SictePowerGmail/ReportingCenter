@@ -158,6 +158,9 @@ class ReporteCorporativo extends Component {
 
                             <label className="DiaAgenda">DiaAgenda</label>
                             <input className="form-control" type="text" name="DiaAgenda" id="DiaAgenda" onChange={this.handleChange} value={form ? form.DiaAgenda : ''} />
+                            <span className="input-group-addon">
+                                <span className="glyphicon glyphicon-calendar"></span>
+                            </span>
                             <br />
 
                             <label className="Trabajo">Trabajo</label>
