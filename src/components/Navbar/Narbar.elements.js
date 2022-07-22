@@ -217,4 +217,7 @@ export const MenuItemLink = styled(Link)`
         }
     }
     `;
-    
+    export const PowerBi = styled.iframe`
+    height: calc(100vh - 70px);
+    width: 100%;
+    `;
