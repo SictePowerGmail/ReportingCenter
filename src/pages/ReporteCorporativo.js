@@ -40,7 +40,21 @@ class ReporteCorporativo extends Component {
             this.modalInsertar();
             this.peticionGet();
         }).catch(error => {
-            console.log(error.message);
+            if (error.response) {
+                var MensajeDeError = error.response.data.errors
+                var ErrorMensaje = MensajeDeError.map(function(MensajeDeError){
+                    return MensajeDeError.msg
+                })
+                console.log(ErrorMensaje);
+                alert(ErrorMensaje);
+                console.log(error.response.status);
+                console.log(error.response.headers);
+            } else if (error.request) {
+                console.log(error.request);
+            } else {
+                console.log('Error', error.message);
+            }
+            console.log(error);
         })
     }
 
@@ -48,6 +62,22 @@ class ReporteCorporativo extends Component {
         axios.put(url+"/"+this.state.form.id, this.state.form).then(response=>{
           this.modalInsertar();
           this.peticionGet();
+        }).catch(error => {
+            if (error.response) {
+                var MensajeDeError = error.response.data.errors
+                var ErrorMensaje = MensajeDeError.map(function(MensajeDeError){
+                    return MensajeDeError.msg
+                })
+                console.log(ErrorMensaje);
+                alert(ErrorMensaje);
+                console.log(error.response.status);
+                console.log(error.response.headers);
+            } else if (error.request) {
+                console.log(error.request);
+            } else {
+                console.log('Error', error.message);
+            }
+            console.log(error);
         })
     }
 
@@ -137,6 +167,8 @@ class ReporteCorporativo extends Component {
                     </tbody>
                 </table>
 
+                
+
                 <Modal isOpen={this.state.modalInsertar}>
                     <ModalHeader style={{ display: 'block' }}>
                         <span style={{ float: 'right' }}></span>
@@ -145,7 +177,7 @@ class ReporteCorporativo extends Component {
                         <div className="form-group">
 
                             <label className="TipoTrabajo">Tipo de trabajo</label>
-                            <input className="form-control" type="text" name="TipoTrabajo" id="TipoTrabajo" onChange={this.handleChange} value={form ? form.TipoTrabajo : ''} />
+                            <input className="form-control" type="text" name="TipoTrabajo" id="TipoTrabajo" onChange={this.handleChange} value={form ? form.TipoTrabajo : ''}/>
                             <br />
 
                             <label className="OT">OT</label>
@@ -179,6 +211,8 @@ class ReporteCorporativo extends Component {
                             <input className="form-control" type="text" name="Cedula" id="Cedula" onChange={this.handleChange} value={form ? form.Cedula : ''} />
                             <br />
                         </div>
+
+                    
                     </ModalBody>
 
                     <ModalFooter>
@@ -195,7 +229,7 @@ class ReporteCorporativo extends Component {
 
                 <Modal isOpen={this.state.modalEliminar}>
                     <ModalBody>
-                        Estás seguro que desar eliminar el registro
+                        Seguro que desea eliminar este registro
                     </ModalBody>
                     <ModalFooter>
                         <button className="btn btn-danger" onClick={()=>this.peticionDelete()}>Sí</button>
