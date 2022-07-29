@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/ReportingCenter/static/css/main.cd3c848c.css",
-    "main.js": "/ReportingCenter/static/js/main.1a5848af.js",
+    "main.js": "/ReportingCenter/static/js/main.1c0f8066.js",
     "index.html": "/ReportingCenter/index.html",
     "main.cd3c848c.css.map": "/ReportingCenter/static/css/main.cd3c848c.css.map",
-    "main.1a5848af.js.map": "/ReportingCenter/static/js/main.1a5848af.js.map"
+    "main.1c0f8066.js.map": "/ReportingCenter/static/js/main.1c0f8066.js.map"
   },
   "entrypoints": [
     "static/css/main.cd3c848c.css",
-    "static/js/main.1a5848af.js"
+    "static/js/main.1c0f8066.js"
   ]
 }
