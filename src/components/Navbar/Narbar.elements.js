@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 export const Container = styled.div`
     width: 100%;
-    height: 70px;
+    height: 50px;
     background-color: #23394d; ;
     `;
 
