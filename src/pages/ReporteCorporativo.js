@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 import { Component } from 'react';
+import swal from 'sweetalert';
 
 const url = "https://sicte.herokuapp.com/api/tasks";
 
@@ -45,8 +46,8 @@ class ReporteCorporativo extends Component {
                 var ErrorMensaje = MensajeDeError.map(function(MensajeDeError){
                     return MensajeDeError.msg
                 })
+                swal(ErrorMensaje[0],"", "error");
                 console.log(ErrorMensaje);
-                alert(ErrorMensaje);
                 console.log(error.response.status);
                 console.log(error.response.headers);
             } else if (error.request) {
@@ -68,8 +69,8 @@ class ReporteCorporativo extends Component {
                 var ErrorMensaje = MensajeDeError.map(function(MensajeDeError){
                     return MensajeDeError.msg
                 })
+                swal(ErrorMensaje[0],"", "error");
                 console.log(ErrorMensaje);
-                alert(ErrorMensaje);
                 console.log(error.response.status);
                 console.log(error.response.headers);
             } else if (error.request) {
@@ -204,7 +205,14 @@ class ReporteCorporativo extends Component {
                             <br />
 
                             <label className="NombreResponsable">NombreResponsable</label>
-                            <input className="form-control" type="text" name="NombreResponsable" id="NombreResponsable" onChange={this.handleChange} value={form ? form.NombreResponsable : ''} />
+                            <div className="input-group">
+                            <input className="form-control" type="text" placeholder="Buscar" name="NombreResponsable" id="NombreResponsable" onChange={this.handleChange} value={form ? form.NombreResponsable : ''} />
+                            <div className="input-group-append">
+                                <button className="btn btn-outline-secondary" type="button">
+                                    Buscar
+                                </button>
+                            </div>
+                            </div>
                             <br />
 
                             <label className="Cedula">Cedula</label>
