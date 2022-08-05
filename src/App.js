@@ -5,11 +5,13 @@ import {
   Route,
   Routes
 } from "react-router-dom";
-import Login from "./components/Login/Login";
+//import Login from "./components/Login/Login";
 import Corporativo from "./pages/Corporativo";
 import Planeacion from "./pages/Planeacion";
 import Mantenimiento from "./pages/Mantenimiento";
 import ReporteCorporativo from "./pages/ReporteCorporativo";
+import Inicio from './pages/Inicio';
+import Login from './pages/Login';
 
 
 function App() {
