@@ -1,56 +1,73 @@
-import React from 'react'
-import axios from 'axios';
-import "bootstrap/dist/css/bootstrap.min.css";
-import { Component } from 'react';
-import { useState } from 'react';
-import swal from 'sweetalert';
+import { useState } from "react";
+import axios from "axios";
 
 const url = "https://sicte.herokuapp.com/api/login";
 
+function Login() {
 
+    const [datos, setDatos] = useState({
+        email: "",
+        password: ""
+    });
 
-class Inicio extends Component {
-
-    state = {
-        tokenSession: [],
-        form: {
-            email: '',
-            password: ''
-        }
+    const handleInputChange = (e) => {
+        let { name, value } = e.target;
+        let newDatos = { ...datos, [name]: value };
+        setDatos(newDatos);
     }
 
-    render() {
-        const { form } = this.state;
-        return (
-            <div>
-                <section>
-                    <div className="container mt-5 pt-5">
-                        <div className="row">
-                            <div className="col-12 col-sm-7 col-md-6 m-auto">
-                                <div className="card border-0 shadow">
-                                    <div className="card-body">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" className="bi bi-person-circle my-3 mx-auto" viewBox="0 0 16 16">
-                                            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
-                                            <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
-                                        </svg>
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (!e.target.checkValidity()) {
+            console.log("no enviar");
+        } else {
+            let res = await axios.post(url, datos);
+            console.log(res.data);
+        }
+    };
 
-                                        <form action="">
-                                            <input type="text" name="email" id="email" className="form-control my-4 py-2" placeholder="Username" onChange={this.handleChange} value={form ? form.email : ''} />
-                                            <input type="text" name="password" id="password" className="form-control my-4 py-2" placeholder="Password" onChange={this.handleChange} value={form ? form.password : ''} />
-                                            <div className="text-center mt-3">
-                                                <button className="btn btn-primary">Login</button>
-                                            </div>
-                                        </form>
+    return (
+        <section>
+            <div className="container mt-5 pt-5">
+                <div className="row justify-content-sm-center h-100">
+                    <div className="col-xxl-4 col-xl-5 col-lg-5 col-md-7 col-sm-9">
+                        <div className="card shadow-lg">
+                            <div className="card-body p-5">
+                                <h1 className="fs-4 card-title fw-bold mb-4">Login</h1>
+                                <form onSubmit={handleSubmit} className="needs-validation" noValidate={true} autoComplete="off">
+                                    <div className="mb-3">
+                                        <label className="mb-2 text-muted" htmlFor="email">Email</label>
+                                        <input id="email" type="text" onChange={handleInputChange} value={datos.email} className="form-control" name="email" required autoFocus />
+                                        <div className="invalid-feedback">
+                                            email inválido
+                                        </div>
                                     </div>
-                                </div>
+                                    <div className="mb-3">
+                                        <div className="mb-2 w-100">
+                                            <label className="text-muted" htmlFor="password">Contraseña</label>
+                                        </div>
+                                        <input id="password" type="password" onChange={handleInputChange} value={datos.password} className="form-control" name="password" required />
+                                        <div className="invalid-feedback">
+                                            Contraseña es requirida
+                                        </div>
+                                    </div>
+                                    <div className="d-flex align-items-center">
+                                        <div className="form-check">
+                                            <input type="checkbox" name="remember" id="remember" className="form-check-input" />
+                                            <label htmlFor="remember" className="form-check-label">Recordarme</label>
+                                        </div>
+                                        <button type="submit" className="btn btn-primary ms-auto">
+                                            <i className="bi bi-box-arrow-in-right"></i> Ingresar
+                                        </button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
-                </section>
-
+                </div>
             </div>
-        )
-    }
+        </section>
+    );
 }
 
-export default Inicio
+export default Login;
