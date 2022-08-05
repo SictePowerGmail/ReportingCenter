@@ -35,10 +35,10 @@ const Navbar = () => {
                 </MobileIcon>
             <Menu open={showMobileMenu}>
                 <MenuItem>
-                    <MenuItemLink to='/Inicio'>
+                    <MenuItemLink to='/'>
                         <div>
                             <FaHome />
-                            Inicio
+                            Login
                         </div>
                     </MenuItemLink>
                 </MenuItem>

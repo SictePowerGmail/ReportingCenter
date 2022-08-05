@@ -5,7 +5,7 @@ import {
   Route,
   Routes
 } from "react-router-dom";
-import Inicio from "./pages/Inicio";
+import Login from "./components/Login/Login";
 import Corporativo from "./pages/Corporativo";
 import Planeacion from "./pages/Planeacion";
 import Mantenimiento from "./pages/Mantenimiento";
@@ -17,9 +17,8 @@ function App() {
     <Router>
       <Navbar />
       <Routes>
-        <Route path='/' exact element={<Inicio />} />
-        <Route path='/ReportingCenter' exact element={<Inicio />} />
-        <Route path='/Inicio' exact element={<Inicio />} />
+        <Route path='/' exact element={<Login />} />
+        <Route path='/ReportingCenter' exact element={<Login />} />
         <Route path='/Planeacion' exact element={<Planeacion />} />
         <Route path='/Corporativo' exact element={<Corporativo />} />
         <Route path='/Mantenimiento' exact element={<Mantenimiento />} />
