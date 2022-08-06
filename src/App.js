@@ -12,6 +12,7 @@ import Mantenimiento from "./pages/Mantenimiento";
 import ReporteCorporativo from "./pages/ReporteCorporativo";
 import Inicio from './pages/Inicio';
 import Login from './pages/Login';
+import ReportePlaneacion from './pages/ReportePlaneacion';
 
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
         <Route path='/Corporativo' exact element={<Corporativo />} />
         <Route path='/Mantenimiento' exact element={<Mantenimiento />} />
         <Route path='/ReporteCorporativo' exact element={<ReporteCorporativo />} />
+        <Route path='/ReportePlaneacion' exact element={<ReportePlaneacion/>} />
       </Routes>
     </Router>
   );

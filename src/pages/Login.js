@@ -39,7 +39,7 @@ function Login() {
                                         <label className="mb-2 text-muted" htmlFor="email">Email</label>
                                         <input id="email" type="text" onChange={handleInputChange} value={datos.email} className="form-control" name="email" required autoFocus />
                                         <div className="invalid-feedback">
-                                            email inválido
+                                            Email inválido
                                         </div>
                                     </div>
                                     <div className="mb-3">

@@ -108,6 +108,22 @@ const Navbar = () => {
                         </SubMenuItem>
                     </SubMenu>
                 </MenuItem>
+                <MenuItem>
+                    <MenuItemLink to='/ReportePlaneacion'>
+                        <div>
+                            <FaGlasses />
+                            Reportes pla
+                        </div>
+                    </MenuItemLink>
+                    <SubMenu>
+                        <SubMenuItem>
+                            <SubMenuItemLink>Puntuación</SubMenuItemLink>
+                        </SubMenuItem>
+                        <SubMenuItem>
+                            <SubMenuItemLink>Reporte</SubMenuItemLink>
+                        </SubMenuItem>
+                    </SubMenu>
+                </MenuItem>
             </Menu>
             </IconContext.Provider>
         </Wrapper>
