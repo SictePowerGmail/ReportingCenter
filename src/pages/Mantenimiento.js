@@ -1,18 +1,13 @@
-import React from 'react'
+import React, { Component } from 'react'
+import { PowerBi } from '../components/Navbar/Narbar.elements'
 
-export const Mantenimiento = () => {
-  return (
-    <div>
-      <iframe
+export default class Planeacion extends Component {
+  render() {
+    return (
+    <PowerBi
         title="MantenimientoSeguimientoMoviles - Mantenimiento puntuación"
-        width="100%"
-        height="650"
-        src="https://app.powerbi.com/view?r=eyJrIjoiOTY4YTNkODktZTU4NS00NjUxLTg3ZWEtMzRiYTdmMWEzM2ZjIiwidCI6ImUwYmZlOTBkLTIwZTAtNDEwYi1iNmYxLTQyOWIwNDNkMzYwOCJ9"
-        frameBorder="0"
-        allowFullScreen={true}>
-      </iframe>
-    </div>
-  )
+        src="https://app.powerbi.com/view?r=eyJrIjoiOTY4YTNkODktZTU4NS00NjUxLTg3ZWEtMzRiYTdmMWEzM2ZjIiwidCI6ImUwYmZlOTBkLTIwZTAtNDEwYi1iNmYxLTQyOWIwNDNkMzYwOCJ9">
+    </PowerBi>
+    )
+  }
 }
-
-export default Mantenimiento

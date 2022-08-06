@@ -144,40 +144,58 @@ export const MenuItemLink = styled(Link)`
             }
         }
         `;
-    export const PowerBiContainer = styled.div`
-        background-color: #23394d;
-    `;
-    export const SubMenu = styled.ul`
-    height: 100%;
-    display: block;
-    justify-content: space-between;
-    list-style: none;
-    &:hover {
-        display:block;
-    }
-    `;
-    export const SubMenuItem = styled.li`
-    height: 100%;
-    
+
+    export const PowerBi = styled.iframe`
+    height: calc(100vh - 50px);
+    width: 100%;
     `;
 
-    export const SubMenuItemLink = styled.a`
-    text-decoration:none;
-    display: flex;
-    justify-content: left;
-    align-items: center;
-    height: 100%;
-    
+    export const DropDownContent = styled.div`
+    display: none;
+    position: absolute;
+    min-width: 131px;
+    z-index: 1;
+`;
+
+export const DropDownLi = styled.li`
+
+    display: inline-block;
+    &:hover ${DropDownContent} {
+        display: block;
+    }
+`;
+
+export const StyledSubMenu = styled(Link)`
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
     color: #64b2ff;
+    padding: 13px;
+    min-width: 131px;
+    font.size: 1.2rem;
     font-family: sans-serif;
-    font-size: 1rem;
-    font-weight: 300;
-    cursor: pointer;
-    transition: 0.5s all ease;
+    &:hover {
+        color: #fff;
+        background-color: #e0792a;
+        transition: 0.5s all ease;
+
+        div{
+            svg{
+                fill: #23394d;
+            }
+        }
+    }
+`;
+
+export const SubMenu = styled(Link)`
+    text-decoration: none;
+    display: block;
+    text-align: left;
     background-color: #23394d;
-    display:none;
-    
-    
+    padding: 10px;
+    color: #64b2ff;
+    font.size: 1.2rem;
+    font-family: sans-serif;
 
     &:hover {
         color: #fff;
@@ -190,34 +208,4 @@ export const MenuItemLink = styled(Link)`
             }
         }
     }
-
-    div{
-        width: 100%;
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        svg{
-            display: none;
-            fill: #e0792a;
-            margin-right: 0.5rem;
-        }
-    }
-
-    @media screen and (max-width: 960px){
-        width: 100%;
-
-        div{
-            width: 30%;
-            justify-content: left;
-
-            svg{
-                display: flex;
-            }
-        }
-    }
-    `;
-    export const PowerBi = styled.iframe`
-    height: calc(100vh - 50px);
-    width: 100%;
-    `;
+`;

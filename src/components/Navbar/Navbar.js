@@ -1,12 +1,20 @@
-import React, {useState} from 'react'
-import { SubMenuItemLink, SubMenu, Container, LogoContainer, Menu, MenuItem, MenuItemLink, MobileIcon, Wrapper, SubMenuItem } from './Narbar.elements';
+import React, { useState } from 'react'
+import {
+    Container,
+    LogoContainer,
+    Menu, MenuItem,
+    MenuItemLink,
+    MobileIcon,
+    Wrapper,
+    DropDownContent,
+    DropDownLi,
+    StyledSubMenu,
+    SubMenu
+} from './Narbar.elements';
 import {
     FaBars,
     FaTimes,
-    FaHome,
-    FaUserAlt,
-    FaBriefcase,
-    FaGlasses
+    FaHome
 } from "react-icons/fa";
 import { IconContext } from 'react-icons';
 
@@ -15,120 +23,82 @@ import { IconContext } from 'react-icons';
 const Navbar = () => {
     const [showMobileMenu, setShowMobileMenu] = useState(false);
 
-  return (
-    <Container>
-        <Wrapper>
-            <IconContext.Provider value={{ style: {fontSize: "2em"}}}>
-            
-            <LogoContainer>
-                <p>
-                    Sicte 
-                </p>
-                <p>
-                    Centro de reportes
-                </p>
-            </LogoContainer>
-                <MobileIcon onClick={() => setShowMobileMenu(!showMobileMenu)}>
-                    {
-                        showMobileMenu ? <FaTimes /> : <FaBars />
-                    }
-                </MobileIcon>
-            <Menu open={showMobileMenu}>
-                <MenuItem>
-                    <MenuItemLink to='/'>
-                        <div>
-                            <FaHome />
-                            Login
-                        </div>
-                    </MenuItemLink>
-                </MenuItem>
-                <MenuItem>
-                    <MenuItemLink to='/Planeacion'>
-                        <div>
-                            <FaUserAlt />
-                            Planeación
-                        </div>
-                    </MenuItemLink>
-                    <SubMenu>
-                        <SubMenuItem>
-                            <SubMenuItemLink>Puntuación</SubMenuItemLink>
-                        </SubMenuItem>
-                        <SubMenuItem>
-                            <SubMenuItemLink>Reporte</SubMenuItemLink>
-                        </SubMenuItem>
+    return (
+        <Container>
+            <Wrapper>
+                <IconContext.Provider value={{ style: { fontSize: "2em" } }}>
 
-                    </SubMenu>
+                    <LogoContainer>
+                        <p>
+                            Sicte
+                        </p>
+                        <p>
+                            Centro de reportes
+                        </p>
+                    </LogoContainer>
+                    <MobileIcon onClick={() => setShowMobileMenu(!showMobileMenu)}>
+                        {
+                            showMobileMenu ? <FaTimes /> : <FaBars />
+                        }
+                    </MobileIcon>
+                    <Menu open={showMobileMenu}>
+                        
+                        <DropDownLi>
+                            <StyledSubMenu to='/DropDown'>
+                                Planeación
+                            </StyledSubMenu>
+                            <DropDownContent>
+                                {" "}
+                                <SubMenu to='/ReportePlaneacion'>
+                                    Reporte
+                                </SubMenu>
+                                <SubMenu to='/Planeacion'>
+                                    Puntuación
+                                </SubMenu>
+                            </DropDownContent>
+                        </DropDownLi>
 
-                </MenuItem>
-                <MenuItem>
-                    <MenuItemLink to='/Corporativo'>
-                        <div>
-                            <FaBriefcase />
-                            Corporativo
-                        </div>
-                    </MenuItemLink>
-                    <SubMenu>
-                        <SubMenuItem>
-                            <SubMenuItemLink>Puntuación</SubMenuItemLink>
-                        </SubMenuItem>
-                        <SubMenuItem>
-                            <SubMenuItemLink>Reporte</SubMenuItemLink>
-                        </SubMenuItem>
-                    </SubMenu>
-                </MenuItem>
-                <MenuItem>
-                    <MenuItemLink to='/Mantenimiento'>
-                        <div>
-                            <FaGlasses />
-                            Mantenimiento
-                        </div>
-                    </MenuItemLink>
-                    <SubMenu>
-                        <SubMenuItem>
-                            <SubMenuItemLink>Puntuación</SubMenuItemLink>
-                        </SubMenuItem>
-                        <SubMenuItem>
-                            <SubMenuItemLink>Reporte</SubMenuItemLink>
-                        </SubMenuItem>
-                    </SubMenu>
-                </MenuItem>
-                <MenuItem>
-                    <MenuItemLink to='/ReporteCorporativo'>
-                        <div>
-                            <FaGlasses />
-                            Reportes
-                        </div>
-                    </MenuItemLink>
-                    <SubMenu>
-                        <SubMenuItem>
-                            <SubMenuItemLink>Puntuación</SubMenuItemLink>
-                        </SubMenuItem>
-                        <SubMenuItem>
-                            <SubMenuItemLink>Reporte</SubMenuItemLink>
-                        </SubMenuItem>
-                    </SubMenu>
-                </MenuItem>
-                <MenuItem>
-                    <MenuItemLink to='/ReportePlaneacion'>
-                        <div>
-                            <FaGlasses />
-                            Reportes pla
-                        </div>
-                    </MenuItemLink>
-                    <SubMenu>
-                        <SubMenuItem>
-                            <SubMenuItemLink>Puntuación</SubMenuItemLink>
-                        </SubMenuItem>
-                        <SubMenuItem>
-                            <SubMenuItemLink>Reporte</SubMenuItemLink>
-                        </SubMenuItem>
-                    </SubMenu>
-                </MenuItem>
-            </Menu>
-            </IconContext.Provider>
-        </Wrapper>
-    </Container>
-  );
+                        <DropDownLi>
+                            <StyledSubMenu to='/DropDown'>
+                                Corporativo
+                            </StyledSubMenu>
+                            <DropDownContent>
+                                {" "}
+                                <SubMenu to='/ReporteCorporativo'>
+                                    Reporte
+                                </SubMenu>
+                                <SubMenu to='/Corporativo'>
+                                    Puntuación
+                                </SubMenu>
+                            </DropDownContent>
+                        </DropDownLi>
+
+                        <DropDownLi>
+                            <StyledSubMenu to='/DropDown'>
+                                Mantenimiento
+                            </StyledSubMenu>
+                            <DropDownContent>
+                                {" "}
+                                <SubMenu to='/Mantenimiento'>
+                                    Puntuación
+                                </SubMenu>
+                            </DropDownContent>
+                        </DropDownLi>
+
+                        <MenuItem>
+                            <MenuItemLink to='/'>
+                                <div>
+                                    <FaHome />
+                                    Login
+                                </div>
+                            </MenuItemLink>
+                        </MenuItem>
+
+                    </Menu>
+                </IconContext.Provider>
+            </Wrapper>
+        </Container>
+    );
 }
 
 export default Navbar
