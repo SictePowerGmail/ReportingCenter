@@ -5,14 +5,15 @@ import {
   Route,
   Routes
 } from "react-router-dom";
-//import Login from "./components/Login/Login";
-import Corporativo from "./pages/Corporativo";
-import Planeacion from "./pages/Planeacion";
 import Mantenimiento from "./pages/Mantenimiento";
 import ReporteCorporativo from "./pages/ReporteCorporativo";
-import Inicio from './pages/Inicio';
 import Login from './pages/Login';
 import ReportePlaneacion from './pages/ReportePlaneacion';
+import CorporativoPuntuacion from './pages/CorporativoPuntuacion';
+import CorporativoFinanciero from './pages/CorporativoFinanciero';
+import PlaneacionTecnico from './pages/PlaneacionTecnico';
+import PlaneacionFinanciero from './pages/PlaneacionFinanciero';
+import PlaneacionPuntuacion from './pages/PlaneacionPuntuacion';
 
 
 function App() {
@@ -22,10 +23,13 @@ function App() {
       <Routes>
         <Route path='/' exact element={<Login />} />
         <Route path='/ReportingCenter' exact element={<Login />} />
-        <Route path='/Planeacion' exact element={<Planeacion />} />
-        <Route path='/Corporativo' exact element={<Corporativo />} />
         <Route path='/Mantenimiento' exact element={<Mantenimiento />} />
+        <Route path='/CorporativoFinanciero' exact element={<CorporativoFinanciero/>} />
+        <Route path='/CorporativoPuntuacion' exact element={<CorporativoPuntuacion />} />
         <Route path='/ReporteCorporativo' exact element={<ReporteCorporativo />} />
+        <Route path='/PlaneacionTecnico' exact element={<PlaneacionTecnico />} />
+        <Route path='/PlaneacionFinanciero' exact element={<PlaneacionFinanciero />} />
+        <Route path='/PlaneacionPuntuacion' exact element={<PlaneacionPuntuacion />} />
         <Route path='/ReportePlaneacion' exact element={<ReportePlaneacion/>} />
       </Routes>
     </Router>

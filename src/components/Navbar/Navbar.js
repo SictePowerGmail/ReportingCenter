@@ -49,11 +49,17 @@ const Navbar = () => {
                             </StyledSubMenu>
                             <DropDownContent>
                                 {" "}
+                                <SubMenu to='/PlaneacionTecnico'>
+                                    Técnico
+                                </SubMenu>
+                                <SubMenu to='/PlaneacionFinanciero'>
+                                    Financiero
+                                </SubMenu>
+                                <SubMenu to='/PlaneacionPuntuacion'>
+                                    Puntuación
+                                </SubMenu>
                                 <SubMenu to='/ReportePlaneacion'>
                                     Reporte
-                                </SubMenu>
-                                <SubMenu to='/Planeacion'>
-                                    Puntuación
                                 </SubMenu>
                             </DropDownContent>
                         </DropDownLi>
@@ -64,11 +70,15 @@ const Navbar = () => {
                             </StyledSubMenu>
                             <DropDownContent>
                                 {" "}
+
+                                <SubMenu to='/CorporativoFinanciero'>
+                                    Financiero
+                                </SubMenu>
+                                <SubMenu to='/CorporativoPuntuacion'>
+                                    Puntuación
+                                </SubMenu>
                                 <SubMenu to='/ReporteCorporativo'>
                                     Reporte
-                                </SubMenu>
-                                <SubMenu to='/Corporativo'>
-                                    Puntuación
                                 </SubMenu>
                             </DropDownContent>
                         </DropDownLi>

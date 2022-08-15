@@ -8,6 +8,17 @@ import swal from 'sweetalert';
 
 const url = "https://sicte.herokuapp.com/api/PlaGesRep";
 
+const accessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2M…jM4fQ.ekvRdu_uIqcaKPliDYOr4SpsX_ohwRmT6A6XMC8dXgs';
+
+/* Enviar token en encabezado
+const authAxios = axios.create({
+    baseURL: url,
+    headers: {
+        Authorization: `Bearer ${accessToken}`,
+    },
+});
+*/
+
 class ReportePlaneacion extends Component {
     state = {
         data: [],
