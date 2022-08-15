@@ -44,7 +44,7 @@ const Navbar = () => {
                     <Menu open={showMobileMenu}>
                         
                         <DropDownLi>
-                            <StyledSubMenu to='/DropDown'>
+                            <StyledSubMenu to='/PlaneacionTecnico'>
                                 Planeación
                             </StyledSubMenu>
                             <DropDownContent>
@@ -65,7 +65,7 @@ const Navbar = () => {
                         </DropDownLi>
 
                         <DropDownLi>
-                            <StyledSubMenu to='/DropDown'>
+                            <StyledSubMenu to='/CorporativoFinanciero'>
                                 Corporativo
                             </StyledSubMenu>
                             <DropDownContent>
@@ -84,7 +84,7 @@ const Navbar = () => {
                         </DropDownLi>
 
                         <DropDownLi>
-                            <StyledSubMenu to='/DropDown'>
+                            <StyledSubMenu to='/Mantenimiento'>
                                 Mantenimiento
                             </StyledSubMenu>
                             <DropDownContent>
