@@ -6,7 +6,7 @@ export default class MantenimientoFinanciero extends Component {
     return (
       <PowerBi
       title="Financiero mantenimiento"
-      src="https://app.powerbi.com/view?r=eyJrIjoiYmJkODQ3NjItMWRlMy00OTQ0LWIwMjUtMGI2MmZlNGYyNWI2IiwidCI6ImUwYmZlOTBkLTIwZTAtNDEwYi1iNmYxLTQyOWIwNDNkMzYwOCJ9&pageName=ReportSection">
+      src="https://app.powerbi.com/view?r=eyJrIjoiYzE1ZTE2MjMtMjRiOC00N2UwLWFlYTctZTdkZjM2MDhmYjdhIiwidCI6ImUwYmZlOTBkLTIwZTAtNDEwYi1iNmYxLTQyOWIwNDNkMzYwOCJ9&pageName=ReportSection21d7783099cd4c41409c">
       </PowerBi>
     )
   }

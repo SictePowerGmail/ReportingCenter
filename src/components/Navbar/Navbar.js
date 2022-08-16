@@ -58,6 +58,9 @@ const Navbar = () => {
                                 <SubMenu to='/PlaneacionPuntuacion'>
                                     Puntuación
                                 </SubMenu>
+                                <SubMenu to='/PlaneacionEmpalmes'>
+                                    Empalmes
+                                </SubMenu>
                                 <SubMenu to='/ReportePlaneacion'>
                                     Reporte
                                 </SubMenu>
@@ -89,8 +92,32 @@ const Navbar = () => {
                             </StyledSubMenu>
                             <DropDownContent>
                                 {" "}
-                                <SubMenu to='/Mantenimiento'>
+                                <SubMenu to='/MantenimientoTecnico'>
+                                    Técnico
+                                </SubMenu>
+                                <SubMenu to='/MantenimientoFinanciero'>
+                                    Financiero
+                                </SubMenu>
+                                <SubMenu to='/MantenimientoPuntuacion'>
                                     Puntuación
+                                </SubMenu>
+                            </DropDownContent>
+                        </DropDownLi>
+
+                        <DropDownLi>
+                            <StyledSubMenu to='/Capacidades'>
+                                Dirección
+                            </StyledSubMenu>
+                            <DropDownContent>
+                                {" "}
+                                <SubMenu to='/Capacidades'>
+                                    Capacidades
+                                </SubMenu>
+                                <SubMenu to='/Penalizaciones'>
+                                    Penalizaciones
+                                </SubMenu>
+                                <SubMenu to='/EstatusAlturas'>
+                                    Estatus alturas
                                 </SubMenu>
                             </DropDownContent>
                         </DropDownLi>
