@@ -122,14 +122,7 @@ const Navbar = () => {
                             </DropDownContent>
                         </DropDownLi>
 
-                        <MenuItem>
-                            <MenuItemLink to='/'>
-                                <div>
-                                    <FaHome />
-                                    Login
-                                </div>
-                            </MenuItemLink>
-                        </MenuItem>
+
 
                     </Menu>
                 </IconContext.Provider>
@@ -137,5 +130,15 @@ const Navbar = () => {
         </Container>
     );
 }
+/*
+<MenuItem>
+<MenuItemLink to='/'>
+    <div>
+        <FaHome />
+        Login
+    </div>
+</MenuItemLink>
+</MenuItem>
+*/
 
 export default Navbar

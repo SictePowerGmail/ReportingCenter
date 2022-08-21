@@ -21,14 +21,15 @@ import Capacidades from './pages/Capacidades';
 import Penalizaciones from './pages/Penalizaciones';
 import EstatusAlturas from './pages/EstatusAlturas';
 
-
+//        <Route path='/' exact element={<Login />} />
+//        <Route path='/ReportingCenter' exact element={<Login />} />
 function App() {
   return (
     <Router>
       <Navbar />
       <Routes>
-        <Route path='/' exact element={<Login />} />
-        <Route path='/ReportingCenter' exact element={<Login />} />
+        <Route path='/' exact element={<PlaneacionTecnico />} />
+        <Route path='/ReportingCenter' exact element={<PlaneacionTecnico />} />
         <Route path='/CorporativoFinanciero' exact element={<CorporativoFinanciero/>} />
         <Route path='/CorporativoPuntuacion' exact element={<CorporativoPuntuacion />} />
         <Route path='/ReporteCorporativo' exact element={<ReporteCorporativo />} />
