@@ -17,6 +17,7 @@ import PlaneacionEmpalmes from './pages/PlaneacionEmpalmes';
 import MantenimientoTecnico from './pages/MantenimientoTecnico';
 import MantenimientoFinanciero from './pages/MantenimientoFinanciero';
 import MantenimientoPuntuacion from './pages/MantenimientoPuntuacion';
+import MantenimientoPuntuacionTMRF from './pages/MantenimientoPuntuacionTMRF';
 import Capacidades from './pages/Capacidades';
 import Penalizaciones from './pages/Penalizaciones';
 import EstatusAlturas from './pages/EstatusAlturas';
@@ -41,6 +42,7 @@ function App() {
         <Route path='/MantenimientoTecnico' exact element={<MantenimientoTecnico />} />
         <Route path='/MantenimientoFinanciero' exact element={<MantenimientoFinanciero />} />
         <Route path='/MantenimientoPuntuacion' exact element={<MantenimientoPuntuacion />} />
+        <Route path='/MantenimientoPuntuacionTMRF' exact element={<MantenimientoPuntuacionTMRF />} />
         <Route path='/Capacidades' exact element={<Capacidades />} />
         <Route path='/Penalizaciones' exact element={<Penalizaciones />} />
         <Route path='/EstatusAlturas' exact element={<EstatusAlturas />} />
