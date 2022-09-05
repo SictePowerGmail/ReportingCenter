@@ -146,7 +146,7 @@ export const MenuItemLink = styled(Link)`
         `;
 
     export const PowerBi = styled.iframe`
-    height: calc(100vh - 10px);
+    height: calc(100vh + 10px);
     width: 100%;
     `;
 
