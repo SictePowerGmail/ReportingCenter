@@ -61,9 +61,7 @@ const Navbar = () => {
                                 <SubMenu to='/PlaneacionEmpalmes'>
                                     Empalmes
                                 </SubMenu>
-                                <SubMenu to='/ReportePlaneacion'>
-                                    Reporte
-                                </SubMenu>
+                                
                             </DropDownContent>
                         </DropDownLi>
 
@@ -79,9 +77,6 @@ const Navbar = () => {
                                 </SubMenu>
                                 <SubMenu to='/CorporativoPuntuacion'>
                                     Puntuación
-                                </SubMenu>
-                                <SubMenu to='/ReporteCorporativo'>
-                                    Reporte
                                 </SubMenu>
                             </DropDownContent>
                         </DropDownLi>
