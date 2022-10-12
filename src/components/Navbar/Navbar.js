@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import {
     Container,
     LogoContainer,
-    Menu, MenuItem,
+    Menu,
     MenuItemLink,
     MobileIcon,
     Wrapper,
