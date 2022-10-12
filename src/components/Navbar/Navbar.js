@@ -102,6 +102,9 @@ const Navbar = () => {
                                 <SubMenu to='/MantenimientoPuntuacionTMRF'>
                                     Puntuación TMRF
                                 </SubMenu>
+                                <SubMenu to='/PlaneacionEmpalmes'>
+                                    Empalmes
+                                </SubMenu>
                             </DropDownContent>
                         </DropDownLi>
 
