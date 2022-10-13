@@ -6,7 +6,7 @@ export default class CorporativoFinanciero extends Component {
     return (
       <PowerBi
       title="Financiero corporativo"
-      src="https://app.powerbi.com/view?r=eyJrIjoiNjYzZjc4MmUtMWE3Mi00OWFiLTk0YjItMmM2OGZkMmZiNDZlIiwidCI6ImUwYmZlOTBkLTIwZTAtNDEwYi1iNmYxLTQyOWIwNDNkMzYwOCJ9&pageName=ReportSection9eb6acb34820c3d43e07">
+      src="https://app.powerbi.com/reportEmbed?reportId=0bda64d1-6a0f-4d87-870b-3cf9fd39e367&autoAuth=true&ctid=e0bfe90d-20e0-410b-b6f1-429b043d3608">
       </PowerBi>
     )
   }

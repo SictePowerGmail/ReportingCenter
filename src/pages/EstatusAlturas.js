@@ -6,7 +6,7 @@ export default class Penalizaciones extends Component {
     return (
       <PowerBi
       title="Estatus de alturas"
-      src="https://app.powerbi.com/view?r=eyJrIjoiNGU4MTBjMTgtMmZmYS00NDU1LTg5OGYtNGIyNTk1Zjc0ZjA5IiwidCI6ImUwYmZlOTBkLTIwZTAtNDEwYi1iNmYxLTQyOWIwNDNkMzYwOCJ9&pageName=ReportSection6c7b9393ba4550a27aa0">
+      src="https://app.powerbi.com/reportEmbed?reportId=de65c91f-3a24-4216-90eb-041e5bffac56&autoAuth=true&ctid=e0bfe90d-20e0-410b-b6f1-429b043d3608">
       </PowerBi>
     )
   }

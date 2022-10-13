@@ -6,7 +6,7 @@ export default class PlaneacionFinanciero extends Component {
     return (
       <PowerBi
       title="Financiero planeación"
-      src="https://app.powerbi.com/view?r=eyJrIjoiN2ViODg5ZjMtN2YwOS00YThjLWJhZjktYjliODMxZDBmNGNmIiwidCI6ImUwYmZlOTBkLTIwZTAtNDEwYi1iNmYxLTQyOWIwNDNkMzYwOCJ9&pageName=ReportSection169a6db5ad09dca508b1">
+      src="https://app.powerbi.com/reportEmbed?reportId=6d86e89d-f035-4141-ac78-d5e0ae84ae23&autoAuth=true&ctid=e0bfe90d-20e0-410b-b6f1-429b043d3608">
       </PowerBi>
     )
   }
