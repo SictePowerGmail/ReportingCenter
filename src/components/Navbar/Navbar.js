@@ -97,7 +97,13 @@ const Navbar = () => {
                                     Puntuación TMRF
                                 </SubMenu>
                                 <SubMenu to='/PlaneacionEmpalmes'>
-                                    Empalmes
+                                    Torre de control
+                                </SubMenu>
+                                <SubMenu to='/PBRB_IndicadoresMantenimiento'>
+                                    Informe
+                                </SubMenu>
+                                <SubMenu to='/PBRB_SeguimientoEmpalmes'>
+                                    Seguimiento
                                 </SubMenu>
                             </DropDownContent>
                         </DropDownLi>

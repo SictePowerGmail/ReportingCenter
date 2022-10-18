@@ -21,6 +21,8 @@ import MantenimientoPuntuacionTMRF from './pages/MantenimientoPuntuacionTMRF';
 import Capacidades from './pages/Capacidades';
 import Penalizaciones from './pages/Penalizaciones';
 import EstatusAlturas from './pages/EstatusAlturas';
+import PBRB_IndicadoresMantenimiento from './pages/PBRB_IndicadoresMantenimiento';
+import PBRB_SeguimientoEmpalmes from './pages/PBRB_SeguimientoEmpalmes';
 
 //        <Route path='/' exact element={<Login />} />
 //        <Route path='/ReportingCenter' exact element={<Login />} />
@@ -46,6 +48,8 @@ function App() {
         <Route path='/Capacidades' exact element={<Capacidades />} />
         <Route path='/Penalizaciones' exact element={<Penalizaciones />} />
         <Route path='/EstatusAlturas' exact element={<EstatusAlturas />} />
+        <Route path='/PBRB_IndicadoresMantenimiento' exact element={<PBRB_IndicadoresMantenimiento />} />
+        <Route path='PBRB_SeguimientoEmpalmes' exact element={<PBRB_SeguimientoEmpalmes />} />
       </Routes>
     </Router>
   );
