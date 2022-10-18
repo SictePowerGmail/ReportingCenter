@@ -150,6 +150,11 @@ export const MenuItemLink = styled(Link)`
     width: 100%;
     `;
 
+    export const PowerBiPrivate = styled.iframe`
+    height: calc(100vh - 15px);
+    width: 100%;
+    `;
+
     export const DropDownContent = styled.div`
     display: none;
     position: absolute;
