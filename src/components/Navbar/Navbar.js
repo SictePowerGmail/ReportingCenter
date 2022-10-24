@@ -52,6 +52,9 @@ const Navbar = () => {
                                 <SubMenu to='/PlaneacionTecnico'>
                                     Técnico
                                 </SubMenu>
+                                <SubMenu to='/PlaneacionFacturacion'>
+                                    Facturación
+                                </SubMenu>
                                 <SubMenu to='/PlaneacionFinanciero'>
                                     Financiero
                                 </SubMenu>
