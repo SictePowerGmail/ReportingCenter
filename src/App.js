@@ -24,6 +24,7 @@ import EstatusAlturas from './pages/EstatusAlturas';
 import PBRB_IndicadoresMantenimiento from './pages/PBRB_IndicadoresMantenimiento';
 import PBRB_SeguimientoEmpalmes from './pages/PBRB_SeguimientoEmpalmes';
 import PlaneacionFacturacion from './pages/PlaneacionFacturacion';
+import Inicio from './pages/Inicio';
 
 //        <Route path='/' exact element={<Login />} />
 //        <Route path='/ReportingCenter' exact element={<Login />} />
@@ -32,7 +33,7 @@ function App() {
     <Router>
       <Navbar />
       <Routes>
-        <Route path='/' exact element={<PlaneacionTecnico />} />
+        <Route path='/' exact element={<PlaneacionTecnico/>} />
         <Route path='/ReportingCenter' exact element={<PlaneacionTecnico />} />
         <Route path='/CorporativoFinanciero' exact element={<CorporativoFinanciero/>} />
         <Route path='/CorporativoPuntuacion' exact element={<CorporativoPuntuacion />} />
