@@ -6,7 +6,7 @@ export default class PlaneacionFacturacion extends Component {
     return (
       <PowerBiPrivate
       title="Facturación planeación"
-      src="https://app.powerbi.com/reportEmbed?reportId=af6308a7-6b49-4228-aef9-a4066929e15c&autoAuth=true&ctid=e0bfe90d-20e0-410b-b6f1-429b043d3608">
+      src="https://app.powerbi.com/reportEmbed?reportId=dd92722e-002b-4619-a1e9-62107c347d74&autoAuth=true&ctid=e0bfe90d-20e0-410b-b6f1-429b043d3608">
       </PowerBiPrivate>
     )
   }
