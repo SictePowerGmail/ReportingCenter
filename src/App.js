@@ -33,8 +33,8 @@ function App() {
     <Router>
       <Navbar />
       <Routes>
-        <Route path='/' exact element={<PlaneacionTecnico/>} />
-        <Route path='/ReportingCenter' exact element={<PlaneacionTecnico />} />
+        <Route path='/' exact element={<Inicio />} />
+        <Route path='/ReportingCenter' exact element={<Inicio />} />
         <Route path='/CorporativoFinanciero' exact element={<CorporativoFinanciero/>} />
         <Route path='/CorporativoPuntuacion' exact element={<CorporativoPuntuacion />} />
         <Route path='/ReporteCorporativo' exact element={<ReporteCorporativo />} />

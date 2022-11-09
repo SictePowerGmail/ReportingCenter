@@ -1,15 +1,14 @@
-import React from "react";
-import { Carousel } from "bootstrap";
-//import { Carousel } from "react-bootstrap";
+import React from 'react';
+import { Carousel } from 'react-bootstrap';
 
-const Corousel1 = () => {
-    return(
-<div>
+export default function BootstrapCarousel() {
+  return (
+    <div>
     <Carousel>
       <Carousel.Item>
         <img
           className="d-block w-100"
-          src="holder.js/800x400?text=First slide&bg=373940"
+          src="./images/01.jpg"
           alt="First slide"
         />
         <Carousel.Caption>
@@ -20,7 +19,7 @@ const Corousel1 = () => {
       <Carousel.Item>
         <img
           className="d-block w-100"
-          src="holder.js/800x400?text=Second slide&bg=282c34"
+          src="./images/02.jpg"
           alt="Second slide"
         />
 
@@ -32,7 +31,7 @@ const Corousel1 = () => {
       <Carousel.Item>
         <img
           className="d-block w-100"
-          src="holder.js/800x400?text=Third slide&bg=20232a"
+          src="./images/03.jpg"
           alt="Third slide"
         />
 
@@ -44,9 +43,6 @@ const Corousel1 = () => {
         </Carousel.Caption>
       </Carousel.Item>
     </Carousel>
-
-</div>
-    )
+    </div>
+  )
 }
-
-export default Corousel1

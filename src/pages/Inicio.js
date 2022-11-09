@@ -1,14 +1,13 @@
 import React, { Component } from 'react'
-import Corousel1 from '../components/Carousel/Corousel1'
-
+import { PowerBi } from '../components/Navbar/Narbar.elements'
 
 export default class Inicio extends Component {
   render() {
     return (
-      <div>
-        <Corousel1 />
-        <h1>Hola mundo</h1>
-      </div>
+      <PowerBi
+      title="Inicio"
+      src="https://app.powerbi.com/view?r=eyJrIjoiYmQ2MjM3MjctZjIwNC00ODI0LWFlODctMzczMjY3MWY4NmFhIiwidCI6ImUwYmZlOTBkLTIwZTAtNDEwYi1iNmYxLTQyOWIwNDNkMzYwOCJ9&pageName=ReportSection">
+      </PowerBi>
     )
   }
 }
