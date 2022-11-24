@@ -117,6 +117,9 @@ const Navbar = () => {
                             </StyledSubMenu>
                             <DropDownContent>
                                 {" "}
+                                <SubMenu to='/Seguimiento'>
+                                    Seguimiento
+                                </SubMenu>
                                 <SubMenu to='/Capacidades'>
                                     Capacidades
                                 </SubMenu>

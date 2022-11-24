@@ -25,6 +25,7 @@ import PBRB_IndicadoresMantenimiento from './pages/PBRB_IndicadoresMantenimiento
 import PBRB_SeguimientoEmpalmes from './pages/PBRB_SeguimientoEmpalmes';
 import PlaneacionFacturacion from './pages/PlaneacionFacturacion';
 import Inicio from './pages/Inicio';
+import Seguimiento from './pages/Seguimiento';
 
 //        <Route path='/' exact element={<Login />} />
 //        <Route path='/ReportingCenter' exact element={<Login />} />
@@ -53,6 +54,7 @@ function App() {
         <Route path='/PBRB_IndicadoresMantenimiento' exact element={<PBRB_IndicadoresMantenimiento />} />
         <Route path='/PBRB_SeguimientoEmpalmes' exact element={<PBRB_SeguimientoEmpalmes />} />
         <Route path='/PlaneacionFacturacion' exacte element={<PlaneacionFacturacion />} />
+        <Route path='/Seguimiento' exacte element={<Seguimiento />} />
       </Routes>
     </Router>
   );
