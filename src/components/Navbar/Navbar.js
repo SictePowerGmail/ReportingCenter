@@ -102,12 +102,13 @@ const Navbar = () => {
                                 <SubMenu to='/PlaneacionEmpalmes'>
                                     Torre de control
                                 </SubMenu>
+                                <SubMenu to='/WhatsApp'>
+                                    Torre de control WA
+                                </SubMenu>
                                 <SubMenu to='/PBRB_IndicadoresMantenimiento'>
                                     Informe
                                 </SubMenu>
-                                <SubMenu to='/PBRB_SeguimientoEmpalmes'>
-                                    Seguimiento
-                                </SubMenu>
+
                             </DropDownContent>
                         </DropDownLi>
 
