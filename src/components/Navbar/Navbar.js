@@ -97,7 +97,7 @@ const Navbar = () => {
                                     Puntuación
                                 </SubMenu>
                                 <SubMenu to='/MantenimientoPuntuacionTMRF'>
-                                    Puntuación TMRF
+                                    Correctivo - Preventivo
                                 </SubMenu>
                                 <SubMenu to='/PlaneacionEmpalmes'>
                                     Torre de control
