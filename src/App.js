@@ -14,6 +14,7 @@ import PlaneacionTecnico from './pages/PlaneacionTecnico';
 import PlaneacionFinanciero from './pages/PlaneacionFinanciero';
 import PlaneacionPuntuacion from './pages/PlaneacionPuntuacion';
 import PlaneacionEmpalmes from './pages/PlaneacionEmpalmes';
+import MantenimientoBacklog from './pages/MantenimientoBacklog';
 import MantenimientoTecnico from './pages/MantenimientoTecnico';
 import MantenimientoFinanciero from './pages/MantenimientoFinanciero';
 import MantenimientoPuntuacion from './pages/MantenimientoPuntuacion';
@@ -55,6 +56,7 @@ function App() {
         <Route path='/Seguimiento' exact element={<Seguimiento />} />
         <Route path='/PlaneacionFacturacion' exacte element={<PlaneacionFacturacion />} />
         <Route path='/WhatsApp' exacte element={<WhatsApp />} />
+        <Route path='/MantenimientoBacklog' exacte element={<MantenimientoBacklog />} />
       </Routes>
     </Router>
   );
