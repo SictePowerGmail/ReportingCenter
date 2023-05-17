@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
-import { PowerBiPrivate } from '../components/Navbar/Narbar.elements'
+import { PowerBi } from '../components/Navbar/Narbar.elements'
 
 export default class Capacidades extends Component {
   render() {
     return (
-      <PowerBiPrivate
+      <PowerBi
       title="Capacidades"
-      src="https://app.powerbi.com/reportEmbed?reportId=c42043e2-fe67-423b-a5b3-fa0ab010dc9b&autoAuth=true&ctid=e0bfe90d-20e0-410b-b6f1-429b043d3608">
-      </PowerBiPrivate>
+      src="https://app.powerbi.com/view?r=eyJrIjoiZDU1NmZhMzYtYTk2Yi00N2JlLWIyMzctNzUxZjE2OTY2Y2I0IiwidCI6ImUwYmZlOTBkLTIwZTAtNDEwYi1iNmYxLTQyOWIwNDNkMzYwOCJ9">
+      </PowerBi>
     )
   }
 }
