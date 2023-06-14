@@ -33,7 +33,7 @@ const Navbar = () => {
                             Sicte
                         </p>
                         <p>
-                            Centro de reportes
+                            Centro de control de operaciones
                         </p>
                     </LogoContainer>
                     <MobileIcon onClick={() => setShowMobileMenu(!showMobileMenu)}>
