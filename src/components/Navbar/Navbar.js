@@ -52,9 +52,6 @@ const Navbar = () => {
                                 <SubMenu to='/PlaneacionTecnico'>
                                     Técnico
                                 </SubMenu>
-                                <SubMenu to='/PlaneacionFacturacion'>
-                                    Facturación
-                                </SubMenu>
                                 <SubMenu to='/PlaneacionFinanciero'>
                                     Financiero
                                 </SubMenu>
@@ -90,9 +87,6 @@ const Navbar = () => {
                                 <SubMenu to='/MantenimientoTecnico'>
                                     Técnico
                                 </SubMenu>
-                                <SubMenu to='/MantenimientoBacklog'>
-                                    Backlog
-                                </SubMenu>
                                 <SubMenu to='/MantenimientoFinanciero'>
                                     Financiero
                                 </SubMenu>
@@ -104,9 +98,6 @@ const Navbar = () => {
                                 </SubMenu>
                                 <SubMenu to='/PlaneacionEmpalmes'>
                                     Torre de control
-                                </SubMenu>
-                                <SubMenu to='/WhatsApp'>
-                                    Torre de control WA
                                 </SubMenu>
                                 <SubMenu to='/PBRB_IndicadoresMantenimiento'>
                                     Informe
@@ -126,12 +117,6 @@ const Navbar = () => {
                                 </SubMenu>
                                 <SubMenu to='/Capacidades'>
                                     Capacidades
-                                </SubMenu>
-                                <SubMenu to='/Penalizaciones'>
-                                    Penalizaciones
-                                </SubMenu>
-                                <SubMenu to='/EstatusAlturas'>
-                                    Estatus alturas
                                 </SubMenu>
                             </DropDownContent>
                         </DropDownLi>
