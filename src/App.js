@@ -9,6 +9,7 @@ import ReporteCorporativo from "./pages/ReporteCorporativo";
 import Login from './pages/Login';
 import ReportePlaneacion from './pages/ReportePlaneacion';
 import CorporativoPuntuacion from './pages/CorporativoPuntuacion';
+import CorporativoKPI from './pages/CorporativoKPI';
 import CorporativoFinanciero from './pages/CorporativoFinanciero';
 import PlaneacionTecnico from './pages/PlaneacionTecnico';
 import PlaneacionFinanciero from './pages/PlaneacionFinanciero';
@@ -39,6 +40,7 @@ function App() {
         <Route path='/ReportingCenter' exact element={<Inicio />} />
         <Route path='/CorporativoFinanciero' exact element={<CorporativoFinanciero/>} />
         <Route path='/CorporativoPuntuacion' exact element={<CorporativoPuntuacion />} />
+        <Route path='/CorporativoKPI' exact element={<CorporativoKPI />} />
         <Route path='/ReporteCorporativo' exact element={<ReporteCorporativo />} />
         <Route path='/PlaneacionTecnico' exact element={<PlaneacionTecnico />} />
         <Route path='/PlaneacionFinanciero' exact element={<PlaneacionFinanciero />} />

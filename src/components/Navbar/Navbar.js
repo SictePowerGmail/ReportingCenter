@@ -69,6 +69,9 @@ const Navbar = () => {
                             <DropDownContent>
                                 {" "}
 
+                                <SubMenu to='/CorporativoKPI'>
+                                    Técnico
+                                </SubMenu>
                                 <SubMenu to='/CorporativoFinanciero'>
                                     Financiero
                                 </SubMenu>
