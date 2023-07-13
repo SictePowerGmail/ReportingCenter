@@ -42,6 +42,29 @@ const Navbar = () => {
                         }
                     </MobileIcon>
                     <Menu open={showMobileMenu}>
+
+                    <DropDownLi>
+                            <StyledSubMenu to='/PlaneacionFinanciero'>
+                                Producción
+                            </StyledSubMenu>
+                            <DropDownContent>
+                                {" "}
+                                <SubMenu to='/PlaneacionFinanciero'>
+                                    Planeación
+                                </SubMenu>
+                                <SubMenu to='/CorporativoFinanciero'>
+                                    Corporativo
+                                </SubMenu>
+                                <SubMenu to='/MantenimientoFinanciero'>
+                                    Mantenimiento
+                                </SubMenu>
+
+                                <SubMenu to='/SMU_Financiero'>
+                                    SMU
+                                </SubMenu>
+                                
+                            </DropDownContent>
+                        </DropDownLi>
                         
                         <DropDownLi>
                             <StyledSubMenu to='/PlaneacionTecnico'>
