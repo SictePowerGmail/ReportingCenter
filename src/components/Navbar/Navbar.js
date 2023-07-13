@@ -128,22 +128,10 @@ const Navbar = () => {
                                 <SubMenu to='/PBRB_IndicadoresMantenimiento'>
                                     Informe
                                 </SubMenu>
-
-                            </DropDownContent>
-                        </DropDownLi>
-
-                        <DropDownLi>
-                            <StyledSubMenu to='/Capacidades'>
-                                Dirección
-                            </StyledSubMenu>
-                            <DropDownContent>
-                                {" "}
                                 <SubMenu to='/Seguimiento'>
                                     Seguimiento
                                 </SubMenu>
-                                <SubMenu to='/Capacidades'>
-                                    Capacidades
-                                </SubMenu>
+
                             </DropDownContent>
                         </DropDownLi>
 
