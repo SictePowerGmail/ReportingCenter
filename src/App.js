@@ -29,6 +29,7 @@ import PlaneacionFacturacion from './pages/PlaneacionFacturacion';
 import Inicio from './pages/Inicio';
 import WhatsApp from './pages/WhatsApp';
 import SMU_Financiero from './pages/SMU_Financiero';
+import MercadoMasivo from './pages/MercadoMasivo';
 
 
 //        <Route path='/' exact element={<Login />} />
@@ -62,6 +63,7 @@ function App() {
         <Route path='/WhatsApp' exacte element={<WhatsApp />} />
         <Route path='/MantenimientoBacklog' exacte element={<MantenimientoBacklog />} />
         <Route path='/SMU_Financiero' exacte element={<SMU_Financiero />} />
+        <Route path='/MercadoMasivo' exacte element={<MercadoMasivo />} />
       </Routes>
     </Router>
   );

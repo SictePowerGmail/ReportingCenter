@@ -65,42 +65,45 @@ const Navbar = () => {
                                 
                             </DropDownContent>
                         </DropDownLi>
-                        
+
                         <DropDownLi>
-                            <StyledSubMenu to='/PlaneacionTecnico'>
-                                Planeación
+                            <StyledSubMenu to='/MantenimientoTecnico'>
+                                Indicadores
                             </StyledSubMenu>
                             <DropDownContent>
                                 {" "}
+                                <SubMenu to='/MantenimientoTecnico'>
+                                    Mantenimiento
+                                </SubMenu>
                                 <SubMenu to='/PlaneacionTecnico'>
-                                    Técnico
+                                    Planeación
                                 </SubMenu>
-                                <SubMenu to='/PlaneacionFinanciero'>
-                                    Financiero
+                                <SubMenu to='/CorporativoKPI'>
+                                    Corporativo
                                 </SubMenu>
-                                <SubMenu to='/PlaneacionPuntuacion'>
-                                    Puntuación
+                                <SubMenu to='/MercadoMasivo'>
+                                    Mercado masivo
                                 </SubMenu>
                                 
                             </DropDownContent>
                         </DropDownLi>
-
+                        
                         <DropDownLi>
-                            <StyledSubMenu to='/CorporativoFinanciero'>
-                                Corporativo
+                            <StyledSubMenu to='/PlaneacionTecnico'>
+                                Puntuación
                             </StyledSubMenu>
                             <DropDownContent>
                                 {" "}
-
-                                <SubMenu to='/CorporativoKPI'>
-                                    Técnico
-                                </SubMenu>
-                                <SubMenu to='/CorporativoFinanciero'>
-                                    Financiero
+                                <SubMenu to='/PlaneacionPuntuacion'>
+                                    Planeación
                                 </SubMenu>
                                 <SubMenu to='/CorporativoPuntuacion'>
-                                    Puntuación
+                                    Corporativo
                                 </SubMenu>
+                                <SubMenu to='/MantenimientoPuntuacion'>
+                                    Mantenimiento
+                                </SubMenu>
+                                
                             </DropDownContent>
                         </DropDownLi>
 
