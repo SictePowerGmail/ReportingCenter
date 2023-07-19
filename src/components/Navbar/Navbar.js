@@ -58,9 +58,11 @@ const Navbar = () => {
                                 <SubMenu to='/MantenimientoFinanciero'>
                                     Mantenimiento
                                 </SubMenu>
-
                                 <SubMenu to='/SMU_Financiero'>
                                     SMU
+                                </SubMenu>
+                                <SubMenu to='/OperacionesFinanciero'>
+                                    Operaciones
                                 </SubMenu>
                                 
                             </DropDownContent>

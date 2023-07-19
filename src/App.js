@@ -31,6 +31,7 @@ import WhatsApp from './pages/WhatsApp';
 import SMU_Financiero from './pages/SMU_Financiero';
 import MercadoMasivo from './pages/MercadoMasivo';
 import HistoricoKPI from './pages/HistoricoKPI';
+import OperacionesFinanciero from './pages/OperacionesFinanciero';
 
 
 //        <Route path='/' exact element={<Login />} />
@@ -66,6 +67,7 @@ function App() {
         <Route path='/SMU_Financiero' exacte element={<SMU_Financiero />} />
         <Route path='/MercadoMasivo' exacte element={<MercadoMasivo />} />
         <Route path='/HistoricoKPI' exacte element={<HistoricoKPI />} />
+        <Route path='/OperacionesFinanciero' exacte element={<OperacionesFinanciero />} />
       </Routes>
     </Router>
   );
