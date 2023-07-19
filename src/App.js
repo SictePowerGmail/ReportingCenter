@@ -32,6 +32,7 @@ import SMU_Financiero from './pages/SMU_Financiero';
 import MercadoMasivo from './pages/MercadoMasivo';
 import HistoricoKPI from './pages/HistoricoKPI';
 import OperacionesFinanciero from './pages/OperacionesFinanciero';
+import ReingenieriaFinanciero from './pages/ReingenieriaFinanciero';
 
 
 //        <Route path='/' exact element={<Login />} />
@@ -68,6 +69,7 @@ function App() {
         <Route path='/MercadoMasivo' exacte element={<MercadoMasivo />} />
         <Route path='/HistoricoKPI' exacte element={<HistoricoKPI />} />
         <Route path='/OperacionesFinanciero' exacte element={<OperacionesFinanciero />} />
+        <Route path='/ReingenieriaFinanciero' exacte element={<ReingenieriaFinanciero />} />
       </Routes>
     </Router>
   );
