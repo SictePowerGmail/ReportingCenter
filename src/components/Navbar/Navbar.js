@@ -89,6 +89,9 @@ const Navbar = () => {
                                 <SubMenu to='/MercadoMasivo'>
                                     Mercado masivo
                                 </SubMenu>
+                                <SubMenu to='/SMU_Tecnico'>
+                                    SMU
+                                </SubMenu>
                                 <SubMenu to='/HistoricoKPI'>
                                     Histórico KPI 
                                 </SubMenu>
