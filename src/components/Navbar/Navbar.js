@@ -76,16 +76,19 @@ const Navbar = () => {
                             <DropDownContent>
                                 {" "}
                                 <SubMenu to='/MantenimientoTecnico'>
-                                    Mantenimiento
-                                </SubMenu>
-                                <SubMenu to='/PlaneacionTecnico'>
-                                    Planeación
-                                </SubMenu>
-                                <SubMenu to='/CorporativoKPI'>
-                                    Corporativo
+                                    G1 Mantenimiento
                                 </SubMenu>
                                 <SubMenu to='/MercadoMasivo'>
-                                    Mercado masivo
+                                    G2 - G8 Mercado masivo
+                                </SubMenu>
+                                <SubMenu to='/CorporativoKPI'>
+                                    G3 - G9 Corporativo	
+                                </SubMenu>
+                                <SubMenu to='/SMU_Tecnico'>
+                                    G4 SMU
+                                </SubMenu>
+                                <SubMenu to='/PlaneacionTecnico'>
+                                    G6 Proyectos
                                 </SubMenu>
                                 <SubMenu to='/HistoricoKPI'>
                                     Histórico KPI 
