@@ -6,7 +6,7 @@ export default class Penalizaciones extends Component {
     return (
       <PowerBi
       title="Penalizaciones"
-      src="https://app.powerbi.com/view?r=eyJrIjoiYmNjM2RjOTAtYzQ2OC00Mzc1LTgyZDUtODE5MzUwOWQ0NTM2IiwidCI6ImUwYmZlOTBkLTIwZTAtNDEwYi1iNmYxLTQyOWIwNDNkMzYwOCJ9">
+      src="https://app.powerbi.com/view?r=eyJrIjoiMzAxOGM3MGUtMDQwYS00OTBiLTgyMjAtYTExMDI5ZWY5MTkzIiwidCI6ImUwYmZlOTBkLTIwZTAtNDEwYi1iNmYxLTQyOWIwNDNkMzYwOCJ9">
       </PowerBi>
     )
   }

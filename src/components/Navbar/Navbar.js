@@ -3,7 +3,6 @@ import {
     Container,
     LogoContainer,
     Menu,
-    MenuItemLink,
     MobileIcon,
     Wrapper,
     DropDownContent,
@@ -13,8 +12,7 @@ import {
 } from './Narbar.elements';
 import {
     FaBars,
-    FaTimes,
-    FaHome
+    FaTimes
 } from "react-icons/fa";
 import { IconContext } from 'react-icons';
 
@@ -116,7 +114,7 @@ const Navbar = () => {
                         </DropDownLi>
 
                         <DropDownLi>
-                            <StyledSubMenu to='/Mantenimiento'>
+                            <StyledSubMenu to='/MantenimientoTecnico'>
                                 Mantenimiento
                             </StyledSubMenu>
                             <DropDownContent>
@@ -142,11 +140,21 @@ const Navbar = () => {
                                 <SubMenu to='/Seguimiento'>
                                     Seguimiento
                                 </SubMenu>
-
                             </DropDownContent>
                         </DropDownLi>
 
+                        <DropDownLi>
+                            <StyledSubMenu to='/Penalizaciones'>
+                                Dirección
+                            </StyledSubMenu>
+                            <DropDownContent>
+                                {" "}
+                                <SubMenu to='/Penalizaciones'>
+                                    Penalizaciones
+                                </SubMenu>
 
+                            </DropDownContent>
+                        </DropDownLi>
 
                     </Menu>
                 </IconContext.Provider>
@@ -154,15 +162,5 @@ const Navbar = () => {
         </Container>
     );
 }
-/*
-<MenuItem>
-<MenuItemLink to='/'>
-    <div>
-        <FaHome />
-        Login
-    </div>
-</MenuItemLink>
-</MenuItem>
-*/
 
 export default Navbar
