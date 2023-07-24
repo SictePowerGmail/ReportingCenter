@@ -112,7 +112,6 @@ const Navbar = () => {
                                 <SubMenu to='/MantenimientoPuntuacion'>
                                     Mantenimiento
                                 </SubMenu>
-                                
                             </DropDownContent>
                         </DropDownLi>
 
