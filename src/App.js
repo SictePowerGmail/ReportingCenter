@@ -34,6 +34,7 @@ import HistoricoKPI from './pages/HistoricoKPI';
 import OperacionesFinanciero from './pages/OperacionesFinanciero';
 import ReingenieriaFinanciero from './pages/ReingenieriaFinanciero';
 import SMU_Tecnico from './pages/SMU_Tecnico';
+import CentrosDeCostos from './pages/CentrosDeCostos';
 
 
 //        <Route path='/' exact element={<Login />} />
@@ -72,6 +73,7 @@ function App() {
         <Route path='/OperacionesFinanciero' exacte element={<OperacionesFinanciero />} />
         <Route path='/ReingenieriaFinanciero' exacte element={<ReingenieriaFinanciero />} />
         <Route path='/SMU_Tecnico' exacte element={<SMU_Tecnico />} />
+        <Route path='/Centro_de_costos' exacte element={<CentrosDeCostos />} />
       </Routes>
     </Router>
   );
