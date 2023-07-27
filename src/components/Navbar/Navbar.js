@@ -121,8 +121,8 @@ const Navbar = () => {
                             </StyledSubMenu>
                             <DropDownContent>
                                 {" "}
-                                <SubMenu to='/MantenimientoTecnico'>
-                                    Técnico
+                                <SubMenu to='/MantenimientoBacklogFO'>
+                                    Backlog FO
                                 </SubMenu>
                                 <SubMenu to='/MantenimientoFinanciero'>
                                     Financiero
