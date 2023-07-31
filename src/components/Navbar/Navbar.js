@@ -157,6 +157,9 @@ const Navbar = () => {
                                 <SubMenu to='/Centro_de_costos'>
                                     Centros de costos
                                 </SubMenu>
+                                <SubMenu to='/Moviles'>
+                                    Móviles
+                                </SubMenu>
 
                             </DropDownContent>
                         </DropDownLi>

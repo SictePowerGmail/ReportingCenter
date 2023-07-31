@@ -36,6 +36,7 @@ import ReingenieriaFinanciero from './pages/ReingenieriaFinanciero';
 import SMU_Tecnico from './pages/SMU_Tecnico';
 import CentrosDeCostos from './pages/CentrosDeCostos';
 import BacklogFO from './pages/Backlog_FO';
+import Moviles from './pages/Moviles';
 
 
 //        <Route path='/' exact element={<Login />} />
@@ -76,6 +77,7 @@ function App() {
         <Route path='/SMU_Tecnico' exacte element={<SMU_Tecnico />} />
         <Route path='/Centro_de_costos' exacte element={<CentrosDeCostos />} />
         <Route path='/MantenimientoBacklogFO' exacte element={<BacklogFO />} />
+        <Route path='/Moviles' exacte element={<Moviles />} />
       </Routes>
     </Router>
   );
