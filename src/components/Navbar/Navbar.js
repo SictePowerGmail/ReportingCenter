@@ -158,7 +158,7 @@ const Navbar = () => {
                                     Centros de costos
                                 </SubMenu>
                                 <SubMenu to='/Moviles'>
-                                    Móviles
+                                    Composición móviles
                                 </SubMenu>
 
                             </DropDownContent>
