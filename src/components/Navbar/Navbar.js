@@ -90,6 +90,9 @@ const Navbar = () => {
                                 <SubMenu to='/PlaneacionTecnico'>
                                     G6 Proyectos
                                 </SubMenu>
+                                <SubMenu to='/Sitios_moviles'>
+                                    G7 Sitios Móviles
+                                </SubMenu>
                                 <SubMenu to='/HistoricoKPI'>
                                     Histórico KPI 
                                 </SubMenu>
