@@ -11,4 +11,3 @@ export default class Sitios_Moviles extends Component {
     )
   }
 }
-<iframe title="Report Section" width="600" height="373.5" src="" frameborder="0" allowFullScreen="true"></iframe>

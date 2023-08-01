@@ -38,6 +38,7 @@ import CentrosDeCostos from './pages/CentrosDeCostos';
 import BacklogFO from './pages/Backlog_FO';
 import Moviles from './pages/Moviles';
 import Sitios_Moviles from './pages/Sitios_Moviles';
+import Logistica from './pages/Logistica';
 
 
 //        <Route path='/' exact element={<Login />} />
@@ -80,6 +81,7 @@ function App() {
         <Route path='/MantenimientoBacklogFO' exacte element={<BacklogFO />} />
         <Route path='/Moviles' exacte element={<Moviles />} />
         <Route path='/Sitios_moviles' exacte element={<Sitios_Moviles />} />
+        <Route path='/Logistica_tecnico' exacte element={<Logistica />} />
       </Routes>
     </Router>
   );
