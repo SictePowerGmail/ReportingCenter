@@ -96,6 +96,9 @@ const Navbar = () => {
                                 <SubMenu to='/HistoricoKPI'>
                                     Histórico KPI 
                                 </SubMenu>
+                                <SubMenu to='/Logistica_tecnico'>
+                                    Logística
+                                </SubMenu>
                                 
                             </DropDownContent>
                         </DropDownLi>
