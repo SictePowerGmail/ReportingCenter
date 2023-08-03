@@ -87,6 +87,9 @@ const Navbar = () => {
                                 <SubMenu to='/SMU_Tecnico'>
                                     G4 SMU
                                 </SubMenu>
+                                <SubMenu to='/Mintic'>
+                                    G5 MINTIC
+                                </SubMenu>
                                 <SubMenu to='/PlaneacionTecnico'>
                                     G6 Proyectos
                                 </SubMenu>
