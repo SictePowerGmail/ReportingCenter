@@ -6,7 +6,7 @@ export default class CorporativoPuntuacion extends Component {
     return (
       <PowerBi
       title="Puntuación corporativo"
-      src="https://app.powerbi.com/view?r=eyJrIjoiNjQwMjcxOTEtNmM3Ni00ODNhLThhOTctODdmODMwZGZjNTg5IiwidCI6ImUwYmZlOTBkLTIwZTAtNDEwYi1iNmYxLTQyOWIwNDNkMzYwOCJ9">
+      src="https://app.powerbi.com/view?r=eyJrIjoiZmYwNDY5NWEtZmMyYy00NzhhLTkzOTYtNTllMDIwMTM0OWJkIiwidCI6ImUwYmZlOTBkLTIwZTAtNDEwYi1iNmYxLTQyOWIwNDNkMzYwOCJ9">
       </PowerBi>
     )
   }
