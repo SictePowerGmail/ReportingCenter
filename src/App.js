@@ -71,7 +71,7 @@ function App() {
         <Route path='/Seguimiento' exact element={<Seguimiento />} />
         <Route path='/PlaneacionFacturacion' exacte element={<PlaneacionFacturacion />} />
         <Route path='/WhatsApp' exacte element={<WhatsApp />} />
-        <Route path='/MantenimientoBacklog' exacte element={<MantenimientoBacklog />} />
+        <Route path='/MantenimientoBacklog' exacte element={<MantenimientoBacklog/>} />
         <Route path='/SMU_Financiero' exacte element={<SMU_Financiero />} />
         <Route path='/MercadoMasivo' exacte element={<MercadoMasivo />} />
         <Route path='/HistoricoKPI' exacte element={<HistoricoKPI />} />

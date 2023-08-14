@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { PowerBi } from '../components/Navbar/Narbar.elements'
 
-export default class MantenimientoPuntuacion extends Component {
+export default class MantenimientoBacklog extends Component {
   render() {
     return (
       <PowerBi
