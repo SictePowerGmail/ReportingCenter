@@ -102,6 +102,9 @@ const Navbar = () => {
                                 <SubMenu to='/Logistica_tecnico'>
                                     Logística
                                 </SubMenu>
+                                <SubMenu to='/NPS'>
+                                    NPS
+                                </SubMenu>
                                 
                             </DropDownContent>
                         </DropDownLi>

@@ -40,6 +40,7 @@ import Moviles from './pages/Moviles';
 import Sitios_Moviles from './pages/Sitios_Moviles';
 import Logistica from './pages/Logistica';
 import Mintic from './pages/Mintic';
+import NPS from './pages/NPS';
 
 
 //        <Route path='/' exact element={<Login />} />
@@ -84,6 +85,7 @@ function App() {
         <Route path='/Sitios_moviles' exacte element={<Sitios_Moviles />} />
         <Route path='/Logistica_tecnico' exacte element={<Logistica />} />
         <Route path='/Mintic' exacte element={<Mintic />} />
+        <Route path='/NPS' exacte element={<NPS />} />
       </Routes>
     </Router>
   );
