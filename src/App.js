@@ -41,6 +41,7 @@ import Sitios_Moviles from './pages/Sitios_Moviles';
 import Logistica from './pages/Logistica';
 import Mintic from './pages/Mintic';
 import NPS from './pages/NPS';
+import BacklogHFC from './pages/Backlog_HFC';
 
 
 //        <Route path='/' exact element={<Login />} />
@@ -81,6 +82,7 @@ function App() {
         <Route path='/SMU_Tecnico' exacte element={<SMU_Tecnico />} />
         <Route path='/Centro_de_costos' exacte element={<CentrosDeCostos />} />
         <Route path='/MantenimientoBacklogFO' exacte element={<BacklogFO />} />
+        <Route path='/MantenimientoBacklogHFC' exacte element={<BacklogHFC />} />
         <Route path='/Moviles' exacte element={<Moviles />} />
         <Route path='/Sitios_moviles' exacte element={<Sitios_Moviles />} />
         <Route path='/Logistica_tecnico' exacte element={<Logistica />} />
