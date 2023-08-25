@@ -124,7 +124,11 @@ const Navbar = () => {
                                 <SubMenu to='/MantenimientoPuntuacion'>
                                     Mantenimiento
                                 </SubMenu>
+                                <SubMenu to='/ReingenieriasPuntuacion'>
+                                    Reingenierias
+                                </SubMenu>
                             </DropDownContent>
+                            
                         </DropDownLi>
 
                         <DropDownLi>
@@ -166,6 +170,9 @@ const Navbar = () => {
                             </StyledSubMenu>
                             <DropDownContent>
                                 {" "}
+                                <SubMenu to='/GestionDeNomina'>
+                                    Gestión de nómina
+                                </SubMenu>
                                 <SubMenu to='/Penalizaciones'>
                                     Penalizaciones
                                 </SubMenu>

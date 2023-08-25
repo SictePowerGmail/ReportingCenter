@@ -42,6 +42,8 @@ import Logistica from './pages/Logistica';
 import Mintic from './pages/Mintic';
 import NPS from './pages/NPS';
 import BacklogHFC from './pages/Backlog_HFC';
+import ReingenieriasPuntuacion from './pages/ReingenieriasPuntuacion';
+import GestionNomina from './pages/GestionNomina';
 
 
 //        <Route path='/' exact element={<Login />} />
@@ -88,6 +90,8 @@ function App() {
         <Route path='/Logistica_tecnico' exacte element={<Logistica />} />
         <Route path='/Mintic' exacte element={<Mintic />} />
         <Route path='/NPS' exacte element={<NPS />} />
+        <Route path='/ReingenieriasPuntuacion' exacte element={<ReingenieriasPuntuacion />} />
+        <Route path='/GestionDeNomina' exacte element={<GestionNomina />} />
       </Routes>
     </Router>
   );
