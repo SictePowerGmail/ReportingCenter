@@ -103,9 +103,8 @@ const Navbar = () => {
                                     Logística
                                 </SubMenu>
                                 <SubMenu to='/NPS'>
-                                    NPS
+                                    NPS - Contraseña: 4434
                                 </SubMenu>
-                                
                             </DropDownContent>
                         </DropDownLi>
                         
