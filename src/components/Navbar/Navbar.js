@@ -160,6 +160,9 @@ const Navbar = () => {
                                 <SubMenu to='/Seguimiento'>
                                     Seguimiento
                                 </SubMenu>
+                                <SubMenu to='/MantenimientoHorarios'>
+                                    Horarios
+                                </SubMenu>
                             </DropDownContent>
                         </DropDownLi>
 

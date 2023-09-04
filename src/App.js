@@ -44,6 +44,7 @@ import NPS from './pages/NPS';
 import BacklogHFC from './pages/Backlog_HFC';
 import ReingenieriasPuntuacion from './pages/ReingenieriasPuntuacion';
 import GestionNomina from './pages/GestionNomina';
+import MantenimientoHorarios from './pages/MantenimientoHorarios';
 
 
 //        <Route path='/' exact element={<Login />} />
@@ -92,6 +93,7 @@ function App() {
         <Route path='/NPS' exacte element={<NPS />} />
         <Route path='/ReingenieriasPuntuacion' exacte element={<ReingenieriasPuntuacion />} />
         <Route path='/GestionDeNomina' exacte element={<GestionNomina />} />
+        <Route path='/MantenimientoHorarios' exacte element={<MantenimientoHorarios />} />
       </Routes>
     </Router>
   );
