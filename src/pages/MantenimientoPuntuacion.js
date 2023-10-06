@@ -6,7 +6,7 @@ export default class MantenimientoPuntuacion extends Component {
     return (
       <PowerBi
       title="Puntuación mantenimiento"
-      src="https://app.powerbi.com/view?r=eyJrIjoiMWZhOTNlMTUtYmNkYy00YjM4LTkxNDctZDBhZTg5NWQ0YjNlIiwidCI6ImUwYmZlOTBkLTIwZTAtNDEwYi1iNmYxLTQyOWIwNDNkMzYwOCJ9&pageName=ReportSection21d7783099cd4c41409c">
+      src="https://app.powerbi.com/view?r=eyJrIjoiMGFjZTc5NzgtNWZlNi00MTEyLThiZGEtMDcwOGUzZmJmNzZlIiwidCI6ImUwYmZlOTBkLTIwZTAtNDEwYi1iNmYxLTQyOWIwNDNkMzYwOCJ9">
       </PowerBi>
     )
   }
