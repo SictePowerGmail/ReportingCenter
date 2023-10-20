@@ -178,6 +178,9 @@ const Navbar = () => {
                                 <SubMenu to='/GestionDeNomina'>
                                     Gestión de nómina
                                 </SubMenu>
+                                <SubMenu to='/ParqueAutomotor'>
+                                    Parque automor
+                                </SubMenu>
                                 <SubMenu to='/Penalizaciones'>
                                     Penalizaciones
                                 </SubMenu>
