@@ -6,7 +6,7 @@ export default class MantenimientoPuntuacionTMRF extends Component {
     return (
       <PowerBi
       title="Puntuación mantenimiento"
-      src="https://app.powerbi.com/view?r=eyJrIjoiYzM1NDhlNDAtN2M4Mi00YmNlLTk2MWEtMGRmYjEzNmI3Y2FhIiwidCI6ImUwYmZlOTBkLTIwZTAtNDEwYi1iNmYxLTQyOWIwNDNkMzYwOCJ9">
+      src="https://app.powerbi.com/view?r=eyJrIjoiZTIzNjA3YzktMjRmYy00YWUxLTkwMDEtZDVmOTA2MzEyZWZlIiwidCI6ImNmMzJhMGM2LWM5OTAtNDZhYS05NmUwLWQwNGY1MDdiMTEwMyJ9">
       </PowerBi>
     )
   }
