@@ -145,9 +145,6 @@ const Navbar = () => {
                                 <SubMenu to='/MantenimientoPuntuacionTMRF'>
                                     Correctivo - Preventivo
                                 </SubMenu>
-                                <SubMenu to='/PlaneacionEmpalmes'>
-                                    Torre de control
-                                </SubMenu>
                                 <SubMenu to='/PBRB_IndicadoresMantenimiento'>
                                     Informe
                                 </SubMenu>
