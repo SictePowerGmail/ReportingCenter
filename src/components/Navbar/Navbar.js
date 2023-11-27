@@ -142,12 +142,6 @@ const Navbar = () => {
                                 <SubMenu to='/MantenimientoBacklogHFC'>
                                     Cumplimiento SLA HFC
                                 </SubMenu>
-                                <SubMenu to='/MantenimientoFinanciero'>
-                                    Financiero
-                                </SubMenu>
-                                <SubMenu to='/MantenimientoPuntuacion'>
-                                    Puntuación
-                                </SubMenu>
                                 <SubMenu to='/MantenimientoPuntuacionTMRF'>
                                     Correctivo - Preventivo
                                 </SubMenu>
@@ -159,9 +153,6 @@ const Navbar = () => {
                                 </SubMenu>
                                 <SubMenu to='/Seguimiento'>
                                     Seguimiento
-                                </SubMenu>
-                                <SubMenu to='/MantenimientoHorarios'>
-                                    Horarios
                                 </SubMenu>
                             </DropDownContent>
                         </DropDownLi>
