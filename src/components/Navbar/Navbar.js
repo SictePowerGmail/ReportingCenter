@@ -151,6 +151,9 @@ const Navbar = () => {
                                 <SubMenu to='/Seguimiento'>
                                     Seguimiento
                                 </SubMenu>
+                                <SubMenu to='/TorreDeControl'>
+                                    Torre de control
+                                </SubMenu>
                             </DropDownContent>
                         </DropDownLi>
 

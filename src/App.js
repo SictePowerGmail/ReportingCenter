@@ -47,6 +47,7 @@ import GestionNomina from './pages/GestionNomina';
 import MantenimientoHorarios from './pages/MantenimientoHorarios';
 import OperacionesPuntuacion from './pages/OperacionesPuntuacion';
 import ParqueAutomor from './pages/ParqueAutomotor';
+import TorreControl from './pages/TorreControl';
 
 
 //        <Route path='/' exact element={<Login />} />
@@ -98,6 +99,7 @@ function App() {
         <Route path='/MantenimientoHorarios' exacte element={<MantenimientoHorarios />} />
         <Route path='/OperacionesPuntuacion' exacte element={<OperacionesPuntuacion />} />
         <Route path='/ParqueAutomotor' exacte element={<ParqueAutomor />} />
+        <Route path='/TorreDeControl' exacte element={<TorreControl />} />
       </Routes>
     </Router>
   );
