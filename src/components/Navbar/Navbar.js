@@ -42,6 +42,19 @@ const Navbar = () => {
                     <Menu open={showMobileMenu}>
 
                     <DropDownLi>
+                            <StyledSubMenu to='/MantenimientoFacturacion'>
+                                Facturación
+                            </StyledSubMenu>
+                            <DropDownContent>
+                                {" "}
+                                <SubMenu to='/MantenimientoFacturacion'>
+                                    Mantenimiento
+                                </SubMenu>
+                                
+                            </DropDownContent>
+                        </DropDownLi>
+
+                    <DropDownLi>
                             <StyledSubMenu to='/PlaneacionFinanciero'>
                                 Producción
                             </StyledSubMenu>
