@@ -50,7 +50,9 @@ const Navbar = () => {
                                 <SubMenu to='/MantenimientoFacturacion'>
                                     Mantenimiento
                                 </SubMenu>
-                                
+                                <SubMenu to='/OperacionesFacturacion'>
+                                    Operaciones
+                                </SubMenu>
                             </DropDownContent>
                         </DropDownLi>
 
@@ -61,7 +63,7 @@ const Navbar = () => {
                             <DropDownContent>
                                 {" "}
                                 <SubMenu to='/PlaneacionFinanciero'>
-                                    Planeación
+                                    Proyectos
                                 </SubMenu>
                                 <SubMenu to='/CorporativoFinanciero'>
                                     Corporativo
@@ -125,7 +127,7 @@ const Navbar = () => {
                             <DropDownContent>
                                 {" "}
                                 <SubMenu to='/PlaneacionPuntuacion'>
-                                    Planeación
+                                    Proyectos
                                 </SubMenu>
                                 <SubMenu to='/CorporativoPuntuacion'>
                                     Corporativo
