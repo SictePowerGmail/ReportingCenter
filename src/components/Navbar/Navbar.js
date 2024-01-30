@@ -31,7 +31,7 @@ const Navbar = () => {
                             Sicte CCOT
                         </p>
                         <p>
-                            Centro de control de operaciones técnicas
+                            Centro Técnico de Control
                         </p>
                     </LogoContainer>
                     <MobileIcon onClick={() => setShowMobileMenu(!showMobileMenu)}>
