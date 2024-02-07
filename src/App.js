@@ -50,6 +50,7 @@ import ParqueAutomor from './pages/ParqueAutomotor';
 import TorreControl from './pages/TorreControl';
 import MantenimientoFacturacion from './pages/MantenmimientoFacturacion';
 import OperacionesFacturacion from './pages/OperacionesFacturacion';
+import CorporativoFacturacion from './pages/CorporativoFacturacion';
 
 
 //        <Route path='/' exact element={<Login />} />
@@ -104,6 +105,7 @@ function App() {
         <Route path='/TorreDeControl' exacte element={<TorreControl />} />
         <Route path='/MantenimientoFacturacion' exacte element={<MantenimientoFacturacion />} />
         <Route path='/OperacionesFacturacion' exacte element={<OperacionesFacturacion />} />
+        <Route path='/CorporativoFacturacion' exacte element={<CorporativoFacturacion />} />
       </Routes>
     </Router>
   );
