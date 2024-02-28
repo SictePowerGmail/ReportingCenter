@@ -6,7 +6,7 @@ export default class HistoricoKPI extends Component {
     return (
       <PowerBi
       title="HistoricoKPI"
-      src="https://app.powerbi.com/view?r=eyJrIjoiZGM4ZWM0ZDctOTc0Yy00ZjBiLWJkZWItODIzMmEyMDU5MGJjIiwidCI6ImUwYmZlOTBkLTIwZTAtNDEwYi1iNmYxLTQyOWIwNDNkMzYwOCJ9">
+      src="https://app.powerbi.com/view?r=eyJrIjoiYjUyYjVhYjUtNDMwNC00OGYwLTgzZmItODRiZjFhOTFiZmI3IiwidCI6ImUwYmZlOTBkLTIwZTAtNDEwYi1iNmYxLTQyOWIwNDNkMzYwOCJ9">
       </PowerBi>
     )
   }
