@@ -6,7 +6,7 @@ export default class Mintic extends Component {
     return (
       <PowerBi
       title="G5 Mintic"
-      src="https://app.powerbi.com/view?r=eyJrIjoiZmM1ZjlkZDktMzhlMy00N2JiLWE3ZGItMGZiZjljOWU4NGIyIiwidCI6ImUwYmZlOTBkLTIwZTAtNDEwYi1iNmYxLTQyOWIwNDNkMzYwOCJ9">
+      src="https://app.powerbi.com/view?r=eyJrIjoiYzdkYWEzZTQtMzIwNC00YWMwLTg4NjUtYTQ4YjMwNGJmNjA3IiwidCI6IjQ2YmIyMmI4LTRjMmMtNDBmZi04MzYwLTdiNjMzNDgyMTI3OSIsImMiOjR9&pageName=ReportSection4779131ba95a01155cdc">
       </PowerBi>
     )
   }

@@ -90,6 +90,9 @@ const Navbar = () => {
                             </StyledSubMenu>
                             <DropDownContent>
                                 {" "}
+                                <SubMenu to='/HistoricoKPI'>
+                                    Histórico KPI 
+                                </SubMenu>
                                 <SubMenu to='/MantenimientoTecnico'>
                                     G1 Mantenimiento
                                 </SubMenu>
@@ -110,9 +113,6 @@ const Navbar = () => {
                                 </SubMenu>
                                 <SubMenu to='/Sitios_moviles'>
                                     G7 Sitios Móviles
-                                </SubMenu>
-                                <SubMenu to='/HistoricoKPI'>
-                                    Histórico KPI 
                                 </SubMenu>
                                 <SubMenu to='/Logistica_tecnico'>
                                     Logística
