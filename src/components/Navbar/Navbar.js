@@ -47,6 +47,9 @@ const Navbar = () => {
                             </StyledSubMenu>
                             <DropDownContent>
                                 {" "}
+                                <SubMenu to='/PlaneacionFacturacion'>
+                                    Proyectos
+                                </SubMenu>
                                 <SubMenu to='/CorporativoFacturacion'>
                                     Corporativo
                                 </SubMenu>
