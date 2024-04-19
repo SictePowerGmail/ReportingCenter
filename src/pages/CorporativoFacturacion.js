@@ -6,7 +6,7 @@ export default class CorporativoFacturacion extends Component {
     return (
       <PowerBiPrivate
       title="Financiero corporativo"
-      src="https://app.powerbi.com/reportEmbed?reportId=f3c01404-dcf3-455e-aa3d-3a32e4b79936&autoAuth=true&ctid=e0bfe90d-20e0-410b-b6f1-429b043d3608">
+      src="https://app.powerbi.com/reportEmbed?reportId=a7172b1e-9bf4-4166-b829-5c8c812b0a71&autoAuth=true&ctid=e0bfe90d-20e0-410b-b6f1-429b043d3608">
       </PowerBiPrivate>
     )
   }
