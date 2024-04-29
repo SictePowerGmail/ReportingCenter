@@ -51,6 +51,7 @@ import TorreControl from './pages/TorreControl';
 import MantenimientoFacturacion from './pages/MantenmimientoFacturacion';
 import OperacionesFacturacion from './pages/OperacionesFacturacion';
 import CorporativoFacturacion from './pages/CorporativoFacturacion';
+import FacturacionConsolidado from './pages/FacturacionConsolidado';
 
 
 //        <Route path='/' exact element={<Login />} />
@@ -106,6 +107,7 @@ function App() {
         <Route path='/MantenimientoFacturacion' exacte element={<MantenimientoFacturacion />} />
         <Route path='/OperacionesFacturacion' exacte element={<OperacionesFacturacion />} />
         <Route path='/CorporativoFacturacion' exacte element={<CorporativoFacturacion />} />
+        <Route path='/ConsolidadoNacionalFacturacion' exacte element={<FacturacionConsolidado />} />
       </Routes>
     </Router>
   );
