@@ -52,6 +52,7 @@ import MantenimientoFacturacion from './pages/MantenmimientoFacturacion';
 import OperacionesFacturacion from './pages/OperacionesFacturacion';
 import CorporativoFacturacion from './pages/CorporativoFacturacion';
 import FacturacionConsolidado from './pages/FacturacionConsolidado';
+import Compras from './pages/Compras';
 
 
 //        <Route path='/' exact element={<Login />} />
@@ -108,6 +109,7 @@ function App() {
         <Route path='/OperacionesFacturacion' exacte element={<OperacionesFacturacion />} />
         <Route path='/CorporativoFacturacion' exacte element={<CorporativoFacturacion />} />
         <Route path='/ConsolidadoNacionalFacturacion' exacte element={<FacturacionConsolidado />} />
+        <Route path='/Compras' exacte element={<Compras />} />
       </Routes>
     </Router>
   );

@@ -202,6 +202,9 @@ const Navbar = () => {
                                 <SubMenu to='/Moviles'>
                                     Composición móviles
                                 </SubMenu>
+                                <SubMenu to='/Compras'>
+                                    Compras
+                                </SubMenu>
 
                             </DropDownContent>
                         </DropDownLi>
