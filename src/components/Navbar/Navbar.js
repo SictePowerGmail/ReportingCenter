@@ -53,6 +53,9 @@ const Navbar = () => {
                                 <SubMenu to='/PlaneacionFacturacion'>
                                     Proyectos
                                 </SubMenu>
+                                <SubMenu to='/SeguimientoProyectos'>
+                                    Seguimiento proyectos
+                                </SubMenu>
                                 <SubMenu to='/CorporativoFacturacion'>
                                     Corporativo
                                 </SubMenu>
