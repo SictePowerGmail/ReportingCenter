@@ -9,31 +9,31 @@ export const Container = styled.div`
 
 export const Wrapper = styled.div`
     width: 100%;
-    max-width: 1300px;
+    max-width: 1500px;
     height: 100%;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
     margin: auto;
-    `;
+    `;  
 
 export const LogoContainer = styled.div`
-    margin-left: 0.5rem;
+    height: 100%;
     display: flex;
     align-items: center;
-    font.size: 1.2rem;
     font-family: sans-serif;
 
     p {
         &:nth-child(1){
-            font-size: 1.5rem;
-            font-weight: 500;
+            font-size: 24px;
             color: #fff;
+            margin: 8px;
         }
 
         &:nth-child(2){
-            margin-left: 15px;
+            font-size: 17px;
             color: #e07924;
+            margin: 8px;
         }
     }
 
@@ -49,10 +49,10 @@ export const Menu = styled.ul`
     justify-content: space-between;
     list-style: none;
 
-    @media screen and (max-width: 960px) {
+    @media screen and (max-width: 1300px) {
         background-color: #23394d;
         position: absolute;
-        top: 70px;
+        top: 50px;
         left: ${({open})=> open ? "0" : "-100%"};
         width: 100%;
         height: 90vh;
@@ -67,7 +67,7 @@ export const MenuItem = styled.li`
     height: 100%;
     
 
-    @media screen and (max-width: 960px) {
+    @media screen and (max-width: 1300px) {
         width: 100%;
         height: 70px;
         display: flex;
@@ -117,7 +117,7 @@ export const MenuItemLink = styled(Link)`
 
 
 
-    @media screen and (max-width: 960px){
+    @media screen and (max-width: 1300px){
         width: 100%;
 
         div{
@@ -133,7 +133,7 @@ export const MenuItemLink = styled(Link)`
 
     export const MobileIcon = styled.div`
         display: none;
-        @media screen and (max-width: 960px){
+        @media screen and (max-width: 1300px){
             display: flex;
             align-items: center;
             cursor: pointer;

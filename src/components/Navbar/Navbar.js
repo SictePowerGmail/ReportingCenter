@@ -31,22 +31,21 @@ const Navbar = () => {
                             Sicte CCOT
                         </p>
                         <p>
-                            Centro Técnico de Control
+                            Centro de Control de Operaciones Técnicas
                         </p>
                     </LogoContainer>
                     <MobileIcon onClick={() => setShowMobileMenu(!showMobileMenu)}>
                         {
                             showMobileMenu ? <FaTimes /> : <FaBars />
                         }
-                    </MobileIcon>
+                    </MobileIcon>   
                     <Menu open={showMobileMenu}>
 
-                    <DropDownLi>
+                        <DropDownLi>
                             <StyledSubMenu to='/MantenimientoFacturacion'>
                                 Facturación
                             </StyledSubMenu>
                             <DropDownContent>
-                                {" "}
                                 <SubMenu to='/ConsolidadoNacionalFacturacion'>
                                     Consolidado nacional
                                 </SubMenu>
@@ -68,12 +67,11 @@ const Navbar = () => {
                             </DropDownContent>
                         </DropDownLi>
 
-                    <DropDownLi>
+                        <DropDownLi>
                             <StyledSubMenu to='/PlaneacionFinanciero'>
                                 Producción
                             </StyledSubMenu>
                             <DropDownContent>
-                                {" "}
                                 <SubMenu to='/PlaneacionFinanciero'>
                                     Proyectos
                                 </SubMenu>
@@ -98,7 +96,6 @@ const Navbar = () => {
                                 Indicadores
                             </StyledSubMenu>
                             <DropDownContent>
-                                {" "}
                                 <SubMenu to='/HistoricoKPI'>
                                     Histórico KPI 
                                 </SubMenu>
@@ -131,13 +128,13 @@ const Navbar = () => {
                                 </SubMenu>
                             </DropDownContent>
                         </DropDownLi>
-                        
+                            
                         <DropDownLi>
                             <StyledSubMenu to='/PlaneacionTecnico'>
                                 Puntuación
                             </StyledSubMenu>
                             <DropDownContent>
-                                {" "}
+                                
                                 <SubMenu to='/PlaneacionPuntuacion'>
                                     Proyectos
                                 </SubMenu>
@@ -153,8 +150,7 @@ const Navbar = () => {
                                 <SubMenu to='/OperacionesPuntuacion'>
                                     Operaciones
                                 </SubMenu>
-                            </DropDownContent>
-                            
+                            </DropDownContent> 
                         </DropDownLi>
 
                         <DropDownLi>
@@ -162,7 +158,7 @@ const Navbar = () => {
                                 Mantenimiento
                             </StyledSubMenu>
                             <DropDownContent>
-                                {" "}
+                                
                                 <SubMenu to='/MantenimientoBacklogFO'>
                                     Cumplimiento SLA FO
                                 </SubMenu>
@@ -189,7 +185,7 @@ const Navbar = () => {
                                 Dirección
                             </StyledSubMenu>
                             <DropDownContent>
-                                {" "}
+                                
                                 <SubMenu to='/GestionDeNomina'>
                                     Gestión de nómina
                                 </SubMenu>
