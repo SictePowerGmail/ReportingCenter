@@ -55,7 +55,7 @@ import FacturacionConsolidado from './pages/FacturacionConsolidado';
 import Compras from './pages/Compras';
 import SeguimientoProyectos from './pages/SeguimientoProyectos';
 
-
+//4434
 //        <Route path='/' exact element={<Login />} />
 //        <Route path='/ReportingCenter' exact element={<Login />} />
 function App() {
