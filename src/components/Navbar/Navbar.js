@@ -102,29 +102,11 @@ const Navbar = () => {
                                 <SubMenu to='/MantenimientoTecnico'>
                                     G1 Mantenimiento
                                 </SubMenu>
-                                <SubMenu to='/MercadoMasivo'>
-                                    G2 - G8 Mercado masivo
-                                </SubMenu>
-                                <SubMenu to='/CorporativoKPI'>
-                                    G3 - G9 Corporativo	
-                                </SubMenu>
-                                <SubMenu to='/SMU_Tecnico'>
-                                    G4 SMU
-                                </SubMenu>
                                 <SubMenu to='/Mintic'>
                                     G5 MINTIC
                                 </SubMenu>
-                                <SubMenu to='/PlaneacionTecnico'>
-                                    G6 Proyectos
-                                </SubMenu>
-                                <SubMenu to='/Sitios_moviles'>
-                                    G7 Sitios Móviles
-                                </SubMenu>
-                                <SubMenu to='/Logistica_tecnico'>
-                                    Logística
-                                </SubMenu>
                                 <SubMenu to='/NPS'>
-                                    NPS - Contraseña: 4434
+                                    NPS
                                 </SubMenu>
                             </DropDownContent>
                         </DropDownLi>
@@ -168,9 +150,6 @@ const Navbar = () => {
                                 <SubMenu to='/MantenimientoPuntuacionTMRF'>
                                     Correctivo - Preventivo
                                 </SubMenu>
-                                <SubMenu to='/PBRB_IndicadoresMantenimiento'>
-                                    Informe
-                                </SubMenu>
                                 <SubMenu to='/Seguimiento'>
                                     Seguimiento
                                 </SubMenu>
@@ -185,16 +164,6 @@ const Navbar = () => {
                                 Dirección
                             </StyledSubMenu>
                             <DropDownContent>
-                                
-                                <SubMenu to='/GestionDeNomina'>
-                                    Gestión de nómina
-                                </SubMenu>
-                                <SubMenu to='/ParqueAutomotor'>
-                                    Parque automor
-                                </SubMenu>
-                                <SubMenu to='/Penalizaciones'>
-                                    Penalizaciones
-                                </SubMenu>
                                 <SubMenu to='/Centro_de_costos'>
                                     Centros de costos
                                 </SubMenu>
