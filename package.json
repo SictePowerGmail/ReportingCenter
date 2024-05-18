@@ -2,7 +2,7 @@
   "name": "responsivemenu",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://SictePowerGmail.github.io/ReportingCenter",
+  "homepage": "https://sictepowergmail.github.io/ReportingCenter/",
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.1.1",
     "@fortawesome/free-solid-svg-icons": "^6.1.1",
