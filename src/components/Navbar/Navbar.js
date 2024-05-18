@@ -148,7 +148,7 @@ const Navbar = () => {
                                     Cumplimiento SLA HFC
                                 </SubMenu>
                                 <SubMenu to='/MantenimientoPuntuacionTMRF'>
-                                    Correctivo - Preventivo
+                                    Correctivo - Preventivo MTTO
                                 </SubMenu>
                                 <SubMenu to='/Seguimiento'>
                                     Seguimiento
