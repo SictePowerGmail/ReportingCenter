@@ -129,9 +129,7 @@ const Navbar = () => {
                                 <SubMenu to='/ReingenieriasPuntuacion'>
                                     Reingenierias
                                 </SubMenu>
-                                <SubMenu to='/OperacionesPuntuacion'>
-                                    Operaciones
-                                </SubMenu>
+
                             </DropDownContent> 
                         </DropDownLi>
 
