@@ -54,6 +54,8 @@ import CorporativoFacturacion from './pages/CorporativoFacturacion';
 import FacturacionConsolidado from './pages/FacturacionConsolidado';
 import Compras from './pages/Compras';
 import SeguimientoProyectos from './pages/SeguimientoProyectos';
+import MinticFacturacion from './pages/MinticFacturacion';
+import STTA from './pages/STTA';
 
 //4434
 //        <Route path='/' exact element={<Login />} />
@@ -112,6 +114,8 @@ function App() {
         <Route path='/ConsolidadoNacionalFacturacion' exacte element={<FacturacionConsolidado />} />
         <Route path='/Compras' exacte element={<Compras />} />
         <Route path='/SeguimientoProyectos' exacte element={<SeguimientoProyectos/>} />
+        <Route path='/MinticFacturacion' exacte element={<MinticFacturacion/>} />
+        <Route path='/STTA' exacte element={<STTA/>} />
       </Routes>
     </Router>
   );

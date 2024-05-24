@@ -64,6 +64,9 @@ const Navbar = () => {
                                 <SubMenu to='/OperacionesFacturacion'>
                                     Operaciones
                                 </SubMenu>
+                                <SubMenu to='/MinticFacturacion'>
+                                    Mintic
+                                </SubMenu>
                             </DropDownContent>
                         </DropDownLi>
 
@@ -170,6 +173,9 @@ const Navbar = () => {
                                 </SubMenu>
                                 <SubMenu to='/Compras'>
                                     Compras
+                                </SubMenu>
+                                <SubMenu to='/STTA'>
+                                    STTA
                                 </SubMenu>
 
                             </DropDownContent>
