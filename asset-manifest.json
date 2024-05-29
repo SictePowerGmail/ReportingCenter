@@ -1,13 +1,12 @@
 {
   "files": {
-    "main.css": "/ReportingCenter/static/css/main.e7720ab7.css",
-    "main.js": "/ReportingCenter/static/js/main.d599dc65.js",
+    "main.css": "/ReportingCenter/static/css/main.31d6cfe0.css",
+    "main.js": "/ReportingCenter/static/js/main.6573ced6.js",
     "index.html": "/ReportingCenter/index.html",
-    "main.e7720ab7.css.map": "/ReportingCenter/static/css/main.e7720ab7.css.map",
-    "main.d599dc65.js.map": "/ReportingCenter/static/js/main.d599dc65.js.map"
+    "main.6573ced6.js.map": "/ReportingCenter/static/js/main.6573ced6.js.map"
   },
   "entrypoints": [
-    "static/css/main.e7720ab7.css",
-    "static/js/main.d599dc65.js"
+    "static/css/main.31d6cfe0.css",
+    "static/js/main.6573ced6.js"
   ]
 }
