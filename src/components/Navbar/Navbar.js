@@ -155,7 +155,7 @@ const Navbar = () => {
                                     Correctivo - Preventivo MTTO
                                 </SubMenu>
                                 <SubMenu to='/Seguimiento'>
-                                    Seguimiento MTTO
+                                    Seguimiento
                                 </SubMenu>
                                 <SubMenu to='/TorreDeControl'>
                                     Torre de control
