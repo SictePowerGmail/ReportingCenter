@@ -71,10 +71,13 @@ const Navbar = () => {
                         </DropDownLi>
 
                         <DropDownLi>
-                            <StyledSubMenu to='/PlaneacionFinanciero'>
+                            <StyledSubMenu to='/RendimientoOperativo'>
                                 Producción
                             </StyledSubMenu>
                             <DropDownContent>
+                                <SubMenu to='/RendimientoOperativo'>
+                                    Rendimiento operativo
+                                </SubMenu>
                                 <SubMenu to='/PlaneacionFinanciero'>
                                     Proyectos
                                 </SubMenu>
