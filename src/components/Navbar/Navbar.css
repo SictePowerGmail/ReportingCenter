@@ -1,0 +1,174 @@
+#Contenedor {
+    width: 100%;
+    height: 40px;
+    background-color: #23394d;
+    max-width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin: auto;
+}
+
+#Icono-Menu{
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    color: #e07924;
+    margin: auto 5px;
+    padding-left: 4px;
+    padding-right: 10px;
+    font-size: 20px;
+
+    &:hover {
+        color: #ff6f00;
+        transition: 0.3s all ease;
+    }
+}
+
+#Titulo {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    font-family: sans-serif;
+    margin: 0 auto;
+
+    p {
+        &:nth-child(1){
+            font-size: 24px;
+            color: #fff;
+            margin: auto 8px;
+        }
+
+        &:nth-child(2){
+            font-size: 17px;
+            color: #e0792a;
+            margin: auto 8px;
+        }
+    }
+
+    @media screen and (max-width: 539px) {
+        p {
+            &:nth-child(2){
+                display: none;
+            }
+        }
+    }
+}
+
+#MenuContainer {
+    max-height: calc(100vh); /* Altura máxima: altura de la ventana - altura del título */
+    overflow-y: auto;
+    height: 100%;
+    display: flex;
+    list-style: none;
+    background-color: #0F1D2B;
+    position: absolute;
+    top: 40px;
+    flex-direction: column;
+    width: 220px;
+}
+
+#MenuContainerCerrado {
+    max-height: calc(100vh); /* Altura máxima: altura de la ventana - altura del título */
+    overflow-y: auto;
+    height: 100%;
+    display: flex;
+    list-style: none;
+    background-color: #0F1D2B;
+    position: absolute;
+    top: 40px;
+    flex-direction: column;
+    transition: 0.3s all ease;
+    width: 40px;
+}
+
+/* Estilos para las barras de desplazamiento */
+#MenuContainer::-webkit-scrollbar {
+    width: 5px;
+}
+
+#MenuContainer::-webkit-scrollbar-thumb {
+    background-color: #e0792a;
+    border-radius: 5px;
+}
+
+#MenuContainer::-webkit-scrollbar-thumb:hover {
+    background-color: #ff6f00;
+}
+
+#MenuContainer::-webkit-scrollbar-track {
+    background-color: #ddd;
+}
+
+#Menu {
+    padding: 3px 3px; /* Agrega espacio entre el menú y la parte superior del contenedor */
+}
+
+#SubMenu {
+    display: inline-block;
+}
+
+#SubMenu-Titulo {
+    display: inline-block;
+    text-decoration: none;
+    cursor: pointer;
+    color: #64b2ff;
+    padding: 3px 3px;
+    min-width: 210px;
+    font-family: sans-serif;
+    
+    &:hover {
+        color: #fff;
+        background-color: #e0792a;
+        transition: 0.3s all ease;
+        border-radius: 5px;
+    }
+}
+
+#SubMenu-Contenido {
+    display: block;
+    border-radius: 5px;
+}
+
+#SubMenu-Contenido-Titulo {
+    text-decoration: none;
+    display: flex;
+    background-color: #23394d;
+    padding: 3px 3px 3px 30px;
+    color: #64b2ff;
+    font-size: 15px;
+    font-family: sans-serif;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+
+    &:hover {
+        color: #fff;
+        background-color: #e0792a;
+        transition: 0.3s all ease;
+        border-radius: 5px;
+    }
+}
+
+#SubMenu-Titulo-Contenedor {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+#SubMenu-Titulo-Icono {
+    padding-left: 4px;
+    padding-right: 10px;
+    font-size: 20px;
+}
+
+#SubMenu-Titulo-Texto {
+    font-size: 15px;
+    flex: 1;
+}
+
+#SubMenu-Titulo-Icono2 {
+    font-size: 16px;
+    margin-left: auto;
+}
