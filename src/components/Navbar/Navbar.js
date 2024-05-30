@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
 import './Navbar.css'
-import { FaBars, FaTimes, FaHome, FaChartLine, FaStar, FaTools, FaBuilding, FaChevronDown, FaChevronUp } from 'react-icons/fa';
-import { HiClipboardList, HiChartBar } from "react-icons/hi";
+import { FaBars, FaTimes, FaHome, FaChartLine, FaStar, FaTools, FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import { HiClipboardList, HiChartBar, HiOfficeBuilding } from "react-icons/hi";
 
 const Navbar = () => {
-    const [showMobileMenu, setShowMobileMenu] = useState(true);
+    const [showMobileMenu, setShowMobileMenu] = useState(false);
     const [showDropdownFacturacion, setShowDropdownFacturacion] = useState(false);
     const [showDropdownProduccion, setShowDropdownProduccion] = useState(false);
     const [showDropdownIndicadores, setShowDropdownIndicadores] = useState(false);
@@ -190,7 +190,7 @@ const Navbar = () => {
                                 setShowDropdownDireccion(!showDropdownDireccion)
                             }}>
                                 <span id='SubMenu-Titulo-Contenedor'>
-                                    <span id='SubMenu-Titulo-Icono'><FaBuilding/></span>
+                                    <span id='SubMenu-Titulo-Icono'><HiOfficeBuilding/></span>
                                     <span id="SubMenu-Titulo-Texto">Dirección</span>
                                     <span id="SubMenu-Titulo-Icono2">
                                         {
@@ -269,7 +269,7 @@ const Navbar = () => {
                         <li id='SubMenu'>
                             <div id='SubMenu-Titulo'>
                                 <span id='SubMenu-Titulo-Contenedor'>
-                                    <span id='SubMenu-Titulo-Icono'><FaBuilding/></span>
+                                    <span id='SubMenu-Titulo-Icono'><HiOfficeBuilding/></span>
                                 </span>
                             </div>
                         </li>
