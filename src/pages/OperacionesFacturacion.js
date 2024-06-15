@@ -6,7 +6,7 @@ export default class OperacionesFacturacion extends Component {
     return (
       <PowerBiPrivate
       title="Facturación operaciones"
-      src="https://app.powerbi.com/reportEmbed?reportId=dca84934-e4bb-468b-9e14-79d0321bc280&autoAuth=true&ctid=e0bfe90d-20e0-410b-b6f1-429b043d3608">
+      src="https://app.powerbi.com/reportEmbed?reportId=18dca057-81ed-47ba-9cbc-fdc150f22621&autoAuth=true&ctid=e0bfe90d-20e0-410b-b6f1-429b043d3608">
       </PowerBiPrivate>
     )
   }

@@ -164,7 +164,7 @@ const Navbar = () => {
                             }}>
                                 <span id='SubMenu-Titulo-Contenedor'>
                                     <span id='SubMenu-Titulo-Icono'><FaTools/></span>
-                                    <span id="SubMenu-Titulo-Texto">Mantenimiento</span>
+                                    <span id="SubMenu-Titulo-Texto">Operación</span>
                                     <span id="SubMenu-Titulo-Icono2">
                                         {
                                             showDropdownMantenimiento ? <FaChevronUp /> : <FaChevronDown />
@@ -178,6 +178,7 @@ const Navbar = () => {
                                     <Link id='SubMenu-Contenido-Titulo' to="/MantenimientoBacklogHFC" onClick={toggleMobileMenu}>Cumplimiento SLA HFC</Link>
                                     <Link id='SubMenu-Contenido-Titulo' to="/MantenimientoPuntuacionTMRF" onClick={toggleMobileMenu}>Correctivo - Preventivo</Link>
                                     <Link id='SubMenu-Contenido-Titulo' to="/Seguimiento" onClick={toggleMobileMenu}>Seguimiento</Link>
+                                    <Link id='SubMenu-Contenido-Titulo' to="/SeguimientoSMU" onClick={toggleMobileMenu}>Seguimiento SMU</Link>
                                     <Link id='SubMenu-Contenido-Titulo' to="/TorreDeControl" onClick={toggleMobileMenu}>Torre de control</Link>
                                 </div>
                             )}

@@ -1,13 +1,12 @@
 import React, { Component } from 'react'
-import { PowerBi } from '../components/Navbar/Narbar.elements'
+import imagen from '../images/01.jpg'
 
 export default class Inicio extends Component {
   render() {
     return (
-      <PowerBi
-      title="Inicio"
-      src="https://app.powerbi.com/view?r=eyJrIjoiYmQ2MjM3MjctZjIwNC00ODI0LWFlODctMzczMjY3MWY4NmFhIiwidCI6ImUwYmZlOTBkLTIwZTAtNDEwYi1iNmYxLTQyOWIwNDNkMzYwOCJ9&pageName=ReportSection">
-      </PowerBi>
+      <div class="div-Imagen">
+        <img src={imagen} class="Imagen" alt="Imagen 1"/>
+      </div>
     )
   }
 }

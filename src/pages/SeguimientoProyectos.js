@@ -6,7 +6,7 @@ export default class SeguimientoProyectos extends Component {
     return (
       <PowerBiPrivate
       title="Financiero corporativo"
-      src="https://app.powerbi.com/reportEmbed?reportId=cf43bffb-ac93-419f-abc7-44006e81ae45&autoAuth=true&ctid=e0bfe90d-20e0-410b-b6f1-429b043d3608">
+      src="https://app.powerbi.com/reportEmbed?reportId=665f5d73-d0dd-409f-94a9-e19be1e1121c&autoAuth=true&ctid=e0bfe90d-20e0-410b-b6f1-429b043d3608">
       </PowerBiPrivate>
     )
   }

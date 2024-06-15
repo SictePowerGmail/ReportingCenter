@@ -6,7 +6,7 @@ export default class MinticFacturacion extends Component {
     return (
       <PowerBiPrivate
       title="Mintic facturacion"
-      src="https://app.powerbi.com/reportEmbed?reportId=dd98d693-7e56-407b-8c6e-aed9585316c2&autoAuth=true&ctid=e0bfe90d-20e0-410b-b6f1-429b043d3608">
+      src="https://app.powerbi.com/reportEmbed?reportId=2ce4ae7a-fc21-4897-82a7-12e55f396d2d&autoAuth=true&ctid=e0bfe90d-20e0-410b-b6f1-429b043d3608">
       </PowerBiPrivate>
     )
   }

@@ -6,7 +6,7 @@ export default class MantenimientoFacturacion extends Component {
     return (
       <PowerBiPrivate
       title="Financiero facturacion"
-      src="https://app.powerbi.com/reportEmbed?reportId=123fb101-834e-40e9-ab2d-13e00d95683e&autoAuth=true&ctid=e0bfe90d-20e0-410b-b6f1-429b043d3608">
+      src="https://app.powerbi.com/reportEmbed?reportId=fcfbec1b-da73-491c-aabc-23045ec0a975&autoAuth=true&ctid=e0bfe90d-20e0-410b-b6f1-429b043d3608">
       </PowerBiPrivate>
     )
   }
