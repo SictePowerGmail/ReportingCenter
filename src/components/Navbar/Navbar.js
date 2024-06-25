@@ -73,6 +73,7 @@ const Navbar = () => {
                                     <Link id='SubMenu-Contenido-Titulo' to="/MantenimientoFacturacion" onClick={toggleMobileMenu}>Mantenimiento</Link>
                                     <Link id='SubMenu-Contenido-Titulo' to="/OperacionesFacturacion" onClick={toggleMobileMenu}>Operaciones</Link>
                                     <Link id='SubMenu-Contenido-Titulo' to="/MinticFacturacion" onClick={toggleMobileMenu}>Mintic</Link>
+                                    <Link id='SubMenu-Contenido-Titulo' to="/SMU" onClick={toggleMobileMenu}>SMU</Link>
                                 </div>
                             )}
                         </li>

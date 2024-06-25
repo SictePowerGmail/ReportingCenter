@@ -37,6 +37,7 @@ import MinticFacturacion from './pages/MinticFacturacion';
 import STTA from './pages/STTA';
 import RendimientoOperativo from './pages/RendimientoOperativo';
 import SeguimientoSMU from './pages/SeguimientoSMU';
+import SMU from './pages/SMU';
 
 //4434
 
@@ -78,6 +79,7 @@ function App() {
         <Route path='/STTA' exacte element={<STTA/>} />
         <Route path='/RendimientoOperativo' exacte element={<RendimientoOperativo/>} />
         <Route path='/SeguimientoSMU' exacte element={<SeguimientoSMU/>} />
+        <Route path='/SMU' exacte element={<SMU/>} />
       </Routes>
     </Router>
   );
