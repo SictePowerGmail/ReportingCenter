@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
 import './Navbar.css'
-import { FaBars, FaTimes, FaHome, FaChartLine, FaStar, FaTools, FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import { FaCogs, FaBars, FaTimes, FaHome, FaChartLine, FaStar, FaTools, FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import { HiClipboardList, HiChartBar, HiOfficeBuilding } from "react-icons/hi";
 
 const Navbar = () => {
@@ -43,10 +43,17 @@ const Navbar = () => {
                 <div id='MenuContainer'>
                     <ul id='Menu'>
                         <li id='SubMenu'>
-                            <Link id='SubMenu-Titulo' to='/'>
+                            <Link id='SubMenu-Titulo' to='/' onClick={toggleMobileMenu}>
                                 <span id='SubMenu-Titulo-Icono'><FaHome/></span>
                                 <span id="SubMenu-Titulo-Texto">Inicio</span>
                             </Link>      
+                        </li>
+
+                        <li id='SubMenu'>
+                            <Link id='SubMenu-Titulo' to='/Capacidades' onClick={toggleMobileMenu}>
+                                <span id='SubMenu-Titulo-Icono'><FaCogs/></span>
+                                <span id="SubMenu-Titulo-Texto">Capacidades</span>
+                            </Link>  
                         </li>
 
                         <li id='SubMenu'>
@@ -77,6 +84,7 @@ const Navbar = () => {
                                 </div>
                             )}
                         </li>
+
                         <li id='SubMenu'>
                             <div id='SubMenu-Titulo' onClick={() => 
                             {   
@@ -226,6 +234,12 @@ const Navbar = () => {
                             <span id='SubMenu-Titulo'>
                                 <span id='SubMenu-Titulo-Icono'><FaHome/></span>
                             </span>      
+                        </li>
+
+                        <li id='SubMenu'>
+                            <span id='SubMenu-Titulo'>
+                                <span id='SubMenu-Titulo-Icono'><FaCogs/></span>
+                            </span>
                         </li>
 
                         <li id='SubMenu'>

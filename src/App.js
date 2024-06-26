@@ -38,6 +38,7 @@ import STTA from './pages/STTA';
 import RendimientoOperativo from './pages/RendimientoOperativo';
 import SeguimientoSMU from './pages/SeguimientoSMU';
 import SMU from './pages/SMU';
+import Capacidades from './pages/Capacidades'
 
 //4434
 
@@ -80,6 +81,7 @@ function App() {
         <Route path='/RendimientoOperativo' exacte element={<RendimientoOperativo/>} />
         <Route path='/SeguimientoSMU' exacte element={<SeguimientoSMU/>} />
         <Route path='/SMU' exacte element={<SMU/>} />
+        <Route path='/Capacidades' exacte element={<Capacidades/>} />
       </Routes>
     </Router>
   );
