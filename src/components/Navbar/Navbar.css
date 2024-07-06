@@ -1,7 +1,11 @@
+body, #root {
+    height: 100vh;
+}
+
 .div-Imagen {
     align-items: center;
     display: flex;
-    height: 100vh;
+    height: calc(100vh - 40px);
     justify-content: center;
     overflow: hidden;
     padding-left: 40px;
@@ -71,9 +75,9 @@
 }
 
 #MenuContainer {
-    max-height: calc(100vh); /* Altura máxima: altura de la ventana - altura del título */
+    max-height: calc(100vh - 40px); /* Altura máxima: altura de la ventana - altura del título */
     overflow-y: auto;
-    height: 100%;
+    height: calc(100vh - 40px);;
     display: flex;
     list-style: none;
     background-color: #0F1D2B;
@@ -84,9 +88,8 @@
 }
 
 #MenuContainerCerrado {
-    max-height: calc(100vh); /* Altura máxima: altura de la ventana - altura del título */
-    overflow-y: auto;
-    height: 100%;
+    max-height: calc(100vh - 40px); /* Altura máxima: altura de la ventana - altura del título */
+    height: calc(100vh - 40px);;
     display: flex;
     list-style: none;
     background-color: #0F1D2B;
@@ -130,6 +133,23 @@
     color: #64b2ff;
     padding: 3px 3px;
     min-width: 210px;
+    font-family: sans-serif;
+    
+    &:hover {
+        color: #fff;
+        background-color: #e0792a;
+        transition: 0.3s all ease;
+        border-radius: 5px;
+    }
+}
+
+#SubMenu-Titulo-Cerrado {
+    display: inline-block;
+    text-decoration: none;
+    cursor: pointer;
+    color: #64b2ff;
+    padding: 3px 3px;
+    max-width: 34px;
     font-family: sans-serif;
     
     &:hover {

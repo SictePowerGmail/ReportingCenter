@@ -223,27 +223,27 @@ const Navbar = () => {
                 </div>
             )}
 
-{!showMobileMenu && (
-                <div id='MenuContainerCerrado' onMouseEnter={() => 
+            {!showMobileMenu && (
+                <div id='MenuContainerCerrado' onClick={() => 
                 {
                     closeAllDropdowns();
                     setShowMobileMenu(true)
                 }}>
                     <ul id='Menu'>
                         <li id='SubMenu'>
-                            <span id='SubMenu-Titulo'>
+                            <span id='SubMenu-Titulo-Cerrado'>
                                 <span id='SubMenu-Titulo-Icono'><FaHome/></span>
                             </span>      
                         </li>
 
                         <li id='SubMenu'>
-                            <span id='SubMenu-Titulo'>
+                            <span id='SubMenu-Titulo-Cerrado'>
                                 <span id='SubMenu-Titulo-Icono'><FaCogs/></span>
                             </span>
                         </li>
 
                         <li id='SubMenu'>
-                            <div id='SubMenu-Titulo'>
+                            <div id='SubMenu-Titulo-Cerrado'>
                                 <span id='SubMenu-Titulo-Contenedor'>
                                     <span id='SubMenu-Titulo-Icono'><HiClipboardList/></span>
                                 </span>
@@ -251,7 +251,7 @@ const Navbar = () => {
                         </li>
 
                         <li id='SubMenu'>
-                            <div id='SubMenu-Titulo'>
+                            <div id='SubMenu-Titulo-Cerrado'>
                                 <span id='SubMenu-Titulo-Contenedor'>
                                     <span id='SubMenu-Titulo-Icono'><HiChartBar/></span>
                                 </span>
@@ -259,7 +259,7 @@ const Navbar = () => {
                         </li>
 
                         <li id='SubMenu'>
-                            <div id='SubMenu-Titulo'>
+                            <div id='SubMenu-Titulo-Cerrado'>
                                 <span id='SubMenu-Titulo-Contenedor'>
                                     <span id='SubMenu-Titulo-Icono'><FaChartLine/></span>
                                 </span>
@@ -267,7 +267,7 @@ const Navbar = () => {
                         </li>
                             
                         <li id='SubMenu'>
-                            <div id='SubMenu-Titulo'>
+                            <div id='SubMenu-Titulo-Cerrado'>
                                 <span id='SubMenu-Titulo-Contenedor'>
                                     <span id='SubMenu-Titulo-Icono'><FaStar/></span>
                                 </span>
@@ -275,7 +275,7 @@ const Navbar = () => {
                         </li>
 
                         <li id='SubMenu'>
-                            <div id='SubMenu-Titulo'>
+                            <div id='SubMenu-Titulo-Cerrado'>
                                 <span id='SubMenu-Titulo-Contenedor'>
                                     <span id='SubMenu-Titulo-Icono'><FaTools/></span>
                                 </span>
@@ -283,7 +283,7 @@ const Navbar = () => {
                         </li>
 
                         <li id='SubMenu'>
-                            <div id='SubMenu-Titulo'>
+                            <div id='SubMenu-Titulo-Cerrado'>
                                 <span id='SubMenu-Titulo-Contenedor'>
                                     <span id='SubMenu-Titulo-Icono'><HiOfficeBuilding/></span>
                                 </span>
@@ -294,173 +294,6 @@ const Navbar = () => {
             )}
 
         </div>
-        /*        <Container>
-                    <Wrapper>
-                        <IconContext.Provider value={{ style: { fontSize: "2em" } }}>
-        
-                            <LogoContainer>
-                                <p>
-                                    Sicte CCOT
-                                </p>
-                                <p>
-                                    Centro de Control de Operaciones Técnicas
-                                </p>
-                            </LogoContainer>
-                            <MobileIcon onClick={() => setShowMobileMenu(!showMobileMenu)}>
-                                {
-                                    showMobileMenu ? <FaTimes /> : <FaBars />
-                                }
-                            </MobileIcon>   
-                            <Menu open={showMobileMenu}>
-        
-                                <DropDownLi>
-                                    <StyledSubMenu to='/MantenimientoFacturacion'>
-                                        Facturación
-                                    </StyledSubMenu>
-                                    <DropDownContent>
-                                        <SubMenu to='/ConsolidadoNacionalFacturacion'>
-                                            Consolidado nacional
-                                        </SubMenu>
-                                        <SubMenu to='/PlaneacionFacturacion'>
-                                            Proyectos
-                                        </SubMenu>
-                                        <SubMenu to='/SeguimientoProyectos'>
-                                            Seguimiento proyectos
-                                        </SubMenu>
-                                        <SubMenu to='/CorporativoFacturacion'>
-                                            Corporativo
-                                        </SubMenu>
-                                        <SubMenu to='/MantenimientoFacturacion'>
-                                            Mantenimiento
-                                        </SubMenu>
-                                        <SubMenu to='/OperacionesFacturacion'>
-                                            Operaciones
-                                        </SubMenu>
-                                        <SubMenu to='/MinticFacturacion'>
-                                            Mintic
-                                        </SubMenu>
-                                    </DropDownContent>
-                                </DropDownLi>
-        
-                                <DropDownLi>
-                                    <StyledSubMenu to='/RendimientoOperativo'>
-                                        Producción
-                                    </StyledSubMenu>
-                                    <DropDownContent>
-                                        <SubMenu to='/RendimientoOperativo'>
-                                            Rendimiento operativo
-                                        </SubMenu>
-                                        <SubMenu to='/PlaneacionFinanciero'>
-                                            Proyectos
-                                        </SubMenu>
-                                        <SubMenu to='/CorporativoFinanciero'>
-                                            Corporativo
-                                        </SubMenu>
-                                        <SubMenu to='/MantenimientoFinanciero'>
-                                            Mantenimiento
-                                        </SubMenu>
-                                        <SubMenu to='/ReingenieriaFinanciero'>
-                                            Reingenierias
-                                        </SubMenu>
-                                        <SubMenu to='/OperacionesFinanciero'>
-                                            Operaciones
-                                        </SubMenu>
-                                        
-                                    </DropDownContent>
-                                </DropDownLi>
-        
-                                <DropDownLi>
-                                    <StyledSubMenu to='/MantenimientoTecnico'>
-                                        Indicadores
-                                    </StyledSubMenu>
-                                    <DropDownContent>
-                                        <SubMenu to='/HistoricoKPI'>
-                                            Histórico KPI 
-                                        </SubMenu>
-                                        <SubMenu to='/MantenimientoTecnico'>
-                                            G1 Mantenimiento
-                                        </SubMenu>
-                                        <SubMenu to='/Mintic'>
-                                            G5 MINTIC
-                                        </SubMenu>
-                                        <SubMenu to='/NPS'>
-                                            NPS
-                                        </SubMenu>
-                                    </DropDownContent>
-                                </DropDownLi>
-                                    
-                                <DropDownLi>
-                                    <StyledSubMenu to='/PlaneacionTecnico'>
-                                        Puntuación
-                                    </StyledSubMenu>
-                                    <DropDownContent>
-                                        
-                                        <SubMenu to='/PlaneacionPuntuacion'>
-                                            Proyectos
-                                        </SubMenu>
-                                        <SubMenu to='/CorporativoPuntuacion'>
-                                            Corporativo
-                                        </SubMenu>
-                                        <SubMenu to='/MantenimientoPuntuacion'>
-                                            Mantenimiento
-                                        </SubMenu>
-                                        <SubMenu to='/ReingenieriasPuntuacion'>
-                                            Reingenierias
-                                        </SubMenu>
-        
-                                    </DropDownContent> 
-                                </DropDownLi>
-        
-                                <DropDownLi>
-                                    <StyledSubMenu to='/MantenimientoTecnico'>
-                                        Mantenimiento
-                                    </StyledSubMenu>
-                                    <DropDownContent>
-                                        
-                                        <SubMenu to='/MantenimientoBacklogFO'>
-                                            Cumplimiento SLA FO
-                                        </SubMenu>
-                                        <SubMenu to='/MantenimientoBacklogHFC'>
-                                            Cumplimiento SLA HFC
-                                        </SubMenu>
-                                        <SubMenu to='/MantenimientoPuntuacionTMRF'>
-                                            Correctivo - Preventivo MTTO
-                                        </SubMenu>
-                                        <SubMenu to='/Seguimiento'>
-                                            Seguimiento
-                                        </SubMenu>
-                                        <SubMenu to='/TorreDeControl'>
-                                            Torre de control
-                                        </SubMenu>
-                                    </DropDownContent>
-                                </DropDownLi>
-        
-                                <DropDownLi>
-                                    <StyledSubMenu to='/Penalizaciones'>
-                                        Dirección
-                                    </StyledSubMenu>
-                                    <DropDownContent>
-                                        <SubMenu to='/Centro_de_costos'>
-                                            Centros de costos
-                                        </SubMenu>
-                                        <SubMenu to='/Moviles'>
-                                            Composición móviles
-                                        </SubMenu>
-                                        <SubMenu to='/Compras'>
-                                            Compras
-                                        </SubMenu>
-                                        <SubMenu to='/STTA'>
-                                            STTA
-                                        </SubMenu>
-        
-                                    </DropDownContent>
-                                </DropDownLi>
-        
-                            </Menu>
-                        </IconContext.Provider>
-                    </Wrapper>
-                </Container>
-        */
     );
 }
 
