@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/ReportingCenter/static/css/main.87028280.css",
-    "main.js": "/ReportingCenter/static/js/main.c2899db0.js",
+    "main.js": "/ReportingCenter/static/js/main.4fa6e4ad.js",
     "static/media/01.jpg": "/ReportingCenter/static/media/01.90f3a9eed9bfbe9d97b2.jpg",
     "index.html": "/ReportingCenter/index.html",
     "main.87028280.css.map": "/ReportingCenter/static/css/main.87028280.css.map",
-    "main.c2899db0.js.map": "/ReportingCenter/static/js/main.c2899db0.js.map"
+    "main.4fa6e4ad.js.map": "/ReportingCenter/static/js/main.4fa6e4ad.js.map"
   },
   "entrypoints": [
     "static/css/main.87028280.css",
-    "static/js/main.c2899db0.js"
+    "static/js/main.4fa6e4ad.js"
   ]
 }
