@@ -103,7 +103,7 @@ const Navbar = () => {
                             </div>
                             {showDropdownProduccion && (
                                 <div id='SubMenu-Contenido'>
-                                    <Link id='SubMenu-Contenido-Titulo' to="/RendimientoOperativo" onClick={toggleMobileMenu}>Rendimiento operativo</Link>
+                                    <Link id='SubMenu-Contenido-Titulo' to="/RendimientoOperativo" onClick={toggleMobileMenu}>Productividad nacional</Link>
                                     <Link id='SubMenu-Contenido-Titulo' to="/PlaneacionFinanciero" onClick={toggleMobileMenu}>Proyectos</Link>
                                     <Link id='SubMenu-Contenido-Titulo' to="/CorporativoFinanciero" onClick={toggleMobileMenu}>Corporativo</Link>
                                     <Link id='SubMenu-Contenido-Titulo' to="/MantenimientoFinanciero" onClick={toggleMobileMenu}>Mantenimiento</Link>
