@@ -6,7 +6,7 @@ export default class SeguimientoSMU extends Component {
     return (
       <PowerBiPrivate
       title="Seguimiento SMU"
-      src="https://app.powerbi.com/view?r=eyJrIjoiNDVlZDhmOWItYTE5Yy00ODllLWJiMTQtMjI1OWFmYjM1YmM2IiwidCI6ImUwYmZlOTBkLTIwZTAtNDEwYi1iNmYxLTQyOWIwNDNkMzYwOCJ9">
+      src="https://app.powerbi.com/view?r=eyJrIjoiMjQyOGYxYjAtNDUxOC00OWRjLTk2MzgtMzY0MTViOWZiMWY5IiwidCI6ImUwYmZlOTBkLTIwZTAtNDEwYi1iNmYxLTQyOWIwNDNkMzYwOCJ9">
       </PowerBiPrivate>
     )
   }
