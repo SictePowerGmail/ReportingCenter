@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { PowerBi } from '../components/Navbar/Narbar.elements'
 
-export default class TecnicoSMU extends Component {
+export default class SMU_Tecnico extends Component {
   render() {
     return (           
       <PowerBi

@@ -212,6 +212,7 @@ const Navbar = () => {
                             </div>
                             {showDropdownDireccion && (
                                 <div id='SubMenu-Contenido'>
+                                    <Link id='SubMenu-Contenido-Titulo' to="/Penalizaciones" onClick={toggleMobileMenu}>Penalizaciones</Link>
                                     <Link id='SubMenu-Contenido-Titulo' to="/Centro_de_costos" onClick={toggleMobileMenu}>Centros de costos</Link>
                                     <Link id='SubMenu-Contenido-Titulo' to="/Moviles" onClick={toggleMobileMenu}>Composición móviles</Link>
                                     <Link id='SubMenu-Contenido-Titulo' to="/Compras" onClick={toggleMobileMenu}>Compras</Link>

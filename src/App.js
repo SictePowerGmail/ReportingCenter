@@ -40,6 +40,7 @@ import SeguimientoSMU from './pages/SeguimientoSMU';
 import SMU from './pages/SMU';
 import Capacidades from './pages/Capacidades'
 import SMU_Tecnico from './pages/SMU_Tecnico';
+import Penalizaciones from './pages/Penalizaciones';
 
 //4434
 
@@ -84,6 +85,7 @@ function App() {
         <Route path='/SMU' exacte element={<SMU/>} />
         <Route path='/Capacidades' exacte element={<Capacidades/>} />
         <Route path='/SMU_Tecnico' exacte element={<SMU_Tecnico/>} />
+        <Route path='/Penalizaciones' exacte element={<Penalizaciones/>} />
       </Routes>
     </Router>
   );
