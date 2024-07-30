@@ -6,7 +6,7 @@ export default class NPS extends Component {
     return (
       <PowerBi
       title="NPS"
-      src="https://app.powerbi.com/view?r=eyJrIjoiMDcwMzcwY2YtODUzYy00NzJkLWE3YTctYzQxNDNkMGI3N2U4IiwidCI6ImE4NjhmMmMwLWEzZWMtNDQ3Ni1hMmEzLTRhZmMyYjkyZGI3OCIsImMiOjR9">
+      src="https://app.powerbi.com/view?r=eyJrIjoiNDEyMTA3ZmYtNTZlYi00NDljLTljN2YtZDA0OTljN2EyMzc1IiwidCI6IjE0MDQ0M2FmLThlNzktNGZjZS1iM2VkLWRlMDAxMzEyOTg0ZiIsImMiOjR9">
       </PowerBi>
     )
   }
