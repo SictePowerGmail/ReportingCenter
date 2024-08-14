@@ -1,10 +1,7 @@
-import React from 'react';
+import React, { useEffect } from "react";
+import { initGA, logPageView } from "./analytics";
 import Navbar from "./components/Navbar/Navbar";
-import {
-  HashRouter as Router,
-  Route,
-  Routes
-} from "react-router-dom";
+import { HashRouter as Router, Route, Routes, useLocation } from "react-router-dom";
 import CorporativoPuntuacion from './pages/CorporativoPuntuacion';
 import CorporativoFinanciero from './pages/CorporativoFinanciero';
 import PlaneacionFinanciero from './pages/PlaneacionFinanciero';
@@ -45,8 +42,19 @@ import Penalizaciones from './pages/Penalizaciones';
 //4434
 
 function App() {
+  const location = useLocation();
+
+  useEffect(() => {
+    initGA();
+    logPageView();
+  }, []);
+
+  useEffect(() => {
+    logPageView();
+  }, [location]);
+
   return (
-    <Router>
+    <>
       <Navbar />
       <Routes>
         <Route path='/' exact element={<Inicio />} />
@@ -87,8 +95,14 @@ function App() {
         <Route path='/SMU_Tecnico' exacte element={<SMU_Tecnico/>} />
         <Route path='/Penalizaciones' exacte element={<Penalizaciones/>} />
       </Routes>
-    </Router>
+    </>
   );
 }
 
-export default App;
+export default function RootApp() {
+  return (
+    <Router>
+      <App />
+    </Router>
+  );
+}
