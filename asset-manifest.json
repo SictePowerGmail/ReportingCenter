@@ -1,15 +1,28 @@
 {
   "files": {
-    "main.css": "/ReportingCenter/static/css/main.cf193cdc.css",
-    "main.js": "/ReportingCenter/static/js/main.9034d8f0.js",
+    "main.css": "/ReportingCenter/static/css/main.54d33af4.css",
+    "main.js": "/ReportingCenter/static/js/main.fee5a88a.js",
+    "static/media/fa-solid-900.ttf": "/ReportingCenter/static/media/fa-solid-900.07ed6d5fa32c1d54af0f.ttf",
     "static/media/01.jpg": "/ReportingCenter/static/media/01.90f3a9eed9bfbe9d97b2.jpg",
+    "static/media/fa-brands-400.ttf": "/ReportingCenter/static/media/fa-brands-400.0ff70dcbf135d859ebf3.ttf",
+    "static/media/fa-solid-900.woff2": "/ReportingCenter/static/media/fa-solid-900.93f719f4d62bfa3e748c.woff2",
+    "static/media/fa-brands-400.woff2": "/ReportingCenter/static/media/fa-brands-400.bb8d5a145e22822103fb.woff2",
+    "static/media/glyphicons-halflings-regular.svg": "/ReportingCenter/static/media/glyphicons-halflings-regular.060b2710bdbbe3dfe48b.svg",
+    "static/media/fa-regular-400.ttf": "/ReportingCenter/static/media/fa-regular-400.17a6e1aebccdbaa39e78.ttf",
+    "static/media/glyphicons-halflings-regular.ttf": "/ReportingCenter/static/media/glyphicons-halflings-regular.4692b9ec53fd5972caa2.ttf",
+    "static/media/fa-regular-400.woff2": "/ReportingCenter/static/media/fa-regular-400.bc3722686635b5f86132.woff2",
+    "static/media/glyphicons-halflings-regular.woff": "/ReportingCenter/static/media/glyphicons-halflings-regular.82b1212e45a2bc35dd73.woff",
+    "static/media/glyphicons-halflings-regular.eot": "/ReportingCenter/static/media/glyphicons-halflings-regular.5be1347c682810f199c7.eot",
+    "static/media/glyphicons-halflings-regular.woff2": "/ReportingCenter/static/media/glyphicons-halflings-regular.be810be3a3e14c682a25.woff2",
     "static/media/Sicte 6.png": "/ReportingCenter/static/media/Sicte 6.aa0fe2dc246472eb4108.png",
+    "static/media/fa-v4compatibility.ttf": "/ReportingCenter/static/media/fa-v4compatibility.0f6cb412603527bda691.ttf",
+    "static/media/fa-v4compatibility.woff2": "/ReportingCenter/static/media/fa-v4compatibility.6cfec8414be20e2c3426.woff2",
     "index.html": "/ReportingCenter/index.html",
-    "main.cf193cdc.css.map": "/ReportingCenter/static/css/main.cf193cdc.css.map",
-    "main.9034d8f0.js.map": "/ReportingCenter/static/js/main.9034d8f0.js.map"
+    "main.54d33af4.css.map": "/ReportingCenter/static/css/main.54d33af4.css.map",
+    "main.fee5a88a.js.map": "/ReportingCenter/static/js/main.fee5a88a.js.map"
   },
   "entrypoints": [
-    "static/css/main.cf193cdc.css",
-    "static/js/main.9034d8f0.js"
+    "static/css/main.54d33af4.css",
+    "static/js/main.fee5a88a.js"
   ]
 }
