@@ -38,6 +38,8 @@ import SMU from './pages/SMU';
 import Capacidades from './pages/Capacidades'
 import SMU_Tecnico from './pages/SMU_Tecnico';
 import Penalizaciones from './pages/Penalizaciones';
+import SupervisionLogin from './supervision/SupervisionLogin'
+import SeguimientoOperaciones from "./pages/SeguimientoOperaciones";
 
 //4434
 
@@ -94,6 +96,9 @@ function App() {
         <Route path='/Capacidades' exacte element={<Capacidades/>} />
         <Route path='/SMU_Tecnico' exacte element={<SMU_Tecnico/>} />
         <Route path='/Penalizaciones' exacte element={<Penalizaciones/>} />
+        <Route path='/SeguimientoOperaciones' exacte element={<SeguimientoOperaciones/>} />
+
+        <Route path='/SupervisionLogin' exacte element={<SupervisionLogin/>} />
       </Routes>
     </>
   );

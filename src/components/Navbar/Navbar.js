@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
 import './Navbar.css'
-import { FaCogs, FaBars, FaTimes, FaHome, FaChartLine, FaStar, FaTools, FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import { FaCogs, FaBars, FaTimes, FaHome, FaChartLine, FaStar, FaTools, FaChevronDown, FaChevronUp, FaEye } from 'react-icons/fa';
 import { HiClipboardList, HiChartBar, HiOfficeBuilding } from "react-icons/hi";
 
 const Navbar = () => {
@@ -55,6 +55,13 @@ const Navbar = () => {
                                 <span id="SubMenu-Titulo-Texto">Capacidades</span>
                             </Link>  
                         </li>
+                        
+                        {/* <li id='SubMenu'>
+                            <Link id='SubMenu-Titulo' to='/SupervisionLogin' onClick={toggleMobileMenu}>
+                                <span id='SubMenu-Titulo-Icono'><FaEye /></span>
+                                <span id="SubMenu-Titulo-Texto">Supervision</span>
+                            </Link>  
+                        </li> */}
 
                         <li id='SubMenu'>
                             <div id='SubMenu-Titulo' onClick={() => {
@@ -187,6 +194,7 @@ const Navbar = () => {
                                     <Link id='SubMenu-Contenido-Titulo' to="/MantenimientoBacklogHFC" onClick={toggleMobileMenu}>Cumplimiento SLA HFC</Link>
                                     <Link id='SubMenu-Contenido-Titulo' to="/MantenimientoPuntuacionTMRF" onClick={toggleMobileMenu}>Correctivo - Preventivo</Link>
                                     <Link id='SubMenu-Contenido-Titulo' to="/Seguimiento" onClick={toggleMobileMenu}>Seguimiento MTTO Centro</Link>
+                                    <Link id='SubMenu-Contenido-Titulo' to="/SeguimientoOperaciones" onClick={toggleMobileMenu}>Seguimiento Operaciones</Link>
                                     <Link id='SubMenu-Contenido-Titulo' to="/SeguimientoSMU" onClick={toggleMobileMenu}>Seguimiento SMU</Link>
                                     <Link id='SubMenu-Contenido-Titulo' to="/SMU_Tecnico" onClick={toggleMobileMenu}>Técnico SMU</Link>
                                     <Link id='SubMenu-Contenido-Titulo' to="/TorreDeControl" onClick={toggleMobileMenu}>Torre de control</Link>
@@ -243,6 +251,12 @@ const Navbar = () => {
                                 <span id='SubMenu-Titulo-Icono'><FaCogs/></span>
                             </span>
                         </li>
+
+                        {/* <li id='SubMenu'>
+                            <span id='SubMenu-Titulo-Cerrado'>
+                                <span id='SubMenu-Titulo-Icono'><FaEye/></span>
+                            </span>
+                        </li> */}
 
                         <li id='SubMenu'>
                             <div id='SubMenu-Titulo-Cerrado'>

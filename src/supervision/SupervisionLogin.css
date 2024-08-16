@@ -1,0 +1,109 @@
+/* Contenedor principal de la aplicación de inicio de sesión */
+.Supervision-Login-App {
+    display: flex; /* Usa el modelo de caja flexible */
+    justify-content: center; /* Centra horizontalmente */
+    align-items: center; /* Centra verticalmente */
+    height: calc(100vh - 40px); /* Toma toda la altura disponible */
+    width: 100%; /* Toma todo el ancho disponible */
+    background-color: #E6E6E6;
+}
+
+/* Contenedor del primer contenido */
+.Supervision-Login-App .Login-Contenido_1 {
+    background-color: #0B1A46; /* Color de fondo */
+    padding: 20px; /* Relleno interno */
+    border-radius: 30px 0px 0px 30px; /* Bordes redondeados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra */
+    width: 350px; /* Ancho fijo */
+    height: 600px; /* Altura fija */
+    display: flex; /* Usa el modelo de caja flexible */
+    justify-content: center; /* Centra horizontalmente */
+    align-items: center; /* Centra verticalmente */
+}
+
+/* Estilos para la imagen dentro del primer contenido */
+.Supervision-Login-App .Login-Contenido_1 img {
+    width: 250px; /* Ancho de la imagen */
+    height: 100px; /* Altura de la imagen */
+}
+
+/* Contenedor del segundo contenido */
+.Supervision-Login-App .Login-Contenido_2 {
+    background-color: #ffffff; /* Color de fondo */
+    padding: 20px; /* Relleno interno */
+    border-radius: 0px 30px 30px 0px; /* Bordes redondeados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra */
+    width: 350px; /* Ancho fijo */
+    height: 600px; /* Altura fija */
+    position: relative;
+}
+
+/* Estilos para el logo dentro del contenedor */
+.Supervision-Login-App .Login-Logo {
+    text-align: center; /* Alinea el texto al centro */
+}
+
+/* Estilos para el título dentro del contenedor */
+.Supervision-Login-App .Login-Titulo {
+    text-align: center; /* Alinea el texto al centro */
+    padding: 50px 0px 40px 0px; /* Relleno superior e inferior */
+    color: black; /* Color del texto */
+}
+
+/* Estilos para los campos de usuario y contraseña */
+.Supervision-Login-App .Login-Usuario,
+.Supervision-Login-App .Login-Contraseña {
+    display: flex; /* Usa el modelo de caja flexible */
+    justify-content: center; /* Centra horizontalmente */
+    margin-bottom: 20px; /* Espacio entre los campos */
+    font-size: 1.1em; /* Tamaño de fuente */
+    align-items: center; /* Centra verticalmente */
+}
+
+/* Estilos para el icono dentro de los campos de usuario y contraseña */
+.Supervision-Login-App .Login-Usuario i,
+.Supervision-Login-App .Login-Contraseña i {
+    padding-right: 10px; /* Espacio entre el icono y el texto */
+}
+
+/* Estilos para los campos de entrada de usuario y contraseña */
+.Supervision-Login-App .Login-Usuario input,
+.Supervision-Login-App .Login-Contraseña input {
+    padding: 0px 5px; /* Relleno interno */
+    box-sizing: border-box; /* Incluye el ancho del borde y el relleno en el ancho total */
+}
+
+/* Estilos para el botón de envío */
+.Supervision-Login-App .Login-Boton-Envio {
+    display: flex; /* Usa el modelo de caja flexible */
+    justify-content: center; /* Centra horizontalmente */
+    padding: 20px 0px 30px 0px; /* Relleno superior e inferior */
+}
+
+/* Estilos específicos para el botón de envío */
+.Supervision-Login-App #Login-Boton-Envio-Estilo {
+    --bs-btn-bg: #0B1A46; /* Color de fondo del botón */
+    --bs-btn-border-color: #0B1A46; /* Color del borde del botón */
+    --bs-btn-disabled-bg: #0B1A46; /* Color de fondo del botón cuando está desactivado */
+    --bs-btn-disabled-border-color: #0B1A46; /* Color del borde del botón cuando está desactivado */
+}
+
+.Supervision-Login-App .Login-Contenido_2 .Version {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin-right: 30px;
+}
+
+.Supervision-Login-App .contenedor-error-message {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.Supervision-Login-App .error-message {
+    color: red;
+    font-size: 20px;
+    margin-top: 10px;
+    text-align: center;
+}
