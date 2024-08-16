@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom';
 import './Navbar.css'
 import { FaCogs, FaBars, FaTimes, FaHome, FaChartLine, FaStar, FaTools, FaChevronDown, FaChevronUp, FaEye } from 'react-icons/fa';
 import { HiClipboardList, HiChartBar, HiOfficeBuilding } from "react-icons/hi";
 
-const Navbar = () => {
+function Navbar() {
     const [showMobileMenu, setShowMobileMenu] = useState(false);
     const [showDropdownFacturacion, setShowDropdownFacturacion] = useState(false);
     const [showDropdownProduccion, setShowDropdownProduccion] = useState(false);
@@ -12,6 +12,7 @@ const Navbar = () => {
     const [showDropdownPuntuacion, setShowDropdownPuntuacion] = useState(false);
     const [showDropdownMantenimiento, setShowDropdownMantenimiento] = useState(false);
     const [showDropdownDireccion, setShowDropdownDireccion] = useState(false);
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 600);
 
     const toggleMobileMenu = () => setShowMobileMenu(!showMobileMenu);
 
@@ -23,6 +24,20 @@ const Navbar = () => {
         setShowDropdownMantenimiento(false);
         setShowDropdownDireccion(false);
     };
+
+    useEffect(() => {
+        const handleResize = () => {
+          setIsMobile(window.innerWidth < 600);
+        };
+    
+        // Escuchar el evento de cambio de tamaño
+        window.addEventListener('resize', handleResize);
+    
+        // Limpiar el evento al desmontar el componente
+        return () => {
+          window.removeEventListener('resize', handleResize);
+        };
+      }, [window.innerWidth]);
 
     return (
         <div id='Contenedor'>
@@ -56,12 +71,12 @@ const Navbar = () => {
                             </Link>  
                         </li>
                         
-                        {/* <li id='SubMenu'>
+                        <li id='SubMenu'>
                             <Link id='SubMenu-Titulo' to='/SupervisionLogin' onClick={toggleMobileMenu}>
                                 <span id='SubMenu-Titulo-Icono'><FaEye /></span>
                                 <span id="SubMenu-Titulo-Texto">Supervision</span>
                             </Link>  
-                        </li> */}
+                        </li>
 
                         <li id='SubMenu'>
                             <div id='SubMenu-Titulo' onClick={() => {
@@ -194,7 +209,7 @@ const Navbar = () => {
                                     <Link id='SubMenu-Contenido-Titulo' to="/MantenimientoBacklogHFC" onClick={toggleMobileMenu}>Cumplimiento SLA HFC</Link>
                                     <Link id='SubMenu-Contenido-Titulo' to="/MantenimientoPuntuacionTMRF" onClick={toggleMobileMenu}>Correctivo - Preventivo</Link>
                                     <Link id='SubMenu-Contenido-Titulo' to="/Seguimiento" onClick={toggleMobileMenu}>Seguimiento MTTO Centro</Link>
-                                    <Link id='SubMenu-Contenido-Titulo' to="/SeguimientoOperaciones" onClick={toggleMobileMenu}>Seguimiento Operaciones</Link>
+                                    <Link id='SubMenu-Contenido-Titulo' to={isMobile ? "/SeguimientoOperacionesMovil" : "/SeguimientoOperaciones"} onClick={toggleMobileMenu}>Seguimiento Operaciones</Link>
                                     <Link id='SubMenu-Contenido-Titulo' to="/SeguimientoSMU" onClick={toggleMobileMenu}>Seguimiento SMU</Link>
                                     <Link id='SubMenu-Contenido-Titulo' to="/SMU_Tecnico" onClick={toggleMobileMenu}>Técnico SMU</Link>
                                     <Link id='SubMenu-Contenido-Titulo' to="/TorreDeControl" onClick={toggleMobileMenu}>Torre de control</Link>
@@ -252,11 +267,11 @@ const Navbar = () => {
                             </span>
                         </li>
 
-                        {/* <li id='SubMenu'>
+                        <li id='SubMenu'>
                             <span id='SubMenu-Titulo-Cerrado'>
                                 <span id='SubMenu-Titulo-Icono'><FaEye/></span>
                             </span>
-                        </li> */}
+                        </li>
 
                         <li id='SubMenu'>
                             <div id='SubMenu-Titulo-Cerrado'>
@@ -313,4 +328,4 @@ const Navbar = () => {
     );
 }
 
-export default Navbar
+export default Navbar;

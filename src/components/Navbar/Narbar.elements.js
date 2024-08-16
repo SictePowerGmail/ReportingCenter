@@ -8,6 +8,10 @@ export const PowerBi = styled.iframe`
     height: calc(100vh - 40px);
     width: 100%;
     padding-left: 40px;
+    
+    @media screen and (max-width: 600px) {
+        padding-left: 0px;
+    }
 `;
 
 export const PowerBiPrivate = styled.iframe`
@@ -18,4 +22,8 @@ export const PowerBiPrivate = styled.iframe`
     height: calc(100vh - 40px);
     width: 100%;
     padding-left: 40px;
+
+    @media screen and (max-width: 600px) {
+        padding-left: 0px;
+    }
 `;

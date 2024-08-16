@@ -65,7 +65,7 @@ body, #root {
         }
     }
 
-    @media screen and (max-width: 539px) {
+    @media screen and (max-width: 600px) {
         p {
             &:nth-child(2){
                 display: none;
@@ -98,6 +98,12 @@ body, #root {
     flex-direction: column;
     transition: 0.3s all ease;
     width: 40px;
+}
+
+@media screen and (max-width: 600px) {
+    #MenuContainerCerrado {
+        display: none; /* Ocultar el menú */
+    }
 }
 
 /* Estilos para las barras de desplazamiento */
