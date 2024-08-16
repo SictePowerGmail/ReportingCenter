@@ -54,7 +54,7 @@ const SupervisionLogin = () => {
                 </div>            
                 <form onSubmit={handleSubmit}>
                     <div className='Login-Usuario'>
-                        <i className="glyphicon fas fa-user"></i>
+                        <i className="fas fa-user"></i>
                         <input type="text" placeholder="Usuario" value={username} onChange={(e) => setUsername(e.target.value)}/>
                     </div>
                     <div className='Login-Contraseña'>
