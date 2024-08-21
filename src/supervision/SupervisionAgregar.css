@@ -6,7 +6,7 @@
     align-items: center; /* Centra verticalmente */
 }
 
-.Contenido {
+.Supervision-Agregar .Contenido {
     display: flex; /* Usa el modelo de caja flexible */
     justify-content: center; /* Centra horizontalmente */
     align-items: center; /* Centra verticalmente */
@@ -19,30 +19,66 @@
     position: relative;
 }
 
-.Contenido .Formulario {
+.Supervision-Agregar .Contenido .Formulario {
     width: 100%;
     height: 100%;
 }
 
-.Contenido .OT,
-.Contenido .Novedad,
-.Contenido .Observacion,
-.Contenido .Ubicacion,
-.Contenido .Foto,
-.Contenido .Enviar {
+.Supervision-Agregar .Contenido .Titulo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.Supervision-Agregar .Contenido .Titulo h3 {
     margin: 10px;
 }
 
-.Contenido .OT i,
-.Contenido .Novedad i,
-.Contenido .Observacion i,
-.Contenido .Foto i {
+.Supervision-Agregar .Contenido .OT,
+.Supervision-Agregar .Contenido .Novedad,
+.Supervision-Agregar .Contenido .Observacion,
+.Supervision-Agregar .Contenido .Ubicacion,
+.Supervision-Agregar .Contenido .Foto,
+.Supervision-Agregar .Contenido .Enviar {
+    margin: 10px;
+}
+
+.Supervision-Agregar .Contenido .OT,
+.Supervision-Agregar .Contenido .Novedad,
+.Supervision-Agregar .Contenido .Observacion,
+.Supervision-Agregar .Contenido .Foto {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 10px;
+}
+
+.Supervision-Agregar .Contenido .OT i,
+.Supervision-Agregar .Contenido .Novedad i,
+.Supervision-Agregar .Contenido .Observacion i,
+.Supervision-Agregar .Contenido .Foto i {
     padding-right: 10px;
 }
 
-.Contenido .OT input,
-.Contenido .Novedad input,
-.Contenido .Observacion input,
-.Contenido .Foto input {
+.Supervision-Agregar .Contenido .OT input,
+.Supervision-Agregar .Contenido .Novedad input,
+.Supervision-Agregar .Contenido .Observacion textarea {
     width: 90%;
+}
+
+.Supervision-Agregar .Contenido .Observacion textarea {
+    height: 10vh;
+}
+
+.Supervision-Agregar .Contenido .Foto label {
+    width: 90%;
+}
+
+.Supervision-Agregar .Contenido .Enviar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }

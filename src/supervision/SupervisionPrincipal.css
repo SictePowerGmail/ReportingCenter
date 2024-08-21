@@ -6,7 +6,7 @@
     align-items: center; /* Centra verticalmente */
 }
 
-.Contenido {
+.Supervision-Principal .Contenido {
     display: flex; /* Usa el modelo de caja flexible */
     justify-content: center; /* Centra horizontalmente */
     align-items: center; /* Centra verticalmente */
@@ -19,7 +19,7 @@
     position: relative;
 }
 
-.btn-flotante {
+.Supervision-Principal .btn-flotante {
     position: absolute;
     bottom: 0;
     right: 0;
@@ -40,6 +40,6 @@
     z-index: 1000;
 }
 
-.btn-flotante:hover {
+.Supervision-Principal .btn-flotante:hover {
     background-color: #0056b3;
 }

@@ -15,9 +15,16 @@ const SupervisionAgregar = () => {
     const [ot, setOt] = useState('');
     const [novedad, setNovedad] = useState('');
     const [observacion, setObservacion] = useState('');
-    const [foto, setFoto] = useState('');
+    const [foto, setFoto] = useState(null);
     const mapRef = useRef(null);
     const locationRef = useRef(null);
+
+    const clickCapture = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            setFoto(URL.createObjectURL(file));
+        }
+    };
     
     const enviarFormulario = async (event) => {
         
@@ -130,6 +137,9 @@ const SupervisionAgregar = () => {
         <div className="Supervision-Agregar">
             <div className='Contenido'>
                 <form onSubmit={enviarFormulario} className='Formulario'>
+                    <div className='Titulo'>
+                        <h3>Actividad</h3>
+                    </div>
                     <div className='OT'>
                         <i className="fas fa-tools"></i>
                         <input type="text" placeholder="OT" value={ot} onChange={(e) => setOt(e.target.value)}/>
@@ -140,19 +150,29 @@ const SupervisionAgregar = () => {
                     </div>
                     <div className='Observacion'>
                         <i className="fas fa-comment"></i>
-                        <input type="text" placeholder="Observacion" value={observacion} onChange={(e) => setObservacion(e.target.value)}/>
+                        <textarea type="text" placeholder="Observacion" value={observacion} onChange={(e) => setObservacion(e.target.value)} rows={1}/>
                     </div>
                     <div className='Ubicacion'>
                         <h4>Ubicación del Usuario</h4>
                         {error ? (
                             <p>Error: {error}</p>
                         ) : (
-                            <div id="map" style={{ width: '100%', height: '400px' }}></div>
+                            <div id="map" style={{ width: '100%', height: '300px' }}></div>
                         )}
                     </div>
                     <div className='Foto'>
-                        <i className="fas fa-user"></i>
-                        <input type="text" placeholder="Foto" value={foto} onChange={(e) => setFoto(e.target.value)}/>
+                        <i className="fas fa-camera"></i>
+                        <input 
+                            type="file" 
+                            accept="image/*" 
+                            capture="environment" 
+                            onChange={clickCapture}
+                            style={{ display: 'none' }}
+                            id="fotoInput"
+                        />
+                        <label htmlFor="fotoInput" className="foto-label">
+                            {foto ? <img src={foto} alt="Foto" className="foto-preview" /> : 'Tomar Foto'}
+                        </label>
                     </div>
 
                     <div className='Enviar'>
