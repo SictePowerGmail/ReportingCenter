@@ -151,6 +151,8 @@ function App() {
       /* Logistica */
       case '/EquiposMovilesR2':
         return 'Equipos Moviles R2';
+        case '/EquiposMovilesR4':
+          return 'Equipos Moviles R4';
       /* Direccion */
       case '/Penalizaciones':
         return 'Penalizaciones';

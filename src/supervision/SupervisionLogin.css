@@ -125,7 +125,7 @@
         justify-content: center; /* Centra horizontalmente */
         align-items: center; /* Centra verticalmente */
         width: 100%; /* Ancho fijo */
-        max-width: 300px;
+        max-width: 350px;
         height: 25%; /* Altura fija */
         margin-top: 20px;
         background-color: #0B1A46; /* Color de fondo */
@@ -142,7 +142,7 @@
     /* Contenedor del segundo contenido */
     .Supervision-Login-App .Login-Contenido_2 {
         width: 100%; /* Ancho fijo */
-        max-width: 300px;
+        max-width: 350px;
         height: 75%; /* Altura fija */
         margin-bottom: 20px;
         background-color: #ffffff; /* Color de fondo */
@@ -185,6 +185,7 @@
     .Supervision-Login-App .Login-Contraseña input {
         padding: 0px 5px; /* Relleno interno */
         box-sizing: border-box; /* Incluye el ancho del borde y el relleno en el ancho total */
+        width: 80%;
     }
 
     /* Estilos para el botón de envío */
