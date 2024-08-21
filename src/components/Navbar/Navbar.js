@@ -1,11 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { Link } from 'react-router-dom';
 import './Navbar.css'
-import { FaTruck, FaCogs, FaBars, FaTimes, FaHome, FaChartLine, FaStar, FaTools, FaChevronDown, FaChevronUp, FaEye } from 'react-icons/fa';
+import { FaFileAlt, FaTruck, FaCogs, FaBars, FaTimes, FaHome, FaChartLine, FaStar, FaTools, FaChevronDown, FaChevronUp, FaEye } from 'react-icons/fa';
 import { HiClipboardList, HiChartBar, HiOfficeBuilding } from "react-icons/hi";
 
 function Navbar() {
     const [showMobileMenu, setShowMobileMenu] = useState(false);
+    const [showDropdownReportes, setShowDropdownReportes] = useState(false);
     const [showDropdownFacturacion, setShowDropdownFacturacion] = useState(false);
     const [showDropdownProduccion, setShowDropdownProduccion] = useState(false);
     const [showDropdownIndicadores, setShowDropdownIndicadores] = useState(false);
@@ -76,17 +77,26 @@ function Navbar() {
                         </li>
 
                         <li id='SubMenu'>
-                            <Link id='SubMenu-Titulo' to='/Capacidades' onClick={toggleMobileMenu}>
-                                <span id='SubMenu-Titulo-Icono'><FaCogs/></span>
-                                <span id="SubMenu-Titulo-Texto">Capacidades</span>
-                            </Link>  
-                        </li>
-                        
-                        <li id='SubMenu'>
-                            <Link id='SubMenu-Titulo' to='/SupervisionLogin' onClick={toggleMobileMenu}>
-                                <span id='SubMenu-Titulo-Icono'><FaEye /></span>
-                                <span id="SubMenu-Titulo-Texto">Supervision</span>
-                            </Link>  
+                            <div id='SubMenu-Titulo' onClick={() => {
+                                closeAllDropdowns();
+                                setShowDropdownReportes(!showDropdownReportes);
+                            }}>
+                                <span id='SubMenu-Titulo-Contenedor'>
+                                    <span id='SubMenu-Titulo-Icono'><FaFileAlt /></span>
+                                    <span id="SubMenu-Titulo-Texto">Reportes</span>
+                                    <span id="SubMenu-Titulo-Icono2">
+                                        {
+                                            showDropdownReportes ? <FaChevronUp /> : <FaChevronDown />
+                                        }
+                                    </span>
+                                </span>
+                            </div>
+                            {showDropdownReportes && (
+                                <div id='SubMenu-Contenido'>
+                                    <Link id='SubMenu-Contenido-Titulo' to="/Capacidades" onClick={toggleMobileMenu}>Capacidades</Link>
+                                    <Link id='SubMenu-Contenido-Titulo' to="/SupervisionLogin" onClick={toggleMobileMenu}>Supervision</Link>
+                                </div>
+                            )}
                         </li>
 
                         <li id='SubMenu'>
@@ -166,7 +176,7 @@ function Navbar() {
                                 <div id='SubMenu-Contenido'>
                                     <Link id='SubMenu-Contenido-Titulo' to="/HistoricoKPI" onClick={toggleMobileMenu}>Histórico KPI</Link>
                                     <Link id='SubMenu-Contenido-Titulo' to="/MantenimientoTecnico" onClick={toggleMobileMenu}>G1 Mantenimiento</Link>
-                                    <Link id='SubMenu-Contenido-Titulo' to="/Mintic" onClick={toggleMobileMenu}>G5 MINTIC</Link>
+                                    {/*<Link id='SubMenu-Contenido-Titulo' to="/Mintic" onClick={toggleMobileMenu}>G5 MINTIC</Link>*/}
                                     <Link id='SubMenu-Contenido-Titulo' to="/NPS" onClick={toggleMobileMenu}>NPS</Link>
                                 </div>
                             )}
@@ -296,15 +306,11 @@ function Navbar() {
                         </li>
 
                         <li id='SubMenu'>
-                            <span id='SubMenu-Titulo-Cerrado'>
-                                <span id='SubMenu-Titulo-Icono'><FaCogs/></span>
-                            </span>
-                        </li>
-
-                        <li id='SubMenu'>
-                            <span id='SubMenu-Titulo-Cerrado'>
-                                <span id='SubMenu-Titulo-Icono'><FaEye/></span>
-                            </span>
+                            <div id='SubMenu-Titulo-Cerrado'>
+                                <span id='SubMenu-Titulo-Contenedor'>
+                                    <span id='SubMenu-Titulo-Icono'><FaFileAlt/></span>
+                                </span>
+                            </div>
                         </li>
 
                         <li id='SubMenu'>
