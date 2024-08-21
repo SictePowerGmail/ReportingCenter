@@ -257,6 +257,7 @@ function Navbar() {
                             {showDropdownLogistica && (
                                 <div id='SubMenu-Contenido'>
                                     <Link id='SubMenu-Contenido-Titulo' to="/EquiposMovilesR2" onClick={toggleMobileMenu}>Equipos en moviles R2</Link>
+                                    <Link id='SubMenu-Contenido-Titulo' to="/EquiposMovilesR4" onClick={toggleMobileMenu}>Equipos en moviles R4</Link>
                                 </div>
                             )}
                         </li>

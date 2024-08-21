@@ -45,6 +45,7 @@ import SupervisionAgregar from "./supervision/SupervisionAgregar";
 import SeguimientoOperaciones from "./pages/SeguimientoOperaciones";
 import SeguimientoOperacionesMovil from "./pages/SeguimientoOperacionesMovil";
 import EquiposMovilesR2 from "./pages/EquiposMovilesR2";
+import EquiposMovilesR4 from "./pages/EquiposMovilesR4";
 
 //4434
 
@@ -217,6 +218,7 @@ function App() {
         <Route path='/TorreDeControl' exacte element={<TorreControl />} />
         {/* Logistica */}
         <Route path='/EquiposMovilesR2' exacte element={<EquiposMovilesR2/>} />
+        <Route path='/EquiposMovilesR4' exacte element={<EquiposMovilesR4/>} />
         {/* Direccion */}
         <Route path='/Penalizaciones' exacte element={<Penalizaciones/>} />
         <Route path='/Centro_de_costos' exacte element={<CentrosDeCostos />} />
