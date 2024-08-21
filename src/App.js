@@ -70,16 +70,99 @@ function App() {
       case '/ReportingCenter':
         return 'Reporting Center';
       /* Reportes */
+      case '/Capacidades':
+        return 'Capacidades';
+      case '/SupervisionLogin':
+        return 'Supervisión';
       case '/SupervisionPrincipal':
-        return 'Supervisión - Principal';
+        return 'Supervisión';
+      case '/SupervisionAgregar':
+        return 'Supervisión';
+      /* Facturacion */
+      case '/ConsolidadoNacionalFacturacion':
+        return 'Consolidado Nacional Facturacion';
+      case '/PlaneacionFacturacion':
+        return 'Planeacion Facturacion';
+      case '/SeguimientoProyectos':
+        return 'Seguimiento Proyectos Facturacion';
+      case '/CorporativoFacturacion':
+        return 'Corporativo Facturacion';
+      case '/MantenimientoFacturacion':
+        return 'Mantenimiento Facturacion';
+      case '/OperacionesFacturacion':
+        return 'Operaciones Facturacion';
+      case '/MinticFacturacion':
+        return 'Mintic Facturacion';
+      case '/SMU':
+        return 'SMU Facturacion';
+      /* Produccion */
+      case '/RendimientoOperativo':
+        return 'Rendimiento Operativo';
+      case '/PlaneacionFinanciero':
+        return 'Planeacion Financiero';
+      case '/CorporativoFinanciero':
+        return 'Corporativo Financiero';
+      case '/MantenimientoFinanciero':
+        return 'Mantenimiento Financiero';
+      case '/ReingenieriaFinanciero':
+        return 'Reingenieria Financiero';
+      case '/OperacionesFinanciero':
+        return 'Operaciones Financiero';
+      /* Indicadores */
+      case '/HistoricoKPI':
+        return 'Historico KPI';
+      case '/MantenimientoTecnico':
+        return 'Mantenimiento Tecnico';
+      case '/Mintic':
+        return 'Mintic';
+      case '/NPS':
+        return 'NPS';      
+      /* Puntuacion */
+      case '/PlaneacionPuntuacion':
+        return 'Planeacion Puntuacion';
+      case '/CorporativoPuntuacion':
+        return 'Corporativo Puntuacion';
+      case '/MantenimientoPuntuacion':
+        return 'Mantenimiento Puntuacion';
+      case '/ReingenieriasPuntuacion':
+        return 'Reingenierias Puntuacion';
       /* Operacion */
+      case '/MantenimientoBacklogFO':
+        return 'Mantenimiento Backlog FO';
+      case '/MantenimientoBacklogHFC':
+        return 'Mantenimiento Backlog HFC';
+      case '/MantenimientoPuntuacionTMRF':
+        return 'Mantenimiento Puntuacion TMRF';
+      case '/Seguimiento':
+        return 'Seguimiento';
       case '/SeguimientoOperaciones':
         return 'Seguimiento Operaciones';
       case '/SeguimientoOperacionesMovil':
         return 'Seguimiento Operaciones Movil';
-
+      case '/SeguimientoSMU':
+        return 'Seguimiento SMU';
+      case '/SeguimientoSMUMovil':
+        return 'Seguimiento SMU Movil';
+      case '/SMU_Tecnico':
+        return 'SMU Tecnico';
+      case '/TorreDeControl':
+        return 'Torre De Control';
+      /* Logistica */
+      case '/EquiposMovilesR2':
+        return 'Equipos Moviles R2';
+      /* Direccion */
+      case '/Penalizaciones':
+        return 'Penalizaciones';
+      case '/Centro_de_costos':
+        return 'Centro_de_costos';
+      case '/Moviles':
+        return 'Moviles';
+      case '/Compras':
+        return 'Compras';
+      case '/STTA':
+        return 'STTA';
       default:
-        return 'Mi Aplicación';
+        return 'Validar';
     }
   };
 
