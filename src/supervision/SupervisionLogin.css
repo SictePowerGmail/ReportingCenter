@@ -114,8 +114,8 @@
         justify-content: center; /* Centra horizontalmente */
         align-items: center; /* Centra verticalmente */
         height: calc(100vh - 40px); /* Toma toda la altura disponible */
-        width: calc(100% - 40px); /* Toma todo el ancho disponible */
-        margin-left: 40px;
+        width: calc(100%); /* Toma todo el ancho disponible */
+        margin-left: 0px;
         background-color: #E6E6E6;
     }
 
@@ -124,10 +124,10 @@
         display: flex; /* Usa el modelo de caja flexible */
         justify-content: center; /* Centra horizontalmente */
         align-items: center; /* Centra verticalmente */
-        width: 95%; /* Ancho fijo */
+        width: 100%; /* Ancho fijo */
         max-width: 300px;
         height: 25%; /* Altura fija */
-        margin-top: 5px;
+        margin-top: 20px;
         background-color: #0B1A46; /* Color de fondo */
         border-radius: 30px 30px 0px 0px; /* Bordes redondeados */
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra */
@@ -141,14 +141,15 @@
 
     /* Contenedor del segundo contenido */
     .Supervision-Login-App .Login-Contenido_2 {
-        width: 95%; /* Ancho fijo */
+        width: 100%; /* Ancho fijo */
         max-width: 300px;
         height: 75%; /* Altura fija */
-        margin-bottom: 5px;
+        margin-bottom: 20px;
         background-color: #ffffff; /* Color de fondo */
         border-radius: 0px 0px 30px 30px; /* Bordes redondeados */
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra */
         position: relative;
+        z-index: 5;
     }
 
     /* Estilos para el logo dentro del contenedor */

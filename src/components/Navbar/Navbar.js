@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { Link } from 'react-router-dom';
 import './Navbar.css'
-import { FaCogs, FaBars, FaTimes, FaHome, FaChartLine, FaStar, FaTools, FaChevronDown, FaChevronUp, FaEye } from 'react-icons/fa';
+import { FaTruck, FaCogs, FaBars, FaTimes, FaHome, FaChartLine, FaStar, FaTools, FaChevronDown, FaChevronUp, FaEye } from 'react-icons/fa';
 import { HiClipboardList, HiChartBar, HiOfficeBuilding } from "react-icons/hi";
 
 function Navbar() {
@@ -11,8 +11,10 @@ function Navbar() {
     const [showDropdownIndicadores, setShowDropdownIndicadores] = useState(false);
     const [showDropdownPuntuacion, setShowDropdownPuntuacion] = useState(false);
     const [showDropdownMantenimiento, setShowDropdownMantenimiento] = useState(false);
+    const [showDropdownLogistica, setShowDropdownLogistica] = useState(false);
     const [showDropdownDireccion, setShowDropdownDireccion] = useState(false);
     const [isMobile, setIsMobile] = useState(window.innerWidth < 600);
+    const menuRef = useRef(null);
 
     const toggleMobileMenu = () => setShowMobileMenu(!showMobileMenu);
 
@@ -22,22 +24,30 @@ function Navbar() {
         setShowDropdownIndicadores(false);
         setShowDropdownPuntuacion(false);
         setShowDropdownMantenimiento(false);
+        setShowDropdownLogistica(false);
         setShowDropdownDireccion(false);
     };
 
     useEffect(() => {
         const handleResize = () => {
-          setIsMobile(window.innerWidth < 600);
+            setIsMobile(window.innerWidth < 600);
         };
-    
-        // Escuchar el evento de cambio de tamaño
+
+        const handleClickOutside = (event) => {
+            if (menuRef.current && !menuRef.current.contains(event.target)) {
+                setShowMobileMenu(false);
+                closeAllDropdowns(); // También puedes cerrar los dropdowns si es necesario
+            }
+        };
+
         window.addEventListener('resize', handleResize);
-    
-        // Limpiar el evento al desmontar el componente
+        document.addEventListener('mousedown', handleClickOutside);
+
         return () => {
-          window.removeEventListener('resize', handleResize);
+            window.removeEventListener('resize', handleResize);
+            document.removeEventListener('mousedown', handleClickOutside);
         };
-      }, [window.innerWidth]);
+    }, []);
 
     return (
         <div id='Contenedor'>
@@ -54,8 +64,9 @@ function Navbar() {
                     Centro de Control de Operaciones Técnicas
                 </p>
             </div>
+            <div id='AntiMenu'></div>
             {showMobileMenu && (
-                <div id='MenuContainer'>
+                <div id='MenuContainer' ref={menuRef}>
                     <ul id='Menu'>
                         <li id='SubMenu'>
                             <Link id='SubMenu-Titulo' to='/' onClick={toggleMobileMenu}>
@@ -221,6 +232,29 @@ function Navbar() {
                             <div id='SubMenu-Titulo' onClick={() => 
                             {
                                 closeAllDropdowns();
+                                setShowDropdownLogistica(!showDropdownLogistica)
+                            }}>
+                                <span id='SubMenu-Titulo-Contenedor'>
+                                    <span id='SubMenu-Titulo-Icono'><FaTruck /></span>
+                                    <span id="SubMenu-Titulo-Texto">Logistica</span>
+                                    <span id="SubMenu-Titulo-Icono2">
+                                        {
+                                            showDropdownLogistica ? <FaChevronUp /> : <FaChevronDown />
+                                        }
+                                    </span>
+                                </span>
+                            </div>
+                            {showDropdownLogistica && (
+                                <div id='SubMenu-Contenido'>
+                                    <Link id='SubMenu-Contenido-Titulo' to="/EquiposMovilesR2" onClick={toggleMobileMenu}>Equipos en moviles R2</Link>
+                                </div>
+                            )}
+                        </li>
+
+                        <li id='SubMenu'>
+                            <div id='SubMenu-Titulo' onClick={() => 
+                            {
+                                closeAllDropdowns();
                                 setShowDropdownDireccion(!showDropdownDireccion)
                             }}>
                                 <span id='SubMenu-Titulo-Contenedor'>
@@ -309,6 +343,14 @@ function Navbar() {
                             <div id='SubMenu-Titulo-Cerrado'>
                                 <span id='SubMenu-Titulo-Contenedor'>
                                     <span id='SubMenu-Titulo-Icono'><FaTools/></span>
+                                </span>
+                            </div>
+                        </li>
+
+                        <li id='SubMenu'>
+                            <div id='SubMenu-Titulo-Cerrado'>
+                                <span id='SubMenu-Titulo-Contenedor'>
+                                    <span id='SubMenu-Titulo-Icono'><FaTruck/></span>
                                 </span>
                             </div>
                         </li>

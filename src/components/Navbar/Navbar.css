@@ -1,19 +1,24 @@
 body, #root {
     height: 100vh;
+    background-color: rgb(230, 230, 230);
 }
 
 .div-Imagen {
-    align-items: center;
     display: flex;
-    height: calc(100vh - 40px);
+    align-items: center;
     justify-content: center;
+    height: calc(100vh - 40px);
     overflow: hidden;
     padding-left: 40px;
+
+    @media screen and (max-width: 600px) {
+        padding-left: 0px;
+    }
 }
 
 .div-Imagen .Imagen {
-    height: 100%;
     object-fit: cover;
+    height: 100%;
     width: 100%;
 }
 
@@ -34,8 +39,8 @@ body, #root {
     cursor: pointer;
     color: #e07924;
     margin: auto 5px;
-    padding-left: 4px;
-    padding-right: 10px;
+    padding-left: 5px;
+    padding-right: 5px;
     font-size: 20px;
 
     &:hover {
@@ -74,6 +79,11 @@ body, #root {
     }
 }
 
+#AntiMenu {
+    height: 40px;
+    width: 40px;
+}
+
 #MenuContainer {
     max-height: calc(100vh - 40px); /* Altura máxima: altura de la ventana - altura del título */
     overflow-y: auto;
@@ -85,6 +95,7 @@ body, #root {
     top: 40px;
     flex-direction: column;
     width: 220px;
+    z-index: 5000;
 }
 
 #MenuContainerCerrado {

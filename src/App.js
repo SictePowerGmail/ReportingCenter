@@ -40,8 +40,11 @@ import Capacidades from './pages/Capacidades'
 import SMU_Tecnico from './pages/SMU_Tecnico';
 import Penalizaciones from './pages/Penalizaciones';
 import SupervisionLogin from './supervision/SupervisionLogin'
+import SupervisionPrincipal from "./supervision/SupervisionPrincipal";
+import SupervisionAgregar from "./supervision/SupervisionAgregar";
 import SeguimientoOperaciones from "./pages/SeguimientoOperaciones";
 import SeguimientoOperacionesMovil from "./pages/SeguimientoOperacionesMovil";
+import EquiposMovilesR2 from "./pages/EquiposMovilesR2";
 
 //4434
 
@@ -101,8 +104,11 @@ function App() {
         <Route path='/Penalizaciones' exacte element={<Penalizaciones/>} />
         <Route path='/SeguimientoOperaciones' exacte element={<SeguimientoOperaciones/>} />
         <Route path='/SeguimientoOperacionesMovil' exacte element={<SeguimientoOperacionesMovil/>} />
+        <Route path='/EquiposMovilesR2' exacte element={<EquiposMovilesR2/>} />
 
         <Route path='/SupervisionLogin' exacte element={<SupervisionLogin/>} />
+        <Route path='/SupervisionPrincipal' exacte element={<SupervisionPrincipal/>} />
+        <Route path='/SupervisionAgregar' exacte element={<SupervisionAgregar/>} />
       </Routes>
     </>
   );
