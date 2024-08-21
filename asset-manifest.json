@@ -1,14 +1,16 @@
 {
   "files": {
-    "main.css": "/ReportingCenter/static/css/main.212e0d9a.css",
-    "main.js": "/ReportingCenter/static/js/main.4a9e5d38.js",
+    "main.css": "/ReportingCenter/static/css/main.517c2837.css",
+    "main.js": "/ReportingCenter/static/js/main.13012834.js",
     "static/media/fa-solid-900.ttf": "/ReportingCenter/static/media/fa-solid-900.07ed6d5fa32c1d54af0f.ttf",
     "static/media/01.jpg": "/ReportingCenter/static/media/01.90f3a9eed9bfbe9d97b2.jpg",
     "static/media/fa-brands-400.ttf": "/ReportingCenter/static/media/fa-brands-400.0ff70dcbf135d859ebf3.ttf",
+    "static/media/markers-soft@2x.png": "/ReportingCenter/static/media/markers-soft@2x.1f2cc17911c8d4a3fa01.png",
     "static/media/fa-solid-900.woff2": "/ReportingCenter/static/media/fa-solid-900.93f719f4d62bfa3e748c.woff2",
     "static/media/fa-brands-400.woff2": "/ReportingCenter/static/media/fa-brands-400.bb8d5a145e22822103fb.woff2",
     "static/media/glyphicons-halflings-regular.svg": "/ReportingCenter/static/media/glyphicons-halflings-regular.060b2710bdbbe3dfe48b.svg",
     "static/media/fa-regular-400.ttf": "/ReportingCenter/static/media/fa-regular-400.17a6e1aebccdbaa39e78.ttf",
+    "static/media/markers-soft.png": "/ReportingCenter/static/media/markers-soft.e52214306ad12a5c837e.png",
     "static/media/glyphicons-halflings-regular.ttf": "/ReportingCenter/static/media/glyphicons-halflings-regular.4692b9ec53fd5972caa2.ttf",
     "static/media/fa-regular-400.woff2": "/ReportingCenter/static/media/fa-regular-400.bc3722686635b5f86132.woff2",
     "static/media/glyphicons-halflings-regular.woff": "/ReportingCenter/static/media/glyphicons-halflings-regular.82b1212e45a2bc35dd73.woff",
@@ -18,11 +20,11 @@
     "static/media/fa-v4compatibility.ttf": "/ReportingCenter/static/media/fa-v4compatibility.0f6cb412603527bda691.ttf",
     "static/media/fa-v4compatibility.woff2": "/ReportingCenter/static/media/fa-v4compatibility.6cfec8414be20e2c3426.woff2",
     "index.html": "/ReportingCenter/index.html",
-    "main.212e0d9a.css.map": "/ReportingCenter/static/css/main.212e0d9a.css.map",
-    "main.4a9e5d38.js.map": "/ReportingCenter/static/js/main.4a9e5d38.js.map"
+    "main.517c2837.css.map": "/ReportingCenter/static/css/main.517c2837.css.map",
+    "main.13012834.js.map": "/ReportingCenter/static/js/main.13012834.js.map"
   },
   "entrypoints": [
-    "static/css/main.212e0d9a.css",
-    "static/js/main.4a9e5d38.js"
+    "static/css/main.517c2837.css",
+    "static/js/main.13012834.js"
   ]
 }
