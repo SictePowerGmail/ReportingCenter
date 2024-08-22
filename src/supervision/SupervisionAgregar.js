@@ -108,6 +108,7 @@ const SupervisionAgregar = () => {
 
             toast.success('Datos enviados exitosamente', { 
                 className: 'toast-success',
+                autoClose: 1000,
                 onClose: () => {
                   console.log('Datos enviados exitosamente');
                   navigate('/SupervisionPrincipal', { state: { role: role, nombre: nombre } });
