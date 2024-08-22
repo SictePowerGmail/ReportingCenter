@@ -5,12 +5,14 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet.awesome-markers/dist/leaflet.awesome-markers.css';
 import 'leaflet.awesome-markers/dist/leaflet.awesome-markers.js';
+import axios from 'axios';
 
 const SupervisionAgregar = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const { userRole } = location.state || {};
+    const { role, nombre } = location.state || {};
     const [error, setError] = useState(null);
+    const [fecha, setFecha] = useState('');
     const [ubicacion, setUbicacion] = useState({ latitude: null, longitude: null });
     const [ot, setOt] = useState('');
     const [novedad, setNovedad] = useState('');
@@ -22,49 +24,90 @@ const SupervisionAgregar = () => {
     const clickCapture = (event) => {
         const file = event.target.files[0];
         if (file) {
-            setFoto(URL.createObjectURL(file));
+            setFoto(file);
         }
+    };
+
+    const formatDate = (date) => {
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const year = date.getFullYear();
+        const hours = date.getHours().toString().padStart(2, '0');
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+        
+        return `${year}-${month}-${day} ${hours}-${minutes}`;
+    };
+
+    const formatDate2 = (date) => {
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const year = date.getFullYear();
+        const hours = date.getHours().toString().padStart(2, '0');
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+        
+        return `${year}-${month}-${day} ${hours}:${minutes}`;
     };
     
     const enviarFormulario = async (event) => {
         
         event.preventDefault();
         setError('');
-    
-        console.log(JSON.stringify({ ot:ot, novedad:novedad, observacion:observacion, ubicacion:ubicacion, foto:foto }),);
 
-        /*
-        try {
-            const response = await fetch('https://sicteferias.from-co.net:8120/user/login/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json', // Cambia el tipo de contenido a application/json
-                },
-                body: JSON.stringify({ correo: username, contrasena: password }), // Convierte los datos a JSON
-            });
-    
-            if (response.ok) {
-                const data = await response.json(); // Obtén la respuesta como JSON
-                const userRole = data.rol; // Asume que la respuesta tiene una propiedad 'rol'
-                if (userRole === 'SUPERVISION' || userRole === 'admin') {
-                    navigate('/SupervisionPrincipal', { state: { role: userRole } });
-                } else {
-                    setError('Permiso no autorizado');
-                }
-            } else {
-                const errorText = await response.text();
-                if (response.status === 404) {
-                    setError('Usuario no encontrado');
-                } else if (response.status === 401) {
-                    setError('Contraseña incorrecta');
-                } else {
-                    setError('Error inesperado: ' + errorText);
-                }
-            }
-        } catch (error) {
-            setError('Error al conectar con el servidor');
+        if (!ot) {
+            alert("Por favor agrega una OT");
+            return;
         }
-        */
+
+        if (!novedad) {
+            alert("Por favor agrega una Novedad");
+            return;
+        }
+
+        if (!observacion) {
+            alert("Por favor agrega una Observacion");
+            return;
+        }
+
+        if (!ubicacion.latitude || !ubicacion.longitude) {
+            alert("Por favor dar permisos para acceder a la ubicacion");
+            return;
+        }
+
+        if (!foto) {
+            alert("Por favor agrega una foto");
+            return;
+        }
+
+        const formattedDate = formatDate(fecha);
+        const formattedDate2 = formatDate2(fecha);
+        const formData = new FormData();
+        const fotoNombre = `${formattedDate}_${foto.name}`
+        formData.append('file', foto);
+        formData.append("filename", fotoNombre);
+        //console.log(JSON.stringify({ nombre:nombre, fecha:formattedDate, ot:ot, novedad:novedad, observacion:observacion, latitud:ubicacion.latitude, longitud:ubicacion.longitude, fotoNombre:fotoNombre }));
+
+        try {
+            const response = await axios.post('https://sicteferias.from-co.net:8120/supervision/cargarImagen', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+
+            await axios.post("https://sicteferias.from-co.net:8120/supervision/cargarDatos", {
+                fecha: formattedDate2,
+                nombre: nombre,
+                ot: ot,
+                novedad: novedad,
+                observacion: observacion,
+                latitud: ubicacion.latitude,
+                longitud: ubicacion.longitude,
+                fotoNombre: fotoNombre
+            });
+
+            console.log('Datos enviados exitosamente');
+        } catch (error) {
+            console.error('Error al subir el archivo o enviar los datos:', error);
+        }
     };
 
     useEffect(() => {
@@ -130,6 +173,8 @@ const SupervisionAgregar = () => {
         } else {
             setError('Geolocation is not supported by this browser.');
         }
+
+        setFecha(new Date())
     }, []);
     
 
@@ -139,6 +184,10 @@ const SupervisionAgregar = () => {
                 <form onSubmit={enviarFormulario} className='Formulario'>
                     <div className='Titulo'>
                         <h3>Actividad</h3>
+                    </div>
+                    <div className='Fecha'>
+                        <i className="fas fa-calendar-alt"></i>
+                        <span>{fecha.toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
                     </div>
                     <div className='OT'>
                         <i className="fas fa-tools"></i>
@@ -153,7 +202,10 @@ const SupervisionAgregar = () => {
                         <textarea type="text" placeholder="Observacion" value={observacion} onChange={(e) => setObservacion(e.target.value)} rows={1}/>
                     </div>
                     <div className='Ubicacion'>
-                        <h4>Ubicación del Usuario</h4>
+                        <div className='Contenedor'>
+                            <i className="fas fa-map-marker-alt"></i>
+                            <span>Ubicación del Usuario</span>
+                        </div>
                         {error ? (
                             <p>Error: {error}</p>
                         ) : (
@@ -171,7 +223,7 @@ const SupervisionAgregar = () => {
                             id="fotoInput"
                         />
                         <label htmlFor="fotoInput" className="foto-label">
-                            {foto ? <img src={foto} alt="Foto" className="foto-preview" /> : 'Tomar Foto'}
+                            {foto ? foto.name : 'Tomar Foto'}
                         </label>
                     </div>
 

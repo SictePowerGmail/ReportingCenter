@@ -5,12 +5,12 @@ import './SupervisionPrincipal.css'
 const SupervisionPrincipal = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const { role } = location.state || {};
+    const { role, nombre } = location.state || {};
     const [error, setError] = useState('');
 
     const Agregar = async (event) => {
         if (role === 'SUPERVISION' || role === 'admin') {
-            navigate('/SupervisionAgregar');
+            navigate('/SupervisionAgregar', { state: { role:role, nombre:nombre } });
         }  else {
             setError('Permiso no autorizado');
         }

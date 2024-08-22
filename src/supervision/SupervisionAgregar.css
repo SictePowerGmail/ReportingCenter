@@ -45,6 +45,7 @@
     margin: 10px;
 }
 
+.Supervision-Agregar .Contenido .Fecha,
 .Supervision-Agregar .Contenido .OT,
 .Supervision-Agregar .Contenido .Novedad,
 .Supervision-Agregar .Contenido .Observacion,
@@ -55,16 +56,20 @@
     margin: 10px;
 }
 
+.Supervision-Agregar .Contenido .Fecha i,
 .Supervision-Agregar .Contenido .OT i,
 .Supervision-Agregar .Contenido .Novedad i,
 .Supervision-Agregar .Contenido .Observacion i,
+.Supervision-Agregar .Contenido .Ubicacion .Contenedor i,
 .Supervision-Agregar .Contenido .Foto i {
     padding-right: 10px;
 }
 
+.Supervision-Agregar .Contenido .Fecha span,
 .Supervision-Agregar .Contenido .OT input,
 .Supervision-Agregar .Contenido .Novedad input,
-.Supervision-Agregar .Contenido .Observacion textarea {
+.Supervision-Agregar .Contenido .Observacion textarea,
+.Supervision-Agregar .Contenido .Ubicacion .Contenedor span {
     width: 90%;
 }
 
@@ -72,8 +77,16 @@
     height: 10vh;
 }
 
+.Supervision-Agregar .Contenido .Ubicacion .Contenedor {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
 .Supervision-Agregar .Contenido .Foto label {
     width: 90%;
+    margin: 0;
 }
 
 .Supervision-Agregar .Contenido .Enviar {

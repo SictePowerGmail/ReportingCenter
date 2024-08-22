@@ -258,6 +258,7 @@ function Navbar() {
                                 <div id='SubMenu-Contenido'>
                                     <Link id='SubMenu-Contenido-Titulo' to="/EquiposMovilesR2" onClick={toggleMobileMenu}>Equipos en moviles R2</Link>
                                     <Link id='SubMenu-Contenido-Titulo' to="/EquiposMovilesR4" onClick={toggleMobileMenu}>Equipos en moviles R4</Link>
+                                    <Link id='SubMenu-Contenido-Titulo' to="/ConsumosOperaciones" onClick={toggleMobileMenu}>Consumos Operaciones</Link>
                                 </div>
                             )}
                         </li>
