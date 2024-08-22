@@ -29,7 +29,7 @@ const SupervisionLogin = () => {
                 const userRole = data.rol; // Asume que la respuesta tiene una propiedad 'rol'
                 const userNombre = data.nombre; // Asume que la respuesta tiene una propiedad 'rol'
                 if (userRole === 'SUPERVISION' || userRole === 'admin') {
-                    navigate('/SupervisionPrincipal', { state: { role:userRole, nombre:userNombre } });
+                    navigate('/SupervisionPrincipal', { state: { role:userRole, nombre:userNombre, estadoNotificacion:false } });
                 } else {
                     setError('Permiso no autorizado');
                 }

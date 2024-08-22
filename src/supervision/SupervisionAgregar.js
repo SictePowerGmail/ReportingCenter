@@ -106,14 +106,8 @@ const SupervisionAgregar = () => {
                 fotoNombre: fotoNombre
             });
 
-            toast.success('Datos enviados exitosamente', { 
-                className: 'toast-success',
-                autoClose: 1000,
-                onClose: () => {
-                  console.log('Datos enviados exitosamente');
-                  navigate('/SupervisionPrincipal', { state: { role: role, nombre: nombre } });
-                }
-            });
+            navigate('/SupervisionPrincipal', { state: { role:role, nombre:nombre, estadoNotificacion:true } });
+            console.log('Datos enviados exitosamente');
 
         } catch (error) {
             console.error('Error al subir el archivo o enviar los datos:', error);
