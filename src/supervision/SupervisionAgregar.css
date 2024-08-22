@@ -95,3 +95,9 @@
     align-items: center;
     justify-content: center;
 }
+
+.Toastify__toast {
+    margin-top: 40px; /* Elimina el margen */
+    width: 250px; /* Ajusta el ancho */
+    padding: 10px; /* Ajusta el padding */
+}

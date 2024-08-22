@@ -6,6 +6,8 @@ import 'leaflet/dist/leaflet.css';
 import 'leaflet.awesome-markers/dist/leaflet.awesome-markers.css';
 import 'leaflet.awesome-markers/dist/leaflet.awesome-markers.js';
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const SupervisionAgregar = () => {
     const navigate = useNavigate();
@@ -54,27 +56,27 @@ const SupervisionAgregar = () => {
         setError('');
 
         if (!ot) {
-            alert("Por favor agrega una OT");
+            toast.error('Por favor agrega una OT', { className: 'toast-error' });
             return;
         }
 
         if (!novedad) {
-            alert("Por favor agrega una Novedad");
+            toast.error('Por favor agrega una Novedad', { className: 'toast-error' });
             return;
         }
 
         if (!observacion) {
-            alert("Por favor agrega una Observacion");
+            toast.error('Por favor agrega una Observacion', { className: 'toast-error' });
             return;
         }
 
         if (!ubicacion.latitude || !ubicacion.longitude) {
-            alert("Por favor dar permisos para acceder a la ubicacion");
+            toast.error('Por favor dar permisos para acceder a la ubicacion', { className: 'toast-error' });
             return;
         }
 
         if (!foto) {
-            alert("Por favor agrega una foto");
+            toast.error('Por favor agrega una foto', { className: 'toast-error' });
             return;
         }
 
@@ -87,12 +89,12 @@ const SupervisionAgregar = () => {
         //console.log(JSON.stringify({ nombre:nombre, fecha:formattedDate, ot:ot, novedad:novedad, observacion:observacion, latitud:ubicacion.latitude, longitud:ubicacion.longitude, fotoNombre:fotoNombre }));
 
         try {
-            const response = await axios.post('https://sicteferias.from-co.net:8120/supervision/cargarImagen', formData, {
+            await axios.post('https://sicteferias.from-co.net:8120/supervision/cargarImagen', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
             });
-
+            
             await axios.post("https://sicteferias.from-co.net:8120/supervision/cargarDatos", {
                 fecha: formattedDate2,
                 nombre: nombre,
@@ -104,9 +106,17 @@ const SupervisionAgregar = () => {
                 fotoNombre: fotoNombre
             });
 
-            console.log('Datos enviados exitosamente');
+            toast.success('Datos enviados exitosamente', { 
+                className: 'toast-success',
+                onClose: () => {
+                  console.log('Datos enviados exitosamente');
+                  navigate('/SupervisionPrincipal', { state: { role: role, nombre: nombre } });
+                }
+            });
+
         } catch (error) {
             console.error('Error al subir el archivo o enviar los datos:', error);
+            toast.error('Error al subir el archivo o enviar los datos', { className: 'toast-error' });
         }
     };
 
@@ -231,6 +241,9 @@ const SupervisionAgregar = () => {
                         <button type="submit" id='Enviar' className="btn btn-primary">Enviar</button>
                     </div>
                 </form>
+                <div className='Notificaciones'>
+                    <ToastContainer />
+                </div>
             </div>
         </div>
     );
