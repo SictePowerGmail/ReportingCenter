@@ -8,7 +8,8 @@
 
 .Supervision-Principal .Contenido {
     display: flex; /* Usa el modelo de caja flexible */
-    justify-content: center; /* Centra horizontalmente */
+    flex-direction: column;
+    justify-content: baseline; /* Centra horizontalmente */
     align-items: center; /* Centra verticalmente */
     width: 100%; /* Ancho fijo */
     height: 95%;
@@ -17,6 +18,10 @@
     border-radius: 30px 30px 30px 30px; /* Bordes redondeados */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra */
     position: relative;
+}
+
+.Supervision-Principal .Contenido .recharts-wrapper {
+    padding-right: 30px;
 }
 
 .Supervision-Principal .btn-flotante {
