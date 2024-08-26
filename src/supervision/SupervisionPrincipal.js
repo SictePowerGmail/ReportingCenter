@@ -169,11 +169,7 @@ const SupervisionPrincipal = () => {
         // Definir el contenido del popup (inicialmente sin imagen)
         const popupContent = `
             <div>
-                <p>Fecha: ${fecha}</p>
-                <p>Placa: ${placa}</p>
-                <p>OT: ${ot}</p>
-                <p>Novedad: ${novedad}</p>
-                <p>Observación: ${observacion}</p>
+                <p>Fecha: ${fecha}<br>Placa: ${placa}<br>OT: ${ot}<br>Novedad: ${novedad}<br>Observación: ${observacion}</p>
                 <div id="image-container-${fotoNombre}" style="width: 100px; height: auto; text-align: center;"></div>
             </div>
         `;
