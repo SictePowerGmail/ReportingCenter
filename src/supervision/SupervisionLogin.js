@@ -84,7 +84,7 @@ const SupervisionLogin = () => {
                 )}
 
                 <div className='Version'>
-                    <p>v1.01</p>
+                    <p>v1.02</p>
                 </div>
             </div>
         </div>

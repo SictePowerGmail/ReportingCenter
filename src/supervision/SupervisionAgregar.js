@@ -16,6 +16,7 @@ const SupervisionAgregar = () => {
     const [error, setError] = useState(null);
     const [fecha, setFecha] = useState('');
     const [ubicacion, setUbicacion] = useState({ latitude: null, longitude: null });
+    const [placa, setPlaca] = useState('');
     const [ot, setOt] = useState('');
     const [novedad, setNovedad] = useState('');
     const [observacion, setObservacion] = useState('');
@@ -54,6 +55,11 @@ const SupervisionAgregar = () => {
         
         event.preventDefault();
         setError('');
+
+        if (!placa) {
+            toast.error('Por favor agrega la placa de la movil', { className: 'toast-error' });
+            return;
+        }
 
         if (!ot) {
             toast.error('Por favor agrega una OT', { className: 'toast-error' });
@@ -98,6 +104,7 @@ const SupervisionAgregar = () => {
             await axios.post("https://sicteferias.from-co.net:8120/supervision/cargarDatos", {
                 fecha: formattedDate2,
                 nombre: nombre,
+                placa: placa,
                 ot: ot,
                 novedad: novedad,
                 observacion: observacion,
@@ -194,6 +201,24 @@ const SupervisionAgregar = () => {
                         <i className="fas fa-calendar-alt"></i>
                         <span>{fecha.toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
                     </div>
+                    <div className='Placa'>
+                        <i className="fas fa-id-card"></i>
+                        <input 
+                            type="text" 
+                            placeholder="Placa Movil (Ejemplo: ABC123)" 
+                            value={placa} 
+                            onChange={(e) => {
+                                const newValue = e.target.value.toUpperCase(); // Convertir a mayúsculas automáticamente
+                                if (/^[A-Z]{0,3}[0-9]{0,3}$/.test(newValue)) {
+                                    setPlaca(newValue); // Solo actualizar el estado si el nuevo valor coincide con el patrón
+                                }
+                            }}
+                            pattern="[A-Za-z]{3}[0-9]{3}"
+                            maxLength={6} // Limitar la longitud máxima a 6 caracteres
+                            title="Debe ser en formato de 3 letras seguidas de 3 números (Ejemplo: ABC123)"
+                        />
+                    </div>
+
                     <div className='OT'>
                         <i className="fas fa-tools"></i>
                         <input type="text" placeholder="OT" value={ot} onChange={(e) => setOt(e.target.value)}/>
@@ -214,7 +239,7 @@ const SupervisionAgregar = () => {
                         {error ? (
                             <p>Error: {error}</p>
                         ) : (
-                            <div id="map" style={{ width: '100%', height: '300px' }}></div>
+                            <div id="map" style={{ width: '100%', height: '270px' }}></div>
                         )}
                     </div>
                     <div className='Foto'>

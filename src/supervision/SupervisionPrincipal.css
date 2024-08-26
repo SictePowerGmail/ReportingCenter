@@ -18,18 +18,117 @@
     border-radius: 30px 30px 30px 30px; /* Bordes redondeados */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra */
     position: relative;
+    overflow-y: auto;
 }
 
-.Supervision-Principal .Contenido .recharts-wrapper {
+.Supervision-Principal .Contenido::-webkit-scrollbar {
+    width: 10px; 
+}
+
+.Supervision-Principal .Contenido::-webkit-scrollbar-track {
+    background: rgb(230, 230, 230); /* Color de fondo de la pista de la scrollbar */
+    border-radius: 10px; /* Bordes redondeados para el track */
+}
+
+.Supervision-Principal .Contenido::-webkit-scrollbar-thumb {
+    background-color: #ff8800; /* Color de la barra de desplazamiento */
+    border-radius: 10px; /* Bordes redondeados para la barra de desplazamiento */
+    border: 3px solid rgb(230, 230, 230); /* Espacio alrededor del thumb (efecto de margen) */
+}
+
+.Supervision-Principal .Contenido::-webkit-scrollbar-thumb:hover {
+    background: #bd6a0c; /* Color de la barra de desplazamiento al pasar el mouse por encima */
+}
+
+.Supervision-Principal .Contenido h4 {
+    margin: 30px 0px 10px 0px;
+}
+
+.Supervision-Principal .Contenido .SeleccionFecha {
+    width: 90%;
+    margin: 10px 10px 5px 10px;
+}
+
+.Supervision-Principal .Contenido .SeleccionFecha i {
+    padding-right: 10px;
+}
+
+.Supervision-Principal .Contenido .SeleccionFecha select {
+    margin: 5px 0px 0px 20px;
+}
+
+.Supervision-Principal .Contenido .SeleccionSupervision {
+    width: 90%;
+    margin: 5px 10px 5px 10px;
+}
+
+.Supervision-Principal .Contenido .SeleccionSupervision i {
+    padding-right: 10px;
+}
+
+.Supervision-Principal .Contenido .SeleccionSupervision select {
+    margin: 5px 0px 0px 20px;
+}
+
+.Supervision-Principal .Contenido .SeleccionPlaca {
+    width: 90%;
+    margin: 5px 10px 0px 10px;
+}
+
+.Supervision-Principal .Contenido .SeleccionPlaca i {
+    padding-right: 10px;
+}
+
+.Supervision-Principal .Contenido .SeleccionPlaca select {
+    margin: 5px 0px 0px 20px;
+}
+
+.Supervision-Principal .Contenido .Total {
+    width: 90%;
+    margin: 10px;
+}
+
+.Supervision-Principal .Contenido .Total i {
+    padding-right: 10px;
+}
+
+.Supervision-Principal .Contenido .TituloBarraFecha {
+    width: 90%;
+    margin: 0px 10px 5px 10px;
+    padding-left: 8px;
+}
+
+.Supervision-Principal .Contenido .TituloBarraFecha i {
+    padding-right: 10px;
+}
+
+.Supervision-Principal .Contenido .BarraFecha {
     padding-right: 30px;
+}
+
+.Supervision-Principal .Contenido .Ubicacion .Contenedor {
+    margin: 0px 10px 5px 10px;
+    padding-left: 3px;
+}
+
+.Supervision-Principal .Contenido .Ubicacion .Contenedor i {
+    padding-right: 10px;
+}
+
+.Supervision-Principal .Contenido .TituloBarraSupervision {
+    width: 90%;
+    margin: 10px 10px 5px 0px;
+    padding-left: 5px;
+}
+
+.Supervision-Principal .Contenido .TituloBarraSupervision i {
+    padding-right: 10px;
 }
 
 .Supervision-Principal .btn-flotante {
     position: absolute;
-    bottom: 0;
-    right: 0;
-    bottom: 10px;
-    right: 10px;
+    top: 20px;
+    right: 20px;
     width: 60px;
     height: 60px;
     background-color: #007bff;

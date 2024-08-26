@@ -36,6 +36,7 @@
     margin: 10px;
 }
 
+.Supervision-Agregar .Contenido .Placa,
 .Supervision-Agregar .Contenido .OT,
 .Supervision-Agregar .Contenido .Novedad,
 .Supervision-Agregar .Contenido .Observacion,
@@ -46,6 +47,7 @@
 }
 
 .Supervision-Agregar .Contenido .Fecha,
+.Supervision-Agregar .Contenido .Placa,
 .Supervision-Agregar .Contenido .OT,
 .Supervision-Agregar .Contenido .Novedad,
 .Supervision-Agregar .Contenido .Observacion,
@@ -57,6 +59,7 @@
 }
 
 .Supervision-Agregar .Contenido .Fecha i,
+.Supervision-Agregar .Contenido .Placa i,
 .Supervision-Agregar .Contenido .OT i,
 .Supervision-Agregar .Contenido .Novedad i,
 .Supervision-Agregar .Contenido .Observacion i,
@@ -65,6 +68,7 @@
     padding-right: 10px;
 }
 
+.Supervision-Agregar .Contenido .Placa input,
 .Supervision-Agregar .Contenido .Fecha span,
 .Supervision-Agregar .Contenido .OT input,
 .Supervision-Agregar .Contenido .Novedad input,
