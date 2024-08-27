@@ -12,7 +12,6 @@ const SupervisionPrincipal = () => {
     const location = useLocation();
     const [datosRegistrosSupervision, setDatosRegistrosSupervision] = useState([]);
     const { role, nombre, estadoNotificacion } = location.state || {};
-    const [error, setError] = useState('');
     const mapRef = useRef(null);
     const [graficaRegistrosSupervisionDia, setGraficaRegistrosSupervisionDia] = useState({});
     const [graficaRegistrosSupervisionCadaUno, setGraficaRegistrosSupervisionCadaUno] = useState({});
@@ -24,10 +23,10 @@ const SupervisionPrincipal = () => {
 
 
     const Agregar = async (event) => {
-        if (role === 'SUPERVISION' || role === 'admin') {
+        if (role === 'SUPERVISION' || role === 'admin' || role === 'COORDINACION') {
             navigate('/SupervisionAgregar', { state: { role:role, nombre:nombre, estadoNotificacion:false } });
         }  else {
-            setError('Permiso no autorizado');
+            toast.error('Permiso no autorizado', { className: 'toast-error' });
         }
     };
 
