@@ -28,11 +28,7 @@ const SupervisionLogin = () => {
                 const data = await response.json(); // Obtén la respuesta como JSON
                 const userRole = data.rol; // Asume que la respuesta tiene una propiedad 'rol'
                 const userNombre = data.nombre; // Asume que la respuesta tiene una propiedad 'rol'
-                if (userRole === 'SUPERVISION' || userRole === 'admin' || userRole === 'COORDINACION') {
-                    navigate('/SupervisionPrincipal', { state: { role:userRole, nombre:userNombre, estadoNotificacion:false } });
-                } else {
-                    setError('Permiso no autorizado');
-                }
+                navigate('/SupervisionPrincipal', { state: { role:userRole, nombre:userNombre, estadoNotificacion:false } });
             } else {
                 const errorText = await response.text();
                 if (response.status === 404) {
@@ -84,7 +80,7 @@ const SupervisionLogin = () => {
                 )}
 
                 <div className='Version'>
-                    <p>v1.04</p>
+                    <p>v1.05</p>
                 </div>
             </div>
         </div>

@@ -23,11 +23,7 @@ const SupervisionPrincipal = () => {
 
 
     const Agregar = async (event) => {
-        if (role === 'SUPERVISION' || role === 'admin' || role === 'COORDINACION') {
-            navigate('/SupervisionAgregar', { state: { role:role, nombre:nombre, estadoNotificacion:false } });
-        }  else {
-            toast.error('Permiso no autorizado', { className: 'toast-error' });
-        }
+        navigate('/SupervisionAgregar', { state: { role:role, nombre:nombre, estadoNotificacion:false } });
     };
 
     const cargarRegistrosSupervision = async (event) => {
