@@ -17,6 +17,26 @@
     border-radius: 30px 30px 30px 30px; /* Bordes redondeados */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra */
     position: relative;
+    overflow-y: auto;
+}
+
+.Supervision-Agregar .Contenido::-webkit-scrollbar {
+    width: 10px; 
+}
+
+.Supervision-Agregar .Contenido::-webkit-scrollbar-track {
+    background: rgb(230, 230, 230); /* Color de fondo de la pista de la scrollbar */
+    border-radius: 10px; /* Bordes redondeados para el track */
+}
+
+.Supervision-Agregar .Contenido::-webkit-scrollbar-thumb {
+    background-color: #ff8800; /* Color de la barra de desplazamiento */
+    border-radius: 10px; /* Bordes redondeados para la barra de desplazamiento */
+    border: 3px solid rgb(230, 230, 230); /* Espacio alrededor del thumb (efecto de margen) */
+}
+
+.Supervision-Agregar .Contenido::-webkit-scrollbar-thumb:hover {
+    background: #bd6a0c; /* Color de la barra de desplazamiento al pasar el mouse por encima */
 }
 
 .Supervision-Agregar .Contenido .Formulario {
@@ -54,7 +74,7 @@
 .Supervision-Agregar .Contenido .Foto {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: baseline;
     margin: 10px;
 }
 
@@ -77,6 +97,13 @@
     width: 90%;
 }
 
+.Supervision-Agregar .Contenido .Fecha .FechaEntrada {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
 .Supervision-Agregar .Contenido .Observacion textarea {
     height: 10vh;
 }
@@ -91,6 +118,7 @@
 .Supervision-Agregar .Contenido .Foto label {
     width: 90%;
     margin: 0;
+    font-size: 18px;
 }
 
 .Supervision-Agregar .Contenido .Enviar {
@@ -98,6 +126,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    padding-bottom: 10px;
 }
 
 .Toastify__toast {

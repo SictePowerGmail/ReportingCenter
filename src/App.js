@@ -47,6 +47,7 @@ import SeguimientoOperacionesMovil from "./pages/SeguimientoOperacionesMovil";
 import EquiposMovilesR2 from "./pages/EquiposMovilesR2";
 import EquiposMovilesR4 from "./pages/EquiposMovilesR4";
 import ConsumosOperaciones from "./pages/ConsumosOperaciones";
+import DesmonteMantenimiento from "./pages/DesmonteMantenimiento";
 
 //4434
 
@@ -156,6 +157,8 @@ function App() {
         return 'Equipos Moviles R4';
       case '/ConsumosOperaciones':
         return 'ConsumosOperaciones';
+      case '/DesmonteMantenimiento':
+        return 'DesmonteMantenimiento';
       /* Direccion */
       case '/Penalizaciones':
         return 'Penalizaciones';
@@ -225,6 +228,7 @@ function App() {
         <Route path='/EquiposMovilesR2' exacte element={<EquiposMovilesR2/>} />
         <Route path='/EquiposMovilesR4' exacte element={<EquiposMovilesR4/>} />
         <Route path='/ConsumosOperaciones' exacte element={<ConsumosOperaciones/>} />
+        <Route path='/DesmonteMantenimiento' exacte element={<DesmonteMantenimiento/>} />
         {/* Direccion */}
         <Route path='/Penalizaciones' exacte element={<Penalizaciones/>} />
         <Route path='/Centro_de_costos' exacte element={<CentrosDeCostos />} />

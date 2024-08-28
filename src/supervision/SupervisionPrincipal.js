@@ -4,7 +4,7 @@ import './SupervisionPrincipal.css'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, LabelList } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, LabelList } from 'recharts';
 import L from 'leaflet';
 
 const SupervisionPrincipal = () => {
@@ -47,7 +47,7 @@ const SupervisionPrincipal = () => {
                 }
 
                 if (placaSeleccionada !== 'Todo') {
-                    dataFiltrada = data.filter(item => item.placa === placaSeleccionada);
+                    dataFiltrada = dataFiltrada.filter(item => item.placa === placaSeleccionada);
                 }
 
                 generarMapa(dataFiltrada);
@@ -254,101 +254,109 @@ const SupervisionPrincipal = () => {
         <div className="Supervision-Principal">
             <div className='Contenido'>
                 <h4>Registros</h4>
-                <div className='SeleccionFecha'>
-                    <div className='TituloFecha'>
-                        <i className="fas fa-calendar-alt"></i>
-                        <span>Fecha</span>
+                <div className='RenderizarFiltros'>
+                    <div className='SeleccionFecha'>
+                        <div className='TituloFecha'>
+                            <i className="fas fa-calendar-alt"></i>
+                            <span>Fecha</span>
+                        </div>
+                        <select id='Fecha-Reporte-Boton' value={fechaSeleccionada} onChange={(e) => setFechaSeleccionada(e.target.value)} className="select-box">
+                            {getListaFecha().map((fecha, index) => (
+                                <option key={index} value={fecha}>
+                                    {fecha}
+                                </option>
+                            ))}
+                        </select>
                     </div>
-                    <select id='Fecha-Reporte-Boton' value={fechaSeleccionada} onChange={(e) => setFechaSeleccionada(e.target.value)} className="select-box">
-                        {getListaFecha().map((fecha, index) => (
-                            <option key={index} value={fecha}>
-                                {fecha}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-                <div className='SeleccionSupervision'>
-                    <div className='TituloSupervision'>
-                        <i className="fas fa-user-tie"></i>
-                        <span>Supervisor</span>
+                    <div className='SeleccionSupervision'>
+                        <div className='TituloSupervision'>
+                            <i className="fas fa-user-tie"></i>
+                            <span>Supervisor</span>
+                        </div>
+                        <select id='Fecha-Reporte-Boton' value={supervisorSeleccionado} onChange={(e) => setSupervisorSeleccionado(e.target.value)} className="select-box">
+                            {getListaNombre().map((nombres, index) => (
+                                <option key={index} value={nombres}>
+                                    {nombres}
+                                </option>
+                            ))}
+                        </select>
                     </div>
-                    <select id='Fecha-Reporte-Boton' value={supervisorSeleccionado} onChange={(e) => setSupervisorSeleccionado(e.target.value)} className="select-box">
-                        {getListaNombre().map((nombres, index) => (
-                            <option key={index} value={nombres}>
-                                {nombres}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-                <div className='SeleccionPlaca'>
-                    <div className='TituloPlaca'>
-                        <i className="fas fa-id-card"></i>
-                        <span>Placa</span>
+                    <div className='SeleccionPlaca'>
+                        <div className='TituloPlaca'>
+                            <i className="fas fa-id-card"></i>
+                            <span>Placa</span>
+                        </div>
+                        <select id='Fecha-Reporte-Boton' value={placaSeleccionada} onChange={(e) => setPlacaSeleccionada(e.target.value)} className="select-box">
+                            {getListaPlaca().map((placa, index) => (
+                                <option key={index} value={placa}>
+                                    {placa}
+                                </option>
+                            ))}
+                        </select>
                     </div>
-                    <select id='Fecha-Reporte-Boton' value={placaSeleccionada} onChange={(e) => setPlacaSeleccionada(e.target.value)} className="select-box">
-                        {getListaPlaca().map((placa, index) => (
-                            <option key={index} value={placa}>
-                                {placa}
-                            </option>
-                        ))}
-                    </select>
                 </div>
-                <div className='Total'>
-                    <i className="fas fa-calculator"></i>
-                    <span>Total acompañamientos: {cantidadAcompañamientos}</span>
-                </div>
-                <div className='BarraFecha'>
-                    <div className='TituloBarraFecha'>
-                        <i className="fas fa-chart-bar"></i>
-                        <span>Acompañamientos por dia</span>
+                <div className='RenderizarMapaYGraficos'>
+                    <div className='RenderizarMapa'>
+                        <div className='Total'>
+                            <i className="fas fa-calculator"></i>
+                            <span>Total acompañamientos: {cantidadAcompañamientos}</span>
+                        </div>
+                        <div className='Ubicacion'>
+                            <div className='Contenedor'>
+                                <i className="fas fa-map-marker-alt"></i>
+                                <span>Ubicaciónes registradas</span>
+                            </div>
+                            <div id="map" className='Mapa'></div>
+                        </div>
                     </div>
-                    <BarChart
-                        width={310}
-                        height={200}
-                        margin={0}
-                        data={graficaRegistrosSupervisionDia}
-                    >
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="name" />
-                        <YAxis domain={[dataMin => dataMin - 1, dataMax => dataMax + 5]} />
-                        <Tooltip />
-                        <Bar dataKey="registros" fill="#8884d8">
-                            <LabelList dataKey="registros" position="top" />
-                        </Bar>
-                    </BarChart>
-                </div>
-                <div className='Ubicacion'>
-                    <div className='Contenedor'>
-                        <i className="fas fa-map-marker-alt"></i>
-                        <span>Ubicaciónes registradas</span>
+                    <div className='RenderizarGraficos'>
+                        <div className='BarraFecha'>
+                            <div className='TituloBarraFecha'>
+                                <i className="fas fa-chart-bar"></i>
+                                <span>Acompañamientos por dia</span>
+                            </div>
+                            <BarChart
+                                width={310}
+                                height={200}
+                                margin={0}
+                                data={graficaRegistrosSupervisionDia}
+                            >
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="name" />
+                                <YAxis domain={[dataMin => dataMin - 1, dataMax => dataMax + 5]} />
+                                <Tooltip />
+                                <Bar dataKey="registros" fill="#8884d8">
+                                    <LabelList dataKey="registros" position="top" />
+                                </Bar>
+                            </BarChart>
+                        </div>
+                        <div className='BarraSupervision'>
+                            <div className='TituloBarraSupervision'>
+                                <i className="fas fa-chart-bar"></i>
+                                <span>Acompañamientos por supervisor</span>
+                            </div>
+                            <BarChart
+                                width={310}
+                                height={300}
+                                data={graficaRegistrosSupervisionCadaUno}
+                                layout="vertical"
+                                >
+                                <YAxis dataKey="name" type="category" width={100}/>
+                                <XAxis
+                                    type="number" // Cambiado a tipo number para ajustar dinámicamente
+                                    domain={[dataMin => dataMin - 1, dataMax => dataMax + 5]}
+                                    tick={false} // Oculta los ticks del eje X
+                                    axisLine={false} // Oculta la línea del eje X
+                                    tickLine={false} // Oculta las líneas de los ticks
+                                    interval={0} // Muestra todos los ticks
+                                />
+                                <Tooltip />
+                                <Bar dataKey="registros" fill="#8884d8">
+                                    <LabelList dataKey="registros" position="right" />
+                                </Bar>
+                            </BarChart>
+                        </div>
                     </div>
-                    <div id="map" className='Mapa' style={{ width: '330px', height: '300px' }}></div>
-                </div>
-                <div className='BarraSupervision'>
-                    <div className='TituloBarraSupervision'>
-                        <i className="fas fa-chart-bar"></i>
-                        <span>Acompañamientos por supervisor</span>
-                    </div>
-                    <BarChart
-                        width={310}
-                        height={300}
-                        data={graficaRegistrosSupervisionCadaUno}
-                        layout="vertical"
-                        >
-                        <YAxis dataKey="name" type="category" width={100}/>
-                        <XAxis
-                            type="number" // Cambiado a tipo number para ajustar dinámicamente
-                            domain={[dataMin => dataMin - 1, dataMax => dataMax + 5]}
-                            tick={false} // Oculta los ticks del eje X
-                            axisLine={false} // Oculta la línea del eje X
-                            tickLine={false} // Oculta las líneas de los ticks
-                            interval={0} // Muestra todos los ticks
-                        />
-                        <Tooltip />
-                        <Bar dataKey="registros" fill="#8884d8">
-                            <LabelList dataKey="registros" position="right" />
-                        </Bar>
-                    </BarChart>
                 </div>
                 <div>
                     <button onClick={Agregar} className="btn-flotante">+</button>

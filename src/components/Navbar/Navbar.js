@@ -259,6 +259,7 @@ function Navbar() {
                                     <Link id='SubMenu-Contenido-Titulo' to="/EquiposMovilesR2" onClick={toggleMobileMenu}>Equipos en moviles R2</Link>
                                     <Link id='SubMenu-Contenido-Titulo' to="/EquiposMovilesR4" onClick={toggleMobileMenu}>Equipos en moviles R4</Link>
                                     <Link id='SubMenu-Contenido-Titulo' to="/ConsumosOperaciones" onClick={toggleMobileMenu}>Consumos Operaciones</Link>
+                                    <Link id='SubMenu-Contenido-Titulo' to="/DesmonteMantenimiento" onClick={toggleMobileMenu}>Desmonte Mantenimiento</Link>
                                 </div>
                             )}
                         </li>
@@ -291,7 +292,7 @@ function Navbar() {
                         </li>
                     </ul>
                     <div className='Version'>
-                        <p>v1.03</p>
+                        <p>v1.04</p>
                     </div>
                 </div>
             )}

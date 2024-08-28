@@ -1,9 +1,16 @@
 .Supervision-Principal {
-    width: calc(100%);
+    width: calc(100% - 40px);
     height: calc(100% - 40px);
     display: flex; /* Usa el modelo de caja flexible */
     justify-content: center; /* Centra horizontalmente */
     align-items: center; /* Centra verticalmente */
+    margin-left: 40px;
+    padding: 0px 20px;
+
+    @media screen and (max-width: 600px) {
+        width: calc(100%);
+        margin-left: 0px;
+    }
 }
 
 .Supervision-Principal .Contenido {
@@ -13,12 +20,15 @@
     align-items: center; /* Centra verticalmente */
     width: 100%; /* Ancho fijo */
     height: 95%;
-    max-width: 350px;
     background-color: white;
     border-radius: 30px 30px 30px 30px; /* Bordes redondeados */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra */
     position: relative;
     overflow-y: auto;
+
+    @media screen and (max-width: 600px) {
+        max-width: 350px;  
+    }
 }
 
 .Supervision-Principal .Contenido::-webkit-scrollbar {
@@ -41,7 +51,21 @@
 }
 
 .Supervision-Principal .Contenido h4 {
-    margin: 30px 0px 10px 0px;
+    margin: 30px 0px 0px 0px;
+
+    @media screen and (max-width: 600px) {
+        margin: 30px 0px 10px 0px;
+    }
+}
+
+.Supervision-Principal .Contenido .RenderizarFiltros {
+    display: flex; /* Usa el modelo de caja flexible */
+    justify-content: center; /* Centra horizontalmente */
+    align-items: baseline; /* Centra verticalmente */
+    
+    @media screen and (max-width: 600px) {
+        display: contents; /* Usa el modelo de caja flexible */
+    }
 }
 
 .Supervision-Principal .Contenido .SeleccionFecha {
@@ -84,17 +108,55 @@
 }
 
 .Supervision-Principal .Contenido .Total {
-    width: 90%;
+    width: 100%;
     margin: 10px;
+    padding-left: 13px;
+
+    @media screen and (max-width: 600px) {
+        width: 90%;
+        padding-left: 0px;
+    }
 }
 
 .Supervision-Principal .Contenido .Total i {
     padding-right: 10px;
 }
 
+.Supervision-Principal .Contenido .RenderizarMapaYGraficos {
+    display: flex; /* Usa el modelo de caja flexible */
+    justify-content: baseline; /* Centra horizontalmente */
+    align-items: baseline; /* Centra verticalmente */
+
+    @media screen and (max-width: 600px) {
+        display: contents; /* Usa el modelo de caja flexible */
+    }
+}
+
+.Supervision-Principal .Contenido .RenderizarMapa {
+    display: flex; /* Usa el modelo de caja flexible */
+    flex-direction: column;
+    justify-content: center; /* Centra horizontalmente */
+    align-items: center; /* Centra verticalmente */
+
+    @media screen and (max-width: 600px) {
+        display: contents; /* Usa el modelo de caja flexible */
+    }
+}
+
+.Supervision-Principal .Contenido .RenderizarGraficos {
+    display: flex; /* Usa el modelo de caja flexible */
+    flex-direction: column;
+    justify-content: center; /* Centra horizontalmente */
+    align-items: center; /* Centra verticalmente */
+
+    @media screen and (max-width: 600px) {
+        display: contents; /* Usa el modelo de caja flexible */
+    }
+}
+
 .Supervision-Principal .Contenido .TituloBarraFecha {
     width: 90%;
-    margin: 0px 10px 5px 10px;
+    margin: 10px 10px 5px 10px;
     padding-left: 8px;
 }
 
@@ -109,6 +171,40 @@
 .Supervision-Principal .Contenido .Ubicacion .Contenedor {
     margin: 0px 10px 5px 10px;
     padding-left: 3px;
+}
+
+.Supervision-Principal .Contenido .Ubicacion #map {
+    width: 70vw;
+    height: 62vh;
+
+    @media screen and (min-width: 1350px) and (max-width: 1600px) {
+        /* Estilos para pantallas entre 600px y 1200px */
+        width: 65vw;
+        height: 62vh;
+    }
+
+    @media screen and (min-width: 600px) and (max-width: 1350px) {
+        /* Estilos para pantallas entre 600px y 1200px */
+        width: 60vw;
+        height: 62vh;
+    }
+
+    @media screen and (min-width: 950px) and (max-width: 1150px) {
+        /* Estilos para pantallas entre 600px y 1200px */
+        width: 50vw;
+        height: 62vh;
+    }
+
+    @media screen and (min-width: 600px) and (max-width: 950px) {
+        /* Estilos para pantallas entre 600px y 1200px */
+        width: 30vw;
+        height: 62vh;
+    }
+
+    @media screen and (max-width: 600px) {
+        width: 330px;
+        height: 300px;
+    }
 }
 
 .Supervision-Principal .Contenido .Ubicacion .Contenedor i {

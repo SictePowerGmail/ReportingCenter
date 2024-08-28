@@ -199,7 +199,10 @@ const SupervisionAgregar = () => {
                     </div>
                     <div className='Fecha'>
                         <i className="fas fa-calendar-alt"></i>
-                        <span>{fecha.toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
+                        <div className='FechaEntrada'>
+                            <h5>Fecha</h5>
+                            <span>{fecha.toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
+                        </div>
                     </div>
                     <div className='Placa'>
                         <i className="fas fa-id-card"></i>
@@ -218,29 +221,45 @@ const SupervisionAgregar = () => {
                             title="Debe ser en formato de 3 letras seguidas de 3 números (Ejemplo: ABC123)"
                         />
                     </div>
-
+                    <div className='Novedad'>
+                        <i className="fas fa-bullhorn"></i>
+                        <input type="text" placeholder="Lider Cuadrilla" value={novedad} onChange={(e) => setNovedad(e.target.value)}/>
+                    </div>
                     <div className='OT'>
                         <i className="fas fa-tools"></i>
-                        <input type="text" placeholder="OT" value={ot} onChange={(e) => setOt(e.target.value)}/>
+                        <input type="text" placeholder="OT / UUID" value={ot} onChange={(e) => setOt(e.target.value)}/>
                     </div>
                     <div className='Novedad'>
                         <i className="fas fa-bullhorn"></i>
-                        <input type="text" placeholder="Novedad" value={novedad} onChange={(e) => setNovedad(e.target.value)}/>
+                        <input type="text" placeholder="1. ¿Tienen todos los EPP?" value={novedad} onChange={(e) => setNovedad(e.target.value)}/>
+                    </div>
+                    <div className='Novedad'>
+                        <i className="fas fa-bullhorn"></i>
+                        <input type="text" placeholder="2. ¿Todos estan certificados en alturas?" value={novedad} onChange={(e) => setNovedad(e.target.value)}/>
+                    </div>
+                    <div className='Novedad'>
+                        <i className="fas fa-bullhorn"></i>
+                        <input type="text" placeholder="3. ¿Se esta diligenciando el ATS?" value={novedad} onChange={(e) => setNovedad(e.target.value)}/>
+                    </div>
+                    <div className='Novedad'>
+                        <i className="fas fa-bullhorn"></i>
+                        <input type="text" placeholder="4. ¿Se realizo reporte de empalmes en WFM?" value={novedad} onChange={(e) => setNovedad(e.target.value)}/>
+                    </div>
+                    <div className='Novedad'>
+                        <i className="fas fa-bullhorn"></i>
+                        <input type="text" placeholder="5. ¿Se realizo preoperacional?" value={novedad} onChange={(e) => setNovedad(e.target.value)}/>
+                    </div>
+                    <div className='Novedad'>
+                        <i className="fas fa-bullhorn"></i>
+                        <input type="text" placeholder="6. Estado del vehiculo:" value={novedad} onChange={(e) => setNovedad(e.target.value)}/>
+                    </div>
+                    <div className='Novedad'>
+                        <i className="fas fa-bullhorn"></i>
+                        <input type="text" placeholder="7. Equipos especializados:" value={novedad} onChange={(e) => setNovedad(e.target.value)}/>
                     </div>
                     <div className='Observacion'>
                         <i className="fas fa-comment"></i>
-                        <textarea type="text" placeholder="Observacion" value={observacion} onChange={(e) => setObservacion(e.target.value)} rows={1}/>
-                    </div>
-                    <div className='Ubicacion'>
-                        <div className='Contenedor'>
-                            <i className="fas fa-map-marker-alt"></i>
-                            <span>Ubicación del Usuario</span>
-                        </div>
-                        {error ? (
-                            <p>Error: {error}</p>
-                        ) : (
-                            <div id="map" style={{ width: '100%', height: '270px' }}></div>
-                        )}
+                        <textarea type="text" placeholder="8. Observacion" value={observacion} onChange={(e) => setObservacion(e.target.value)} rows={1}/>
                     </div>
                     <div className='Foto'>
                         <i className="fas fa-camera"></i>
@@ -253,10 +272,20 @@ const SupervisionAgregar = () => {
                             id="fotoInput"
                         />
                         <label htmlFor="fotoInput" className="foto-label">
-                            {foto ? foto.name : 'Tomar Foto'}
+                            {foto ? foto.name : '9. Tomar foto de  la cuadrilla'}
                         </label>
                     </div>
-
+                    <div className='Ubicacion'>
+                        <div className='Contenedor'>
+                            <i className="fas fa-map-marker-alt"></i>
+                            <span>Ubicación del Usuario</span>
+                        </div>
+                        {error ? (
+                            <p>Error: {error}</p>
+                        ) : (
+                            <div id="map" style={{ width: '100%', height: '270px' }}></div>
+                        )}
+                    </div>
                     <div className='Enviar'>
                         <button type="submit" id='Enviar' className="btn btn-primary">Enviar</button>
                     </div>
