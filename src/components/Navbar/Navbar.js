@@ -20,6 +20,7 @@ function Navbar() {
     const toggleMobileMenu = () => setShowMobileMenu(!showMobileMenu);
 
     const closeAllDropdowns = () => {
+        setShowDropdownReportes(false);
         setShowDropdownFacturacion(false);
         setShowDropdownProduccion(false);
         setShowDropdownIndicadores(false);

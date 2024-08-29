@@ -206,6 +206,11 @@ const SupervisionPrincipal = () => {
     };
     
     useEffect(() => {
+        if (!nombre) {
+            navigate('/SupervisionLogin');
+            toast.error('Por favor iniciar sesion', { className: 'toast-error' });
+        }
+
         if (estadoNotificacion) {
             navigate('/SupervisionPrincipal', { state: { role:role, nombre:nombre, estadoNotificacion:false } });
             toast.success('Datos enviados exitosamente', { className: 'toast-success' });

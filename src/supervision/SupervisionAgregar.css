@@ -56,56 +56,172 @@
     margin: 10px;
 }
 
-.Supervision-Agregar .Contenido .Placa,
-.Supervision-Agregar .Contenido .OT,
-.Supervision-Agregar .Contenido .Novedad,
-.Supervision-Agregar .Contenido .Observacion,
-.Supervision-Agregar .Contenido .Ubicacion,
-.Supervision-Agregar .Contenido .Foto,
-.Supervision-Agregar .Contenido .Enviar {
-    margin: 10px;
-}
-
 .Supervision-Agregar .Contenido .Fecha,
 .Supervision-Agregar .Contenido .Placa,
+.Supervision-Agregar .Contenido .LiderCuadrilla,
 .Supervision-Agregar .Contenido .OT,
-.Supervision-Agregar .Contenido .Novedad,
+.Supervision-Agregar .Contenido .EPP,
+.Supervision-Agregar .Contenido .Alturas,
+.Supervision-Agregar .Contenido .ATS,
+.Supervision-Agregar .Contenido .Empalmes,
+.Supervision-Agregar .Contenido .Preoperacional,
+.Supervision-Agregar .Contenido .Vehiculo,
+.Supervision-Agregar .Contenido .Equipos,
 .Supervision-Agregar .Contenido .Observacion,
 .Supervision-Agregar .Contenido .Foto {
     display: flex;
-    align-items: center;
+    align-items: baseline;
     justify-content: baseline;
-    margin: 10px;
+    margin: 13px 10px;
 }
 
 .Supervision-Agregar .Contenido .Fecha i,
 .Supervision-Agregar .Contenido .Placa i,
+.Supervision-Agregar .Contenido .LiderCuadrilla i,
 .Supervision-Agregar .Contenido .OT i,
-.Supervision-Agregar .Contenido .Novedad i,
+.Supervision-Agregar .Contenido .EPP i,
+.Supervision-Agregar .Contenido .Alturas i,
+.Supervision-Agregar .Contenido .ATS i,
 .Supervision-Agregar .Contenido .Observacion i,
+.Supervision-Agregar .Contenido .Empalmes i,
+.Supervision-Agregar .Contenido .Preoperacional i,
+.Supervision-Agregar .Contenido .Vehiculo i,
+.Supervision-Agregar .Contenido .Equipos i,
 .Supervision-Agregar .Contenido .Ubicacion .Contenedor i,
 .Supervision-Agregar .Contenido .Foto i {
     padding-right: 10px;
 }
 
-.Supervision-Agregar .Contenido .Placa input,
 .Supervision-Agregar .Contenido .Fecha span,
+.Supervision-Agregar .Contenido .Placa input,
+.Supervision-Agregar .Contenido .LiderCuadrilla input,
 .Supervision-Agregar .Contenido .OT input,
-.Supervision-Agregar .Contenido .Novedad input,
+.Supervision-Agregar .Contenido .EPP input,
+.Supervision-Agregar .Contenido .Alturas input,
+.Supervision-Agregar .Contenido .ATS input,
+.Supervision-Agregar .Contenido .Empalmes input,
+.Supervision-Agregar .Contenido .Preoperacional input,
+.Supervision-Agregar .Contenido .Vehiculo input,
 .Supervision-Agregar .Contenido .Observacion textarea,
 .Supervision-Agregar .Contenido .Ubicacion .Contenedor span {
-    width: 90%;
+    width: 100%;
 }
 
-.Supervision-Agregar .Contenido .Fecha .FechaEntrada {
+.Supervision-Agregar .Contenido .Fecha .Entrada,
+.Supervision-Agregar .Contenido .Placa .Entrada,
+.Supervision-Agregar .Contenido .LiderCuadrilla .Entrada,
+.Supervision-Agregar .Contenido .OT .Entrada,
+.Supervision-Agregar .Contenido .EPP .Entrada,
+.Supervision-Agregar .Contenido .Alturas .Entrada,
+.Supervision-Agregar .Contenido .ATS .Entrada,
+.Supervision-Agregar .Contenido .Empalmes .Entrada,
+.Supervision-Agregar .Contenido .Preoperacional .Entrada,
+.Supervision-Agregar .Contenido .Vehiculo .Entrada,
+.Supervision-Agregar .Contenido .Equipos .Entrada {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: baseline;
     justify-content: center;
+    width: 100%;
+}
+
+.Supervision-Agregar .Contenido .Fecha .Entrada h5,
+.Supervision-Agregar .Contenido .Placa .Entrada h5,
+.Supervision-Agregar .Contenido .LiderCuadrilla .Entrada h5,
+.Supervision-Agregar .Contenido .OT .Entrada h5,
+.Supervision-Agregar .Contenido .EPP .Entrada h5,
+.Supervision-Agregar .Contenido .Alturas .Entrada h5,
+.Supervision-Agregar .Contenido .ATS .Entrada h5,
+.Supervision-Agregar .Contenido .Empalmes .Entrada h5,
+.Supervision-Agregar .Contenido .Preoperacional .Entrada h5,
+.Supervision-Agregar .Contenido .Vehiculo .Entrada h5,
+.Supervision-Agregar .Contenido .Equipos .Entrada h5 {
+    margin: 0;
+    margin-bottom: 3px;
+}
+
+.Supervision-Agregar .Contenido .EPP .Entrada .Botones,
+.Supervision-Agregar .Contenido .Alturas .Entrada .Botones,
+.Supervision-Agregar .Contenido .ATS .Entrada .Botones,
+.Supervision-Agregar .Contenido .Empalmes .Entrada .Botones,
+.Supervision-Agregar .Contenido .Preoperacional .Entrada .Botones,
+.Supervision-Agregar .Contenido .Vehiculo .Entrada .Botones,
+.Supervision-Agregar .Contenido .Equipos .Entrada .Botones {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.Supervision-Agregar .Contenido .EPP .Entrada .Botones button,
+.Supervision-Agregar .Contenido .Alturas .Entrada .Botones button,
+.Supervision-Agregar .Contenido .ATS .Entrada .Botones button,
+.Supervision-Agregar .Contenido .Empalmes .Entrada .Botones button,
+.Supervision-Agregar .Contenido .Preoperacional .Entrada .Botones button {
+    background-color: #f0f0f0; /* Color de fondo predeterminado */
+    border: none;
+    padding: 8px 20px;
+    cursor: pointer;
+    margin-right: 10px;
+    border-radius: 10px;
+}
+
+.Supervision-Agregar .Contenido .EPP .Entrada .Botones button.selected,
+.Supervision-Agregar .Contenido .Alturas .Entrada .Botones button.selected,
+.Supervision-Agregar .Contenido .ATS .Entrada .Botones button.selected,
+.Supervision-Agregar .Contenido .Empalmes .Entrada .Botones button.selected,
+.Supervision-Agregar .Contenido .Preoperacional .Entrada .Botones button.selected {
+    background-color: #1229ad; /* Color de fondo cuando el botón está seleccionado */
+    color: white;
+}
+
+.Supervision-Agregar .Contenido .Vehiculo .Entrada .Botones button,
+.Supervision-Agregar .Contenido .Equipos .Entrada .Botones button {
+    background-color: #f0f0f0; /* Color de fondo predeterminado */
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 10px;
+    margin: 0px 5px 5px 0px;
+}
+
+.Supervision-Agregar .Contenido .Vehiculo .Entrada .Botones button.selected,
+.Supervision-Agregar .Contenido .Equipos .Entrada .Botones button.selected {
+    background-color: #1229ad; /* Color de fondo cuando el botón está seleccionado */
+    color: white;
+}
+
+.Supervision-Agregar .Contenido .Fecha .Entrada {
+    padding-left: 5px;
+}
+
+.Supervision-Agregar .Contenido .Vehiculo .Entrada .Comentario {
+    width: 100%;
+}
+
+.Supervision-Agregar .Contenido .Equipos .Entrada .Botones {
+    padding-left: 20px;
+}
+
+.Supervision-Agregar .Contenido .Equipos .Entrada .Botones .Titulo {
+    width: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin: 0;
+}
+
+.Supervision-Agregar .Contenido .Equipos .Entrada .Botones .Titulo h5 {
+    margin: 0;
+    padding-right: 10px;
 }
 
 .Supervision-Agregar .Contenido .Observacion textarea {
     height: 10vh;
+}
+
+.Supervision-Agregar .Contenido .Ubicacion {
+    margin: 13px 10px;
 }
 
 .Supervision-Agregar .Contenido .Ubicacion .Contenedor {

@@ -12,13 +12,16 @@ import 'react-toastify/dist/ReactToastify.css';
 const SupervisionAgregar = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const { role, nombre } = location.state || {};
+    const { role, nombre, estadoNotificacion } = location.state || {};
     const [error, setError] = useState(null);
     const [fecha, setFecha] = useState('');
+    const [datosPlanta, setDatosPlanta] = useState('');
     const [ubicacion, setUbicacion] = useState({ latitude: null, longitude: null });
     const [placa, setPlaca] = useState('');
     const [ot, setOt] = useState('');
-    const [novedad, setNovedad] = useState('');
+    const [cedula, setCedula] = useState('');
+    const [nombreUsuario, setNombreUsuario] = useState('');
+    const [nombreCuadrilla, setNombreCuadrilla] = useState('Nombre');
     const [observacion, setObservacion] = useState('');
     const [foto, setFoto] = useState(null);
     const mapRef = useRef(null);
@@ -56,8 +59,22 @@ const SupervisionAgregar = () => {
         event.preventDefault();
         setError('');
 
+        if (!nombreUsuario) {
+            navigate('/SupervisionLogin');
+        }
+
         if (!placa) {
             toast.error('Por favor agrega la placa de la movil', { className: 'toast-error' });
+            return;
+        }
+
+        if (nombreCuadrilla === 'Nombre' || nombreCuadrilla === '') {
+            toast.error('Por favor agrega la cedula del lider de la cuadrilla', { className: 'toast-error' });
+            return;
+        }
+
+        if (nombreCuadrilla === 'Usuario no encontrado') {
+            toast.error('Por favor valide la cedula del lider de la cuadrilla', { className: 'toast-error' });
             return;
         }
 
@@ -66,8 +83,97 @@ const SupervisionAgregar = () => {
             return;
         }
 
-        if (!novedad) {
-            toast.error('Por favor agrega una Novedad', { className: 'toast-error' });
+        if (!respuestaEPP) {
+            toast.error('Por favor responda la primera pregunta', { className: 'toast-error' });
+            return;
+        }
+        else if (respuestaEPP === 'no' && (!comentarioEPP || comentarioEPP.trim().length === 0)) {
+            toast.error('Por favor justifique la primera pregunta', { className: 'toast-error' });
+            return;
+        }
+
+        if (!respuestaAlturas) {
+            toast.error('Por favor responda la segunda pregunta', { className: 'toast-error' });
+            return;
+        }
+        else if (respuestaAlturas === 'no' && (!comentarioAlturas || comentarioAlturas.trim().length === 0)) {
+            toast.error('Por favor justifique la segunda pregunta', { className: 'toast-error' });
+            return;
+        }
+
+        if (!respuestaATS) {
+            toast.error('Por favor responda la tercera pregunta', { className: 'toast-error' });
+            return;
+        }
+        else if (respuestaATS === 'no' && (!comentarioATS || comentarioATS.trim().length === 0)) {
+            toast.error('Por favor justifique la tercera pregunta', { className: 'toast-error' });
+            return;
+        }
+
+        if (!respuestaEmpalmes) {
+            toast.error('Por favor responda la cuarta pregunta', { className: 'toast-error' });
+            return;
+        }
+        else if (!comentarioEmpalmes || comentarioEmpalmes.trim().length === 0) {
+            toast.error('Por favor justifique la cuarta pregunta', { className: 'toast-error' });
+            return;
+        }
+
+        if (!respuestaPreoperacional) {
+            toast.error('Por favor responda la quinta pregunta', { className: 'toast-error' });
+            return;
+        }
+        else if (respuestaPreoperacional === 'no' && (!comentarioPreoperacional || comentarioPreoperacional.trim().length === 0)) {
+            toast.error('Por favor justifique la quinta pregunta', { className: 'toast-error' });
+            return;
+        }
+
+        if (!respuestaVehiculo) {
+            toast.error('Por favor responda la sexta pregunta', { className: 'toast-error' });
+            return;
+        }
+        else if (respuestaVehiculo !== '5' && (!comentarioVehiculo || comentarioVehiculo.trim().length === 0)) {
+            toast.error('Por favor justifique la sexta pregunta', { className: 'toast-error' });
+            return;
+        }
+
+        if (!respuestaEmpalmadora) {
+            toast.error('Por favor responda la septima pregunta - Empalmadora', { className: 'toast-error' });
+            return;
+        }
+
+        if (!respuestaOTDR) {
+            toast.error('Por favor responda la septima pregunta - OTDR', { className: 'toast-error' });
+            return;
+        }
+
+        if (!respuestaCortadora) {
+            toast.error('Por favor responda la septima pregunta - Cortadora', { className: 'toast-error' });
+            return;
+        }
+
+        if (!respuestaPinza) {
+            toast.error('Por favor responda la septima pregunta - Pinza', { className: 'toast-error' });
+            return;
+        }
+
+        if (!respuestaOPM) {
+            toast.error('Por favor responda la septima pregunta - OPM', { className: 'toast-error' });
+            return;
+        }
+
+        if (!respuestaONEXPERT) {
+            toast.error('Por favor responda la septima pregunta - ONEXPERT', { className: 'toast-error' });
+            return;
+        }
+
+        if (!respuestaMedidorConductancia) {
+            toast.error('Por favor responda la septima pregunta - Medidor de Conductancia', { className: 'toast-error' });
+            return;
+        }
+
+        if (!respuestaMedidorFugas) {
+            toast.error('Por favor responda la septima pregunta - Medidor de Fugas', { className: 'toast-error' });
             return;
         }
 
@@ -76,13 +182,13 @@ const SupervisionAgregar = () => {
             return;
         }
 
-        if (!ubicacion.latitude || !ubicacion.longitude) {
-            toast.error('Por favor dar permisos para acceder a la ubicacion', { className: 'toast-error' });
+        if (!foto) {
+            toast.error('Por favor agrega una foto', { className: 'toast-error' });
             return;
         }
 
-        if (!foto) {
-            toast.error('Por favor agrega una foto', { className: 'toast-error' });
+        if (!ubicacion.latitude || !ubicacion.longitude) {
+            toast.error('Por favor dar permisos para acceder a la ubicacion', { className: 'toast-error' });
             return;
         }
 
@@ -92,7 +198,6 @@ const SupervisionAgregar = () => {
         const fotoNombre = `${formattedDate}_${foto.name}`
         formData.append('file', foto);
         formData.append("filename", fotoNombre);
-        //console.log(JSON.stringify({ nombre:nombre, fecha:formattedDate, ot:ot, novedad:novedad, observacion:observacion, latitud:ubicacion.latitude, longitud:ubicacion.longitude, fotoNombre:fotoNombre }));
 
         try {
             await axios.post('https://sicteferias.from-co.net:8120/supervision/cargarImagen', formData, {
@@ -103,17 +208,38 @@ const SupervisionAgregar = () => {
             
             await axios.post("https://sicteferias.from-co.net:8120/supervision/cargarDatos", {
                 fecha: formattedDate2,
-                nombre: nombre,
+                nombre: nombreUsuario,
                 placa: placa,
+                cedulaCuadrilla: cedula,
+                nombreCuadrilla: nombreCuadrilla,
                 ot: ot,
-                novedad: novedad,
+                epp: respuestaEPP,
+                eppComentario: comentarioEPP,
+                alturas: respuestaAlturas,
+                alturasComentario: comentarioAlturas,
+                ats: respuestaATS,
+                atsComentario: comentarioATS,
+                empalmes: respuestaEmpalmes,
+                empalmesComentario: comentarioEmpalmes,
+                preoperacional: respuestaPreoperacional,
+                preoperacionalComentario: comentarioPreoperacional,
+                vehiculo: respuestaVehiculo,
+                vehiculoComentario: comentarioVehiculo,
+                empalmadora: respuestaEmpalmadora,
+                otdr: respuestaOTDR,
+                cortadora: respuestaCortadora,
+                pinza: respuestaPinza,
+                opm: respuestaOPM,
+                onexpert: respuestaONEXPERT,
+                medidorConductancia: respuestaMedidorConductancia,
+                medidorFugas: respuestaMedidorFugas,
                 observacion: observacion,
+                fotoNombre: fotoNombre,
                 latitud: ubicacion.latitude,
-                longitud: ubicacion.longitude,
-                fotoNombre: fotoNombre
+                longitud: ubicacion.longitude
             });
 
-            navigate('/SupervisionPrincipal', { state: { role:role, nombre:nombre, estadoNotificacion:true } });
+            navigate('/SupervisionPrincipal', { state: { role:role, nombre:nombreUsuario, estadoNotificacion:true } });
             console.log('Datos enviados exitosamente');
 
         } catch (error) {
@@ -122,7 +248,23 @@ const SupervisionAgregar = () => {
         }
     };
 
+    const cargarDatosPlanta = () => {
+        fetch('https://sicteferias.from-co.net:8120/capacidad/Planta')
+            .then(response => response.json())
+            .then(data => {
+                setDatosPlanta(data);
+
+            })
+            .catch(error => setError('Error al cargar los datos: ' + error.message));
+    };
+
     useEffect(() => {
+        if (!nombre) {
+            navigate('/SupervisionLogin');
+        }
+
+        setNombreUsuario(nombre);
+
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 (position) => {
@@ -186,76 +328,424 @@ const SupervisionAgregar = () => {
             setError('Geolocation is not supported by this browser.');
         }
 
-        setFecha(new Date())
+        cargarDatosPlanta();
+        setFecha(new Date());
     }, []);
     
+    const [respuestaEPP, setRespuestaEPP] = useState(null);
+    const [comentarioEPP, setComentarioEPP] = useState('');
+
+    const clickSiEPP = () => {
+        setRespuestaEPP('si');
+        setComentarioEPP('');
+    };
+    
+    const clickNoEPP = () => {
+        setRespuestaEPP('no');
+    };
+
+    const [respuestaAlturas, setRespuestaAlturas] = useState(null);
+    const [comentarioAlturas, setComentarioAlturas] = useState('');
+
+    const clickSiAlturas = () => {
+        setRespuestaAlturas('si');
+        setComentarioAlturas('');
+    };
+    
+    const clickNoAlturas = () => {
+        setRespuestaAlturas('no');
+    };
+
+    const [respuestaATS, setRespuestaATS] = useState(null);
+    const [comentarioATS, setComentarioATS] = useState('');
+
+    const clickSiATS = () => {
+        setRespuestaATS('si');
+        setComentarioATS('');
+    };
+    
+    const clickNoATS = () => {
+        setRespuestaATS('no');
+    };
+
+    const [respuestaEmpalmes, setRespuestaEmpalmes] = useState(null);
+    const [comentarioEmpalmes, setComentarioEmpalmes] = useState('');
+
+    const clickSiEmpalmes = () => {
+        setRespuestaEmpalmes('si');
+        setComentarioEmpalmes('');
+    };
+    
+    const clickNoEmpalmes = () => {
+        setRespuestaEmpalmes('no');
+    };
+
+    const [respuestaPreoperacional, setRespuestaPreoperacional] = useState(null);
+    const [comentarioPreoperacional, setComentarioPreoperacional] = useState('');
+
+    const clickSiPreoperacional = () => {
+        setRespuestaPreoperacional('si');
+        setComentarioPreoperacional('');
+    };
+    
+    const clickNoPreoperacional = () => {
+        setRespuestaPreoperacional('no');
+    };
+
+    const [respuestaVehiculo, setRespuestaVehiculo] = useState(null);
+    const [comentarioVehiculo, setComentarioVehiculo] = useState('');
+
+    const click1Vehiculo = () => {
+        setRespuestaVehiculo('1');
+        setComentarioVehiculo('');
+    };
+    
+    const click2Vehiculo = () => {
+        setRespuestaVehiculo('2');
+    };
+    
+    const click3Vehiculo = () => {
+        setRespuestaVehiculo('3');
+    };
+
+    const click4Vehiculo = () => {
+        setRespuestaVehiculo('4');
+    };
+
+    const click5Vehiculo = () => {
+        setRespuestaVehiculo('5');
+    };
+
+    const [respuestaEmpalmadora, setRespuestaEmpalmadora] = useState(null);
+
+    const clickSiEmpalmadora = () => {
+        setRespuestaEmpalmadora('Si');
+    };
+    
+    const clickNoEmpalmadora = () => {
+        setRespuestaEmpalmadora('No');
+    };
+    
+    const clickNaEmpalmadora = () => {
+        setRespuestaEmpalmadora('N/A');
+    };
+
+    const [respuestaOTDR, setRespuestaOTDR] = useState(null);
+
+    const clickSiOTDR = () => {
+        setRespuestaOTDR('Si');
+    };
+    
+    const clickNoOTDR = () => {
+        setRespuestaOTDR('No');
+    };
+    
+    const clickNaOTDR = () => {
+        setRespuestaOTDR('N/A');
+    };
+
+    const [respuestaCortadora, setRespuestaCortadora] = useState(null);
+
+    const clickSiCortadora = () => {
+        setRespuestaCortadora('Si');
+    };
+    
+    const clickNoCortadora = () => {
+        setRespuestaCortadora('No');
+    };
+    
+    const clickNaCortadora = () => {
+        setRespuestaCortadora('N/A');
+    };
+
+    const [respuestaPinza, setRespuestaPinza] = useState(null);
+
+    const clickSiPinza = () => {
+        setRespuestaPinza('Si');
+    };
+    
+    const clickNoPinza = () => {
+        setRespuestaPinza('No');
+    };
+    
+    const clickNaPinza = () => {
+        setRespuestaPinza('N/A');
+    };
+
+    const [respuestaOPM, setRespuestaOPM] = useState(null);
+
+    const clickSiOPM = () => {
+        setRespuestaOPM('Si');
+    };
+    
+    const clickNoOPM = () => {
+        setRespuestaOPM('No');
+    };
+    
+    const clickNaOPM = () => {
+        setRespuestaOPM('N/A');
+    };
+
+    const [respuestaONEXPERT, setRespuestaONEXPERT] = useState(null);
+
+    const clickSiONEXPERT = () => {
+        setRespuestaONEXPERT('Si');
+    };
+    
+    const clickNoONEXPERT = () => {
+        setRespuestaONEXPERT('No');
+    };
+    
+    const clickNaONEXPERT = () => {
+        setRespuestaONEXPERT('N/A');
+    };
+
+    const [respuestaMedidorConductancia, setRespuestaMedidorConductancia] = useState(null);
+
+    const clickSiMedidorConductancia = () => {
+        setRespuestaMedidorConductancia('Si');
+    };
+    
+    const clickNoMedidorConductancia = () => {
+        setRespuestaMedidorConductancia('No');
+    };
+    
+    const clickNaMedidorConductancia = () => {
+        setRespuestaMedidorConductancia('N/A');
+    };
+
+    const [respuestaMedidorFugas, setRespuestaMedidorFugas] = useState(null);
+
+    const clickSiMedidorFugas = () => {
+        setRespuestaMedidorFugas('Si');
+    };
+    
+    const clickNoMedidorFugas = () => {
+        setRespuestaMedidorFugas('No');
+    };
+    
+    const clickNaMedidorFugas = () => {
+        setRespuestaMedidorFugas('N/A');
+    };
+
+    const estadoCambioCedula = (e) => {
+        const cedulaInput = e.target.value;
+        setCedula(cedulaInput);
+
+        const registroEncontrado = datosPlanta.find(item => item.nit === cedulaInput);
+      
+        if (registroEncontrado) {
+            setNombreCuadrilla(registroEncontrado.nombre);
+        } else {
+            setNombreCuadrilla('Usuario no encontrado');
+        }
+    };
 
     return (
         <div className="Supervision-Agregar">
             <div className='Contenido'>
-                <form onSubmit={enviarFormulario} className='Formulario'>
+                <form className='Formulario'>
                     <div className='Titulo'>
                         <h3>Actividad</h3>
                     </div>
                     <div className='Fecha'>
                         <i className="fas fa-calendar-alt"></i>
-                        <div className='FechaEntrada'>
-                            <h5>Fecha</h5>
+                        <div className='Entrada'>
+                            <h5>Fecha:</h5>
                             <span>{fecha.toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
                         </div>
                     </div>
                     <div className='Placa'>
                         <i className="fas fa-id-card"></i>
-                        <input 
-                            type="text" 
-                            placeholder="Placa Movil (Ejemplo: ABC123)" 
-                            value={placa} 
-                            onChange={(e) => {
-                                const newValue = e.target.value.toUpperCase(); // Convertir a mayúsculas automáticamente
-                                if (/^[A-Z]{0,3}[0-9]{0,3}$/.test(newValue)) {
-                                    setPlaca(newValue); // Solo actualizar el estado si el nuevo valor coincide con el patrón
-                                }
-                            }}
-                            pattern="[A-Za-z]{3}[0-9]{3}"
-                            maxLength={6} // Limitar la longitud máxima a 6 caracteres
-                            title="Debe ser en formato de 3 letras seguidas de 3 números (Ejemplo: ABC123)"
-                        />
+                        <div className='Entrada'>
+                            <h5>Ingrese la placa de la movil:</h5>
+                            <input 
+                                type="text" 
+                                placeholder="Placa movil (Ejemplo: ABC123)" 
+                                value={placa} 
+                                onChange={(e) => {
+                                    const newValue = e.target.value.toUpperCase(); // Convertir a mayúsculas automáticamente
+                                    if (/^[A-Z]{0,3}[0-9]{0,3}$/.test(newValue)) {
+                                        setPlaca(newValue); // Solo actualizar el estado si el nuevo valor coincide con el patrón
+                                    }
+                                }}
+                                pattern="[A-Za-z]{3}[0-9]{3}"
+                                maxLength={6} // Limitar la longitud máxima a 6 caracteres
+                                title="Debe ser en formato de 3 letras seguidas de 3 números (Ejemplo: ABC123)"
+                            />
+                        </div>
                     </div>
-                    <div className='Novedad'>
-                        <i className="fas fa-bullhorn"></i>
-                        <input type="text" placeholder="Lider Cuadrilla" value={novedad} onChange={(e) => setNovedad(e.target.value)}/>
+                    <div className='LiderCuadrilla'>
+                        <i className="fas fa-users-cog"></i>
+                        <div className='Entrada'>
+                            <h5>Ingrese el lider de la cuadrilla:</h5>
+                            <input type="text" placeholder="Cedula" value={cedula} onChange={estadoCambioCedula}/>
+                            <input type="text" placeholder="Nombre" value={nombreCuadrilla} disabled={true} />
+                        </div>
                     </div>
                     <div className='OT'>
                         <i className="fas fa-tools"></i>
-                        <input type="text" placeholder="OT / UUID" value={ot} onChange={(e) => setOt(e.target.value)}/>
+                        <div className='Entrada'>
+                            <h5>Ingrese la OT / UUID:</h5>
+                            <input type="text" placeholder="OT / UUID" value={ot} onChange={(e) => setOt(e.target.value)}/>
+                        </div>
                     </div>
-                    <div className='Novedad'>
+                    <div className='EPP'>
                         <i className="fas fa-bullhorn"></i>
-                        <input type="text" placeholder="1. ¿Tienen todos los EPP?" value={novedad} onChange={(e) => setNovedad(e.target.value)}/>
+                        <div className='Entrada'>
+                            <h5>1. ¿Tienen todos los EPP?</h5>
+                            <div className='Botones'>
+                                <button onClick={clickSiEPP} className={respuestaEPP === 'si' ? 'selected' : ''}>Sí</button>
+                                <button onClick={clickNoEPP} className={respuestaEPP === 'no' ? 'selected' : ''}>No</button>
+                                <div className="Comentario">
+                                    <input type="text" placeholder={respuestaEPP === 'si' ? "" : "¿Por qué?"} value={comentarioEPP}
+                                        onChange={(e) => setComentarioEPP(e.target.value)} disabled={respuestaEPP !== 'no'} />
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div className='Novedad'>
+                    <div className='Alturas'>
                         <i className="fas fa-bullhorn"></i>
-                        <input type="text" placeholder="2. ¿Todos estan certificados en alturas?" value={novedad} onChange={(e) => setNovedad(e.target.value)}/>
+                        <div className='Entrada'>
+                            <h5>2. ¿Todos estan certificados en alturas?</h5>
+                            <div className='Botones'>
+                                <button onClick={clickSiAlturas} className={respuestaAlturas === 'si' ? 'selected' : ''}>Sí</button>
+                                <button onClick={clickNoAlturas} className={respuestaAlturas === 'no' ? 'selected' : ''}>No</button>
+                                <div className="Comentario">
+                                    <input type="text" placeholder={respuestaAlturas === 'si' ? "" : "¿Por qué?"} value={comentarioAlturas}
+                                        onChange={(e) => setComentarioAlturas(e.target.value)} disabled={respuestaAlturas !== 'no'} />
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div className='Novedad'>
+                    <div className='ATS'>
                         <i className="fas fa-bullhorn"></i>
-                        <input type="text" placeholder="3. ¿Se esta diligenciando el ATS?" value={novedad} onChange={(e) => setNovedad(e.target.value)}/>
+                        <div className='Entrada'>
+                            <h5>3. ¿Se diligencio el ATS?</h5>
+                            <div className='Botones'>
+                                <button onClick={clickSiATS} className={respuestaATS === 'si' ? 'selected' : ''}>Sí</button>
+                                <button onClick={clickNoATS} className={respuestaATS === 'no' ? 'selected' : ''}>No</button>
+                                <div className="Comentario">
+                                    <input type="text" placeholder={respuestaATS === 'si' ? "" : "¿Por qué?"} value={comentarioATS}
+                                        onChange={(e) => setComentarioATS(e.target.value)} disabled={respuestaATS !== 'no'} />
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div className='Novedad'>
+                    <div className='Empalmes'>
                         <i className="fas fa-bullhorn"></i>
-                        <input type="text" placeholder="4. ¿Se realizo reporte de empalmes en WFM?" value={novedad} onChange={(e) => setNovedad(e.target.value)}/>
+                        <div className='Entrada'>
+                            <h5>4. ¿Se realizo reporte de empalmes en WFM?</h5>
+                            <div className='Botones'>
+                                <button onClick={clickSiEmpalmes} className={respuestaEmpalmes === 'si' ? 'selected' : ''}>Sí</button>
+                                <button onClick={clickNoEmpalmes} className={respuestaEmpalmes === 'no' ? 'selected' : ''}>No</button>
+                                <div className="Comentario">
+                                    <input type="text" placeholder={respuestaEmpalmes === 'si' ? "¿Cuantos?" : "¿Por qué?"} value={comentarioEmpalmes}
+                                        onChange={(e) => setComentarioEmpalmes(e.target.value)} />
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div className='Novedad'>
+                    <div className='Preoperacional'>
                         <i className="fas fa-bullhorn"></i>
-                        <input type="text" placeholder="5. ¿Se realizo preoperacional?" value={novedad} onChange={(e) => setNovedad(e.target.value)}/>
+                        <div className='Entrada'>
+                            <h5>5. ¿Se realizo preoperacional?</h5>
+                            <div className='Botones'>
+                                <button onClick={clickSiPreoperacional} className={respuestaPreoperacional === 'si' ? 'selected' : ''}>Sí</button>
+                                <button onClick={clickNoPreoperacional} className={respuestaPreoperacional === 'no' ? 'selected' : ''}>No</button>
+                                <div className="Comentario">
+                                    <input type="text" placeholder={respuestaPreoperacional === 'si' ? "" : "¿Por qué?"} value={comentarioPreoperacional}
+                                        onChange={(e) => setComentarioPreoperacional(e.target.value)} disabled={respuestaPreoperacional !== 'no'} />
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div className='Novedad'>
+                    <div className='Vehiculo'>
                         <i className="fas fa-bullhorn"></i>
-                        <input type="text" placeholder="6. Estado del vehiculo:" value={novedad} onChange={(e) => setNovedad(e.target.value)}/>
+                        <div className='Entrada'>
+                            <h5>6. Estado del vehiculo:</h5>
+                            <div className='Botones'>
+                                <button onClick={click1Vehiculo} className={respuestaVehiculo === '1' ? 'selected' : ''}>1</button>
+                                <button onClick={click2Vehiculo} className={respuestaVehiculo === '2' ? 'selected' : ''}>2</button>
+                                <button onClick={click3Vehiculo} className={respuestaVehiculo === '3' ? 'selected' : ''}>3</button>
+                                <button onClick={click4Vehiculo} className={respuestaVehiculo === '4' ? 'selected' : ''}>4</button>
+                                <button onClick={click5Vehiculo} className={respuestaVehiculo === '5' ? 'selected' : ''}>5</button>
+                            </div>
+                            <div className="Comentario">
+                                <input type="text" placeholder={respuestaVehiculo === '5' ? "" : "¿Por qué?"} value={comentarioVehiculo}
+                                    onChange={(e) => setComentarioVehiculo(e.target.value)} disabled={respuestaVehiculo === '5'} />
+                            </div>
+                        </div>
                     </div>
-                    <div className='Novedad'>
+                    <div className='Equipos'>
                         <i className="fas fa-bullhorn"></i>
-                        <input type="text" placeholder="7. Equipos especializados:" value={novedad} onChange={(e) => setNovedad(e.target.value)}/>
+                        <div className='Entrada'>
+                            <h5>7. Equipos especializados:</h5>
+                            <div className='Botones'>
+                                <div className='Titulo'>
+                                    <h5>Empalmadora</h5>
+                                </div>
+                                <button onClick={clickSiEmpalmadora} className={respuestaEmpalmadora === 'Si' ? 'selected' : ''}>Si</button>
+                                <button onClick={clickNoEmpalmadora} className={respuestaEmpalmadora === 'No' ? 'selected' : ''}>No</button>
+                                <button onClick={clickNaEmpalmadora} className={respuestaEmpalmadora === 'N/A' ? 'selected' : ''}>N/A</button>
+                            </div>
+                            <div className='Botones'>
+                                <div className='Titulo'>
+                                    <h5>OTDR</h5>
+                                </div>
+                                <button onClick={clickSiOTDR} className={respuestaOTDR === 'Si' ? 'selected' : ''}>Si</button>
+                                <button onClick={clickNoOTDR} className={respuestaOTDR === 'No' ? 'selected' : ''}>No</button>
+                                <button onClick={clickNaOTDR} className={respuestaOTDR === 'N/A' ? 'selected' : ''}>N/A</button>
+                            </div>
+                            <div className='Botones'>
+                                <div className='Titulo'>
+                                    <h5>Cortadora</h5>
+                                </div>
+                                <button onClick={clickSiCortadora} className={respuestaCortadora === 'Si' ? 'selected' : ''}>Si</button>
+                                <button onClick={clickNoCortadora} className={respuestaCortadora === 'No' ? 'selected' : ''}>No</button>
+                                <button onClick={clickNaCortadora} className={respuestaCortadora === 'N/A' ? 'selected' : ''}>N/A</button>
+                            </div>
+                            <div className='Botones'>
+                                <div className='Titulo'>
+                                    <h5>Pinza de Trafico</h5>
+                                </div>
+                                <button onClick={clickSiPinza} className={respuestaPinza === 'Si' ? 'selected' : ''}>Si</button>
+                                <button onClick={clickNoPinza} className={respuestaPinza === 'No' ? 'selected' : ''}>No</button>
+                                <button onClick={clickNaPinza} className={respuestaPinza === 'N/A' ? 'selected' : ''}>N/A</button>
+                            </div>
+                            <div className='Botones'>
+                                <div className='Titulo'>
+                                    <h5>OPM</h5>
+                                </div>
+                                <button onClick={clickSiOPM} className={respuestaOPM === 'Si' ? 'selected' : ''}>Si</button>
+                                <button onClick={clickNoOPM} className={respuestaOPM === 'No' ? 'selected' : ''}>No</button>
+                                <button onClick={clickNaOPM} className={respuestaOPM === 'N/A' ? 'selected' : ''}>N/A</button>
+                            </div>
+                            <div className='Botones'>
+                                <div className='Titulo'>
+                                    <h5>ONEXPERT</h5>
+                                </div>
+                                <button onClick={clickSiONEXPERT} className={respuestaONEXPERT === 'Si' ? 'selected' : ''}>Si</button>
+                                <button onClick={clickNoONEXPERT} className={respuestaONEXPERT === 'No' ? 'selected' : ''}>No</button>
+                                <button onClick={clickNaONEXPERT} className={respuestaONEXPERT === 'N/A' ? 'selected' : ''}>N/A</button>
+                            </div>
+                            <div className='Botones'>
+                                <div className='Titulo'>
+                                    <h5>Medidor de Conductancia</h5>
+                                </div>
+                                <button onClick={clickSiMedidorConductancia} className={respuestaMedidorConductancia === 'Si' ? 'selected' : ''}>Si</button>
+                                <button onClick={clickNoMedidorConductancia} className={respuestaMedidorConductancia === 'No' ? 'selected' : ''}>No</button>
+                                <button onClick={clickNaMedidorConductancia} className={respuestaMedidorConductancia === 'N/A' ? 'selected' : ''}>N/A</button>
+                            </div>
+                            <div className='Botones'>
+                                <div className='Titulo'>
+                                    <h5>Medidor de Fugas</h5>
+                                </div>
+                                <button onClick={clickSiMedidorFugas} className={respuestaMedidorFugas === 'Si' ? 'selected' : ''}>Si</button>
+                                <button onClick={clickNoMedidorFugas} className={respuestaMedidorFugas === 'No' ? 'selected' : ''}>No</button>
+                                <button onClick={clickNaMedidorFugas} className={respuestaMedidorFugas === 'N/A' ? 'selected' : ''}>N/A</button>
+                            </div>
+                        </div>
                     </div>
                     <div className='Observacion'>
                         <i className="fas fa-comment"></i>
@@ -286,7 +776,7 @@ const SupervisionAgregar = () => {
                             <div id="map" style={{ width: '100%', height: '270px' }}></div>
                         )}
                     </div>
-                    <div className='Enviar'>
+                    <div className='Enviar' onClick={enviarFormulario}>
                         <button type="submit" id='Enviar' className="btn btn-primary">Enviar</button>
                     </div>
                 </form>
