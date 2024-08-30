@@ -6,11 +6,11 @@ import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, LabelList } from 'recharts';
 import L from 'leaflet';
+import { ThreeDots } from 'react-loader-spinner';
 
 const SupervisionPrincipal = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const [datosRegistrosSupervision, setDatosRegistrosSupervision] = useState([]);
     const { role, nombre, estadoNotificacion } = location.state || {};
     const mapRef = useRef(null);
     const [graficaRegistrosSupervisionDia, setGraficaRegistrosSupervisionDia] = useState({});
@@ -19,7 +19,10 @@ const SupervisionPrincipal = () => {
     const [supervisorSeleccionado, setSupervisorSeleccionado] = useState('Todo');
     const [placaSeleccionada, setPlacaSeleccionada] = useState('Todo');
     const [cantidadAcompañamientos, setCantidadAcompañamientos] = useState('0');
-    let registrosPorDia2;
+    const [listaFecha, setListaFecha] = useState([]);
+    const [listaSupervisor, setListaSupervisor] = useState([]);
+    const [listaPlaca, setListaPlaca] = useState([]);
+    const [loading, setLoading] = useState(false);
 
 
     const Agregar = async (event) => {
@@ -31,21 +34,20 @@ const SupervisionPrincipal = () => {
             .then(response => {
                 let dataFiltrada;
                 const data = response.data;
-                setDatosRegistrosSupervision(data)
 
                 if (supervisorSeleccionado === 'Todo') {
                     dataFiltrada = data
                 } else {
                     dataFiltrada = data.filter(item => item.nombre === supervisorSeleccionado);
                 }
-
+        
                 if (fechaSeleccionada !== 'Todo') {
                     dataFiltrada = dataFiltrada.filter(item => {
                         const itemFecha = item.fecha.split(' ')[0];
                         return itemFecha === fechaSeleccionada;
                     });
                 }
-
+        
                 if (placaSeleccionada !== 'Todo') {
                     dataFiltrada = dataFiltrada.filter(item => item.placa === placaSeleccionada);
                 }
@@ -53,22 +55,28 @@ const SupervisionPrincipal = () => {
                 generarMapa(dataFiltrada);
 
                 const registrosPorDia = dataFiltrada.reduce((acc, item) => {
-                    const fecha = new Date(item.fecha).toLocaleDateString('es-ES');
+                    // Formatear la fecha en formato YYYY-MM-DD
+                    const fechaObj = new Date(item.fecha);
+                    const fecha = fechaObj.toISOString().split('T')[0]; // Extraer solo la parte de la fecha
+                
                     if (!acc[fecha]) {
                         acc[fecha] = 0;
                     }
                     acc[fecha]++;
                     return acc;
                 }, {});
-
-                registrosPorDia2 = Object.entries(registrosPorDia).map(([fecha, registros]) => ({
-                    name: fecha,
-                    registros: registros
-                }));
+                
+                // Convertir objeto a array y ordenar por fecha
+                const registrosPorDia2 = Object.entries(registrosPorDia)
+                    .map(([fecha, registros]) => ({
+                        name: fecha,
+                        registros: registros
+                    }))
+                    .sort((a, b) => new Date(a.name) - new Date(b.name)); // Ordenar por fecha
 
                 setGraficaRegistrosSupervisionDia(registrosPorDia2);
 
-                const registrosPorCadaUno = data.reduce((acc, item) => {
+                const registrosPorCadaUno = dataFiltrada.reduce((acc, item) => {
                     if (!acc[item.nombre]) {
                         acc[item.nombre] = 0;
                     }
@@ -86,9 +94,38 @@ const SupervisionPrincipal = () => {
                 const registrosTotal = dataFiltrada.length;
 
                 setCantidadAcompañamientos(registrosTotal)
+                setLoading(false);
+
+                const uniqueDia = new Set();
+                uniqueDia.add("Todo");
+                dataFiltrada.forEach(item => {
+                    const fechaCompleta = new Date(item.fecha); // Asumiendo que item.fecha está en formato ISO
+                    const dia = fechaCompleta.getDate().toString().padStart(2, '0');
+                    const mes = (fechaCompleta.getMonth() + 1).toString().padStart(2, '0'); // Meses en JavaScript son 0-indexados
+                    const año = fechaCompleta.getFullYear();
+                    const fechaFormateada = `${año}-${mes}-${dia}`;
+                    uniqueDia.add(fechaFormateada);
+                });
+                setListaFecha(Array.from(uniqueDia));
+
+                const uniqueNombre = new Set();
+                uniqueNombre.add("Todo");
+                dataFiltrada.forEach(item => {
+                    uniqueNombre.add(item.nombre);
+                });
+                setListaSupervisor(Array.from(uniqueNombre));
+
+                const uniquePlaca = new Set();
+                uniquePlaca.add("Todo");
+                dataFiltrada.forEach(item => {
+                    uniquePlaca.add(item.placa);
+                });
+
+                setListaPlaca(Array.from(uniquePlaca));
             })
             .catch(error => {
                 console.error('Error fetching data:', error);
+                setLoading(false);
             });
     }
 
@@ -149,7 +186,7 @@ const SupervisionPrincipal = () => {
     };  
 
     const addMarkerToMap = (item) => {
-        const { latitud, longitud, fotoNombre, fecha, ot, novedad, observacion, placa } = item;
+        const { latitud, longitud, fotoNombre, fecha, ot, nombreCuadrilla, observacion, placa } = item;
     
         const awesomeMarker = L.AwesomeMarkers.icon({
             icon: 'car',
@@ -160,11 +197,26 @@ const SupervisionPrincipal = () => {
     
         // Crea el marcador y añádelo al mapa
         const marker = L.marker([latitud, longitud], { icon: awesomeMarker }).addTo(mapRef.current);
+
+        // Separar el nombre en partes
+        const partesNombre = nombreCuadrilla.split(" ");
+
+        // Obtener el primer apellido y el primer nombre
+        const primerApellido = partesNombre[0];
+        const primerNombre = partesNombre[2]; // Asegúrate de que el nombre siempre esté en esta posición
+
+        // Crear el nombre corto
+        const nombreCorto = `${primerApellido} ${primerNombre}`;
+        let nombreCapitalizado = nombreCorto
+            .toLowerCase()
+            .split(' ')
+            .map(palabra => palabra.charAt(0).toUpperCase() + palabra.slice(1))
+            .join(' ');
     
         // Definir el contenido del popup (inicialmente sin imagen)
         const popupContent = `
             <div>
-                <p>Fecha: ${fecha}<br>Placa: ${placa}<br>OT: ${ot}<br>Novedad: ${novedad}<br>Observación: ${observacion}</p>
+                <h6><strong>Fecha: </strong>${fecha}<br><strong>Placa: </strong>${placa}<br><strong>Nombre Tecnico: </strong><br>${nombreCapitalizado}<br><strong>OT: </strong>${ot}<br><strong>Observación: </strong>${observacion}</h6>
                 <div id="image-container-${fotoNombre}" style="width: 100px; height: auto; text-align: center;"></div>
             </div>
         `;
@@ -177,7 +229,7 @@ const SupervisionPrincipal = () => {
             const imageContainer = document.getElementById(`image-container-${fotoNombre}`);
             if (imageContainer) {
                 const imageUrl = await fetchImage(fotoNombre);
-                imageContainer.innerHTML = imageUrl ? `<img src="${imageUrl}" alt="${fotoNombre}" style="width: 100px; height: auto;"/>` : `<p>No image available</p>`;
+                imageContainer.innerHTML = imageUrl ? `<img src="${imageUrl}" alt="${fotoNombre}" style="width: 150px; height: auto;"/>` : `<p>No image available</p>`;
             }
         });
     };
@@ -223,153 +275,133 @@ const SupervisionPrincipal = () => {
         cargarRegistrosSupervision();
     }, [supervisorSeleccionado, fechaSeleccionada, placaSeleccionada]);
 
-    const getListaNombre = () => {
-        const uniqueNombre = new Set();
-        uniqueNombre.add("Todo");
-        datosRegistrosSupervision.forEach(item => {
-            uniqueNombre.add(item.nombre);
-        });
-        return Array.from(uniqueNombre);
-    };
-
-    const getListaFecha = () => {
-        const uniqueDia = new Set();
-        uniqueDia.add("Todo");
-        datosRegistrosSupervision.forEach(item => {
-            const fechaCompleta = new Date(item.fecha); // Asumiendo que item.fecha está en formato ISO
-            const dia = fechaCompleta.getDate().toString().padStart(2, '0');
-            const mes = (fechaCompleta.getMonth() + 1).toString().padStart(2, '0'); // Meses en JavaScript son 0-indexados
-            const año = fechaCompleta.getFullYear();
-            const fechaFormateada = `${año}-${mes}-${dia}`;
-            uniqueDia.add(fechaFormateada);
-        });
-        return Array.from(uniqueDia);
-    };
-
-    const getListaPlaca = () => {
-        const uniquePlaca = new Set();
-        uniquePlaca.add("Todo");
-        datosRegistrosSupervision.forEach(item => {
-            uniquePlaca.add(item.placa);
-        });
-        return Array.from(uniquePlaca);
-    };
-
     return (
         <div className="Supervision-Principal">
-            <div className='Contenido'>
-                <h4>Registros</h4>
-                <div className='RenderizarFiltros'>
-                    <div className='SeleccionFecha'>
-                        <div className='TituloFecha'>
-                            <i className="fas fa-calendar-alt"></i>
-                            <span>Fecha</span>
-                        </div>
-                        <select id='Fecha-Reporte-Boton' value={fechaSeleccionada} onChange={(e) => setFechaSeleccionada(e.target.value)} className="select-box">
-                            {getListaFecha().map((fecha, index) => (
-                                <option key={index} value={fecha}>
-                                    {fecha}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className='SeleccionSupervision'>
-                        <div className='TituloSupervision'>
-                            <i className="fas fa-user-tie"></i>
-                            <span>Supervisor</span>
-                        </div>
-                        <select id='Fecha-Reporte-Boton' value={supervisorSeleccionado} onChange={(e) => setSupervisorSeleccionado(e.target.value)} className="select-box">
-                            {getListaNombre().map((nombres, index) => (
-                                <option key={index} value={nombres}>
-                                    {nombres}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className='SeleccionPlaca'>
-                        <div className='TituloPlaca'>
-                            <i className="fas fa-id-card"></i>
-                            <span>Placa</span>
-                        </div>
-                        <select id='Fecha-Reporte-Boton' value={placaSeleccionada} onChange={(e) => setPlacaSeleccionada(e.target.value)} className="select-box">
-                            {getListaPlaca().map((placa, index) => (
-                                <option key={index} value={placa}>
-                                    {placa}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
+            {loading ? (
+                <div id="CargandoPagina">
+                    <ThreeDots
+                        type="ThreeDots"
+                        color="#0B1A46"
+                        height={200}
+                        width={200}
+                    />
+                    <p>... Cargando Datos ...</p>
                 </div>
-                <div className='RenderizarMapaYGraficos'>
-                    <div className='RenderizarMapa'>
-                        <div className='Total'>
-                            <i className="fas fa-calculator"></i>
-                            <span>Total acompañamientos: {cantidadAcompañamientos}</span>
-                        </div>
-                        <div className='Ubicacion'>
-                            <div className='Contenedor'>
-                                <i className="fas fa-map-marker-alt"></i>
-                                <span>Ubicaciónes registradas</span>
+            ) : (
+                <div className='Contenido'>
+                    <h4>Registros</h4>
+                    <div className='RenderizarFiltros'>
+                        <div className='SeleccionFecha'>
+                            <div className='TituloFecha'>
+                                <i className="fas fa-calendar-alt"></i>
+                                <span>Fecha</span>
                             </div>
-                            <div id="map" className='Mapa'></div>
+                            <select id='Fecha-Reporte-Boton' value={fechaSeleccionada} onChange={(e) => setFechaSeleccionada(e.target.value)} className="select-box">
+                                {listaFecha.map((fecha, index) => (
+                                    <option key={index} value={fecha}>
+                                        {fecha}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className='SeleccionSupervision'>
+                            <div className='TituloSupervision'>
+                                <i className="fas fa-user-tie"></i>
+                                <span>Supervisor</span>
+                            </div>
+                            <select id='Fecha-Reporte-Boton' value={supervisorSeleccionado} onChange={(e) => setSupervisorSeleccionado(e.target.value)} className="select-box">
+                                {listaSupervisor.map((nombres, index) => (
+                                    <option key={index} value={nombres}>
+                                        {nombres}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className='SeleccionPlaca'>
+                            <div className='TituloPlaca'>
+                                <i className="fas fa-id-card"></i>
+                                <span>Placa</span>
+                            </div>
+                            <select id='Fecha-Reporte-Boton' value={placaSeleccionada} onChange={(e) => setPlacaSeleccionada(e.target.value)} className="select-box">
+                                {listaPlaca.map((placa, index) => (
+                                    <option key={index} value={placa}>
+                                        {placa}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
                     </div>
-                    <div className='RenderizarGraficos'>
-                        <div className='BarraFecha'>
-                            <div className='TituloBarraFecha'>
-                                <i className="fas fa-chart-bar"></i>
-                                <span>Acompañamientos por dia</span>
+                    <div className='RenderizarMapaYGraficos'>
+                        <div className='RenderizarMapa'>
+                            <div className='Total'>
+                                <i className="fas fa-calculator"></i>
+                                <span>Total acompañamientos: {cantidadAcompañamientos}</span>
                             </div>
-                            <BarChart
-                                width={310}
-                                height={200}
-                                margin={0}
-                                data={graficaRegistrosSupervisionDia}
-                            >
-                                <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis dataKey="name" />
-                                <YAxis domain={[dataMin => dataMin - 1, dataMax => dataMax + 5]} />
-                                <Tooltip />
-                                <Bar dataKey="registros" fill="#8884d8">
-                                    <LabelList dataKey="registros" position="top" />
-                                </Bar>
-                            </BarChart>
+                            <div className='Ubicacion'>
+                                <div className='Contenedor'>
+                                    <i className="fas fa-map-marker-alt"></i>
+                                    <span>Ubicaciónes registradas</span>
+                                </div>
+                                <div id="map" className='Mapa'></div>
+                            </div>
                         </div>
-                        <div className='BarraSupervision'>
-                            <div className='TituloBarraSupervision'>
-                                <i className="fas fa-chart-bar"></i>
-                                <span>Acompañamientos por supervisor</span>
-                            </div>
-                            <BarChart
-                                width={310}
-                                height={300}
-                                data={graficaRegistrosSupervisionCadaUno}
-                                layout="vertical"
+                        <div className='RenderizarGraficos'>
+                            <div className='BarraFecha'>
+                                <div className='TituloBarraFecha'>
+                                    <i className="fas fa-chart-bar"></i>
+                                    <span>Acompañamientos por dia</span>
+                                </div>
+                                <BarChart
+                                    width={280}
+                                    height={200}
+                                    margin={0}
+                                    data={graficaRegistrosSupervisionDia}
                                 >
-                                <YAxis dataKey="name" type="category" width={100}/>
-                                <XAxis
-                                    type="number" // Cambiado a tipo number para ajustar dinámicamente
-                                    domain={[dataMin => dataMin - 1, dataMax => dataMax + 5]}
-                                    tick={false} // Oculta los ticks del eje X
-                                    axisLine={false} // Oculta la línea del eje X
-                                    tickLine={false} // Oculta las líneas de los ticks
-                                    interval={0} // Muestra todos los ticks
-                                />
-                                <Tooltip />
-                                <Bar dataKey="registros" fill="#8884d8">
-                                    <LabelList dataKey="registros" position="right" />
-                                </Bar>
-                            </BarChart>
+                                    <CartesianGrid strokeDasharray="3 3" />
+                                    <XAxis dataKey="name" />
+                                    <YAxis domain={[dataMin => dataMin - 1, dataMax => dataMax + 5]} />
+                                    <Tooltip />
+                                    <Bar dataKey="registros" fill="#8884d8">
+                                        <LabelList dataKey="registros" position="top" />
+                                    </Bar>
+                                </BarChart>
+                            </div>
+                            <div className='BarraSupervision'>
+                                <div className='TituloBarraSupervision'>
+                                    <i className="fas fa-chart-bar"></i>
+                                    <span>Acompañamientos por supervisor</span>
+                                </div>
+                                <BarChart
+                                    width={310}
+                                    height={300}
+                                    data={graficaRegistrosSupervisionCadaUno}
+                                    layout="vertical"
+                                    >
+                                    <YAxis dataKey="name" type="category" width={100}/>
+                                    <XAxis
+                                        type="number" // Cambiado a tipo number para ajustar dinámicamente
+                                        domain={[dataMin => dataMin - 1, dataMax => dataMax + 5]}
+                                        tick={false} // Oculta los ticks del eje X
+                                        axisLine={false} // Oculta la línea del eje X
+                                        tickLine={false} // Oculta las líneas de los ticks
+                                        interval={0} // Muestra todos los ticks
+                                    />
+                                    <Tooltip />
+                                    <Bar dataKey="registros" fill="#8884d8">
+                                        <LabelList dataKey="registros" position="right" />
+                                    </Bar>
+                                </BarChart>
+                            </div>
                         </div>
                     </div>
+                    <div>
+                        <button onClick={Agregar} className="btn-flotante">+</button>
+                    </div>
+                    <div className='Notificaciones'>
+                        <ToastContainer />
+                    </div>
                 </div>
-                <div>
-                    <button onClick={Agregar} className="btn-flotante">+</button>
-                </div>
-                <div className='Notificaciones'>
-                    <ToastContainer />
-                </div>
-            </div>
+            )}
         </div>
     );
 };

@@ -13,6 +13,13 @@
     }
 }
 
+.Supervision-Principal #CargandoPagina {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
 .Supervision-Principal .Contenido {
     display: flex; /* Usa el modelo de caja flexible */
     flex-direction: column;
@@ -157,20 +164,16 @@
 .Supervision-Principal .Contenido .TituloBarraFecha {
     width: 90%;
     margin: 10px 10px 5px 10px;
-    padding-left: 8px;
+    padding-left: 5px;
 }
 
 .Supervision-Principal .Contenido .TituloBarraFecha i {
     padding-right: 10px;
 }
 
-.Supervision-Principal .Contenido .BarraFecha {
-    padding-right: 30px;
-}
-
 .Supervision-Principal .Contenido .Ubicacion .Contenedor {
+    width: 90%;
     margin: 0px 10px 5px 10px;
-    padding-left: 3px;
 }
 
 .Supervision-Principal .Contenido .Ubicacion #map {
@@ -202,7 +205,7 @@
     }
 
     @media screen and (max-width: 600px) {
-        width: 330px;
+        width: 300px;
         height: 300px;
     }
 }
@@ -211,9 +214,13 @@
     padding-right: 10px;
 }
 
+.Supervision-Principal .Contenido .BarraFecha {
+    width: 100%;
+}
+
 .Supervision-Principal .Contenido .TituloBarraSupervision {
     width: 90%;
-    margin: 10px 10px 5px 0px;
+    margin: 10px 10px 5px 10px;
     padding-left: 5px;
 }
 

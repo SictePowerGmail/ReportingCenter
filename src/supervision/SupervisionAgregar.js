@@ -6,6 +6,7 @@ import 'leaflet/dist/leaflet.css';
 import 'leaflet.awesome-markers/dist/leaflet.awesome-markers.css';
 import 'leaflet.awesome-markers/dist/leaflet.awesome-markers.js';
 import axios from 'axios';
+import moment from 'moment';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -26,6 +27,8 @@ const SupervisionAgregar = () => {
     const [foto, setFoto] = useState(null);
     const mapRef = useRef(null);
     const locationRef = useRef(null);
+    const [datosRegistrosSupervision, setDatosRegistrosSupervision] = useState([]);
+    const [listaPlacasRegistradas, setListaPlacasRegistradas] = useState([]);
 
     const clickCapture = (event) => {
         const file = event.target.files[0];
@@ -65,6 +68,12 @@ const SupervisionAgregar = () => {
 
         if (!placa) {
             toast.error('Por favor agrega la placa de la movil', { className: 'toast-error' });
+            return;
+        } else if (!/^[A-Z]{3}[0-9]{3}$/.test(placa)) {
+            toast.error('La placa debe estar en el formato ABC123', { className: 'toast-error' });
+            return;
+        } else if (listaPlacasRegistradas.includes(placa)) {
+            toast.error('La placa ya fue registrada en los ultimos dos dias', { className: 'toast-error' });
             return;
         }
 
@@ -258,7 +267,35 @@ const SupervisionAgregar = () => {
             .catch(error => setError('Error al cargar los datos: ' + error.message));
     };
 
+    const cargarRegistrosSupervision = async (event) => {
+        axios.get('https://sicteferias.from-co.net:8120/supervision/RegistrosSupervision')
+            .then(response => {
+                const data = response.data;
+
+                setDatosRegistrosSupervision(data);
+
+                // Definir el inicio y el final del día de ayer y de hoy
+                //const todayStart = moment().startOf('day'); // Inicio del día de hoy
+                const todayEnd = moment().endOf('day'); // Fin del día de hoy
+                const yesterdayStart = moment().subtract(1, 'day').startOf('day');
+
+                const filteredData = data.filter(item => {
+                    const fechaItem = moment(item.fecha, 'YYYY-MM-DD HH:mm');
+                    return fechaItem.isBetween(yesterdayStart, todayEnd, null, '[]');
+                });
+
+                const uniquePlacas = Array.from(new Set(filteredData.map(item => item.placa)));
+
+                setListaPlacasRegistradas(uniquePlacas);
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+            });
+    }
+
     useEffect(() => {
+        cargarRegistrosSupervision();
+        
         if (!nombre) {
             navigate('/SupervisionLogin');
         }
