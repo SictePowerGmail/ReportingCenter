@@ -68,10 +68,21 @@
 }
 
 /* Estilos para los campos de entrada de usuario y contraseña */
-.Supervision-Login-App .Login-Usuario input,
+.Supervision-Login-App .Login-Usuario input {
+    padding: 0px 5px; /* Relleno interno */
+    box-sizing: border-box; /* Incluye el ancho del borde y el relleno en el ancho total */
+    width: 70%;
+}
+
 .Supervision-Login-App .Login-Contraseña input {
     padding: 0px 5px; /* Relleno interno */
     box-sizing: border-box; /* Incluye el ancho del borde y el relleno en el ancho total */
+    width: calc(70% - 24px);
+}
+
+.Supervision-Login-App .Login-Contraseña .password-toggle {
+    padding: 0px;
+    padding-left: 5px;
 }
 
 /* Estilos para el botón de envío */
@@ -181,13 +192,23 @@
     }
 
     /* Estilos para los campos de entrada de usuario y contraseña */
-    .Supervision-Login-App .Login-Usuario input,
-    .Supervision-Login-App .Login-Contraseña input {
+    .Supervision-Login-App .Login-Usuario input {
         padding: 0px 5px; /* Relleno interno */
         box-sizing: border-box; /* Incluye el ancho del borde y el relleno en el ancho total */
         width: 80%;
     }
 
+    .Supervision-Login-App .Login-Contraseña input {
+        padding: 0px 5px; /* Relleno interno */
+        box-sizing: border-box; /* Incluye el ancho del borde y el relleno en el ancho total */
+        width: calc(80% - 24px);
+    }
+
+    .Supervision-Login-App .Login-Contraseña .password-toggle {
+        padding: 0px;
+        padding-left: 5px;
+    }
+    
     /* Estilos para el botón de envío */
     .Supervision-Login-App .Login-Boton-Envio {
         display: flex; /* Usa el modelo de caja flexible */

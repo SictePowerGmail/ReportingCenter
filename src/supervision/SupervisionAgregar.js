@@ -63,6 +63,7 @@ const SupervisionAgregar = () => {
         setError('');
 
         if (!nombreUsuario) {
+            localStorage.setItem('formData', JSON.stringify(formData));
             navigate('/SupervisionLogin');
         }
 
@@ -73,7 +74,7 @@ const SupervisionAgregar = () => {
             toast.error('La placa debe estar en el formato ABC123', { className: 'toast-error' });
             return;
         } else if (listaPlacasRegistradas.includes(placa)) {
-            toast.error('La placa ya fue registrada en los ultimos dos dias', { className: 'toast-error' });
+            toast.error('La placa ya fue registrada el dia de hoy', { className: 'toast-error' });
             return;
         }
 
@@ -275,16 +276,18 @@ const SupervisionAgregar = () => {
                 setDatosRegistrosSupervision(data);
 
                 // Definir el inicio y el final del día de ayer y de hoy
-                //const todayStart = moment().startOf('day'); // Inicio del día de hoy
+                const todayStart = moment().startOf('day'); // Inicio del día de hoy
                 const todayEnd = moment().endOf('day'); // Fin del día de hoy
                 const yesterdayStart = moment().subtract(1, 'day').startOf('day');
 
                 const filteredData = data.filter(item => {
                     const fechaItem = moment(item.fecha, 'YYYY-MM-DD HH:mm');
-                    return fechaItem.isBetween(yesterdayStart, todayEnd, null, '[]');
+                    return fechaItem.isBetween(todayStart, todayEnd, null, '[]');
                 });
 
                 const uniquePlacas = Array.from(new Set(filteredData.map(item => item.placa)));
+
+                console.log(uniquePlacas)
 
                 setListaPlacasRegistradas(uniquePlacas);
             })
@@ -295,10 +298,6 @@ const SupervisionAgregar = () => {
 
     useEffect(() => {
         cargarRegistrosSupervision();
-        
-        if (!nombre) {
-            navigate('/SupervisionLogin');
-        }
 
         setNombreUsuario(nombre);
 
@@ -590,6 +589,13 @@ const SupervisionAgregar = () => {
                         <div className='Entrada'>
                             <h5>Fecha:</h5>
                             <span>{fecha.toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
+                        </div>
+                    </div>
+                    <div className='Supervisor'>
+                        <i className="fas fa-user-cog"></i>
+                        <div className="Entrada">
+                            <h5>Supervisor:</h5>
+                            <input type="text" placeholder={nombreUsuario} disabled={true} />
                         </div>
                     </div>
                     <div className='Placa'>

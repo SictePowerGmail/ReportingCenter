@@ -8,6 +8,7 @@ const SupervisionLogin = () => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
+    const [mostrarPassword, setMostrarPassword] = useState(false);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -60,7 +61,8 @@ const SupervisionLogin = () => {
                     </div>
                     <div className='Login-Contraseña'>
                         <i className="fas fa-lock"></i>
-                        <input type="password" placeholder="Contraseña" value={password} onChange={(e) => setPassword(e.target.value)}/>
+                        <input type={mostrarPassword ? 'text' : 'password'} placeholder="Contraseña" value={password} onChange={(e) => setPassword(e.target.value)} />
+                        <i className={`password-toggle fas ${mostrarPassword ? 'fa-eye-slash' : 'fa-eye'}`} onClick={() => setMostrarPassword(!mostrarPassword)}></i>
                     </div>
 
                     <div className='Login-Boton-Envio'>
@@ -80,7 +82,7 @@ const SupervisionLogin = () => {
                 )}
 
                 <div className='Version'>
-                    <p>v1.07</p>
+                    <p>v1.08</p>
                 </div>
             </div>
         </div>
