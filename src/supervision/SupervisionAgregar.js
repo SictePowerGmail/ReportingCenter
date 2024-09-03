@@ -17,11 +17,13 @@ const SupervisionAgregar = () => {
     const [error, setError] = useState(null);
     const [fecha, setFecha] = useState('');
     const [datosPlanta, setDatosPlanta] = useState('');
+    const [datosUsuarios, setDatosUsuarios] = useState('');
     const [ubicacion, setUbicacion] = useState({ latitude: null, longitude: null });
     const [placa, setPlaca] = useState('');
     const [ot, setOt] = useState('');
     const [cedula, setCedula] = useState('');
-    const [nombreUsuario, setNombreUsuario] = useState('');
+    const [cedulaUsuario, setCedulaUsuario] = useState('');
+    const [nombreUsuario, setNombreUsuario] = useState('Nombre');
     const [nombreCuadrilla, setNombreCuadrilla] = useState('Nombre');
     const [observacion, setObservacion] = useState('');
     const [foto, setFoto] = useState(null);
@@ -63,8 +65,8 @@ const SupervisionAgregar = () => {
         setError('');
 
         if (!nombreUsuario) {
-            localStorage.setItem('formData', JSON.stringify(formData));
-            navigate('/SupervisionLogin');
+            toast.error('Por favor agrega la cedula del supervisor', { className: 'toast-error' });
+            return;
         }
 
         if (!placa) {
@@ -259,10 +261,20 @@ const SupervisionAgregar = () => {
     };
 
     const cargarDatosPlanta = () => {
-        fetch('https://sicteferias.from-co.net:8120/capacidad/Planta')
+        fetch('https://sicteferias.from-co.net:8120/capacidad/PlantaEnLinea')
             .then(response => response.json())
             .then(data => {
                 setDatosPlanta(data);
+
+            })
+            .catch(error => setError('Error al cargar los datos: ' + error.message));
+    };
+
+    const cargarTodosUsuarios = () => {
+        fetch('https://sicteferias.from-co.net:8120/user')
+            .then(response => response.json())
+            .then(data => {
+                setDatosUsuarios(data);
 
             })
             .catch(error => setError('Error al cargar los datos: ' + error.message));
@@ -298,8 +310,9 @@ const SupervisionAgregar = () => {
 
     useEffect(() => {
         cargarRegistrosSupervision();
-
         setNombreUsuario(nombre);
+        cargarDatosPlanta();   
+        cargarTodosUsuarios(); 
 
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
@@ -363,8 +376,7 @@ const SupervisionAgregar = () => {
         } else {
             setError('Geolocation is not supported by this browser.');
         }
-
-        cargarDatosPlanta();
+        
         setFecha(new Date());
     }, []);
     
@@ -577,6 +589,19 @@ const SupervisionAgregar = () => {
         }
     };
 
+    const estadoCambioCedulaUsuario = (e) => {
+        const cedulaInput = e.target.value;
+        setCedulaUsuario(cedulaInput);
+
+        const registroEncontrado = datosUsuarios.find(item => item.cedula === cedulaInput);
+      
+        if (registroEncontrado) {
+            setNombreUsuario(registroEncontrado.nombre);
+        } else {
+            setNombreUsuario('Usuario no encontrado');
+        }
+    };
+
     return (
         <div className="Supervision-Agregar">
             <div className='Contenido'>
@@ -595,7 +620,10 @@ const SupervisionAgregar = () => {
                         <i className="fas fa-user-cog"></i>
                         <div className="Entrada">
                             <h5>Supervisor:</h5>
-                            <input type="text" placeholder={nombreUsuario} disabled={true} />
+                            {nombreUsuario === 'Nombre' || nombreUsuario === 'Usuario no encontrado' || !nombreUsuario ? (
+                                <input type="text" placeholder="Cedula" value={cedulaUsuario} onChange={estadoCambioCedulaUsuario}/>
+                            ) : null }
+                            <input type="text" placeholder={!nombreUsuario ? "Nombre" : nombreUsuario} disabled={true} />
                         </div>
                     </div>
                     <div className='Placa'>

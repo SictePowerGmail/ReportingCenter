@@ -31,7 +31,7 @@ import FacturacionConsolidado from './pages/FacturacionConsolidado';
 import Compras from './pages/Compras';
 import SeguimientoProyectos from './pages/SeguimientoProyectos';
 import MinticFacturacion from './pages/MinticFacturacion';
-import STTA from './pages/STTA';
+import SSTA from './pages/SSTA';
 import RendimientoOperativo from './pages/RendimientoOperativo';
 import SeguimientoSMU from './pages/SeguimientoSMU';
 import SeguimientoSMUMovil from './pages/SeguimientoSMUMovil';
@@ -168,8 +168,8 @@ function App() {
         return 'Moviles';
       case '/Compras':
         return 'Compras';
-      case '/STTA':
-        return 'STTA';
+      case '/SSTA':
+        return 'SSTA';
       default:
         return 'Validar';
     }
@@ -234,7 +234,8 @@ function App() {
         <Route path='/Centro_de_costos' exacte element={<CentrosDeCostos />} />
         <Route path='/Moviles' exacte element={<Moviles />} />
         <Route path='/Compras' exacte element={<Compras />} />
-        <Route path='/STTA' exacte element={<STTA/>} />
+        {/* SSTA */}
+        <Route path='/SSTA' exacte element={<SSTA/>} />
       </Routes>
     </>
   );

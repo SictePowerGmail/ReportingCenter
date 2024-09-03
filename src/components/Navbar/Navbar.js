@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { Link } from 'react-router-dom';
 import './Navbar.css'
-import { FaFileAlt, FaTruck, FaCogs, FaBars, FaTimes, FaHome, FaChartLine, FaStar, FaTools, FaChevronDown, FaChevronUp, FaEye } from 'react-icons/fa';
+import { FaHardHat, FaFileAlt, FaTruck, FaCogs, FaBars, FaTimes, FaHome, FaChartLine, FaStar, FaTools, FaChevronDown, FaChevronUp, FaEye } from 'react-icons/fa';
 import { HiClipboardList, HiChartBar, HiOfficeBuilding } from "react-icons/hi";
 
 function Navbar() {
@@ -14,6 +14,7 @@ function Navbar() {
     const [showDropdownMantenimiento, setShowDropdownMantenimiento] = useState(false);
     const [showDropdownLogistica, setShowDropdownLogistica] = useState(false);
     const [showDropdownDireccion, setShowDropdownDireccion] = useState(false);
+    const [showDropdownSSTA, setShowDropdownSSTA] = useState(false);
     const [isMobile, setIsMobile] = useState(window.innerWidth < 600);
     const menuRef = useRef(null);
 
@@ -28,6 +29,7 @@ function Navbar() {
         setShowDropdownMantenimiento(false);
         setShowDropdownLogistica(false);
         setShowDropdownDireccion(false);
+        setShowDropdownSSTA(false);
     };
 
     useEffect(() => {
@@ -287,13 +289,35 @@ function Navbar() {
                                     <Link id='SubMenu-Contenido-Titulo' to="/Centro_de_costos" onClick={toggleMobileMenu}>Centros de costos</Link>
                                     <Link id='SubMenu-Contenido-Titulo' to="/Moviles" onClick={toggleMobileMenu}>Composición móviles</Link>
                                     <Link id='SubMenu-Contenido-Titulo' to="/Compras" onClick={toggleMobileMenu}>Compras</Link>
-                                    <Link id='SubMenu-Contenido-Titulo' to="/STTA" onClick={toggleMobileMenu}>STTA</Link>
+                                </div>
+                            )}
+                        </li>
+
+                        <li id='SubMenu'>
+                            <div id='SubMenu-Titulo' onClick={() => 
+                            {
+                                closeAllDropdowns();
+                                setShowDropdownSSTA(!showDropdownSSTA)
+                            }}>
+                                <span id='SubMenu-Titulo-Contenedor'>
+                                    <span id='SubMenu-Titulo-Icono'><FaHardHat /></span>
+                                    <span id="SubMenu-Titulo-Texto">SSTA</span>
+                                    <span id="SubMenu-Titulo-Icono2">
+                                        {
+                                            showDropdownSSTA ? <FaChevronUp /> : <FaChevronDown />
+                                        }
+                                    </span>
+                                </span>
+                            </div>
+                            {showDropdownSSTA && (
+                                <div id='SubMenu-Contenido'>
+                                    <Link id='SubMenu-Contenido-Titulo' to="/SSTA" onClick={toggleMobileMenu}>SSTA</Link>
                                 </div>
                             )}
                         </li>
                     </ul>
                     <div className='Version'>
-                        <p>v1.04</p>
+                        <p>v1.05</p>
                     </div>
                 </div>
             )}
@@ -371,6 +395,14 @@ function Navbar() {
                             <div id='SubMenu-Titulo-Cerrado'>
                                 <span id='SubMenu-Titulo-Contenedor'>
                                     <span id='SubMenu-Titulo-Icono'><HiOfficeBuilding/></span>
+                                </span>
+                            </div>
+                        </li>
+
+                        <li id='SubMenu'>
+                            <div id='SubMenu-Titulo-Cerrado'>
+                                <span id='SubMenu-Titulo-Contenedor'>
+                                    <span id='SubMenu-Titulo-Icono'><FaHardHat/></span>
                                 </span>
                             </div>
                         </li>
