@@ -255,3 +255,10 @@
     width: 250px; /* Ajusta el ancho */
     padding: 10px; /* Ajusta el padding */
 }
+
+#CargandoPagina {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}

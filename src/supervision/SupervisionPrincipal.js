@@ -22,7 +22,7 @@ const SupervisionPrincipal = () => {
     const [listaFecha, setListaFecha] = useState([]);
     const [listaSupervisor, setListaSupervisor] = useState([]);
     const [listaPlaca, setListaPlaca] = useState([]);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
 
 
     const Agregar = async (event) => {
@@ -51,8 +51,6 @@ const SupervisionPrincipal = () => {
                 if (placaSeleccionada !== 'Todo') {
                     dataFiltrada = dataFiltrada.filter(item => item.placa === placaSeleccionada);
                 }
-
-                generarMapa(dataFiltrada);
 
                 const registrosPorDia = dataFiltrada.reduce((acc, item) => {
                     // Formatear la fecha en formato YYYY-MM-DD
@@ -122,6 +120,8 @@ const SupervisionPrincipal = () => {
                 });
 
                 setListaPlaca(Array.from(uniquePlaca));
+
+                generarMapa(dataFiltrada);
             })
             .catch(error => {
                 console.error('Error fetching data:', error);
@@ -186,7 +186,7 @@ const SupervisionPrincipal = () => {
     };  
 
     const addMarkerToMap = (item) => {
-        const { latitud, longitud, fotoNombre, fecha, ot, nombreCuadrilla, observacion, placa } = item;
+        const { latitud, longitud, fotoNombre, fecha, ot, nombreCuadrilla, observacion, placa, nombre } = item;
     
         const awesomeMarker = L.AwesomeMarkers.icon({
             icon: 'car',
@@ -216,7 +216,7 @@ const SupervisionPrincipal = () => {
         // Definir el contenido del popup (inicialmente sin imagen)
         const popupContent = `
             <div>
-                <h6><strong>Fecha: </strong>${fecha}<br><strong>Placa: </strong>${placa}<br><strong>Nombre Tecnico: </strong><br>${nombreCapitalizado}<br><strong>OT: </strong>${ot}<br><strong>Observación: </strong>${observacion}</h6>
+                <h6><strong>Fecha: </strong>${fecha}<br><strong>Supervisor: </strong>${nombre}<br><strong>Placa: </strong>${placa}<br><strong>Nombre Tecnico: </strong>${nombreCapitalizado}<br><strong>OT: </strong>${ot}<br><strong>Observación: </strong>${observacion}</h6>
                 <div id="image-container-${fotoNombre}" style="width: 100px; height: auto; text-align: center;"></div>
             </div>
         `;
