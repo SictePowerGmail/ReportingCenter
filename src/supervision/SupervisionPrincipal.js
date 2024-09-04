@@ -22,7 +22,7 @@ const SupervisionPrincipal = () => {
     const [listaFecha, setListaFecha] = useState([]);
     const [listaSupervisor, setListaSupervisor] = useState([]);
     const [listaPlaca, setListaPlaca] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
 
 
     const Agregar = async (event) => {
@@ -96,7 +96,7 @@ const SupervisionPrincipal = () => {
 
                 const uniqueDia = new Set();
                 uniqueDia.add("Todo");
-                dataFiltrada.forEach(item => {
+                data.forEach(item => {
                     const fechaCompleta = new Date(item.fecha); // Asumiendo que item.fecha está en formato ISO
                     const dia = fechaCompleta.getDate().toString().padStart(2, '0');
                     const mes = (fechaCompleta.getMonth() + 1).toString().padStart(2, '0'); // Meses en JavaScript son 0-indexados
@@ -104,22 +104,37 @@ const SupervisionPrincipal = () => {
                     const fechaFormateada = `${año}-${mes}-${dia}`;
                     uniqueDia.add(fechaFormateada);
                 });
-                setListaFecha(Array.from(uniqueDia));
+                const listaFechaOrdenada = Array.from(uniqueDia).sort((a, b) => {
+                    if (a === "Todo") return -1; // Mantener "Todo" en el primer lugar
+                    if (b === "Todo") return 1;
+                    return new Date(b) - new Date(a);
+                });
+                setListaFecha(listaFechaOrdenada);
 
                 const uniqueNombre = new Set();
                 uniqueNombre.add("Todo");
-                dataFiltrada.forEach(item => {
+                data.forEach(item => {
                     uniqueNombre.add(item.nombre);
                 });
-                setListaSupervisor(Array.from(uniqueNombre));
+                const listaSupervisorOrdenada = Array.from(uniqueNombre).sort((a, b) => {
+                    if (a === "Todo") return -1; // Mantener "Todo" en el primer lugar
+                    if (b === "Todo") return 1;
+                    return a.localeCompare(b); // Comparar de forma ascendente
+                });
+                setListaSupervisor(listaSupervisorOrdenada);
+                
 
                 const uniquePlaca = new Set();
                 uniquePlaca.add("Todo");
-                dataFiltrada.forEach(item => {
+                data.forEach(item => {
                     uniquePlaca.add(item.placa);
                 });
-
-                setListaPlaca(Array.from(uniquePlaca));
+                const listaPlacaOrdenada = Array.from(uniquePlaca).sort((a, b) => {
+                    if (a === "Todo") return -1; // Mantener "Todo" en el primer lugar
+                    if (b === "Todo") return 1;
+                    return a.localeCompare(b); // Comparar de forma ascendente
+                });
+                setListaPlaca(listaPlacaOrdenada);
 
                 generarMapa(dataFiltrada);
             })
