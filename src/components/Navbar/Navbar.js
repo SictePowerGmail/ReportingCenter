@@ -312,12 +312,13 @@ function Navbar() {
                             {showDropdownSSTA && (
                                 <div id='SubMenu-Contenido'>
                                     <Link id='SubMenu-Contenido-Titulo' to="/SSTA" onClick={toggleMobileMenu}>SSTA</Link>
+                                    <Link id='SubMenu-Contenido-Titulo' to="/CursosDeAlturas" onClick={toggleMobileMenu}>Cursos de Alturas</Link>
                                 </div>
                             )}
                         </li>
                     </ul>
                     <div className='Version'>
-                        <p>v1.05</p>
+                        <p>v1.06</p>
                     </div>
                 </div>
             )}
