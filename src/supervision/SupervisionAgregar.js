@@ -317,7 +317,6 @@ const SupervisionAgregar = () => {
 
     useEffect(() => {
         cargarRegistrosSupervision();
-        setNombreUsuario(nombre);
         cargarDatosPlanta();   
         cargarTodosUsuarios();
         setFecha(new Date());
