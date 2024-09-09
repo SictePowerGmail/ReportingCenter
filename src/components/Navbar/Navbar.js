@@ -318,7 +318,7 @@ function Navbar() {
                         </li>
                     </ul>
                     <div className='Version'>
-                        <p>v1.07</p>
+                        <p>v1.08</p>
                     </div>
                 </div>
             )}

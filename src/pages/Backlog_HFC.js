@@ -5,8 +5,8 @@ export default class BacklogHFC extends Component {
   render() {
     return (
       <PowerBi
-      title="Backlog HFC"
-      src="https://app.powerbi.com/view?r=eyJrIjoiM2Y0OGMwMTItMmUxZS00YzU2LThlNGQtOTYxZTAzYTZjNGE0IiwidCI6ImUwYmZlOTBkLTIwZTAtNDEwYi1iNmYxLTQyOWIwNDNkMzYwOCJ9">
+        title="Backlog HFC"
+        src="https://app.powerbi.com/view?r=eyJrIjoiODVkZThmM2ItZmJlZC00NjkyLThkNGUtYjUwZGFhNmNhM2RjIiwidCI6ImUwYmZlOTBkLTIwZTAtNDEwYi1iNmYxLTQyOWIwNDNkMzYwOCJ9">
       </PowerBi>
     )
   }
