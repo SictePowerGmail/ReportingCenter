@@ -313,12 +313,13 @@ function Navbar() {
                                 <div id='SubMenu-Contenido'>
                                     <Link id='SubMenu-Contenido-Titulo' to="/SSTA" onClick={toggleMobileMenu}>SSTA</Link>
                                     <Link id='SubMenu-Contenido-Titulo' to="/CursosDeAlturas" onClick={toggleMobileMenu}>Cursos de Alturas</Link>
+                                    <Link id='SubMenu-Contenido-Titulo' to="/EntregasPendientesDotacion" onClick={toggleMobileMenu}>Entregas Pendientes Dotación</Link>
                                 </div>
                             )}
                         </li>
                     </ul>
                     <div className='Version'>
-                        <p>v1.09</p>
+                        <p>v1.10</p>
                     </div>
                 </div>
             )}

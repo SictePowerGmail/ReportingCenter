@@ -49,6 +49,7 @@ import EquiposMovilesR4 from "./pages/EquiposMovilesR4";
 import ConsumosOperaciones from "./pages/ConsumosOperaciones";
 import DesmonteMantenimiento from "./pages/DesmonteMantenimiento";
 import CursosDeAlturas from "./pages/CursosDeAlturas";
+import EntregasPendientesDotacion from "./pages/EntregasPendientesDotacion";
 
 //4434
 
@@ -169,10 +170,13 @@ function App() {
         return 'Moviles';
       case '/Compras':
         return 'Compras';
+      /* SSTA */
       case '/SSTA':
         return 'SSTA';
       case '/CursosDeAlturas':
         return 'CursosDeAlturas';
+      case '/EntregasPendientesDotacion':
+        return 'EntregasPendientesDotacion'
       default:
         return 'Validar';
     }
@@ -240,6 +244,7 @@ function App() {
         {/* SSTA */}
         <Route path='/SSTA' exacte element={<SSTA/>} />
         <Route path='/CursosDeAlturas' exacte element={<CursosDeAlturas />} />
+        <Route path='/EntregasPendientesDotacion' exacte element={<EntregasPendientesDotacion />} />
       </Routes>
     </>
   );
