@@ -20,13 +20,13 @@ const SupervisionAgregar = () => {
     const [datosPlanta, setDatosPlanta] = useState('');
     const [datosUsuarios, setDatosUsuarios] = useState('');
     const [ubicacion, setUbicacion] = useState({ latitude: null, longitude: null });
-    const [placa, setPlaca] = useState('');
-    const [ot, setOt] = useState('');
-    const [cedula, setCedula] = useState('');
-    const [cedulaUsuario, setCedulaUsuario] = useState('');
-    const [nombreUsuario, setNombreUsuario] = useState('Nombre');
-    const [nombreCuadrilla, setNombreCuadrilla] = useState('Nombre');
-    const [observacion, setObservacion] = useState('');
+    const [placa, setPlaca] = useState(localStorage.getItem('placa') || '');
+    const [ot, setOt] = useState(localStorage.getItem('ot') || '');
+    const [cedula, setCedula] = useState(localStorage.getItem('cedula') || '');
+    const [nombreCuadrilla, setNombreCuadrilla] = useState(localStorage.getItem('nombreCuadrilla') || 'Nombre');
+    const [cedulaUsuario, setCedulaUsuario] = useState(localStorage.getItem('cedulaUsuario') || '');
+    const [nombreUsuario, setNombreUsuario] = useState(localStorage.getItem('nombreUsuario') || 'Nombre');
+    const [observacion, setObservacion] = useState(localStorage.getItem('observacion') || '');
     const [foto, setFoto] = useState(null);
     const mapRef = useRef(null);
     const locationRef = useRef(null);
@@ -79,8 +79,8 @@ const SupervisionAgregar = () => {
         if (!placa) {
             toast.error('Por favor agrega la placa de la movil', { className: 'toast-error' });
             return;
-        } else if (!/^[A-Z]{3}[0-9]{3}$/.test(placa)) {
-            toast.error('La placa debe estar en el formato ABC123', { className: 'toast-error' });
+        } else if (!/^[A-Z]{3}[0-9]{2}[0-9A-Z]{1}$/.test(placa)) {
+            toast.error('La placa debe estar en el formato ABC123 o ABC12A', { className: 'toast-error' });
             return;
         } else if (listaPlacasRegistradas.includes(placa)) {
             toast.error('La placa ya fue registrada el dia de hoy', { className: 'toast-error' });
@@ -258,6 +258,34 @@ const SupervisionAgregar = () => {
                 longitud: ubicacion.longitude
             });
 
+            localStorage.removeItem('cedulaUsuario');
+            localStorage.removeItem('nombreUsuario');
+            localStorage.removeItem('placa');
+            localStorage.removeItem('cedula');
+            localStorage.removeItem('nombreCuadrilla');
+            localStorage.removeItem('ot');
+            localStorage.removeItem('respuestaEPP');
+            localStorage.removeItem('comentarioEPP');
+            localStorage.removeItem('respuestaAlturas');
+            localStorage.removeItem('comentarioAlturas');
+            localStorage.removeItem('respuestaATS');
+            localStorage.removeItem('comentarioATS');
+            localStorage.removeItem('respuestaEmpalmes');
+            localStorage.removeItem('comentarioEmpalmes');
+            localStorage.removeItem('respuestaPreoperacional');
+            localStorage.removeItem('comentarioPreoperacional');
+            localStorage.removeItem('respuestaVehiculo');
+            localStorage.removeItem('comentarioVehiculo');
+            localStorage.removeItem('respuestaEmpalmadora');
+            localStorage.removeItem('respuestaOTDR');
+            localStorage.removeItem('respuestaCortadora');
+            localStorage.removeItem('respuestaPinza');
+            localStorage.removeItem('respuestaOPM');
+            localStorage.removeItem('respuestaONEXPERT');
+            localStorage.removeItem('respuestaMedidorConductancia');
+            localStorage.removeItem('respuestaMedidorFugas');
+            localStorage.removeItem('observacion');
+
             navigate('/SupervisionPrincipal', { state: { role:role, nombre:nombreUsuario, estadoNotificacion:true } });
             console.log('Datos enviados exitosamente');
 
@@ -387,8 +415,8 @@ const SupervisionAgregar = () => {
         }
     }
     
-    const [respuestaEPP, setRespuestaEPP] = useState(null);
-    const [comentarioEPP, setComentarioEPP] = useState('');
+    const [respuestaEPP, setRespuestaEPP] = useState(localStorage.getItem('respuestaEPP') || null);
+    const [comentarioEPP, setComentarioEPP] = useState(localStorage.getItem('comentarioEPP') || '');
 
     const clickSiEPP = () => {
         setRespuestaEPP('si');
@@ -399,8 +427,8 @@ const SupervisionAgregar = () => {
         setRespuestaEPP('no');
     };
 
-    const [respuestaAlturas, setRespuestaAlturas] = useState(null);
-    const [comentarioAlturas, setComentarioAlturas] = useState('');
+    const [respuestaAlturas, setRespuestaAlturas] = useState(localStorage.getItem('respuestaAlturas') || null);
+    const [comentarioAlturas, setComentarioAlturas] = useState(localStorage.getItem('comentarioAlturas') || '');
 
     const clickSiAlturas = () => {
         setRespuestaAlturas('si');
@@ -411,8 +439,8 @@ const SupervisionAgregar = () => {
         setRespuestaAlturas('no');
     };
 
-    const [respuestaATS, setRespuestaATS] = useState(null);
-    const [comentarioATS, setComentarioATS] = useState('');
+    const [respuestaATS, setRespuestaATS] = useState(localStorage.getItem('respuestaATS') || null);
+    const [comentarioATS, setComentarioATS] = useState(localStorage.getItem('comentarioATS') || '');
 
     const clickSiATS = () => {
         setRespuestaATS('si');
@@ -423,8 +451,8 @@ const SupervisionAgregar = () => {
         setRespuestaATS('no');
     };
 
-    const [respuestaEmpalmes, setRespuestaEmpalmes] = useState(null);
-    const [comentarioEmpalmes, setComentarioEmpalmes] = useState('');
+    const [respuestaEmpalmes, setRespuestaEmpalmes] = useState(localStorage.getItem('respuestaEmpalmes') || null);
+    const [comentarioEmpalmes, setComentarioEmpalmes] = useState(localStorage.getItem('comentarioEmpalmes') || '');
 
     const clickSiEmpalmes = () => {
         setRespuestaEmpalmes('si');
@@ -435,8 +463,8 @@ const SupervisionAgregar = () => {
         setRespuestaEmpalmes('no');
     };
 
-    const [respuestaPreoperacional, setRespuestaPreoperacional] = useState(null);
-    const [comentarioPreoperacional, setComentarioPreoperacional] = useState('');
+    const [respuestaPreoperacional, setRespuestaPreoperacional] = useState(localStorage.getItem('respuestaPreoperacional') || null);
+    const [comentarioPreoperacional, setComentarioPreoperacional] = useState(localStorage.getItem('comentarioPreoperacional') || '');
 
     const clickSiPreoperacional = () => {
         setRespuestaPreoperacional('si');
@@ -447,8 +475,8 @@ const SupervisionAgregar = () => {
         setRespuestaPreoperacional('no');
     };
 
-    const [respuestaVehiculo, setRespuestaVehiculo] = useState(null);
-    const [comentarioVehiculo, setComentarioVehiculo] = useState('');
+    const [respuestaVehiculo, setRespuestaVehiculo] = useState(localStorage.getItem('respuestaVehiculo') || null);
+    const [comentarioVehiculo, setComentarioVehiculo] = useState(localStorage.getItem('comentarioVehiculo') || '');
 
     const click1Vehiculo = () => {
         setRespuestaVehiculo('1');
@@ -471,7 +499,7 @@ const SupervisionAgregar = () => {
         setRespuestaVehiculo('5');
     };
 
-    const [respuestaEmpalmadora, setRespuestaEmpalmadora] = useState(null);
+    const [respuestaEmpalmadora, setRespuestaEmpalmadora] = useState(localStorage.getItem('respuestaEmpalmadora') || null);
 
     const clickSiEmpalmadora = () => {
         setRespuestaEmpalmadora('Si');
@@ -485,7 +513,7 @@ const SupervisionAgregar = () => {
         setRespuestaEmpalmadora('N/A');
     };
 
-    const [respuestaOTDR, setRespuestaOTDR] = useState(null);
+    const [respuestaOTDR, setRespuestaOTDR] = useState(localStorage.getItem('respuestaOTDR') || null);
 
     const clickSiOTDR = () => {
         setRespuestaOTDR('Si');
@@ -499,7 +527,7 @@ const SupervisionAgregar = () => {
         setRespuestaOTDR('N/A');
     };
 
-    const [respuestaCortadora, setRespuestaCortadora] = useState(null);
+    const [respuestaCortadora, setRespuestaCortadora] = useState(localStorage.getItem('respuestaCortadora') || null);
 
     const clickSiCortadora = () => {
         setRespuestaCortadora('Si');
@@ -513,7 +541,7 @@ const SupervisionAgregar = () => {
         setRespuestaCortadora('N/A');
     };
 
-    const [respuestaPinza, setRespuestaPinza] = useState(null);
+    const [respuestaPinza, setRespuestaPinza] = useState(localStorage.getItem('respuestaPinza') || null);
 
     const clickSiPinza = () => {
         setRespuestaPinza('Si');
@@ -527,7 +555,7 @@ const SupervisionAgregar = () => {
         setRespuestaPinza('N/A');
     };
 
-    const [respuestaOPM, setRespuestaOPM] = useState(null);
+    const [respuestaOPM, setRespuestaOPM] = useState(localStorage.getItem('respuestaOPM') || null);
 
     const clickSiOPM = () => {
         setRespuestaOPM('Si');
@@ -541,7 +569,7 @@ const SupervisionAgregar = () => {
         setRespuestaOPM('N/A');
     };
 
-    const [respuestaONEXPERT, setRespuestaONEXPERT] = useState(null);
+    const [respuestaONEXPERT, setRespuestaONEXPERT] = useState(localStorage.getItem('respuestaONEXPERT') || null);
 
     const clickSiONEXPERT = () => {
         setRespuestaONEXPERT('Si');
@@ -555,7 +583,7 @@ const SupervisionAgregar = () => {
         setRespuestaONEXPERT('N/A');
     };
 
-    const [respuestaMedidorConductancia, setRespuestaMedidorConductancia] = useState(null);
+    const [respuestaMedidorConductancia, setRespuestaMedidorConductancia] = useState(localStorage.getItem('respuestaMedidorConductancia') || null);
 
     const clickSiMedidorConductancia = () => {
         setRespuestaMedidorConductancia('Si');
@@ -569,7 +597,7 @@ const SupervisionAgregar = () => {
         setRespuestaMedidorConductancia('N/A');
     };
 
-    const [respuestaMedidorFugas, setRespuestaMedidorFugas] = useState(null);
+    const [respuestaMedidorFugas, setRespuestaMedidorFugas] = useState(localStorage.getItem('respuestaMedidorFugas') || null);
 
     const clickSiMedidorFugas = () => {
         setRespuestaMedidorFugas('Si');
@@ -608,6 +636,114 @@ const SupervisionAgregar = () => {
             setNombreUsuario('Usuario no encontrado');
         }
     };
+
+    useEffect(() => {
+        localStorage.setItem('cedulaUsuario', cedulaUsuario);
+    }, [cedulaUsuario]);
+
+    useEffect(() => {
+        localStorage.setItem('nombreUsuario', nombreUsuario);
+    }, [nombreUsuario]);
+
+    useEffect(() => {
+        localStorage.setItem('placa', placa);
+    }, [placa]);
+
+    useEffect(() => {
+        localStorage.setItem('cedula', cedula);
+    }, [cedula]);
+
+    useEffect(() => {
+        localStorage.setItem('nombreCuadrilla', nombreCuadrilla);
+    }, [nombreCuadrilla]);
+
+    useEffect(() => {
+        localStorage.setItem('ot', ot);
+    }, [ot]);
+
+    useEffect(() => {
+        localStorage.setItem('respuestaEPP', respuestaEPP);
+    }, [respuestaEPP]);
+
+    useEffect(() => {
+        localStorage.setItem('comentarioEPP', comentarioEPP);
+    }, [comentarioEPP]);
+
+    useEffect(() => {
+        localStorage.setItem('respuestaAlturas', respuestaAlturas);
+    }, [respuestaAlturas]);
+
+    useEffect(() => {
+        localStorage.setItem('comentarioAlturas', comentarioAlturas);
+    }, [comentarioAlturas]);
+
+    useEffect(() => {
+        localStorage.setItem('respuestaATS', respuestaATS);
+    }, [respuestaATS]);
+
+    useEffect(() => {
+        localStorage.setItem('comentarioATS', comentarioATS);
+    }, [comentarioATS]);
+
+    useEffect(() => {
+        localStorage.setItem('respuestaEmpalmes', respuestaEmpalmes);
+    }, [respuestaEmpalmes]);
+
+    useEffect(() => {
+        localStorage.setItem('comentarioEmpalmes', comentarioEmpalmes);
+    }, [comentarioEmpalmes]);
+
+    useEffect(() => {
+        localStorage.setItem('respuestaPreoperacional', respuestaPreoperacional);
+    }, [respuestaPreoperacional]);
+
+    useEffect(() => {
+        localStorage.setItem('comentarioPreoperacional', comentarioPreoperacional);
+    }, [comentarioPreoperacional]);
+
+    useEffect(() => {
+        localStorage.setItem('respuestaVehiculo', respuestaVehiculo);
+    }, [respuestaVehiculo]);
+
+    useEffect(() => {
+        localStorage.setItem('comentarioVehiculo', comentarioVehiculo);
+    }, [comentarioVehiculo]);
+
+    useEffect(() => {
+        localStorage.setItem('respuestaEmpalmadora', respuestaEmpalmadora);
+    }, [respuestaEmpalmadora]);
+
+    useEffect(() => {
+        localStorage.setItem('respuestaOTDR', respuestaOTDR);
+    }, [respuestaOTDR]);
+
+    useEffect(() => {
+        localStorage.setItem('respuestaCortadora', respuestaCortadora);
+    }, [respuestaCortadora]);
+
+    useEffect(() => {
+        localStorage.setItem('respuestaPinza', respuestaPinza);
+    }, [respuestaPinza]);
+
+    useEffect(() => {
+        localStorage.setItem('respuestaOPM', respuestaOPM);
+    }, [respuestaOPM]);
+
+    useEffect(() => {
+        localStorage.setItem('respuestaONEXPERT', respuestaONEXPERT);
+    }, [respuestaONEXPERT]);
+
+    useEffect(() => {
+        localStorage.setItem('respuestaMedidorConductancia', respuestaMedidorConductancia);
+    }, [respuestaMedidorConductancia]);
+
+    useEffect(() => {
+        localStorage.setItem('respuestaMedidorFugas', respuestaMedidorFugas);
+    }, [respuestaMedidorFugas]);
+
+    useEffect(() => {
+        localStorage.setItem('observacion', observacion);
+    }, [observacion]);
 
     return (
         <div className="Supervision-Agregar">
@@ -650,15 +786,15 @@ const SupervisionAgregar = () => {
                                 <h5>Ingrese la placa de la movil:</h5>
                                 <input 
                                     type="text" 
-                                    placeholder="Placa movil (Ejemplo: ABC123)" 
+                                    placeholder="Placa movil (Ejemplo: ABC123, ABC12A)" 
                                     value={placa} 
                                     onChange={(e) => {
                                         const newValue = e.target.value.toUpperCase(); // Convertir a mayúsculas automáticamente
-                                        if (/^[A-Z]{0,3}[0-9]{0,3}$/.test(newValue)) {
+                                        if (/^[A-Z]{0,3}[0-9]{0,2}[0-9A-Z]{0,1}$/.test(newValue)) {
                                             setPlaca(newValue); // Solo actualizar el estado si el nuevo valor coincide con el patrón
                                         }
                                     }}
-                                    pattern="[A-Za-z]{3}[0-9]{3}"
+                                    pattern="[A-Za-z]{3}[0-9]{2}[0-9A-Za-z]{1}"
                                     maxLength={6} // Limitar la longitud máxima a 6 caracteres
                                     title="Debe ser en formato de 3 letras seguidas de 3 números (Ejemplo: ABC123)"
                                 />
