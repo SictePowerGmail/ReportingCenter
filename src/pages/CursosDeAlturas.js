@@ -6,7 +6,7 @@ export default class CursosDeAlturas extends Component {
     return (
       <PowerBi
         title="Cursos de Alturas"
-        src="https://app.powerbi.com/view?r=eyJrIjoiNWM4NGZiZDAtZTJiNi00MTA0LTg1NDItMmU2MzAxMzg0MThjIiwidCI6ImUwYmZlOTBkLTIwZTAtNDEwYi1iNmYxLTQyOWIwNDNkMzYwOCJ9&pageName=ReportSection0eab5c17151ab8d764ff">
+        src="https://app.powerbi.com/view?r=eyJrIjoiNWM4NGZiZDAtZTJiNi00MTA0LTg1NDItMmU2MzAxMzg0MThjIiwidCI6ImUwYmZlOTBkLTIwZTAtNDEwYi1iNmYxLTQyOWIwNDNkMzYwOCJ9">
       </PowerBi>
     )
   }
