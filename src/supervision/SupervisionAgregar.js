@@ -33,11 +33,45 @@ const SupervisionAgregar = () => {
     const [datosRegistrosSupervision, setDatosRegistrosSupervision] = useState([]);
     const [listaPlacasRegistradas, setListaPlacasRegistradas] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [enviando, setEnviando] = useState(false);
 
     const clickCapture = (event) => {
         const file = event.target.files[0];
         if (file) {
-            setFoto(file);
+            const reader = new FileReader();
+    
+            reader.onload = (e) => {
+                const img = new Image();
+                img.src = e.target.result;
+    
+                img.onload = () => {
+                    // Crear un canvas para redimensionar la imagen
+                    const canvas = document.createElement("canvas");
+                    const ctx = canvas.getContext("2d");
+    
+                    // Especificar las nuevas dimensiones de la imagen
+                    const MAX_WIDTH = 800; // Puedes ajustar el ancho según tu necesidad
+                    const scaleSize = MAX_WIDTH / img.width;
+                    canvas.width = MAX_WIDTH;
+                    canvas.height = img.height * scaleSize;
+    
+                    // Dibujar la imagen en el canvas
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    
+                    // Convertir el canvas a blob
+                    canvas.toBlob((blob) => {
+                        const resizedFile = new File([blob], file.name, {
+                            type: file.type,
+                            lastModified: Date.now(),
+                        });
+    
+                        // Asignar la imagen redimensionada
+                        setFoto(resizedFile);
+                    }, file.type);
+                };
+            };
+    
+            reader.readAsDataURL(file);
         }
     };
 
@@ -211,6 +245,8 @@ const SupervisionAgregar = () => {
             return;
         }
 
+        setEnviando(true)
+
         const formattedDate = formatDate(fecha);
         const formattedDate2 = formatDate2(fecha);
         const formData = new FormData();
@@ -286,6 +322,7 @@ const SupervisionAgregar = () => {
             localStorage.removeItem('respuestaMedidorFugas');
             localStorage.removeItem('observacion');
 
+            setEnviando(false)
             navigate('/SupervisionPrincipal', { state: { role:role, nombre:nombreUsuario, estadoNotificacion:true } });
             console.log('Datos enviados exitosamente');
 
@@ -759,252 +796,264 @@ const SupervisionAgregar = () => {
                 </div>
             ) : (
                 <div className='Contenido'>
-                    <form className='Formulario'>
-                        <div className='Titulo'>
-                            <h3>Actividad</h3>
-                        </div>
-                        <div className='Fecha'>
-                            <i className="fas fa-calendar-alt"></i>
-                            <div className='Entrada'>
-                                <h5>Fecha:</h5>
-                                <span>{fecha.toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
-                            </div>
-                        </div>
-                        <div className='Supervisor'>
-                            <i className="fas fa-user-cog"></i>
-                            <div className="Entrada">
-                                <h5>Supervisor:</h5>
-                                {nombreUsuario === 'Nombre' || nombreUsuario === 'Usuario no encontrado' || !nombreUsuario ? (
-                                    <input type="text" placeholder="Cedula" value={cedulaUsuario} onChange={estadoCambioCedulaUsuario}/>
-                                ) : null }
-                                <input type="text" placeholder={!nombreUsuario ? "Nombre" : nombreUsuario} disabled={true} />
-                            </div>
-                        </div>
-                        <div className='Placa'>
-                            <i className="fas fa-id-card"></i>
-                            <div className='Entrada'>
-                                <h5>Ingrese la placa de la movil:</h5>
-                                <input 
-                                    type="text" 
-                                    placeholder="Placa movil (Ejemplo: ABC123, ABC12A)" 
-                                    value={placa} 
-                                    onChange={(e) => {
-                                        const newValue = e.target.value.toUpperCase(); // Convertir a mayúsculas automáticamente
-                                        if (/^[A-Z]{0,3}[0-9]{0,2}[0-9A-Z]{0,1}$/.test(newValue)) {
-                                            setPlaca(newValue); // Solo actualizar el estado si el nuevo valor coincide con el patrón
-                                        }
-                                    }}
-                                    pattern="[A-Za-z]{3}[0-9]{2}[0-9A-Za-z]{1}"
-                                    maxLength={6} // Limitar la longitud máxima a 6 caracteres
-                                    title="Debe ser en formato de 3 letras seguidas de 3 números (Ejemplo: ABC123)"
-                                />
-                            </div>
-                        </div>
-                        <div className='LiderCuadrilla'>
-                            <i className="fas fa-users-cog"></i>
-                            <div className='Entrada'>
-                                <h5>Ingrese el lider de la cuadrilla:</h5>
-                                <input type="text" placeholder="Cedula" value={cedula} onChange={estadoCambioCedula}/>
-                                <input type="text" placeholder="Nombre" value={nombreCuadrilla} disabled={true} />
-                            </div>
-                        </div>
-                        <div className='OT'>
-                            <i className="fas fa-tools"></i>
-                            <div className='Entrada'>
-                                <h5>Ingrese la OT / UUID:</h5>
-                                <input type="text" placeholder="OT / UUID" value={ot} onChange={(e) => setOt(e.target.value)}/>
-                            </div>
-                        </div>
-                        <div className='EPP'>
-                            <i className="fas fa-bullhorn"></i>
-                            <div className='Entrada'>
-                                <h5>1. ¿Tienen todos los EPP?</h5>
-                                <div className='Botones'>
-                                    <button onClick={clickSiEPP} className={respuestaEPP === 'si' ? 'selected' : ''}>Sí</button>
-                                    <button onClick={clickNoEPP} className={respuestaEPP === 'no' ? 'selected' : ''}>No</button>
-                                    <div className="Comentario">
-                                        <input type="text" placeholder={respuestaEPP === 'si' ? "" : "¿Por qué?"} value={comentarioEPP}
-                                            onChange={(e) => setComentarioEPP(e.target.value)} disabled={respuestaEPP !== 'no'} />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className='Alturas'>
-                            <i className="fas fa-bullhorn"></i>
-                            <div className='Entrada'>
-                                <h5>2. ¿Todos estan certificados en alturas?</h5>
-                                <div className='Botones'>
-                                    <button onClick={clickSiAlturas} className={respuestaAlturas === 'si' ? 'selected' : ''}>Sí</button>
-                                    <button onClick={clickNoAlturas} className={respuestaAlturas === 'no' ? 'selected' : ''}>No</button>
-                                    <div className="Comentario">
-                                        <input type="text" placeholder={respuestaAlturas === 'si' ? "" : "¿Por qué?"} value={comentarioAlturas}
-                                            onChange={(e) => setComentarioAlturas(e.target.value)} disabled={respuestaAlturas !== 'no'} />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className='ATS'>
-                            <i className="fas fa-bullhorn"></i>
-                            <div className='Entrada'>
-                                <h5>3. ¿Se diligencio el ATS?</h5>
-                                <div className='Botones'>
-                                    <button onClick={clickSiATS} className={respuestaATS === 'si' ? 'selected' : ''}>Sí</button>
-                                    <button onClick={clickNoATS} className={respuestaATS === 'no' ? 'selected' : ''}>No</button>
-                                    <div className="Comentario">
-                                        <input type="text" placeholder={respuestaATS === 'si' ? "" : "¿Por qué?"} value={comentarioATS}
-                                            onChange={(e) => setComentarioATS(e.target.value)} disabled={respuestaATS !== 'no'} />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className='Empalmes'>
-                            <i className="fas fa-bullhorn"></i>
-                            <div className='Entrada'>
-                                <h5>4. ¿Se realizo reporte de empalmes en WFM?</h5>
-                                <div className='Botones'>
-                                    <button onClick={clickSiEmpalmes} className={respuestaEmpalmes === 'si' ? 'selected' : ''}>Sí</button>
-                                    <button onClick={clickNoEmpalmes} className={respuestaEmpalmes === 'no' ? 'selected' : ''}>No</button>
-                                    <div className="Comentario">
-                                        <input type="text" placeholder={respuestaEmpalmes === 'si' ? "¿Cuantos?" : "¿Por qué?"} value={comentarioEmpalmes}
-                                            onChange={(e) => setComentarioEmpalmes(e.target.value)} />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className='Preoperacional'>
-                            <i className="fas fa-bullhorn"></i>
-                            <div className='Entrada'>
-                                <h5>5. ¿Se realizo preoperacional?</h5>
-                                <div className='Botones'>
-                                    <button onClick={clickSiPreoperacional} className={respuestaPreoperacional === 'si' ? 'selected' : ''}>Sí</button>
-                                    <button onClick={clickNoPreoperacional} className={respuestaPreoperacional === 'no' ? 'selected' : ''}>No</button>
-                                    <div className="Comentario">
-                                        <input type="text" placeholder={respuestaPreoperacional === 'si' ? "" : "¿Por qué?"} value={comentarioPreoperacional}
-                                            onChange={(e) => setComentarioPreoperacional(e.target.value)} disabled={respuestaPreoperacional !== 'no'} />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className='Vehiculo'>
-                            <i className="fas fa-bullhorn"></i>
-                            <div className='Entrada'>
-                                <h5>6. Estado del vehiculo:</h5>
-                                <div className='Botones'>
-                                    <button onClick={click1Vehiculo} className={respuestaVehiculo === '1' ? 'selected' : ''}>1</button>
-                                    <button onClick={click2Vehiculo} className={respuestaVehiculo === '2' ? 'selected' : ''}>2</button>
-                                    <button onClick={click3Vehiculo} className={respuestaVehiculo === '3' ? 'selected' : ''}>3</button>
-                                    <button onClick={click4Vehiculo} className={respuestaVehiculo === '4' ? 'selected' : ''}>4</button>
-                                    <button onClick={click5Vehiculo} className={respuestaVehiculo === '5' ? 'selected' : ''}>5</button>
-                                </div>
-                                <div className="Comentario">
-                                    <input type="text" placeholder={respuestaVehiculo === '5' ? "" : "¿Por qué?"} value={comentarioVehiculo}
-                                        onChange={(e) => setComentarioVehiculo(e.target.value)} disabled={respuestaVehiculo === '5'} />
-                                </div>
-                            </div>
-                        </div>
-                        <div className='Equipos'>
-                            <i className="fas fa-bullhorn"></i>
-                            <div className='Entrada'>
-                                <h5>7. Equipos especializados:</h5>
-                                <div className='Botones'>
-                                    <div className='Titulo'>
-                                        <h5>Empalmadora</h5>
-                                    </div>
-                                    <button onClick={clickSiEmpalmadora} className={respuestaEmpalmadora === 'Si' ? 'selected' : ''}>Si</button>
-                                    <button onClick={clickNoEmpalmadora} className={respuestaEmpalmadora === 'No' ? 'selected' : ''}>No</button>
-                                    <button onClick={clickNaEmpalmadora} className={respuestaEmpalmadora === 'N/A' ? 'selected' : ''}>N/A</button>
-                                </div>
-                                <div className='Botones'>
-                                    <div className='Titulo'>
-                                        <h5>OTDR</h5>
-                                    </div>
-                                    <button onClick={clickSiOTDR} className={respuestaOTDR === 'Si' ? 'selected' : ''}>Si</button>
-                                    <button onClick={clickNoOTDR} className={respuestaOTDR === 'No' ? 'selected' : ''}>No</button>
-                                    <button onClick={clickNaOTDR} className={respuestaOTDR === 'N/A' ? 'selected' : ''}>N/A</button>
-                                </div>
-                                <div className='Botones'>
-                                    <div className='Titulo'>
-                                        <h5>Cortadora</h5>
-                                    </div>
-                                    <button onClick={clickSiCortadora} className={respuestaCortadora === 'Si' ? 'selected' : ''}>Si</button>
-                                    <button onClick={clickNoCortadora} className={respuestaCortadora === 'No' ? 'selected' : ''}>No</button>
-                                    <button onClick={clickNaCortadora} className={respuestaCortadora === 'N/A' ? 'selected' : ''}>N/A</button>
-                                </div>
-                                <div className='Botones'>
-                                    <div className='Titulo'>
-                                        <h5>Pinza de Trafico</h5>
-                                    </div>
-                                    <button onClick={clickSiPinza} className={respuestaPinza === 'Si' ? 'selected' : ''}>Si</button>
-                                    <button onClick={clickNoPinza} className={respuestaPinza === 'No' ? 'selected' : ''}>No</button>
-                                    <button onClick={clickNaPinza} className={respuestaPinza === 'N/A' ? 'selected' : ''}>N/A</button>
-                                </div>
-                                <div className='Botones'>
-                                    <div className='Titulo'>
-                                        <h5>OPM</h5>
-                                    </div>
-                                    <button onClick={clickSiOPM} className={respuestaOPM === 'Si' ? 'selected' : ''}>Si</button>
-                                    <button onClick={clickNoOPM} className={respuestaOPM === 'No' ? 'selected' : ''}>No</button>
-                                    <button onClick={clickNaOPM} className={respuestaOPM === 'N/A' ? 'selected' : ''}>N/A</button>
-                                </div>
-                                <div className='Botones'>
-                                    <div className='Titulo'>
-                                        <h5>ONEXPERT</h5>
-                                    </div>
-                                    <button onClick={clickSiONEXPERT} className={respuestaONEXPERT === 'Si' ? 'selected' : ''}>Si</button>
-                                    <button onClick={clickNoONEXPERT} className={respuestaONEXPERT === 'No' ? 'selected' : ''}>No</button>
-                                    <button onClick={clickNaONEXPERT} className={respuestaONEXPERT === 'N/A' ? 'selected' : ''}>N/A</button>
-                                </div>
-                                <div className='Botones'>
-                                    <div className='Titulo'>
-                                        <h5>Medidor de Conductancia</h5>
-                                    </div>
-                                    <button onClick={clickSiMedidorConductancia} className={respuestaMedidorConductancia === 'Si' ? 'selected' : ''}>Si</button>
-                                    <button onClick={clickNoMedidorConductancia} className={respuestaMedidorConductancia === 'No' ? 'selected' : ''}>No</button>
-                                    <button onClick={clickNaMedidorConductancia} className={respuestaMedidorConductancia === 'N/A' ? 'selected' : ''}>N/A</button>
-                                </div>
-                                <div className='Botones'>
-                                    <div className='Titulo'>
-                                        <h5>Medidor de Fugas</h5>
-                                    </div>
-                                    <button onClick={clickSiMedidorFugas} className={respuestaMedidorFugas === 'Si' ? 'selected' : ''}>Si</button>
-                                    <button onClick={clickNoMedidorFugas} className={respuestaMedidorFugas === 'No' ? 'selected' : ''}>No</button>
-                                    <button onClick={clickNaMedidorFugas} className={respuestaMedidorFugas === 'N/A' ? 'selected' : ''}>N/A</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div className='Observacion'>
-                            <i className="fas fa-comment"></i>
-                            <textarea type="text" placeholder="8. Observacion" value={observacion} onChange={(e) => setObservacion(e.target.value)} rows={1}/>
-                        </div>
-                        <div className='Foto'>
-                            <i className="fas fa-camera"></i>
-                            <input 
-                                type="file" 
-                                accept="image/*" 
-                                capture="environment" 
-                                onChange={clickCapture}
-                                style={{ display: 'none' }}
-                                id="fotoInput"
+                    {enviando ? (
+                        <div id="CargandoPagina">
+                            <ThreeDots
+                                type="ThreeDots"
+                                color="#0B1A46"
+                                height={200}
+                                width={200}
                             />
-                            <label htmlFor="fotoInput" className="foto-label">
-                                {foto ? foto.name : '9. Tomar foto de  la cuadrilla'}
-                            </label>
+                            <p>... Enviando Datos ...</p>
                         </div>
-                        <div className='Ubicacion'>
-                            <div className='Contenedor'>
-                                <i className="fas fa-map-marker-alt"></i>
-                                <span>Ubicación del Usuario</span>
+                    ) : (
+                        <form className='Formulario'>
+                            <div className='Titulo'>
+                                <h3>Actividad</h3>
                             </div>
-                            {error ? ( 
-                                <p>Error: {error}</p>
-                            ) : (
-                                <div id="map" style={{ width: '100%', height: '270px' }}></div>
-                            )}
-                        </div>
-                        <div className='Enviar' onClick={enviarFormulario}>
-                            <button type="submit" id='Enviar' className="btn btn-primary">Enviar</button>
-                        </div>
-                    </form>
+                            <div className='Fecha'>
+                                <i className="fas fa-calendar-alt"></i>
+                                <div className='Entrada'>
+                                    <h5>Fecha:</h5>
+                                    <span>{fecha.toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
+                                </div>
+                            </div>
+                            <div className='Supervisor'>
+                                <i className="fas fa-user-cog"></i>
+                                <div className="Entrada">
+                                    <h5>Supervisor:</h5>
+                                    {nombreUsuario === 'Nombre' || nombreUsuario === 'Usuario no encontrado' || !nombreUsuario ? (
+                                        <input type="text" placeholder="Cedula" value={cedulaUsuario} onChange={estadoCambioCedulaUsuario}/>
+                                    ) : null }
+                                    <input type="text" placeholder={!nombreUsuario ? "Nombre" : nombreUsuario} disabled={true} />
+                                </div>
+                            </div>
+                            <div className='Placa'>
+                                <i className="fas fa-id-card"></i>
+                                <div className='Entrada'>
+                                    <h5>Ingrese la placa de la movil:</h5>
+                                    <input 
+                                        type="text" 
+                                        placeholder="Placa movil (Ejemplo: ABC123, ABC12A)" 
+                                        value={placa} 
+                                        onChange={(e) => {
+                                            const newValue = e.target.value.toUpperCase(); // Convertir a mayúsculas automáticamente
+                                            if (/^[A-Z]{0,3}[0-9]{0,2}[0-9A-Z]{0,1}$/.test(newValue)) {
+                                                setPlaca(newValue); // Solo actualizar el estado si el nuevo valor coincide con el patrón
+                                            }
+                                        }}
+                                        pattern="[A-Za-z]{3}[0-9]{2}[0-9A-Za-z]{1}"
+                                        maxLength={6} // Limitar la longitud máxima a 6 caracteres
+                                        title="Debe ser en formato de 3 letras seguidas de 3 números (Ejemplo: ABC123)"
+                                    />
+                                </div>
+                            </div>
+                            <div className='LiderCuadrilla'>
+                                <i className="fas fa-users-cog"></i>
+                                <div className='Entrada'>
+                                    <h5>Ingrese el lider de la cuadrilla:</h5>
+                                    <input type="text" placeholder="Cedula" value={cedula} onChange={estadoCambioCedula}/>
+                                    <input type="text" placeholder="Nombre" value={nombreCuadrilla} disabled={true} />
+                                </div>
+                            </div>
+                            <div className='OT'>
+                                <i className="fas fa-tools"></i>
+                                <div className='Entrada'>
+                                    <h5>Ingrese la OT / UUID:</h5>
+                                    <input type="text" placeholder="OT / UUID" value={ot} onChange={(e) => setOt(e.target.value)}/>
+                                </div>
+                            </div>
+                            <div className='EPP'>
+                                <i className="fas fa-bullhorn"></i>
+                                <div className='Entrada'>
+                                    <h5>1. ¿Tienen todos los EPP?</h5>
+                                    <div className='Botones'>
+                                        <button onClick={clickSiEPP} className={respuestaEPP === 'si' ? 'selected' : ''}>Sí</button>
+                                        <button onClick={clickNoEPP} className={respuestaEPP === 'no' ? 'selected' : ''}>No</button>
+                                        <div className="Comentario">
+                                            <input type="text" placeholder={respuestaEPP === 'si' ? "" : "¿Por qué?"} value={comentarioEPP}
+                                                onChange={(e) => setComentarioEPP(e.target.value)} disabled={respuestaEPP !== 'no'} />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className='Alturas'>
+                                <i className="fas fa-bullhorn"></i>
+                                <div className='Entrada'>
+                                    <h5>2. ¿Todos estan certificados en alturas?</h5>
+                                    <div className='Botones'>
+                                        <button onClick={clickSiAlturas} className={respuestaAlturas === 'si' ? 'selected' : ''}>Sí</button>
+                                        <button onClick={clickNoAlturas} className={respuestaAlturas === 'no' ? 'selected' : ''}>No</button>
+                                        <div className="Comentario">
+                                            <input type="text" placeholder={respuestaAlturas === 'si' ? "" : "¿Por qué?"} value={comentarioAlturas}
+                                                onChange={(e) => setComentarioAlturas(e.target.value)} disabled={respuestaAlturas !== 'no'} />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className='ATS'>
+                                <i className="fas fa-bullhorn"></i>
+                                <div className='Entrada'>
+                                    <h5>3. ¿Se diligencio el ATS?</h5>
+                                    <div className='Botones'>
+                                        <button onClick={clickSiATS} className={respuestaATS === 'si' ? 'selected' : ''}>Sí</button>
+                                        <button onClick={clickNoATS} className={respuestaATS === 'no' ? 'selected' : ''}>No</button>
+                                        <div className="Comentario">
+                                            <input type="text" placeholder={respuestaATS === 'si' ? "" : "¿Por qué?"} value={comentarioATS}
+                                                onChange={(e) => setComentarioATS(e.target.value)} disabled={respuestaATS !== 'no'} />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className='Empalmes'>
+                                <i className="fas fa-bullhorn"></i>
+                                <div className='Entrada'>
+                                    <h5>4. ¿Se realizo reporte de empalmes en WFM?</h5>
+                                    <div className='Botones'>
+                                        <button onClick={clickSiEmpalmes} className={respuestaEmpalmes === 'si' ? 'selected' : ''}>Sí</button>
+                                        <button onClick={clickNoEmpalmes} className={respuestaEmpalmes === 'no' ? 'selected' : ''}>No</button>
+                                        <div className="Comentario">
+                                            <input type="text" placeholder={respuestaEmpalmes === 'si' ? "¿Cuantos?" : "¿Por qué?"} value={comentarioEmpalmes}
+                                                onChange={(e) => setComentarioEmpalmes(e.target.value)} />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className='Preoperacional'>
+                                <i className="fas fa-bullhorn"></i>
+                                <div className='Entrada'>
+                                    <h5>5. ¿Se realizo preoperacional?</h5>
+                                    <div className='Botones'>
+                                        <button onClick={clickSiPreoperacional} className={respuestaPreoperacional === 'si' ? 'selected' : ''}>Sí</button>
+                                        <button onClick={clickNoPreoperacional} className={respuestaPreoperacional === 'no' ? 'selected' : ''}>No</button>
+                                        <div className="Comentario">
+                                            <input type="text" placeholder={respuestaPreoperacional === 'si' ? "" : "¿Por qué?"} value={comentarioPreoperacional}
+                                                onChange={(e) => setComentarioPreoperacional(e.target.value)} disabled={respuestaPreoperacional !== 'no'} />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className='Vehiculo'>
+                                <i className="fas fa-bullhorn"></i>
+                                <div className='Entrada'>
+                                    <h5>6. Estado del vehiculo:</h5>
+                                    <div className='Botones'>
+                                        <button onClick={click1Vehiculo} className={respuestaVehiculo === '1' ? 'selected' : ''}>1</button>
+                                        <button onClick={click2Vehiculo} className={respuestaVehiculo === '2' ? 'selected' : ''}>2</button>
+                                        <button onClick={click3Vehiculo} className={respuestaVehiculo === '3' ? 'selected' : ''}>3</button>
+                                        <button onClick={click4Vehiculo} className={respuestaVehiculo === '4' ? 'selected' : ''}>4</button>
+                                        <button onClick={click5Vehiculo} className={respuestaVehiculo === '5' ? 'selected' : ''}>5</button>
+                                    </div>
+                                    <div className="Comentario">
+                                        <input type="text" placeholder={respuestaVehiculo === '5' ? "" : "¿Por qué?"} value={comentarioVehiculo}
+                                            onChange={(e) => setComentarioVehiculo(e.target.value)} disabled={respuestaVehiculo === '5'} />
+                                    </div>
+                                </div>
+                            </div>
+                            <div className='Equipos'>
+                                <i className="fas fa-bullhorn"></i>
+                                <div className='Entrada'>
+                                    <h5>7. Equipos especializados:</h5>
+                                    <div className='Botones'>
+                                        <div className='Titulo'>
+                                            <h5>Empalmadora</h5>
+                                        </div>
+                                        <button onClick={clickSiEmpalmadora} className={respuestaEmpalmadora === 'Si' ? 'selected' : ''}>Si</button>
+                                        <button onClick={clickNoEmpalmadora} className={respuestaEmpalmadora === 'No' ? 'selected' : ''}>No</button>
+                                        <button onClick={clickNaEmpalmadora} className={respuestaEmpalmadora === 'N/A' ? 'selected' : ''}>N/A</button>
+                                    </div>
+                                    <div className='Botones'>
+                                        <div className='Titulo'>
+                                            <h5>OTDR</h5>
+                                        </div>
+                                        <button onClick={clickSiOTDR} className={respuestaOTDR === 'Si' ? 'selected' : ''}>Si</button>
+                                        <button onClick={clickNoOTDR} className={respuestaOTDR === 'No' ? 'selected' : ''}>No</button>
+                                        <button onClick={clickNaOTDR} className={respuestaOTDR === 'N/A' ? 'selected' : ''}>N/A</button>
+                                    </div>
+                                    <div className='Botones'>
+                                        <div className='Titulo'>
+                                            <h5>Cortadora</h5>
+                                        </div>
+                                        <button onClick={clickSiCortadora} className={respuestaCortadora === 'Si' ? 'selected' : ''}>Si</button>
+                                        <button onClick={clickNoCortadora} className={respuestaCortadora === 'No' ? 'selected' : ''}>No</button>
+                                        <button onClick={clickNaCortadora} className={respuestaCortadora === 'N/A' ? 'selected' : ''}>N/A</button>
+                                    </div>
+                                    <div className='Botones'>
+                                        <div className='Titulo'>
+                                            <h5>Pinza de Trafico</h5>
+                                        </div>
+                                        <button onClick={clickSiPinza} className={respuestaPinza === 'Si' ? 'selected' : ''}>Si</button>
+                                        <button onClick={clickNoPinza} className={respuestaPinza === 'No' ? 'selected' : ''}>No</button>
+                                        <button onClick={clickNaPinza} className={respuestaPinza === 'N/A' ? 'selected' : ''}>N/A</button>
+                                    </div>
+                                    <div className='Botones'>
+                                        <div className='Titulo'>
+                                            <h5>OPM</h5>
+                                        </div>
+                                        <button onClick={clickSiOPM} className={respuestaOPM === 'Si' ? 'selected' : ''}>Si</button>
+                                        <button onClick={clickNoOPM} className={respuestaOPM === 'No' ? 'selected' : ''}>No</button>
+                                        <button onClick={clickNaOPM} className={respuestaOPM === 'N/A' ? 'selected' : ''}>N/A</button>
+                                    </div>
+                                    <div className='Botones'>
+                                        <div className='Titulo'>
+                                            <h5>ONEXPERT</h5>
+                                        </div>
+                                        <button onClick={clickSiONEXPERT} className={respuestaONEXPERT === 'Si' ? 'selected' : ''}>Si</button>
+                                        <button onClick={clickNoONEXPERT} className={respuestaONEXPERT === 'No' ? 'selected' : ''}>No</button>
+                                        <button onClick={clickNaONEXPERT} className={respuestaONEXPERT === 'N/A' ? 'selected' : ''}>N/A</button>
+                                    </div>
+                                    <div className='Botones'>
+                                        <div className='Titulo'>
+                                            <h5>Medidor de Conductancia</h5>
+                                        </div>
+                                        <button onClick={clickSiMedidorConductancia} className={respuestaMedidorConductancia === 'Si' ? 'selected' : ''}>Si</button>
+                                        <button onClick={clickNoMedidorConductancia} className={respuestaMedidorConductancia === 'No' ? 'selected' : ''}>No</button>
+                                        <button onClick={clickNaMedidorConductancia} className={respuestaMedidorConductancia === 'N/A' ? 'selected' : ''}>N/A</button>
+                                    </div>
+                                    <div className='Botones'>
+                                        <div className='Titulo'>
+                                            <h5>Medidor de Fugas</h5>
+                                        </div>
+                                        <button onClick={clickSiMedidorFugas} className={respuestaMedidorFugas === 'Si' ? 'selected' : ''}>Si</button>
+                                        <button onClick={clickNoMedidorFugas} className={respuestaMedidorFugas === 'No' ? 'selected' : ''}>No</button>
+                                        <button onClick={clickNaMedidorFugas} className={respuestaMedidorFugas === 'N/A' ? 'selected' : ''}>N/A</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className='Observacion'>
+                                <i className="fas fa-comment"></i>
+                                <textarea type="text" placeholder="8. Observacion" value={observacion} onChange={(e) => setObservacion(e.target.value)} rows={1}/>
+                            </div>
+                            <div className='Foto'>
+                                <i className="fas fa-camera"></i>
+                                <input 
+                                    type="file" 
+                                    accept="image/*" 
+                                    capture="environment" 
+                                    onChange={clickCapture}
+                                    style={{ display: 'none' }}
+                                    id="fotoInput"
+                                />
+                                <label htmlFor="fotoInput" className="foto-label">
+                                    {foto ? foto.name : '9. Tomar foto de  la cuadrilla'}
+                                </label>
+                            </div>
+                            <div className='Ubicacion'>
+                                <div className='Contenedor'>
+                                    <i className="fas fa-map-marker-alt"></i>
+                                    <span>Ubicación del Usuario</span>
+                                </div>
+                                {error ? ( 
+                                    <p>Error: {error}</p>
+                                ) : (
+                                    <div id="map" style={{ width: '100%', height: '270px' }}></div>
+                                )}
+                            </div>
+                            <div className='Enviar' onClick={enviarFormulario}>
+                                <button type="submit" id='Enviar' className="btn btn-primary">Enviar</button>
+                            </div>
+                        </form>
+                    )}            
                     <div className='Notificaciones'>
                         <ToastContainer />
                     </div>

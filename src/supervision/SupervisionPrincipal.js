@@ -4,7 +4,7 @@ import './SupervisionPrincipal.css'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, LabelList } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, LabelList, ResponsiveContainer } from 'recharts';
 import L from 'leaflet';
 import { ThreeDots } from 'react-loader-spinner';
 
@@ -15,6 +15,7 @@ const SupervisionPrincipal = () => {
     const mapRef = useRef(null);
     const [graficaRegistrosSupervisionDia, setGraficaRegistrosSupervisionDia] = useState({});
     const [graficaRegistrosSupervisionCadaUno, setGraficaRegistrosSupervisionCadaUno] = useState({});
+    const [graficaRegistrosOrdenadosPorPlaca, setGraficaRegistrosOrdenadosPorPlaca] = useState({});
     const [fechaSeleccionada, setFechaSeleccionada] = useState('Todo');
     const [supervisorSeleccionado, setSupervisorSeleccionado] = useState('Todo');
     const [placaSeleccionada, setPlacaSeleccionada] = useState('Todo');
@@ -22,8 +23,7 @@ const SupervisionPrincipal = () => {
     const [listaFecha, setListaFecha] = useState([]);
     const [listaSupervisor, setListaSupervisor] = useState([]);
     const [listaPlaca, setListaPlaca] = useState([]);
-    const [loading, setLoading] = useState(false);
-
+    const [loading, setLoading] = useState(false); 
 
     const Agregar = async (event) => {
         navigate('/SupervisionAgregar', { state: { role:role, nombre:nombre, estadoNotificacion:false } });
@@ -66,12 +66,15 @@ const SupervisionPrincipal = () => {
                 
                 // Convertir objeto a array y ordenar por fecha
                 const registrosPorDia2 = Object.entries(registrosPorDia)
-                    .map(([fecha, registros]) => ({
-                        name: fecha,
-                        registros: registros
-                    }))
-                    .sort((a, b) => new Date(a.name) - new Date(b.name)); // Ordenar por fecha
-
+                    .map(([fecha, registros]) => {
+                        const date = new Date(fecha);
+                        return {
+                            name: date.getUTCDate(),  // Extraer el día sin modificar la fecha por la zona horaria
+                            registros: registros
+                        };
+                    })
+                    .sort((a, b) => a.name - b.name);  // Ordenar por día numérico
+                
                 setGraficaRegistrosSupervisionDia(registrosPorDia2);
 
                 const registrosPorCadaUno = dataFiltrada.reduce((acc, item) => {
@@ -89,10 +92,29 @@ const SupervisionPrincipal = () => {
 
                 setGraficaRegistrosSupervisionCadaUno(registrosPorCadaUno2)
 
+                const registrosPorPlaca = dataFiltrada.reduce((acc, item) => {
+                    // Formatear la fecha en formato YYYY-MM-DD
+                    const placa = item.placa;
+                
+                    if (!acc[placa]) {
+                        acc[placa] = 0;
+                    }
+                    acc[placa]++;
+                    return acc;
+                }, {});
+
+                const registrosOrdenadosPorPlaca = Object.entries(registrosPorPlaca)
+                    .sort(([, a], [, b]) => b - a)  // Ordenar por el valor (cantidad)
+                    .map(([placa, cantidad]) => ({ placa, cantidad }));  // Convertir de nuevo a objetos
+
+                setGraficaRegistrosOrdenadosPorPlaca(registrosOrdenadosPorPlaca)
+
                 const registrosTotal = dataFiltrada.length;
 
                 setCantidadAcompañamientos(registrosTotal)
                 setLoading(false);
+
+
 
                 const uniqueDia = new Set();
                 uniqueDia.add("Todo");
@@ -122,7 +144,6 @@ const SupervisionPrincipal = () => {
                     return a.localeCompare(b); // Comparar de forma ascendente
                 });
                 setListaSupervisor(listaSupervisorOrdenada);
-                
 
                 const uniquePlaca = new Set();
                 uniquePlaca.add("Todo");
@@ -359,28 +380,30 @@ const SupervisionPrincipal = () => {
                                 </div>
                                 <div id="map" className='Mapa'></div>
                             </div>
-                        </div>
-                        <div className='RenderizarGraficos'>
                             <div className='BarraFecha'>
                                 <div className='TituloBarraFecha'>
                                     <i className="fas fa-chart-bar"></i>
                                     <span>Acompañamientos por dia</span>
                                 </div>
-                                <BarChart
-                                    width={280}
-                                    height={200}
-                                    margin={0}
-                                    data={graficaRegistrosSupervisionDia}
-                                >
-                                    <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis dataKey="name" />
-                                    <YAxis domain={[dataMin => dataMin - 1, dataMax => dataMax + 5]} />
-                                    <Tooltip />
-                                    <Bar dataKey="registros" fill="#8884d8">
-                                        <LabelList dataKey="registros" position="top" />
-                                    </Bar>
-                                </BarChart>
+                                <div className='GraficaFecha'>
+                                    <ResponsiveContainer width="100%" height="100%">
+                                        <BarChart
+                                            margin={0}
+                                            data={graficaRegistrosSupervisionDia}
+                                        >
+                                            <CartesianGrid strokeDasharray="3 3" />
+                                            <XAxis dataKey="name" />
+                                            <YAxis domain={[dataMin => dataMin - 1, dataMax => dataMax + 5]} />
+                                            <Tooltip />
+                                            <Bar dataKey="registros" fill="#8884d8">
+                                                <LabelList dataKey="registros" position="top" />
+                                            </Bar>
+                                        </BarChart>
+                                    </ResponsiveContainer>
+                                </div>
                             </div>
+                        </div>
+                        <div className='RenderizarGraficos'>
                             <div className='BarraSupervision'>
                                 <div className='TituloBarraSupervision'>
                                     <i className="fas fa-chart-bar"></i>
@@ -404,6 +427,32 @@ const SupervisionPrincipal = () => {
                                     <Tooltip />
                                     <Bar dataKey="registros" fill="#8884d8">
                                         <LabelList dataKey="registros" position="right" />
+                                    </Bar>
+                                </BarChart>
+                            </div>
+                            <div className='BarraSupervision'>
+                                <div className='TituloBarraSupervision'>
+                                    <i className="fas fa-chart-bar"></i>
+                                    <span>Acompañamientos por placa</span>
+                                </div>
+                                <BarChart
+                                    width={310}
+                                    height={600}
+                                    data={graficaRegistrosOrdenadosPorPlaca}
+                                    layout="vertical"
+                                    >
+                                    <YAxis dataKey="placa" type="category" width={100}/>
+                                    <XAxis
+                                        type="number" // Cambiado a tipo number para ajustar dinámicamente
+                                        domain={[dataMin => dataMin - 1, dataMax => dataMax + 5]}
+                                        tick={false} // Oculta los ticks del eje X
+                                        axisLine={false} // Oculta la línea del eje X
+                                        tickLine={false} // Oculta las líneas de los ticks
+                                        interval={0} // Muestra todos los ticks
+                                    />
+                                    <Tooltip />
+                                    <Bar dataKey="cantidad" fill="#8884d8">
+                                        <LabelList dataKey="cantidad" position="right" />
                                     </Bar>
                                 </BarChart>
                             </div>
