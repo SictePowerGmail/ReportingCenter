@@ -4,7 +4,7 @@ import './SupervisionPrincipal.css'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, LabelList, ResponsiveContainer } from 'recharts';
+import { Legend, PieChart, Pie, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, LabelList, ResponsiveContainer } from 'recharts';
 import L from 'leaflet';
 import { ThreeDots } from 'react-loader-spinner';
 
@@ -13,14 +13,41 @@ const SupervisionPrincipal = () => {
     const location = useLocation();
     const { role, nombre, estadoNotificacion } = location.state || {};
     const mapRef = useRef(null);
+    const [registrosSupervision, setRegistrosSupervision] = useState({});
     const [graficaRegistrosSupervisionDia, setGraficaRegistrosSupervisionDia] = useState({});
     const [graficaRegistrosSupervisionCadaUno, setGraficaRegistrosSupervisionCadaUno] = useState({});
     const [graficaRegistrosOrdenadosPorPlaca, setGraficaRegistrosOrdenadosPorPlaca] = useState({});
+    const [graficaRegistrosOrdenadosPorEpp, setGraficaRegistrosOrdenadosPorEPP] = useState({});
+    const [registrosOrdenadosPorEppNo, setRegistrosOrdenadosPorEppNo] = useState({});
+    const [graficaRegistrosOrdenadosPorAlturas, setGraficaRegistrosOrdenadosPorAlturas] = useState({});
+    const [registrosOrdenadosPorAlturasNo, setRegistrosOrdenadosPorAlturasNo] = useState({});
+    const [graficaRegistrosOrdenadosPorATS, setGraficaRegistrosOrdenadosPorATS] = useState({});
+    const [registrosOrdenadosPorATSNo, setRegistrosOrdenadosPorATSNo] = useState({});
+    const [graficaRegistrosOrdenadosPorEmpalmes, setGraficaRegistrosOrdenadosPorEmpalmes] = useState({});
+    const [registrosOrdenadosPorEmpalmesNo, setRegistrosOrdenadosPorEmpalmesNo] = useState({});
+    const [registrosOrdenadosPorEmpalmesSi, setRegistrosOrdenadosPorEmpalmesSi] = useState({});
+    const [graficaRegistrosOrdenadosPorPreoperacional, setGraficaRegistrosOrdenadosPorPreoperacional] = useState({});
+    const [registrosOrdenadosPorPreoperacionalNo, setRegistrosOrdenadosPorPreoperacionalNo] = useState({});
+    const [graficaRegistrosOrdenadosPorVehiculo, setGraficaRegistrosOrdenadosPorVehiculo] = useState({});
+    const [registrosOrdenadosPorVehiculoNo, setRegistrosOrdenadosPorVehiculoNo] = useState({});
+    const [graficaRegistrosOrdenadosPorEquipos, setGraficaRegistrosOrdenadosPorEquipos] = useState({});
     const [fechaSeleccionada, setFechaSeleccionada] = useState('Todo');
+    const [añoSeleccionada, setAñoSeleccionada] = useState(() => {
+        const añoActual = new Date().getFullYear();
+        return añoActual.toString();
+    });
+    const [mesSeleccionada, setMesSeleccionada] = useState(() => {
+        const mesActual = new Date().getMonth() + 1;
+        return mesActual.toString().padStart(2, '0'); // Para asegurarte que siempre sea de dos dígitos, como '01' para enero
+    });
+    const [diaSeleccionada, setDiaSeleccionada] = useState('Todo');
     const [supervisorSeleccionado, setSupervisorSeleccionado] = useState('Todo');
     const [placaSeleccionada, setPlacaSeleccionada] = useState('Todo');
     const [cantidadAcompañamientos, setCantidadAcompañamientos] = useState('0');
     const [listaFecha, setListaFecha] = useState([]);
+    const [listaAño, setListaAño] = useState([]);
+    const [listaMes, setListaMes] = useState([]);
+    const [listaDia, setListaDia] = useState([]);
     const [listaSupervisor, setListaSupervisor] = useState([]);
     const [listaPlaca, setListaPlaca] = useState([]);
     const [loading, setLoading] = useState(false); 
@@ -47,10 +74,33 @@ const SupervisionPrincipal = () => {
                         return itemFecha === fechaSeleccionada;
                     });
                 }
-        
+
+                if (añoSeleccionada !== 'Todo') {
+                    dataFiltrada = dataFiltrada.filter(item => {
+                        const [yearItem, monthItem, dayItem] = item.fecha.split(' ')[0].split('-'); // Descomponer la fecha del item
+                        return yearItem === añoSeleccionada; // Comparar año, mes y día
+                    });
+                }
+
+                if (mesSeleccionada !== 'Todo') {
+                    dataFiltrada = dataFiltrada.filter(item => {
+                        const [yearItem, monthItem, dayItem] = item.fecha.split(' ')[0].split('-'); // Descomponer la fecha del item
+                        return monthItem === mesSeleccionada; // Comparar año, mes y día
+                    });
+                }
+
+                if (diaSeleccionada !== 'Todo') {
+                    dataFiltrada = dataFiltrada.filter(item => {
+                        const [yearItem, monthItem, dayItem] = item.fecha.split(' ')[0].split('-'); // Descomponer la fecha del item
+                        return dayItem === diaSeleccionada; // Comparar año, mes y día
+                    });
+                }
+
                 if (placaSeleccionada !== 'Todo') {
                     dataFiltrada = dataFiltrada.filter(item => item.placa === placaSeleccionada);
                 }
+
+                setRegistrosSupervision(dataFiltrada);
 
                 const registrosPorDia = dataFiltrada.reduce((acc, item) => {
                     // Formatear la fecha en formato YYYY-MM-DD
@@ -114,24 +164,252 @@ const SupervisionPrincipal = () => {
                 setCantidadAcompañamientos(registrosTotal)
                 setLoading(false);
 
+                const registrosPorEPP = dataFiltrada.reduce((acc, item) => {
+                    // Formatear la fecha en formato YYYY-MM-DD
+                    const epp = item.epp;
+                
+                    if (!acc[epp]) {
+                        acc[epp] = 0;
+                    }
+                    acc[epp]++;
+                    return acc;
+                }, {});
+
+                const registrosOrdenadosPorEPP = Object.entries(registrosPorEPP).map(([key, value]) => ({
+                    name: key.charAt(0).toUpperCase() + key.slice(1),  // Capitaliza 'si' y 'no'
+                    value: value
+                }));
+
+                setGraficaRegistrosOrdenadosPorEPP(registrosOrdenadosPorEPP)
+
+                const datosFiltradosPorEppNo = dataFiltrada.filter(item => item.epp === 'no');
+
+                setRegistrosOrdenadosPorEppNo(datosFiltradosPorEppNo);
+
+                const registrosPorAlturas = dataFiltrada.reduce((acc, item) => {
+                    // Formatear la fecha en formato YYYY-MM-DD
+                    const alturas = item.alturas;
+                
+                    if (!acc[alturas]) {
+                        acc[alturas] = 0;
+                    }
+                    acc[alturas]++;
+                    return acc;
+                }, {});
+
+                const registrosOrdenadosPorAlturas = Object.entries(registrosPorAlturas).map(([key, value]) => ({
+                    name: key.charAt(0).toUpperCase() + key.slice(1),  // Capitaliza 'si' y 'no'
+                    value: value
+                }));
+
+                setGraficaRegistrosOrdenadosPorAlturas(registrosOrdenadosPorAlturas)
+
+                const datosFiltradosPorAlturasNo = dataFiltrada.filter(item => item.alturas === 'no');
+
+                setRegistrosOrdenadosPorAlturasNo(datosFiltradosPorAlturasNo);
+
+                const registrosPorATS = dataFiltrada.reduce((acc, item) => {
+                    // Formatear la fecha en formato YYYY-MM-DD
+                    const ats = item.ats;
+                
+                    if (!acc[ats]) {
+                        acc[ats] = 0;
+                    }
+                    acc[ats]++;
+                    return acc;
+                }, {});
+
+                const registrosOrdenadosPorATS = Object.entries(registrosPorATS).map(([key, value]) => ({
+                    name: key.charAt(0).toUpperCase() + key.slice(1),  // Capitaliza 'si' y 'no'
+                    value: value
+                }));
+
+                setGraficaRegistrosOrdenadosPorATS(registrosOrdenadosPorATS)
+
+                const datosFiltradosPorATSNo = dataFiltrada.filter(item => item.ats === 'no');
+
+                setRegistrosOrdenadosPorATSNo(datosFiltradosPorATSNo);
+
+                const registrosPorEmpalmes = dataFiltrada.reduce((acc, item) => {
+                    // Formatear la fecha en formato YYYY-MM-DD
+                    const empalmes = item.empalmes;
+                
+                    if (!acc[empalmes]) {
+                        acc[empalmes] = 0;
+                    }
+                    acc[empalmes]++;
+                    return acc;
+                }, {});
+
+                const registrosOrdenadosPorEmpalmes = Object.entries(registrosPorEmpalmes).map(([key, value]) => ({
+                    name: key.charAt(0).toUpperCase() + key.slice(1),  // Capitaliza 'si' y 'no'
+                    value: value
+                }));
+
+                setGraficaRegistrosOrdenadosPorEmpalmes(registrosOrdenadosPorEmpalmes)
+
+                const datosFiltradosPorEmpalmesNo = dataFiltrada.filter(item => item.empalmes === 'no');
+
+                setRegistrosOrdenadosPorEmpalmesNo(datosFiltradosPorEmpalmesNo);
+
+                const datosFiltradosPorEmpalmesSi = dataFiltrada.filter(item => item.empalmes === 'si');
+
+                setRegistrosOrdenadosPorEmpalmesSi(datosFiltradosPorEmpalmesSi);
+
+                const registrosPorPreoperacional = dataFiltrada.reduce((acc, item) => {
+                    // Formatear la fecha en formato YYYY-MM-DD
+                    const preoperacional = item.preoperacional;
+                
+                    if (!acc[preoperacional]) {
+                        acc[preoperacional] = 0;
+                    }
+                    acc[preoperacional]++;
+                    return acc;
+                }, {});
+
+                const registrosOrdenadosPorPreoperacional = Object.entries(registrosPorPreoperacional).map(([key, value]) => ({
+                    name: key.charAt(0).toUpperCase() + key.slice(1),  // Capitaliza 'si' y 'no'
+                    value: value
+                }));
+
+                setGraficaRegistrosOrdenadosPorPreoperacional(registrosOrdenadosPorPreoperacional)
+
+                const datosFiltradosPorPreoperacionalNo = dataFiltrada.filter(item => item.preoperacional === 'no');
+
+                setRegistrosOrdenadosPorPreoperacionalNo(datosFiltradosPorPreoperacionalNo);
+
+                const registrosPorVehiculo = dataFiltrada.reduce((acc, item) => {
+                    // Formatear la fecha en formato YYYY-MM-DD
+                    const vehiculo = item.vehiculo;
+                
+                    if (!acc[vehiculo]) {
+                        acc[vehiculo] = 0;
+                    }
+                    acc[vehiculo]++;
+                    return acc;
+                }, {});
+
+                const registrosOrdenadosPorVehiculo = Object.entries(registrosPorVehiculo).map(([key, value]) => ({
+                    name: key.charAt(0).toUpperCase() + key.slice(1),  // Capitaliza 'si' y 'no'
+                    value: value
+                }));
+
+                setGraficaRegistrosOrdenadosPorVehiculo(registrosOrdenadosPorVehiculo)
+
+                const datosFiltradosPorVehiculoNo = dataFiltrada.filter(item => item.vehiculo !== '5');
+
+                setRegistrosOrdenadosPorVehiculoNo(datosFiltradosPorVehiculoNo);
+
+                const equipos = dataFiltrada.map(item => ({
+                    empalmadora: item.empalmadora,
+                    otdr: item.otdr,
+                    cortadora: item.cortadora,
+                    pinza: item.pinza,
+                    opm: item.opm,
+                    onexpert: item.onexpert,
+                    medidorConductancia: item.medidorConductancia,
+                    medidorFugas: item.medidorFugas
+                }));
+
+                const respuestasAgrupadasEquipos  = [
+                    {
+                      name: 'Empalmadora',
+                      si: equipos.filter(item => item.empalmadora === 'Si').length,
+                      no: equipos.filter(item => item.empalmadora === 'No').length,
+                      na: equipos.filter(item => item.empalmadora === 'N/A').length,
+                    },
+                    {
+                      name: 'OTDR',
+                      si: equipos.filter(item => item.otdr === 'Si').length,
+                      no: equipos.filter(item => item.otdr === 'No').length,
+                      na: equipos.filter(item => item.otdr === 'N/A').length,
+                    },
+                    {
+                      name: 'Cortadora',
+                      si: equipos.filter(item => item.cortadora === 'Si').length,
+                      no: equipos.filter(item => item.cortadora === 'No').length,
+                      na: equipos.filter(item => item.cortadora === 'N/A').length,
+                    },
+                    {
+                        name: 'Pinza',
+                        si: equipos.filter(item => item.pinza === 'Si').length,
+                        no: equipos.filter(item => item.pinza === 'No').length,
+                        na: equipos.filter(item => item.pinza === 'N/A').length,
+                    },
+                    {
+                        name: 'OPM',
+                        si: equipos.filter(item => item.opm === 'Si').length,
+                        no: equipos.filter(item => item.opm === 'No').length,
+                        na: equipos.filter(item => item.opm === 'N/A').length,
+                    },
+                    {
+                        name: 'Onexpert',
+                        si: equipos.filter(item => item.onexpert === 'Si').length,
+                        no: equipos.filter(item => item.onexpert === 'No').length,
+                        na: equipos.filter(item => item.onexpert === 'N/A').length,
+                    },
+                    {
+                        name: 'Medidor de Conductancia',
+                        si: equipos.filter(item => item.medidorConductancia === 'Si').length,
+                        no: equipos.filter(item => item.medidorConductancia === 'No').length,
+                        na: equipos.filter(item => item.medidorConductancia === 'N/A').length,
+                    },
+                    {
+                        name: 'Medidor de Fugas',
+                        si: equipos.filter(item => item.medidorFugas === 'Si').length,
+                        no: equipos.filter(item => item.medidorFugas === 'No').length,
+                        na: equipos.filter(item => item.medidorFugas === 'N/A').length,
+                    }
+                ];
+
+                setGraficaRegistrosOrdenadosPorEquipos(respuestasAgrupadasEquipos);
 
 
+
+
+                const uniqueFecha = new Set();
                 const uniqueDia = new Set();
+                const uniqueMes= new Set();
+                const uniqueAño = new Set();
+                uniqueFecha.add("Todo");
                 uniqueDia.add("Todo");
+                uniqueMes.add("Todo");
+                uniqueAño.add("Todo");
                 data.forEach(item => {
                     const fechaCompleta = new Date(item.fecha); // Asumiendo que item.fecha está en formato ISO
                     const dia = fechaCompleta.getDate().toString().padStart(2, '0');
                     const mes = (fechaCompleta.getMonth() + 1).toString().padStart(2, '0'); // Meses en JavaScript son 0-indexados
                     const año = fechaCompleta.getFullYear();
                     const fechaFormateada = `${año}-${mes}-${dia}`;
-                    uniqueDia.add(fechaFormateada);
+                    uniqueFecha.add(fechaFormateada);
+                    uniqueDia.add(dia);
+                    uniqueMes.add(mes);
+                    uniqueAño.add(año);
                 });
-                const listaFechaOrdenada = Array.from(uniqueDia).sort((a, b) => {
+                const listaFechaOrdenada = Array.from(uniqueFecha).sort((a, b) => {
                     if (a === "Todo") return -1; // Mantener "Todo" en el primer lugar
                     if (b === "Todo") return 1;
                     return new Date(b) - new Date(a);
                 });
+                const listaAñoOrdenada = Array.from(uniqueAño).sort((a, b) => {
+                    if (a === "Todo") return -1; // Mantener "Todo" en el primer lugar
+                    if (b === "Todo") return 1;
+                    return a - b;
+                });
+                const listaMesOrdenada = Array.from(uniqueMes).sort((a, b) => {
+                    if (a === "Todo") return -1; // Mantener "Todo" en el primer lugar
+                    if (b === "Todo") return 1;
+                    return a - b;
+                });
+                const listaDiaOrdenada = Array.from(uniqueDia).sort((a, b) => {
+                    if (a === "Todo") return -1; // Mantener "Todo" en el primer lugar
+                    if (b === "Todo") return 1;
+                    return a - b;
+                });
                 setListaFecha(listaFechaOrdenada);
+                setListaAño(listaAñoOrdenada);
+                setListaMes(listaMesOrdenada);
+                setListaDia(listaDiaOrdenada);
 
                 const uniqueNombre = new Set();
                 uniqueNombre.add("Todo");
@@ -309,7 +587,7 @@ const SupervisionPrincipal = () => {
 
     useEffect(() => {
         cargarRegistrosSupervision();
-    }, [supervisorSeleccionado, fechaSeleccionada, placaSeleccionada]);
+    }, [fechaSeleccionada, añoSeleccionada, mesSeleccionada, diaSeleccionada, supervisorSeleccionado, placaSeleccionada]);
 
     return (
         <div className="Supervision-Principal">
@@ -329,11 +607,37 @@ const SupervisionPrincipal = () => {
                     <div className='RenderizarFiltros'>
                         <div className='SeleccionFecha'>
                             <div className='TituloFecha'>
-                                <i className="fas fa-calendar-alt"></i>
-                                <span>Fecha</span>
+                                <i className="fas fa-calendar"></i>
+                                <span>Año</span>
                             </div>
-                            <select id='Fecha-Reporte-Boton' value={fechaSeleccionada} onChange={(e) => setFechaSeleccionada(e.target.value)} className="select-box">
-                                {listaFecha.map((fecha, index) => (
+                            <select id='Fecha-Reporte-Boton' value={añoSeleccionada} onChange={(e) => setAñoSeleccionada(e.target.value)} className="select-box">
+                                {listaAño.map((fecha, index) => (
+                                    <option key={index} value={fecha}>
+                                        {fecha}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className='SeleccionFecha'>
+                            <div className='TituloFecha'>
+                                <i className="fas fa-calendar-alt"></i>
+                                <span>Mes</span>
+                            </div>
+                            <select id='Fecha-Reporte-Boton' value={mesSeleccionada} onChange={(e) => setMesSeleccionada(e.target.value)} className="select-box">
+                                {listaMes.map((fecha, index) => (
+                                    <option key={index} value={fecha}>
+                                        {fecha}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className='SeleccionFecha'>
+                            <div className='TituloFecha'>
+                                <i className="fas fa-calendar-day"></i>
+                                <span>Dia</span>
+                            </div>
+                            <select id='Fecha-Reporte-Boton' value={diaSeleccionada} onChange={(e) => setDiaSeleccionada(e.target.value)} className="select-box">
+                                {listaDia.map((fecha, index) => (
                                     <option key={index} value={fecha}>
                                         {fecha}
                                     </option>
@@ -369,93 +673,525 @@ const SupervisionPrincipal = () => {
                     </div>
                     <div className='RenderizarMapaYGraficos'>
                         <div className='RenderizarMapa'>
+                            
                             <div className='Total'>
                                 <i className="fas fa-calculator"></i>
                                 <span>Total acompañamientos: {cantidadAcompañamientos}</span>
                             </div>
-                            <div className='Ubicacion'>
-                                <div className='Contenedor'>
-                                    <i className="fas fa-map-marker-alt"></i>
-                                    <span>Ubicaciónes registradas</span>
+                            
+                            <div className='UbicacionYPlaca'>
+                                <div className='Ubicacion'>
+                                    <div className='Contenedor'>
+                                        <i className="fas fa-map-marker-alt"></i>
+                                        <span>Ubicaciónes registradas</span>
+                                    </div>
+                                    <div id="map" className='Mapa'></div>
                                 </div>
-                                <div id="map" className='Mapa'></div>
-                            </div>
-                            <div className='BarraFecha'>
-                                <div className='TituloBarraFecha'>
-                                    <i className="fas fa-chart-bar"></i>
-                                    <span>Acompañamientos por dia</span>
-                                </div>
-                                <div className='GraficaFecha'>
-                                    <ResponsiveContainer width="100%" height="100%">
-                                        <BarChart
-                                            margin={0}
-                                            data={graficaRegistrosSupervisionDia}
+                                <div className='Placa'>
+                                    <div className='TituloBarraSupervision'>
+                                        <i className="fas fa-chart-bar"></i>
+                                        <span>Acompañamientos por placa</span>
+                                    </div>
+                                    <BarChart
+                                        width={310}
+                                        height={510}
+                                        data={graficaRegistrosOrdenadosPorPlaca}
+                                        layout="vertical"
                                         >
-                                            <CartesianGrid strokeDasharray="3 3" />
-                                            <XAxis dataKey="name" />
-                                            <YAxis domain={[dataMin => dataMin - 1, dataMax => dataMax + 5]} />
-                                            <Tooltip />
-                                            <Bar dataKey="registros" fill="#8884d8">
-                                                <LabelList dataKey="registros" position="top" />
-                                            </Bar>
-                                        </BarChart>
-                                    </ResponsiveContainer>
+                                        <YAxis dataKey="placa" type="category" width={100}/>
+                                        <XAxis
+                                            type="number" // Cambiado a tipo number para ajustar dinámicamente
+                                            domain={[dataMin => dataMin - 1, dataMax => dataMax + 5]}
+                                            tick={false} // Oculta los ticks del eje X
+                                            axisLine={false} // Oculta la línea del eje X
+                                            tickLine={false} // Oculta las líneas de los ticks
+                                            interval={0} // Muestra todos los ticks
+                                        />
+                                        <Tooltip />
+                                        <Bar dataKey="cantidad" fill="#8884d8">
+                                            <LabelList dataKey="cantidad" position="right" />
+                                        </Bar>
+                                    </BarChart>
                                 </div>
                             </div>
-                        </div>
-                        <div className='RenderizarGraficos'>
-                            <div className='BarraSupervision'>
-                                <div className='TituloBarraSupervision'>
-                                    <i className="fas fa-chart-bar"></i>
-                                    <span>Acompañamientos por supervisor</span>
+                            
+                            <div className='SupervisoresYDia'>
+                                <div className='BarraSupervision'>
+                                    <div className='TituloBarraSupervision'>
+                                        <i className="fas fa-chart-bar"></i>
+                                        <span>Acompañamientos por supervisor</span>
+                                    </div>
+                                    <BarChart
+                                        width={310}
+                                        height={300}
+                                        data={graficaRegistrosSupervisionCadaUno}
+                                        layout="vertical"
+                                        >
+                                        <YAxis dataKey="name" type="category" width={100}/>
+                                        <XAxis
+                                            type="number" // Cambiado a tipo number para ajustar dinámicamente
+                                            domain={[dataMin => dataMin - 1, dataMax => dataMax + 5]}
+                                            tick={false} // Oculta los ticks del eje X
+                                            axisLine={false} // Oculta la línea del eje X
+                                            tickLine={false} // Oculta las líneas de los ticks
+                                            interval={0} // Muestra todos los ticks
+                                        />
+                                        <Tooltip />
+                                        <Bar dataKey="registros" fill="#8884d8">
+                                            <LabelList dataKey="registros" position="right" />
+                                        </Bar>
+                                    </BarChart>
                                 </div>
-                                <BarChart
-                                    width={310}
-                                    height={300}
-                                    data={graficaRegistrosSupervisionCadaUno}
-                                    layout="vertical"
-                                    >
-                                    <YAxis dataKey="name" type="category" width={100}/>
-                                    <XAxis
-                                        type="number" // Cambiado a tipo number para ajustar dinámicamente
-                                        domain={[dataMin => dataMin - 1, dataMax => dataMax + 5]}
-                                        tick={false} // Oculta los ticks del eje X
-                                        axisLine={false} // Oculta la línea del eje X
-                                        tickLine={false} // Oculta las líneas de los ticks
-                                        interval={0} // Muestra todos los ticks
-                                    />
-                                    <Tooltip />
-                                    <Bar dataKey="registros" fill="#8884d8">
-                                        <LabelList dataKey="registros" position="right" />
-                                    </Bar>
-                                </BarChart>
-                            </div>
-                            <div className='BarraSupervision'>
-                                <div className='TituloBarraSupervision'>
-                                    <i className="fas fa-chart-bar"></i>
-                                    <span>Acompañamientos por placa</span>
+                                <div className='BarraFecha'>
+                                    <div className='TituloBarraFecha'>
+                                        <i className="fas fa-chart-bar"></i>
+                                        <span>Acompañamientos por dia</span>
+                                    </div>
+                                    <div className='GraficaFecha'>
+                                        <ResponsiveContainer width="100%" height="100%">
+                                            <BarChart
+                                                margin={0}
+                                                data={graficaRegistrosSupervisionDia}
+                                            >
+                                                <CartesianGrid strokeDasharray="3 3" />
+                                                <XAxis dataKey="name" />
+                                                <YAxis domain={[dataMin => dataMin - 1, dataMax => dataMax + 5]} />
+                                                <Tooltip />
+                                                <Bar dataKey="registros" fill="#8884d8">
+                                                    <LabelList dataKey="registros" position="top" />
+                                                </Bar>
+                                            </BarChart>
+                                        </ResponsiveContainer>
+                                    </div>
                                 </div>
-                                <BarChart
-                                    width={310}
-                                    height={600}
-                                    data={graficaRegistrosOrdenadosPorPlaca}
-                                    layout="vertical"
-                                    >
-                                    <YAxis dataKey="placa" type="category" width={100}/>
-                                    <XAxis
-                                        type="number" // Cambiado a tipo number para ajustar dinámicamente
-                                        domain={[dataMin => dataMin - 1, dataMax => dataMax + 5]}
-                                        tick={false} // Oculta los ticks del eje X
-                                        axisLine={false} // Oculta la línea del eje X
-                                        tickLine={false} // Oculta las líneas de los ticks
-                                        interval={0} // Muestra todos los ticks
-                                    />
-                                    <Tooltip />
-                                    <Bar dataKey="cantidad" fill="#8884d8">
-                                        <LabelList dataKey="cantidad" position="right" />
-                                    </Bar>
-                                </BarChart>
                             </div>
+
+                            <div className='Epps'>
+                                <div className='BarraSupervision'>
+                                    <div className='TituloBarraSupervision'>
+                                        <i className="fas fa-chart-bar"></i>
+                                        <span>Registros por EPP</span>
+                                    </div>
+                                    <PieChart width={310} height={300}>
+                                        <Pie
+                                            data={graficaRegistrosOrdenadosPorEpp}
+                                            dataKey="value"
+                                            nameKey="name"
+                                            cx="50%"  // Centra el gráfico horizontalmente
+                                            cy="50%"  // Centra el gráfico verticalmente
+                                            outerRadius={110}  // Tamaño del gráfico
+                                            fill="#8884d8"
+                                            label  // Muestra etiquetas
+                                        />
+                                        <Tooltip />
+                                    </PieChart>
+                                </div>
+                                <div className='tabla-epp'> 
+                                    <div className='TituloBarraSupervision'>
+                                        <i className="fas fa-chart-bar"></i>
+                                        <span>Registros por Epp con respuesta negativa</span>
+                                    </div>
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                {["nombre", "nombreCuadrilla", "placa","fecha", "ot", "eppComentario"].map(col => (
+                                                    <th key={col}>{col.charAt(0).toUpperCase() + col.slice(1)}</th>
+                                                ))}
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {Array.isArray(registrosOrdenadosPorEppNo) && registrosOrdenadosPorEppNo.length > 0 ? (
+                                                registrosOrdenadosPorEppNo.map((item, index) => (
+                                                    <tr key={index}>
+                                                        <td>{item.nombre}</td>
+                                                        <td>{item.nombreCuadrilla}</td>
+                                                        <td>{item.placa}</td>
+                                                        <td>{item.fecha}</td>
+                                                        <td>{item.ot}</td>
+                                                        <td>{item.eppComentario}</td>
+                                                    </tr>
+                                                ))
+                                            ) : (
+                                                <tr>
+                                                    <td colSpan="5">No hay registros negativos</td>
+                                                </tr>
+                                            )}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div className='Alturas'>
+                                <div className='BarraSupervision'>
+                                    <div className='TituloBarraSupervision'>
+                                        <i className="fas fa-chart-bar"></i>
+                                        <span>Registros por Alturas</span>
+                                    </div>
+                                    <PieChart width={310} height={300}>
+                                        <Pie
+                                            data={graficaRegistrosOrdenadosPorAlturas}
+                                            dataKey="value"
+                                            nameKey="name"
+                                            cx="50%"  // Centra el gráfico horizontalmente
+                                            cy="50%"  // Centra el gráfico verticalmente
+                                            outerRadius={110}  // Tamaño del gráfico
+                                            fill="#8884d8"
+                                            label  // Muestra etiquetas
+                                        />
+                                        <Tooltip />
+                                    </PieChart>
+                                </div>
+                                <div className='tabla-epp'> 
+                                    <div className='TituloBarraSupervision'>
+                                        <i className="fas fa-chart-bar"></i>
+                                        <span>Registros por Alturas con respuesta negativa</span>
+                                    </div>
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                {["nombre", "nombreCuadrilla", "placa","fecha", "ot", "alturasComentario"].map(col => (
+                                                    <th key={col}>{col.charAt(0).toUpperCase() + col.slice(1)}</th>
+                                                ))}
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {Array.isArray(registrosOrdenadosPorAlturasNo) && registrosOrdenadosPorAlturasNo.length > 0 ? (
+                                                registrosOrdenadosPorAlturasNo.map((item, index) => (
+                                                    <tr key={index}>
+                                                        <td>{item.nombre}</td>
+                                                        <td>{item.nombreCuadrilla}</td>
+                                                        <td>{item.placa}</td>
+                                                        <td>{item.fecha}</td>
+                                                        <td>{item.ot}</td>
+                                                        <td>{item.alturasComentario}</td>
+                                                    </tr>
+                                                ))
+                                            ) : (
+                                                <tr>
+                                                    <td colSpan="5">No hay registros negativos</td>
+                                                </tr>
+                                            )}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div className='ATS'>
+                                <div className='BarraSupervision'>
+                                    <div className='TituloBarraSupervision'>
+                                        <i className="fas fa-chart-bar"></i>
+                                        <span>Registros por ATS</span>
+                                    </div>
+                                    <PieChart width={310} height={300}>
+                                        <Pie
+                                            data={graficaRegistrosOrdenadosPorATS}
+                                            dataKey="value"
+                                            nameKey="name"
+                                            cx="50%"  // Centra el gráfico horizontalmente
+                                            cy="50%"  // Centra el gráfico verticalmente
+                                            outerRadius={110}  // Tamaño del gráfico
+                                            fill="#8884d8"
+                                            label  // Muestra etiquetas
+                                        />
+                                        <Tooltip />
+                                    </PieChart>
+                                </div>
+                                <div className='tabla-epp'> 
+                                    <div className='TituloBarraSupervision'>
+                                        <i className="fas fa-chart-bar"></i>
+                                        <span>Registros por ATS con respuesta negativa</span>
+                                    </div>
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                {["nombre", "nombreCuadrilla", "placa","fecha", "ot", "atsComentario"].map(col => (
+                                                    <th key={col}>{col.charAt(0).toUpperCase() + col.slice(1)}</th>
+                                                ))}
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {Array.isArray(registrosOrdenadosPorATSNo) && registrosOrdenadosPorATSNo.length > 0 ? (
+                                                registrosOrdenadosPorATSNo.map((item, index) => (
+                                                    <tr key={index}>
+                                                        <td>{item.nombre}</td>
+                                                        <td>{item.nombreCuadrilla}</td>
+                                                        <td>{item.placa}</td>
+                                                        <td>{item.fecha}</td>
+                                                        <td>{item.ot}</td>
+                                                        <td>{item.atsComentario}</td>
+                                                    </tr>
+                                                ))
+                                            ) : (
+                                                <tr>
+                                                    <td colSpan="5">No hay registros negativos</td>
+                                                </tr>
+                                            )}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div className='Empalmes'>
+                                <div className='BarraSupervision'>
+                                    <div className='TituloBarraSupervision'>
+                                        <i className="fas fa-chart-bar"></i>
+                                        <span>Registros de Empalmes</span>
+                                    </div>
+                                    <PieChart width={310} height={300}>
+                                        <Pie
+                                            data={graficaRegistrosOrdenadosPorEmpalmes}
+                                            dataKey="value"
+                                            nameKey="name"
+                                            cx="50%"  // Centra el gráfico horizontalmente
+                                            cy="50%"  // Centra el gráfico verticalmente
+                                            outerRadius={110}  // Tamaño del gráfico
+                                            fill="#8884d8"
+                                            label  // Muestra etiquetas
+                                        />
+                                        <Tooltip />
+                                    </PieChart>
+                                </div>
+                                <div className='TablasDeEmpalmes'> 
+                                    <div className='tabla-epp'> 
+                                        <div className='TituloBarraSupervision'>
+                                            <i className="fas fa-chart-bar"></i>
+                                            <span>Registros de Empalmes con respuesta negativa</span>
+                                        </div>
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    {["nombre", "nombreCuadrilla", "placa","fecha", "ot", "empalmesComentario"].map(col => (
+                                                        <th key={col}>{col.charAt(0).toUpperCase() + col.slice(1)}</th>
+                                                    ))}
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {Array.isArray(registrosOrdenadosPorEmpalmesNo) && registrosOrdenadosPorEmpalmesNo.length > 0 ? (
+                                                    registrosOrdenadosPorEmpalmesNo.map((item, index) => (
+                                                        <tr key={index}>
+                                                            <td>{item.nombre}</td>
+                                                            <td>{item.nombreCuadrilla}</td>
+                                                            <td>{item.placa}</td>
+                                                            <td>{item.fecha}</td>
+                                                            <td>{item.ot}</td>
+                                                            <td>{item.empalmesComentario}</td>
+                                                        </tr>
+                                                    ))
+                                                ) : (
+                                                    <tr>
+                                                        <td colSpan="5">No hay registros negativos</td>
+                                                    </tr>
+                                                )}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div className='tabla-epp'> 
+                                        <div className='TituloBarraSupervision'>
+                                            <i className="fas fa-chart-bar"></i>
+                                            <span>Registros de Empalmes con respuesta positiva</span>
+                                        </div>
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    {["nombre", "nombreCuadrilla", "placa","fecha", "ot", "empalmesComentario"].map(col => (
+                                                        <th key={col}>{col.charAt(0).toUpperCase() + col.slice(1)}</th>
+                                                    ))}
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {Array.isArray(registrosOrdenadosPorEmpalmesSi) && registrosOrdenadosPorEmpalmesSi.length > 0 ? (
+                                                    registrosOrdenadosPorEmpalmesSi.map((item, index) => (
+                                                        <tr key={index}>
+                                                            <td>{item.nombre}</td>
+                                                            <td>{item.nombreCuadrilla}</td>
+                                                            <td>{item.placa}</td>
+                                                            <td>{item.fecha}</td>
+                                                            <td>{item.ot}</td>
+                                                            <td>{item.empalmesComentario}</td>
+                                                        </tr>
+                                                    ))
+                                                ) : (
+                                                    <tr>
+                                                        <td colSpan="5">No hay registros negativos</td>
+                                                    </tr>
+                                                )}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className='Preoperacional'>
+                                <div className='BarraSupervision'>
+                                    <div className='TituloBarraSupervision'>
+                                        <i className="fas fa-chart-bar"></i>
+                                        <span>Registros por Preoperacional</span>
+                                    </div>
+                                    <PieChart width={310} height={300}>
+                                        <Pie
+                                            data={graficaRegistrosOrdenadosPorPreoperacional}
+                                            dataKey="value"
+                                            nameKey="name"
+                                            cx="50%"  // Centra el gráfico horizontalmente
+                                            cy="50%"  // Centra el gráfico verticalmente
+                                            outerRadius={110}  // Tamaño del gráfico
+                                            fill="#8884d8"
+                                            label  // Muestra etiquetas
+                                        />
+                                        <Tooltip />
+                                    </PieChart>
+                                </div>
+                                <div className='tabla-epp'> 
+                                    <div className='TituloBarraSupervision'>
+                                        <i className="fas fa-chart-bar"></i>
+                                        <span>Registros por Preoperacional con respuesta negativa</span>
+                                    </div>
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                {["nombre", "nombreCuadrilla", "placa","fecha", "ot", "preoperacionalComentario"].map(col => (
+                                                    <th key={col}>{col.charAt(0).toUpperCase() + col.slice(1)}</th>
+                                                ))}
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {Array.isArray(registrosOrdenadosPorPreoperacionalNo) && registrosOrdenadosPorPreoperacionalNo.length > 0 ? (
+                                                registrosOrdenadosPorPreoperacionalNo.map((item, index) => (
+                                                    <tr key={index}>
+                                                        <td>{item.nombre}</td>
+                                                        <td>{item.nombreCuadrilla}</td>
+                                                        <td>{item.placa}</td>
+                                                        <td>{item.fecha}</td>
+                                                        <td>{item.ot}</td>
+                                                        <td>{item.preoperacionalComentario}</td>
+                                                    </tr>
+                                                ))
+                                            ) : (
+                                                <tr>
+                                                    <td colSpan="5">No hay registros negativos</td>
+                                                </tr>
+                                            )}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div className='Vehiculo'>
+                                <div className='BarraSupervision'>
+                                    <div className='TituloBarraSupervision'>
+                                        <i className="fas fa-chart-bar"></i>
+                                        <span>Registros por Vehiculos</span>
+                                    </div>
+                                    <PieChart width={310} height={300}>
+                                        <Pie
+                                            data={graficaRegistrosOrdenadosPorVehiculo}
+                                            dataKey="value"
+                                            nameKey="name"
+                                            cx="50%"  // Centra el gráfico horizontalmente
+                                            cy="50%"  // Centra el gráfico verticalmente
+                                            outerRadius={110}  // Tamaño del gráfico
+                                            fill="#8884d8"
+                                            label  // Muestra etiquetas
+                                        />
+                                        <Tooltip />
+                                    </PieChart>
+                                </div>
+                                <div className='tabla-epp'> 
+                                    <div className='TituloBarraSupervision'>
+                                        <i className="fas fa-chart-bar"></i>
+                                        <span>Registros por Vehiculos con respuesta negativa</span>
+                                    </div>
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                {["nombre", "nombreCuadrilla", "placa","fecha", "ot", "vehiculo","vehiculoComentario"].map(col => (
+                                                    <th key={col}>{col.charAt(0).toUpperCase() + col.slice(1)}</th>
+                                                ))}
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {Array.isArray(registrosOrdenadosPorVehiculoNo) && registrosOrdenadosPorVehiculoNo.length > 0 ? (
+                                                registrosOrdenadosPorVehiculoNo.map((item, index) => (
+                                                    <tr key={index}>
+                                                        <td>{item.nombre}</td>
+                                                        <td>{item.nombreCuadrilla}</td>
+                                                        <td>{item.placa}</td>
+                                                        <td>{item.fecha}</td>
+                                                        <td>{item.ot}</td>
+                                                        <td>{item.vehiculo}</td>
+                                                        <td>{item.vehiculoComentario}</td>
+                                                    </tr>
+                                                ))
+                                            ) : (
+                                                <tr>
+                                                    <td colSpan="5">No hay registros negativos</td>
+                                                </tr>
+                                            )}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+
+                            <div className='Vehiculo'>
+                                <div className='BarraSupervision'>
+                                    <div className='TituloBarraSupervision'>
+                                        <i className="fas fa-chart-bar"></i>
+                                        <span>Registros por Equipos</span>
+                                    </div>
+                                    <div className='GraficaEquipos'>
+                                        <ResponsiveContainer width="100%" height="100%">
+                                            <BarChart margin={0} data={graficaRegistrosOrdenadosPorEquipos}>
+                                                <CartesianGrid strokeDasharray="3 3" />
+                                                <XAxis dataKey="name" />
+                                                <YAxis />
+                                                <Tooltip />
+                                                <Legend />
+                                                <Bar dataKey="si" fill="#8884d8" />
+                                                <Bar dataKey="no" fill="#82ca9d" />
+                                                <Bar dataKey="na" fill="#ffc658" />
+                                            </BarChart>
+                                        </ResponsiveContainer>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className='Observaciones'>
+                                <div className='tabla-epp' id='tabla-observaciones'> 
+                                    <div className='TituloBarraSupervision'>
+                                        <i className="fas fa-chart-bar"></i>
+                                        <span>Observaciones</span>
+                                    </div>
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                {["nombre", "nombreCuadrilla", "placa","fecha", "ot", "observacion"].map(col => (
+                                                    <th key={col}>{col.charAt(0).toUpperCase() + col.slice(1)}</th>
+                                                ))}
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {Array.isArray(registrosSupervision) && registrosSupervision.length > 0 ? (
+                                                registrosSupervision.map((item, index) => (
+                                                    <tr key={index}>
+                                                        <td>{item.nombre}</td>
+                                                        <td>{item.nombreCuadrilla}</td>
+                                                        <td>{item.placa}</td>
+                                                        <td>{item.fecha}</td>
+                                                        <td>{item.ot}</td>
+                                                        <td>{item.observacion}</td>
+                                                    </tr>
+                                                ))
+                                            ) : (
+                                                <tr>
+                                                    <td colSpan="5">No hay registros negativos</td>
+                                                </tr>
+                                            )}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            
                         </div>
                     </div>
                     <div>

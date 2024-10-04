@@ -32,6 +32,7 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra */
     position: relative;
     overflow-y: auto;
+    padding-bottom: 20px;
 
     @media screen and (max-width: 600px) {
         max-width: 350px;  
@@ -55,6 +56,29 @@
 
 .Supervision-Principal .Contenido::-webkit-scrollbar-thumb:hover {
     background: #bd6a0c; /* Color de la barra de desplazamiento al pasar el mouse por encima */
+}
+
+.Supervision-Principal .btn-flotante {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    z-index: 1000;
+}
+
+.Supervision-Principal .btn-flotante:hover {
+    background-color: #0056b3;
 }
 
 .Supervision-Principal .Contenido h4 {
@@ -150,15 +174,17 @@
     }
 }
 
-.Supervision-Principal .Contenido .RenderizarGraficos {
-    display: flex; /* Usa el modelo de caja flexible */
-    flex-direction: column;
-    justify-content: center; /* Centra horizontalmente */
-    align-items: center; /* Centra verticalmente */
-
-    @media screen and (max-width: 600px) {
-        display: contents; /* Usa el modelo de caja flexible */
-    }
+.Supervision-Principal .Contenido .Vehiculo,
+.Supervision-Principal .Contenido .Preoperacional,
+.Supervision-Principal .Contenido .Empalmes,
+.Supervision-Principal .Contenido .ATS,
+.Supervision-Principal .Contenido .Alturas,
+.Supervision-Principal .Contenido .Epps,
+.Supervision-Principal .Contenido .SupervisoresYDia,
+.Supervision-Principal .Contenido .UbicacionYPlaca {
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
 }
 
 .Supervision-Principal .Contenido .TituloBarraFecha {
@@ -177,11 +203,16 @@
 }
 
 .Supervision-Principal .Contenido .Ubicacion #map {
-    height: 62vh;
+    height: 510px;
 }
 
+.Supervision-Principal .Contenido .GraficaEquipos,
 .Supervision-Principal .Contenido .BarraFecha .GraficaFecha {
     height: 300px;
+}
+
+.Supervision-Principal .Contenido .GraficaEquipos {
+    width: 90vw;
 }
 
 .Supervision-Principal .Contenido .BarraFecha .GraficaFecha,
@@ -231,25 +262,79 @@
     padding-right: 10px;
 }
 
-.Supervision-Principal .btn-flotante {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    width: 60px;
-    height: 60px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 50%;
-    font-size: 24px;
+.Supervision-Principal .Contenido .TablasDeEmpalmes {
     display: flex;
-    align-items: center;
+    flex-direction: column;
     justify-content: center;
-    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.3);
-    cursor: pointer;
-    z-index: 1000;
+    align-items: center;
 }
 
-.Supervision-Principal .btn-flotante:hover {
-    background-color: #0056b3;
+
+
+
+
+.Supervision-Principal .Contenido #tabla-observaciones {
+    width: 90vw;
+}
+
+.Supervision-Principal .Contenido .tabla-epp {
+    width: 70vw;
+    border-collapse: collapse;
+    font-size: 16px;
+    text-align: left;
+}
+
+.Supervision-Principal .Contenido .tabla-epp h3 {
+    margin: 10px 0;
+}
+
+/* Limitar la altura del tbody */
+.Supervision-Principal .Contenido .tabla-epp tbody {
+    display: block;
+    max-height: 250px; /* Máxima altura del cuerpo de la tabla */
+    overflow-y: auto; /* Añadir barra de desplazamiento vertical */
+}
+
+.Supervision-Principal .Contenido .tabla-epp thead, 
+.Supervision-Principal .Contenido .tabla-epp tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+.Supervision-Principal .Contenido .tabla-epp th,
+.Supervision-Principal .Contenido .tabla-epp td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    word-wrap: break-word; /* Permite el ajuste de línea */
+    white-space: normal; /* Permitir el ajuste en varias líneas */
+}
+
+.Supervision-Principal .Contenido .tabla-epp th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+    position: sticky;
+    top: 0; /* Fijar los encabezados en la parte superior cuando se hace scroll */
+}
+
+.Supervision-Principal .Contenido .tabla-epp td {
+    max-width: 150px; /* Fija el ancho máximo de las celdas */
+}
+
+/* Ajustar el contenido largo */
+.Supervision-Principal .Contenido .tabla-epp td {
+    white-space: normal; /* Ajusta el texto en varias líneas */
+    overflow: visible;   /* Permite que el contenido fluya */
+}
+
+/* Responsive: Para pantallas pequeñas */
+@media (max-width: 768px) {
+    .Supervision-Principal .Contenido .tabla-epp td, .tabla-epp th {
+        font-size: 14px;
+        padding: 6px;
+    }
+
+    .Supervision-Principal .Contenido .tabla-epp td {
+        max-width: 100px;
+    }
 }
