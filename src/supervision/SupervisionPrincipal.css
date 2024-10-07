@@ -185,6 +185,10 @@
     display: flex;
     justify-content: center;
     align-items: baseline;
+    
+    @media screen and (max-width: 600px) {
+        display: contents; /* Usa el modelo de caja flexible */
+    }
 }
 
 .Supervision-Principal .Contenido .TituloBarraFecha {
@@ -213,6 +217,11 @@
 
 .Supervision-Principal .Contenido .GraficaEquipos {
     width: 90vw;
+
+    @media screen and (max-width: 600px) {
+        width: 85vw;
+        padding-right: 20px;
+    }
 }
 
 .Supervision-Principal .Contenido .BarraFecha .GraficaFecha,
@@ -275,6 +284,10 @@
 
 .Supervision-Principal .Contenido #tabla-observaciones {
     width: 90vw;
+
+    @media screen and (max-width: 600px) {
+        width: 85vw;
+    }
 }
 
 .Supervision-Principal .Contenido .tabla-epp {
@@ -282,10 +295,33 @@
     border-collapse: collapse;
     font-size: 16px;
     text-align: left;
+
+    @media screen and (max-width: 600px) {
+        width: 85vw;
+        min-width: 200px;
+    }
 }
 
 .Supervision-Principal .Contenido .tabla-epp h3 {
     margin: 10px 0;
+}
+
+.Supervision-Principal .Contenido .tabla-epp table {
+    display: block;
+
+    @media screen and (max-width: 600px) {
+        overflow: auto;
+        max-width: 300px;
+    }
+}
+
+.Supervision-Principal .Contenido .tabla-epp thead {
+    display: block;
+    max-height: 250px; /* Máxima altura del cuerpo de la tabla */
+
+    @media screen and (max-width: 600px) {
+        max-width: 300px;
+    }
 }
 
 /* Limitar la altura del tbody */
@@ -293,13 +329,33 @@
     display: block;
     max-height: 250px; /* Máxima altura del cuerpo de la tabla */
     overflow-y: auto; /* Añadir barra de desplazamiento vertical */
+    
+    @media screen and (max-width: 600px) {
+        max-width: 300px;
+        overflow-y: initial;
+    }
 }
 
-.Supervision-Principal .Contenido .tabla-epp thead, 
+.Supervision-Principal .Contenido .tabla-epp thead tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+
+    @media screen and (max-width: 600px) {
+        width: 1000px;
+        min-width: 150px;
+    }
+}
+
 .Supervision-Principal .Contenido .tabla-epp tbody tr {
     display: table;
     width: 100%;
     table-layout: fixed;
+
+    @media screen and (max-width: 600px) {
+        width: 1000px;
+        min-width: 150px;
+    }
 }
 
 .Supervision-Principal .Contenido .tabla-epp th,
