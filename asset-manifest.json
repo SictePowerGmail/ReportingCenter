@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/ReportingCenter/static/css/main.e6943462.css",
-    "main.js": "/ReportingCenter/static/js/main.d8e652a3.js",
+    "main.css": "/ReportingCenter/static/css/main.07cc0b16.css",
+    "main.js": "/ReportingCenter/static/js/main.2b36b60a.js",
     "static/media/fa-solid-900.ttf": "/ReportingCenter/static/media/fa-solid-900.07ed6d5fa32c1d54af0f.ttf",
     "static/media/01.jpg": "/ReportingCenter/static/media/01.90f3a9eed9bfbe9d97b2.jpg",
     "static/media/fa-brands-400.ttf": "/ReportingCenter/static/media/fa-brands-400.0ff70dcbf135d859ebf3.ttf",
@@ -20,11 +20,11 @@
     "static/media/fa-v4compatibility.ttf": "/ReportingCenter/static/media/fa-v4compatibility.0f6cb412603527bda691.ttf",
     "static/media/fa-v4compatibility.woff2": "/ReportingCenter/static/media/fa-v4compatibility.6cfec8414be20e2c3426.woff2",
     "index.html": "/ReportingCenter/index.html",
-    "main.e6943462.css.map": "/ReportingCenter/static/css/main.e6943462.css.map",
-    "main.d8e652a3.js.map": "/ReportingCenter/static/js/main.d8e652a3.js.map"
+    "main.07cc0b16.css.map": "/ReportingCenter/static/css/main.07cc0b16.css.map",
+    "main.2b36b60a.js.map": "/ReportingCenter/static/js/main.2b36b60a.js.map"
   },
   "entrypoints": [
-    "static/css/main.e6943462.css",
-    "static/js/main.d8e652a3.js"
+    "static/css/main.07cc0b16.css",
+    "static/js/main.2b36b60a.js"
   ]
 }
