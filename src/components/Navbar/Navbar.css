@@ -308,7 +308,9 @@ body,
             padding: 3px 3px;
 
             #SubMenu {
-                display: inline-block;
+                display: flex;
+                align-items: center;
+                justify-content: center;
 
                 #SubMenu-Titulo-Solo {
                     display: flex;
@@ -342,7 +344,8 @@ body,
                 }
 
                 #SubMenu-Titulo {
-                    display: inline-block;
+                    display: flex;
+                    align-items: center;
                     text-decoration: none;
                     cursor: pointer;
                     color: #64b2ff;
@@ -362,6 +365,7 @@ body,
                     #SubMenu-Titulo-Contenedor {
                         display: flex;
                         height: 20px;
+                        width: 100%;
 
                         #SubMenu-Titulo-Icono {
                             display: flex;
