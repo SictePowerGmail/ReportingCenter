@@ -308,9 +308,7 @@ body,
             padding: 3px 3px;
 
             #SubMenu {
-                display: flex;
-                align-items: center;
-                justify-content: center;
+                display: inline-block;
 
                 #SubMenu-Titulo-Solo {
                     display: flex;
