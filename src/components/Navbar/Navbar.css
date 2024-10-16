@@ -309,6 +309,7 @@ body,
 
             #SubMenu {
                 display: inline-block;
+                width: 214px;
 
                 #SubMenu-Titulo-Solo {
                     display: flex;
@@ -363,7 +364,7 @@ body,
                     #SubMenu-Titulo-Contenedor {
                         display: flex;
                         height: 20px;
-                        width: 100%;
+                        width: 208px;
 
                         #SubMenu-Titulo-Icono {
                             display: flex;
