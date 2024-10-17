@@ -30,7 +30,6 @@ function Navbar() {
     const name = fullName ? fullName.split(" ")[0] : "";
     const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth > 530);
 
-
     const toggleMobileMenu = () => setShowMobileMenu(!showMobileMenu);
 
     const closeAllDropdowns = () => {
@@ -65,16 +64,13 @@ function Navbar() {
 
         window.addEventListener('resize', handleResize);
         document.addEventListener('mousedown', handleClickOutside);
-        window.addEventListener('resize', handleResize);
-
 
         return () => {
             window.removeEventListener('resize', handleResize);
             document.removeEventListener('mousedown', handleClickOutside);
-            window.removeEventListener('resize', handleResize);
         };
 
-    }, []);
+    }, [menuRef]);
 
     const handleLogin = async (event) => {
         event.preventDefault();
@@ -202,7 +198,12 @@ function Navbar() {
                         <span>Tel: {Cookies.get('telefono')}</span>
                         <span>Rol: {Cookies.get('rol')}</span>
                         <ul>
-                            <li>Bases de Datos</li>
+                            <Link id='SubMenu-Contenido-Titulo' to="/Capacidades" 
+                                onClick={() => {
+                                    setIsOpen(!isOpen);
+                                    setShowDropdownUser(!showDropdownUser);
+                                }}
+                            ><li>Bases de Datos</li></Link>
                             <li onClick={handleLogout}>Cerrar Sesión</li>
                         </ul>
                     </div>
