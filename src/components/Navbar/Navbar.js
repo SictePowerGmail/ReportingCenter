@@ -198,7 +198,7 @@ function Navbar() {
                         <span>Tel: {Cookies.get('telefono')}</span>
                         <span>Rol: {Cookies.get('rol')}</span>
                         <ul>
-                            <Link id='SubMenu-Contenido-Titulo' to="/Capacidades" 
+                            <Link to="/BasesDeDatos" 
                                 onClick={() => {
                                     setIsOpen(!isOpen);
                                     setShowDropdownUser(!showDropdownUser);
@@ -585,7 +585,7 @@ function Navbar() {
                 </ul>
                 {showMobileMenu && (
                     <div className='Version'>
-                        <p>v1.17</p>
+                        <p>v1.18</p>
                     </div>
                 )}
             </div>

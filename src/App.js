@@ -50,6 +50,7 @@ import ConsumosOperaciones from "./pages/ConsumosOperaciones";
 import DesmonteMantenimiento from "./pages/DesmonteMantenimiento";
 import CursosDeAlturas from "./pages/CursosDeAlturas";
 import EntregasPendientesDotacion from "./pages/EntregasPendientesDotacion";
+import BasesDeDatos from "./pages/BasesDeDatos";
 
 //4434
 
@@ -69,6 +70,9 @@ function App() {
 
   const getPageTitle = (pathname) => {
     switch (pathname) {
+      /* Menu Usuario */
+      case '/BasesDeDatos':
+        return 'Bases De Datos';
       /* Inicio */
       case '/':
         return 'Reporting Center';
@@ -186,6 +190,8 @@ function App() {
     <>
       <Navbar />
       <Routes>
+        {/* Menu Usuario */}
+        <Route path='/BasesDeDatos' exact element={<BasesDeDatos />} />
         {/* Inicio */}
         <Route path='/' exact element={<Inicio />} />
         <Route path='/ReportingCenter' exact element={<Inicio />} />
