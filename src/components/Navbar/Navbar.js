@@ -44,6 +44,15 @@ function Navbar() {
     };
 
     useEffect(() => {
+        const cedula = Cookies.get('cedula');
+        if (cedula === "" || cedula === undefined) {
+            setIsLogin(false);
+        } else {
+            setIsLogin(true);
+        }
+    }, [isLogin]);
+
+    useEffect(() => {
         const handleResize = () => {
             setIsMobile(window.innerWidth < 600);
             setIsLargeScreen(window.innerWidth > 530);
@@ -87,13 +96,15 @@ function Navbar() {
             });
     
             if (response.ok) {
+                setIsOpen(false);
+                setIsLogin(true);
                 const data = await response.json();
-                Cookies.set('token', data.role, { expires: 3 }); // Expira en 7 días
-                Cookies.set('cedula', data.cedula);
-                Cookies.set('nombre', data.nombre);
-                Cookies.set('correo', data.correo);
-                Cookies.set('telefono', data.telefono);
-                Cookies.set('rol', data.rol);
+                Cookies.set('token', data.role, { expires: 7 });
+                Cookies.set('cedula', data.cedula, { expires: 7 });
+                Cookies.set('nombre', data.nombre, { expires: 7 });
+                Cookies.set('correo', data.correo, { expires: 7 });
+                Cookies.set('telefono', data.telefono, { expires: 7 });
+                Cookies.set('rol', data.rol, { expires: 7 });
                 window.location.href = '/ReportingCenter';
             } else {
                 const errorText = await response.text();
@@ -111,6 +122,8 @@ function Navbar() {
     };
 
     const handleLogout = () => {
+        setIsOpen(false);
+        setIsLogin(false);
         Cookies.remove('token');
         Cookies.remove('cedula');
         Cookies.remove('nombre');
@@ -119,24 +132,6 @@ function Navbar() {
         Cookies.remove('rol');
         window.location.href = '/ReportingCenter';
     };
-
-    useEffect(() => {
-        const cedula = Cookies.remove('cedula');
-        if (cedula === "" || cedula === undefined) {
-            setIsLogin(false);
-        } else {
-            setIsLogin(true);
-        }
-    }, []);
-
-    useEffect(() => {
-        const cedula = Cookies.remove('cedula');
-        if (cedula === "" || cedula === undefined) {
-            setIsLogin(false);
-        } else {
-            setIsLogin(true);
-        }
-    }, [isLogin]);
 
     return (
         <div id='Contenedor'>
@@ -594,7 +589,7 @@ function Navbar() {
                 </ul>
                 {showMobileMenu && (
                     <div className='Version'>
-                        <p>v1.19</p>
+                        <p>v1.20</p>
                     </div>
                 )}
             </div>
