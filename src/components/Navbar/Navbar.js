@@ -24,7 +24,6 @@ function Navbar() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-    const token = Cookies.get('token');
     const fullName = Cookies.get('nombre');
     const initial = fullName ? fullName.charAt(0).toUpperCase() : "";
     const name = fullName ? fullName.split(" ")[0] : "";
@@ -122,8 +121,18 @@ function Navbar() {
     };
 
     useEffect(() => {
-        if (token === "" || token === undefined) {
-            setIsLogin(false);    
+        const cedula = Cookies.remove('cedula');
+        if (cedula === "" || cedula === undefined) {
+            setIsLogin(false);
+        } else {
+            setIsLogin(true);
+        }
+    }, []);
+
+    useEffect(() => {
+        const cedula = Cookies.remove('cedula');
+        if (cedula === "" || cedula === undefined) {
+            setIsLogin(false);
         } else {
             setIsLogin(true);
         }
@@ -585,7 +594,7 @@ function Navbar() {
                 </ul>
                 {showMobileMenu && (
                     <div className='Version'>
-                        <p>v1.18</p>
+                        <p>v1.19</p>
                     </div>
                 )}
             </div>
