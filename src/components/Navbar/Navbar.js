@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { Link, Navigate } from 'react-router-dom';
-import './Navbar.css'
+import './navbar.css'
 import { FaHardHat, FaFileAlt, FaTruck, FaBars, FaTimes, FaHome, FaChartLine, FaStar, FaTools, FaChevronDown, FaChevronUp, FaUser } from 'react-icons/fa';
 import { HiClipboardList, HiChartBar, HiOfficeBuilding } from "react-icons/hi";
 import Cookies from 'js-cookie';
@@ -301,6 +301,7 @@ function Navbar() {
                                 <ul>
                                     <Link id='SubMenu-Contenido-Titulo' to="/Capacidades" onClick={toggleMobileMenu}><li>Capacidades</li></Link>
                                     <Link id='SubMenu-Contenido-Titulo' to="/SupervisionLogin" onClick={toggleMobileMenu}><li>Supervision</li></Link>
+                                    <Link id='SubMenu-Contenido-Titulo' to="/MaterialLogin" onClick={toggleMobileMenu}><li>Solicitud de Material</li></Link>
                                 </ul>
                             </div>
                         )}
