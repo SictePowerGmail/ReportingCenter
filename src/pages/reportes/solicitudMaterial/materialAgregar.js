@@ -243,12 +243,13 @@ const MaterialAgregar = () => {
 
     useEffect(() => {
         setFecha(new Date());
-        cargarDatosKgprod();
+        setLoading(false);
     }, []);
 
     useEffect(() => {
+        setLoading(true);
         cargarDatosKgprod();
-    }, [ciudadesEntradaTexto]);
+    }, [ciudadElgida]);
 
     return (
         <div className="materialAgregar">

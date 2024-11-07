@@ -24,20 +24,20 @@
         position: relative;
         overflow-y: auto;
         padding-bottom: 20px;
-        
+
         &::-webkit-scrollbar {
             width: 10px;
         }
 
         &::-webkit-scrollbar-track {
-            background: rgb(230, 230, 230);
+            background-color: white;
             border-radius: 10px;
         }
 
         &::-webkit-scrollbar-thumb {
             background-color: #ff8800;
             border-radius: 10px;
-            border: 3px solid rgb(230, 230, 230);
+            border: 3px solid white;
         }
 
         &::-webkit-scrollbar-thumb:hover {
@@ -64,6 +64,94 @@
 
             &:hover {
                 background-color: #0056b3;
+            }
+        }
+
+        .Titulo {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 15px 0px;
+
+            span {
+                font-size: 25px;
+            }
+        }
+
+        .menuNavegacion {
+            width: 100%;
+
+            ul {
+                li {
+                    cursor: pointer;
+                }
+            }
+        }
+
+        .Solicitudes,
+        .Director,
+        .DireccionOperacion,
+        .EntregaBodega {
+            padding: 20px 20px 0px;
+            width: 100%;
+
+            .Subtitulo {
+                width: 100%;
+                text-align: center;
+                padding: 10px;
+                background-color: #23394d;
+                color: #fff;
+                border-radius: 10px 10px 0px 0px;
+                font-size: medium;
+
+                &::placeholder {
+                    text-align: center;
+                }
+            }
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+
+                th,
+                td {
+                    border: 1px solid #ddd;
+                    padding: 8px;
+                    text-align: center;
+                }
+
+                thead {
+                    th:hover {
+                        background-color: #56d424d5;
+                        cursor: pointer;
+                    }
+                }
+
+                tbody {
+                    tr:hover {
+                        background-color: #56d424d5;
+                        cursor: pointer;
+                    }
+                }
+
+                input {
+                    margin-top: 4px;
+                    padding: 4px;
+                    width: 90%;
+                    text-align: center;
+                }
+            }
+
+            .Boton {
+                display: flex;
+                align-items: center;
+                justify-content: end;
+                margin-top: 10px;
+
+                span {
+                    cursor: pointer;
+                }
             }
         }
     }
