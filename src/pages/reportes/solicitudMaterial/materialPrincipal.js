@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './materialPrincipal.css'
 import { ToastContainer, toast } from 'react-toastify';
@@ -19,10 +19,11 @@ const MaterialPrincipal = () => {
     const cargarDatosRegistrosSolicitudMaterial = () => {
         axios.get('https://sicteferias.from-co.net:8120/solicitudMaterial/RegistrosSolicitudMaterial')
             .then(response => {
-                const datos = response.data;
+                let datos = response.data;
+                datos.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
                 setRegistrosSolicitudMaterial(datos);
 
-                const datosSolicitudesRealizadas = response.data
+                const datosSolicitudesRealizadas = datos
                     .map(({
                         fecha,
                         cedula,
@@ -37,13 +38,13 @@ const MaterialPrincipal = () => {
                     }) => {
                         let estado;
                         if (aprobacionDirector === "Pendiente") {
-                            estado = "Pendiente";
+                            estado = "Pendiente por Director";
                         } else if (aprobacionDirector === "Rechazado") {
-                            estado = "Rechazado";
+                            estado = "Rechazado por Director";
                         } else if (aprobacionDireccionOperacion === "Pendiente") {
-                            estado = "Pendiente";
+                            estado = "Pendiente por Direccion";
                         } else if (aprobacionDireccionOperacion === "Rechazado") {
-                            estado = "Rechazado";
+                            estado = "Rechazado por Direccion";
                         } else if (entregaBodega === "Pendiente") {
                             estado = "Pendiente Entrega Bodega";
                         } else {
@@ -69,7 +70,7 @@ const MaterialPrincipal = () => {
 
                 setSolicitudMaterialSinMat(datosSolicitudesRealizadas);
 
-                const datosPendienteDirector = response.data
+                const datosPendienteDirector = datos
                     .filter(item => item.aprobacionDirector === "Pendiente")
                     .map(({ fecha, cedula, nombre, ciudad, uuid, nombreProyecto, entregaProyecto }) => ({
                         fecha,
@@ -88,7 +89,7 @@ const MaterialPrincipal = () => {
 
                 setPendienteDirectorSinMat(datosPendienteDirector);
 
-                const datosAprobacionDirector = response.data
+                const datosAprobacionDirector = datos
                     .filter(item => item.aprobacionDirector === "Aprobado")
                     .map(({ fecha, cedula, nombre, ciudad, uuid, nombreProyecto, entregaProyecto }) => ({
                         fecha,
@@ -107,7 +108,7 @@ const MaterialPrincipal = () => {
 
                 setAprobacionDirectorSinMat(datosAprobacionDirector);
 
-                const datosRechazadoDirector = response.data
+                const datosRechazadoDirector = datos
                     .filter(item => item.aprobacionDirector === "Rechazado")
                     .map(({ fecha, cedula, nombre, ciudad, uuid, nombreProyecto, entregaProyecto }) => ({
                         fecha,
@@ -126,7 +127,7 @@ const MaterialPrincipal = () => {
 
                 setRechazadoDirectorSinMat(datosRechazadoDirector);
 
-                const datosPendienteDireccionOperacion = response.data
+                const datosPendienteDireccionOperacion = datos
                     .filter(item => item.aprobacionDirector === "Aprobado" && item.aprobacionDireccionOperacion === "Pendiente")
                     .map(({ fecha, cedula, nombre, ciudad, uuid, nombreProyecto, entregaProyecto }) => ({
                         fecha,
@@ -145,7 +146,7 @@ const MaterialPrincipal = () => {
 
                 setPendienteDireccionOperacionSinMat(datosPendienteDireccionOperacion);
 
-                const datosAprobadoDireccionOperacion = response.data
+                const datosAprobadoDireccionOperacion = datos
                     .filter(item => item.aprobacionDirector === "Aprobado" && item.aprobacionDireccionOperacion === "Aprobado")
                     .map(({ fecha, cedula, nombre, ciudad, uuid, nombreProyecto, entregaProyecto }) => ({
                         fecha,
@@ -163,8 +164,8 @@ const MaterialPrincipal = () => {
                     );
 
                 setAprobacionDireccionOperacionSinMat(datosAprobadoDireccionOperacion);
-                
-                const datosRechazadoDireccionOperacion = response.data
+
+                const datosRechazadoDireccionOperacion = datos
                     .filter(item => item.aprobacionDirector === "Aprobado" && item.aprobacionDireccionOperacion === "Rechazado")
                     .map(({ fecha, cedula, nombre, ciudad, uuid, nombreProyecto, entregaProyecto }) => ({
                         fecha,
@@ -183,8 +184,8 @@ const MaterialPrincipal = () => {
 
                 setRechazadoDireccionOperacionSinMat(datosRechazadoDireccionOperacion);
 
-                const datosEntregaBodega = response.data
-                    .filter(item => item.aprobacionDirector === "Aprobado" && item.aprobacionDireccionOperacion === "Aprobado")
+                const datosPendienteEntregaBodega = datos
+                    .filter(item => item.aprobacionDirector === "Aprobado" && item.aprobacionDireccionOperacion === "Aprobado" && item.entregaBodega === "Pendiente")
                     .map(({ fecha, cedula, nombre, ciudad, uuid, nombreProyecto, entregaProyecto }) => ({
                         fecha,
                         cedula,
@@ -200,7 +201,26 @@ const MaterialPrincipal = () => {
                         ))
                     );
 
-                setPendienteEntregaBodegaSinMat(datosEntregaBodega);
+                setPendienteEntregaBodegaSinMat(datosPendienteEntregaBodega);
+
+                const datosEntregadoEntregaBodega = datos
+                    .filter(item => item.aprobacionDirector === "Aprobado" && item.aprobacionDireccionOperacion === "Aprobado" && item.entregaBodega === "Entregado")
+                    .map(({ fecha, cedula, nombre, ciudad, uuid, nombreProyecto, entregaProyecto }) => ({
+                        fecha,
+                        cedula,
+                        nombre,
+                        ciudad,
+                        uuid,
+                        nombreProyecto,
+                        entregaProyecto
+                    }))
+                    .filter((value, index, self) =>
+                        index === self.findIndex((t) => (
+                            t.fecha === value.fecha && t.cedula === value.cedula
+                        ))
+                    );
+
+                setEntregadoEntregaBodegaSinMat(datosEntregadoEntregaBodega);
 
                 setLoading(false);
             })
@@ -560,6 +580,7 @@ const MaterialPrincipal = () => {
     const [pendienteEntregaBodegaSinMat, setPendienteEntregaBodegaSinMat] = useState([]);
     const [filtradoPendienteEntregaBodegaSinMat, setFiltradoPendienteEntregaBodegaSinMat] = useState({});
     const [expandidoPendienteEntregaBodegaSinMat, setExpandidoPendienteEntregaBodegaSinMat] = useState(false);
+    const [observacionesPendienteEntregaBodega, setObservacionesPendienteEntregaBodega] = useState('');
     const [ventanaAbiertaPendienteEntregaBodega, setVentanaAbiertaPendienteEntregaBodega] = useState(false);
     const [filaSeleccionadaPendienteEntregaBodega, setFilaSeleccionadaPendienteEntregaBodega] = useState(null);
 
@@ -591,7 +612,45 @@ const MaterialPrincipal = () => {
     const manejarCerrarModalPendienteEntregaBodega = () => {
         setVentanaAbiertaPendienteEntregaBodega(false);
         setFilaSeleccionadaPendienteEntregaBodega(null);
+        cargarDatosRegistrosSolicitudMaterial();
     };
+
+    const [entregadoEntregaBodegaSinMat, setEntregadoEntregaBodegaSinMat] = useState([]);
+    const [filtradoEntregadoEntregaBodegaSinMat, setFiltradoEntregadoEntregaBodegaSinMat] = useState({});
+    const [expandidoEntregadoEntregaBodegaSinMat, setExpandidoEntregadoEntregaBodegaSinMat] = useState(false);
+    const [ventanaAbiertaEntregadoEntregaBodega, setVentanaAbiertaEntregadoEntregaBodega] = useState(false);
+    const [filaSeleccionadaEntregadoEntregaBodega, setFilaSeleccionadaEntregadoEntregaBodega] = useState(null);
+
+    const datosFiltradosEntregadoEntregaBodegaSinMat = entregadoEntregaBodegaSinMat.filter((fila) => {
+        return Object.keys(filtradoEntregadoEntregaBodegaSinMat).every((columna) => {
+            return (
+                !filtradoEntregadoEntregaBodegaSinMat[columna] ||
+                fila[columna]?.toString().toLowerCase().includes(filtradoEntregadoEntregaBodegaSinMat[columna].toLowerCase())
+            );
+        });
+    });
+
+    const manejarCambioFiltroEntregadoEntregaBodega = (columna, valor) => {
+        setFiltradoEntregadoEntregaBodegaSinMat({
+            ...filtradoEntregadoEntregaBodegaSinMat,
+            [columna]: valor,
+        });
+    };
+
+    const manejarClickFilaEntregadoEntregaBodega = (fila) => {
+        const datosFiltrados = registrosSolicitudMaterial.filter(
+            (item) => item.fecha === fila.fecha && item.cedula === fila.cedula
+        );
+
+        setFilaSeleccionadaEntregadoEntregaBodega(datosFiltrados);
+        setVentanaAbiertaEntregadoEntregaBodega(true);
+    };
+
+    const manejarCerrarModalEntregadoEntregaBodega = () => {
+        setVentanaAbiertaEntregadoEntregaBodega(false);
+        setFilaSeleccionadaEntregadoEntregaBodega(null);
+    };
+
 
     return (
         <div className="materialPrincipal">
@@ -1105,15 +1164,23 @@ const MaterialPrincipal = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {datosFiltradosPendienteEntregaBodegaSinMat.slice(0, expandidoPendienteEntregaBodegaSinMat ? datosFiltradosPendienteEntregaBodegaSinMat.length : 6).map((fila, index) => (
-                                        <tr key={`${fila.fecha}-${fila.cedula}`} onClick={() => manejarClickFilaPendienteEntregaBodega(fila)}>
-                                            {Object.values(fila).map((valor, idx) => (
-                                                <td key={idx} onClick={() => manejarClickFilaPendienteEntregaBodega(fila)}>
-                                                    {valor}
-                                                </td>
-                                            ))}
+                                    {datosFiltradosPendienteEntregaBodegaSinMat.length === 0 ? (
+                                        <tr>
+                                            <td colSpan={Object.keys(pendienteEntregaBodegaSinMat[0] || {}).length} style={{ textAlign: 'center' }}>
+                                                No hay registros
+                                            </td>
                                         </tr>
-                                    ))}
+                                    ) : (
+                                        datosFiltradosPendienteEntregaBodegaSinMat.slice(0, expandidoPendienteEntregaBodegaSinMat ? datosFiltradosPendienteEntregaBodegaSinMat.length : 6).map((fila, index) => (
+                                            <tr key={`${fila.fecha}-${fila.cedula}`} onClick={() => manejarClickFilaPendienteEntregaBodega(fila)}>
+                                                {Object.values(fila).map((valor, idx) => (
+                                                    <td key={idx} onClick={() => manejarClickFilaPendienteEntregaBodega(fila)}>
+                                                        {valor}
+                                                    </td>
+                                                ))}
+                                            </tr>
+                                        ))
+                                    )}
                                 </tbody>
                             </table>
                             <div className='Boton'>
@@ -1129,6 +1196,67 @@ const MaterialPrincipal = () => {
                                 onApprove=""
                                 onDeny=""
                                 fila={filaSeleccionadaPendienteEntregaBodega}
+                                observaciones={observacionesPendienteEntregaBodega}
+                                setObservaciones={setObservacionesPendienteEntregaBodega}
+                                pantalla="EntregaBodega"
+                            />
+                        </div>
+                    )}
+
+                    {carpeta === "Entrega Bodega" && (
+                        <div className='EntregaBodega'>
+                            <div className='Subtitulo'>
+                                <span>Solicitudes Entregadas por Bodega</span>
+                            </div>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        {Object.keys(entregadoEntregaBodegaSinMat[0] || {}).map((columna) => (
+                                            <th key={columna}>
+                                                {formatearNombreColumna(columna)}
+                                                <br />
+                                                <input
+                                                    type="text"
+                                                    placeholder={`Filtrar ${formatearNombreColumna(columna)}`}
+                                                    onChange={(e) => manejarCambioFiltroEntregadoEntregaBodega(columna, e.target.value)}
+                                                />
+                                            </th>
+                                        ))}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {datosFiltradosEntregadoEntregaBodegaSinMat.length === 0 ? (
+                                        <tr>
+                                            <td colSpan={Object.keys(entregadoEntregaBodegaSinMat[0] || {}).length} style={{ textAlign: 'center' }}>
+                                                No hay registros
+                                            </td>
+                                        </tr>
+                                    ) : (
+                                        datosFiltradosEntregadoEntregaBodegaSinMat.slice(0, expandidoEntregadoEntregaBodegaSinMat ? datosFiltradosEntregadoEntregaBodegaSinMat.length : 6).map((fila, index) => (
+                                            <tr key={`${fila.fecha}-${fila.cedula}`} onClick={() => manejarClickFilaEntregadoEntregaBodega(fila)}>
+                                                {Object.values(fila).map((valor, idx) => (
+                                                    <td key={idx} onClick={() => manejarClickFilaEntregadoEntregaBodega(fila)}>
+                                                        {valor}
+                                                    </td>
+                                                ))}
+                                            </tr>
+                                        ))
+                                    )}
+                                </tbody>
+                            </table>
+                            <div className='Boton'>
+                                <span onClick={() => {
+                                    setExpandidoEntregadoEntregaBodegaSinMat(!expandidoEntregadoEntregaBodegaSinMat);
+                                }}>
+                                    {expandidoEntregadoEntregaBodegaSinMat ? "Mostrar menos" : "Mostrar mas"}
+                                </span>
+                            </div>
+                            <MaterialPendienteDirector
+                                isOpen={ventanaAbiertaEntregadoEntregaBodega}
+                                onClose={manejarCerrarModalEntregadoEntregaBodega}
+                                onApprove=""
+                                onDeny=""
+                                fila={filaSeleccionadaEntregadoEntregaBodega}
                                 observaciones=""
                                 setObservaciones=""
                                 pantalla="EntregaBodega"

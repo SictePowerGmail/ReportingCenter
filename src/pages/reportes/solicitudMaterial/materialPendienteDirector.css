@@ -24,66 +24,133 @@
         justify-content: baseline;
         align-items: center;
 
-        .BarraSuperior {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .CargandoPagina {
             width: 100%;
-
-            h3 {
-                margin-top: 10px;
-            }
+            height: 90%;
         }
 
-        .Detalles {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 10px 0px;
-            width: 100%;
-
-            .Columna1, .Columna2 {
+        div {
+            .BarraSuperior {
                 display: flex;
-                flex-direction: column;
+                justify-content: space-between;
+                align-items: center;
+                width: 100%;
+
+                h3 {
+                    margin-top: 10px;
+                }
+            }
+
+            .Detalles {
+                display: flex;
                 justify-content: center;
-                align-items: baseline;
+                align-items: center;
+                margin: 10px 0px;
                 width: 100%;
+
+                .Columna1,
+                .Columna2 {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: baseline;
+                    width: 100%;
+                }
             }
-        }
 
-        .Tabla {
-            margin: 10px 0px;
-        }
-
-        .Observaciones {
-            margin: 10px 0px;
-            width: 100%;
-
-            textarea {
-                display: block;
+            .Tabla {
+                margin: 10px 0px;
                 width: 100%;
-                margin-top: 5px;
+
+                span {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 18px;
+                    font-weight: bold;
+                    margin: 20px 0px 10px 0px;
+                }
             }
-        }
 
-        .Botones {
-            width: 50%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 10px 0px;
-
-            button {
-                width: 100px;
-            }
-        }
-
-        .LecturaPDFs {
-            width: 100%;
-
-            iframe {
+            .Observaciones {
+                margin: 10px 0px;
                 width: 100%;
-                height: 500px;
+
+                textarea {
+                    display: block;
+                    width: 100%;
+                    margin-top: 5px;
+                }
+            }
+
+            .Botones {
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin: 10px 0px;
+
+                button {
+                    width: 100px;
+                    margin: 0px 40px;
+                }
+            }
+
+            .LecturaPDFs {
+                width: 100%;
+                margin-top: 10px;
+
+                .EntradaPDFs {
+                    span {
+                        font-weight: bold;
+                    }
+
+                    .inputPDFs {
+                        width: 100%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: baseline;
+                        margin: 10px 0px;
+                    }
+                }
+
+                .Contenedor {
+                    text-align: center;
+                    margin-top: 20px;
+
+                    .title {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 18px;
+                        font-weight: bold;
+                        margin: 20px 0px 10px 0px;
+                    }
+
+                    .VisorPDFs {
+                        border: 1px solid #ccc;
+                        border-radius: 8px;
+                        overflow: hidden;
+                        height: 400px;
+
+                        iframe {
+                            width: 100%;
+                            height: 100%;
+                            border: none;
+                        }
+                    }
+
+                    .Botones {
+                        width: 100%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+
+                        button {
+                            margin: 0px 20px;
+                        }
+                    }
+                }
             }
         }
     }
