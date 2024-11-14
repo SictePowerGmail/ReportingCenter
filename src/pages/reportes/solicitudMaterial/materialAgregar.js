@@ -20,7 +20,7 @@ const MaterialAgregar = () => {
     const nombreUsuario = Cookies.get('userNombre');
     const [ciudadesEntradaTexto, setCiudadesEntradaTexto] = useState(Cookies.get('solMatCiudad'));
     const [ciudadesSugerencias, setCiudadesSugerencias] = useState([]);
-    const Ciudades = ['Armenia', 'Bogota', 'Manizales', 'Pereira'];
+    const Ciudades = ['Armenia', 'Bogota San Cipriano Corporativo', 'Bogota San Cipriano Red Externa', 'Manizales', 'Pereira'];
     const [ciudadElgida, setCiudadElgida] = useState(Cookies.get('solMatCiudad'));
     const [uuidEntradaTexto, setUuidEntradaTexto] = useState(Cookies.get('solMatUUID'));
     const [nombreProyetoEntradaTexto, setNombreProyetoEntradaTexto] = useState(Cookies.get('solMatNombreProyecto'));
@@ -66,14 +66,56 @@ const MaterialAgregar = () => {
         const year = date.getFullYear();
         const hours = date.getHours().toString().padStart(2, '0');
         const minutes = date.getMinutes().toString().padStart(2, '0');
-        
+
         return `${year}-${month}-${day} ${hours}-${minutes}`;
     };
+
+    const verificarDisponibilidad = async () => {
+        const datosRestados = await calculo();
+
+        const filasAgrupadas = filasTabla.reduce((acumulador, fila) => {
+            const { codigoSap, cantidadSolicitada } = fila;
+
+            if (acumulador[codigoSap]) {
+                acumulador[codigoSap].cantidadTotalSolicitada += cantidadSolicitada;
+            } else {
+                acumulador[codigoSap] = {
+                    ...fila,
+                    cantidadTotalSolicitada: cantidadSolicitada
+                };
+            }
+
+            return acumulador;
+        }, {});
+
+        const filasAgrupadasArray = Object.values(filasAgrupadas);
+
+        const filasConSuficienteCantidad = filasAgrupadasArray.filter(fila => {
+            const { codigoSap, cantidadSolicitada } = fila;
+
+            const itemRestado = datosRestados.find(item => item.codigo === codigoSap);
+
+            if (itemRestado && itemRestado.cantidadRestada >= cantidadSolicitada) {
+                return true;
+            }
+
+            toast.error(`Cantidad disponible para el item ${itemRestado.codigo} ahora es inferior al solicitado, cantidad disponible ${itemRestado.cantidadRestada}`, { className: 'toast-error' });
+            return false;
+        });
+
+        return filasConSuficienteCantidad;
+    }
 
     const enviarFormulario = async (event) => {
 
         event.preventDefault();
         setError('');
+
+        const filasConSuficienteCantidad = await verificarDisponibilidad();
+
+        if (filasConSuficienteCantidad.length === 0) {
+            return;
+        }
 
         if (!nombreUsuario) {
             toast.error('Por favor agregar la cedula del solicitante', { className: 'toast-error' });
@@ -209,36 +251,106 @@ const MaterialAgregar = () => {
         }
     };
 
-    const cargarDatosKgprod = () => {
-        axios.get('https://sicteferias.from-co.net:8120/bodega/kgprod')
-            .then(response => {
-                let ciudad;
-                let datosFiltrados;
+    const calculo = async () => {
+        try {
+            const responseKgprod = await axios.get('https://sicteferias.from-co.net:8120/bodega/kgprod');
+            let ciudad;
 
-                if (ciudadElgida === "Manizales") {
-                    ciudad = ['KGPROD_MZL'];
-                } else if (ciudadElgida === "Pereira") {
-                    ciudad = ['KGPROD_PER'];
-                } else if (ciudadElgida === "Armenia") {
-                    ciudad = ['KGPROD_ARM'];
-                } else if (ciudadElgida === "Bogota") {
-                    ciudad = ['KGPROD_CORP_BOG', 'KGPROD_RED_BOG'];
+            if (ciudadElgida === "Manizales") {
+                ciudad = ['KGPROD_MZL'];
+            } else if (ciudadElgida === "Pereira") {
+                ciudad = ['KGPROD_PER'];
+            } else if (ciudadElgida === "Armenia") {
+                ciudad = ['KGPROD_ARM'];
+            } else if (ciudadElgida === "Bogota San Cipriano Corporativo") {
+                ciudad = ['KGPROD_CORP_BOG'];
+            } else if (ciudadElgida === "Bogota San Cipriano Red Externa") {
+                ciudad = ['KGPROD_RED_BOG'];
+            } else {
+                ciudad = []
+            }
+
+            const datosFiltradosKgprod = ciudad.length ? responseKgprod.data.filter(item => ciudad.includes(item.bodega)) : responseKgprod.data;
+
+            const responseRegistrosSolicitudMaterial = await axios.get('https://sicteferias.from-co.net:8120/solicitudMaterial/RegistrosSolicitudMaterial');
+
+            const datosFiltradosRegistrosSolicitudMaterial = responseRegistrosSolicitudMaterial.data.filter(item =>
+                item.aprobacionDirector !== "Rechazado" &&
+                item.aprobacionDireccionOperacion !== "Rechazado" &&
+                item.entregaBodega !== "Entregado"
+            );
+
+            const dinamicaRegistrosSolicitudMaterial = datosFiltradosRegistrosSolicitudMaterial.reduce((acumulador, item) => {
+                const codigo = item.codigoSapMaterial;
+                const cantidad = parseInt(item.cantidadSolicitadaMaterial, 10) || 0;
+
+                if (acumulador[codigo]) {
+                    acumulador[codigo] += cantidad;
                 } else {
-                    ciudad = ''
+                    acumulador[codigo] = cantidad;
                 }
 
-                if (ciudad === "") {
-                    datosFiltrados = response.data;
+                return acumulador;
+            }, {});
+
+            const responseRegistrosEntregadoSolicitudMaterial = await axios.get('https://sicteferias.from-co.net:8120/solicitudMaterial/RegistrosEntregadosSolicitudMaterial');
+
+            const hoy = new Date().toISOString().split("T")[0];
+
+            const datosFiltradosRegistrosEntregadoSolicitudMaterial = responseRegistrosEntregadoSolicitudMaterial.data.filter(item =>
+                item.fechaEntrega.slice(0, 10) === hoy
+            );
+
+            const dinamicaRegistrosEntregaSolicitudMaterial = datosFiltradosRegistrosEntregadoSolicitudMaterial.reduce((acumulador, item) => {
+                const codigo = item.codigoSapMaterial;
+                const cantidad = parseInt(item.cantidadSolicitadaMaterial, 10) || 0;
+
+                if (acumulador[codigo]) {
+                    acumulador[codigo] += cantidad;
                 } else {
-                    datosFiltrados = response.data.filter(item => ciudad.includes(item.bodega));
+                    acumulador[codigo] = cantidad;
                 }
 
-                setDataKgprod(datosFiltrados);
-                setLoading(false);
-            })
-            .catch(error => {
-                setError(error);
+                return acumulador;
+            }, {});
+
+            const datosRestados = datosFiltradosKgprod.map(itemKgprod => {
+                const codigo = itemKgprod.codigo;
+                const cantidadDisponible = parseInt(itemKgprod.candisp, 10) || 0;
+
+                const cantidadSolicitada = dinamicaRegistrosSolicitudMaterial[codigo] || 0;
+                const cantidadEntregada = dinamicaRegistrosEntregaSolicitudMaterial[codigo] || 0;
+                
+                const nuevaCantidad = cantidadDisponible - cantidadSolicitada - cantidadEntregada;
+
+                return {
+                    ...itemKgprod,
+                    cantidadRestada: nuevaCantidad,
+                    cantidadSolicitada,
+                    cantidadEntregada,
+                    cantidadDisponible
+                };
             });
+
+            return datosRestados
+
+        } catch (error) {
+            setError(error);
+        }
+    }
+
+    const cargarDatos = async () => {
+
+        try {
+            const datosRestados = await calculo();
+
+            setDataKgprod(datosRestados);
+            setLoading(false);
+
+        } catch (error) {
+            setError(error);
+            setLoading(false);
+        }
     };
 
     useEffect(() => {
@@ -248,7 +360,7 @@ const MaterialAgregar = () => {
 
     useEffect(() => {
         setLoading(true);
-        cargarDatosKgprod();
+        cargarDatos();
     }, [ciudadElgida]);
 
     return (
@@ -426,6 +538,7 @@ const MaterialAgregar = () => {
                                     <input
                                         type="date"
                                         value={entregaProyetoEntradaTexto}
+                                        min={new Date().toISOString().split("T")[0]}
                                         onChange={(e) => {
                                             setEntregaProyetoEntradaTexto(e.target.value);
                                             Cookies.set('solMatEntregaProyectada', e.target.value, { expires: 7 });
@@ -539,9 +652,9 @@ const MaterialAgregar = () => {
                                                                         accionCambioEntradaTextoTabla(index, 'codigoSap', elementoEncontrado.codigo);
 
                                                                         const nuevoCantidadDisponible = [...cantidadDisponible];
-                                                                        nuevoCantidadDisponible[index] = elementoEncontrado.candisp;
+                                                                        nuevoCantidadDisponible[index] = elementoEncontrado.cantidadRestada;
                                                                         setCantidadDisponible(nuevoCantidadDisponible);
-                                                                        accionCambioEntradaTextoTabla(index, 'cantidadDisponible', elementoEncontrado.candisp);
+                                                                        accionCambioEntradaTextoTabla(index, 'cantidadDisponible', elementoEncontrado.cantidadRestada);
 
                                                                         const nuevasSugerencias = [...sugerenciasPorFila];
                                                                         nuevasSugerencias[index] = [];
@@ -565,7 +678,14 @@ const MaterialAgregar = () => {
                                                     <input
                                                         type="number"
                                                         value={fila.cantidadSolicitada}
-                                                        onChange={(e) => accionCambioEntradaTextoTabla(index, 'cantidadSolicitada', e.target.value)}
+                                                        onChange={(e) => {
+                                                            const nuevaCantidad = parseInt(e.target.value, 10) || 0;
+                                                            if (nuevaCantidad <= cantidadDisponible[index]) {
+                                                                accionCambioEntradaTextoTabla(index, 'cantidadSolicitada', nuevaCantidad);
+                                                            } else {
+                                                                toast.error(`La cantidad solicitada no puede ser mayor que la cantidad disponible (${cantidadDisponible[index]})`, { className: 'toast-error' });
+                                                            }
+                                                        }}
                                                         disabled={!fila.propiedad | cantidadDisponible[index] === "0"}
                                                         required
                                                     />

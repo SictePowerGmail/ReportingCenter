@@ -13,6 +13,16 @@ const MaterialPendienteDirector = ({ isOpen, onClose, onApprove, onDeny, fila, o
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
+    const formatDate2 = (date) => {
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const year = date.getFullYear();
+        const hours = date.getHours().toString().padStart(2, '0');
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+
+        return `${year}-${month}-${day} ${hours}:${minutes}`;
+    };
+
     const formatDate3 = (date) => {
         const day = date.getDate().toString().padStart(2, '0');
         const month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -157,8 +167,8 @@ const MaterialPendienteDirector = ({ isOpen, onClose, onApprove, onDeny, fila, o
         }
 
         const fechaActual = new Date();
-        const formattedDate = formatDate3(fechaActual);
-        const pdfNombre = pdfNombres.map(pdf => `${formattedDate}_${pdf}`).join(",");
+        const formattedDate3 = formatDate3(fechaActual);
+        const pdfNombre = pdfNombres.map(pdf => `${formattedDate3}_${pdf}`).join(",");
 
         try {
             await axios.post('https://sicteferias.from-co.net:8120/solicitudMaterial/actualizarEstadoEntregaBodegaPDFs', { ids, pdfNombre });
@@ -172,7 +182,7 @@ const MaterialPendienteDirector = ({ isOpen, onClose, onApprove, onDeny, fila, o
             const pdf = pdfsFiles[i];
             const nombre = pdfNombres[i]
             const formDataPdf = new FormData();
-            const pdfNombre = `${formattedDate}_${nombre}`;
+            const pdfNombre = `${formattedDate3}_${nombre}`;
             formDataPdf.append('file', pdf);
             formDataPdf.append("filename", pdfNombre);
 
@@ -189,12 +199,15 @@ const MaterialPendienteDirector = ({ isOpen, onClose, onApprove, onDeny, fila, o
             }
         }
 
+        const formattedDate2 = formatDate2(fechaActual);
+
         for (let i = 0; i < pdfsFiles.length; i++) {
             const nombre = pdfNombres[i]
-            const pdfNombre = `${formattedDate}_${nombre}`;
+            const pdfNombre = `${formattedDate3}_${nombre}`;
 
             try {
-                const response = await axios.post('https://sicteferias.from-co.net:8120/solicitudMaterial/leerPDF', { "rutaPdf": pdfNombre },
+                const response = await axios.post('https://sicteferias.from-co.net:8120/solicitudMaterial/leerPDF',
+                    { "rutaPdf": pdfNombre },
                     {
                         headers: {
                             'Content-Type': 'application/json',
@@ -207,6 +220,33 @@ const MaterialPendienteDirector = ({ isOpen, onClose, onApprove, onDeny, fila, o
                 }));
 
                 setPdfData(prevData => [...prevData, ...updatedData]);
+
+                for (const row of updatedData) {
+
+                    try {
+                        await axios.post('https://sicteferias.from-co.net:8120/solicitudMaterial/cargarDatosEntregados',
+                            {
+                                fechaEntrega: formattedDate2,
+                                ciudad: fila[0].ciudad,
+                                documento: nombre,
+                                uuid: fila[0].uuid,
+                                nombreProyecto: fila[0].nombreProyecto,
+                                codigoSapMaterial: row.PRODUCTO,
+                                descripcionMaterial: row.DESCRIPCION,
+                                unidadMedidaMaterial: row["U.M."],
+                                cantidadSolicitadaMaterial: row.CANTIDAD
+                            },
+                            {
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                            }
+                        );
+                    } catch (error) {
+                        console.error('Error al enviar la fila al backend:', error);
+                        toast.error(`Error al cargar los datos: ${pdfNombre}`, { className: 'toast-error' });
+                    }
+                }
 
             } catch (error) {
                 console.error(`Error al enviar el PDF ${pdfNombre} al backend:`, error);
