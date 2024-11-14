@@ -20,6 +20,10 @@
     display: flex; /* Usa el modelo de caja flexible */
     justify-content: center; /* Centra horizontalmente */
     align-items: center; /* Centra verticalmente */
+
+    @media screen and (max-height: 650px) {
+        height: 100%;
+    }
 }
 
 /* Estilos para la imagen dentro del primer contenido */
@@ -37,6 +41,10 @@
     width: 350px; /* Ancho fijo */
     height: 600px; /* Altura fija */
     position: relative;
+
+    @media screen and (max-height: 650px) {
+        height: 100%;
+    }
 }
 
 /* Estilos para el logo dentro del contenedor */
