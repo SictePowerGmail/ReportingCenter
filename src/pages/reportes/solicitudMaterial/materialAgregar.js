@@ -355,6 +355,14 @@ const MaterialAgregar = () => {
 
     useEffect(() => {
         setFecha(new Date());
+
+        const cedulaUsuario = Cookies.get('userCedula');
+        const nombreUsuario = Cookies.get('userNombre');
+
+        if (cedulaUsuario === undefined && nombreUsuario === undefined) {
+            navigate('/MaterialLogin', { state: { estadoNotificacion: false } });
+        }
+
         setLoading(false);
     }, []);
 

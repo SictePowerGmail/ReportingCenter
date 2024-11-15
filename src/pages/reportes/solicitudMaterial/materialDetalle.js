@@ -1,17 +1,19 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import './materialPendienteDirector.css';
+import './materialDetalle.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ThreeDots } from 'react-loader-spinner';
-import { use } from 'react';
+import Cookies from 'js-cookie';
 
-const MaterialPendienteDirector = ({ isOpen, onClose, onApprove, onDeny, fila, observaciones, setObservaciones, pantalla }) => {
+const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observaciones, setObservaciones, pantalla }) => {
     const [diseñoFile, setDiseñoFile] = useState(null);
     const [kmzFile, setKmzFile] = useState(null);
     const contenidoRef = useRef(null);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
 
     const formatDate2 = (date) => {
         const day = date.getDate().toString().padStart(2, '0');
@@ -32,6 +34,15 @@ const MaterialPendienteDirector = ({ isOpen, onClose, onApprove, onDeny, fila, o
 
         return `${year}-${month}-${day} ${hours}-${minutes}`;
     };
+
+    useEffect(() => {
+        const cedulaUsuario = Cookies.get('userCedula');
+        const nombreUsuario = Cookies.get('userNombre');
+
+        if (cedulaUsuario === undefined && nombreUsuario === undefined) {
+            navigate('/MaterialLogin', { state: { estadoNotificacion: false } });
+        }
+    }, []);
 
     useEffect(() => {
         if (fila && fila[0]) {
@@ -71,7 +82,6 @@ const MaterialPendienteDirector = ({ isOpen, onClose, onApprove, onDeny, fila, o
                 });
 
                 const pdfUrl = URL.createObjectURL(response.data);
-
                 setPdfsUrl(prevUrls => [...prevUrls, pdfUrl]);
 
             } catch (error) {
@@ -260,7 +270,7 @@ const MaterialPendienteDirector = ({ isOpen, onClose, onApprove, onDeny, fila, o
     if (!isOpen) return null;
 
     return (
-        <div className="PendienteDirector">
+        <div className="MaterialDetalle">
 
             <div className='Contenido' ref={contenidoRef}>
 
@@ -278,7 +288,7 @@ const MaterialPendienteDirector = ({ isOpen, onClose, onApprove, onDeny, fila, o
                     <div>
                         <div className="BarraSuperior">
                             <h3>Detalles de la Solicitud</h3>
-                            <button onClick={onClose}>X</button>
+                            <button onClick={onClose}><i className="fas fa-times"></i></button>
                         </div>
 
                         <div className='Detalles'>
@@ -303,7 +313,18 @@ const MaterialPendienteDirector = ({ isOpen, onClose, onApprove, onDeny, fila, o
                                 </span>
                             </div>
                             <div className='Columna2'>
-                                <span><strong>Uuid:</strong> {fila[0].uuid}</span>
+                                <div>
+                                    <span><strong>Uuid:</strong> {fila[0].uuid}</span>
+                                    <button
+                                        title='Copiar Texto'
+                                        onClick={() => {
+                                            navigator.clipboard.writeText(fila[0].uuid);
+                                            toast.info(`Texto Copiado`, { className: 'toast-error' });
+                                        }}
+                                    >
+                                        <i className="fas fa-copy"></i>
+                                    </button>
+                                </div>
                                 <span><strong>Nombre Proyecto:</strong> {fila[0].nombreProyecto}</span>
                                 <span><strong>Fecha Entrega Proyecto:</strong> {fila[0].entregaProyecto}</span>
                                 <span><strong>Aprobacion Director:</strong> {fila[0].aprobacionDirector}</span>
@@ -345,47 +366,47 @@ const MaterialPendienteDirector = ({ isOpen, onClose, onApprove, onDeny, fila, o
                             </table>
                         </div>
 
-                        {(pantalla === "EntregaBodega") && (
-                            <div className='LecturaPDFs'>
-                                {(pdfData.length === 0 && fila[0].entregaBodega === "Pendiente") && (
-                                    <div className='EntradaPDFs'>
-                                        <span>Por favor agregue los PDFs de las salidas de material</span>
-                                        <div className='inputPDFs'>
-                                            <input type="file" accept="application/pdf" multiple onChange={lecturaDePDFs} ref={pdfInputRef} />
-                                        </div>
+                        <div className='LecturaPDFs'>
+                            {(pdfData.length === 0 && fila[0].entregaBodega === "Pendiente") && (
+                                <div className='EntradaPDFs'>
+                                    <span>Por favor agregue los PDFs de las salidas de material</span>
+                                    <div className='inputPDFs'>
+                                        <input type="file" accept="application/pdf" multiple onChange={lecturaDePDFs} ref={pdfInputRef} />
                                     </div>
-                                )}
-                                <div className='Contenedor'>
-                                    {pdfsUrl.length > 0 && (
-                                        <>
-                                            <div className='title'>
-                                                <span>Salidas de Material</span>
-                                            </div>
-                                            <div className='VisorPDFs'>
-                                                <iframe
-                                                    src={pdfsUrl[pdfConteoIndice]}
-                                                    title={`PDF-${pdfConteoIndice + 1}`}
-                                                />
-                                            </div>
-                                            <div className='Botones'>
-                                                <button
-                                                    onClick={() => {
-                                                        setPdfConteoIndice((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : pdfsUrl.length - 1));
-                                                    }}
-                                                >Anterior
-                                                </button>
-                                                <h4>{pdfNombres[pdfConteoIndice]}</h4>
-                                                <button
-                                                    onClick={() => {
-                                                        setPdfConteoIndice((prevIndex) => (prevIndex < pdfsUrl.length - 1 ? prevIndex + 1 : 0));
-                                                    }}
-                                                >Siguiente</button>
-                                            </div>
-                                        </>
-                                    )}
                                 </div>
+                            )}
+                            <div className='Contenedor'>
+                                {pdfsUrl.length > 0 && (
+                                    <>
+                                        <div className='title'>
+                                            <span>Salidas de Material</span>
+                                        </div>
+                                        <div className='VisorPDFs'>
+                                            <iframe
+                                                src={pdfsUrl[pdfConteoIndice]}
+                                                title={`PDF-${pdfConteoIndice + 1}`}
+                                            />
+                                        </div>
+                                        <div className='Botones'>
+                                            <button className='btn btn-secondary'
+                                                disabled={pdfsUrl.length < 2}
+                                                onClick={() => {
+                                                    setPdfConteoIndice((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : pdfsUrl.length - 1));
+                                                }}
+                                            >Anterior
+                                            </button>
+                                            <h5>Archivo {pdfConteoIndice + 1} de {pdfsUrl.length}</h5>
+                                            <button className='btn btn-secondary'
+                                                disabled={pdfsUrl.length < 2}
+                                                onClick={() => {
+                                                    setPdfConteoIndice((prevIndex) => (prevIndex < pdfsUrl.length - 1 ? prevIndex + 1 : 0));
+                                                }}
+                                            >Siguiente</button>
+                                        </div>
+                                    </>
+                                )}
                             </div>
-                        )}
+                        </div>
 
                         {((fila[0].aprobacionDirector === "Pendiente" && pantalla === "Director") || (fila[0].aprobacionDireccionOperacion === "Pendiente" && pantalla === "DireccionOperacion") || (fila[0].entregaBodega === "Pendiente" && pantalla === "EntregaBodega" && pdfsUrl.length > 0 && pdfData.length === 0)) && (
                             <div className='Observaciones'>
@@ -407,8 +428,8 @@ const MaterialPendienteDirector = ({ isOpen, onClose, onApprove, onDeny, fila, o
 
                         {((fila[0].aprobacionDirector === "Pendiente" && pantalla === "Director") || (fila[0].aprobacionDireccionOperacion === "Pendiente" && pantalla === "DireccionOperacion")) && (
                             <div className="Botones">
-                                <button onClick={onApprove}>Aprobar</button>
-                                <button
+                                <button className='btn btn-success' onClick={onApprove}>Aprobar</button>
+                                <button className='btn btn-danger'
                                     onClick={() => {
                                         if (observaciones.trim() === '') {
                                             setError('Las observaciones son obligatorias al rechazar.');
@@ -478,4 +499,4 @@ const MaterialPendienteDirector = ({ isOpen, onClose, onApprove, onDeny, fila, o
     );
 };
 
-export default MaterialPendienteDirector;
+export default MaterialDetalle;

@@ -68,7 +68,7 @@
         }
 
         .Titulo {
-            width: 100%;
+            width: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -148,6 +148,7 @@
                 align-items: center;
                 justify-content: end;
                 margin-top: 10px;
+                width: 100%;
 
                 span {
                     cursor: pointer;

@@ -5,12 +5,12 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ThreeDots } from 'react-loader-spinner';
 import axios from 'axios';
-import MaterialPendienteDirector from './materialPendienteDirector';
+import MaterialDetalle from './materialDetalle';
+import Cookies from 'js-cookie';
 
 const MaterialPrincipal = () => {
     const location = useLocation();
     const [error, setError] = useState('');
-    const { role, nombre, estadoNotificacion } = location.state || {};
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
     const [carpeta, setCarpeta] = useState('Solicitudes');
@@ -48,7 +48,7 @@ const MaterialPrincipal = () => {
                         } else if (entregaBodega === "Pendiente") {
                             estado = "Pendiente Entrega Bodega";
                         } else {
-                            estado = "Completo";
+                            estado = "Material Entregado";
                         }
 
                         return {
@@ -230,6 +230,13 @@ const MaterialPrincipal = () => {
     };
 
     useEffect(() => {
+        const cedulaUsuario = Cookies.get('userCedula');
+        const nombreUsuario = Cookies.get('userNombre');
+
+        if (cedulaUsuario === undefined && nombreUsuario === undefined) {
+            navigate('/MaterialLogin', { state: { estadoNotificacion: false } });
+        }
+
         cargarDatosRegistrosSolicitudMaterial();
     }, []);
 
@@ -578,27 +585,10 @@ const MaterialPrincipal = () => {
     };
 
     const [pendienteEntregaBodegaSinMat, setPendienteEntregaBodegaSinMat] = useState([]);
-    const [filtradoPendienteEntregaBodegaSinMat, setFiltradoPendienteEntregaBodegaSinMat] = useState({});
     const [expandidoPendienteEntregaBodegaSinMat, setExpandidoPendienteEntregaBodegaSinMat] = useState(false);
     const [observacionesPendienteEntregaBodega, setObservacionesPendienteEntregaBodega] = useState('');
     const [ventanaAbiertaPendienteEntregaBodega, setVentanaAbiertaPendienteEntregaBodega] = useState(false);
     const [filaSeleccionadaPendienteEntregaBodega, setFilaSeleccionadaPendienteEntregaBodega] = useState(null);
-
-    const datosFiltradosPendienteEntregaBodegaSinMat = pendienteEntregaBodegaSinMat.filter((fila) => {
-        return Object.keys(filtradoPendienteEntregaBodegaSinMat).every((columna) => {
-            return (
-                !filtradoPendienteEntregaBodegaSinMat[columna] ||
-                fila[columna]?.toString().toLowerCase().includes(filtradoPendienteEntregaBodegaSinMat[columna].toLowerCase())
-            );
-        });
-    });
-
-    const manejarCambioFiltroPendienteEntregaBodega = (columna, valor) => {
-        setFiltradoPendienteEntregaBodegaSinMat({
-            ...filtradoPendienteEntregaBodegaSinMat,
-            [columna]: valor,
-        });
-    };
 
     const manejarClickFilaPendienteEntregaBodega = (fila) => {
         const datosFiltrados = registrosSolicitudMaterial.filter(
@@ -616,26 +606,9 @@ const MaterialPrincipal = () => {
     };
 
     const [entregadoEntregaBodegaSinMat, setEntregadoEntregaBodegaSinMat] = useState([]);
-    const [filtradoEntregadoEntregaBodegaSinMat, setFiltradoEntregadoEntregaBodegaSinMat] = useState({});
     const [expandidoEntregadoEntregaBodegaSinMat, setExpandidoEntregadoEntregaBodegaSinMat] = useState(false);
     const [ventanaAbiertaEntregadoEntregaBodega, setVentanaAbiertaEntregadoEntregaBodega] = useState(false);
     const [filaSeleccionadaEntregadoEntregaBodega, setFilaSeleccionadaEntregadoEntregaBodega] = useState(null);
-
-    const datosFiltradosEntregadoEntregaBodegaSinMat = entregadoEntregaBodegaSinMat.filter((fila) => {
-        return Object.keys(filtradoEntregadoEntregaBodegaSinMat).every((columna) => {
-            return (
-                !filtradoEntregadoEntregaBodegaSinMat[columna] ||
-                fila[columna]?.toString().toLowerCase().includes(filtradoEntregadoEntregaBodegaSinMat[columna].toLowerCase())
-            );
-        });
-    });
-
-    const manejarCambioFiltroEntregadoEntregaBodega = (columna, valor) => {
-        setFiltradoEntregadoEntregaBodegaSinMat({
-            ...filtradoEntregadoEntregaBodegaSinMat,
-            [columna]: valor,
-        });
-    };
 
     const manejarClickFilaEntregadoEntregaBodega = (fila) => {
         const datosFiltrados = registrosSolicitudMaterial.filter(
@@ -651,6 +624,26 @@ const MaterialPrincipal = () => {
         setFilaSeleccionadaEntregadoEntregaBodega(null);
     };
 
+    const [filtrosComunes, setFiltrosComunes] = useState({});
+    
+    const manejarCambioFiltroComun = (columna, valor) => {
+        setFiltrosComunes((prevFiltros) => ({
+            ...prevFiltros,
+            [columna]: valor,
+        }));
+    };
+
+    const datosFiltradosPendienteEntregaBodegaSinMat = pendienteEntregaBodegaSinMat.filter((fila) =>
+        Object.entries(filtrosComunes).every(([columna, valor]) =>
+            fila[columna]?.toString().toLowerCase().includes(valor.toLowerCase())
+        )
+    );
+    
+    const datosFiltradosEntregadoEntregaBodegaSinMat = entregadoEntregaBodegaSinMat.filter((fila) =>
+        Object.entries(filtrosComunes).every(([columna, valor]) =>
+            fila[columna]?.toString().toLowerCase().includes(valor.toLowerCase())
+        )
+    );
 
     return (
         <div className="materialPrincipal">
@@ -669,7 +662,7 @@ const MaterialPrincipal = () => {
                     <div>
                         <button className="btn-flotante"
                             onClick={() => {
-                                navigate('/MaterialAgregar', { state: { role: role, nombre: nombre, estadoNotificacion: false } });
+                                navigate('/MaterialAgregar', { state: { estadoNotificacion: false } });
                             }}
                         >+</button>
                     </div>
@@ -683,7 +676,10 @@ const MaterialPrincipal = () => {
                             <li className="nav-item">
                                 <a
                                     className={`nav-link ${carpeta === 'Solicitudes' ? 'active' : ''}`}
-                                    onClick={() => setCarpeta('Solicitudes')}
+                                    onClick={() => {
+                                        setCarpeta('Solicitudes');
+                                        setFiltradoSolicitudMaterialSinMat({});
+                                    }}
                                 >
                                     Solicitudes
                                 </a>
@@ -691,7 +687,12 @@ const MaterialPrincipal = () => {
                             <li className="nav-item">
                                 <a
                                     className={`nav-link ${carpeta === 'Director' ? 'active' : ''}`}
-                                    onClick={() => setCarpeta('Director')}
+                                    onClick={() => {
+                                        setCarpeta('Director');
+                                        setFiltradoPendDirectSinMat({});
+                                        setFiltradoAprobacionDirectSinMat({});
+                                        setFiltradoRechazadoDirectSinMat({});
+                                    }}
                                 >
                                     Director
                                 </a>
@@ -699,7 +700,12 @@ const MaterialPrincipal = () => {
                             <li className="nav-item">
                                 <a
                                     className={`nav-link ${carpeta === 'Direccion Operacion' ? 'active' : ''}`}
-                                    onClick={() => setCarpeta('Direccion Operacion')}
+                                    onClick={() => {
+                                        setCarpeta('Direccion Operacion');
+                                        setFiltradoPendDireccOperaSinMat({});
+                                        setFiltradoAprobacionDireccOperaSinMat({});
+                                        setFiltradoRechazadoDireccOperaSinMat({});
+                                    }}
                                 >
                                     Direccion Operacion
                                 </a>
@@ -707,7 +713,10 @@ const MaterialPrincipal = () => {
                             <li className="nav-item">
                                 <a
                                     className={`nav-link ${carpeta === 'Entrega Bodega' ? 'active' : ''}`}
-                                    onClick={() => setCarpeta('Entrega Bodega')}
+                                    onClick={() => {
+                                        setCarpeta('Entrega Bodega');
+                                        setFiltrosComunes({});
+                                    }}
                                 >
                                     Entrega Bodega
                                 </a>
@@ -744,7 +753,7 @@ const MaterialPrincipal = () => {
                                             </td>
                                         </tr>
                                     ) : (
-                                        datosFiltradosSolicitudMaterialSinMat.slice(0, expandidoSolicitudMaterialSinMat ? datosFiltradosSolicitudMaterialSinMat.length : 10).map((fila, index) => (
+                                        datosFiltradosSolicitudMaterialSinMat.slice(0, expandidoSolicitudMaterialSinMat ? datosFiltradosSolicitudMaterialSinMat.length : 7).map((fila, index) => (
                                             <tr key={`${fila.fecha}-${fila.cedula}`} onClick={() => manejarClickFilaPendienteDirector(fila)}>
                                                 {Object.values(fila).map((valor, idx) => (
                                                     <td key={idx} onClick={() => manejarClickFilaPendienteDirector(fila)}>
@@ -763,7 +772,7 @@ const MaterialPrincipal = () => {
                                     {expandidoSolicitudMaterialSinMat ? "Mostrar menos" : "Mostrar mas"}
                                 </span>
                             </div>
-                            <MaterialPendienteDirector
+                            <MaterialDetalle
                                 isOpen={ventanaAbiertaPendienteDirector}
                                 onClose={manejarCerrarModalPendienteDirector}
                                 onApprove={manejarAprobarPendienteDirector}
@@ -805,7 +814,7 @@ const MaterialPrincipal = () => {
                                             </td>
                                         </tr>
                                     ) : (
-                                        datosFiltradosPendienteDirectorSinMat.slice(0, expandidoPendDirectSinMat ? datosFiltradosPendienteDirectorSinMat.length : 6).map((fila, index) => (
+                                        datosFiltradosPendienteDirectorSinMat.slice(0, expandidoPendDirectSinMat ? datosFiltradosPendienteDirectorSinMat.length : 5).map((fila, index) => (
                                             <tr key={`${fila.fecha}-${fila.cedula}`} onClick={() => manejarClickFilaPendienteDirector(fila)}>
                                                 {Object.values(fila).map((valor, idx) => (
                                                     <td key={idx} onClick={() => manejarClickFilaPendienteDirector(fila)}>
@@ -824,7 +833,7 @@ const MaterialPrincipal = () => {
                                     {expandidoPendDirectSinMat ? "Mostrar menos" : "Mostrar mas"}
                                 </span>
                             </div>
-                            <MaterialPendienteDirector
+                            <MaterialDetalle
                                 isOpen={ventanaAbiertaPendienteDirector}
                                 onClose={manejarCerrarModalPendienteDirector}
                                 onApprove={manejarAprobarPendienteDirector}
@@ -866,7 +875,7 @@ const MaterialPrincipal = () => {
                                             </td>
                                         </tr>
                                     ) : (
-                                        datosFiltradosAprobacionDirectorSinMat.slice(0, expandidoAprobacionDirectSinMat ? datosFiltradosAprobacionDirectorSinMat.length : 6).map((fila, index) => (
+                                        datosFiltradosAprobacionDirectorSinMat.slice(0, expandidoAprobacionDirectSinMat ? datosFiltradosAprobacionDirectorSinMat.length : 5).map((fila, index) => (
                                             <tr key={`${fila.fecha}-${fila.cedula}`} onClick={() => manejarClickFilaAprobacionDirector(fila)}>
                                                 {Object.values(fila).map((valor, idx) => (
                                                     <td key={idx} onClick={() => manejarClickFilaAprobacionDirector(fila)}>
@@ -885,7 +894,7 @@ const MaterialPrincipal = () => {
                                     {expandidoAprobacionDirectSinMat ? "Mostrar menos" : "Mostrar mas"}
                                 </span>
                             </div>
-                            <MaterialPendienteDirector
+                            <MaterialDetalle
                                 isOpen={ventanaAbiertaAprobacionDirector}
                                 onClose={manejarCerrarModalAprobacionDirector}
                                 onApprove={manejarAprobarPendienteDirector}
@@ -927,7 +936,7 @@ const MaterialPrincipal = () => {
                                             </td>
                                         </tr>
                                     ) : (
-                                        datosFiltradosRechazadoDirectorSinMat.slice(0, expandidoRechazadoDirectSinMat ? datosFiltradosRechazadoDirectorSinMat.length : 6).map((fila, index) => (
+                                        datosFiltradosRechazadoDirectorSinMat.slice(0, expandidoRechazadoDirectSinMat ? datosFiltradosRechazadoDirectorSinMat.length : 5).map((fila, index) => (
                                             <tr key={`${fila.fecha}-${fila.cedula}`} onClick={() => manejarClickFilaRechazadoDirector(fila)}>
                                                 {Object.values(fila).map((valor, idx) => (
                                                     <td key={idx} onClick={() => manejarClickFilaRechazadoDirector(fila)}>
@@ -946,7 +955,7 @@ const MaterialPrincipal = () => {
                                     {expandidoRechazadoDirectSinMat ? "Mostrar menos" : "Mostrar mas"}
                                 </span>
                             </div>
-                            <MaterialPendienteDirector
+                            <MaterialDetalle
                                 isOpen={ventanaAbiertaRechazadoDirector}
                                 onClose={manejarCerrarModalRechazadoDirector}
                                 onApprove={manejarAprobarPendienteDirector}
@@ -988,7 +997,7 @@ const MaterialPrincipal = () => {
                                             </td>
                                         </tr>
                                     ) : (
-                                        datosFiltradosPendienteDireccionOperacionSinMat.slice(0, expandidoPendDireccOperaSinMat ? datosFiltradosPendienteDireccionOperacionSinMat.length : 6).map((fila, index) => (
+                                        datosFiltradosPendienteDireccionOperacionSinMat.slice(0, expandidoPendDireccOperaSinMat ? datosFiltradosPendienteDireccionOperacionSinMat.length : 5).map((fila, index) => (
                                             <tr key={`${fila.fecha}-${fila.cedula}`} onClick={() => manejarClickFilaPendienteDireccionOperacion(fila)}>
                                                 {Object.values(fila).map((valor, idx) => (
                                                     <td key={idx} onClick={() => manejarClickFilaPendienteDireccionOperacion(fila)}>
@@ -1007,7 +1016,7 @@ const MaterialPrincipal = () => {
                                     {expandidoPendDireccOperaSinMat ? "Mostrar menos" : "Mostrar mas"}
                                 </span>
                             </div>
-                            <MaterialPendienteDirector
+                            <MaterialDetalle
                                 isOpen={ventanaAbiertaPendienteDireccionOperacion}
                                 onClose={manejarCerrarModalPendienteDireccionOperacion}
                                 onApprove={manejarAprobarPendienteDireccionOperacion}
@@ -1049,7 +1058,7 @@ const MaterialPrincipal = () => {
                                             </td>
                                         </tr>
                                     ) : (
-                                        datosFiltradosAprobacionDireccionOperacionSinMat.slice(0, expandidoAprobacionDireccOperaSinMat ? datosFiltradosAprobacionDireccionOperacionSinMat.length : 6).map((fila, index) => (
+                                        datosFiltradosAprobacionDireccionOperacionSinMat.slice(0, expandidoAprobacionDireccOperaSinMat ? datosFiltradosAprobacionDireccionOperacionSinMat.length : 5).map((fila, index) => (
                                             <tr key={`${fila.fecha}-${fila.cedula}`} onClick={() => manejarClickFilaAprobacionDireccionOperacion(fila)}>
                                                 {Object.values(fila).map((valor, idx) => (
                                                     <td key={idx} onClick={() => manejarClickFilaAprobacionDireccionOperacion(fila)}>
@@ -1068,7 +1077,7 @@ const MaterialPrincipal = () => {
                                     {expandidoAprobacionDireccOperaSinMat ? "Mostrar menos" : "Mostrar mas"}
                                 </span>
                             </div>
-                            <MaterialPendienteDirector
+                            <MaterialDetalle
                                 isOpen={ventanaAbiertaAprobacionDireccionOperacion}
                                 onClose={manejarCerrarModalAprobacionDireccionOperacion}
                                 onApprove={manejarAprobarPendienteDireccionOperacion}
@@ -1110,7 +1119,7 @@ const MaterialPrincipal = () => {
                                             </td>
                                         </tr>
                                     ) : (
-                                        datosFiltradosRechazadoDireccionOperacionSinMat.slice(0, expandidoRechazadoDireccOperaSinMat ? datosFiltradosRechazadoDireccionOperacionSinMat.length : 6).map((fila, index) => (
+                                        datosFiltradosRechazadoDireccionOperacionSinMat.slice(0, expandidoRechazadoDireccOperaSinMat ? datosFiltradosRechazadoDireccionOperacionSinMat.length : 5).map((fila, index) => (
                                             <tr key={`${fila.fecha}-${fila.cedula}`} onClick={() => manejarClickFilaRechazadoDireccionOperacion(fila)}>
                                                 {Object.values(fila).map((valor, idx) => (
                                                     <td key={idx} onClick={() => manejarClickFilaRechazadoDireccionOperacion(fila)}>
@@ -1129,7 +1138,7 @@ const MaterialPrincipal = () => {
                                     {expandidoRechazadoDireccOperaSinMat ? "Mostrar menos" : "Mostrar mas"}
                                 </span>
                             </div>
-                            <MaterialPendienteDirector
+                            <MaterialDetalle
                                 isOpen={ventanaAbiertaRechazadoDireccionOperacion}
                                 onClose={manejarCerrarModalRechazadoDireccionOperacion}
                                 onApprove={manejarAprobarPendienteDireccionOperacion}
@@ -1157,7 +1166,7 @@ const MaterialPrincipal = () => {
                                                 <input
                                                     type="text"
                                                     placeholder={`Filtrar ${formatearNombreColumna(columna)}`}
-                                                    onChange={(e) => manejarCambioFiltroPendienteEntregaBodega(columna, e.target.value)}
+                                                    onChange={(e) => manejarCambioFiltroComun(columna, e.target.value)}
                                                 />
                                             </th>
                                         ))}
@@ -1171,7 +1180,7 @@ const MaterialPrincipal = () => {
                                             </td>
                                         </tr>
                                     ) : (
-                                        datosFiltradosPendienteEntregaBodegaSinMat.slice(0, expandidoPendienteEntregaBodegaSinMat ? datosFiltradosPendienteEntregaBodegaSinMat.length : 6).map((fila, index) => (
+                                        datosFiltradosPendienteEntregaBodegaSinMat.slice(0, expandidoPendienteEntregaBodegaSinMat ? datosFiltradosPendienteEntregaBodegaSinMat.length : 5).map((fila, index) => (
                                             <tr key={`${fila.fecha}-${fila.cedula}`} onClick={() => manejarClickFilaPendienteEntregaBodega(fila)}>
                                                 {Object.values(fila).map((valor, idx) => (
                                                     <td key={idx} onClick={() => manejarClickFilaPendienteEntregaBodega(fila)}>
@@ -1190,7 +1199,7 @@ const MaterialPrincipal = () => {
                                     {expandidoPendienteEntregaBodegaSinMat ? "Mostrar menos" : "Mostrar mas"}
                                 </span>
                             </div>
-                            <MaterialPendienteDirector
+                            <MaterialDetalle
                                 isOpen={ventanaAbiertaPendienteEntregaBodega}
                                 onClose={manejarCerrarModalPendienteEntregaBodega}
                                 onApprove=""
@@ -1218,7 +1227,7 @@ const MaterialPrincipal = () => {
                                                 <input
                                                     type="text"
                                                     placeholder={`Filtrar ${formatearNombreColumna(columna)}`}
-                                                    onChange={(e) => manejarCambioFiltroEntregadoEntregaBodega(columna, e.target.value)}
+                                                    onChange={(e) => manejarCambioFiltroComun(columna, e.target.value)}
                                                 />
                                             </th>
                                         ))}
@@ -1232,7 +1241,7 @@ const MaterialPrincipal = () => {
                                             </td>
                                         </tr>
                                     ) : (
-                                        datosFiltradosEntregadoEntregaBodegaSinMat.slice(0, expandidoEntregadoEntregaBodegaSinMat ? datosFiltradosEntregadoEntregaBodegaSinMat.length : 6).map((fila, index) => (
+                                        datosFiltradosEntregadoEntregaBodegaSinMat.slice(0, expandidoEntregadoEntregaBodegaSinMat ? datosFiltradosEntregadoEntregaBodegaSinMat.length : 5).map((fila, index) => (
                                             <tr key={`${fila.fecha}-${fila.cedula}`} onClick={() => manejarClickFilaEntregadoEntregaBodega(fila)}>
                                                 {Object.values(fila).map((valor, idx) => (
                                                     <td key={idx} onClick={() => manejarClickFilaEntregadoEntregaBodega(fila)}>
@@ -1251,7 +1260,7 @@ const MaterialPrincipal = () => {
                                     {expandidoEntregadoEntregaBodegaSinMat ? "Mostrar menos" : "Mostrar mas"}
                                 </span>
                             </div>
-                            <MaterialPendienteDirector
+                            <MaterialDetalle
                                 isOpen={ventanaAbiertaEntregadoEntregaBodega}
                                 onClose={manejarCerrarModalEntregadoEntregaBodega}
                                 onApprove=""

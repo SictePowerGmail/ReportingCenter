@@ -13,8 +13,6 @@ const MaterialLogin = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         setError('');
-    
-        console.log(JSON.stringify({ correo: username, contrasena: password }),);
 
         try {
             const response = await fetch('https://sicteferias.from-co.net:8120/user/login/login', {
@@ -37,7 +35,7 @@ const MaterialLogin = () => {
                 Cookies.set('solMatUUID', "", { expires: 7 });
                 Cookies.set('solMatNombreProyecto', "", { expires: 7 });
                 Cookies.set('solMatEntregaProyectada', "", { expires: 7 });
-                navigate('/MaterialPrincipal', { state: { role:userRole, nombre:userNombre, estadoNotificacion:false } });
+                navigate('/MaterialPrincipal', { state: { estadoNotificacion:false } });
             } else {
                 const errorText = await response.text();
                 if (response.status === 404) {
@@ -90,7 +88,7 @@ const MaterialLogin = () => {
                 )}
 
                 <div className='Version'>
-                    <p>v1.04</p>
+                    <p>v1.05</p>
                 </div>
             </div>
         </div>
