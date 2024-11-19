@@ -7,6 +7,7 @@ import { ThreeDots } from 'react-loader-spinner';
 import axios from 'axios';
 import MaterialDetalle from './materialDetalle';
 import Cookies from 'js-cookie';
+import { ObtenerRolUsuario, ObtenerRelacionPersonalDirectores } from '../../../funciones';
 
 const MaterialPrincipal = () => {
     const location = useLocation();
@@ -15,6 +16,8 @@ const MaterialPrincipal = () => {
     const navigate = useNavigate();
     const [carpeta, setCarpeta] = useState('Solicitudes');
     const [registrosSolicitudMaterial, setRegistrosSolicitudMaterial] = useState([]);
+    const rolUsuario = ObtenerRolUsuario(Cookies.get('userRole'));
+    const nombreUsuario = Cookies.get('userNombre');
 
     const cargarDatosRegistrosSolicitudMaterial = () => {
         axios.get('https://sicteferias.from-co.net:8120/solicitudMaterial/RegistrosSolicitudMaterial')
@@ -87,7 +90,11 @@ const MaterialPrincipal = () => {
                         ))
                     );
 
-                setPendienteDirectorSinMat(datosPendienteDirector);
+                const datosFiltradosPendienteDirector = rolUsuario === "admin"
+                    ? datosPendienteDirector
+                    : datosPendienteDirector.filter(item => ObtenerRelacionPersonalDirectores(item.nombre) === nombreUsuario);
+
+                setPendienteDirectorSinMat(datosFiltradosPendienteDirector);
 
                 const datosAprobacionDirector = datos
                     .filter(item => item.aprobacionDirector === "Aprobado")
@@ -106,7 +113,11 @@ const MaterialPrincipal = () => {
                         ))
                     );
 
-                setAprobacionDirectorSinMat(datosAprobacionDirector);
+                const datosFiltradosAprobacionDirector = rolUsuario === "admin"
+                    ? datosAprobacionDirector
+                    : datosAprobacionDirector.filter(item => ObtenerRelacionPersonalDirectores(item.nombre) === nombreUsuario);
+
+                setAprobacionDirectorSinMat(datosFiltradosAprobacionDirector);
 
                 const datosRechazadoDirector = datos
                     .filter(item => item.aprobacionDirector === "Rechazado")
@@ -125,7 +136,11 @@ const MaterialPrincipal = () => {
                         ))
                     );
 
-                setRechazadoDirectorSinMat(datosRechazadoDirector);
+                const datosFiltradosRechazadoDirector = rolUsuario === "admin"
+                    ? datosRechazadoDirector
+                    : datosRechazadoDirector.filter(item => ObtenerRelacionPersonalDirectores(item.nombre) === nombreUsuario);
+
+                setRechazadoDirectorSinMat(datosFiltradosRechazadoDirector);
 
                 const datosPendienteDireccionOperacion = datos
                     .filter(item => item.aprobacionDirector === "Aprobado" && item.aprobacionDireccionOperacion === "Pendiente")
@@ -586,7 +601,6 @@ const MaterialPrincipal = () => {
 
     const [pendienteEntregaBodegaSinMat, setPendienteEntregaBodegaSinMat] = useState([]);
     const [expandidoPendienteEntregaBodegaSinMat, setExpandidoPendienteEntregaBodegaSinMat] = useState(false);
-    const [observacionesPendienteEntregaBodega, setObservacionesPendienteEntregaBodega] = useState('');
     const [ventanaAbiertaPendienteEntregaBodega, setVentanaAbiertaPendienteEntregaBodega] = useState(false);
     const [filaSeleccionadaPendienteEntregaBodega, setFilaSeleccionadaPendienteEntregaBodega] = useState(null);
 
@@ -608,7 +622,7 @@ const MaterialPrincipal = () => {
     const [entregadoEntregaBodegaSinMat, setEntregadoEntregaBodegaSinMat] = useState([]);
     const [expandidoEntregadoEntregaBodegaSinMat, setExpandidoEntregadoEntregaBodegaSinMat] = useState(false);
     const [ventanaAbiertaEntregadoEntregaBodega, setVentanaAbiertaEntregadoEntregaBodega] = useState(false);
-    const [filaSeleccionadaEntregadoEntregaBodega, setFilaSeleccionadaEntregadoEntregaBodega] = useState(null);
+    const [filaSeleccionadaEntregadoEntregaBodega, setFilaSeleccionadaEntregadoEntregaBodega] = useState([]);
 
     const manejarClickFilaEntregadoEntregaBodega = (fila) => {
         const datosFiltrados = registrosSolicitudMaterial.filter(
@@ -622,10 +636,11 @@ const MaterialPrincipal = () => {
     const manejarCerrarModalEntregadoEntregaBodega = () => {
         setVentanaAbiertaEntregadoEntregaBodega(false);
         setFilaSeleccionadaEntregadoEntregaBodega(null);
+        cargarDatosRegistrosSolicitudMaterial();
     };
 
     const [filtrosComunes, setFiltrosComunes] = useState({});
-    
+
     const manejarCambioFiltroComun = (columna, valor) => {
         setFiltrosComunes((prevFiltros) => ({
             ...prevFiltros,
@@ -638,7 +653,7 @@ const MaterialPrincipal = () => {
             fila[columna]?.toString().toLowerCase().includes(valor.toLowerCase())
         )
     );
-    
+
     const datosFiltradosEntregadoEntregaBodegaSinMat = entregadoEntregaBodegaSinMat.filter((fila) =>
         Object.entries(filtrosComunes).every(([columna, valor]) =>
             fila[columna]?.toString().toLowerCase().includes(valor.toLowerCase())
@@ -659,13 +674,15 @@ const MaterialPrincipal = () => {
                 </div>
             ) : (
                 <div className='Contenido'>
-                    <div>
-                        <button className="btn-flotante"
-                            onClick={() => {
-                                navigate('/MaterialAgregar', { state: { estadoNotificacion: false } });
-                            }}
-                        >+</button>
-                    </div>
+                    {(rolUsuario === "COORDINACION" || rolUsuario === "DIRECTOR" || rolUsuario === "admin") && (
+                        <div>
+                            <button className="btn-flotante"
+                                onClick={() => {
+                                    navigate('/MaterialAgregar', { state: { estadoNotificacion: false } });
+                                }}
+                            >+</button>
+                        </div>
+                    )}
 
                     <div className='Titulo'>
                         <h2>Solicitudes de Material</h2>
@@ -684,43 +701,49 @@ const MaterialPrincipal = () => {
                                     Solicitudes
                                 </a>
                             </li>
-                            <li className="nav-item">
-                                <a
-                                    className={`nav-link ${carpeta === 'Director' ? 'active' : ''}`}
-                                    onClick={() => {
-                                        setCarpeta('Director');
-                                        setFiltradoPendDirectSinMat({});
-                                        setFiltradoAprobacionDirectSinMat({});
-                                        setFiltradoRechazadoDirectSinMat({});
-                                    }}
-                                >
-                                    Director
-                                </a>
-                            </li>
-                            <li className="nav-item">
-                                <a
-                                    className={`nav-link ${carpeta === 'Direccion Operacion' ? 'active' : ''}`}
-                                    onClick={() => {
-                                        setCarpeta('Direccion Operacion');
-                                        setFiltradoPendDireccOperaSinMat({});
-                                        setFiltradoAprobacionDireccOperaSinMat({});
-                                        setFiltradoRechazadoDireccOperaSinMat({});
-                                    }}
-                                >
-                                    Direccion Operacion
-                                </a>
-                            </li>
-                            <li className="nav-item">
-                                <a
-                                    className={`nav-link ${carpeta === 'Entrega Bodega' ? 'active' : ''}`}
-                                    onClick={() => {
-                                        setCarpeta('Entrega Bodega');
-                                        setFiltrosComunes({});
-                                    }}
-                                >
-                                    Entrega Bodega
-                                </a>
-                            </li>
+                            {(rolUsuario === "DIRECTOR" || rolUsuario === "admin") && (
+                                <li className="nav-item">
+                                    <a
+                                        className={`nav-link ${carpeta === 'Director' ? 'active' : ''}`}
+                                        onClick={() => {
+                                            setCarpeta('Director');
+                                            setFiltradoPendDirectSinMat({});
+                                            setFiltradoAprobacionDirectSinMat({});
+                                            setFiltradoRechazadoDirectSinMat({});
+                                        }}
+                                    >
+                                        Director
+                                    </a>
+                                </li>
+                            )}
+                            {rolUsuario === "admin" && (
+                                <li className="nav-item">
+                                    <a
+                                        className={`nav-link ${carpeta === 'Direccion Operacion' ? 'active' : ''}`}
+                                        onClick={() => {
+                                            setCarpeta('Direccion Operacion');
+                                            setFiltradoPendDireccOperaSinMat({});
+                                            setFiltradoAprobacionDireccOperaSinMat({});
+                                            setFiltradoRechazadoDireccOperaSinMat({});
+                                        }}
+                                    >
+                                        Direccion Operacion
+                                    </a>
+                                </li>
+                            )}
+                            {(rolUsuario === "BODEGA" || rolUsuario === "admin") && (
+                                <li className="nav-item">
+                                    <a
+                                        className={`nav-link ${carpeta === 'Entrega Bodega' ? 'active' : ''}`}
+                                        onClick={() => {
+                                            setCarpeta('Entrega Bodega');
+                                            setFiltrosComunes({});
+                                        }}
+                                    >
+                                        Entrega Bodega
+                                    </a>
+                                </li>
+                            )}
                         </ul>
                     </div>
 
@@ -1205,8 +1228,8 @@ const MaterialPrincipal = () => {
                                 onApprove=""
                                 onDeny=""
                                 fila={filaSeleccionadaPendienteEntregaBodega}
-                                observaciones={observacionesPendienteEntregaBodega}
-                                setObservaciones={setObservacionesPendienteEntregaBodega}
+                                observaciones=""
+                                setObservaciones=""
                                 pantalla="EntregaBodega"
                             />
                         </div>

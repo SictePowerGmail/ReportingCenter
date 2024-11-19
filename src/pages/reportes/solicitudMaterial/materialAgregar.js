@@ -111,6 +111,18 @@ const MaterialAgregar = () => {
         event.preventDefault();
         setError('');
 
+        if (filasTabla.some(fila =>
+            !fila.propiedad ||
+            !fila.codigoSap ||
+            !fila.descripcion ||
+            !fila.unidadMedida ||
+            !fila.cantidadDisponible ||
+            !fila.cantidadSolicitada
+        )) {
+            toast.error('Por favor completa todos los campos de la tabla', { className: 'toast-error' });
+            return;
+        }
+
         const filasConSuficienteCantidad = await verificarDisponibilidad();
 
         if (filasConSuficienteCantidad.length === 0) {
@@ -157,6 +169,13 @@ const MaterialAgregar = () => {
             return;
         }
 
+        const fechaHoy = new Date().toISOString().split("T")[0];
+
+        if (entregaProyetoEntradaTexto < fechaHoy) {
+            toast.error(`La fecha ingresada debe ser mayo o igual a la de hoy.`, { className: 'toast-error' });
+            return;
+        }
+        
         if (!filasTabla || filasTabla.length === 0) {
             toast.error('Por favor agrega al menos una fila antes de enviar', { className: 'toast-error' });
             return;
@@ -170,15 +189,14 @@ const MaterialAgregar = () => {
             return;
         }
 
-        if (filasTabla.some(fila =>
-            !fila.propiedad ||
-            !fila.codigoSap ||
-            !fila.descripcion ||
-            !fila.unidadMedida ||
-            !fila.cantidadDisponible ||
-            !fila.cantidadSolicitada
-        )) {
-            toast.error('Por favor completa todos los campos de la tabla', { className: 'toast-error' });
+        const codigosSap = filasTabla.map((fila) => fila.codigoSap);
+
+        const codigosSapRepetidos = codigosSap.filter((codigoSap, index) => {
+            return codigosSap.indexOf(codigoSap) !== index;
+        });
+
+        if (codigosSapRepetidos.length > 0) {
+            toast.error(`Codigos Sap Repetidos en la solicitud: ${[...new Set(codigosSapRepetidos)].join(', ')}`, { className: 'toast-error' });
             return;
         }
 
@@ -223,6 +241,7 @@ const MaterialAgregar = () => {
                     unidadMedidaMaterial: unidadMedida,
                     cantidadDisponibleMaterial: cantidadDisponible,
                     cantidadSolicitadaMaterial: cantidadSolicitada,
+                    cantidadRestantePorDespacho: cantidadSolicitada,
                     aprobacionDirector: "Pendiente",
                     aprobacionDireccionOperacion: "Pendiente",
                     entregaBodega: "Pendiente"
@@ -293,6 +312,23 @@ const MaterialAgregar = () => {
                 return acumulador;
             }, {});
 
+            const datosFiltradosRegistrosSolicitudMaterialPendienteDespacho = responseRegistrosSolicitudMaterial.data.filter(item =>
+                item.entregaBodega === "Entregado"
+            );
+
+            const dinamicaRegistrosSolicitudMaterialPendienteDespacho = datosFiltradosRegistrosSolicitudMaterialPendienteDespacho.reduce((acumulador, item) => {
+                const codigo = item.codigoSapMaterial;
+                const cantidad = parseInt(item.cantidadRestantePorDespacho, 10) || 0;
+
+                if (acumulador[codigo]) {
+                    acumulador[codigo] += cantidad;
+                } else {
+                    acumulador[codigo] = cantidad;
+                }
+
+                return acumulador;
+            }, {});
+
             const responseRegistrosEntregadoSolicitudMaterial = await axios.get('https://sicteferias.from-co.net:8120/solicitudMaterial/RegistrosEntregadosSolicitudMaterial');
 
             const hoy = new Date().toISOString().split("T")[0];
@@ -320,15 +356,17 @@ const MaterialAgregar = () => {
 
                 const cantidadSolicitada = dinamicaRegistrosSolicitudMaterial[codigo] || 0;
                 const cantidadEntregada = dinamicaRegistrosEntregaSolicitudMaterial[codigo] || 0;
-                
-                const nuevaCantidad = cantidadDisponible - cantidadSolicitada - cantidadEntregada;
+                const cantidadPendienteDespacho = dinamicaRegistrosSolicitudMaterialPendienteDespacho[codigo] || 0;
+
+                const nuevaCantidad = cantidadDisponible - cantidadSolicitada - cantidadEntregada - cantidadPendienteDespacho;
 
                 return {
                     ...itemKgprod,
                     cantidadRestada: nuevaCantidad,
                     cantidadSolicitada,
                     cantidadEntregada,
-                    cantidadDisponible
+                    cantidadDisponible,
+                    cantidadPendienteDespacho
                 };
             });
 
@@ -550,6 +588,17 @@ const MaterialAgregar = () => {
                                         onChange={(e) => {
                                             setEntregaProyetoEntradaTexto(e.target.value);
                                             Cookies.set('solMatEntregaProyectada', e.target.value, { expires: 7 });
+
+                                            const fechaHoy = new Date().toISOString().split("T")[0];
+
+                                            if (e.target.value < fechaHoy) {
+                                                e.target.value = '';
+                                                toast.error(`La fecha ingresada debe ser mayo o igual a la de hoy.`, { className: 'toast-error' });
+                                                setEntregaProyetoEntradaTexto('');
+                                            } else {
+                                                setEntregaProyetoEntradaTexto(e.target.value);
+                                                Cookies.set('solMatEntregaProyectada', e.target.value, { expires: 7 });
+                                            }
                                         }}
                                         placeholder="Seleccione una fecha"
                                     />
@@ -624,6 +673,7 @@ const MaterialAgregar = () => {
                                                         value={fila.descripcion}
                                                         onChange={(event) => {
                                                             accionCambioEntradaTextoTabla(index, 'descripcion', event.target.value);
+
                                                             const sugerenciasFiltradas = descripciones.filter((option) =>
                                                                 option.toLowerCase().includes(event.target.value.toLowerCase())
                                                             );

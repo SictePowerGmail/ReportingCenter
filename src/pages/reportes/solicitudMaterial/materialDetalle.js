@@ -12,7 +12,9 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
     const [kmzFile, setKmzFile] = useState(null);
     const contenidoRef = useRef(null);
     const [error, setError] = useState('');
-    const [loading, setLoading] = useState(false);
+    const [observacionesBodega, setObservacionesBodega] = useState('');
+    const [loading, setLoading] = useState(true);
+    const [filaEditada, setFilaEditada] = useState(null);
     const navigate = useNavigate();
 
     const formatDate2 = (date) => {
@@ -45,17 +47,6 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
     }, []);
 
     useEffect(() => {
-        if (fila && fila[0]) {
-            fetchArchivo(fila[0].diseño, 'diseño');
-            fetchArchivo(fila[0].kmz, 'kmz');
-        }
-
-        if (fila && fila[0] && fila[0].pdfs !== null) {
-            optenerPDFs();
-        }
-    }, [fila]);
-
-    useEffect(() => {
         const handleClickOutside = (event) => {
             if (contenidoRef.current && !contenidoRef.current.contains(event.target)) {
                 onClose();
@@ -64,7 +55,10 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
 
         document.addEventListener('mousedown', handleClickOutside);
         setPdfsUrl([]);
+        setPdfsUrlNuevos([]);
         setPdfData([]);
+        setPdfDataNuevos([]);
+        setObservacionesBodega('');
 
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
@@ -102,7 +96,14 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
                     ...row,
                 }));
 
-                setPdfData(prevData => [...prevData, ...updatedData]);
+                const codigoSapMateriales = fila.map(f => f.codigoSapMaterial);
+
+                const updatedDataConEstado = updatedData.map(data => ({
+                    ...data,
+                    material: codigoSapMateriales.includes(data.PRODUCTO) ? "Solicitado" : "No solicitado",
+                }));
+
+                setPdfData(prevData => [...prevData, ...updatedDataConEstado]);
 
             } catch (error) {
                 console.error(`Error al enviar el PDF ${pdfNombre} al backend:`, error);
@@ -135,12 +136,34 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
         }
     };
 
-    const [pdfsUrl, setPdfsUrl] = useState([]);
-    const [pdfsFiles, setPdfsFiles] = useState([]);
-    const [pdfConteoIndice, setPdfConteoIndice] = useState(0);
-    const [pdfNombres, setPdfNombres] = useState([]);
-    const pdfInputRef = useRef(null);
     const [pdfData, setPdfData] = useState([]);
+    const [pdfsUrl, setPdfsUrl] = useState([]);
+    const [pdfNombres, setPdfNombres] = useState([]);
+    const [pdfConteoIndice, setPdfConteoIndice] = useState(0);
+    const [pdfsFiles, setPdfsFiles] = useState([]);
+    const pdfInputRef = useRef(null);
+    const [pdfDataNuevos, setPdfDataNuevos] = useState([]);
+    const [pdfsUrlNuevos, setPdfsUrlNuevos] = useState([]);
+    const [pdfNombresNuevos, setPdfNombresNuevos] = useState([]);
+    const [pdfConteoIndiceNuevos, setPdfConteoIndiceNuevos] = useState(0);
+    const [pdfsFilesNuevos, setPdfsFilesNuevos] = useState([]);
+    const pdfInputRefNuevos = useRef(null);
+
+    useEffect(() => {
+        if (fila && fila[0]) {
+            fetchArchivo(fila[0].diseño, 'diseño');
+            fetchArchivo(fila[0].kmz, 'kmz');
+        }
+
+        if (fila && fila[0] && fila[0].pdfs !== null) {
+            optenerPDFs();
+        }
+
+    }, [fila]);
+
+    useEffect(() => {
+        setLoading(false);
+    }, [pdfData])
 
     const lecturaDePDFs = (event) => {
         const files = Array.from(event.target.files);
@@ -156,29 +179,53 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
         setPdfConteoIndice(0);
     };
 
+    const lecturaDePDFsNuevos = (event) => {
+        const files = Array.from(event.target.files);
+        const urls = files
+            .filter(file => file.type === "application/pdf")
+            .map(file => URL.createObjectURL(file));
+        const pdfFiles = files.filter(file => file.type === "application/pdf");
+        const nombres = files.map(file => file.name);
+
+        setPdfsUrlNuevos(urls);
+        setPdfsFilesNuevos(pdfFiles);
+        setPdfNombresNuevos(nombres);
+        setPdfConteoIndiceNuevos(0);
+    };
+
+    let estadoCargue;
+
     const manejarCargueEntregaBodega = async () => {
-        setLoading(true);
         const ids = fila.map(item => item.id);
         const estado = "Entregado"
         let observacionesTemporal;
 
-        if (observaciones === "") {
+        if (observacionesBodega === "") {
             observacionesTemporal = "Ninguna";
         } else {
-            observacionesTemporal = observaciones;
+            observacionesTemporal = observacionesBodega;
         }
 
-        try {
-            await axios.post('https://sicteferias.from-co.net:8120/solicitudMaterial/actualizarEstadoEntregaBodega', { ids, estado, observacionesTemporal });
-            console.log('Solicitud enviada correctamente entrega bodega');
-        } catch (error) {
-            console.error('Error al enviar los IDs al backend:', error);
-            toast.error('Error en actualizar estado', { className: 'toast-success' });
+        if (estadoCargue === 'normal') {
+            try {
+                await axios.post('https://sicteferias.from-co.net:8120/solicitudMaterial/actualizarEstadoEntregaBodega', { ids, estado, observacionesTemporal });
+                console.log('Solicitud enviada correctamente entrega bodega');
+            } catch (error) {
+                console.error('Error al enviar los IDs al backend:', error);
+                toast.error('Error en actualizar estado', { className: 'toast-success' });
+            }
         }
 
         const fechaActual = new Date();
         const formattedDate3 = formatDate3(fechaActual);
-        const pdfNombre = pdfNombres.map(pdf => `${formattedDate3}_${pdf}`).join(",");
+        let pdfNombre;
+        if (estadoCargue === 'normal') {
+            pdfNombre = pdfNombres.map(pdf => `${formattedDate3}_${pdf}`).join(",");
+        } else if (estadoCargue === 'nuevo') {
+            const prfNombreAnterior = fila[0].pdfs
+            const pdfNombresNuevosFormateados = pdfNombresNuevos.map(pdf => `${formattedDate3}_${pdf}`).join(",");
+            pdfNombre = `${prfNombreAnterior},${pdfNombresNuevosFormateados}`
+        }
 
         try {
             await axios.post('https://sicteferias.from-co.net:8120/solicitudMaterial/actualizarEstadoEntregaBodegaPDFs', { ids, pdfNombre });
@@ -188,9 +235,22 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
             toast.error('Error en actualizar estado', { className: 'toast-success' });
         }
 
-        for (let i = 0; i < pdfsFiles.length; i++) {
-            const pdf = pdfsFiles[i];
-            const nombre = pdfNombres[i]
+        let pdfsFilesDefinitivos;
+
+        if (estadoCargue === 'normal') {
+            pdfsFilesDefinitivos = pdfsFiles;
+        } else if (estadoCargue === 'nuevo') {
+            pdfsFilesDefinitivos = pdfsFilesNuevos;
+        }
+
+        for (let i = 0; i < pdfsFilesDefinitivos.length; i++) {
+            const pdf = pdfsFilesDefinitivos[i];
+            let nombre;
+            if (estadoCargue === 'normal') {
+                nombre = pdfNombres[i]
+            } else if (estadoCargue === 'nuevo') {
+                nombre = pdfNombresNuevos[i]
+            }
             const formDataPdf = new FormData();
             const pdfNombre = `${formattedDate3}_${nombre}`;
             formDataPdf.append('file', pdf);
@@ -210,9 +270,15 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
         }
 
         const formattedDate2 = formatDate2(fechaActual);
+        let updatedDataConEstado2;
 
-        for (let i = 0; i < pdfsFiles.length; i++) {
-            const nombre = pdfNombres[i]
+        for (let i = 0; i < pdfsFilesDefinitivos.length; i++) {
+            let nombre;
+            if (estadoCargue === 'normal') {
+                nombre = pdfNombres[i]
+            } else if (estadoCargue === 'nuevo') {
+                nombre = pdfNombresNuevos[i]
+            }
             const pdfNombre = `${formattedDate3}_${nombre}`;
 
             try {
@@ -229,9 +295,22 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
                     ...row,
                 }));
 
-                setPdfData(prevData => [...prevData, ...updatedData]);
+                const codigoSapMateriales = fila.map(f => f.codigoSapMaterial);
 
-                for (const row of updatedData) {
+                const updatedDataConEstado = updatedData.map(data => ({
+                    ...data,
+                    material: codigoSapMateriales.includes(data.PRODUCTO) ? "Solicitado" : "No solicitado",
+                }));
+
+                if (estadoCargue === 'normal') {
+                    updatedDataConEstado2 = updatedDataConEstado;
+                    setPdfData(prevData => [...prevData, ...updatedDataConEstado]);
+                } else if (estadoCargue === 'nuevo') {
+                    updatedDataConEstado2 = updatedDataConEstado.concat(pdfData);
+                    setPdfDataNuevos(prevData => [...prevData, ...updatedDataConEstado]);
+                }
+
+                for (const row of updatedDataConEstado) {
 
                     try {
                         await axios.post('https://sicteferias.from-co.net:8120/solicitudMaterial/cargarDatosEntregados',
@@ -244,7 +323,8 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
                                 codigoSapMaterial: row.PRODUCTO,
                                 descripcionMaterial: row.DESCRIPCION,
                                 unidadMedidaMaterial: row["U.M."],
-                                cantidadSolicitadaMaterial: row.CANTIDAD
+                                cantidadSolicitadaMaterial: row.CANTIDAD,
+                                material: row.material
                             },
                             {
                                 headers: {
@@ -264,7 +344,43 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
             }
         }
 
-        setLoading(false);
+        const fila2 = fila.map((item) => {
+            const cantidadSolicitada = parseFloat(item.cantidadSolicitadaMaterial) || 0;
+
+            const cantidadDespachada = updatedDataConEstado2
+                .filter((pdfItem) => pdfItem.PRODUCTO.trim() === item.codigoSapMaterial.trim())
+                .reduce((total, pdfItem) => {
+                    return total + (parseFloat(pdfItem.CANTIDAD) || 0);
+                }, 0);
+
+            const cantidadRestante = cantidadSolicitada - cantidadDespachada;
+
+            return {
+                ...item,
+                cantidadRestantePorDespacho: cantidadRestante.toFixed(0),
+            };
+        });
+
+        const cantidades = fila2.map(item => item.cantidadRestantePorDespacho);
+        
+        try {
+            await axios.post('https://sicteferias.from-co.net:8120/solicitudMaterial/actualizarEstadoCantidadRestantePorDespacho', 
+                { 
+                    ids, cantidades 
+                },
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
+            console.log('Solicitud enviada correctamente entrega bodega');
+        } catch (error) {
+            console.error('Error al enviar los IDs al backend:', error);
+            toast.error('Error en actualizar estado', { className: 'toast-success' });
+        }
+
+        setFilaEditada(fila2);
     };
 
     if (!isOpen) return null;
@@ -344,15 +460,16 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
                                 <thead>
                                     <tr>
                                         <th>Propiedad Material</th>
-                                        <th>Cantidad Disponible</th>
                                         <th>Código SAP Material</th>
                                         <th>Descripción Material</th>
                                         <th>Unidad de Medida</th>
+                                        <th>Cantidad Disponible</th>
                                         <th>Cantidad Solicitada</th>
+                                        <th>Cantidad Restante por Despacho</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {fila.map((item) => (
+                                    {(filaEditada && filaEditada.length > 0 ? filaEditada : fila).map((item) => (
                                         <tr key={item.id}>
                                             <td>{item.propiedadMaterial}</td>
                                             <td>{item.codigoSapMaterial}</td>
@@ -360,6 +477,7 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
                                             <td>{item.unidadMedidaMaterial}</td>
                                             <td>{item.cantidadDisponibleMaterial}</td>
                                             <td>{item.cantidadSolicitadaMaterial}</td>
+                                            <td>{item.cantidadRestantePorDespacho}</td>
                                         </tr>
                                     ))}
                                 </tbody>
@@ -367,7 +485,7 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
                         </div>
 
                         <div className='LecturaPDFs'>
-                            {(pdfData.length === 0 && fila[0].entregaBodega === "Pendiente") && (
+                            {(pdfData.length === 0 && fila[0].entregaBodega === "Pendiente" && pantalla === "EntregaBodega") && (
                                 <div className='EntradaPDFs'>
                                     <span>Por favor agregue los PDFs de las salidas de material</span>
                                     <div className='inputPDFs'>
@@ -375,40 +493,38 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
                                     </div>
                                 </div>
                             )}
-                            <div className='Contenedor'>
-                                {pdfsUrl.length > 0 && (
-                                    <>
-                                        <div className='title'>
-                                            <span>Salidas de Material</span>
-                                        </div>
-                                        <div className='VisorPDFs'>
-                                            <iframe
-                                                src={pdfsUrl[pdfConteoIndice]}
-                                                title={`PDF-${pdfConteoIndice + 1}`}
-                                            />
-                                        </div>
-                                        <div className='Botones'>
-                                            <button className='btn btn-secondary'
-                                                disabled={pdfsUrl.length < 2}
-                                                onClick={() => {
-                                                    setPdfConteoIndice((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : pdfsUrl.length - 1));
-                                                }}
-                                            >Anterior
-                                            </button>
-                                            <h5>Archivo {pdfConteoIndice + 1} de {pdfsUrl.length}</h5>
-                                            <button className='btn btn-secondary'
-                                                disabled={pdfsUrl.length < 2}
-                                                onClick={() => {
-                                                    setPdfConteoIndice((prevIndex) => (prevIndex < pdfsUrl.length - 1 ? prevIndex + 1 : 0));
-                                                }}
-                                            >Siguiente</button>
-                                        </div>
-                                    </>
-                                )}
-                            </div>
+                            {pdfsUrl.length > 0 && (
+                                <div className='Contenedor'>
+                                    <div className='title'>
+                                        <span>Salidas de Material</span>
+                                    </div>
+                                    <div className='VisorPDFs'>
+                                        <iframe
+                                            src={pdfsUrl[pdfConteoIndice]}
+                                            title={`PDF-${pdfConteoIndice + 1}`}
+                                        />
+                                    </div>
+                                    <div className='Botones'>
+                                        <button className='btn btn-secondary'
+                                            disabled={pdfsUrl.length < 2}
+                                            onClick={() => {
+                                                setPdfConteoIndice((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : pdfsUrl.length - 1));
+                                            }}
+                                        >Anterior
+                                        </button>
+                                        <h5>Archivo {pdfConteoIndice + 1} de {pdfsUrl.length}</h5>
+                                        <button className='btn btn-secondary'
+                                            disabled={pdfsUrl.length < 2}
+                                            onClick={() => {
+                                                setPdfConteoIndice((prevIndex) => (prevIndex < pdfsUrl.length - 1 ? prevIndex + 1 : 0));
+                                            }}
+                                        >Siguiente</button>
+                                    </div>
+                                </div>
+                            )}
                         </div>
 
-                        {((fila[0].aprobacionDirector === "Pendiente" && pantalla === "Director") || (fila[0].aprobacionDireccionOperacion === "Pendiente" && pantalla === "DireccionOperacion") || (fila[0].entregaBodega === "Pendiente" && pantalla === "EntregaBodega" && pdfsUrl.length > 0 && pdfData.length === 0)) && (
+                        {((fila[0].aprobacionDirector === "Pendiente" && pantalla === "Director") || (fila[0].aprobacionDireccionOperacion === "Pendiente" && pantalla === "DireccionOperacion")) && (
                             <div className='Observaciones'>
                                 <label htmlFor="observaciones">Observaciones:</label>
                                 <textarea
@@ -416,7 +532,23 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
                                     value={observaciones}
                                     onChange={(e) => {
                                         setObservaciones(e.target.value);
-                                        setError('');
+                                    }}
+                                    placeholder="Escribe tus observaciones aquí..."
+                                    rows="2"
+                                    cols="100"
+                                />
+                                {error && <p className="error">{error}</p>}
+                            </div>
+                        )}
+
+                        {(fila[0].entregaBodega === "Pendiente" && pantalla === "EntregaBodega" && pdfData.length === 0 && pdfsUrl.length > 0) && (
+                            <div className='Observaciones'>
+                                <label htmlFor="observaciones">Observaciones:</label>
+                                <textarea
+                                    id="observaciones"
+                                    value={observacionesBodega}
+                                    onChange={(e) => {
+                                        setObservacionesBodega(e.target.value);
                                     }}
                                     placeholder="Escribe tus observaciones aquí..."
                                     rows="2"
@@ -442,13 +574,19 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
                             </div>
                         )}
 
-                        {((fila[0].entregaBodega === "Pendiente" && pantalla === "EntregaBodega" && pdfsUrl.length > 0 && pdfData.length === 0)) && (
+                        {((fila[0].entregaBodega === "Pendiente" && pantalla === "EntregaBodega" && pdfData.length === 0 && pdfsUrl.length > 0)) && (
                             <div className="Botones">
-                                <button onClick={manejarCargueEntregaBodega}>Cargar</button>
-                                <button
+                                <button className='btn btn-success'
+                                    onClick={() => {
+                                        estadoCargue = "normal";
+                                        manejarCargueEntregaBodega();
+                                    }}
+                                >Cargar</button>
+                                <button className='btn btn-primary'
                                     onClick={() => {
                                         setPdfsUrl([]);
                                         pdfInputRef.current.value = null;
+                                        setObservacionesBodega('');
                                     }}
                                 >Limpiar</button>
                             </div>
@@ -468,6 +606,7 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
                                                 <th>U.M.</th>
                                                 <th>CANTIDAD</th>
                                                 <th>OBSERVACIONES</th>
+                                                <th>MATERIAL</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -480,6 +619,144 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
                                                     <td>{item["U.M."]}</td>
                                                     <td>{item["CANTIDAD"]}</td>
                                                     <td>{item["OBSERVACIONES"]}</td>
+                                                    <td
+                                                        className={
+                                                            item["material"] === "Solicitado"
+                                                                ? "material-solicitado"
+                                                                : "material-no-solicitado"
+                                                        }
+                                                    >
+                                                        {item["material"]}
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        )}
+
+                        {(fila[0].entregaBodega !== "Pendiente" && pantalla === "EntregaBodega") && (
+                            <div className='LecturaPDFs'>
+                                <div className='Contenedor'>
+                                    <div className='title'>
+                                        <span>Agregar Salidas de Material</span>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        <div className='LecturaPDFs'>
+                            {(pdfDataNuevos.length === 0 && fila[0].entregaBodega !== "Pendiente" && pantalla === "EntregaBodega") && (
+                                <div className='EntradaPDFs'>
+                                    <span>Por favor agregue los nuevos PDFs de salidas de material</span>
+                                    <div className='inputPDFs'>
+                                        <input type="file" accept="application/pdf" multiple onChange={lecturaDePDFsNuevos} ref={pdfInputRefNuevos} />
+                                    </div>
+                                </div>
+                            )}
+                            {pdfsUrlNuevos.length > 0 && (
+                                <div className='Contenedor'>
+                                    <div className='title'>
+                                        <span>Salidas de Material</span>
+                                    </div>
+                                    <div className='VisorPDFs'>
+                                        <iframe
+                                            src={pdfsUrlNuevos[pdfConteoIndiceNuevos]}
+                                            title={`PDF-${pdfConteoIndiceNuevos + 1}`}
+                                        />
+                                    </div>
+                                    <div className='Botones'>
+                                        <button className='btn btn-secondary'
+                                            disabled={pdfsUrlNuevos.length < 2}
+                                            onClick={() => {
+                                                setPdfConteoIndiceNuevos((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : pdfsUrlNuevos.length - 1));
+                                            }}
+                                        >Anterior
+                                        </button>
+                                        <h5>Archivo {pdfConteoIndiceNuevos + 1} de {pdfsUrlNuevos.length}</h5>
+                                        <button className='btn btn-secondary'
+                                            disabled={pdfsUrlNuevos.length < 2}
+                                            onClick={() => {
+                                                setPdfConteoIndiceNuevos((prevIndex) => (prevIndex < pdfsUrlNuevos.length - 1 ? prevIndex + 1 : 0));
+                                            }}
+                                        >Siguiente</button>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
+                        {(fila[0].entregaBodega !== "Pendiente" && pantalla === "EntregaBodega" && pdfDataNuevos.length === 0 && pdfsUrlNuevos.length > 0) && (
+                            <div className='Observaciones'>
+                                <label htmlFor="observaciones">Observaciones:</label>
+                                <textarea
+                                    id="observaciones"
+                                    value={observacionesBodega}
+                                    onChange={(e) => {
+                                        setObservacionesBodega(e.target.value);
+                                    }}
+                                    placeholder="Escribe tus observaciones aquí..."
+                                    rows="2"
+                                    cols="100"
+                                />
+                                {error && <p className="error">{error}</p>}
+                            </div>
+                        )}
+
+                        {((fila[0].entregaBodega !== "Pendiente" && pantalla === "EntregaBodega" && pdfDataNuevos.length === 0 && pdfsUrlNuevos.length > 0)) && (
+                            <div className="Botones">
+                                <button className='btn btn-success'
+                                    onClick={() => {
+                                        estadoCargue = "nuevo";
+                                        manejarCargueEntregaBodega();
+                                    }}
+                                >Cargar</button>
+                                <button className='btn btn-primary'
+                                    onClick={() => {
+                                        setPdfsUrlNuevos([]);
+                                        pdfInputRefNuevos.current.value = null;
+                                        setObservacionesBodega('');
+                                    }}
+                                >Limpiar</button>
+                            </div>
+                        )}
+
+                        {pdfDataNuevos.length > 0 && (
+                            <div className="Tabla">
+                                <span>Material Entregado</span>
+                                <div>
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>SALIDA</th>
+                                                <th>NRO.</th>
+                                                <th>PRODUCTO</th>
+                                                <th>DESCRIPCION</th>
+                                                <th>U.M.</th>
+                                                <th>CANTIDAD</th>
+                                                <th>OBSERVACIONES</th>
+                                                <th>MATERIAL</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {pdfDataNuevos.map((item, index) => (
+                                                <tr key={index}>
+                                                    <td>{item["pdfNombre"]}</td>
+                                                    <td>{item["NRO."]}</td>
+                                                    <td>{item["PRODUCTO"]}</td>
+                                                    <td>{item["DESCRIPCION"]}</td>
+                                                    <td>{item["U.M."]}</td>
+                                                    <td>{item["CANTIDAD"]}</td>
+                                                    <td>{item["OBSERVACIONES"]}</td>
+                                                    <td
+                                                        className={
+                                                            item["material"] === "Solicitado"
+                                                                ? "material-solicitado"
+                                                                : "material-no-solicitado"
+                                                        }
+                                                    >
+                                                        {item["material"]}
+                                                    </td>
                                                 </tr>
                                             ))}
                                         </tbody>

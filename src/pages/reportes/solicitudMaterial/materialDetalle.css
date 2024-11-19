@@ -95,6 +95,20 @@
                     }
                 }
 
+                tbody {
+                    .material-solicitado {
+                        background-color: green;
+                        color: white;
+                        text-align: center;
+                    }
+                    
+                    .material-no-solicitado {
+                        background-color: red;
+                        color: white;
+                        text-align: center;
+                    }
+                }
+
                 span {
                     display: flex;
                     align-items: center;
