@@ -50,6 +50,26 @@ const relacionPersonalDirectores = {
     'Sergio Garcia': "John Castillo"
 };
 
+const obtenerRelacionPersonal = async () => {
+    try {
+        const response = await axios.get('https://sicteferias.from-co.net:8120/solicitudMaterial/RelacionPersonal');
+
+        return response.data;
+    } catch (error) {
+        console.error("Error al obtener la lista de directores:", error);
+        return [];
+    }
+};
+
+let RelacionPersonal = [];
+
+const cargarRelacionPersonal = async () => {
+    RelacionPersonal = await obtenerRelacionPersonal();
+};
+
+cargarRelacionPersonal();
+
 export const ObtenerRelacionPersonalDirectores = (usuario) => {
-    return relacionPersonalDirectores[usuario];
+    const registro = RelacionPersonal.find(item => item.coordinador === usuario);
+    return registro ? registro.director : null;
 };
