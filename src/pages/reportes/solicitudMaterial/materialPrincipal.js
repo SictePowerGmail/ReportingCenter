@@ -8,6 +8,8 @@ import axios from 'axios';
 import MaterialDetalle from './materialDetalle';
 import Cookies from 'js-cookie';
 import { ObtenerRolUsuario, ObtenerRelacionPersonalDirectores } from '../../../funciones';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 
 const MaterialPrincipal = () => {
     const location = useLocation();
@@ -660,6 +662,35 @@ const MaterialPrincipal = () => {
         )
     );
 
+    const descargarArchivo = () => {
+        const hoja = XLSX.utils.json_to_sheet(registrosSolicitudMaterial);
+        const libro = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(libro, hoja, 'Datos');
+        const archivoExcel = XLSX.write(libro, { bookType: 'xlsx', type: 'array' });
+        const blob = new Blob([archivoExcel], { type: 'application/octet-stream' });
+        saveAs(blob, 'Solicitudes de Material.xlsx');
+    };
+
+    const [orden, setOrden] = useState({ columna: null, ascendente: true });
+    const [datosOrdenados, setDatosOrdenados] = useState([]);
+
+    useEffect(() => {
+        setDatosOrdenados(datosFiltradosSolicitudMaterialSinMat);
+    }, [datosFiltradosSolicitudMaterialSinMat]);
+
+    const manejarOrdenarColumna = (columna) => {
+        const esAscendente = orden.columna === columna ? !orden.ascendente : true;
+        setOrden({ columna, ascendente: esAscendente });
+
+        const datosOrdenadosTemporal = [...datosOrdenados].sort((a, b) => {
+            if (a[columna] < b[columna]) return esAscendente ? -1 : 1;
+            if (a[columna] > b[columna]) return esAscendente ? 1 : -1;
+            return 0;
+        });
+
+        setDatosOrdenados(datosOrdenadosTemporal);
+    };
+
     return (
         <div className="materialPrincipal">
             {loading ? (
@@ -749,6 +780,9 @@ const MaterialPrincipal = () => {
 
                     {carpeta === "Solicitudes" && (
                         <div className='Solicitudes'>
+                            <div className='Botones'>
+                                <button className='btn btn-success' onClick={descargarArchivo}>Descargar Excel</button>
+                            </div>
                             <div className='Subtitulo'>
                                 <span>Solicitudes Realizadas</span>
                             </div>
@@ -756,12 +790,20 @@ const MaterialPrincipal = () => {
                                 <thead>
                                     <tr>
                                         {Object.keys(solicitudMaterialSinMat[0] || {}).map((columna) => (
-                                            <th key={columna}>
+                                            <th key={columna} onClick={() => manejarOrdenarColumna(columna)}>
                                                 {formatearNombreColumna(columna)}
+                                                {orden.columna === columna ? (
+                                                    orden.ascendente ? (
+                                                        <i className="fas fa-sort-up"></i>
+                                                    ) : (
+                                                        <i className="fas fa-sort-down"></i>
+                                                    )
+                                                ) : (
+                                                    <i className="fas fa-sort"></i>
+                                                )}
                                                 <br />
                                                 <input
                                                     type="text"
-                                                    placeholder={`Filtrar ${formatearNombreColumna(columna)}`}
                                                     onChange={(e) => manejarCambioFiltroSolicitudMaterial(columna, e.target.value)}
                                                 />
                                             </th>
@@ -769,14 +811,14 @@ const MaterialPrincipal = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {datosFiltradosSolicitudMaterialSinMat.length === 0 ? (
+                                    {datosOrdenados.length === 0 ? (
                                         <tr>
                                             <td colSpan={Object.keys(solicitudMaterialSinMat[0] || {}).length} style={{ textAlign: 'center' }}>
                                                 No hay registros
                                             </td>
                                         </tr>
                                     ) : (
-                                        datosFiltradosSolicitudMaterialSinMat.slice(0, expandidoSolicitudMaterialSinMat ? datosFiltradosSolicitudMaterialSinMat.length : 7).map((fila, index) => (
+                                        datosOrdenados.slice(0, expandidoSolicitudMaterialSinMat ? datosOrdenados.length : 6).map((fila, index) => (
                                             <tr key={`${fila.fecha}-${fila.cedula}`} onClick={() => manejarClickFilaPendienteDirector(fila)}>
                                                 {Object.values(fila).map((valor, idx) => (
                                                     <td key={idx} onClick={() => manejarClickFilaPendienteDirector(fila)}>

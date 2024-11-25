@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './materialAgregar.css'
+import './reporteMaterialAgregar.css'
 import 'leaflet/dist/leaflet.css';
 import 'leaflet.awesome-markers/dist/leaflet.awesome-markers.css';
 import 'leaflet.awesome-markers/dist/leaflet.awesome-markers.js';
@@ -10,37 +10,27 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ThreeDots } from 'react-loader-spinner';
 import Cookies from 'js-cookie';
 
-const MaterialAgregar = () => {
+const ReporteMaterialAgregar = () => {
     const navigate = useNavigate();
-    const [error, setError] = useState('');
     const [loading, setLoading] = useState(true);
+    const [enviando, setEnviando] = useState(false);
     const [dataKgprod, setDataKgprod] = useState(null);
+
     const [fecha, setFecha] = useState('');
     const cedulaUsuario = Cookies.get('userCedula');
     const nombreUsuario = Cookies.get('userNombre');
-    const [ciudadesEntradaTexto, setCiudadesEntradaTexto] = useState(Cookies.get('solMatCiudad'));
-    const [ciudadesSugerencias, setCiudadesSugerencias] = useState([]);
-    const Ciudades = ['Armenia', 'Bogota San Cipriano Corporativo', 'Bogota San Cipriano Red Externa', 'Manizales', 'Pereira'];
-    const [ciudadElgida, setCiudadElgida] = useState(Cookies.get('solMatCiudad'));
-    const [uuidEntradaTexto, setUuidEntradaTexto] = useState(Cookies.get('solMatUUID'));
-    const [nombreProyetoEntradaTexto, setNombreProyetoEntradaTexto] = useState(Cookies.get('solMatNombreProyecto'));
-    const [entregaProyetoEntradaTexto, setEntregaProyetoEntradaTexto] = useState(Cookies.get('solMatEntregaProyectada'));
-    const [diseñoArchivo, setDiseñoArchivo] = useState('');
-    const [kmzArchivo, setKmzArchivo] = useState('');
-    const [filasTabla, setFilasTabla] = useState([{ propiedad: '', codigoSap: '', descripcion: '', unidadMedida: '', cantidadDisponible: '', cantidadSolicitada: '' }]);
-    const propiedades = ['Sicte', 'Claro'];
-    const [descripciones, setDescripciones] = useState('');
-    const [sugerenciasPorFila, setSugerenciasPorFila] = useState([]);
-    const [codigoSap, setCodigoSap] = useState(Array(filasTabla.length).fill(""));
-    const [unidadMedida, setUnidadMedida] = useState(Array(filasTabla.length).fill(""));
-    const [cantidadDisponible, setCantidadDisponible] = useState(Array(filasTabla.length).fill(""));
-    const [enviando, setEnviando] = useState(false);
-
-    const accionCambioEntradaTextoTabla = (index, field, value) => {
-        const actualizarFilas = [...filasTabla];
-        actualizarFilas[index][field] = value;
-        setFilasTabla(actualizarFilas);
-    };
+    const [otEntradaTexto, setOtEntradaTexto] = useState(Cookies.get('repMatOt'));
+    const [movilEntradaTexto, setMovilEntradaTexto] = useState(Cookies.get('repMatMovil'));
+    const [responsableEntradaTexto, setResponsableEntradaTexto] = useState(Cookies.get('repMatResponsable'));
+    const [nodoEntradaTexto, setNodoEntradaTexto] = useState(Cookies.get('repMatNodo'));
+    const [filasTabla, setFilasTabla] = useState([]);
+    const tipoActividad = ['Instalacion', 'Desmonte'];
+    const [tipo, setTipo] = useState('');
+    const [codigoSap, setCodigoSap] = useState('');
+    const [descripcion, setDescripcion] = useState('');
+    const [unidadMedida, setUnidadMedida] = useState('');
+    const [cantidad, setCantidad] = useState('');
+    const [serial, setSerial] = useState('');
 
     const formatDate = (date) => {
         const day = date.getDate().toString().padStart(2, '0');
@@ -52,68 +42,12 @@ const MaterialAgregar = () => {
         return `${year}-${month}-${day} ${hours}:${minutes}`;
     };
 
-    const formatDate2 = (date) => {
-        const day = date.getDate().toString().padStart(2, '0');
-        const month = (date.getMonth() + 1).toString().padStart(2, '0');
-        const year = date.getFullYear();
-
-        return `${year}-${month}-${day}`;
-    };
-
-    const formatDate3 = (date) => {
-        const day = date.getDate().toString().padStart(2, '0');
-        const month = (date.getMonth() + 1).toString().padStart(2, '0');
-        const year = date.getFullYear();
-        const hours = date.getHours().toString().padStart(2, '0');
-        const minutes = date.getMinutes().toString().padStart(2, '0');
-
-        return `${year}-${month}-${day} ${hours}-${minutes}`;
-    };
-
-    const verificarDisponibilidad = async () => {
-        const datosRestados = await calculo();
-
-        const filasAgrupadas = filasTabla.reduce((acumulador, fila) => {
-            const { codigoSap, cantidadSolicitada } = fila;
-
-            if (acumulador[codigoSap]) {
-                acumulador[codigoSap].cantidadTotalSolicitada += cantidadSolicitada;
-            } else {
-                acumulador[codigoSap] = {
-                    ...fila,
-                    cantidadTotalSolicitada: cantidadSolicitada
-                };
-            }
-
-            return acumulador;
-        }, {});
-
-        const filasAgrupadasArray = Object.values(filasAgrupadas);
-
-        const filasConSuficienteCantidad = filasAgrupadasArray.filter(fila => {
-            const { codigoSap, cantidadSolicitada } = fila;
-
-            const itemRestado = datosRestados.find(item => item.codigo === codigoSap);
-
-            if (itemRestado && itemRestado.cantidadRestada >= cantidadSolicitada) {
-                return true;
-            }
-
-            toast.error(`Cantidad disponible para el item ${itemRestado.codigo} ahora es inferior al solicitado, cantidad disponible ${itemRestado.cantidadRestada}`, { className: 'toast-error' });
-            return false;
-        });
-
-        return filasConSuficienteCantidad;
-    }
-
     const enviarFormulario = async (event) => {
 
         event.preventDefault();
-        setError('');
 
-        const filasConSuficienteCantidad = await verificarDisponibilidad();
-
-        if (filasConSuficienteCantidad.length === 0) {
+        if (!fecha) {
+            toast.error('Se requiere recargar la pagina', { className: 'toast-error' });
             return;
         }
 
@@ -122,127 +56,71 @@ const MaterialAgregar = () => {
             return;
         }
 
-        if (!ciudadElgida) {
-            toast.error('Por favor agregar la ciudad', { className: 'toast-error' });
+        if (!otEntradaTexto) {
+            toast.error('Por favor agregar la OT', { className: 'toast-error' });
             return;
         }
 
-        if (!diseñoArchivo) {
-            toast.error('Por favor agregar el diseño', { className: 'toast-error' });
+        if (!movilEntradaTexto) {
+            toast.error('Por favor agregar la movil', { className: 'toast-error' });
             return;
         }
 
-        if (!kmzArchivo) {
-            toast.error('Por favor agrega el kmz', { className: 'toast-error' });
+        if (!responsableEntradaTexto) {
+            toast.error('Por favor agregar el/los responsable(s)', { className: 'toast-error' });
             return;
         }
 
-        if (!uuidEntradaTexto) {
-            toast.error('Por favor agregar el UUID', { className: 'toast-error' });
-            return;
-        }
-
-        if (!uuidEntradaTexto.includes('-')) {
-            toast.error('El UUID debe contener al menos un guion', { className: 'toast-error' });
-            return;
-        }
-
-        if (!nombreProyetoEntradaTexto) {
-            toast.error('Por favor agregar el nombre del proyecto', { className: 'toast-error' });
-            return;
-        }
-
-        if (!entregaProyetoEntradaTexto) {
-            toast.error('Por favor agregar la fecha proyectada del proyecto', { className: 'toast-error' });
-            return;
-        }
-
-        if (!filasTabla || filasTabla.length === 0) {
-            toast.error('Por favor agrega al menos una fila antes de enviar', { className: 'toast-error' });
+        if (!nodoEntradaTexto) {
+            toast.error('Por favor agregar el nodo', { className: 'toast-error' });
             return;
         }
 
         if (filasTabla.some(fila =>
-            fila.cantidadDisponible === "0"
-        )) {
-            const filaConCantidadCero = filasTabla.find(fila => fila.cantidadDisponible === "0");
-            toast.error(`Cantidad Disponible en cero en el codigo sap ${filaConCantidadCero.codigoSap}`, { className: 'toast-error' });
-            return;
-        }
-
-        if (filasTabla.some(fila =>
-            !fila.propiedad ||
+            !fila.tipo ||
             !fila.codigoSap ||
             !fila.descripcion ||
             !fila.unidadMedida ||
-            !fila.cantidadDisponible ||
-            !fila.cantidadSolicitada
+            !fila.cantidad ||
+            !fila.serial
         )) {
             toast.error('Por favor completa todos los campos de la tabla', { className: 'toast-error' });
-            return;
-        }
-
-        if (filasTabla.some(fila =>
-            fila.cantidadSolicitada === "0"
-        )) {
-            toast.error('No se admiten solicitudes con cantidad en cero', { className: 'toast-error' });
             return;
         }
 
         setEnviando(true)
 
         const fechaCorregida = formatDate(fecha);
-        const entregaProyectoCorregida = formatDate2(new Date(entregaProyetoEntradaTexto));
-        const formattedDate = formatDate3(fecha);
-        const formDataKmz = new FormData();
-        const kmzNombre = `${formattedDate}_${kmzArchivo.name}`
-        formDataKmz.append('file', kmzArchivo);
-        formDataKmz.append("filename", kmzNombre);
-        const formDataDiseño = new FormData();
-        const diseñoNombre = `${formattedDate}_${diseñoArchivo.name}`
-        formDataDiseño.append('file', diseñoArchivo);
-        formDataDiseño.append("filename", diseñoNombre);
 
         try {
             for (const fila of filasTabla) {
-                const { propiedad, codigoSap, descripcion, unidadMedida, cantidadDisponible, cantidadSolicitada } = fila;
+                const { tipo, codigoSap, descripcion, unidadMedida, cantidad, serial } = fila;
 
-                await axios.post("https://sicteferias.from-co.net:8120/solicitudMaterial/cargarDatos", {
+                await axios.post("https://sicteferias.from-co.net:8120/reporteMaterialTecnico/cargarDatosReporteMaterialTecnico", {
                     fecha: fechaCorregida,
                     cedula: cedulaUsuario,
                     nombre: nombreUsuario,
-                    ciudad: ciudadElgida,
-                    diseño: diseñoNombre,
-                    kmz: kmzNombre,
-                    uuid: uuidEntradaTexto,
-                    nombreProyecto: nombreProyetoEntradaTexto,
-                    entregaProyecto: entregaProyectoCorregida,
-                    propiedadMaterial: propiedad,
-                    codigoSapMaterial: codigoSap,
-                    descripcionMaterial: descripcion,
-                    unidadMedidaMaterial: unidadMedida,
-                    cantidadDisponibleMaterial: cantidadDisponible,
-                    cantidadSolicitadaMaterial: cantidadSolicitada,
-                    aprobacionDirector: "Pendiente",
-                    aprobacionDireccionOperacion: "Pendiente",
-                    entregaBodega: "Pendiente"
+                    ot: otEntradaTexto,
+                    movil: movilEntradaTexto,
+                    responsable: responsableEntradaTexto,
+                    nodo: nodoEntradaTexto,
+                    tipoActividad: tipo,
+                    codigoSap: codigoSap,
+                    descripcion: descripcion,
+                    unidadMedida: unidadMedida,
+                    cantidad: cantidad,
+                    serial: serial
                 });
             }
-
-            await axios.post('https://sicteferias.from-co.net:8120/solicitudMaterial/cargarKmz', formDataKmz, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            });
-
-            await axios.post('https://sicteferias.from-co.net:8120/solicitudMaterial/cargarDiseño', formDataDiseño, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            });
+            
+            Cookies.set('repMatOt', "", { expires: 7 });
+            Cookies.set('repMatMovil', "", { expires: 7 });
+            Cookies.set('repMatResponsable', "", { expires: 7 });
+            Cookies.set('repMatNodo', "", { expires: 7 });
+            Cookies.set('repMatFilas', "", { expires: 7 });
 
             setEnviando(false)
-            navigate('/MaterialPrincipal', { state: { estadoNotificacion: true } });
+            navigate('/ReporteMaterialPrincipal', { state: { estadoNotificacion: true } });
             console.log('Datos enviados exitosamente');
 
         } catch (error) {
@@ -251,120 +129,126 @@ const MaterialAgregar = () => {
         }
     };
 
-    const calculo = async () => {
+    useEffect(() => {
+        setFecha(new Date());
+
+        const filasGuardadas = Cookies.get('repMatFilas');
+        if (filasGuardadas) {
+            setFilasTabla(JSON.parse(filasGuardadas));
+        }
+
+        CargarDatos();
+    }, []);
+
+    const agregarFila = () => {
+        if (!tipo || !codigoSap || !descripcion || !unidadMedida || !cantidad || (!serialRequerido && !serial)) {
+            alert("Todos los campos son obligatorios");
+            return;
+        }
+
+        if (cantidad <= 0) {
+            alert("La cantidad no puede ser menor o igual a 0");
+            return;
+        }
+
+        let nuevaFila;
+        if (serialRequerido && !serial) {
+            nuevaFila = { tipo, codigoSap, descripcion, unidadMedida, cantidad, serial: "No requiere Serial" };
+        } else {
+            nuevaFila = { tipo, codigoSap, descripcion, unidadMedida, cantidad, serial };
+        }
+        
+        const filasActualizadas = [...filasTabla, nuevaFila];
+        Cookies.set('repMatFilas', JSON.stringify(filasActualizadas), { expires: 7 });
+        setFilasTabla(filasActualizadas);
+
+        setTipo('');
+        setCodigoSap('');
+        setDescripcion('');
+        setUnidadMedida('');
+        setCantidad('');
+        setSerial('');
+    };
+
+    const borrarFila = (index) => {
+        const nuevasFilas = filasTabla.filter((_, i) => i !== index);
+        Cookies.set('repMatFilas', JSON.stringify(nuevasFilas), { expires: 7 });
+        setFilasTabla(nuevasFilas);
+    };
+
+    const [opcionesCodigo, setOpcionesCodigo] = useState([]);
+    const [opcionesDescripcion, setOpcionesDescripcion] = useState([]);
+    const [serialRequerido, setSerialRequerido] = useState(true);
+
+    const CargarDatos = async () => {
         try {
             const responseKgprod = await axios.get('https://sicteferias.from-co.net:8120/bodega/kgprod');
-            let ciudad;
-
-            if (ciudadElgida === "Manizales") {
-                ciudad = ['KGPROD_MZL'];
-            } else if (ciudadElgida === "Pereira") {
-                ciudad = ['KGPROD_PER'];
-            } else if (ciudadElgida === "Armenia") {
-                ciudad = ['KGPROD_ARM'];
-            } else if (ciudadElgida === "Bogota San Cipriano Corporativo") {
-                ciudad = ['KGPROD_CORP_BOG'];
-            } else if (ciudadElgida === "Bogota San Cipriano Red Externa") {
-                ciudad = ['KGPROD_RED_BOG'];
-            } else {
-                ciudad = []
-            }
+            let ciudad = ['KGPROD_RED_BOG'];
 
             const datosFiltradosKgprod = ciudad.length ? responseKgprod.data.filter(item => ciudad.includes(item.bodega)) : responseKgprod.data;
+            setDataKgprod(datosFiltradosKgprod);
 
-            const responseRegistrosSolicitudMaterial = await axios.get('https://sicteferias.from-co.net:8120/solicitudMaterial/RegistrosSolicitudMaterial');
-
-            const datosFiltradosRegistrosSolicitudMaterial = responseRegistrosSolicitudMaterial.data.filter(item =>
-                item.aprobacionDirector !== "Rechazado" &&
-                item.aprobacionDireccionOperacion !== "Rechazado" &&
-                item.entregaBodega !== "Entregado"
-            );
-
-            const dinamicaRegistrosSolicitudMaterial = datosFiltradosRegistrosSolicitudMaterial.reduce((acumulador, item) => {
-                const codigo = item.codigoSapMaterial;
-                const cantidad = parseInt(item.cantidadSolicitadaMaterial, 10) || 0;
-
-                if (acumulador[codigo]) {
-                    acumulador[codigo] += cantidad;
-                } else {
-                    acumulador[codigo] = cantidad;
-                }
-
-                return acumulador;
-            }, {});
-
-            const responseRegistrosEntregadoSolicitudMaterial = await axios.get('https://sicteferias.from-co.net:8120/solicitudMaterial/RegistrosEntregadosSolicitudMaterial');
-
-            const hoy = new Date().toISOString().split("T")[0];
-
-            const datosFiltradosRegistrosEntregadoSolicitudMaterial = responseRegistrosEntregadoSolicitudMaterial.data.filter(item =>
-                item.fechaEntrega.slice(0, 10) === hoy
-            );
-
-            const dinamicaRegistrosEntregaSolicitudMaterial = datosFiltradosRegistrosEntregadoSolicitudMaterial.reduce((acumulador, item) => {
-                const codigo = item.codigoSapMaterial;
-                const cantidad = parseInt(item.cantidadSolicitadaMaterial, 10) || 0;
-
-                if (acumulador[codigo]) {
-                    acumulador[codigo] += cantidad;
-                } else {
-                    acumulador[codigo] = cantidad;
-                }
-
-                return acumulador;
-            }, {});
-
-            const datosRestados = datosFiltradosKgprod.map(itemKgprod => {
-                const codigo = itemKgprod.codigo;
-                const cantidadDisponible = parseInt(itemKgprod.candisp, 10) || 0;
-
-                const cantidadSolicitada = dinamicaRegistrosSolicitudMaterial[codigo] || 0;
-                const cantidadEntregada = dinamicaRegistrosEntregaSolicitudMaterial[codigo] || 0;
-                
-                const nuevaCantidad = cantidadDisponible - cantidadSolicitada - cantidadEntregada;
-
-                return {
-                    ...itemKgprod,
-                    cantidadRestada: nuevaCantidad,
-                    cantidadSolicitada,
-                    cantidadEntregada,
-                    cantidadDisponible
-                };
-            });
-
-            return datosRestados
+            setLoading(false);
 
         } catch (error) {
-            setError(error);
+            toast.error(`Error: ${error}`, { className: 'toast-error' });
         }
     }
 
-    const cargarDatos = async () => {
+    useEffect(() => {
+        if (dataKgprod) {
+            const opcionesCodigos = Array.from(new Set(dataKgprod.map((item) => item.codigo))).sort();
+            const opcionesDescripciones = Array.from(new Set(dataKgprod.map((item) => item.descrip))).sort();
+            setOpcionesCodigo(opcionesCodigos);
+            setOpcionesDescripcion(opcionesDescripciones);
+        }
+    }, [dataKgprod]);
 
-        try {
-            const datosRestados = await calculo();
+    const handleCodigoSapChange = (e) => {
+        const valor = e.target.value;
+        setCodigoSap(valor);
 
-            setDataKgprod(datosRestados);
-            setLoading(false);
-
-        } catch (error) {
-            setError(error);
-            setLoading(false);
+        const material = dataKgprod.find((item) => item.codigo === valor);
+        if (material) {
+            setDescripcion(material.descrip);
+            setUnidadMedida(material.unimed)
+            if (material.serial === "S") {
+                setSerialRequerido(false);
+            } else if (material.serial === "N") {
+                setSerialRequerido(true);
+            }
+        } else {
+            setDescripcion('');
+            setUnidadMedida('')
+            setSerialRequerido(true);
         }
     };
 
-    useEffect(() => {
-        setFecha(new Date());
-        setLoading(false);
-    }, []);
+    const handleDescripcionChange = (e) => {
+        const valor = e.target.value;
+        setDescripcion(valor);
 
-    useEffect(() => {
-        setLoading(true);
-        cargarDatos();
-    }, [ciudadElgida]);
+        const material = dataKgprod.find((item) => item.descrip === valor);
+        if (material) {
+            setCodigoSap(material.codigo);
+            setUnidadMedida(material.unimed)
+            if (material.serial === "S") {
+                setSerialRequerido(false);
+            } else if (material.serial === "N") {
+                setSerialRequerido(true);
+            }
+        } else {
+            setCodigoSap('');
+            setUnidadMedida('')
+            setSerialRequerido(true);
+        }
+    };
+
+    const [mostrarOpcionesCodigo, setMostrarOpcionesCodigo] = useState(false);
+    const [mostrarOpcionesDescripcion, setMostrarOpcionesDescripcion] = useState(false);
 
     return (
-        <div className="materialAgregar">
+        <div className="reporteMaterialAgregar">
             {loading ? (
                 <div id="CargandoPagina">
                     <ThreeDots
@@ -390,7 +274,7 @@ const MaterialAgregar = () => {
                     ) : (
                         <form className='Formulario'>
                             <div className='Titulo'>
-                                <h3>Solicitud de Material</h3>
+                                <h3>Reporte de Material Tecnico</h3>
                             </div>
 
                             <div className='contenido'>
@@ -414,138 +298,75 @@ const MaterialAgregar = () => {
                                     />
                                 </div>
 
-                                <div className='Ciudad'>
+                                <div className='Ot'>
                                     <div className='Subtitulo'>
                                         <i className="fas fa-calendar-alt"></i>
-                                        <h5>Ciudad</h5>
+                                        <h5>OT</h5>
                                     </div>
                                     <input type="text"
-                                        value={ciudadesEntradaTexto}
+                                        value={otEntradaTexto}
+                                        placeholder="Digite la OT"
                                         onChange={(event) => {
-                                            setCiudadesEntradaTexto(event.target.value);
-                                            const sugerenciasFiltradas = Ciudades.filter((option) =>
-                                                option.toLowerCase().includes(event.target.value.toLowerCase())
-                                            );
-                                            setCiudadesSugerencias(sugerenciasFiltradas);
+                                            const valor = event.target.value;
+                                            setOtEntradaTexto(valor);
+                                            Cookies.set('repMatOt', event.target.value, { expires: 7 });
                                         }}
-                                        onBlur={() => {
-                                            if (!Ciudades.includes(ciudadesEntradaTexto)) {
-                                                setCiudadesEntradaTexto('');
-                                            }
-                                        }}
-                                        placeholder="Digite la Ciudad"
-                                        disabled={Boolean(ciudadElgida)}
                                     />
-                                    <div className="Sugerencias">
-                                        {ciudadesSugerencias.map((sugerencia, index) => (
-                                            <div
-                                                key={index}
-                                                onClick={() => {
-                                                    Cookies.set('solMatCiudad', sugerencia, { expires: 7 });
-                                                    setCiudadElgida(sugerencia);
-                                                    setCiudadesEntradaTexto(sugerencia);
-                                                    setCiudadesSugerencias([]);
-                                                }}
-                                                className="Sugerencia-item"
-                                            >
-                                                {sugerencia}
-                                            </div>
-                                        ))}
-                                    </div>
                                 </div>
 
-                                <div className='ArchivoDiseño'>
+                                <div className='Movil'>
                                     <div className='Subtitulo'>
                                         <i className="fas fa-calendar-alt"></i>
-                                        <h5>Cargar Diseño</h5>
+                                        <h5>Movil</h5>
                                     </div>
-                                    <label className="Archivo">
-                                        <input
-                                            type="file"
-                                            accept=".zip, .rar, .7z"
-                                            onChange={(e) => setDiseñoArchivo(e.target.files[0])}
-                                        />
-                                        {diseñoArchivo ? (
-                                            <span>{diseñoArchivo.name}</span>
-                                        ) : (
-                                            <span>Formatos ".zip, .rar, .7z"</span>
-                                        )}
-                                    </label>
+                                    <input type="text"
+                                        value={movilEntradaTexto}
+                                        placeholder="Digite la Movil"
+                                        onChange={(event) => {
+                                            const valor = event.target.value;
+                                            setMovilEntradaTexto(valor);
+                                            Cookies.set('repMatMovil', event.target.value, { expires: 7 });
+                                        }}
+                                    />
                                 </div>
 
-                                <div className='ArchivoKMZ'>
+                                <div className='Responsable'>
                                     <div className='Subtitulo'>
                                         <i className="fas fa-calendar-alt"></i>
-                                        <h5>Cargar KMZ</h5>
+                                        <h5>Responsable</h5>
                                     </div>
-                                    <label className="Archivo">
-                                        <input
-                                            type="file"
-                                            accept=".kmz"
-                                            onChange={(e) => setKmzArchivo(e.target.files[0])}
-                                        />
-                                        {kmzArchivo ? (
-                                            <span>{kmzArchivo.name}</span>
-                                        ) : (
-                                            <span>Formato ".kmz"</span>
-                                        )}
-                                    </label>
+                                    <input type="text"
+                                        value={responsableEntradaTexto}
+                                        placeholder="Digite el responsable"
+                                        onChange={(event) => {
+                                            const valor = event.target.value;
+                                            setResponsableEntradaTexto(valor);
+                                            Cookies.set('repMatResponsable', event.target.value, { expires: 7 });
+                                        }}
+                                    />
                                 </div>
                             </div>
 
                             <div className='contenido'>
-                                <div className='UUID'>
+                                <div className='Nodo'>
                                     <div className='Subtitulo'>
                                         <i className="fas fa-calendar-alt"></i>
-                                        <h5>UUID</h5>
+                                        <h5>Nodo</h5>
                                     </div>
                                     <input type="text"
-                                        value={uuidEntradaTexto}
-                                        placeholder="Digite el UUID"
+                                        value={nodoEntradaTexto}
+                                        placeholder="Digite el nodo"
                                         onChange={(event) => {
                                             const valor = event.target.value;
-                                            setUuidEntradaTexto(valor);
-                                            Cookies.set('solMatUUID', event.target.value, { expires: 7 });
-                                        }}
-                                        onBlur={() => {
-                                            if (!uuidEntradaTexto.includes('-')) {
-                                                toast.info('El UUID debe contener al menos un guion', { className: 'toast-error' });
-                                            }
+                                            setNodoEntradaTexto(valor);
+                                            Cookies.set('repMatNodo', event.target.value, { expires: 7 });
                                         }}
                                     />
                                 </div>
 
-                                <div className='NombreProyecto'>
-                                    <div className='Subtitulo'>
-                                        <i className="fas fa-calendar-alt"></i>
-                                        <h5>Nombre del Proyecto</h5>
-                                    </div>
-                                    <input type="text"
-                                        value={nombreProyetoEntradaTexto}
-                                        placeholder="Digite el Nombre del Proyecto"
-                                        onChange={(event) => {
-                                            setNombreProyetoEntradaTexto(event.target.value);
-                                            Cookies.set('solMatNombreProyecto', event.target.value, { expires: 7 });
-                                        }}
-                                    />
-                                </div>
+                                <div className='CuadroAjuste'></div>
 
-                                <div className='EntregaProyecto'>
-                                    <div className='Subtitulo'>
-                                        <i className="fas fa-calendar-alt"></i>
-                                        <h5>Entrega Proyectada UUID</h5>
-                                    </div>
-                                    <input
-                                        type="date"
-                                        value={entregaProyetoEntradaTexto}
-                                        min={new Date().toISOString().split("T")[0]}
-                                        onChange={(e) => {
-                                            setEntregaProyetoEntradaTexto(e.target.value);
-                                            Cookies.set('solMatEntregaProyectada', e.target.value, { expires: 7 });
-                                        }}
-                                        placeholder="Seleccione una fecha"
-                                    />
-                                </div>
+                                <div className='CuadroAjuste'></div>
 
                                 <div className='CuadroAjuste'></div>
 
@@ -554,169 +375,164 @@ const MaterialAgregar = () => {
 
                             <div className='lineaHorizaontal'></div>
 
-                            <div className="Tabla">
+                            <div className='SubTitulo'>
+                                <h4>Agregar Material</h4>
+                            </div>
+
+                            <div className="Tabla Agregar">
                                 <table>
                                     <thead>
                                         <tr>
-                                            <th>Propiedad del Material</th>
+                                            <th>Tipo de Actividad</th>
                                             <th>Codigo SAP</th>
                                             <th>Descripción del Material</th>
                                             <th>Unidad de Medida</th>
-                                            <th>Cantidad Disponible</th>
-                                            <th>Cantidad Solicitada</th>
-                                            <th>Acciones</th>
+                                            <th>Cantidad</th>
+                                            <th>Serial</th>
+                                            <th>Accion</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {filasTabla.map((fila, index) => (
-                                            <tr key={index}>
-                                                <td>
-                                                    <select
-                                                        value={fila.propiedad}
-                                                        onChange={(e) => {
-                                                            const propiedad = e.target.value;
-                                                            accionCambioEntradaTextoTabla(index, 'propiedad', propiedad);
-
-                                                            let datosFiltrados;
-
-                                                            if (propiedad === "Sicte") {
-                                                                datosFiltrados = dataKgprod.filter(item => item.indComprado === "S");
-                                                            } else if (propiedad === "Claro") {
-                                                                datosFiltrados = dataKgprod.filter(item => item.indComprado === "N");
-                                                            } else {
-                                                                datosFiltrados = dataKgprod;
-                                                            }
-
-                                                            datosFiltrados.sort((a, b) => a.descrip.localeCompare(b.descrip));
-
-                                                            const descripcionesUnicas = [...new Set(datosFiltrados.map(item => item.descrip))].sort();
-                                                            setDescripciones(descripcionesUnicas);
-
-                                                            const nuevaSugerenciasPorFila = [...sugerenciasPorFila];
-                                                            nuevaSugerenciasPorFila[index] = datosFiltrados.map(item => item.descrip);
-                                                            setSugerenciasPorFila(nuevaSugerenciasPorFila);
-                                                        }}
-                                                        disabled={!Boolean(ciudadElgida)}
-                                                        required
-                                                    >
-                                                        <option value="">-- Seleccionar --</option>
-                                                        {propiedades.map((propiedad, i) => (
-                                                            <option key={i} value={propiedad}>
-                                                                {propiedad}
-                                                            </option>
-                                                        ))}
-                                                    </select>
-                                                </td>
-                                                <td>
-                                                    <span>{codigoSap[index]}</span>
-                                                </td>
-                                                <td>
-                                                    <input
-                                                        type="text"
-                                                        value={fila.descripcion}
-                                                        onChange={(event) => {
-                                                            accionCambioEntradaTextoTabla(index, 'descripcion', event.target.value);
-                                                            const sugerenciasFiltradas = descripciones.filter((option) =>
-                                                                option.toLowerCase().includes(event.target.value.toLowerCase())
-                                                            );
-                                                            const nuevaSugerencias = [...sugerenciasPorFila];
-                                                            nuevaSugerencias[index] = sugerenciasFiltradas;
-                                                            setSugerenciasPorFila(nuevaSugerencias);
-                                                        }}
-                                                        onBlur={() => {
-                                                            if (!descripciones.includes(fila.descripcion)) {
-                                                                accionCambioEntradaTextoTabla(index, 'descripcion', '');
-                                                            }
-                                                        }}
-                                                        placeholder="Digite la Descripción"
-                                                        disabled={!fila.propiedad}
-                                                        required
-                                                    />
-                                                    {fila.propiedad && (
-                                                        <div className="Sugerencias">
-                                                            {sugerenciasPorFila[index] && sugerenciasPorFila[index].map((sugerencia, i) => (
-                                                                <div
-                                                                    key={i}
-                                                                    onClick={() => {
-                                                                        accionCambioEntradaTextoTabla(index, 'descripcion', sugerencia);
-
-                                                                        const elementoEncontrado = dataKgprod.find(item => item.descrip === sugerencia);
-                                                                        const nuevaUnidadMedida = [...unidadMedida];
-                                                                        nuevaUnidadMedida[index] = elementoEncontrado.unimed;
-                                                                        setUnidadMedida(nuevaUnidadMedida);
-                                                                        accionCambioEntradaTextoTabla(index, 'unidadMedida', elementoEncontrado.unimed);
-
-                                                                        const nuevoCodigoSap = [...codigoSap];
-                                                                        nuevoCodigoSap[index] = elementoEncontrado.codigo;
-                                                                        setCodigoSap(nuevoCodigoSap);
-                                                                        accionCambioEntradaTextoTabla(index, 'codigoSap', elementoEncontrado.codigo);
-
-                                                                        const nuevoCantidadDisponible = [...cantidadDisponible];
-                                                                        nuevoCantidadDisponible[index] = elementoEncontrado.cantidadRestada;
-                                                                        setCantidadDisponible(nuevoCantidadDisponible);
-                                                                        accionCambioEntradaTextoTabla(index, 'cantidadDisponible', elementoEncontrado.cantidadRestada);
-
-                                                                        const nuevasSugerencias = [...sugerenciasPorFila];
-                                                                        nuevasSugerencias[index] = [];
-                                                                        setSugerenciasPorFila(nuevasSugerencias);
+                                        <tr>
+                                            <td data-label="Tipo de Actividad">
+                                                <select value={tipo} onChange={(e) => setTipo(e.target.value)}>
+                                                    <option value="">Seleccione</option>
+                                                    {tipoActividad.map((actividad) => (
+                                                        <option key={actividad} value={actividad}>{actividad}</option>
+                                                    ))}
+                                                </select>
+                                            </td>
+                                            <td data-label="Codigo SAP">
+                                                <input
+                                                    type="text"
+                                                    value={codigoSap}
+                                                    onChange={(e) => handleCodigoSapChange(e)}
+                                                    onFocus={() => setMostrarOpcionesCodigo(true)}
+                                                    onBlur={() => setTimeout(() => setMostrarOpcionesCodigo(false), 200)}
+                                                />
+                                                {mostrarOpcionesCodigo && (
+                                                    <ul>
+                                                        {opcionesCodigo
+                                                            .filter((codigo) => codigo.toLowerCase().includes(codigoSap.toLowerCase()))
+                                                            .map((codigo) => (
+                                                                <li
+                                                                    key={codigo}
+                                                                    style={{
+                                                                        padding: '8px',
+                                                                        cursor: 'pointer',
                                                                     }}
-                                                                    className="Sugerencia-item"
+                                                                    onMouseDown={() => {
+                                                                        setCodigoSap(codigo);
+                                                                        const material = dataKgprod.find((item) => item.codigo === codigo);
+                                                                        if (material) {
+                                                                            setDescripcion(material.descrip);
+                                                                            setUnidadMedida(material.unimed);
+                                                                            if (material.serial === "S") {
+                                                                                setSerialRequerido(false);
+                                                                            } else if (material.serial === "N") {
+                                                                                setSerialRequerido(true);
+                                                                            }
+                                                                        }
+                                                                        setMostrarOpcionesCodigo(false);
+                                                                    }}
                                                                 >
-                                                                    {sugerencia}
-                                                                </div>
+                                                                    {codigo}
+                                                                </li>
                                                             ))}
-                                                        </div>
-                                                    )}
-                                                </td>
-                                                <td>
-                                                    <span>{unidadMedida[index]}</span>
-                                                </td>
-                                                <td>
-                                                    <span>{cantidadDisponible[index]}</span>
-                                                </td>
-                                                <td>
-                                                    <input
-                                                        type="number"
-                                                        value={fila.cantidadSolicitada}
-                                                        onChange={(e) => {
-                                                            const nuevaCantidad = parseInt(e.target.value, 10) || 0;
-                                                            if (nuevaCantidad <= cantidadDisponible[index]) {
-                                                                accionCambioEntradaTextoTabla(index, 'cantidadSolicitada', nuevaCantidad);
-                                                            } else {
-                                                                toast.error(`La cantidad solicitada no puede ser mayor que la cantidad disponible (${cantidadDisponible[index]})`, { className: 'toast-error' });
-                                                            }
-                                                        }}
-                                                        disabled={!fila.propiedad | cantidadDisponible[index] === "0"}
-                                                        required
-                                                    />
-                                                </td>
-                                                <td>
-                                                    <button
-                                                        onClick={() => {
-                                                            const nuevasFilas = filasTabla.filter((_, i) => i !== index);
-                                                            setFilasTabla(nuevasFilas);
-                                                            setUnidadMedida(unidadMedida.filter((_, i) => i !== index));
-                                                            setCodigoSap(codigoSap.filter((_, i) => i !== index));
-                                                            setCantidadDisponible(cantidadDisponible.filter((_, i) => i !== index));
-                                                        }}
-                                                    >Borrar</button>
-                                                </td>
-                                            </tr>
-                                        ))}
+                                                    </ul>
+                                                )}
+                                            </td>
+                                            <td data-label="Descripción del Material">
+                                                <input
+                                                    type="text"
+                                                    value={descripcion}
+                                                    onChange={(e) => handleDescripcionChange(e)}
+                                                    onFocus={() => setMostrarOpcionesDescripcion(true)}
+                                                    onBlur={() => setTimeout(() => setMostrarOpcionesDescripcion(false), 200)}
+                                                />
+                                                {mostrarOpcionesDescripcion && (
+                                                    <ul>
+                                                        {opcionesDescripcion
+                                                            .filter((desc) => desc.toLowerCase().includes(descripcion.toLowerCase()))
+                                                            .map((desc) => (
+                                                                <li
+                                                                    key={desc}
+                                                                    style={{
+                                                                        padding: '8px',
+                                                                        cursor: 'pointer',
+                                                                    }}
+                                                                    onMouseDown={() => {
+                                                                        setDescripcion(desc);
+                                                                        const material = dataKgprod.find((item) => item.descrip === desc);
+                                                                        if (material) {
+                                                                            setCodigoSap(material.codigo);
+                                                                            setUnidadMedida(material.unimed);
+                                                                            if (material.serial === "S") {
+                                                                                setSerialRequerido(false);
+                                                                            } else if (material.serial === "N") {
+                                                                                setSerialRequerido(true);
+                                                                            }
+                                                                        }
+                                                                        setMostrarOpcionesDescripcion(false);
+                                                                    }}
+                                                                >
+                                                                    {desc}
+                                                                </li>
+                                                            ))}
+                                                    </ul>
+                                                )}
+                                            </td>
+                                            <td data-label="Unidad de Medida"><input type="text" value={unidadMedida} disabled /></td>
+                                            <td data-label="Cantidad"><input type="number" value={cantidad} onChange={(e) => setCantidad(e.target.value)} min="1" /></td>
+                                            <td data-label="Serial"><input type="text" value={serial} onChange={(e) => setSerial(e.target.value)} disabled={serialRequerido} /></td>
+                                            <td data-label="Acción"><button className='Agregar' onClick={agregarFila}>Agregar</button></td>
+                                        </tr>
                                     </tbody>
                                 </table>
-                                <div>
-                                    <button
-                                        onClick={() => {
-                                            setFilasTabla([...filasTabla, { propiedad: '', codigoSap: '', descripcion: '', unidadMedida: '', cantidadDisponible: '', cantidadSolicitada: '' }]);
-                                        }}
-                                    >Agregar Fila</button>
-                                </div>
                             </div>
 
-                            <div className='Enviar'>
-                                <button type="submit" id='Enviar' onClick={enviarFormulario} className="btn btn-primary">Enviar</button>
-                            </div>
+                            {filasTabla.length > 0 && (
+                                <>
+                                    <div className='lineaHorizaontal'></div>
+
+                                    <div className='SubTitulo'>
+                                        <h4>Material Agregado</h4>
+                                    </div>
+
+                                    <div className="Tabla Agregados">
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th>Tipo de Actividad</th>
+                                                    <th>Codigo SAP</th>
+                                                    <th>Descripción del Material</th>
+                                                    <th>Unidad de Medida</th>
+                                                    <th>Cantidad</th>
+                                                    <th>Serial</th>
+                                                    <th>Accion</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {filasTabla.map((fila, index) => (
+                                                    <tr key={index}>
+                                                        <td>{fila.tipo}</td>
+                                                        <td>{fila.codigoSap}</td>
+                                                        <td>{fila.descripcion}</td>
+                                                        <td>{fila.unidadMedida}</td>
+                                                        <td>{fila.cantidad}</td>
+                                                        <td>{fila.serial}</td>
+                                                        <td><button className='Borrar' onClick={() => borrarFila(index)}>Borrar</button></td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <div className='Enviar'>
+                                        <button type="submit" id='Enviar' onClick={enviarFormulario} className="btn btn-primary">Enviar</button>
+                                    </div>
+                                </>
+                            )}
                         </form>
                     )}
 
@@ -729,4 +545,4 @@ const MaterialAgregar = () => {
     );
 };
 
-export default MaterialAgregar;
+export default ReporteMaterialAgregar;

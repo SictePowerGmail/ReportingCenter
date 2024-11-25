@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Sicte from '../../../images/Sicte 6.png'
 import Cookies from 'js-cookie';
 
-const MaterialLogin = () => {
+const ReporteMaterialLogin = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -33,11 +33,12 @@ const MaterialLogin = () => {
                 Cookies.set('userRole', userRole, { expires: 7 });
                 Cookies.set('userNombre', userNombre, { expires: 7 });
                 Cookies.set('userCedula', userCedula, { expires: 7 });
-                Cookies.set('solMatCiudad', "", { expires: 7 });
-                Cookies.set('solMatUUID', "", { expires: 7 });
-                Cookies.set('solMatNombreProyecto', "", { expires: 7 });
-                Cookies.set('solMatEntregaProyectada', "", { expires: 7 });
-                navigate('/MaterialPrincipal', { state: { role:userRole, nombre:userNombre, estadoNotificacion:false } });
+                Cookies.set('repMatOt', "", { expires: 7 });
+                Cookies.set('repMatMovil', "", { expires: 7 });
+                Cookies.set('repMatResponsable', "", { expires: 7 });
+                Cookies.set('repMatNodo', "", { expires: 7 });
+                Cookies.set('repMatFilas', "", { expires: 7 });
+                navigate('/ReporteMaterialPrincipal', { state: { role:userRole, nombre:userNombre, estadoNotificacion:false } });
             } else {
                 const errorText = await response.text();
                 if (response.status === 404) {
@@ -90,11 +91,11 @@ const MaterialLogin = () => {
                 )}
 
                 <div className='Version'>
-                    <p>v1.04</p>
+                    <p>v1.01</p>
                 </div>
             </div>
         </div>
     );
 };
 
-export default MaterialLogin;
+export default ReporteMaterialLogin;

@@ -302,6 +302,7 @@ function Navbar() {
                                     <Link id='SubMenu-Contenido-Titulo' to="/Capacidades" onClick={toggleMobileMenu}><li>Capacidades</li></Link>
                                     <Link id='SubMenu-Contenido-Titulo' to="/SupervisionLogin" onClick={toggleMobileMenu}><li>Supervision</li></Link>
                                     <Link id='SubMenu-Contenido-Titulo' to="/MaterialLogin" onClick={toggleMobileMenu}><li>Solicitud de Material</li></Link>
+                                    <Link id='SubMenu-Contenido-Titulo' to="/ReporteMaterialLogin" onClick={toggleMobileMenu}><li>Reporte Material Tecnico</li></Link>
                                 </ul>
                             </div>
                         )}

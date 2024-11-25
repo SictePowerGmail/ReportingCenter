@@ -14,6 +14,9 @@ import SupervisionAgregar from "../pages/reportes/supervision/supervisionAgregar
 import MaterialLogin from "../pages/reportes/solicitudMaterial/materialLogin";
 import MaterialPrincipal from "../pages/reportes/solicitudMaterial/materialPrincipal";
 import MaterialAgregar from "../pages/reportes/solicitudMaterial/materialAgregar";
+import ReporteMaterialLogin from "../pages/reportes/reporteMaterialTecnico/reporteMaterialLogin";
+import ReporteMaterialPrincipal from "../pages/reportes/reporteMaterialTecnico/reporteMaterialPrincipal";
+import ReporteMaterialAgregar from "../pages/reportes/reporteMaterialTecnico/reporteMaterialAgregar";
 /* Facturacion */
 import FacturacionConsolidado from '../pages/facturacion/FacturacionConsolidado';
 import PlaneacionFacturacion from '../pages/facturacion/PlaneacionFacturacion';
@@ -105,6 +108,12 @@ function RutasApp() {
                 return 'Solicitud Materiales';
             case '/MaterialAgregar':
                 return 'Solicitud Materiales'
+            case '/ReporteMaterialLogin':
+                return 'Reporte Materiales Tecnico';
+            case '/ReporteMaterialPrincipal':
+                return 'Reporte Materiales Tecnico';
+            case '/ReporteMaterialAgregar':
+                return 'Reporte Materiales Tecnico'
             /* Facturacion */
             case '/ConsolidadoNacionalFacturacion':
                 return 'Consolidado Nacional Facturacion';
@@ -221,6 +230,9 @@ function RutasApp() {
                 <Route path='/MaterialLogin' exacte element={<MaterialLogin />} />
                 <Route path='/MaterialPrincipal' exacte element={<MaterialPrincipal />} />
                 <Route path='/MaterialAgregar' exacte element={<MaterialAgregar />} />
+                <Route path='/ReporteMaterialLogin' exacte element={<ReporteMaterialLogin />} />
+                <Route path='/ReporteMaterialPrincipal' exacte element={<ReporteMaterialPrincipal />} />
+                <Route path='/ReporteMaterialAgregar' exacte element={<ReporteMaterialAgregar />} />
                 {/* Facturacion */}
                 <Route path='/ConsolidadoNacionalFacturacion' exacte element={<FacturacionConsolidado />} />
                 <Route path='/PlaneacionFacturacion' exacte element={<PlaneacionFacturacion />} />

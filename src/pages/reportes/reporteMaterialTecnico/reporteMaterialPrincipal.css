@@ -1,10 +1,14 @@
-.materialPrincipal {
+.reporteMaterialPrincipal {
     width: 100%;
     height: calc(100% - 40px);
     display: flex;
     justify-content: center;
     align-items: center;
     padding-left: 40px;
+
+    @media screen and (max-width: 600px) {
+        padding-left: 0;
+    }
 
     .CargandoPagina {
         display: flex;
@@ -72,10 +76,19 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 15px 0px;
+            margin: 15px 0px 5px 0px;
 
             span {
                 font-size: 25px;
+            }
+
+            @media screen and (max-width: 600px) {
+                justify-content: start;
+                padding-left: 10px;
+
+                h2 {
+                    font-size: 18px;
+                }
             }
         }
 
@@ -89,12 +102,17 @@
             }
         }
 
-        .Solicitudes,
-        .Director,
-        .DireccionOperacion,
-        .EntregaBodega {
+        .Registros {
             padding: 20px 20px 0px;
             width: 100%;
+
+            .Botones {
+                display: flex;
+                justify-content: end;
+                align-items: center;
+                width: 100%;
+                margin-bottom: 5px;
+            }
 
             .Subtitulo {
                 width: 100%;
@@ -110,36 +128,71 @@
                 }
             }
 
-            table {
-                width: 100%;
-                border-collapse: collapse;
+            .Tabla {
+                overflow: auto;
 
-                th,
-                td {
-                    border: 1px solid #ddd;
-                    padding: 8px;
-                    text-align: center;
+                &::-webkit-scrollbar {
+                    width: 10px;
                 }
+        
+                &::-webkit-scrollbar-track {
+                    background-color: white;
+                    border-radius: 10px;
+                }
+        
+                &::-webkit-scrollbar-thumb {
+                    background-color: #ff8800;
+                    border-radius: 10px;
+                    border: 5px solid white;
+                }
+        
+                &::-webkit-scrollbar-thumb:hover {
+                    background: #bd6a0c;
+                }
+                
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    min-width: 870px;
 
-                thead {
-                    th:hover {
-                        background-color: #56d424d5;
-                        cursor: pointer;
+                    th,
+                    td {
+                        border: 1px solid #ddd;
+                        padding: 8px;
+                        text-align: center;
                     }
-                }
 
-                tbody {
-                    tr:hover {
-                        background-color: #56d424d5;
-                        cursor: pointer;
+                    thead {
+                        th {
+
+                            i {
+                                margin-left: 5px;
+                            }
+                        }
+
+                        th:hover {
+                            background-color: #56d424d5;
+                            cursor: pointer;
+                        }
                     }
-                }
 
-                input {
-                    margin-top: 4px;
-                    padding: 4px;
-                    width: 90%;
-                    text-align: center;
+                    tbody {
+                        tr:hover {
+                            background-color: #56d424d5;
+                            cursor: pointer;
+                        }
+
+                        td {
+                            text-align: center;
+                        }
+                    }
+
+                    input {
+                        margin-top: 4px;
+                        padding: 4px;
+                        width: 90%;
+                        text-align: center;
+                    }
                 }
             }
 
