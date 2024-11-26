@@ -224,45 +224,47 @@
                         border-collapse: collapse;
                         width: 100%;
                         display: block;
-                    }
-                
-                    thead {
-                        display: none;
-                    }
-                
-                    tbody {
-                        tr {
+                        min-width: 0px !important;
+
+                        thead {
+                            display: none;
+                        }
+
+                        tbody {
                             display: block;
-                            text-align: center;
-
-                            td {
-                                display: flex;
-                                justify-content: center;
-                                align-items: center;
-                                padding: 8px 10px;
+                            width: 100%;
+    
+                            tr {
+                                display: block;
+                                width: 100%;
                                 border-bottom: 1px solid #ddd;
-                            }
-                        
-                            td:last-child {
-                                border-bottom: none;
-                            }
-                        }
-                    }
+                                margin-bottom: 20px;
+    
+                                td {
+                                    display: flex;
+                                    justify-content: space-between;
+                                    align-items: center;
+                                    padding: 8px 10px;
+                                    border-bottom: 1px solid #ddd;
+                                    width: 100%;
 
-                    &.Agregados {
-                        td:before {
-                            font-weight: bold;
-                            flex: 0 0 50%;
-                            padding-right: 10px;
-                        }
-                    }
-                
-                    &.Agregar {
-                        td:before {
-                            content: attr(data-label);
-                            font-weight: bold;
-                            flex: 0 0 50%;
-                            padding-right: 10px;
+                                    span {
+                                        flex: 0 0 50%;
+                                        text-align: center;
+                                    }
+
+                                    &:last-child {
+                                        border-bottom: none;
+                                    }
+
+                                    &:before {
+                                        content: attr(data-label);
+                                        font-weight: bold;
+                                        flex: 0 0 50%;
+                                        padding-right: 10px;
+                                    }
+                                }
+                            }
                         }
                     }
                 }

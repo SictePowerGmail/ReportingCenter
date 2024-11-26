@@ -515,13 +515,13 @@ const ReporteMaterialAgregar = () => {
                                             <tbody>
                                                 {filasTabla.map((fila, index) => (
                                                     <tr key={index}>
-                                                        <td>{fila.tipo}</td>
-                                                        <td>{fila.codigoSap}</td>
-                                                        <td>{fila.descripcion}</td>
-                                                        <td>{fila.unidadMedida}</td>
-                                                        <td>{fila.cantidad}</td>
-                                                        <td>{fila.serial}</td>
-                                                        <td><button className='Borrar' onClick={() => borrarFila(index)}>Borrar</button></td>
+                                                        <td data-label="Tipo de Actividad"><span>{fila.tipo}</span></td>
+                                                        <td data-label="Codigo Sap"><span>{fila.codigoSap}</span></td>
+                                                        <td data-label="Descripion del Material"><span>{fila.descripcion}</span></td>
+                                                        <td data-label="Unidad de Medida"><span>{fila.unidadMedida}</span></td>
+                                                        <td data-label="Cantidad"><span>{fila.cantidad}</span></td>
+                                                        <td data-label="Serial"><span>{fila.serial}</span></td>
+                                                        <td data-label="Accion"><span><button className='Borrar' onClick={() => borrarFila(index)}>Borrar</button></span></td>
                                                     </tr>
                                                 ))}
                                             </tbody>
