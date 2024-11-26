@@ -72,11 +72,12 @@
         }
 
         .Titulo {
-            width: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
+            width: 100%;
             margin: 15px 0px 5px 0px;
+            text-align: center;
 
             span {
                 font-size: 25px;
@@ -85,6 +86,7 @@
             @media screen and (max-width: 600px) {
                 justify-content: start;
                 padding-left: 10px;
+                text-align: left;
 
                 h2 {
                     font-size: 18px;
@@ -112,6 +114,7 @@
                 align-items: center;
                 width: 100%;
                 margin-bottom: 5px;
+                text-align: right;
             }
 
             .Subtitulo {
@@ -201,6 +204,7 @@
                 align-items: center;
                 justify-content: end;
                 margin-top: 10px;
+                text-align: right;
 
                 span {
                     cursor: pointer;

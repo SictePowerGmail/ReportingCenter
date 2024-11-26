@@ -93,14 +93,15 @@ const ReporteMaterialDetalle = ({ isOpen, onClose, fila }) => {
                                     <span><strong>Cedula:</strong> {fila[0].cedula}</span>
                                     <span><strong>Nombre:</strong> {fila[0].nombre}</span>
                                     <span><strong>OT:</strong> {fila[0].ot}</span>
-                                </div>
-                                <div className='Columna2'>
-                                    <span><strong>Movil:</strong> {fila[0].movil}</span>
-                                    <span><strong>Responsable:</strong> {fila[0].responsable}</span>
-                                    <span><strong>Nodo:</strong> {fila[0].nodo}</span>
                                     <span><strong>Descargar PDF:</strong>
                                         <button onClick={generarPDF} className='btn btn-link'>Generar PDF</button>
                                     </span>
+                                </div>
+                                <div className='Columna2'>
+                                    <span><strong>Codigo Movil:</strong> {fila[0].codigoMovil}</span>
+                                    <span><strong>Movil:</strong> {fila[0].movil}</span>
+                                    <span><strong>Responsable:</strong> {fila[0].responsable}</span>
+                                    <span><strong>Nodo:</strong> {fila[0].nodo}</span>
                                 </div>
                             </div>
 

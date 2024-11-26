@@ -223,7 +223,7 @@ const ReporteMaterialPrincipal = () => {
                                             </tr>
                                         ) : (
                                             ordenarDatos()
-                                                .slice(0, expandidoReporteMaterialTecnicoSinMat ? datosFiltradosReporteMaterialTecnicoSinMat.length : 6)
+                                                .slice(0, expandidoReporteMaterialTecnicoSinMat ? datosFiltradosReporteMaterialTecnicoSinMat.length : 8)
                                                 .map((fila, index) => (
                                                     <tr key={`${fila.fecha}-${fila.cedula}`} onClick={() => manejarClickFilaReporteMaterialTecnicoSinMat(fila)}>
                                                         {Object.values(fila).map((valor, idx) => (

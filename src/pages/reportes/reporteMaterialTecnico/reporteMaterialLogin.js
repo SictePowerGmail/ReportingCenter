@@ -34,6 +34,7 @@ const ReporteMaterialLogin = () => {
                 Cookies.set('userNombre', userNombre, { expires: 7 });
                 Cookies.set('userCedula', userCedula, { expires: 7 });
                 Cookies.set('repMatOt', "", { expires: 7 });
+                Cookies.set('repMatCodMovil', "", { expires: 7 });
                 Cookies.set('repMatMovil', "", { expires: 7 });
                 Cookies.set('repMatResponsable', "", { expires: 7 });
                 Cookies.set('repMatNodo', "", { expires: 7 });
@@ -91,7 +92,7 @@ const ReporteMaterialLogin = () => {
                 )}
 
                 <div className='Version'>
-                    <p>v1.03</p>
+                    <p>v1.04</p>
                 </div>
             </div>
         </div>

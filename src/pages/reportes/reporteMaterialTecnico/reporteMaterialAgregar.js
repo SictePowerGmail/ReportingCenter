@@ -15,11 +15,14 @@ const ReporteMaterialAgregar = () => {
     const [loading, setLoading] = useState(true);
     const [enviando, setEnviando] = useState(false);
     const [dataKgprod, setDataKgprod] = useState(null);
+    const [dataLconsum, setDataLconsum] = useState(null);
 
     const [fecha, setFecha] = useState('');
     const cedulaUsuario = Cookies.get('userCedula');
     const nombreUsuario = Cookies.get('userNombre');
+    const [otsExistentes, setOtsExistentes] = useState([]);
     const [otEntradaTexto, setOtEntradaTexto] = useState(Cookies.get('repMatOt'));
+    const [codigoMovilEntradaTexto, setCodigoMovilEntradaTexto] = useState(Cookies.get('repMatCodMovil'));
     const [movilEntradaTexto, setMovilEntradaTexto] = useState(Cookies.get('repMatMovil'));
     const [responsableEntradaTexto, setResponsableEntradaTexto] = useState(Cookies.get('repMatResponsable'));
     const [nodoEntradaTexto, setNodoEntradaTexto] = useState(Cookies.get('repMatNodo'));
@@ -58,6 +61,16 @@ const ReporteMaterialAgregar = () => {
 
         if (!otEntradaTexto) {
             toast.error('Por favor agregar la OT', { className: 'toast-error' });
+            return;
+        }
+
+        if (otsExistentes.includes(otEntradaTexto)) {
+            toast.error('La OT ingresada ya existe.', { className: 'toast-error' });
+            return;
+        }
+
+        if (!codigoMovilEntradaTexto) {
+            toast.error('Por favor agregar el codigo de la movil', { className: 'toast-error' });
             return;
         }
 
@@ -101,6 +114,7 @@ const ReporteMaterialAgregar = () => {
                     cedula: cedulaUsuario,
                     nombre: nombreUsuario,
                     ot: otEntradaTexto,
+                    codigoMovil: codigoMovilEntradaTexto,
                     movil: movilEntradaTexto,
                     responsable: responsableEntradaTexto,
                     nodo: nodoEntradaTexto,
@@ -112,8 +126,9 @@ const ReporteMaterialAgregar = () => {
                     serial: serial
                 });
             }
-            
+
             Cookies.set('repMatOt', "", { expires: 7 });
+            Cookies.set('repMatCodMovil', "", { expires: 7 });
             Cookies.set('repMatMovil', "", { expires: 7 });
             Cookies.set('repMatResponsable', "", { expires: 7 });
             Cookies.set('repMatNodo', "", { expires: 7 });
@@ -157,7 +172,7 @@ const ReporteMaterialAgregar = () => {
         } else {
             nuevaFila = { tipo, codigoSap, descripcion, unidadMedida, cantidad, serial };
         }
-        
+
         const filasActualizadas = [...filasTabla, nuevaFila];
         Cookies.set('repMatFilas', JSON.stringify(filasActualizadas), { expires: 7 });
         setFilasTabla(filasActualizadas);
@@ -176,6 +191,7 @@ const ReporteMaterialAgregar = () => {
         setFilasTabla(nuevasFilas);
     };
 
+    const [opcionesMovil, setOpcionesMovil] = useState([]);
     const [opcionesCodigo, setOpcionesCodigo] = useState([]);
     const [opcionesDescripcion, setOpcionesDescripcion] = useState([]);
     const [serialRequerido, setSerialRequerido] = useState(true);
@@ -183,10 +199,20 @@ const ReporteMaterialAgregar = () => {
     const CargarDatos = async () => {
         try {
             const responseKgprod = await axios.get('https://sicteferias.from-co.net:8120/bodega/kgprod');
-            let ciudad = ['KGPROD_RED_BOG'];
+            let ciudadKgprod = ['KGPROD_RED_BOG'];
 
-            const datosFiltradosKgprod = ciudad.length ? responseKgprod.data.filter(item => ciudad.includes(item.bodega)) : responseKgprod.data;
+            const datosFiltradosKgprod = ciudadKgprod.length ? responseKgprod.data.filter(item => ciudadKgprod.includes(item.bodega)) : responseKgprod.data;
             setDataKgprod(datosFiltradosKgprod);
+
+            const responseLconsum = await axios.get('https://sicteferias.from-co.net:8120/bodega/lconsum');
+            let ciudadLconsum = ['LCONSUM_RED_BOG'];
+
+            const datosFiltradosLconsum = ciudadLconsum.length ? responseLconsum.data.filter(item => ciudadLconsum.includes(item.bodega)) : responseLconsum.data;
+            setDataLconsum(datosFiltradosLconsum);
+
+            const responseReportes = await axios.get('https://sicteferias.from-co.net:8120/reporteMaterialTecnico/obtenerReporteMaterialTecnico')
+            const ots = responseReportes.data.map(item => item.ot);
+            setOtsExistentes(ots);
 
             setLoading(false);
 
@@ -203,6 +229,30 @@ const ReporteMaterialAgregar = () => {
             setOpcionesDescripcion(opcionesDescripciones);
         }
     }, [dataKgprod]);
+
+    useEffect(() => {
+        if (dataLconsum) {
+            const opcionesMoviles = Array.from(new Set(dataLconsum.map((item) => item.nombre))).sort();
+            setOpcionesMovil(opcionesMoviles);
+        }
+    }, [dataLconsum]);
+
+    const handleMovilChange = (e) => {
+        const valor = e.target.value;
+        setMovilEntradaTexto(valor);
+        Cookies.set('repMatMovil', e.target.value, { expires: 7 });
+
+        const consumidor = dataLconsum.find((item) => item.nombre === valor);
+        if (consumidor) {
+            setCodigoMovilEntradaTexto(consumidor.llave);
+            Cookies.set('repMatCodMovil', consumidor.llave, { expires: 7 });
+            setResponsableEntradaTexto(consumidor.responsable)
+            Cookies.set('repMatResponsable', consumidor.responsable, { expires: 7 });
+        } else {
+            setCodigoMovilEntradaTexto('');
+            setResponsableEntradaTexto('')
+        }
+    };
 
     const handleCodigoSapChange = (e) => {
         const valor = e.target.value;
@@ -244,8 +294,21 @@ const ReporteMaterialAgregar = () => {
         }
     };
 
+    const [mostrarOpcionesMovil, setMostrarOpcionesMovil] = useState(false);
     const [mostrarOpcionesCodigo, setMostrarOpcionesCodigo] = useState(false);
     const [mostrarOpcionesDescripcion, setMostrarOpcionesDescripcion] = useState(false);
+
+    const handleOtChange = (event) => {
+        const valor = event.target.value;
+        setOtEntradaTexto(valor);
+
+        if (otsExistentes.includes(valor)) {
+            toast.error('La OT ingresada ya existe.', { className: 'toast-error' });
+            return;
+        }
+
+        Cookies.set('repMatOt', valor, { expires: 7 });
+    };
 
     return (
         <div className="reporteMaterialAgregar">
@@ -306,11 +369,23 @@ const ReporteMaterialAgregar = () => {
                                     <input type="text"
                                         value={otEntradaTexto}
                                         placeholder="Digite la OT"
+                                        onChange={handleOtChange}
+                                    />
+                                </div>
+
+                                <div className='CodigoMovil'>
+                                    <div className='Subtitulo'>
+                                        <i className="fas fa-calendar-alt"></i>
+                                        <h5>Codigo Movil</h5>
+                                    </div>
+                                    <input type="text"
+                                        value={codigoMovilEntradaTexto}
                                         onChange={(event) => {
                                             const valor = event.target.value;
-                                            setOtEntradaTexto(valor);
-                                            Cookies.set('repMatOt', event.target.value, { expires: 7 });
+                                            setCodigoMovilEntradaTexto(valor);
+                                            Cookies.set('repMatCodMovil', event.target.value, { expires: 7 });
                                         }}
+                                        disabled
                                     />
                                 </div>
 
@@ -319,17 +394,47 @@ const ReporteMaterialAgregar = () => {
                                         <i className="fas fa-calendar-alt"></i>
                                         <h5>Movil</h5>
                                     </div>
-                                    <input type="text"
+                                    <input
+                                        type="text"
                                         value={movilEntradaTexto}
                                         placeholder="Digite la Movil"
-                                        onChange={(event) => {
-                                            const valor = event.target.value;
-                                            setMovilEntradaTexto(valor);
-                                            Cookies.set('repMatMovil', event.target.value, { expires: 7 });
-                                        }}
+                                        onChange={(e) => handleMovilChange(e)}
+                                        onFocus={() => setMostrarOpcionesMovil(true)}
+                                        onBlur={() => setTimeout(() => setMostrarOpcionesMovil(false), 200)}
                                     />
+                                    {mostrarOpcionesMovil && (
+                                        <ul>
+                                            {opcionesMovil
+                                                .filter((nombre) => nombre.toLowerCase().includes(nombre.toLowerCase()))
+                                                .map((nombre) => (
+                                                    <li
+                                                        key={nombre}
+                                                        style={{
+                                                            padding: '8px',
+                                                            cursor: 'pointer',
+                                                        }}
+                                                        onMouseDown={() => {
+                                                            setMovilEntradaTexto(nombre);
+                                                            Cookies.set('repMatMovil', nombre, { expires: 7 });
+                                                            const data = dataLconsum.find((item) => item.nombre === nombre);
+                                                            if (data) {
+                                                                setCodigoMovilEntradaTexto(data.llave);
+                                                                Cookies.set('repMatCodMovil', data.llave, { expires: 7 });
+                                                                setResponsableEntradaTexto(data.responsable)
+                                                                Cookies.set('repMatResponsable', data.responsable, { expires: 7 });
+                                                            }
+                                                            setMostrarOpcionesMovil(false);
+                                                        }}
+                                                    >
+                                                        {nombre}
+                                                    </li>
+                                                ))}
+                                        </ul>
+                                    )}
                                 </div>
+                            </div>
 
+                            <div className='contenido'>
                                 <div className='Responsable'>
                                     <div className='Subtitulo'>
                                         <i className="fas fa-calendar-alt"></i>
@@ -337,17 +442,15 @@ const ReporteMaterialAgregar = () => {
                                     </div>
                                     <input type="text"
                                         value={responsableEntradaTexto}
-                                        placeholder="Digite el responsable"
                                         onChange={(event) => {
                                             const valor = event.target.value;
                                             setResponsableEntradaTexto(valor);
                                             Cookies.set('repMatResponsable', event.target.value, { expires: 7 });
                                         }}
+                                        disabled
                                     />
                                 </div>
-                            </div>
 
-                            <div className='contenido'>
                                 <div className='Nodo'>
                                     <div className='Subtitulo'>
                                         <i className="fas fa-calendar-alt"></i>
@@ -363,8 +466,6 @@ const ReporteMaterialAgregar = () => {
                                         }}
                                     />
                                 </div>
-
-                                <div className='CuadroAjuste'></div>
 
                                 <div className='CuadroAjuste'></div>
 
