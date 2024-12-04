@@ -147,6 +147,13 @@ const ReporteMaterialAgregar = () => {
     useEffect(() => {
         setFecha(new Date());
 
+        const cedulaUsuario = Cookies.get('userCedula');
+        const nombreUsuario = Cookies.get('userNombre');
+
+        if (cedulaUsuario === undefined && nombreUsuario === undefined) {
+            navigate('/MaterialLogin', { state: { estadoNotificacion: false } });
+        }
+
         const filasGuardadas = Cookies.get('repMatFilas');
         if (filasGuardadas) {
             setFilasTabla(JSON.parse(filasGuardadas));

@@ -8,6 +8,7 @@ import axios from 'axios';
 import ReporteMaterialDetalle from './reporteMaterialDetalle';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
+import Cookies from 'js-cookie';
 
 const ReporteMaterialPrincipal = () => {
     const location = useLocation();
@@ -67,6 +68,13 @@ const ReporteMaterialPrincipal = () => {
     };
 
     useEffect(() => {
+        const cedulaUsuario = Cookies.get('userCedula');
+        const nombreUsuario = Cookies.get('userNombre');
+
+        if (cedulaUsuario === undefined && nombreUsuario === undefined) {
+            navigate('/MaterialLogin', { state: { estadoNotificacion: false } });
+        }
+
         cargarDatosReporteMaterialTecnico();
     }, []);
 

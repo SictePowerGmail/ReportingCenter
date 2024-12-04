@@ -18,6 +18,7 @@ const MaterialAgregar = () => {
     const [fecha, setFecha] = useState('');
     const cedulaUsuario = Cookies.get('userCedula');
     const nombreUsuario = Cookies.get('userNombre');
+    const [registrosSolicitudMaterial, setRegistrosSolicitudMaterial] = useState([])
     const [ciudadesEntradaTexto, setCiudadesEntradaTexto] = useState(Cookies.get('solMatCiudad'));
     const [ciudadesSugerencias, setCiudadesSugerencias] = useState([]);
     const Ciudades = ['Armenia', 'Bogota San Cipriano Corporativo', 'Bogota San Cipriano Red Externa', 'Manizales', 'Pereira'];
@@ -48,8 +49,9 @@ const MaterialAgregar = () => {
         const year = date.getFullYear();
         const hours = date.getHours().toString().padStart(2, '0');
         const minutes = date.getMinutes().toString().padStart(2, '0');
+        const seconds = date.getSeconds().toString().padStart(2, '0');
 
-        return `${year}-${month}-${day} ${hours}:${minutes}`;
+        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
     };
 
     const formatDate2 = (date) => {
@@ -66,8 +68,9 @@ const MaterialAgregar = () => {
         const year = date.getFullYear();
         const hours = date.getHours().toString().padStart(2, '0');
         const minutes = date.getMinutes().toString().padStart(2, '0');
+        const seconds = date.getSeconds().toString().padStart(2, '0');
 
-        return `${year}-${month}-${day} ${hours}-${minutes}`;
+        return `${year}-${month}-${day} ${hours}-${minutes}-${seconds}`;
     };
 
     const verificarDisponibilidad = async () => {
@@ -175,7 +178,7 @@ const MaterialAgregar = () => {
             toast.error(`La fecha ingresada debe ser mayo o igual a la de hoy.`, { className: 'toast-error' });
             return;
         }
-        
+
         if (!filasTabla || filasTabla.length === 0) {
             toast.error('Por favor agrega al menos una fila antes de enviar', { className: 'toast-error' });
             return;
@@ -260,6 +263,10 @@ const MaterialAgregar = () => {
                 },
             });
 
+            Cookies.set('solMatCiudad', "", { expires: 7 });
+            Cookies.set('solMatUUID', "", { expires: 7 });
+            Cookies.set('solMatNombreProyecto', "", { expires: 7 });
+            Cookies.set('solMatEntregaProyectada', "", { expires: 7 });
             setEnviando(false)
             navigate('/MaterialPrincipal', { state: { estadoNotificacion: true } });
             console.log('Datos enviados exitosamente');
@@ -292,8 +299,10 @@ const MaterialAgregar = () => {
             const datosFiltradosKgprod = ciudad.length ? responseKgprod.data.filter(item => ciudad.includes(item.bodega)) : responseKgprod.data;
 
             const responseRegistrosSolicitudMaterial = await axios.get('https://sicteferias.from-co.net:8120/solicitudMaterial/RegistrosSolicitudMaterial');
+            setRegistrosSolicitudMaterial(responseRegistrosSolicitudMaterial.data)
 
             const datosFiltradosRegistrosSolicitudMaterial = responseRegistrosSolicitudMaterial.data.filter(item =>
+                item.ciudad === ciudadElgida &&
                 item.aprobacionDirector !== "Rechazado" &&
                 item.aprobacionDireccionOperacion !== "Rechazado" &&
                 item.entregaBodega !== "Entregado"
@@ -409,6 +418,19 @@ const MaterialAgregar = () => {
         cargarDatos();
     }, [ciudadElgida]);
 
+    const validarUUIDUnico = (uuid, ciudad) => {
+        const uuidRepetido = registrosSolicitudMaterial.some((registro) => {
+            const ciudadRegistro = registro.ciudad.split(" ")[0];
+            const ciudadComparada = ciudad.split(" ")[0];
+            return registro.uuid === uuid && ciudadRegistro !== ciudadComparada;
+        });
+
+        if (uuidRepetido) {
+            toast.error(`El UUID "${uuid}" ya está registrado en otra ciudad.`, { className: 'toast-error' });
+            setUuidEntradaTexto('');
+        }
+    };
+
     return (
         <div className="materialAgregar">
             {loading ? (
@@ -446,7 +468,7 @@ const MaterialAgregar = () => {
                                         <h5>Fecha Solicitud</h5>
                                     </div>
                                     <input type="text" disabled
-                                        value={fecha.toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                                        value={fecha.toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit'  })}
                                     />
                                 </div>
 
@@ -556,8 +578,11 @@ const MaterialAgregar = () => {
                                         onBlur={() => {
                                             if (!uuidEntradaTexto.includes('-')) {
                                                 toast.info('El UUID debe contener al menos un guion', { className: 'toast-error' });
+                                            } else {
+                                                validarUUIDUnico(uuidEntradaTexto, ciudadElgida);
                                             }
                                         }}
+                                        disabled={!Boolean(ciudadElgida)}
                                     />
                                 </div>
 
@@ -642,7 +667,7 @@ const MaterialAgregar = () => {
                                                                 datosFiltrados = dataKgprod.filter(item => item.indComprado === "N");
                                                             } else {
                                                                 datosFiltrados = dataKgprod;
-                                                            }
+                                                            } 
 
                                                             datosFiltrados.sort((a, b) => a.descrip.localeCompare(b.descrip));
 
@@ -698,7 +723,15 @@ const MaterialAgregar = () => {
                                                                     onClick={() => {
                                                                         accionCambioEntradaTextoTabla(index, 'descripcion', sugerencia);
 
-                                                                        const elementoEncontrado = dataKgprod.find(item => item.descrip === sugerencia);
+                                                                        let propiedad;
+
+                                                                        if (fila.propiedad === "Sicte") {
+                                                                            propiedad = "S";
+                                                                        } else if (fila.propiedad === "Claro") {
+                                                                            propiedad = "N";
+                                                                        }
+
+                                                                        const elementoEncontrado = dataKgprod.find(item => item.descrip === sugerencia && item.indComprado === propiedad);
                                                                         const nuevaUnidadMedida = [...unidadMedida];
                                                                         nuevaUnidadMedida[index] = elementoEncontrado.unimed;
                                                                         setUnidadMedida(nuevaUnidadMedida);

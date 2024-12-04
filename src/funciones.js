@@ -9,6 +9,8 @@ const obtenerDirectores = async () => {
             .filter(usuario => usuario.rol !== 'SUPERVISION')
             .filter(usuario => usuario.rol !== 'COORDINACION')
             .filter(usuario => usuario.rol !== 'BODEGA')
+            .filter(usuario => usuario.rol !== 'LOGISTICA')
+            .filter(usuario => usuario.rol !== 'FACTURACION')
             .filter(usuario => usuario.rol !== 'admin')
             .map(usuario => usuario.rol);
 
@@ -33,21 +35,19 @@ export const ObtenerRolUsuario = (rol) => {
         return "SUPERVISION";
     } else if (rol === 'COORDINACION') {
         return "COORDINACION";
-    } else if (directores.includes(rol)) {
-        return "DIRECTOR";
     } else if (rol === 'BODEGA') {
         return "BODEGA";
+    } else if (rol === 'LOGISTICA') {
+        return "LOGISTICA";
     } else if (rol === 'admin') {
         return "admin";
+    } else if (rol === 'FACTURACION') {
+        return "FACTURACION";
+    } else if (directores.includes(rol)) {
+        return "DIRECTOR";
     } else {
         return "SIN ROL"
     }
-};
-
-const relacionPersonalDirectores = {
-    'Brayan Castelblanco': "Johana Carvajal",
-    'Brayan Barrera': "John Castillo",
-    'Sergio Garcia': "John Castillo"
 };
 
 const obtenerRelacionPersonal = async () => {
@@ -72,4 +72,14 @@ cargarRelacionPersonal();
 export const ObtenerRelacionPersonalDirectores = (usuario) => {
     const registro = RelacionPersonal.find(item => item.coordinador === usuario);
     return registro ? registro.director : null;
+};
+
+export const ObtenerRelacionCiudadBodega = (usuario) => {
+    const registro = RelacionPersonal.find(item => item.bodega === usuario);
+    return registro ? registro.ciudad : null;
+};
+
+export const ObtenerRelacionCiudadFacturacion = (usuario) => {
+    const registros = RelacionPersonal.filter(item => item.facturacion === usuario);
+    return registros.length > 0 ? registros.map(item => item.ciudad) : [];
 };

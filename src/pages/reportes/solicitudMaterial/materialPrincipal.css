@@ -130,6 +130,12 @@
                 }
 
                 thead {
+                    th {
+                        i {
+                            margin-left: 5px;
+                        }
+                    }
+                    
                     th:hover {
                         background-color: #56d424d5;
                         cursor: pointer;

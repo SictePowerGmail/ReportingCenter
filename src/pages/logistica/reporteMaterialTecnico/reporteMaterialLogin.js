@@ -92,7 +92,7 @@ const ReporteMaterialLogin = () => {
                 )}
 
                 <div className='Version'>
-                    <p>v1.04</p>
+                    <p>v1.05</p>
                 </div>
             </div>
         </div>

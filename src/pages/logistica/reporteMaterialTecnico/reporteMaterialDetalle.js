@@ -5,10 +5,22 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ThreeDots } from 'react-loader-spinner';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router-dom';
 
 const ReporteMaterialDetalle = ({ isOpen, onClose, fila }) => {
+    const navigate = useNavigate();
     const contenidoRef = useRef(null);
     const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        const cedulaUsuario = Cookies.get('userCedula');
+        const nombreUsuario = Cookies.get('userNombre');
+
+        if (cedulaUsuario === undefined && nombreUsuario === undefined) {
+            navigate('/MaterialLogin', { state: { estadoNotificacion: false } });
+        }
+    }, []);
 
     useEffect(() => {
         const handleClickOutside = (event) => {

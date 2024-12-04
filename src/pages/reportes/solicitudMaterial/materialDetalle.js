@@ -6,6 +6,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ThreeDots } from 'react-loader-spinner';
 import Cookies from 'js-cookie';
+import { ObtenerRolUsuario } from '../../../funciones';
 
 const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observaciones, setObservaciones, pantalla }) => {
     const [diseñoFile, setDiseñoFile] = useState(null);
@@ -16,6 +17,7 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
     const [loading, setLoading] = useState(true);
     const [filaEditada, setFilaEditada] = useState(null);
     const navigate = useNavigate();
+    const rolUsuario = ObtenerRolUsuario(Cookies.get('userRole'));
 
     const formatDate2 = (date) => {
         const day = date.getDate().toString().padStart(2, '0');
@@ -362,11 +364,11 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
         });
 
         const cantidades = fila2.map(item => item.cantidadRestantePorDespacho);
-        
+
         try {
-            await axios.post('https://sicteferias.from-co.net:8120/solicitudMaterial/actualizarEstadoCantidadRestantePorDespacho', 
-                { 
-                    ids, cantidades 
+            await axios.post('https://sicteferias.from-co.net:8120/solicitudMaterial/actualizarEstadoCantidadRestantePorDespacho',
+                {
+                    ids, cantidades
                 },
                 {
                     headers: {
@@ -444,14 +446,18 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
                                 <span><strong>Nombre Proyecto:</strong> {fila[0].nombreProyecto}</span>
                                 <span><strong>Fecha Entrega Proyecto:</strong> {fila[0].entregaProyecto}</span>
                                 <span><strong>Aprobacion Director:</strong> {fila[0].aprobacionDirector}</span>
-                                {fila[0].aprobacionDirector !== "Pendiente" && fila[0].observacionesDirector !== "Ninguna" && fila[0].observacionesDirector !== null && (
+                                {fila[0].aprobacionDirector !== "Pendiente" && fila[0].observacionesDirector !== "Ninguna" && (
                                     <span><strong>Observaciones Director:</strong> {fila[0].observacionesDirector}</span>
                                 )}
-                                <span><strong>Aprobacion Direccion Operacion:</strong> {fila[0].aprobacionDireccionOperacion}</span>
-                                {fila[0].aprobacionDireccionOperacion !== "Pendiente" && fila[0].observacionesDireccionOperacion !== "Ninguna" && fila[0].observacionesDireccionOperacion !== null && (
+                                {fila[0].aprobacionDirector === "Aprobado" && (
+                                    <span><strong>Aprobacion Direccion Operacion:</strong> {fila[0].aprobacionDireccionOperacion}</span>
+                                )}
+                                {fila[0].aprobacionDireccionOperacion !== "Pendiente" && fila[0].observacionesDireccionOperacion !== "Ninguna" && (
                                     <span><strong>Observacion Direccion Operacion:</strong> {fila[0].observacionesDireccionOperacion}</span>
                                 )}
-                                <span><strong>Entrega Bodega:</strong> {(fila[0].entregaBodega === "Pendiente" && pdfData.length > 0) ? "Entregado" : fila[0].entregaBodega}</span>
+                                {fila[0].aprobacionDirector === "Aprobado" && fila[0].aprobacionDireccionOperacion === "Aprobado" && (
+                                    <span><strong>Entrega Bodega:</strong> {(fila[0].entregaBodega === "Pendiente" && pdfData.length > 0) ? "Entregado" : fila[0].entregaBodega}</span>
+                                )}
                             </div>
                         </div>
 
@@ -469,23 +475,32 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {(filaEditada && filaEditada.length > 0 ? filaEditada : fila).map((item) => (
-                                        <tr key={item.id}>
-                                            <td>{item.propiedadMaterial}</td>
-                                            <td>{item.codigoSapMaterial}</td>
-                                            <td>{item.descripcionMaterial}</td>
-                                            <td>{item.unidadMedidaMaterial}</td>
-                                            <td>{item.cantidadDisponibleMaterial}</td>
-                                            <td>{item.cantidadSolicitadaMaterial}</td>
-                                            <td>{item.cantidadRestantePorDespacho}</td>
-                                        </tr>
-                                    ))}
+                                    {(filaEditada && filaEditada.length > 0 ? filaEditada : fila).map((item) => {
+                                        const cantidadDisponible = parseInt(item.cantidadDisponibleMaterial, 10) || 0;
+                                        const cantidadRestante = parseInt(item.cantidadRestantePorDespacho, 10) || 0;
+                                        const isDesabastecido = cantidadDisponible < cantidadRestante;
+
+                                        return (
+                                            <tr
+                                                key={item.id}
+                                                className={isDesabastecido ? 'desabastecido' : ''}
+                                            >
+                                                <td>{item.propiedadMaterial}</td>
+                                                <td>{item.codigoSapMaterial}</td>
+                                                <td>{item.descripcionMaterial}</td>
+                                                <td>{item.unidadMedidaMaterial}</td>
+                                                <td>{item.cantidadDisponibleMaterial}</td>
+                                                <td>{item.cantidadSolicitadaMaterial}</td>
+                                                <td>{item.cantidadRestantePorDespacho}</td>
+                                            </tr>
+                                        );
+                                    })}
                                 </tbody>
                             </table>
                         </div>
 
                         <div className='LecturaPDFs'>
-                            {(pdfData.length === 0 && fila[0].entregaBodega === "Pendiente" && pantalla === "EntregaBodega") && (
+                            {(pdfData.length === 0 && fila[0].entregaBodega === "Pendiente" && pantalla === "EntregaBodega" && rolUsuario !== "LOGISTICA") && (
                                 <div className='EntradaPDFs'>
                                     <span>Por favor agregue los PDFs de las salidas de material</span>
                                     <div className='inputPDFs'>
@@ -524,7 +539,7 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
                             )}
                         </div>
 
-                        {((fila[0].aprobacionDirector === "Pendiente" && pantalla === "Director") || (fila[0].aprobacionDireccionOperacion === "Pendiente" && pantalla === "DireccionOperacion")) && (
+                        {(((fila[0].aprobacionDirector === "Pendiente" && pantalla === "Director") || (fila[0].aprobacionDireccionOperacion === "Pendiente" && pantalla === "DireccionOperacion")) && rolUsuario !== "LOGISTICA") && (
                             <div className='Observaciones'>
                                 <label htmlFor="observaciones">Observaciones:</label>
                                 <textarea
@@ -558,7 +573,7 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
                             </div>
                         )}
 
-                        {((fila[0].aprobacionDirector === "Pendiente" && pantalla === "Director") || (fila[0].aprobacionDireccionOperacion === "Pendiente" && pantalla === "DireccionOperacion")) && (
+                        {(((fila[0].aprobacionDirector === "Pendiente" && pantalla === "Director") || (fila[0].aprobacionDireccionOperacion === "Pendiente" && pantalla === "DireccionOperacion")) && rolUsuario !== "LOGISTICA") && (
                             <div className="Botones">
                                 <button className='btn btn-success' onClick={onApprove}>Aprobar</button>
                                 <button className='btn btn-danger'
@@ -636,7 +651,7 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
                             </div>
                         )}
 
-                        {(fila[0].entregaBodega !== "Pendiente" && pantalla === "EntregaBodega") && (
+                        {(fila[0].entregaBodega !== "Pendiente" && pantalla === "EntregaBodega" && rolUsuario !== "LOGISTICA") && (
                             <div className='LecturaPDFs'>
                                 <div className='Contenedor'>
                                     <div className='title'>
@@ -647,7 +662,7 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
                         )}
 
                         <div className='LecturaPDFs'>
-                            {(pdfDataNuevos.length === 0 && fila[0].entregaBodega !== "Pendiente" && pantalla === "EntregaBodega") && (
+                            {(pdfDataNuevos.length === 0 && fila[0].entregaBodega !== "Pendiente" && pantalla === "EntregaBodega" && rolUsuario !== "LOGISTICA") && (
                                 <div className='EntradaPDFs'>
                                     <span>Por favor agregue los nuevos PDFs de salidas de material</span>
                                     <div className='inputPDFs'>
