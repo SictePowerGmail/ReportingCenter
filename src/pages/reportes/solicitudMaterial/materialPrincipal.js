@@ -212,15 +212,13 @@ const MaterialPrincipal = () => {
                 </div>
             ) : (
                 <div className='Contenido'>
-                    {(rolUsuario === "LOGISTICA" || rolUsuario === "COORDINACION" || rolUsuario === "DIRECTOR" || rolUsuario === "admin") && (
-                        <div>
-                            <button className="btn-flotante"
-                                onClick={() => {
-                                    navigate('/MaterialAgregar', { state: { estadoNotificacion: false } });
-                                }}
-                            >+</button>
-                        </div>
-                    )}
+                    <div>
+                        <button className="btn-flotante"
+                            onClick={() => {
+                                navigate('/MaterialAgregar', { state: { estadoNotificacion: false } });
+                            }}
+                        >+</button>
+                    </div>
 
                     <div className='Titulo'>
                         <h2>Solicitudes de Material</h2>
