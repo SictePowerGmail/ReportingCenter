@@ -88,7 +88,7 @@ const MaterialLogin = () => {
                 )}
 
                 <div className='Version'>
-                    <p>v1.09</p>
+                    <p>v1.10</p>
                 </div>
             </div>
         </div>

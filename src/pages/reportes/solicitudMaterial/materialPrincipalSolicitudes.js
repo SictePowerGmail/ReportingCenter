@@ -23,6 +23,7 @@ const MaterialPrincipalSolicitudes = () => {
         axios.get('https://sicteferias.from-co.net:8120/solicitudMaterial/RegistrosSolicitudMaterial')
             .then(response => {
                 let datos = response.data;
+
                 datos = datos.map((item) => {
                     const cantidadDisponible = parseInt(item.cantidadDisponibleMaterial, 10) || 0;
                     const cantidadRestante = parseInt(item.cantidadRestantePorDespacho, 10) || 0;
@@ -61,31 +62,33 @@ const MaterialPrincipalSolicitudes = () => {
 
                 setRegistrosSolicitudMaterial(datos);
 
-                const datosSolicitudesRealizadas = datos
-                    .map(({
-                        fecha,
-                        cedula,
-                        nombre,
-                        ciudad,
-                        uuid,
-                        nombreProyecto,
-                        entregaProyecto,
-                        estado
-                    }) => ({
-                        fecha,
-                        cedula,
-                        nombre,
-                        ciudad,
-                        uuid,
-                        nombreProyecto,
-                        entregaProyecto,
-                        estado
-                    }))
-                    .filter((value, index, self) =>
-                        index === self.findIndex((t) => (
-                            t.fecha === value.fecha && t.cedula === value.cedula && t.uuid === value.uuid
-                        ))
-                    );
+                const datosSolicitudesRealizadas = Object.entries(
+                    datos.reduce((acc, item) => {
+                        const key = `${item.fecha}_${item.cedula}_${item.uuid}`;
+                        if (!acc[key]) {
+                            acc[key] = [];
+                        }
+                        acc[key].push(item);
+                        return acc;
+                    }, {})
+                ).map(([key, items]) => {
+                    const estadoGeneral = items.some((item) => item.estado === "Desabastecido")
+                        ? "Desabastecido"
+                        : items[0].estado;
+                
+                    return {
+                        fecha: items[0].fecha,
+                        cedula: items[0].cedula,
+                        nombre: items[0].nombre,
+                        ciudad: items[0].ciudad,
+                        uuid: items[0].uuid,
+                        nombreProyecto: items[0].nombreProyecto,
+                        entregaProyecto: items[0].entregaProyecto,
+                        estado: estadoGeneral,
+                    };
+                });
+
+                
 
                 setSolicitudMaterialSinMat(datosSolicitudesRealizadas);
 
