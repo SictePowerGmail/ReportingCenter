@@ -405,24 +405,24 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
                 ) : (
                     <div>
                         <div className="BarraSuperior">
-                            <h3>Detalles de la Solicitud</h3>
+                            <h3 translate="no">Detalles de la Solicitud</h3>
                             <button onClick={onClose}><i className="fas fa-times"></i></button>
                         </div>
 
                         <div className='Detalles'>
                             <div className='Columna1'>
-                                <span><strong>Fecha Soliciud:</strong> {fila[0].fecha}</span>
-                                <span><strong>Cedula:</strong> {fila[0].cedula}</span>
-                                <span><strong>Nombre:</strong> {fila[0].nombre}</span>
-                                <span><strong>Ciudad:</strong> {fila[0].ciudad}</span>
-                                <span><strong>Diseño:</strong>
+                                <span translate="no"><strong>Fecha Soliciud:</strong> {fila[0].fecha}</span>
+                                <span translate="no"><strong>Cedula:</strong> {fila[0].cedula}</span>
+                                <span translate="no"><strong>Nombre:</strong> {fila[0].nombre}</span>
+                                <span translate="no"><strong>Ciudad:</strong> {fila[0].ciudad}</span>
+                                <span translate="no"><strong>Diseño:</strong>
                                     {diseñoFile ? (
                                         <a href={diseñoFile} download={fila[0].diseño}> Descargar Diseño</a>
                                     ) : (
                                         'Cargando...'
                                     )}
                                 </span>
-                                <span><strong>Kmz:</strong>
+                                <span translate="no"><strong>Kmz:</strong>
                                     {kmzFile ? (
                                         <a href={kmzFile} download={fila[0].kmz}> Descargar KMZ</a>
                                     ) : (
@@ -432,7 +432,7 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
                             </div>
                             <div className='Columna2'>
                                 <div>
-                                    <span><strong>Uuid:</strong> {fila[0].uuid}</span>
+                                    <span translate="no"><strong>Uuid:</strong> {fila[0].uuid}</span>
                                     <button
                                         title='Copiar Texto'
                                         onClick={() => {
@@ -443,20 +443,20 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
                                         <i className="fas fa-copy"></i>
                                     </button>
                                 </div>
-                                <span><strong>Nombre Proyecto:</strong> {fila[0].nombreProyecto}</span>
-                                <span><strong>Fecha Entrega Proyecto:</strong> {fila[0].entregaProyecto}</span>
-                                <span><strong>Aprobacion Director:</strong> {fila[0].aprobacionDirector}</span>
+                                <span translate="no"><strong>Nombre Proyecto:</strong> {fila[0].nombreProyecto}</span>
+                                <span translate="no"><strong>Fecha Entrega Proyecto:</strong> {fila[0].entregaProyecto}</span>
+                                <span translate="no"><strong>Aprobacion Director:</strong> {fila[0].aprobacionDirector}</span>
                                 {fila[0].aprobacionDirector !== "Pendiente" && fila[0].observacionesDirector !== "Ninguna" && (
-                                    <span><strong>Observaciones Director:</strong> {fila[0].observacionesDirector}</span>
+                                    <span translate="no"><strong>Observaciones Director:</strong> {fila[0].observacionesDirector}</span>
                                 )}
                                 {fila[0].aprobacionDirector === "Aprobado" && (
-                                    <span><strong>Aprobacion Direccion Operacion:</strong> {fila[0].aprobacionDireccionOperacion}</span>
+                                    <span translate="no"><strong>Aprobacion Direccion Operacion:</strong> {fila[0].aprobacionDireccionOperacion}</span>
                                 )}
                                 {fila[0].aprobacionDireccionOperacion !== "Pendiente" && fila[0].observacionesDireccionOperacion !== "Ninguna" && (
-                                    <span><strong>Observacion Direccion Operacion:</strong> {fila[0].observacionesDireccionOperacion}</span>
+                                    <span translate="no"><strong>Observacion Direccion Operacion:</strong> {fila[0].observacionesDireccionOperacion}</span>
                                 )}
                                 {fila[0].aprobacionDirector === "Aprobado" && fila[0].aprobacionDireccionOperacion === "Aprobado" && (
-                                    <span><strong>Entrega Bodega:</strong> {(fila[0].entregaBodega === "Pendiente" && pdfData.length > 0) ? "Entregado" : fila[0].entregaBodega}</span>
+                                    <span translate="no"><strong>Entrega Bodega:</strong> {(fila[0].entregaBodega === "Pendiente" && pdfData.length > 0) ? "Entregado" : fila[0].entregaBodega}</span>
                                 )}
                             </div>
                         </div>
@@ -465,13 +465,13 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
                             <table>
                                 <thead>
                                     <tr>
-                                        <th>Propiedad Material</th>
-                                        <th>Código SAP Material</th>
-                                        <th>Descripción Material</th>
-                                        <th>Unidad de Medida</th>
-                                        <th>Cantidad Disponible</th>
-                                        <th>Cantidad Solicitada</th>
-                                        <th>Cantidad Restante por Despacho</th>
+                                        <th translate="no">Propiedad Material</th>
+                                        <th translate="no">Código SAP Material</th>
+                                        <th translate="no">Descripción Material</th>
+                                        <th translate="no">Unidad de Medida</th>
+                                        <th translate="no">Cantidad Disponible</th>
+                                        <th translate="no">Cantidad Solicitada</th>
+                                        <th translate="no">Cantidad Restante por Despacho</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -485,13 +485,13 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
                                                 key={item.id}
                                                 className={isDesabastecido ? 'desabastecido' : ''}
                                             >
-                                                <td>{item.propiedadMaterial}</td>
-                                                <td>{item.codigoSapMaterial}</td>
-                                                <td>{item.descripcionMaterial}</td>
-                                                <td>{item.unidadMedidaMaterial}</td>
-                                                <td>{item.cantidadDisponibleMaterial}</td>
-                                                <td>{item.cantidadSolicitadaMaterial}</td>
-                                                <td>{item.cantidadRestantePorDespacho}</td>
+                                                <td translate="no">{item.propiedadMaterial}</td>
+                                                <td translate="no">{item.codigoSapMaterial}</td>
+                                                <td translate="no">{item.descripcionMaterial}</td>
+                                                <td translate="no">{item.unidadMedidaMaterial}</td>
+                                                <td translate="no">{item.cantidadDisponibleMaterial}</td>
+                                                <td translate="no">{item.cantidadSolicitadaMaterial}</td>
+                                                <td translate="no">{item.cantidadRestantePorDespacho}</td>
                                             </tr>
                                         );
                                     })}
