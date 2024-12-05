@@ -531,7 +531,16 @@ const MaterialAgregar = () => {
                                         <input
                                             type="file"
                                             accept=".zip, .rar, .7z"
-                                            onChange={(e) => setDiseñoArchivo(e.target.files[0])}
+                                            onChange={(e) => {
+                                                const file = e.target.files[0];
+                                                if (file && (file.name.endsWith('.zip') || file.name.endsWith('.rar') || file.name.endsWith('.7z'))) {
+                                                    setDiseñoArchivo(file);
+                                                } else {
+                                                    e.target.value = null;
+                                                    setDiseñoArchivo('');
+                                                    toast.error('Solo se permiten archivos con formato .zip, .rar y .7z', { className: 'toast-error' });
+                                                }
+                                            }}
                                         />
                                         {diseñoArchivo ? (
                                             <span>{diseñoArchivo.name}</span>
@@ -550,7 +559,16 @@ const MaterialAgregar = () => {
                                         <input
                                             type="file"
                                             accept=".kmz"
-                                            onChange={(e) => setKmzArchivo(e.target.files[0])}
+                                            onChange={(e) => {
+                                                const file = e.target.files[0];
+                                                if (file && file.name.endsWith('.kmz')) {
+                                                    setKmzArchivo(file);
+                                                } else {
+                                                    e.target.value = null;
+                                                    setKmzArchivo('');
+                                                    toast.error('Solo se permiten archivos con formato .kmz', { className: 'toast-error' });
+                                                }
+                                            }}
                                         />
                                         {kmzArchivo ? (
                                             <span>{kmzArchivo.name}</span>
