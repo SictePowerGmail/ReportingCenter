@@ -680,9 +680,9 @@ const MaterialAgregar = () => {
                                                             let datosFiltrados;
 
                                                             if (propiedad === "Sicte") {
-                                                                datosFiltrados = dataKgprod.filter(item => item.indComprado === "S");
+                                                                datosFiltrados = dataKgprod.filter(item => item.indComprado2 === "S");
                                                             } else if (propiedad === "Claro") {
-                                                                datosFiltrados = dataKgprod.filter(item => item.indComprado === "N");
+                                                                datosFiltrados = dataKgprod.filter(item => item.indComprado2 === "N");
                                                             } else {
                                                                 datosFiltrados = dataKgprod;
                                                             } 
@@ -749,7 +749,7 @@ const MaterialAgregar = () => {
                                                                             propiedad = "N";
                                                                         }
 
-                                                                        const elementoEncontrado = dataKgprod.find(item => item.descrip === sugerencia && item.indComprado === propiedad);
+                                                                        const elementoEncontrado = dataKgprod.find(item => item.descrip === sugerencia && item.indComprado2 === propiedad);
                                                                         const nuevaUnidadMedida = [...unidadMedida];
                                                                         nuevaUnidadMedida[index] = elementoEncontrado.unimed;
                                                                         setUnidadMedida(nuevaUnidadMedida);
