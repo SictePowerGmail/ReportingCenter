@@ -322,6 +322,7 @@ const MaterialAgregar = () => {
             }, {});
 
             const datosFiltradosRegistrosSolicitudMaterialPendienteDespacho = responseRegistrosSolicitudMaterial.data.filter(item =>
+                item.ciudad === ciudadElgida &&
                 item.entregaBodega === "Entregado"
             );
 
@@ -343,6 +344,7 @@ const MaterialAgregar = () => {
             const hoy = new Date().toISOString().split("T")[0];
 
             const datosFiltradosRegistrosEntregadoSolicitudMaterial = responseRegistrosEntregadoSolicitudMaterial.data.filter(item =>
+                item.ciudad === ciudadElgida &&
                 item.fechaEntrega.slice(0, 10) === hoy
             );
 
