@@ -22,7 +22,7 @@ const MaterialPrincipalDireccion = () => {
                 setRegistrosSolicitudMaterial(datos);
 
                 const datosPendienteDireccionOperacion = datos
-                    .filter(item => item.aprobacionDirector === "Aprobado" && item.aprobacionDireccionOperacion === "Pendiente")
+                    .filter(item => item.aprobacionAnalista === "Aprobado" && item.aprobacionDirector === "Aprobado" && item.aprobacionDireccionOperacion === "Pendiente")
                     .map(({ fecha, cedula, nombre, ciudad, uuid, nombreProyecto, entregaProyecto }) => ({
                         fecha,
                         cedula,
@@ -41,7 +41,7 @@ const MaterialPrincipalDireccion = () => {
                 setPendienteDireccionOperacionSinMat(datosPendienteDireccionOperacion);
 
                 const datosAprobadoDireccionOperacion = datos
-                    .filter(item => item.aprobacionDirector === "Aprobado" && item.aprobacionDireccionOperacion === "Aprobado")
+                    .filter(item => item.aprobacionAnalista === "Aprobado" && item.aprobacionDirector === "Aprobado" && item.aprobacionDireccionOperacion === "Aprobado")
                     .map(({ fecha, cedula, nombre, ciudad, uuid, nombreProyecto, entregaProyecto }) => ({
                         fecha,
                         cedula,
@@ -60,7 +60,7 @@ const MaterialPrincipalDireccion = () => {
                 setAprobacionDireccionOperacionSinMat(datosAprobadoDireccionOperacion);
 
                 const datosRechazadoDireccionOperacion = datos
-                    .filter(item => item.aprobacionDirector === "Aprobado" && item.aprobacionDireccionOperacion === "Rechazado")
+                    .filter(item => item.aprobacionAnalista === "Aprobado" && item.aprobacionDirector === "Aprobado" && item.aprobacionDireccionOperacion === "Rechazado")
                     .map(({ fecha, cedula, nombre, ciudad, uuid, nombreProyecto, entregaProyecto }) => ({
                         fecha,
                         cedula,

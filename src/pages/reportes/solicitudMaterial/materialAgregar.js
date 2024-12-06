@@ -245,6 +245,7 @@ const MaterialAgregar = () => {
                     cantidadDisponibleMaterial: cantidadDisponible,
                     cantidadSolicitadaMaterial: cantidadSolicitada,
                     cantidadRestantePorDespacho: cantidadSolicitada,
+                    aprobacionAnalista: "Pendiente",
                     aprobacionDirector: "Pendiente",
                     aprobacionDireccionOperacion: "Pendiente",
                     entregaBodega: "Pendiente"

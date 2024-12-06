@@ -61,7 +61,8 @@
                 .Columna2 {
                     display: flex;
                     flex-direction: column;
-                    justify-content: center;
+                    justify-content: baseline;
+                    justify-items: baseline;
                     align-items: baseline;
                     width: 100%;
 

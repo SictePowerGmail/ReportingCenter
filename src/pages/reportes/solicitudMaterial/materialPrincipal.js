@@ -11,6 +11,7 @@ import MaterialPrincipalSolicitudes from './materialPrincipalSolicitudes';
 import MaterialPrincipalDirector from './materialPrincipalDirector';
 import MaterialPrincipalDireccion from './materialPrincipalDireccion';
 import MaterialPrincipalEntregaBodega from './materialPrincipalEntregaBodega';
+import MaterialPrincipalLogistica from './materialPrincipalLogistica';
 
 const MaterialPrincipal = () => {
     const [error, setError] = useState('');
@@ -238,6 +239,18 @@ const MaterialPrincipal = () => {
                                     Solicitudes
                                 </a>
                             </li>
+                            {(rolUsuario === "LOGISTICA" || rolUsuario === "admin") && (
+                                <li className="nav-item">
+                                    <a
+                                        className={`nav-link ${carpeta === 'Logistica' ? 'active' : ''}`}
+                                        onClick={() => {
+                                            setCarpeta('Logistica');
+                                        }}
+                                    >
+                                        Logistica
+                                    </a>
+                                </li>
+                            )}
                             {(rolUsuario === "DIRECTOR" || rolUsuario === "admin") && (
                                 <li className="nav-item">
                                     <a
@@ -279,6 +292,10 @@ const MaterialPrincipal = () => {
 
                     {carpeta === "Solicitudes" && (
                         <MaterialPrincipalSolicitudes />
+                    )}
+
+                    {carpeta === "Logistica" && (
+                        <MaterialPrincipalLogistica />
                     )}
 
                     {carpeta === "Director" && (

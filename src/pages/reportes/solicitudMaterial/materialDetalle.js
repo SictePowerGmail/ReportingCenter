@@ -429,8 +429,6 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
                                         'Cargando...'
                                     )}
                                 </span>
-                            </div>
-                            <div className='Columna2'>
                                 <div>
                                     <span translate="no"><strong>Uuid:</strong> {fila[0].uuid}</span>
                                     <button
@@ -445,12 +443,29 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
                                 </div>
                                 <span translate="no"><strong>Nombre Proyecto:</strong> {fila[0].nombreProyecto}</span>
                                 <span translate="no"><strong>Fecha Entrega Proyecto:</strong> {fila[0].entregaProyecto}</span>
-                                <span translate="no"><strong>Aprobacion Director:</strong> {fila[0].aprobacionDirector}</span>
+                            </div>
+                            <div className='Columna2'>
+                                <span translate="no"><strong>Aprobacion Analista:</strong> {fila[0].aprobacionAnalista}</span>
+                                {fila[0].aprobacionAnalista !== "Pendiente" && (
+                                    <span translate="no"><strong>Fecha Analista:</strong> {fila[0].fechaAnalista}</span>
+                                )}
+                                {fila[0].aprobacionAnalista !== "Pendiente" && fila[0].observacionesAnalista !== "Ninguna" && (
+                                    <span translate="no"><strong>Observaciones Analista:</strong> {fila[0].observacionesAnalista}</span>
+                                )}
+                                {fila[0].aprobacionAnalista === "Aprobado" && (
+                                    <span translate="no"><strong>Aprobacion Director:</strong> {fila[0].aprobacionDirector}</span>
+                                )}
+                                {fila[0].aprobacionDirector !== "Pendiente" && (
+                                    <span translate="no"><strong>Fecha Director:</strong> {fila[0].fechaDirector}</span>
+                                )}
                                 {fila[0].aprobacionDirector !== "Pendiente" && fila[0].observacionesDirector !== "Ninguna" && (
                                     <span translate="no"><strong>Observaciones Director:</strong> {fila[0].observacionesDirector}</span>
                                 )}
                                 {fila[0].aprobacionDirector === "Aprobado" && (
                                     <span translate="no"><strong>Aprobacion Direccion Operacion:</strong> {fila[0].aprobacionDireccionOperacion}</span>
+                                )}
+                                {fila[0].aprobacionDireccionOperacion !== "Pendiente" && (
+                                    <span translate="no"><strong>Fecha Direccion Operacion:</strong> {fila[0].fechaDireccionOperacion}</span>
                                 )}
                                 {fila[0].aprobacionDireccionOperacion !== "Pendiente" && fila[0].observacionesDireccionOperacion !== "Ninguna" && (
                                     <span translate="no"><strong>Observacion Direccion Operacion:</strong> {fila[0].observacionesDireccionOperacion}</span>
@@ -539,7 +554,7 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
                             )}
                         </div>
 
-                        {(((fila[0].aprobacionDirector === "Pendiente" && pantalla === "Director") || (fila[0].aprobacionDireccionOperacion === "Pendiente" && pantalla === "DireccionOperacion")) && rolUsuario !== "LOGISTICA") && (
+                        {(((fila[0].aprobacionAnalista === "Pendiente" && pantalla === "Analista") || (fila[0].aprobacionDirector === "Pendiente" && pantalla === "Director") || (fila[0].aprobacionDireccionOperacion === "Pendiente" && pantalla === "DireccionOperacion"))) && (
                             <div className='Observaciones'>
                                 <label htmlFor="observaciones">Observaciones:</label>
                                 <textarea
@@ -573,7 +588,7 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
                             </div>
                         )}
 
-                        {(((fila[0].aprobacionDirector === "Pendiente" && pantalla === "Director") || (fila[0].aprobacionDireccionOperacion === "Pendiente" && pantalla === "DireccionOperacion")) && rolUsuario !== "LOGISTICA") && (
+                        {(((fila[0].aprobacionAnalista === "Pendiente" && pantalla === "Analista") || (fila[0].aprobacionDirector === "Pendiente" && pantalla === "Director") || (fila[0].aprobacionDireccionOperacion === "Pendiente" && pantalla === "DireccionOperacion"))) && (
                             <div className="Botones">
                                 <button className='btn btn-success' onClick={onApprove}>Aprobar</button>
                                 <button className='btn btn-danger'

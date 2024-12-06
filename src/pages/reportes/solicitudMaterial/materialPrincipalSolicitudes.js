@@ -31,6 +31,10 @@ const MaterialPrincipalSolicitudes = () => {
 
                     if (cantidadDisponible < cantidadRestante) {
                         estado = "Desabastecido";
+                    } else if (item.aprobacionAnalista === "Pendiente") {
+                        estado = "Pendiente por Analista";
+                    } else if (item.aprobacionAnalista === "Rechazado") {
+                        estado = "Rechazado por Analista";
                     } else if (item.aprobacionDirector === "Pendiente") {
                         estado = "Pendiente por Director";
                     } else if (item.aprobacionDirector === "Rechazado") {
