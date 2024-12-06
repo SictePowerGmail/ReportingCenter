@@ -11,9 +11,6 @@ import Capacidades from '../pages/reportes/capacidades/Capacidades'
 import SupervisionLogin from '../pages/reportes/supervision/supervisionLogin'
 import SupervisionPrincipal from "../pages/reportes/supervision/supervisionPrincipal";
 import SupervisionAgregar from "../pages/reportes/supervision/supervisionAgregar";
-import MaterialLogin from "../pages/reportes/solicitudMaterial/materialLogin";
-import MaterialPrincipal from "../pages/reportes/solicitudMaterial/materialPrincipal";
-import MaterialAgregar from "../pages/reportes/solicitudMaterial/materialAgregar";
 /* Facturacion */
 import FacturacionConsolidado from '../pages/facturacion/FacturacionConsolidado';
 import PlaneacionFacturacion from '../pages/facturacion/PlaneacionFacturacion';
@@ -56,6 +53,9 @@ import EquiposMovilesR2 from "../pages/logistica/EquiposMovilesR2";
 import EquiposMovilesR4 from "../pages/logistica/EquiposMovilesR4";
 import ConsumosOperaciones from "../pages/logistica/ConsumosOperaciones";
 import DesmonteMantenimiento from "../pages/logistica/DesmonteMantenimiento";
+import MaterialLogin from "../pages/reportes/solicitudMaterial/materialLogin";
+import MaterialPrincipal from "../pages/reportes/solicitudMaterial/materialPrincipal";
+import MaterialAgregar from "../pages/reportes/solicitudMaterial/materialAgregar";
 import ReporteMaterialLogin from "../pages/logistica/reporteMaterialTecnico/reporteMaterialLogin";
 import ReporteMaterialPrincipal from "../pages/logistica/reporteMaterialTecnico/reporteMaterialPrincipal";
 import ReporteMaterialAgregar from "../pages/logistica/reporteMaterialTecnico/reporteMaterialAgregar";
@@ -102,12 +102,6 @@ function RutasApp() {
                 return 'Supervisión';
             case '/SupervisionAgregar':
                 return 'Supervisión';
-            case '/MaterialLogin':
-                return 'Solicitud Materiales';
-            case '/MaterialPrincipal':
-                return 'Solicitud Materiales';
-            case '/MaterialAgregar':
-                return 'Solicitud Materiales'
             /* Facturacion */
             case '/ConsolidadoNacionalFacturacion':
                 return 'Consolidado Nacional Facturacion';
@@ -186,6 +180,12 @@ function RutasApp() {
                 return 'ConsumosOperaciones';
             case '/DesmonteMantenimiento':
                 return 'DesmonteMantenimiento';
+            case '/MaterialLogin':
+                return 'Solicitud Materiales';
+            case '/MaterialPrincipal':
+                return 'Solicitud Materiales';
+            case '/MaterialAgregar':
+                return 'Solicitud Materiales'
             case '/ReporteMaterialLogin':
                 return 'Reporte Materiales Tecnico';
             case '/ReporteMaterialPrincipal':
@@ -227,9 +227,6 @@ function RutasApp() {
                 <Route path='/SupervisionLogin' exacte element={<SupervisionLogin />} />
                 <Route path='/SupervisionPrincipal' exacte element={<SupervisionPrincipal />} />
                 <Route path='/SupervisionAgregar' exacte element={<SupervisionAgregar />} />
-                <Route path='/MaterialLogin' exacte element={<MaterialLogin />} />
-                <Route path='/MaterialPrincipal' exacte element={<MaterialPrincipal />} />
-                <Route path='/MaterialAgregar' exacte element={<MaterialAgregar />} />
                 {/* Facturacion */}
                 <Route path='/ConsolidadoNacionalFacturacion' exacte element={<FacturacionConsolidado />} />
                 <Route path='/PlaneacionFacturacion' exacte element={<PlaneacionFacturacion />} />
@@ -272,6 +269,9 @@ function RutasApp() {
                 <Route path='/EquiposMovilesR4' exacte element={<EquiposMovilesR4 />} />
                 <Route path='/ConsumosOperaciones' exacte element={<ConsumosOperaciones />} />
                 <Route path='/DesmonteMantenimiento' exacte element={<DesmonteMantenimiento />} />
+                <Route path='/MaterialLogin' exacte element={<MaterialLogin />} />
+                <Route path='/MaterialPrincipal' exacte element={<MaterialPrincipal />} />
+                <Route path='/MaterialAgregar' exacte element={<MaterialAgregar />} />
                 <Route path='/ReporteMaterialLogin' exacte element={<ReporteMaterialLogin />} />
                 <Route path='/ReporteMaterialPrincipal' exacte element={<ReporteMaterialPrincipal />} />
                 <Route path='/ReporteMaterialAgregar' exacte element={<ReporteMaterialAgregar />} />

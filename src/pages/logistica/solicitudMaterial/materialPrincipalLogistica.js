@@ -356,7 +356,7 @@ const MaterialPrincipalLogistica = () => {
                 <>
                     <div className='Analista'>
                         <div className='Subtitulo'>
-                            <span>Solicitudes Pendientes por la Direccion Operacion</span>
+                            <span>Solicitudes Pendientes por Analista</span>
                         </div>
                         <table>
                             <thead>
@@ -415,7 +415,7 @@ const MaterialPrincipalLogistica = () => {
 
                     <div className='Analista'>
                         <div className='Subtitulo'>
-                            <span>Solicitudes Aprobadas por la Direccion Operacion</span>
+                            <span>Solicitudes Aprobadas por Analista</span>
                         </div>
                         <table>
                             <thead>
@@ -474,7 +474,7 @@ const MaterialPrincipalLogistica = () => {
 
                     <div className='Analista'>
                         <div className='Subtitulo'>
-                            <span>Solicitudes Rechazadas por la Direccion Operacion</span>
+                            <span>Solicitudes Rechazadas por Analista</span>
                         </div>
                         <table>
                             <thead>

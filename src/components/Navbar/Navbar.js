@@ -301,7 +301,6 @@ function Navbar() {
                                 <ul>
                                     <Link id='SubMenu-Contenido-Titulo' to="/Capacidades" onClick={toggleMobileMenu}><li>Capacidades</li></Link>
                                     <Link id='SubMenu-Contenido-Titulo' to="/SupervisionLogin" onClick={toggleMobileMenu}><li>Supervision</li></Link>
-                                    <Link id='SubMenu-Contenido-Titulo' to="/MaterialLogin" onClick={toggleMobileMenu}><li>Solicitud de Material</li></Link>
                                 </ul>
                             </div>
                         )}
@@ -516,6 +515,7 @@ function Navbar() {
                                     <Link id='SubMenu-Contenido-Titulo' to="/EquiposMovilesR4" onClick={toggleMobileMenu}><li>Equipos en moviles R4</li></Link>
                                     <Link id='SubMenu-Contenido-Titulo' to="/ConsumosOperaciones" onClick={toggleMobileMenu}><li>Consumos Operaciones</li></Link>
                                     <Link id='SubMenu-Contenido-Titulo' to="/DesmonteMantenimiento" onClick={toggleMobileMenu}><li>Desmonte Mantenimiento</li></Link>
+                                    <Link id='SubMenu-Contenido-Titulo' to="/MaterialLogin" onClick={toggleMobileMenu}><li>Solicitud de Material</li></Link>
                                     <Link id='SubMenu-Contenido-Titulo' to="/ReporteMaterialLogin" onClick={toggleMobileMenu}><li>Reporte Material Tecnico</li></Link>
                                 </ul>
                             </div>
