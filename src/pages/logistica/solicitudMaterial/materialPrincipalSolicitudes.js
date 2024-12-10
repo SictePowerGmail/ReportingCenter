@@ -79,7 +79,7 @@ const MaterialPrincipalSolicitudes = () => {
                     const estadoGeneral = items.some((item) => item.estado === "Desabastecido")
                         ? "Desabastecido"
                         : items[0].estado;
-                
+
                     return {
                         fecha: items[0].fecha,
                         cedula: items[0].cedula,
@@ -92,7 +92,7 @@ const MaterialPrincipalSolicitudes = () => {
                     };
                 });
 
-                
+
 
                 setSolicitudMaterialSinMat(datosSolicitudesRealizadas);
 
@@ -209,42 +209,44 @@ const MaterialPrincipalSolicitudes = () => {
                     <div className='Subtitulo'>
                         <span>Solicitudes Realizadas</span>
                     </div>
-                    <table>
-                        <thead>
-                            <tr>
-                                {Object.keys(solicitudMaterialSinMat[0] || {}).map((columna) => (
-                                    <th key={columna} onClick={() => manejarOrden(columna)}>
-                                        {formatearNombreColumna(columna)}
-                                        {orden.columna === columna ? (orden.ascendente ? <i className="fa-solid fa-sort-up"></i> : <i className="fa-solid fa-sort-down"></i>) : <i className="fa-solid fa-sort"></i>}
-                                        <br />
-                                        <input
-                                            type="text"
-                                            onChange={(e) => manejarCambioFiltroSolicitudMaterial(columna, e.target.value)}
-                                        />
-                                    </th>
-                                ))}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {datosOrdenados.length === 0 ? (
+                    <div className='Tabla'>
+                        <table>
+                            <thead>
                                 <tr>
-                                    <td colSpan={Object.keys(solicitudMaterialSinMat[0] || {}).length} style={{ textAlign: 'center' }}>
-                                        No hay registros
-                                    </td>
+                                    {Object.keys(solicitudMaterialSinMat[0] || {}).map((columna) => (
+                                        <th key={columna} onClick={() => manejarOrden(columna)}>
+                                            {formatearNombreColumna(columna)}
+                                            {orden.columna === columna ? (orden.ascendente ? <i className="fa-solid fa-sort-up"></i> : <i className="fa-solid fa-sort-down"></i>) : <i className="fa-solid fa-sort"></i>}
+                                            <br />
+                                            <input
+                                                type="text"
+                                                onChange={(e) => manejarCambioFiltroSolicitudMaterial(columna, e.target.value)}
+                                            />
+                                        </th>
+                                    ))}
                                 </tr>
-                            ) : (
-                                datosOrdenados.slice(0, expandidoSolicitudMaterialSinMat ? datosOrdenados.length : 6).map((fila, index) => (
-                                    <tr key={`${fila.fecha}-${fila.cedula}-${fila.uuid}`} onClick={() => manejarClickFilaSolicitudMaterial(fila)}>
-                                        {Object.values(fila).map((valor, idx) => (
-                                            <td key={idx} onClick={() => manejarClickFilaSolicitudMaterial(fila)}>
-                                                {valor}
-                                            </td>
-                                        ))}
+                            </thead>
+                            <tbody>
+                                {datosOrdenados.length === 0 ? (
+                                    <tr>
+                                        <td colSpan={Object.keys(solicitudMaterialSinMat[0] || {}).length} style={{ textAlign: 'center' }}>
+                                            No hay registros
+                                        </td>
                                     </tr>
-                                ))
-                            )}
-                        </tbody>
-                    </table>
+                                ) : (
+                                    datosOrdenados.slice(0, expandidoSolicitudMaterialSinMat ? datosOrdenados.length : 6).map((fila, index) => (
+                                        <tr key={`${fila.fecha}-${fila.cedula}-${fila.uuid}`} onClick={() => manejarClickFilaSolicitudMaterial(fila)}>
+                                            {Object.values(fila).map((valor, idx) => (
+                                                <td key={idx} onClick={() => manejarClickFilaSolicitudMaterial(fila)}>
+                                                    {valor}
+                                                </td>
+                                            ))}
+                                        </tr>
+                                    ))
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
                     <div className='Boton'>
                         <span onClick={() => {
                             setExpandidoSolicitudMaterialSinMat(!expandidoSolicitudMaterialSinMat);

@@ -356,7 +356,7 @@ const MaterialPrincipalDirector = () => {
     });
 
     return (
-        <div className='Solicitudes'>
+        <div className='Director'>
             {loading ? (
                 <div className="CargandoPagina">
                     <ThreeDots
@@ -369,10 +369,10 @@ const MaterialPrincipalDirector = () => {
                 </div>
             ) : (
                 <>
-                    <div className='Director'>
-                        <div className='Subtitulo'>
-                            <span>Solicitudes Pendientes por el Director</span>
-                        </div>
+                    <div className='Subtitulo'>
+                        <span>Solicitudes Pendientes por el Director</span>
+                    </div>
+                    <div className='Tabla'>
                         <table>
                             <thead>
                                 <tr>
@@ -409,29 +409,29 @@ const MaterialPrincipalDirector = () => {
                                 )}
                             </tbody>
                         </table>
-                        <div className='Boton'>
-                            <span onClick={() => {
-                                setExpandidoPendDirectSinMat(!expandidoPendDirectSinMat);
-                            }}>
-                                {expandidoPendDirectSinMat ? "Mostrar menos" : "Mostrar mas"}
-                            </span>
-                        </div>
-                        <MaterialDetalle
-                            isOpen={ventanaAbiertaPendienteDirector}
-                            onClose={manejarCerrarModalPendienteDirector}
-                            onApprove={manejarAprobarPendienteDirector}
-                            onDeny={manejarRechazoPendienteDirector}
-                            fila={filaSeleccionadaPendienteDirector}
-                            observaciones={observacionesPendDirect}
-                            setObservaciones={setObservacionesPendDirect}
-                            pantalla="Director"
-                        />
                     </div>
+                    <div className='Boton'>
+                        <span onClick={() => {
+                            setExpandidoPendDirectSinMat(!expandidoPendDirectSinMat);
+                        }}>
+                            {expandidoPendDirectSinMat ? "Mostrar menos" : "Mostrar mas"}
+                        </span>
+                    </div>
+                    <MaterialDetalle
+                        isOpen={ventanaAbiertaPendienteDirector}
+                        onClose={manejarCerrarModalPendienteDirector}
+                        onApprove={manejarAprobarPendienteDirector}
+                        onDeny={manejarRechazoPendienteDirector}
+                        fila={filaSeleccionadaPendienteDirector}
+                        observaciones={observacionesPendDirect}
+                        setObservaciones={setObservacionesPendDirect}
+                        pantalla="Director"
+                    />
 
-                    <div className='Director'>
-                        <div className='Subtitulo'>
-                            <span>Solicitudes Aprobadas por el Director</span>
-                        </div>
+                    <div className='Subtitulo'>
+                        <span>Solicitudes Aprobadas por el Director</span>
+                    </div>
+                    <div className='Tabla'>
                         <table>
                             <thead>
                                 <tr>
@@ -468,29 +468,29 @@ const MaterialPrincipalDirector = () => {
                                 )}
                             </tbody>
                         </table>
-                        <div className='Boton'>
-                            <span onClick={() => {
-                                setExpandidoAprobacionDirectSinMat(!expandidoAprobacionDirectSinMat);
-                            }}>
-                                {expandidoAprobacionDirectSinMat ? "Mostrar menos" : "Mostrar mas"}
-                            </span>
-                        </div>
-                        <MaterialDetalle
-                            isOpen={ventanaAbiertaAprobacionDirector}
-                            onClose={manejarCerrarModalAprobacionDirector}
-                            onApprove={manejarAprobarPendienteDirector}
-                            onDeny={manejarRechazoPendienteDirector}
-                            fila={filaSeleccionadaAprobacionDirector}
-                            observaciones={observacionesPendDirect}
-                            setObservaciones={setObservacionesPendDirect}
-                            pantalla="Director"
-                        />
                     </div>
+                    <div className='Boton'>
+                        <span onClick={() => {
+                            setExpandidoAprobacionDirectSinMat(!expandidoAprobacionDirectSinMat);
+                        }}>
+                            {expandidoAprobacionDirectSinMat ? "Mostrar menos" : "Mostrar mas"}
+                        </span>
+                    </div>
+                    <MaterialDetalle
+                        isOpen={ventanaAbiertaAprobacionDirector}
+                        onClose={manejarCerrarModalAprobacionDirector}
+                        onApprove={manejarAprobarPendienteDirector}
+                        onDeny={manejarRechazoPendienteDirector}
+                        fila={filaSeleccionadaAprobacionDirector}
+                        observaciones={observacionesPendDirect}
+                        setObservaciones={setObservacionesPendDirect}
+                        pantalla="Director"
+                    />
 
-                    <div className='Director'>
-                        <div className='Subtitulo'>
-                            <span>Solicitudes Rechazadas por el Director</span>
-                        </div>
+                    <div className='Subtitulo'>
+                        <span>Solicitudes Rechazadas por el Director</span>
+                    </div>
+                    <div className='Tabla'>
                         <table>
                             <thead>
                                 <tr>
@@ -527,24 +527,25 @@ const MaterialPrincipalDirector = () => {
                                 )}
                             </tbody>
                         </table>
-                        <div className='Boton'>
-                            <span onClick={() => {
-                                setExpandidoRechazadoDirectSinMat(!expandidoRechazadoDirectSinMat);
-                            }}>
-                                {expandidoRechazadoDirectSinMat ? "Mostrar menos" : "Mostrar mas"}
-                            </span>
-                        </div>
-                        <MaterialDetalle
-                            isOpen={ventanaAbiertaRechazadoDirector}
-                            onClose={manejarCerrarModalRechazadoDirector}
-                            onApprove={manejarAprobarPendienteDirector}
-                            onDeny={manejarRechazoPendienteDirector}
-                            fila={filaSeleccionadaRechazadoDirector}
-                            observaciones={observacionesPendDirect}
-                            setObservaciones={setObservacionesPendDirect}
-                            pantalla="Director"
-                        />
                     </div>
+                    <div className='Boton'>
+                        <span onClick={() => {
+                            setExpandidoRechazadoDirectSinMat(!expandidoRechazadoDirectSinMat);
+                        }}>
+                            {expandidoRechazadoDirectSinMat ? "Mostrar menos" : "Mostrar mas"}
+                        </span>
+                    </div>
+                    <MaterialDetalle
+                        isOpen={ventanaAbiertaRechazadoDirector}
+                        onClose={manejarCerrarModalRechazadoDirector}
+                        onApprove={manejarAprobarPendienteDirector}
+                        onDeny={manejarRechazoPendienteDirector}
+                        fila={filaSeleccionadaRechazadoDirector}
+                        observaciones={observacionesPendDirect}
+                        setObservaciones={setObservacionesPendDirect}
+                        pantalla="Director"
+                    />
+
                     <div className='Notificaciones'>
                         <ToastContainer />
                     </div>

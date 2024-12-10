@@ -63,7 +63,7 @@ const MaterialPrincipalEntregaBodega = () => {
                             t.fecha === value.fecha && t.cedula === value.cedula && t.uuid === value.uuid
                         ))
                     );
-                    
+
                 const datosFiltradosEntregadoEntregaBodega = rolUsuario === "admin" || rolUsuario === "LOGISTICA"
                     ? datosEntregadoEntregaBodega
                     : datosEntregadoEntregaBodega.filter(item => ObtenerRelacionCiudadBodega(nombreUsuario) === item.ciudad.split(" ")[0]);
@@ -200,7 +200,7 @@ const MaterialPrincipalEntregaBodega = () => {
     });
 
     return (
-        <div className='Solicitudes'>
+        <div className='EntregaBodega'>
             {loading ? (
                 <div className="CargandoPagina">
                     <ThreeDots
@@ -213,10 +213,10 @@ const MaterialPrincipalEntregaBodega = () => {
                 </div>
             ) : (
                 <>
-                    <div className='EntregaBodega'>
-                        <div className='Subtitulo'>
-                            <span>Solicitudes Pendientes Por Entrega Bodega</span>
-                        </div>
+                    <div className='Subtitulo'>
+                        <span>Solicitudes Pendientes Por Entrega Bodega</span>
+                    </div>
+                    <div className='Tabla'>
                         <table>
                             <thead>
                                 <tr>
@@ -253,29 +253,29 @@ const MaterialPrincipalEntregaBodega = () => {
                                 )}
                             </tbody>
                         </table>
-                        <div className='Boton'>
-                            <span onClick={() => {
-                                setExpandidoPendienteEntregaBodegaSinMat(!expandidoPendienteEntregaBodegaSinMat);
-                            }}>
-                                {expandidoPendienteEntregaBodegaSinMat ? "Mostrar menos" : "Mostrar mas"}
-                            </span>
-                        </div>
-                        <MaterialDetalle
-                            isOpen={ventanaAbiertaPendienteEntregaBodega}
-                            onClose={manejarCerrarModalPendienteEntregaBodega}
-                            onApprove=""
-                            onDeny=""
-                            fila={filaSeleccionadaPendienteEntregaBodega}
-                            observaciones=""
-                            setObservaciones=""
-                            pantalla="EntregaBodega"
-                        />
                     </div>
+                    <div className='Boton'>
+                        <span onClick={() => {
+                            setExpandidoPendienteEntregaBodegaSinMat(!expandidoPendienteEntregaBodegaSinMat);
+                        }}>
+                            {expandidoPendienteEntregaBodegaSinMat ? "Mostrar menos" : "Mostrar mas"}
+                        </span>
+                    </div>
+                    <MaterialDetalle
+                        isOpen={ventanaAbiertaPendienteEntregaBodega}
+                        onClose={manejarCerrarModalPendienteEntregaBodega}
+                        onApprove=""
+                        onDeny=""
+                        fila={filaSeleccionadaPendienteEntregaBodega}
+                        observaciones=""
+                        setObservaciones=""
+                        pantalla="EntregaBodega"
+                    />
 
-                    <div className='EntregaBodega'>
-                        <div className='Subtitulo'>
-                            <span>Solicitudes Entregadas por Bodega</span>
-                        </div>
+                    <div className='Subtitulo'>
+                        <span>Solicitudes Entregadas por Bodega</span>
+                    </div>
+                    <div className='Tabla'>
                         <table>
                             <thead>
                                 <tr>
@@ -312,24 +312,24 @@ const MaterialPrincipalEntregaBodega = () => {
                                 )}
                             </tbody>
                         </table>
-                        <div className='Boton'>
-                            <span onClick={() => {
-                                setExpandidoEntregadoEntregaBodegaSinMat(!expandidoEntregadoEntregaBodegaSinMat);
-                            }}>
-                                {expandidoEntregadoEntregaBodegaSinMat ? "Mostrar menos" : "Mostrar mas"}
-                            </span>
-                        </div>
-                        <MaterialDetalle
-                            isOpen={ventanaAbiertaEntregadoEntregaBodega}
-                            onClose={manejarCerrarModalEntregadoEntregaBodega}
-                            onApprove=""
-                            onDeny=""
-                            fila={filaSeleccionadaEntregadoEntregaBodega}
-                            observaciones=""
-                            setObservaciones=""
-                            pantalla="EntregaBodega"
-                        />
                     </div>
+                    <div className='Boton'>
+                        <span onClick={() => {
+                            setExpandidoEntregadoEntregaBodegaSinMat(!expandidoEntregadoEntregaBodegaSinMat);
+                        }}>
+                            {expandidoEntregadoEntregaBodegaSinMat ? "Mostrar menos" : "Mostrar mas"}
+                        </span>
+                    </div>
+                    <MaterialDetalle
+                        isOpen={ventanaAbiertaEntregadoEntregaBodega}
+                        onClose={manejarCerrarModalEntregadoEntregaBodega}
+                        onApprove=""
+                        onDeny=""
+                        fila={filaSeleccionadaEntregadoEntregaBodega}
+                        observaciones=""
+                        setObservaciones=""
+                        pantalla="EntregaBodega"
+                    />
 
                     <div className='Notificaciones'>
                         <ToastContainer />

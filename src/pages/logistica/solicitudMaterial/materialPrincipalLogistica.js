@@ -341,7 +341,7 @@ const MaterialPrincipalLogistica = () => {
     });
 
     return (
-        <div className='Solicitudes'>
+        <div className='Analista'>
             {loading ? (
                 <div className="CargandoPagina">
                     <ThreeDots
@@ -354,10 +354,10 @@ const MaterialPrincipalLogistica = () => {
                 </div>
             ) : (
                 <>
-                    <div className='Analista'>
-                        <div className='Subtitulo'>
-                            <span>Solicitudes Pendientes por Analista</span>
-                        </div>
+                    <div className='Subtitulo'>
+                        <span>Solicitudes Pendientes por Analista</span>
+                    </div>
+                    <div className='Tabla'>
                         <table>
                             <thead>
                                 <tr>
@@ -394,29 +394,31 @@ const MaterialPrincipalLogistica = () => {
                                 )}
                             </tbody>
                         </table>
-                        <div className='Boton'>
-                            <span onClick={() => {
-                                setExpandidoPendAnalistaSinMat(!expandidoPendAnalistaSinMat);
-                            }}>
-                                {expandidoPendAnalistaSinMat ? "Mostrar menos" : "Mostrar mas"}
-                            </span>
-                        </div>
-                        <MaterialDetalle
-                            isOpen={ventanaAbiertaPendienteAnalista}
-                            onClose={manejarCerrarModalPendienteAnalista}
-                            onApprove={manejarAprobarPendienteAnalista}
-                            onDeny={manejarRechazoPendienteAnalista}
-                            fila={filaSeleccionadaPendienteAnalista}
-                            observaciones={observacionesPendAnalista}
-                            setObservaciones={setObservacionesPendAnalista}
-                            pantalla="Analista"
-                        />
                     </div>
+                    <div className='Boton'>
+                        <span onClick={() => {
+                            setExpandidoPendAnalistaSinMat(!expandidoPendAnalistaSinMat);
+                        }}>
+                            {expandidoPendAnalistaSinMat ? "Mostrar menos" : "Mostrar mas"}
+                        </span>
+                    </div>
+                    <MaterialDetalle
+                        isOpen={ventanaAbiertaPendienteAnalista}
+                        onClose={manejarCerrarModalPendienteAnalista}
+                        onApprove={manejarAprobarPendienteAnalista}
+                        onDeny={manejarRechazoPendienteAnalista}
+                        fila={filaSeleccionadaPendienteAnalista}
+                        observaciones={observacionesPendAnalista}
+                        setObservaciones={setObservacionesPendAnalista}
+                        pantalla="Analista"
+                    />
 
-                    <div className='Analista'>
-                        <div className='Subtitulo'>
-                            <span>Solicitudes Aprobadas por Analista</span>
-                        </div>
+
+
+                    <div className='Subtitulo'>
+                        <span>Solicitudes Aprobadas por Analista</span>
+                    </div>
+                    <div className='Tabla'>
                         <table>
                             <thead>
                                 <tr>
@@ -453,29 +455,31 @@ const MaterialPrincipalLogistica = () => {
                                 )}
                             </tbody>
                         </table>
-                        <div className='Boton'>
-                            <span onClick={() => {
-                                setExpandidoAprobacionAnalistaSinMat(!expandidoAprobacionAnalistaSinMat);
-                            }}>
-                                {expandidoAprobacionAnalistaSinMat ? "Mostrar menos" : "Mostrar mas"}
-                            </span>
-                        </div>
-                        <MaterialDetalle
-                            isOpen={ventanaAbiertaAprobacionAnalista}
-                            onClose={manejarCerrarModalAprobacionAnalista}
-                            onApprove={manejarAprobarPendienteAnalista}
-                            onDeny={manejarRechazoPendienteAnalista}
-                            fila={filaSeleccionadaAprobacionAnalista}
-                            observaciones={observacionesPendAnalista}
-                            setObservaciones={setObservacionesPendAnalista}
-                            pantalla="Analista"
-                        />
                     </div>
+                    <div className='Boton'>
+                        <span onClick={() => {
+                            setExpandidoAprobacionAnalistaSinMat(!expandidoAprobacionAnalistaSinMat);
+                        }}>
+                            {expandidoAprobacionAnalistaSinMat ? "Mostrar menos" : "Mostrar mas"}
+                        </span>
+                    </div>
+                    <MaterialDetalle
+                        isOpen={ventanaAbiertaAprobacionAnalista}
+                        onClose={manejarCerrarModalAprobacionAnalista}
+                        onApprove={manejarAprobarPendienteAnalista}
+                        onDeny={manejarRechazoPendienteAnalista}
+                        fila={filaSeleccionadaAprobacionAnalista}
+                        observaciones={observacionesPendAnalista}
+                        setObservaciones={setObservacionesPendAnalista}
+                        pantalla="Analista"
+                    />
 
-                    <div className='Analista'>
-                        <div className='Subtitulo'>
-                            <span>Solicitudes Rechazadas por Analista</span>
-                        </div>
+
+
+                    <div className='Subtitulo'>
+                        <span>Solicitudes Rechazadas por Analista</span>
+                    </div>
+                    <div className='Tabla'>
                         <table>
                             <thead>
                                 <tr>
@@ -512,24 +516,24 @@ const MaterialPrincipalLogistica = () => {
                                 )}
                             </tbody>
                         </table>
-                        <div className='Boton'>
-                            <span onClick={() => {
-                                setExpandidoRechazadoAnalistaSinMat(!expandidoRechazadoAnalistaSinMat);
-                            }}>
-                                {expandidoRechazadoAnalistaSinMat ? "Mostrar menos" : "Mostrar mas"}
-                            </span>
-                        </div>
-                        <MaterialDetalle
-                            isOpen={ventanaAbiertaRechazadoAnalista}
-                            onClose={manejarCerrarModalRechazadoAnalista}
-                            onApprove={manejarAprobarPendienteAnalista}
-                            onDeny={manejarRechazoPendienteAnalista}
-                            fila={filaSeleccionadaRechazadoAnalista}
-                            observaciones={observacionesPendAnalista}
-                            setObservaciones={setObservacionesPendAnalista}
-                            pantalla="Analista"
-                        />
                     </div>
+                    <div className='Boton'>
+                        <span onClick={() => {
+                            setExpandidoRechazadoAnalistaSinMat(!expandidoRechazadoAnalistaSinMat);
+                        }}>
+                            {expandidoRechazadoAnalistaSinMat ? "Mostrar menos" : "Mostrar mas"}
+                        </span>
+                    </div>
+                    <MaterialDetalle
+                        isOpen={ventanaAbiertaRechazadoAnalista}
+                        onClose={manejarCerrarModalRechazadoAnalista}
+                        onApprove={manejarAprobarPendienteAnalista}
+                        onDeny={manejarRechazoPendienteAnalista}
+                        fila={filaSeleccionadaRechazadoAnalista}
+                        observaciones={observacionesPendAnalista}
+                        setObservaciones={setObservacionesPendAnalista}
+                        pantalla="Analista"
+                    />
 
                     <div className='Notificaciones'>
                         <ToastContainer />

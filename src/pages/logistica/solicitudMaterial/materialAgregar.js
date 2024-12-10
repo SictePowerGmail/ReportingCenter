@@ -673,7 +673,7 @@ const MaterialAgregar = () => {
                                     <tbody>
                                         {filasTabla.map((fila, index) => (
                                             <tr key={index}>
-                                                <td>
+                                                <td data-label="Propiedad del Material">
                                                     <select
                                                         value={fila.propiedad}
                                                         onChange={(e) => {
@@ -710,10 +710,10 @@ const MaterialAgregar = () => {
                                                         ))}
                                                     </select>
                                                 </td>
-                                                <td>
+                                                <td data-label="Codigo SAP">
                                                     <span>{codigoSap[index]}</span>
                                                 </td>
-                                                <td>
+                                                <td data-label="Descripción del Material">
                                                     <input
                                                         type="text"
                                                         value={fila.descripcion}
@@ -780,13 +780,13 @@ const MaterialAgregar = () => {
                                                         </div>
                                                     )}
                                                 </td>
-                                                <td>
+                                                <td data-label="Unidad de Medida">
                                                     <span>{unidadMedida[index]}</span>
                                                 </td>
-                                                <td>
+                                                <td data-label="Cantidad Disponible">
                                                     <span>{cantidadDisponible[index]}</span>
                                                 </td>
-                                                <td>
+                                                <td data-label="Cantidad Solicitada">
                                                     <input
                                                         type="number"
                                                         value={fila.cantidadSolicitada}
@@ -802,7 +802,7 @@ const MaterialAgregar = () => {
                                                         required
                                                     />
                                                 </td>
-                                                <td>
+                                                <td data-label="Acciones">
                                                     <button
                                                         onClick={() => {
                                                             const nuevasFilas = filasTabla.filter((_, i) => i !== index);

@@ -500,13 +500,13 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
                                                 key={item.id}
                                                 className={isDesabastecido ? 'desabastecido' : ''}
                                             >
-                                                <td translate="no">{item.propiedadMaterial}</td>
-                                                <td translate="no">{item.codigoSapMaterial}</td>
-                                                <td translate="no">{item.descripcionMaterial}</td>
-                                                <td translate="no">{item.unidadMedidaMaterial}</td>
-                                                <td translate="no">{item.cantidadDisponibleMaterial}</td>
-                                                <td translate="no">{item.cantidadSolicitadaMaterial}</td>
-                                                <td translate="no">{item.cantidadRestantePorDespacho}</td>
+                                                <td data-label="Propiedad Material" translate="no"><span>{item.propiedadMaterial}</span></td>
+                                                <td data-label="Código SAP Material" translate="no"><span>{item.codigoSapMaterial}</span></td>
+                                                <td data-label="Descripción Material" translate="no"><span>{item.descripcionMaterial}</span></td>
+                                                <td data-label="Unidad de Medida" translate="no"><span>{item.unidadMedidaMaterial}</span></td>
+                                                <td data-label="Cantidad Disponible" translate="no"><span>{item.cantidadDisponibleMaterial}</span></td>
+                                                <td data-label="Cantidad Solicitada" translate="no"><span>{item.cantidadSolicitadaMaterial}</span></td>
+                                                <td data-label="Cantidad Restante por Despacho" translate="no"><span>{item.cantidadRestantePorDespacho}</span></td>
                                             </tr>
                                         );
                                     })}
@@ -642,21 +642,21 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
                                         <tbody>
                                             {pdfData.map((item, index) => (
                                                 <tr key={index}>
-                                                    <td>{item["pdfNombre"]}</td>
-                                                    <td>{item["NRO."]}</td>
-                                                    <td>{item["PRODUCTO"]}</td>
-                                                    <td>{item["DESCRIPCION"]}</td>
-                                                    <td>{item["U.M."]}</td>
-                                                    <td>{item["CANTIDAD"]}</td>
-                                                    <td>{item["OBSERVACIONES"]}</td>
-                                                    <td
+                                                    <td data-label="SALIDA"><span>{item["pdfNombre"]}</span></td>
+                                                    <td data-label="NRO."><span>{item["NRO."]}</span></td>
+                                                    <td data-label="PRODUCTO"><span>{item["PRODUCTO"]}</span></td>
+                                                    <td data-label="DESCRIPCION"><span>{item["DESCRIPCION"]}</span></td>
+                                                    <td data-label="U.M."><span>{item["U.M."]}</span></td>
+                                                    <td data-label="CANTIDAD"><span>{item["CANTIDAD"]}</span></td>
+                                                    <td data-label="OBSERVACIONES"><span>{item["OBSERVACIONES"]}</span></td>
+                                                    <td data-label="MATERIAL"
                                                         className={
                                                             item["material"] === "Solicitado"
                                                                 ? "material-solicitado"
                                                                 : "material-no-solicitado"
                                                         }
                                                     >
-                                                        {item["material"]}
+                                                        <span>{item["material"]}</span>
                                                     </td>
                                                 </tr>
                                             ))}
@@ -771,21 +771,21 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
                                         <tbody>
                                             {pdfDataNuevos.map((item, index) => (
                                                 <tr key={index}>
-                                                    <td>{item["pdfNombre"]}</td>
-                                                    <td>{item["NRO."]}</td>
-                                                    <td>{item["PRODUCTO"]}</td>
-                                                    <td>{item["DESCRIPCION"]}</td>
-                                                    <td>{item["U.M."]}</td>
-                                                    <td>{item["CANTIDAD"]}</td>
-                                                    <td>{item["OBSERVACIONES"]}</td>
-                                                    <td
+                                                    <td data-label="SALIDA"><span>{item["pdfNombre"]}</span></td>
+                                                    <td data-label="NRO."><span>{item["NRO."]}</span></td>
+                                                    <td data-label="PRODUCTO"><span>{item["PRODUCTO"]}</span></td>
+                                                    <td data-label="DESCRIPCION"><span>{item["DESCRIPCION"]}</span></td>
+                                                    <td data-label="U.M."><span>{item["U.M."]}</span></td>
+                                                    <td data-label="CANTIDAD"><span>{item["CANTIDAD"]}</span></td>
+                                                    <td data-label="OBSERVACIONES"><span>{item["OBSERVACIONES"]}</span></td>
+                                                    <td data-label="MATERIAL"
                                                         className={
                                                             item["material"] === "Solicitado"
                                                                 ? "material-solicitado"
                                                                 : "material-no-solicitado"
                                                         }
                                                     >
-                                                        {item["material"]}
+                                                        <span>{item["material"]}</span>
                                                     </td>
                                                 </tr>
                                             ))}
