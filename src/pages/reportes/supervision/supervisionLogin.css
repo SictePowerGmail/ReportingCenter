@@ -1,261 +1,216 @@
-/* Contenedor principal de la aplicación de inicio de sesión */
 .Supervision-Login-App {
-    display: flex; /* Usa el modelo de caja flexible */
-    justify-content: center; /* Centra horizontalmente */
-    align-items: center; /* Centra verticalmente */
-    height: calc(100vh - 40px); /* Toma toda la altura disponible */
-    width: calc(100% - 40px); /* Toma todo el ancho disponible */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 40px);
+    width: calc(100% - 40px);
     margin-left: 40px;
     background-color: #E6E6E6;
-}
 
-/* Contenedor del primer contenido */
-.Supervision-Login-App .Login-Contenido_1 {
-    background-color: #0B1A46; /* Color de fondo */
-    padding: 20px; /* Relleno interno */
-    border-radius: 30px 0px 0px 30px; /* Bordes redondeados */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra */
-    width: 350px; /* Ancho fijo */
-    height: 600px; /* Altura fija */
-    display: flex; /* Usa el modelo de caja flexible */
-    justify-content: center; /* Centra horizontalmente */
-    align-items: center; /* Centra verticalmente */
-
-    @media screen and (max-height: 650px) {
-        height: 100%;
-    }
-}
-
-/* Estilos para la imagen dentro del primer contenido */
-.Supervision-Login-App .Login-Contenido_1 img {
-    width: 250px; /* Ancho de la imagen */
-    height: 100px; /* Altura de la imagen */
-}
-
-/* Contenedor del segundo contenido */
-.Supervision-Login-App .Login-Contenido_2 {
-    background-color: #ffffff; /* Color de fondo */
-    padding: 20px; /* Relleno interno */
-    border-radius: 0px 30px 30px 0px; /* Bordes redondeados */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra */
-    width: 350px; /* Ancho fijo */
-    height: 600px; /* Altura fija */
-    position: relative;
-
-    @media screen and (max-height: 650px) {
-        height: 100%;
-    }
-}
-
-/* Estilos para el logo dentro del contenedor */
-.Supervision-Login-App .Login-Logo {
-    text-align: center; /* Alinea el texto al centro */
-}
-
-/* Estilos para el título dentro del contenedor */
-.Supervision-Login-App .Login-Titulo {
-    text-align: center; /* Alinea el texto al centro */
-    padding: 50px 0px 40px 0px; /* Relleno superior e inferior */
-    color: black; /* Color del texto */
-}
-
-/* Estilos para los campos de usuario y contraseña */
-.Supervision-Login-App .Login-Usuario,
-.Supervision-Login-App .Login-Contraseña {
-    display: flex; /* Usa el modelo de caja flexible */
-    justify-content: center; /* Centra horizontalmente */
-    margin-bottom: 20px; /* Espacio entre los campos */
-    font-size: 1.1em; /* Tamaño de fuente */
-    align-items: center; /* Centra verticalmente */
-}
-
-/* Estilos para el icono dentro de los campos de usuario y contraseña */
-.Supervision-Login-App .Login-Usuario i,
-.Supervision-Login-App .Login-Contraseña i {
-    padding-right: 10px; /* Espacio entre el icono y el texto */
-}
-
-/* Estilos para los campos de entrada de usuario y contraseña */
-.Supervision-Login-App .Login-Usuario input {
-    padding: 0px 5px; /* Relleno interno */
-    box-sizing: border-box; /* Incluye el ancho del borde y el relleno en el ancho total */
-    width: 70%;
-}
-
-.Supervision-Login-App .Login-Contraseña input {
-    padding: 0px 5px; /* Relleno interno */
-    box-sizing: border-box; /* Incluye el ancho del borde y el relleno en el ancho total */
-    width: calc(70% - 24px);
-}
-
-.Supervision-Login-App .Login-Contraseña .password-toggle {
-    padding: 0px;
-    background-color: rgba(194, 194, 194, 0.548);
-    width: 30px;
-    height: 26px;
-    border: 1px solid #363636;
-    border-radius: 0px 5px 5px 0px;
-    display: flex;
-    justify-content: center;
-    align-content: center;
-    align-items: center;
-    justify-items: center;
-}
-
-/* Estilos para el botón de envío */
-.Supervision-Login-App .Login-Boton-Envio {
-    display: flex; /* Usa el modelo de caja flexible */
-    justify-content: center; /* Centra horizontalmente */
-    padding: 20px 0px 30px 0px; /* Relleno superior e inferior */
-}
-
-/* Estilos específicos para el botón de envío */
-.Supervision-Login-App #Login-Boton-Envio-Estilo {
-    background: #0B1A46;
-}
-
-.Supervision-Login-App .Login-Contenido_2 .Version {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    margin-right: 30px;
-}
-
-.contenedor-error-message {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.error-message {
-    color: red;
-    font-size: 20px;
-    margin-top: 10px;
-    text-align: center;
-}
-
-@media screen and (max-width: 600px) {
-    /* Contenedor principal de la aplicación de inicio de sesión */
-    .Supervision-Login-App {
-        display: flex; /* Usa el modelo de caja flexible */
+    @media screen and (max-width: 600px) {
         flex-direction: column;
-        justify-content: center; /* Centra horizontalmente */
-        align-items: center; /* Centra verticalmente */
-        height: calc(100vh - 40px); /* Toma toda la altura disponible */
-        width: calc(100%); /* Toma todo el ancho disponible */
+        width: calc(100%);
         margin-left: 0px;
-        background-color: #E6E6E6;
     }
 
-    /* Contenedor del primer contenido */
-    .Supervision-Login-App .Login-Contenido_1 {
-        display: flex; /* Usa el modelo de caja flexible */
-        justify-content: center; /* Centra horizontalmente */
-        align-items: center; /* Centra verticalmente */
-        width: 100%; /* Ancho fijo */
-        max-width: 350px;
-        height: 25%; /* Altura fija */
-        margin-top: 20px;
-        background-color: #0B1A46; /* Color de fondo */
-        border-radius: 30px 30px 0px 0px; /* Bordes redondeados */
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra */
-    }
-
-    /* Estilos para la imagen dentro del primer contenido */
-    .Supervision-Login-App .Login-Contenido_1 img {
-        width: 250px; /* Ancho de la imagen */
-        height: 100px; /* Altura de la imagen */
-    }
-
-    /* Contenedor del segundo contenido */
-    .Supervision-Login-App .Login-Contenido_2 {
-        width: 100%; /* Ancho fijo */
-        max-width: 350px;
-        height: 75%; /* Altura fija */
-        margin-bottom: 20px;
-        background-color: #ffffff; /* Color de fondo */
-        border-radius: 0px 0px 30px 30px; /* Bordes redondeados */
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra */
-        position: relative;
-        z-index: 5;
-    }
-
-    /* Estilos para el logo dentro del contenedor */
-    .Supervision-Login-App .Login-Logo {
-        text-align: center; /* Alinea el texto al centro */
-    }
-
-    /* Estilos para el título dentro del contenedor */
-    .Supervision-Login-App .Login-Titulo {
-        text-align: center; /* Alinea el texto al centro */
-        padding: 20px 0px 30px 0px; /* Relleno superior e inferior */
-        color: black; /* Color del texto */
-    }
-
-    /* Estilos para los campos de usuario y contraseña */
-    .Supervision-Login-App .Login-Usuario,
-    .Supervision-Login-App .Login-Contraseña {
-        display: flex; /* Usa el modelo de caja flexible */
-        justify-content: center; /* Centra horizontalmente */
-        margin-bottom: 20px; /* Espacio entre los campos */
-        font-size: 1.2em; /* Tamaño de fuente */
-        align-items: center; /* Centra verticalmente */
-    }
-
-    /* Estilos para el icono dentro de los campos de usuario y contraseña */
-    .Supervision-Login-App .Login-Usuario i,
-    .Supervision-Login-App .Login-Contraseña i {
-        padding-right: 10px; /* Espacio entre el icono y el texto */
-    }
-
-    /* Estilos para los campos de entrada de usuario y contraseña */
-    .Supervision-Login-App .Login-Usuario input {
-        padding: 0px 5px; /* Relleno interno */
-        box-sizing: border-box; /* Incluye el ancho del borde y el relleno en el ancho total */
-        width: 80%;
-    }
-
-    .Supervision-Login-App .Login-Contraseña input {
-        padding: 0px 5px; /* Relleno interno */
-        box-sizing: border-box; /* Incluye el ancho del borde y el relleno en el ancho total */
-        width: calc(80% - 24px);
-    }
-
-    .Supervision-Login-App .Login-Contraseña .password-toggle {
-        padding: 0px;
-        height: 28px;
-    }
-    
-    /* Estilos para el botón de envío */
-    .Supervision-Login-App .Login-Boton-Envio {
-        display: flex; /* Usa el modelo de caja flexible */
-        justify-content: center; /* Centra horizontalmente */
-        align-items: center;
-        padding: 20px 0px 30px 0px; /* Relleno superior e inferior */
-    }
-
-    /* Estilos específicos para el botón de envío */
-    .Supervision-Login-App #Login-Boton-Envio-Estilo {
-        background: #0B1A46;
-    }
-
-    .Supervision-Login-App .Login-Contenido_2 .Version {
-        position: absolute;
-        bottom: 0;
-        right: 0;
-        margin-right: 30px;
-    }
-
-    .Supervision-Login-App .contenedor-error-message {
+    .Login-Contenido_1 {
         display: flex;
-        align-items: center;
         justify-content: center;
+        align-items: center;
+        background-color: #0B1A46;
+        padding: 20px;
+        border-radius: 30px 0px 0px 30px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 350px;
+        height: 600px;
+
+        @media screen and (max-width: 600px) {
+            width: 100%;
+            max-width: 350px;
+            height: 25%;
+            margin-top: 20px;
+            border-radius: 30px 30px 0px 0px;
+        }
+
+        img {
+            width: 250px;
+            height: 100px;
+        }
     }
 
-    .Supervision-Login-App .error-message {
-        color: red;
-        font-size: 20px;
-        margin-top: 10px;
-        text-align: center;
+    .Login-Contenido_2 {
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 0px 30px 30px 0px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 350px;
+        height: 600px;
+        position: relative;
+
+        @media screen and (max-width: 600px) {
+            width: 100%;
+            max-width: 350px;
+            height: 75%;
+            margin-bottom: 20px;
+            border-radius: 0px 0px 30px 30px;
+            z-index: 5;
+        }
+
+        @media screen and (max-height: 650px) {
+            height: 100%;
+        }
+
+        .Login-Titulo {
+            text-align: center;
+            padding: 50px 0px 40px 0px;
+            color: black;
+
+            @media screen and (max-width: 600px) {
+                padding: 20px 0px 30px 0px;
+            }
+        }
+
+        .Login-Usuario,
+        .Login-Contraseña {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 1.1em;
+            align-items: center;
+
+            i {
+                padding-right: 10px;
+            }
+        }
+
+        .Login-Usuario input {
+            padding: 0px 5px;
+            box-sizing: border-box;
+            width: 70%;
+
+            @media screen and (max-width: 600px) {
+                width: 80%;
+            }
+        }
+
+        .Login-Contraseña {
+
+            input {
+                padding: 0px 5px;
+                box-sizing: border-box;
+                width: calc(70% - 24px);
+
+                @media screen and (max-width: 600px) {
+                    width: calc(80% - 24px);
+                }
+            }
+
+            .password-toggle {
+                padding: 0px;
+                background-color: rgba(194, 194, 194, 0.548);
+                width: 30px;
+                height: 26px;
+                border: 1px solid #363636;
+                border-radius: 0px 5px 5px 0px;
+                display: flex;
+                justify-content: center;
+                align-content: center;
+                align-items: center;
+                justify-items: center;
+
+                @media screen and (max-width: 600px) {
+                    padding: 0px;
+                    height: 28px;
+                }
+            }
+        }
+
+        .Login-Boton-Envio {
+            display: flex;
+            justify-content: center;
+            padding: 20px 0px 30px 0px;
+
+            @media screen and (max-width: 600px) {
+                align-items: center;
+            }
+
+            #Login-Boton-Envio-Estilo {
+                background: #0B1A46;
+            }
+        }
+
+        .CambiarContraseña {
+            display: flex;
+            justify-content: center;
+            cursor: pointer;
+            margin-bottom: 30px;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+
+            .modal-content {
+                background: white;
+                padding: 20px;
+                border-radius: 8px;
+                width: 300px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                text-align: center;
+
+                h3 {
+                    margin-top: 0;
+                }
+
+                .modal-buttons {
+                    margin-top: 20px;
+
+                    button {
+                        margin: 0 10px;
+                        padding: 10px 20px;
+                        border: none;
+                        border-radius: 5px;
+                        cursor: pointer;
+
+                        &:first-child {
+                            background-color: #0B1A46;
+                            color: white;
+                        }
+                        
+                        &:last-child {
+                            background-color: #ccc;
+                        }
+                    }
+                }
+            }
+        }
+
+        .contenedor-error-message {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 20px;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .Version {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            margin-right: 30px;
+        }
     }
 }

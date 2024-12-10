@@ -345,12 +345,17 @@
 }
 
 .Toastify__toast {
-    margin-top: 40px;
-    /* Elimina el margen */
-    width: 250px;
-    /* Ajusta el ancho */
-    padding: 10px;
-    /* Ajusta el padding */
+    margin: 40px !important;
+    width: 250px !important;
+    padding: 10px !important;
+
+    .Toastify__toast-icon {
+        width: 20% !important;
+    }
+
+    @media (max-width: 1100px) {
+        margin: 40px 0px !important;
+    }
 }
 
 #CargandoPagina {

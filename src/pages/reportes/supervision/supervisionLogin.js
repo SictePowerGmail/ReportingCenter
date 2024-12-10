@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import  './supervisionLogin.css'
+import './supervisionLogin.css'
 import Sicte from '../../../images/Sicte 6.png'
 
 const SupervisionLogin = () => {
@@ -9,11 +9,19 @@ const SupervisionLogin = () => {
     const [error, setError] = useState('');
     const navigate = useNavigate();
     const [mostrarPassword, setMostrarPassword] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+    const [email, setEmail] = useState("");
+
+    const handleSendToken = () => {
+        console.log("Enviando token a:", email);
+        alert("Token enviado al correo: " + email);
+        setShowModal(false);
+    };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         setError('');
-    
+
         console.log(JSON.stringify({ correo: username, contrasena: password }),);
 
         try {
@@ -24,12 +32,12 @@ const SupervisionLogin = () => {
                 },
                 body: JSON.stringify({ correo: username, contrasena: password }), // Convierte los datos a JSON
             });
-    
+
             if (response.ok) {
                 const data = await response.json(); // Obtén la respuesta como JSON
                 const userRole = data.rol; // Asume que la respuesta tiene una propiedad 'rol'
                 const userNombre = data.nombre; // Asume que la respuesta tiene una propiedad 'rol'
-                navigate('/SupervisionPrincipal', { state: { role:userRole, nombre:userNombre, estadoNotificacion:false } });
+                navigate('/SupervisionPrincipal', { state: { role: userRole, nombre: userNombre, estadoNotificacion: false } });
             } else {
                 const errorText = await response.text();
                 if (response.status === 404) {
@@ -53,11 +61,11 @@ const SupervisionLogin = () => {
             <div className='Login-Contenido_2'>
                 <div className='Login-Titulo'>
                     <h1>¡ Bienvenido !</h1>
-                </div>            
+                </div>
                 <form onSubmit={handleSubmit}>
                     <div className='Login-Usuario'>
                         <i className="fas fa-user"></i>
-                        <input type="text" placeholder="Usuario" value={username} onChange={(e) => setUsername(e.target.value)}/>
+                        <input type="text" placeholder="Usuario" value={username} onChange={(e) => setUsername(e.target.value)} />
                     </div>
                     <div className='Login-Contraseña'>
                         <i className="fas fa-lock"></i>
@@ -69,6 +77,30 @@ const SupervisionLogin = () => {
                         <button type="submit" id='Login-Boton-Envio-Estilo' className="btn btn-primary">Iniciar sesión</button>
                     </div>
                 </form>
+
+                <div className='CambiarContraseña' onClick={() => setShowModal(true)}>
+                    <span>¿Olvidaste la contraseña?</span>
+                </div>
+
+                {showModal && (
+                    <div className="modal-overlay">
+                        <div className="modal-content">
+                            <h3>Cambiar Contraseña</h3>
+                            <p>Ingresa tu correo para enviar un token de recuperación.</p>
+                            <input
+                                type="email"
+                                placeholder="Correo electrónico"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                            />
+                            <div className="modal-buttons">
+                                <button onClick={handleSendToken}>Enviar</button>
+                                <button onClick={() => setShowModal(false)}>Cancelar</button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
                 {error === "Error al conectar con el servidor" ? (
                     <div className='contenedor-error-message'>
                         <span className="error-message">
