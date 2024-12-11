@@ -382,8 +382,8 @@ const MaterialAgregar = () => {
                 };
             });
 
-            return datosRestados
 
+            return datosRestados
         } catch (error) {
             setError(error);
         }

@@ -157,7 +157,7 @@ const MaterialPrincipalSolicitudes = () => {
         setFilaSeleccionadaSolicitudMaterial(null);
     };
 
-    const descargarArchivo = () => {
+    const descargarArchivoSolicitudMaterial = () => {
         const hoja = XLSX.utils.json_to_sheet(registrosSolicitudMaterial);
         const libro = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(libro, hoja, 'Datos');
@@ -204,7 +204,7 @@ const MaterialPrincipalSolicitudes = () => {
             ) : (
                 <>
                     <div className='Botones'>
-                        <button className='btn btn-success' onClick={descargarArchivo}>Descargar Excel</button>
+                        <button className='btn btn-success' onClick={descargarArchivoSolicitudMaterial}>Descargar Solicitudes</button>
                     </div>
                     <div className='Subtitulo'>
                         <span>Solicitudes Realizadas</span>

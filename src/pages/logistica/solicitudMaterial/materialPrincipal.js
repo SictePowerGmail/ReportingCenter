@@ -12,6 +12,7 @@ import MaterialPrincipalDirector from './materialPrincipalDirector';
 import MaterialPrincipalDireccion from './materialPrincipalDireccion';
 import MaterialPrincipalEntregaBodega from './materialPrincipalEntregaBodega';
 import MaterialPrincipalLogistica from './materialPrincipalLogistica';
+import MaterialPrincipalBodega from './MaterialPrincipalBodega';
 
 const MaterialPrincipal = () => {
     const [error, setError] = useState('');
@@ -270,7 +271,7 @@ const MaterialPrincipal = () => {
                                         onClick={() => {
                                             setCarpeta('Direccion Operacion');
                                         }}
-                                     >
+                                    >
                                         Direccion Operacion
                                     </a>
                                 </li>
@@ -287,6 +288,16 @@ const MaterialPrincipal = () => {
                                     </a>
                                 </li>
                             )}
+                            <li className="nav-item">
+                                <a
+                                    className={`nav-link ${carpeta === 'MaterialBodega' ? 'active' : ''}`}
+                                    onClick={() => {
+                                        setCarpeta('MaterialBodega');
+                                    }}
+                                >
+                                    Material en Bodega
+                                </a>
+                            </li>
                         </ul>
                     </div>
 
@@ -308,6 +319,10 @@ const MaterialPrincipal = () => {
 
                     {carpeta === "Entrega Bodega" && (
                         <MaterialPrincipalEntregaBodega />
+                    )}
+
+                    {carpeta === "MaterialBodega" && (
+                        <MaterialPrincipalBodega />
                     )}
 
                     <div className='Notificaciones'>
