@@ -385,6 +385,23 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
         setFilaEditada(fila2);
     };
 
+    const [proyectoCerradoEstado, setProyectoCerradoEstado] = useState('');
+
+    const manejarCierreProyecto = async () => {
+        setLoading(true);
+        const ids = fila.map(item => item.id);
+        const pdfNombre = "Cerrado"
+
+        try {
+            await axios.post('https://sicteferias.from-co.net:8120/solicitudMaterial/actualizarEstadoCierreProyecto', { ids, pdfNombre });
+            console.log('Solicitud enviada correctamente cerrar proyecto');
+            setProyectoCerradoEstado('Cerrado');
+        } catch (error) {
+            toast.error('Error en actualizar estado cerrar proyecto', { className: 'toast-success' });
+        }
+        setLoading(false);
+    };
+
     if (!isOpen) return null;
 
     return (
@@ -435,13 +452,24 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
                                         title='Copiar Texto'
                                         onClick={() => {
                                             navigator.clipboard.writeText(fila[0].uuid);
-                                            toast.info(`Texto Copiado`, { className: 'toast-error' });
+                                            toast.info(`UUID Copiado`, { className: 'toast-error' });
                                         }}
                                     >
                                         <i className="fas fa-copy"></i>
                                     </button>
                                 </div>
-                                <span translate="no"><strong>Nombre Proyecto:</strong> {fila[0].nombreProyecto}</span>
+                                <div>
+                                    <span translate="no"><strong>Nombre Proyecto:</strong> {fila[0].nombreProyecto}</span>
+                                    <button
+                                        title='Copiar Texto'
+                                        onClick={() => {
+                                            navigator.clipboard.writeText(fila[0].nombreProyecto);
+                                            toast.info(`Nombre Proyecto Copiado`, { className: 'toast-error' });
+                                        }}
+                                    >
+                                        <i className="fas fa-copy"></i>
+                                    </button>
+                                </div>
                                 <span translate="no"><strong>Fecha Entrega Proyecto:</strong> {fila[0].entregaProyecto}</span>
                             </div>
                             <div className='Columna2'>
@@ -473,6 +501,19 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
                                 {fila[0].aprobacionDirector === "Aprobado" && fila[0].aprobacionDireccionOperacion === "Aprobado" && (
                                     <span translate="no"><strong>Entrega Bodega:</strong> {(fila[0].entregaBodega === "Pendiente" && pdfData.length > 0) ? "Entregado" : fila[0].entregaBodega}</span>
                                 )}
+                                <div>
+                                    <span translate="no"><strong>Estado Proyecto:</strong> {(proyectoCerradoEstado === "Cerrado") ? "Cerrado" : fila[0].estadoProyecto}</span>
+                                    {pantalla === "EntregaBodega" && fila[0].entregaBodega === "Entregado" && fila[0].estadoProyecto === "Abierto" && proyectoCerradoEstado !== "Cerrado" && (
+                                        <button className='cerrarProyecto'
+                                            title='Copiar Texto'
+                                            onClick={() => {
+                                                manejarCierreProyecto();
+                                            }}
+                                        >
+                                            Cerrar Proyecto
+                                        </button>
+                                    )}
+                                </div>
                             </div>
                         </div>
 
@@ -624,7 +665,7 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
 
                         {pdfData.length > 0 && (
                             <div className="Tabla">
-                                <span>Material Entregado</span>
+                                <span className='title'>Material Entregado</span>
                                 <div>
                                     <table>
                                         <thead>
@@ -666,7 +707,7 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
                             </div>
                         )}
 
-                        {(fila[0].entregaBodega !== "Pendiente" && pantalla === "EntregaBodega" && rolUsuario !== "LOGISTICA") && (
+                        {(fila[0].entregaBodega !== "Pendiente" && pantalla === "EntregaBodega" && rolUsuario !== "LOGISTICA" && fila[0].estadoProyecto === "Abierto" && proyectoCerradoEstado !== "Cerrado") && (
                             <div className='LecturaPDFs'>
                                 <div className='Contenedor'>
                                     <div className='title'>
@@ -677,7 +718,7 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
                         )}
 
                         <div className='LecturaPDFs'>
-                            {(pdfDataNuevos.length === 0 && fila[0].entregaBodega !== "Pendiente" && pantalla === "EntregaBodega" && rolUsuario !== "LOGISTICA") && (
+                            {(pdfDataNuevos.length === 0 && fila[0].entregaBodega !== "Pendiente" && pantalla === "EntregaBodega" && rolUsuario !== "LOGISTICA" && fila[0].estadoProyecto === "Abierto"  && proyectoCerradoEstado !== "Cerrado") && (
                                 <div className='EntradaPDFs'>
                                     <span>Por favor agregue los nuevos PDFs de salidas de material</span>
                                     <div className='inputPDFs'>

@@ -220,6 +220,7 @@ const MaterialPrincipalSolicitudes = () => {
                                             <br />
                                             <input
                                                 type="text"
+                                                onClick={(e) => e.stopPropagation()}
                                                 onChange={(e) => manejarCambioFiltroSolicitudMaterial(columna, e.target.value)}
                                             />
                                         </th>

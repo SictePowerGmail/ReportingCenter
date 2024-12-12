@@ -152,6 +152,7 @@ const MaterialPrincipalBodega = () => {
                                             <br />
                                             <input
                                                 type="text"
+                                                onClick={(e) => e.stopPropagation()}
                                                 onChange={(e) => manejarCambioFiltroMaterialDisponible(columna, e.target.value)}
                                             />
                                         </th>

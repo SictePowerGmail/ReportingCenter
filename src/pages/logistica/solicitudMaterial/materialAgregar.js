@@ -248,7 +248,8 @@ const MaterialAgregar = () => {
                     aprobacionAnalista: "Pendiente",
                     aprobacionDirector: "Pendiente",
                     aprobacionDireccionOperacion: "Pendiente",
-                    entregaBodega: "Pendiente"
+                    entregaBodega: "Pendiente",
+                    estadoProyecto: "Abierto"
                 });
             }
 
@@ -304,6 +305,7 @@ const MaterialAgregar = () => {
 
             const datosFiltradosRegistrosSolicitudMaterial = responseRegistrosSolicitudMaterial.data.filter(item =>
                 item.ciudad === ciudadElgida &&
+                item.estadoProyecto === "Abierto" &&
                 item.aprobacionDirector !== "Rechazado" &&
                 item.aprobacionDireccionOperacion !== "Rechazado" &&
                 item.entregaBodega !== "Entregado"
@@ -324,6 +326,7 @@ const MaterialAgregar = () => {
 
             const datosFiltradosRegistrosSolicitudMaterialPendienteDespacho = responseRegistrosSolicitudMaterial.data.filter(item =>
                 item.ciudad === ciudadElgida &&
+                item.estadoProyecto === "Abierto" &&
                 item.entregaBodega === "Entregado"
             );
 

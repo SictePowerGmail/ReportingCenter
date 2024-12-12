@@ -385,6 +385,7 @@ const MaterialPrincipalLogistica = () => {
                                             <br />
                                             <input
                                                 type="text"
+                                                onClick={(e) => e.stopPropagation()}
                                                 onChange={(e) => manejarCambioFiltroPendienteAnalista(columna, e.target.value)}
                                             />
                                         </th>
@@ -446,6 +447,7 @@ const MaterialPrincipalLogistica = () => {
                                             <br />
                                             <input
                                                 type="text"
+                                                onClick={(e) => e.stopPropagation()}
                                                 onChange={(e) => manejarCambioFiltroAprobacionAnalista(columna, e.target.value)}
                                             />
                                         </th>
@@ -507,6 +509,7 @@ const MaterialPrincipalLogistica = () => {
                                             <br />
                                             <input
                                                 type="text"
+                                                onClick={(e) => e.stopPropagation()}
                                                 onChange={(e) => manejarCambioFiltroRechazadoAnalista(columna, e.target.value)}
                                             />
                                         </th>

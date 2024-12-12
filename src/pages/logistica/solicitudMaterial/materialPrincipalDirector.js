@@ -383,6 +383,7 @@ const MaterialPrincipalDirector = () => {
                                             <br />
                                             <input
                                                 type="text"
+                                                onClick={(e) => e.stopPropagation()}
                                                 onChange={(e) => manejarCambioFiltroPendienteDirector(columna, e.target.value)}
                                             />
                                         </th>
@@ -442,6 +443,7 @@ const MaterialPrincipalDirector = () => {
                                             <br />
                                             <input
                                                 type="text"
+                                                onClick={(e) => e.stopPropagation()}
                                                 onChange={(e) => manejarCambioFiltroAprobacionDirector(columna, e.target.value)}
                                             />
                                         </th>
@@ -501,6 +503,7 @@ const MaterialPrincipalDirector = () => {
                                             <br />
                                             <input
                                                 type="text"
+                                                onClick={(e) => e.stopPropagation()}
                                                 onChange={(e) => manejarCambioFiltroRechazadoDirector(columna, e.target.value)}
                                             />
                                         </th>

@@ -368,6 +368,7 @@ const MaterialPrincipalDireccion = () => {
                                             <br />
                                             <input
                                                 type="text"
+                                                onClick={(e) => e.stopPropagation()}
                                                 onChange={(e) => manejarCambioFiltroPendienteDireccionOperacion(columna, e.target.value)}
                                             />
                                         </th>
@@ -429,6 +430,7 @@ const MaterialPrincipalDireccion = () => {
                                             <br />
                                             <input
                                                 type="text"
+                                                onClick={(e) => e.stopPropagation()}
                                                 onChange={(e) => manejarCambioFiltroAprobacionDireccionOperacion(columna, e.target.value)}
                                             />
                                         </th>
@@ -488,6 +490,7 @@ const MaterialPrincipalDireccion = () => {
                                             <br />
                                             <input
                                                 type="text"
+                                                onClick={(e) => e.stopPropagation()}
                                                 onChange={(e) => manejarCambioFiltroRechazadoDireccionOperacion(columna, e.target.value)}
                                             />
                                         </th>

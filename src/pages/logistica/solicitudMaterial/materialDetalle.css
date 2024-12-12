@@ -79,17 +79,23 @@
 
                     div {
                         display: flex;
-                        justify-content: left;
+                        justify-content: space-between;
                         align-items: center;
 
                         button {
                             margin-left: 5px;
+                            margin-right: 10px;
                             border: 1px solid #000;
                             border-radius: 5px;
                             background-color: white;
                             cursor: pointer;
                             font-size: 13px;
                             color: #000;
+                        }
+
+                        .cerrarProyecto {
+                            background-color: green;
+                            color: white;
                         }
                     }
                 }
@@ -132,6 +138,15 @@
                     justify-content: center;
                     font-size: 14px;
                     margin: 20px 0px 10px 0px;
+
+                    &.title {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 18px;
+                        font-weight: bold;
+                        margin: 20px 0px 10px 0px;
+                    }
                 }
 
                 @media (max-width: 1040px) {

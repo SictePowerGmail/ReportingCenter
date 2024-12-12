@@ -25,7 +25,7 @@ const MaterialPrincipalEntregaBodega = () => {
                 setRegistrosSolicitudMaterial(datos);
 
                 const datosPendienteEntregaBodega = datos
-                    .filter(item => item.aprobacionDirector === "Aprobado" && item.aprobacionDireccionOperacion === "Aprobado" && item.entregaBodega === "Pendiente")
+                    .filter(item => item.aprobacionDirector === "Aprobado" && item.aprobacionDireccionOperacion === "Aprobado" && item.entregaBodega === "Pendiente" && item.estadoProyecto === "Abierto")
                     .map(({ fecha, cedula, nombre, ciudad, uuid, nombreProyecto, entregaProyecto }) => ({
                         fecha,
                         cedula,
@@ -48,7 +48,7 @@ const MaterialPrincipalEntregaBodega = () => {
                 setPendienteEntregaBodegaSinMat(datosFiltradosPendienteEntregaBodega);
 
                 const datosEntregadoEntregaBodega = datos
-                    .filter(item => item.aprobacionDirector === "Aprobado" && item.aprobacionDireccionOperacion === "Aprobado" && item.entregaBodega === "Entregado")
+                    .filter(item => item.aprobacionDirector === "Aprobado" && item.aprobacionDireccionOperacion === "Aprobado" && item.entregaBodega === "Entregado" && item.estadoProyecto === "Abierto")
                     .map(({ fecha, cedula, nombre, ciudad, uuid, nombreProyecto, entregaProyecto }) => ({
                         fecha,
                         cedula,
@@ -69,6 +69,29 @@ const MaterialPrincipalEntregaBodega = () => {
                     : datosEntregadoEntregaBodega.filter(item => ObtenerRelacionCiudadBodega(nombreUsuario) === item.ciudad.split(" ")[0]);
 
                 setEntregadoEntregaBodegaSinMat(datosFiltradosEntregadoEntregaBodega);
+
+                const datosProyectosCerrados = datos
+                    .filter(item => item.aprobacionDirector === "Aprobado" && item.aprobacionDireccionOperacion === "Aprobado" && item.entregaBodega === "Entregado" && item.estadoProyecto === "Cerrado")
+                    .map(({ fecha, cedula, nombre, ciudad, uuid, nombreProyecto, entregaProyecto }) => ({
+                        fecha,
+                        cedula,
+                        nombre,
+                        ciudad,
+                        uuid,
+                        nombreProyecto,
+                        entregaProyecto
+                    }))
+                    .filter((value, index, self) =>
+                        index === self.findIndex((t) => (
+                            t.fecha === value.fecha && t.cedula === value.cedula && t.uuid === value.uuid
+                        ))
+                    );
+
+                const datosFiltradosProyectosCerrados = rolUsuario === "admin" || rolUsuario === "LOGISTICA" || rolUsuario === "CAROLINA FERNANDEZ"
+                    ? datosProyectosCerrados
+                    : datosProyectosCerrados.filter(item => ObtenerRelacionCiudadBodega(nombreUsuario) === item.ciudad.split(" ")[0]);
+
+                setProyectosCerradosSinMat(datosFiltradosProyectosCerrados);
 
                 setLoading(false);
             })
@@ -150,6 +173,34 @@ const MaterialPrincipalEntregaBodega = () => {
         }));
     };
 
+    const [proyectosCerradosSinMat, setProyectosCerradosSinMat] = useState([]);
+    const [expandidoProyectosCerradosSinMat, setExpandidoProyectosCerradosSinMat] = useState(false);
+    const [ventanaAbiertaProyectosCerrados, setVentanaAbiertaProyectosCerrados] = useState(false);
+    const [filaSeleccionadaProyectosCerrados, setFilaSeleccionadaProyectosCerrados] = useState([]);
+    const [ordenProyectosCerrados, setOrdenProyectosCerrados] = useState({ columna: null, ascendente: true });
+
+    const manejarClickFilaProyectosCerrados = (fila) => {
+        const datosFiltrados = registrosSolicitudMaterial.filter(
+            (item) => item.fecha === fila.fecha && item.cedula === fila.cedula && item.uuid === fila.uuid
+        );
+
+        setFilaSeleccionadaProyectosCerrados(datosFiltrados);
+        setVentanaAbiertaProyectosCerrados(true);
+    };
+
+    const manejarCerrarModalProyectosCerrados = () => {
+        setVentanaAbiertaProyectosCerrados(false);
+        setFilaSeleccionadaProyectosCerrados(null);
+        cargarDatosRegistrosSolicitudMaterial();
+    };
+
+    const manejarOrdenProyectosCerrados = (columna) => {
+        setOrdenProyectosCerrados((prev) => ({
+            columna,
+            ascendente: prev.columna === columna ? !prev.ascendente : true,
+        }));
+    };
+
     const [filtrosComunes, setFiltrosComunes] = useState({});
 
     const manejarCambioFiltroComun = (columna, valor) => {
@@ -199,6 +250,26 @@ const MaterialPrincipalEntregaBodega = () => {
         }
     });
 
+    const datosFiltradosProyectosCerradosSinMat = proyectosCerradosSinMat.filter((fila) =>
+        Object.entries(filtrosComunes).every(([columna, valor]) =>
+            fila[columna]?.toString().toLowerCase().includes(valor.toLowerCase())
+        )
+    );
+
+    const datosOrdenadosProyectosCerrados = [...datosFiltradosProyectosCerradosSinMat].sort((a, b) => {
+        if (!ordenProyectosCerrados.columna) return 0;
+        const valorA = a[ordenProyectosCerrados.columna];
+        const valorB = b[ordenProyectosCerrados.columna];
+
+        if (typeof valorA === 'number' && typeof valorB === 'number') {
+            return ordenProyectosCerrados.ascendente ? valorA - valorB : valorB - valorA;
+        } else {
+            return ordenProyectosCerrados.ascendente
+                ? valorA.toString().localeCompare(valorB.toString())
+                : valorB.toString().localeCompare(valorA.toString());
+        }
+    });
+
     return (
         <div className='EntregaBodega'>
             {loading ? (
@@ -227,6 +298,7 @@ const MaterialPrincipalEntregaBodega = () => {
                                             <br />
                                             <input
                                                 type="text"
+                                                onClick={(e) => e.stopPropagation()}
                                                 onChange={(e) => manejarCambioFiltroComun(columna, e.target.value)}
                                             />
                                         </th>
@@ -286,6 +358,7 @@ const MaterialPrincipalEntregaBodega = () => {
                                             <br />
                                             <input
                                                 type="text"
+                                                onClick={(e) => e.stopPropagation()}
                                                 onChange={(e) => manejarCambioFiltroComun(columna, e.target.value)}
                                             />
                                         </th>
@@ -326,6 +399,66 @@ const MaterialPrincipalEntregaBodega = () => {
                         onApprove=""
                         onDeny=""
                         fila={filaSeleccionadaEntregadoEntregaBodega}
+                        observaciones=""
+                        setObservaciones=""
+                        pantalla="EntregaBodega"
+                    />
+
+                    <div className='Subtitulo'>
+                        <span>Proyectos Cerrados</span>
+                    </div>
+                    <div className='Tabla'>
+                        <table>
+                            <thead>
+                                <tr>
+                                    {Object.keys(proyectosCerradosSinMat[0] || {}).map((columna) => (
+                                        <th key={columna} onClick={() => manejarOrdenProyectosCerrados(columna)}>
+                                            {formatearNombreColumna(columna)}
+                                            {ordenProyectosCerrados.columna === columna ? (ordenProyectosCerrados.ascendente ? <i className="fa-solid fa-sort-up"></i> : <i className="fa-solid fa-sort-down"></i>) : <i className="fa-solid fa-sort"></i>}
+                                            <br />
+                                            <input
+                                                type="text"
+                                                onClick={(e) => e.stopPropagation()}
+                                                onChange={(e) => manejarCambioFiltroComun(columna, e.target.value)}
+                                            />
+                                        </th>
+                                    ))}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {datosOrdenadosProyectosCerrados.length === 0 ? (
+                                    <tr>
+                                        <td colSpan={Object.keys(proyectosCerradosSinMat[0] || {}).length} style={{ textAlign: 'center' }}>
+                                            No hay registros
+                                        </td>
+                                    </tr>
+                                ) : (
+                                    datosOrdenadosProyectosCerrados.slice(0, expandidoProyectosCerradosSinMat ? datosOrdenadosProyectosCerrados.length : 5).map((fila, index) => (
+                                        <tr key={`${fila.fecha}-${fila.cedula}-${fila.uuid}`} onClick={() => manejarClickFilaProyectosCerrados(fila)}>
+                                            {Object.values(fila).map((valor, idx) => (
+                                                <td key={idx} onClick={() => manejarClickFilaProyectosCerrados(fila)}>
+                                                    {valor}
+                                                </td>
+                                            ))}
+                                        </tr>
+                                    ))
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div className='Boton'>
+                        <span onClick={() => {
+                            setExpandidoProyectosCerradosSinMat(!expandidoProyectosCerradosSinMat);
+                        }}>
+                            {expandidoProyectosCerradosSinMat ? "Mostrar menos" : "Mostrar mas"}
+                        </span>
+                    </div>
+                    <MaterialDetalle
+                        isOpen={ventanaAbiertaProyectosCerrados}
+                        onClose={manejarCerrarModalProyectosCerrados}
+                        onApprove=""
+                        onDeny=""
+                        fila={filaSeleccionadaProyectosCerrados}
                         observaciones=""
                         setObservaciones=""
                         pantalla="EntregaBodega"

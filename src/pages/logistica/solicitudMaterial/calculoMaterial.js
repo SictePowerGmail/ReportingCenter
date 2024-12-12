@@ -25,6 +25,7 @@ export const calculoMaterial = async (ciudadElgida) => {
 
         const datosFiltradosRegistrosSolicitudMaterial = responseRegistrosSolicitudMaterial.data.filter(item =>
             item.ciudad === ciudadElgida &&
+            item.estadoProyecto === "Abierto" &&
             item.aprobacionDirector !== "Rechazado" &&
             item.aprobacionDireccionOperacion !== "Rechazado" &&
             item.entregaBodega !== "Entregado"
@@ -45,6 +46,7 @@ export const calculoMaterial = async (ciudadElgida) => {
 
         const datosFiltradosRegistrosSolicitudMaterialPendienteDespacho = responseRegistrosSolicitudMaterial.data.filter(item =>
             item.ciudad === ciudadElgida &&
+            item.estadoProyecto === "Abierto" &&
             item.entregaBodega === "Entregado"
         );
 
