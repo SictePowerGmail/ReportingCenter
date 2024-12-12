@@ -31,8 +31,9 @@ const MaterialAgregar = () => {
     const [filasTabla, setFilasTabla] = useState([{ propiedad: '', codigoSap: '', descripcion: '', unidadMedida: '', cantidadDisponible: '', cantidadSolicitada: '' }]);
     const propiedades = ['Sicte', 'Claro'];
     const [descripciones, setDescripciones] = useState('');
-    const [sugerenciasPorFila, setSugerenciasPorFila] = useState([]);
-    const [codigoSap, setCodigoSap] = useState(Array(filasTabla.length).fill(""));
+    const [sugerenciasPorFilaDescripciones, setSugerenciasPorFilaDescripciones] = useState([]);
+    const [codigosSap, setCodigosSap] = useState('');
+    const [sugerenciasPorFilaCodigosSap, setSugerenciasPorFilaCodigosSap] = useState([]);
     const [unidadMedida, setUnidadMedida] = useState(Array(filasTabla.length).fill(""));
     const [cantidadDisponible, setCantidadDisponible] = useState(Array(filasTabla.length).fill(""));
     const [enviando, setEnviando] = useState(false);
@@ -474,7 +475,7 @@ const MaterialAgregar = () => {
                                         <h5>Fecha Solicitud</h5>
                                     </div>
                                     <input type="text" disabled
-                                        value={fecha.toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit'  })}
+                                        value={fecha.toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' })}
                                     />
                                 </div>
 
@@ -683,24 +684,50 @@ const MaterialAgregar = () => {
                                                             const propiedad = e.target.value;
                                                             accionCambioEntradaTextoTabla(index, 'propiedad', propiedad);
 
-                                                            let datosFiltrados;
+                                                            let datosFiltradosDescripciones;
+                                                            let datosFiltradosCodigosSap;
 
                                                             if (propiedad === "Sicte") {
-                                                                datosFiltrados = dataKgprod.filter(item => item.indComprado2 === "S");
+                                                                datosFiltradosDescripciones = dataKgprod.filter(item => item.indComprado2 === "S");
+                                                                datosFiltradosCodigosSap = dataKgprod.filter(item => item.indComprado2 === "S");
                                                             } else if (propiedad === "Claro") {
-                                                                datosFiltrados = dataKgprod.filter(item => item.indComprado2 === "N");
+                                                                datosFiltradosDescripciones = dataKgprod.filter(item => item.indComprado2 === "N");
+                                                                datosFiltradosCodigosSap = dataKgprod.filter(item => item.indComprado2 === "N");
                                                             } else {
-                                                                datosFiltrados = dataKgprod;
-                                                            } 
+                                                                datosFiltradosDescripciones = dataKgprod;
+                                                                datosFiltradosCodigosSap = dataKgprod;
+                                                            }
 
-                                                            datosFiltrados.sort((a, b) => a.descrip.localeCompare(b.descrip));
+                                                            datosFiltradosDescripciones.sort((a, b) => a.descrip.localeCompare(b.descrip));
+                                                            datosFiltradosCodigosSap.sort((a, b) => a.codigo.localeCompare(b.codigo));
 
-                                                            const descripcionesUnicas = [...new Set(datosFiltrados.map(item => item.descrip))].sort();
+                                                            const descripcionesUnicas = [...new Set(datosFiltradosDescripciones.map(item => item.descrip))].sort();
                                                             setDescripciones(descripcionesUnicas);
 
-                                                            const nuevaSugerenciasPorFila = [...sugerenciasPorFila];
-                                                            nuevaSugerenciasPorFila[index] = datosFiltrados.map(item => item.descrip);
-                                                            setSugerenciasPorFila(nuevaSugerenciasPorFila);
+                                                            const codigosSapUnicos = [...new Set(datosFiltradosCodigosSap.map(item => item.codigo))].sort();
+                                                            setCodigosSap(codigosSapUnicos);
+
+                                                            const nuevaSugerenciasPorFilaDescripciones = [...sugerenciasPorFilaDescripciones];
+                                                            nuevaSugerenciasPorFilaDescripciones[index] = datosFiltradosDescripciones.map(item => item.descrip);
+                                                            setSugerenciasPorFilaDescripciones(nuevaSugerenciasPorFilaDescripciones);
+
+                                                            const nuevaSugerenciasPorFilaCodigosSap = [...sugerenciasPorFilaCodigosSap];
+                                                            nuevaSugerenciasPorFilaCodigosSap[index] = datosFiltradosCodigosSap.map(item => item.codigo);
+                                                            setSugerenciasPorFilaCodigosSap(nuevaSugerenciasPorFilaCodigosSap);
+
+                                                            if (propiedad !== 'Sicte' && propiedad !== 'Claro') {
+                                                                accionCambioEntradaTextoTabla(index, 'codigoSap', '');
+                                                                accionCambioEntradaTextoTabla(index, 'descripcion', '');
+                                                                accionCambioEntradaTextoTabla(index, 'cantidadSolicitada', '');
+
+                                                                const nuevaUnidadMedida = [...unidadMedida];
+                                                                nuevaUnidadMedida[index] = ""; 
+                                                                setUnidadMedida(nuevaUnidadMedida);
+
+                                                                const nuevaCantidadDisponible = [...cantidadDisponible];
+                                                                nuevaCantidadDisponible[index] = ""; 
+                                                                setCantidadDisponible(nuevaCantidadDisponible);
+                                                            }
                                                         }}
                                                         disabled={!Boolean(ciudadElgida)}
                                                         required
@@ -714,7 +741,85 @@ const MaterialAgregar = () => {
                                                     </select>
                                                 </td>
                                                 <td data-label="Codigo SAP">
-                                                    <span>{codigoSap[index]}</span>
+                                                    <input
+                                                        type="text"
+                                                        value={fila.codigoSap}
+                                                        onChange={(event) => {
+                                                            accionCambioEntradaTextoTabla(index, 'codigoSap', event.target.value);
+
+                                                            const sugerenciasFiltradas = codigosSap.filter((option) =>
+                                                                option.toLowerCase().includes(event.target.value.toLowerCase())
+                                                            );
+                                                            const nuevaSugerencias = [...sugerenciasPorFilaCodigosSap];
+                                                            nuevaSugerencias[index] = sugerenciasFiltradas;
+                                                            setSugerenciasPorFilaCodigosSap(nuevaSugerencias);
+
+                                                            if (event.target.value.trim() === '' || !codigosSap.includes(event.target.value)) {
+                                                                accionCambioEntradaTextoTabla(index, 'descripcion', '');
+                                                                accionCambioEntradaTextoTabla(index, 'cantidadSolicitada', '');
+
+                                                                const nuevaUnidadMedida = [...unidadMedida];
+                                                                nuevaUnidadMedida[index] = ""; 
+                                                                setUnidadMedida(nuevaUnidadMedida);
+
+                                                                const nuevaCantidadDisponible = [...cantidadDisponible];
+                                                                nuevaCantidadDisponible[index] = ""; 
+                                                                setCantidadDisponible(nuevaCantidadDisponible);
+                                                            }
+                                                        }}
+                                                        onBlur={() => {
+                                                            if (!codigosSap.includes(fila.codigoSap)) {
+                                                                accionCambioEntradaTextoTabla(index, 'codigoSap', '');
+                                                            }
+                                                        }}
+                                                        placeholder="Digite el codigo"
+                                                        disabled={!fila.propiedad}
+                                                        required
+                                                    />
+                                                    {fila.propiedad && (
+                                                        <div className="Sugerencias">
+                                                            {sugerenciasPorFilaCodigosSap[index] && sugerenciasPorFilaCodigosSap[index].map((sugerencia, i) => (
+                                                                <div
+                                                                    key={i}
+                                                                    onClick={() => {
+                                                                        accionCambioEntradaTextoTabla(index, 'codigoSap', sugerencia);
+
+                                                                        let propiedad;
+
+                                                                        if (fila.propiedad === "Sicte") {
+                                                                            propiedad = "S";
+                                                                        } else if (fila.propiedad === "Claro") {
+                                                                            propiedad = "N";
+                                                                        }
+
+                                                                        const elementoEncontrado = dataKgprod.find(item => item.codigo === sugerencia && item.indComprado2 === propiedad);
+                                                                        const nuevaUnidadMedida = [...unidadMedida];
+                                                                        nuevaUnidadMedida[index] = elementoEncontrado.unimed;
+                                                                        setUnidadMedida(nuevaUnidadMedida);
+                                                                        accionCambioEntradaTextoTabla(index, 'unidadMedida', elementoEncontrado.unimed);
+
+                                                                        accionCambioEntradaTextoTabla(index, 'descripcion', elementoEncontrado.descrip);
+
+                                                                        const nuevoCantidadDisponible = [...cantidadDisponible];
+                                                                        nuevoCantidadDisponible[index] = elementoEncontrado.cantidadRestada;
+                                                                        setCantidadDisponible(nuevoCantidadDisponible);
+                                                                        accionCambioEntradaTextoTabla(index, 'cantidadDisponible', elementoEncontrado.cantidadRestada);
+
+                                                                        const nuevasSugerenciasDescripcion = [...sugerenciasPorFilaDescripciones];
+                                                                        nuevasSugerenciasDescripcion[index] = [];
+                                                                        setSugerenciasPorFilaDescripciones(nuevasSugerenciasDescripcion);
+
+                                                                        const nuevasSugerenciasCodigosSap = [...sugerenciasPorFilaCodigosSap];
+                                                                        nuevasSugerenciasCodigosSap[index] = [];
+                                                                        setSugerenciasPorFilaCodigosSap(nuevasSugerenciasCodigosSap);
+                                                                    }}
+                                                                    className="Sugerencia-item"
+                                                                >
+                                                                    {sugerencia}
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    )}
                                                 </td>
                                                 <td data-label="Descripción del Material">
                                                     <input
@@ -726,9 +831,22 @@ const MaterialAgregar = () => {
                                                             const sugerenciasFiltradas = descripciones.filter((option) =>
                                                                 option.toLowerCase().includes(event.target.value.toLowerCase())
                                                             );
-                                                            const nuevaSugerencias = [...sugerenciasPorFila];
+                                                            const nuevaSugerencias = [...sugerenciasPorFilaDescripciones];
                                                             nuevaSugerencias[index] = sugerenciasFiltradas;
-                                                            setSugerenciasPorFila(nuevaSugerencias);
+                                                            setSugerenciasPorFilaDescripciones(nuevaSugerencias);
+
+                                                            if (event.target.value.trim() === '' || !descripciones.includes(event.target.value)) {
+                                                                accionCambioEntradaTextoTabla(index, 'codigoSap', '');
+                                                                accionCambioEntradaTextoTabla(index, 'cantidadSolicitada', '');
+
+                                                                const nuevaUnidadMedida = [...unidadMedida];
+                                                                nuevaUnidadMedida[index] = ""; 
+                                                                setUnidadMedida(nuevaUnidadMedida);
+
+                                                                const nuevaCantidadDisponible = [...cantidadDisponible];
+                                                                nuevaCantidadDisponible[index] = ""; 
+                                                                setCantidadDisponible(nuevaCantidadDisponible);
+                                                            }
                                                         }}
                                                         onBlur={() => {
                                                             if (!descripciones.includes(fila.descripcion)) {
@@ -741,7 +859,7 @@ const MaterialAgregar = () => {
                                                     />
                                                     {fila.propiedad && (
                                                         <div className="Sugerencias">
-                                                            {sugerenciasPorFila[index] && sugerenciasPorFila[index].map((sugerencia, i) => (
+                                                            {sugerenciasPorFilaDescripciones[index] && sugerenciasPorFilaDescripciones[index].map((sugerencia, i) => (
                                                                 <div
                                                                     key={i}
                                                                     onClick={() => {
@@ -761,9 +879,6 @@ const MaterialAgregar = () => {
                                                                         setUnidadMedida(nuevaUnidadMedida);
                                                                         accionCambioEntradaTextoTabla(index, 'unidadMedida', elementoEncontrado.unimed);
 
-                                                                        const nuevoCodigoSap = [...codigoSap];
-                                                                        nuevoCodigoSap[index] = elementoEncontrado.codigo;
-                                                                        setCodigoSap(nuevoCodigoSap);
                                                                         accionCambioEntradaTextoTabla(index, 'codigoSap', elementoEncontrado.codigo);
 
                                                                         const nuevoCantidadDisponible = [...cantidadDisponible];
@@ -771,9 +886,13 @@ const MaterialAgregar = () => {
                                                                         setCantidadDisponible(nuevoCantidadDisponible);
                                                                         accionCambioEntradaTextoTabla(index, 'cantidadDisponible', elementoEncontrado.cantidadRestada);
 
-                                                                        const nuevasSugerencias = [...sugerenciasPorFila];
-                                                                        nuevasSugerencias[index] = [];
-                                                                        setSugerenciasPorFila(nuevasSugerencias);
+                                                                        const nuevasSugerenciasDescripcion = [...sugerenciasPorFilaDescripciones];
+                                                                        nuevasSugerenciasDescripcion[index] = [];
+                                                                        setSugerenciasPorFilaDescripciones(nuevasSugerenciasDescripcion);
+
+                                                                        const nuevasSugerenciasCodigosSap = [...sugerenciasPorFilaCodigosSap];
+                                                                        nuevasSugerenciasCodigosSap[index] = [];
+                                                                        setSugerenciasPorFilaCodigosSap(nuevasSugerenciasCodigosSap);
                                                                     }}
                                                                     className="Sugerencia-item"
                                                                 >
@@ -811,7 +930,6 @@ const MaterialAgregar = () => {
                                                             const nuevasFilas = filasTabla.filter((_, i) => i !== index);
                                                             setFilasTabla(nuevasFilas);
                                                             setUnidadMedida(unidadMedida.filter((_, i) => i !== index));
-                                                            setCodigoSap(codigoSap.filter((_, i) => i !== index));
                                                             setCantidadDisponible(cantidadDisponible.filter((_, i) => i !== index));
                                                         }}
                                                     >Borrar</button>

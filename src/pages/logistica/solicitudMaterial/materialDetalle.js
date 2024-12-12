@@ -501,19 +501,7 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
                                 {fila[0].aprobacionDirector === "Aprobado" && fila[0].aprobacionDireccionOperacion === "Aprobado" && (
                                     <span translate="no"><strong>Entrega Bodega:</strong> {(fila[0].entregaBodega === "Pendiente" && pdfData.length > 0) ? "Entregado" : fila[0].entregaBodega}</span>
                                 )}
-                                <div>
-                                    <span translate="no"><strong>Estado Proyecto:</strong> {(proyectoCerradoEstado === "Cerrado") ? "Cerrado" : fila[0].estadoProyecto}</span>
-                                    {pantalla === "EntregaBodega" && fila[0].entregaBodega === "Entregado" && fila[0].estadoProyecto === "Abierto" && proyectoCerradoEstado !== "Cerrado" && (
-                                        <button className='cerrarProyecto'
-                                            title='Copiar Texto'
-                                            onClick={() => {
-                                                manejarCierreProyecto();
-                                            }}
-                                        >
-                                            Cerrar Proyecto
-                                        </button>
-                                    )}
-                                </div>
+                                <span translate="no"><strong>Estado Proyecto:</strong> {(proyectoCerradoEstado === "Cerrado") ? "Cerrado" : fila[0].estadoProyecto}</span>
                             </div>
                         </div>
 
@@ -711,19 +699,31 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
                             <div className='LecturaPDFs'>
                                 <div className='Contenedor'>
                                     <div className='title'>
-                                        <span>Agregar Salidas de Material</span>
+                                        <span>Agregar Nuevas Salidas de Material / Cerrar el Proyecto</span>
                                     </div>
                                 </div>
                             </div>
                         )}
 
                         <div className='LecturaPDFs'>
-                            {(pdfDataNuevos.length === 0 && fila[0].entregaBodega !== "Pendiente" && pantalla === "EntregaBodega" && rolUsuario !== "LOGISTICA" && fila[0].estadoProyecto === "Abierto"  && proyectoCerradoEstado !== "Cerrado") && (
-                                <div className='EntradaPDFs'>
-                                    <span>Por favor agregue los nuevos PDFs de salidas de material</span>
-                                    <div className='inputPDFs'>
-                                        <input type="file" accept="application/pdf" multiple onChange={lecturaDePDFsNuevos} ref={pdfInputRefNuevos} />
+                            {(pdfDataNuevos.length === 0 && fila[0].entregaBodega !== "Pendiente" && pantalla === "EntregaBodega" && rolUsuario !== "LOGISTICA" && fila[0].estadoProyecto === "Abierto" && proyectoCerradoEstado !== "Cerrado") && (
+                                <div className='panelDivisor'>
+                                    <div className='EntradaPDFs'>
+                                        <span>Por favor agregue los nuevos PDFs de salidas de material</span>
+                                        <div className='inputPDFs'>
+                                            <input type="file" accept="application/pdf" multiple onChange={lecturaDePDFsNuevos} ref={pdfInputRefNuevos} />
+                                        </div>
                                     </div>
+                                    {pantalla === "EntregaBodega" && fila[0].entregaBodega === "Entregado" && fila[0].estadoProyecto === "Abierto" && proyectoCerradoEstado !== "Cerrado" && (
+                                        <button className='btn btn-danger'
+                                            title='Copiar Texto'
+                                            onClick={() => {
+                                                manejarCierreProyecto();
+                                            }}
+                                        >
+                                            Cerrar Proyecto
+                                        </button>
+                                    )}
                                 </div>
                             )}
                             {pdfsUrlNuevos.length > 0 && (
