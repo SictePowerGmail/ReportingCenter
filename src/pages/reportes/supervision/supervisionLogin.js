@@ -28,15 +28,15 @@ const SupervisionLogin = () => {
             const response = await fetch('https://sicteferias.from-co.net:8120/user/login/login', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json', // Cambia el tipo de contenido a application/json
+                    'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ correo: username, contrasena: password }), // Convierte los datos a JSON
+                body: JSON.stringify({ correo: username, contrasena: password }),
             });
 
             if (response.ok) {
-                const data = await response.json(); // Obtén la respuesta como JSON
-                const userRole = data.rol; // Asume que la respuesta tiene una propiedad 'rol'
-                const userNombre = data.nombre; // Asume que la respuesta tiene una propiedad 'rol'
+                const data = await response.json(); 
+                const userRole = data.rol; 
+                const userNombre = data.nombre;
                 navigate('/SupervisionPrincipal', { state: { role: userRole, nombre: userNombre, estadoNotificacion: false } });
             } else {
                 const errorText = await response.text();

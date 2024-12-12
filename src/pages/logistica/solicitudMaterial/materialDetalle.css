@@ -152,7 +152,7 @@
                                 margin-bottom: 10px;
 
                                 &::after {
-                                    content: "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -";
+                                    content: "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -";
                                     display: block;
                                     text-align: center;
                                     margin-top: 10px;
@@ -201,7 +201,7 @@
 
                 textarea {
                     display: block;
-                    width: 100%;
+                    width: 100% !important;
                     margin-top: 5px;
                 }
             }
@@ -257,7 +257,7 @@
                         height: 400px;
 
                         iframe {
-                            width: 100%;
+                            width: 100% !important;
                             height: 100%;
                             border: none;
                         }
