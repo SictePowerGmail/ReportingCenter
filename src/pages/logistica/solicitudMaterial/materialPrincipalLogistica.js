@@ -7,12 +7,15 @@ import { ThreeDots } from 'react-loader-spinner';
 import axios from 'axios';
 import MaterialDetalle from './materialDetalle';
 import Cookies from 'js-cookie';
+import { ObtenerRolUsuario, ObtenerRelacionCoordinadorAnalistaLogistica } from '../../../funciones';
 
 const MaterialPrincipalLogistica = () => {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
     const [registrosSolicitudMaterial, setRegistrosSolicitudMaterial] = useState([]);
+    const rolUsuario = ObtenerRolUsuario(Cookies.get('userRole'));
+    const nombreUsuario = Cookies.get('userNombre');
 
     const cargarDatosRegistrosSolicitudMaterial = () => {
         axios.get('https://sicteferias.from-co.net:8120/solicitudMaterial/RegistrosSolicitudMaterial')
@@ -38,7 +41,11 @@ const MaterialPrincipalLogistica = () => {
                         ))
                     );
 
-                setPendienteAnalistaSinMat(datosPendienteAnalista);
+                const datosFiltradosPendienteAnalista = rolUsuario === "admin" || rolUsuario === "CAROLINA FERNANDEZ"
+                    ? datosPendienteAnalista
+                    : datosPendienteAnalista.filter(item => ObtenerRelacionCoordinadorAnalistaLogistica(item.nombre) === nombreUsuario);
+
+                setPendienteAnalistaSinMat(datosFiltradosPendienteAnalista);
 
                 const datosAprobadoAnalista = datos
                     .filter(item => item.aprobacionAnalista === "Aprobado")
@@ -57,7 +64,13 @@ const MaterialPrincipalLogistica = () => {
                         ))
                     );
 
-                setAprobacionAnalistaSinMat(datosAprobadoAnalista);
+                const datosFiltradosAprobadoAnalista = rolUsuario === "admin" || rolUsuario === "CAROLINA FERNANDEZ"
+                    ? datosAprobadoAnalista
+                    : datosAprobadoAnalista.filter(item => {
+                        return ObtenerRelacionCoordinadorAnalistaLogistica(item.nombre)[0] === nombreUsuario;
+                    });
+
+                setAprobacionAnalistaSinMat(datosFiltradosAprobadoAnalista);
 
                 const datosRechazadoAnalista = datos
                     .filter(item => item.aprobacionAnalista === "Rechazado")
@@ -76,7 +89,11 @@ const MaterialPrincipalLogistica = () => {
                         ))
                     );
 
-                setRechazadoAnalistaSinMat(datosRechazadoAnalista);
+                const datosFiltradosRechazadoAnalista = rolUsuario === "admin" || rolUsuario === "CAROLINA FERNANDEZ"
+                    ? datosRechazadoAnalista
+                    : datosRechazadoAnalista.filter(item => ObtenerRelacionCoordinadorAnalistaLogistica(item.nombre) === nombreUsuario);
+
+                setRechazadoAnalistaSinMat(datosFiltradosRechazadoAnalista);
 
                 setLoading(false);
             })

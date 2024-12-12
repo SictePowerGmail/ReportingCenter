@@ -240,7 +240,7 @@ const MaterialPrincipal = () => {
                                     Solicitudes
                                 </a>
                             </li>
-                            {(rolUsuario === "LOGISTICA" || rolUsuario === "admin") && (
+                            {(rolUsuario === "CAROLINA FERNANDEZ" || rolUsuario === "LOGISTICA" || rolUsuario === "admin") && (
                                 <li className="nav-item">
                                     <a
                                         className={`nav-link ${carpeta === 'Logistica' ? 'active' : ''}`}
@@ -276,7 +276,7 @@ const MaterialPrincipal = () => {
                                     </a>
                                 </li>
                             )}
-                            {(rolUsuario === "LOGISTICA" || rolUsuario === "BODEGA" || rolUsuario === "admin") && (
+                            {(rolUsuario === "CAROLINA FERNANDEZ" || rolUsuario === "LOGISTICA" || rolUsuario === "BODEGA" || rolUsuario === "admin") && (
                                 <li className="nav-item">
                                     <a
                                         className={`nav-link ${carpeta === 'Entrega Bodega' ? 'active' : ''}`}

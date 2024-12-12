@@ -12,6 +12,7 @@ const obtenerDirectores = async () => {
             .filter(usuario => usuario.rol !== 'LOGISTICA')
             .filter(usuario => usuario.rol !== 'FACTURACION')
             .filter(usuario => usuario.rol !== 'admin')
+            .filter(usuario => usuario.rol !== 'CAROLINA FERNANDEZ')
             .map(usuario => usuario.rol);
 
         
@@ -39,6 +40,8 @@ export const ObtenerRolUsuario = (rol) => {
         return "BODEGA";
     } else if (rol === 'LOGISTICA') {
         return "LOGISTICA";
+    } else if (rol === 'CAROLINA FERNANDEZ') {
+        return "CAROLINA FERNANDEZ";
     } else if (rol === 'admin') {
         return "admin";
     } else if (rol === 'FACTURACION') {
@@ -82,4 +85,9 @@ export const ObtenerRelacionCiudadBodega = (usuario) => {
 export const ObtenerRelacionCiudadFacturacion = (usuario) => {
     const registros = RelacionPersonal.filter(item => item.facturacion === usuario);
     return registros.length > 0 ? registros.map(item => item.ciudad) : [];
+};
+
+export const ObtenerRelacionCoordinadorAnalistaLogistica = (usuario) => {
+    const registros = RelacionPersonal.filter(item => item.coordinador === usuario);
+    return registros.length > 0 ? registros.map(item => item.analistaLogistica) : [];
 };

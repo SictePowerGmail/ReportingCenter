@@ -41,7 +41,7 @@ const MaterialPrincipalEntregaBodega = () => {
                         ))
                     );
 
-                const datosFiltradosPendienteEntregaBodega = rolUsuario === "admin" || rolUsuario === "LOGISTICA"
+                const datosFiltradosPendienteEntregaBodega = rolUsuario === "admin" || rolUsuario === "LOGISTICA" || rolUsuario === "CAROLINA FERNANDEZ"
                     ? datosPendienteEntregaBodega
                     : datosPendienteEntregaBodega.filter(item => ObtenerRelacionCiudadBodega(nombreUsuario) === item.ciudad.split(" ")[0]);
 
@@ -64,7 +64,7 @@ const MaterialPrincipalEntregaBodega = () => {
                         ))
                     );
 
-                const datosFiltradosEntregadoEntregaBodega = rolUsuario === "admin" || rolUsuario === "LOGISTICA"
+                const datosFiltradosEntregadoEntregaBodega = rolUsuario === "admin" || rolUsuario === "LOGISTICA" || rolUsuario === "CAROLINA FERNANDEZ"
                     ? datosEntregadoEntregaBodega
                     : datosEntregadoEntregaBodega.filter(item => ObtenerRelacionCiudadBodega(nombreUsuario) === item.ciudad.split(" ")[0]);
 
