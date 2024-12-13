@@ -61,6 +61,7 @@ const RecuperarContraseña = () => {
                             try {
                                 await axios.post('https://sicteferias.from-co.net:8120/user/actualizarContrasena', { emailToken, password2 });
                                 toast.success('Cambio de contraseña exitoso', { className: 'toast-success' });
+                                navigate('/ReportingCenter');
                             } catch (error) {
                                 toast.error('Cambio de contraseña fallido', { className: 'toast-success' });
                             }
