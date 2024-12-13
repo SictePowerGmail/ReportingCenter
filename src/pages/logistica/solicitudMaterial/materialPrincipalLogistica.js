@@ -43,7 +43,9 @@ const MaterialPrincipalLogistica = () => {
 
                 const datosFiltradosPendienteAnalista = rolUsuario === "admin" || rolUsuario === "CAROLINA FERNANDEZ"
                     ? datosPendienteAnalista
-                    : datosPendienteAnalista.filter(item => ObtenerRelacionCoordinadorAnalistaLogistica(item.nombre) === nombreUsuario);
+                    : datosPendienteAnalista.filter(item => {
+                        return ObtenerRelacionCoordinadorAnalistaLogistica(item.nombre)[0] === nombreUsuario;
+                    });
 
                 setPendienteAnalistaSinMat(datosFiltradosPendienteAnalista);
 
@@ -91,7 +93,9 @@ const MaterialPrincipalLogistica = () => {
 
                 const datosFiltradosRechazadoAnalista = rolUsuario === "admin" || rolUsuario === "CAROLINA FERNANDEZ"
                     ? datosRechazadoAnalista
-                    : datosRechazadoAnalista.filter(item => ObtenerRelacionCoordinadorAnalistaLogistica(item.nombre) === nombreUsuario);
+                    : datosRechazadoAnalista.filter(item => {
+                        return ObtenerRelacionCoordinadorAnalistaLogistica(item.nombre)[0] === nombreUsuario;
+                    });
 
                 setRechazadoAnalistaSinMat(datosFiltradosRechazadoAnalista);
 
