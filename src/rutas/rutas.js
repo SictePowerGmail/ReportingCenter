@@ -68,6 +68,8 @@ import Compras from '../pages/direccion/Compras';
 import SSTA from '../pages/ssta/SSTA';
 import CursosDeAlturas from "../pages/ssta/CursosDeAlturas";
 import EntregasPendientesDotacion from "../pages/ssta/EntregasPendientesDotacion";
+/* Recuperar Contraseña */
+import RecuperarContraseña from "../pages/recuperarContraseña/recuperarContraseña";
 
 function RutasApp() {
     const location = useLocation();
@@ -208,6 +210,9 @@ function RutasApp() {
                 return 'CursosDeAlturas';
             case '/EntregasPendientesDotacion':
                 return 'EntregasPendientesDotacion'
+            /* Recuperar Contrasena */
+            case '/RecuperarContrasena':
+                return 'RecuperarContrasena';
             default:
                 return 'Validar';
         }
@@ -284,6 +289,8 @@ function RutasApp() {
                 <Route path='/SSTA' exacte element={<SSTA />} />
                 <Route path='/CursosDeAlturas' exacte element={<CursosDeAlturas />} />
                 <Route path='/EntregasPendientesDotacion' exacte element={<EntregasPendientesDotacion />} />
+                {/* Recuperar Contraseña */}
+                <Route path='/RecuperarContrasena' exacte element={<RecuperarContraseña />} />
             </Routes>
         </>
     );

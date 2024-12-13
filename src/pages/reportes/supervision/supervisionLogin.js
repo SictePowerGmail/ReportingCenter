@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './supervisionLogin.css'
 import Sicte from '../../../images/Sicte 6.png'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { ThreeDots } from 'react-loader-spinner';
 
 const SupervisionLogin = () => {
     const [username, setUsername] = useState('');
@@ -11,18 +14,57 @@ const SupervisionLogin = () => {
     const [mostrarPassword, setMostrarPassword] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [email, setEmail] = useState("");
+    const [enviando, setEnviando] = useState(false);
 
-    const handleSendToken = () => {
-        console.log("Enviando token a:", email);
-        alert("Token enviado al correo: " + email);
+    const handleSendToken = async () => {
+        if (!email) {
+            toast.error('Por favor ingresar un correo electronico registrado', { className: 'toast-error' });
+            return;
+        }
+
+        setEnviando(true);
+
+        try {
+            const usuarios = await fetch('https://sicteferias.from-co.net:8120/user', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            const usuariosData = await usuarios.json();
+            const emailExiste = usuariosData.some(usuario => usuario.correo === email);
+
+            if (emailExiste) {
+                const response = await fetch('https://sicteferias.from-co.net:8120/user/enviarToken', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email: email }),
+                });
+
+                if (response.ok) {
+                    toast.info("Token enviado al correo: " + email, { className: 'toast-error' });
+                } else {
+                    const errorText = await response.text();
+                    toast.error("Error al enviar el token al correo: " + errorText, { className: 'toast-error' });
+                }
+            } else {
+                toast.error("Correo ingresado no existe: " + email, { className: 'toast-error' });
+            }
+        } catch (error) {
+            setError('Error al conectar con el servidor');
+        }
+
+        setEmail('');
+        setEnviando(false);
         setShowModal(false);
     };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         setError('');
-
-        console.log(JSON.stringify({ correo: username, contrasena: password }),);
 
         try {
             const response = await fetch('https://sicteferias.from-co.net:8120/user/login/login', {
@@ -34,8 +76,8 @@ const SupervisionLogin = () => {
             });
 
             if (response.ok) {
-                const data = await response.json(); 
-                const userRole = data.rol; 
+                const data = await response.json();
+                const userRole = data.rol;
                 const userNombre = data.nombre;
                 navigate('/SupervisionPrincipal', { state: { role: userRole, nombre: userNombre, estadoNotificacion: false } });
             } else {
@@ -83,20 +125,43 @@ const SupervisionLogin = () => {
                 </div>
 
                 {showModal && (
-                    <div className="modal-overlay">
+                    <div className="modal-overlay"
+                        onClick={(e) => {
+                            if (e.target === e.currentTarget) {
+                                setEmail('');
+                                setShowModal(false);
+                            }
+                        }}>
                         <div className="modal-content">
-                            <h3>Cambiar Contraseña</h3>
-                            <p>Ingresa tu correo para enviar un token de recuperación.</p>
-                            <input
-                                type="email"
-                                placeholder="Correo electrónico"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                            />
-                            <div className="modal-buttons">
-                                <button onClick={handleSendToken}>Enviar</button>
-                                <button onClick={() => setShowModal(false)}>Cancelar</button>
-                            </div>
+                            {enviando ? (
+                                <div id="CargandoPagina">
+                                    <ThreeDots
+                                        type="ThreeDots"
+                                        color="#0B1A46"
+                                        height={150}
+                                        width={200}
+                                    />
+                                    <p>... Enviando Correo ...</p>
+                                </div>
+                            ) : (
+                                <>
+                                    <h3>Cambiar Contraseña</h3>
+                                    <p>Ingresa tu correo para enviar un token de recuperación.</p>
+                                    <input
+                                        type="email"
+                                        placeholder="Correo electrónico"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                    />
+                                    <div className="modal-buttons">
+                                        <button onClick={handleSendToken}>Enviar</button>
+                                        <button onClick={() => {
+                                            setShowModal(false);
+                                            setEmail('');
+                                        }}>Cancelar</button>
+                                    </div>
+                                </>
+                            )}
                         </div>
                     </div>
                 )}
@@ -114,8 +179,11 @@ const SupervisionLogin = () => {
                 )}
 
                 <div className='Version'>
-                    <p>v1.18</p>
+                    <p>v1.19</p>
                 </div>
+            </div>
+            <div className='Notificaciones'>
+                <ToastContainer />
             </div>
         </div>
     );
