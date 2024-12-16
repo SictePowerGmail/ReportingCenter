@@ -517,6 +517,7 @@ function Navbar() {
                                     <Link id='SubMenu-Contenido-Titulo' to="/DesmonteMantenimiento" onClick={toggleMobileMenu}><li>Desmonte Mantenimiento</li></Link>
                                     <Link id='SubMenu-Contenido-Titulo' to="/MaterialLogin" onClick={toggleMobileMenu}><li>Solicitud de Material</li></Link>
                                     <Link id='SubMenu-Contenido-Titulo' to="/ReporteMaterialLogin" onClick={toggleMobileMenu}><li>Reporte Material Tecnico</li></Link>
+                                    <Link id='SubMenu-Contenido-Titulo' to="/InventariosMaterialLogin" onClick={toggleMobileMenu}><li>Inventario Material</li></Link>
                                 </ul>
                             </div>
                         )}

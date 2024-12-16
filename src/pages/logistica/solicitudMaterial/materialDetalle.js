@@ -46,6 +46,7 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
         if (cedulaUsuario === undefined && nombreUsuario === undefined) {
             navigate('/MaterialLogin', { state: { estadoNotificacion: false } });
         }
+
     }, []);
 
     useEffect(() => {
@@ -161,6 +162,7 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
             optenerPDFs();
         }
 
+        setProyectoCerradoEstado('');
     }, [fila]);
 
     useEffect(() => {
@@ -198,6 +200,7 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
     let estadoCargue;
 
     const manejarCargueEntregaBodega = async () => {
+        setLoading(true);
         const ids = fila.map(item => item.id);
         const estado = "Entregado"
         let observacionesTemporal;
@@ -383,6 +386,7 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
         }
 
         setFilaEditada(fila2);
+        setLoading(false);
     };
 
     const [proyectoCerradoEstado, setProyectoCerradoEstado] = useState('');
@@ -400,6 +404,7 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
             toast.error('Error en actualizar estado cerrar proyecto', { className: 'toast-success' });
         }
         setLoading(false);
+        onClose();
     };
 
     if (!isOpen) return null;
@@ -721,7 +726,7 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
                                                 manejarCierreProyecto();
                                             }}
                                         >
-                                            Cerrar Proyecto
+                                            Cerrar Solicitud
                                         </button>
                                     )}
                                 </div>

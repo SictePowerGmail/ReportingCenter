@@ -59,6 +59,9 @@ import MaterialAgregar from "../pages/logistica/solicitudMaterial/materialAgrega
 import ReporteMaterialLogin from "../pages/logistica/reporteMaterialTecnico/reporteMaterialLogin";
 import ReporteMaterialPrincipal from "../pages/logistica/reporteMaterialTecnico/reporteMaterialPrincipal";
 import ReporteMaterialAgregar from "../pages/logistica/reporteMaterialTecnico/reporteMaterialAgregar";
+import InventariosMaterialLogin from "../pages/logistica/inventarios/inventariosMaterialLogin";
+import InventariosMaterialPrincipal from "../pages/logistica/inventarios/inventariosMaterialPrincipal";
+import InventariosMaterialAgregar from "../pages/logistica/inventarios/inventariosMaterialAgregar";
 /* Direccion */
 import Penalizaciones from '../pages/direccion/Penalizaciones';
 import CentrosDeCostos from '../pages/direccion/CentrosDeCostos';
@@ -194,6 +197,12 @@ function RutasApp() {
                 return 'Reporte Materiales Tecnico';
             case '/ReporteMaterialAgregar':
                 return 'Reporte Materiales Tecnico'
+            case '/InventariosMaterialLogin':
+                return 'Inventarios Material';
+            case '/InventariosMaterialPrincipal':
+                return 'Inventarios Material';
+            case '/InventariosMaterialAgregar':
+                return 'Inventarios Material'
             /* Direccion */
             case '/Penalizaciones':
                 return 'Penalizaciones';
@@ -280,6 +289,9 @@ function RutasApp() {
                 <Route path='/ReporteMaterialLogin' exacte element={<ReporteMaterialLogin />} />
                 <Route path='/ReporteMaterialPrincipal' exacte element={<ReporteMaterialPrincipal />} />
                 <Route path='/ReporteMaterialAgregar' exacte element={<ReporteMaterialAgregar />} />
+                <Route path='/InventariosMaterialLogin' exacte element={<InventariosMaterialLogin />} />
+                <Route path='/InventariosMaterialPrincipal' exacte element={<InventariosMaterialPrincipal />} />
+                <Route path='/InventariosMaterialAgregar' exacte element={<InventariosMaterialAgregar />} />
                 {/* Direccion */}
                 <Route path='/Penalizaciones' exacte element={<Penalizaciones />} />
                 <Route path='/Centro_de_costos' exacte element={<CentrosDeCostos />} />
