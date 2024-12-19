@@ -26,6 +26,7 @@ export const calculoMaterial = async (ciudadElgida) => {
         const datosFiltradosRegistrosSolicitudMaterial = responseRegistrosSolicitudMaterial.data.filter(item =>
             item.ciudad === ciudadElgida &&
             item.estadoProyecto === "Abierto" &&
+            item.aprobacionAnalista !== "Rechazado" &&
             item.aprobacionDirector !== "Rechazado" &&
             item.aprobacionDireccionOperacion !== "Rechazado" &&
             item.entregaBodega !== "Entregado"
@@ -89,9 +90,9 @@ export const calculoMaterial = async (ciudadElgida) => {
             const codigo = itemKgprod.codigo;
             const cantidadDisponible = parseInt(itemKgprod.candisp, 10) || 0;
 
-            const cantidadSolicitada = dinamicaRegistrosSolicitudMaterial[codigo] || 0;
-            const cantidadEntregada = dinamicaRegistrosEntregaSolicitudMaterial[codigo] || 0;
-            const cantidadPendienteDespacho = dinamicaRegistrosSolicitudMaterialPendienteDespacho[codigo] || 0;
+            const cantidadSolicitada = Math.max(0, dinamicaRegistrosSolicitudMaterial[codigo] || 0);
+            const cantidadEntregada = Math.max(0, dinamicaRegistrosEntregaSolicitudMaterial[codigo] || 0);
+            const cantidadPendienteDespacho = Math.max(0, dinamicaRegistrosSolicitudMaterialPendienteDespacho[codigo] || 0);
 
             const nuevaCantidad = cantidadDisponible - cantidadSolicitada - cantidadEntregada - cantidadPendienteDespacho;
 

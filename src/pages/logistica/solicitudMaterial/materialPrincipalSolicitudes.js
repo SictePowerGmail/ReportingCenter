@@ -29,20 +29,20 @@ const MaterialPrincipalSolicitudes = () => {
                     const cantidadRestante = parseInt(item.cantidadRestantePorDespacho, 10) || 0;
                     let estado;
 
-                    if (cantidadDisponible < cantidadRestante) {
+                    if (item.aprobacionAnalista === "Rechazado") {
+                        estado = "Rechazado por Analista";
+                    } else if (item.aprobacionDirector === "Rechazado") {
+                        estado = "Rechazado por Director";
+                    } else if (item.aprobacionDireccionOperacion === "Rechazado") {
+                        estado = "Rechazado por Direccion";
+                    } else if (cantidadDisponible < cantidadRestante) {
                         estado = "Desabastecido";
                     } else if (item.aprobacionAnalista === "Pendiente") {
                         estado = "Pendiente por Analista";
-                    } else if (item.aprobacionAnalista === "Rechazado") {
-                        estado = "Rechazado por Analista";
                     } else if (item.aprobacionDirector === "Pendiente") {
                         estado = "Pendiente por Director";
-                    } else if (item.aprobacionDirector === "Rechazado") {
-                        estado = "Rechazado por Director";
                     } else if (item.aprobacionDireccionOperacion === "Pendiente") {
                         estado = "Pendiente por Direccion";
-                    } else if (item.aprobacionDireccionOperacion === "Rechazado") {
-                        estado = "Rechazado por Direccion";
                     } else if (item.entregaBodega === "Pendiente") {
                         estado = "Pendiente Entrega Bodega";
                     } else {
@@ -155,6 +155,8 @@ const MaterialPrincipalSolicitudes = () => {
     const manejarCerrarModalSolicitudMaterial = () => {
         setVentanaAbiertaSolicitudMaterial(false);
         setFilaSeleccionadaSolicitudMaterial(null);
+        setLoading(true);
+        cargarDatosRegistrosSolicitudMaterial();
     };
 
     const descargarArchivoSolicitudMaterial = () => {

@@ -138,6 +138,8 @@ const MaterialPrincipalDireccion = () => {
     const manejarCerrarModalPendienteDireccionOperacion = () => {
         setVentanaAbiertaPendienteDireccionOperacion(false);
         setFilaSeleccionadaPendienteDireccionOperacion(null);
+        setLoading(true);
+        cargarDatosRegistrosSolicitudMaterial();
     };
 
     const formatDate = (date) => {
@@ -174,6 +176,7 @@ const MaterialPrincipalDireccion = () => {
 
         manejarCerrarModalPendienteDireccionOperacion();
         setObservacionesPendDireccionOperacion('');
+        setLoading(true);
         cargarDatosRegistrosSolicitudMaterial();
     };
 
@@ -200,6 +203,7 @@ const MaterialPrincipalDireccion = () => {
 
         manejarCerrarModalPendienteDireccionOperacion();
         setObservacionesPendDireccionOperacion('');
+        setLoading(true);
         cargarDatosRegistrosSolicitudMaterial();
     };
 
@@ -259,6 +263,8 @@ const MaterialPrincipalDireccion = () => {
     const manejarCerrarModalAprobacionDireccionOperacion = () => {
         setVentanaAbiertaAprobacionDireccionOperacion(false);
         setFilaSeleccionadaAprobacionDireccionOperacion(null);
+        setLoading(true);
+        cargarDatosRegistrosSolicitudMaterial();
     };
 
     const manejarOrdenAprobacionDireccionOperacion = (columna) => {
@@ -317,6 +323,8 @@ const MaterialPrincipalDireccion = () => {
     const manejarCerrarModalRechazadoDireccionOperacion = () => {
         setVentanaAbiertaRechazadoDireccionOperacion(false);
         setFilaSeleccionadaRechazadoDireccionOperacion(null);
+        setLoading(true);
+        cargarDatosRegistrosSolicitudMaterial();
     };
 
     const manejarOrdenRechazadoDireccionOperacion = (columna) => {

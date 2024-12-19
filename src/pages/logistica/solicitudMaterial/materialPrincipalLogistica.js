@@ -159,6 +159,8 @@ const MaterialPrincipalLogistica = () => {
     const manejarCerrarModalPendienteAnalista = () => {
         setVentanaAbiertaPendienteAnalista(false);
         setFilaSeleccionadaPendienteAnalista(null);
+        setLoading(true);
+        cargarDatosRegistrosSolicitudMaterial();
     };
 
     const formatDate = (date) => {
@@ -195,6 +197,7 @@ const MaterialPrincipalLogistica = () => {
 
         manejarCerrarModalPendienteAnalista();
         setObservacionesPendAnalista('');
+        setLoading(true);
         cargarDatosRegistrosSolicitudMaterial();
     };
 
@@ -221,6 +224,7 @@ const MaterialPrincipalLogistica = () => {
 
         manejarCerrarModalPendienteAnalista();
         setObservacionesPendAnalista('');
+        setLoading(true);
         cargarDatosRegistrosSolicitudMaterial();
     };
 
@@ -280,6 +284,8 @@ const MaterialPrincipalLogistica = () => {
     const manejarCerrarModalAprobacionAnalista = () => {
         setVentanaAbiertaAprobacionAnalista(false);
         setFilaSeleccionadaAprobacionAnalista(null);
+        setLoading(true);
+        cargarDatosRegistrosSolicitudMaterial();
     };
 
     const manejarOrdenAprobacionAnalista = (columna) => {
@@ -338,6 +344,8 @@ const MaterialPrincipalLogistica = () => {
     const manejarCerrarModalRechazadoAnalista = () => {
         setVentanaAbiertaRechazadoAnalista(false);
         setFilaSeleccionadaRechazadoAnalista(null);
+        setLoading(true);
+        cargarDatosRegistrosSolicitudMaterial();
     };
 
     const manejarOrdenRechazadoAnalista = (columna) => {

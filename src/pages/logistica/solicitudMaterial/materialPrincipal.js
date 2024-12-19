@@ -34,7 +34,113 @@ const MaterialPrincipal = () => {
         calculo("Armenia");
         calculo("Bogota San Cipriano Corporativo");
         calculo("Bogota San Cipriano Red Externa");
+
+        //calculoCantidadRestanteDespacho("Manizales");
+        //calculoCantidadRestanteDespacho("Pereira");
+        //calculoCantidadRestanteDespacho("Armenia");
+        //calculoCantidadRestanteDespacho("Bogota San Cipriano Corporativo");
+        //calculoCantidadRestanteDespacho("Bogota San Cipriano Red Externa");
     }, []);
+
+    // const calculoCantidadRestanteDespacho = async (ciudadElgida) => {
+    //     try {
+    //         setLoading(true);
+
+    //         const responseRegistrosEntregadoSolicitudMaterial = await axios.get('https://sicteferias.from-co.net:8120/solicitudMaterial/RegistrosEntregadosSolicitudMaterial');
+
+    //         const datosFiltradosRegistrosEntregadoSolicitudMaterial = responseRegistrosEntregadoSolicitudMaterial.data.filter(item =>
+    //             item.ciudad === ciudadElgida
+    //         );
+
+    //         const resultadosFiltrados = datosFiltradosRegistrosEntregadoSolicitudMaterial.filter(item =>
+    //             item.uuid === '9C4442-21CAD3' &&
+    //             (item.fechaEntrega === "2024-12-12 08:06" ||
+    //                 item.fechaEntrega === "2024-12-18 08:28")
+    //         );
+
+    //         console.log(resultadosFiltrados);
+
+    //         const responseRegistrosSolicitudMaterial = await axios.get('https://sicteferias.from-co.net:8120/solicitudMaterial/RegistrosSolicitudMaterial');
+
+    //         const datosFiltradosRegistrosSolicitudMaterial = responseRegistrosSolicitudMaterial.data.filter(item =>
+    //             item.ciudad === ciudadElgida &&
+    //             item.aprobacionAnalista !== "Rechazado" &&
+    //             item.aprobacionDirector !== "Rechazado" &&
+    //             item.aprobacionDireccionOperacion !== "Rechazado"
+    //         );
+
+    //         const resultadosFiltrados2 = datosFiltradosRegistrosSolicitudMaterial.filter(item =>
+    //             item.uuid === '9C4442-21CAD3' && item.fecha === "2024-12-09 11:23:36"
+    //         );
+
+    //         console.log(resultadosFiltrados2);
+
+    //         const resultadoActualizado = datosFiltradosRegistrosSolicitudMaterial.map(item1 => {
+    //             const itemTabla2 = datosFiltradosRegistrosEntregadoSolicitudMaterial.filter(item2 => item2.uuid === item1.uuid);
+
+    //             console.log(itemTabla2.filter(item => item.uuid === '9C4442-21CAD3' && (item.fechaEntrega === "2024-12-12 08:06" || item.fechaEntrega === "2024-12-18 08:28")));
+
+    //             // // Si no encontramos datos para este uuid, continuar
+    //             // if (itemTabla2.length === 0) return item1;
+
+    //             // // Separar los PDFs por coma
+    //             // const pdfsSeparados = item1.pdfs.split(',');
+
+    //             // // Iterar sobre los PDFs y procesar la diferencia
+    //             // let cantidadRestante = parseInt(item1.cantidadRestantePorDespacho);
+    //             // pdfsSeparados.forEach(pdf => {
+    //             //     // Aquí vamos a suponer que el nombre del archivo PDF tiene información relacionada
+    //             //     // con el código SAP del material y el uuid, y vamos a hacer el cruce
+
+    //             //     // Supongamos que en el PDF tenemos el código SAP como parte del nombre (por ejemplo: "SAL-738")
+    //             //     const codigoPdf = pdf.split('_')[1].split('.')[0];  // "SAL-738"
+
+    //             //     // Buscar el código SAP en la tabla2
+    //             //     itemTabla2.forEach(item2 => {
+    //             //         if (item2.codigoSapMaterial.includes(codigoPdf)) {
+    //             //             // Aquí puedes hacer el cálculo de la diferencia. 
+    //             //             // Supongamos que la diferencia es la cantidad solicitada menos la cantidad disponible
+    //             //             const diferencia = item2.cantidadSolicitadaMaterial - item2.cantidadDisponibleMaterial;
+
+    //             //             // Actualizar la cantidad restante
+    //             //             cantidadRestante -= diferencia;
+    //             //         }
+    //             //     });
+    //             // });
+
+    //             // // Devolver el objeto actualizado
+    //             // return { ...item1, cantidadRestantePorDespacho: cantidadRestante };
+    //         });
+
+    //         console.log(resultadoActualizado);
+
+    //         const resultadosFiltrados3 = resultadoActualizado.filter(item =>
+    //             item.uuid === '9C4442-21CAD3' && item.fecha === "2024-12-09 11:23:36"
+    //         );
+
+    //         console.log(resultadosFiltrados3);
+
+
+
+    //         // await axios.post('https://sicteferias.from-co.net:8120/solicitudMaterial/actualizarEstadoCantidadDisponibleMaterial',
+    //         //     {
+    //         //         ids, cantidades
+    //         //     },
+    //         //     {
+    //         //         headers: {
+    //         //             'Content-Type': 'application/json',
+    //         //         },
+    //         //     }
+    //         // );
+
+    //         setLoading(false);
+
+    //         // return resultado
+
+    //     } catch (error) {
+    //         setError(error);
+    //     }
+    // }
 
     const calculo = async (ciudadElgida) => {
         try {
@@ -63,6 +169,7 @@ const MaterialPrincipal = () => {
 
             const datosFiltradosRegistrosSolicitudMaterial = responseRegistrosSolicitudMaterial.data.filter(item =>
                 item.ciudad === ciudadElgida &&
+                item.aprobacionAnalista !== "Rechazado" &&
                 item.aprobacionDirector !== "Rechazado" &&
                 item.aprobacionDireccionOperacion !== "Rechazado" &&
                 item.entregaBodega !== "Entregado"

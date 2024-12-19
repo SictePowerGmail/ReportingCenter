@@ -135,6 +135,7 @@ const MaterialPrincipalEntregaBodega = () => {
     const manejarCerrarModalPendienteEntregaBodega = () => {
         setVentanaAbiertaPendienteEntregaBodega(false);
         setFilaSeleccionadaPendienteEntregaBodega(null);
+        setLoading(true);
         cargarDatosRegistrosSolicitudMaterial();
     };
 
@@ -163,6 +164,7 @@ const MaterialPrincipalEntregaBodega = () => {
     const manejarCerrarModalEntregadoEntregaBodega = () => {
         setVentanaAbiertaEntregadoEntregaBodega(false);
         setFilaSeleccionadaEntregadoEntregaBodega(null);
+        setLoading(true);
         cargarDatosRegistrosSolicitudMaterial();
     };
 
@@ -191,6 +193,7 @@ const MaterialPrincipalEntregaBodega = () => {
     const manejarCerrarModalProyectosCerrados = () => {
         setVentanaAbiertaProyectosCerrados(false);
         setFilaSeleccionadaProyectosCerrados(null);
+        setLoading(true);
         cargarDatosRegistrosSolicitudMaterial();
     };
 

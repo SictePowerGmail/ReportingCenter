@@ -275,7 +275,7 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
         }
 
         const formattedDate2 = formatDate2(fechaActual);
-        let updatedDataConEstado2;
+        let updatedDataConEstado2 = [];
 
         for (let i = 0; i < pdfsFilesDefinitivos.length; i++) {
             let nombre;
@@ -308,10 +308,10 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
                 }));
 
                 if (estadoCargue === 'normal') {
-                    updatedDataConEstado2 = updatedDataConEstado;
+                    updatedDataConEstado2 = [...updatedDataConEstado2, ...updatedDataConEstado];
                     setPdfData(prevData => [...prevData, ...updatedDataConEstado]);
                 } else if (estadoCargue === 'nuevo') {
-                    updatedDataConEstado2 = updatedDataConEstado.concat(pdfData);
+                    updatedDataConEstado2 = [...updatedDataConEstado2, ...updatedDataConEstado.concat(pdfData)];
                     setPdfDataNuevos(prevData => [...prevData, ...updatedDataConEstado]);
                 }
 
@@ -352,7 +352,21 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
         const fila2 = fila.map((item) => {
             const cantidadSolicitada = parseFloat(item.cantidadSolicitadaMaterial) || 0;
 
-            const cantidadDespachada = updatedDataConEstado2
+            const dinamicaUpdatedDataConEstado2 = Object.values(
+                updatedDataConEstado2.reduce((acc, pdfItem) => {
+                    const producto = pdfItem.PRODUCTO.trim();
+                    const cantidad = parseFloat(pdfItem.CANTIDAD) || 0;
+            
+                    if (!acc[producto]) {
+                        acc[producto] = { PRODUCTO: producto, CANTIDAD: 0 };
+                    }
+                    acc[producto].CANTIDAD += cantidad;
+            
+                    return acc;
+                }, {})
+            );
+
+            const cantidadDespachada = dinamicaUpdatedDataConEstado2
                 .filter((pdfItem) => pdfItem.PRODUCTO.trim() === item.codigoSapMaterial.trim())
                 .reduce((total, pdfItem) => {
                     return total + (parseFloat(pdfItem.CANTIDAD) || 0);
@@ -842,7 +856,7 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
                         )}
 
                         <div className='Notificaciones'>
-                            <ToastContainer />
+                            <ToastContainer autoClose={1000} />
                         </div>
                     </div>
                 )}

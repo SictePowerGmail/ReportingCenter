@@ -153,6 +153,8 @@ const MaterialPrincipalDirector = () => {
     const manejarCerrarModalPendienteDirector = () => {
         setVentanaAbiertaPendienteDirector(false);
         setFilaSeleccionadaPendienteDirector(null);
+        setLoading(true);
+        cargarDatosRegistrosSolicitudMaterial();
     };
 
     const formatDate = (date) => {
@@ -189,6 +191,7 @@ const MaterialPrincipalDirector = () => {
 
         manejarCerrarModalPendienteDirector();
         setObservacionesPendDirect('');
+        setLoading(true);
         cargarDatosRegistrosSolicitudMaterial();
     };
 
@@ -215,6 +218,7 @@ const MaterialPrincipalDirector = () => {
 
         manejarCerrarModalPendienteDirector();
         setObservacionesPendDirect('');
+        setLoading(true);
         cargarDatosRegistrosSolicitudMaterial();
     };
 
@@ -274,6 +278,8 @@ const MaterialPrincipalDirector = () => {
     const manejarCerrarModalAprobacionDirector = () => {
         setVentanaAbiertaAprobacionDirector(false);
         setFilaSeleccionadaAprobacionDirector(null);
+        setLoading(true);
+        cargarDatosRegistrosSolicitudMaterial();
     };
 
     const manejarOrdenAprobacionDirector = (columna) => {
@@ -332,6 +338,8 @@ const MaterialPrincipalDirector = () => {
     const manejarCerrarModalRechazadoDirector = () => {
         setVentanaAbiertaRechazadoDirector(false);
         setFilaSeleccionadaRechazadoDirector(null);
+        setLoading(true);
+        cargarDatosRegistrosSolicitudMaterial();
     };
 
     const manejarOrdenRechazadoDirector = (columna) => {
