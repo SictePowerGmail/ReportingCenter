@@ -167,7 +167,7 @@ const MaterialPrincipalBodega = () => {
                                         </td>
                                     </tr>
                                 ) : (
-                                    datosOrdenados.slice(0, expandidoMaterialDisponible ? datosOrdenados.length : 6).map((fila, index) => (
+                                    datosOrdenados.slice(0, expandidoMaterialDisponible ? datosOrdenados.length : 10).map((fila, index) => (
                                         <tr key={`${fila.Bodega}-${fila.Codigo}`}>
                                             {Object.values(fila).map((valor, idx) => (
                                                 <td key={idx}>

@@ -265,7 +265,7 @@ const MaterialPrincipalSolicitudes = () => {
                                         </td>
                                     </tr>
                                 ) : (
-                                    datosFiltradosPorEstado.slice(0, expandidoSolicitudMaterialSinMat ? datosFiltradosPorEstado.length : 6).map((fila, index) => (
+                                    datosFiltradosPorEstado.slice(0, expandidoSolicitudMaterialSinMat ? datosFiltradosPorEstado.length : 10).map((fila, index) => (
                                         <tr key={`${fila.fecha}-${fila.cedula}-${fila.uuid}`} onClick={() => manejarClickFilaSolicitudMaterial(fila)}>
                                             {Object.values(fila).map((valor, idx) => (
                                                 <td key={idx} onClick={() => manejarClickFilaSolicitudMaterial(fila)}>
