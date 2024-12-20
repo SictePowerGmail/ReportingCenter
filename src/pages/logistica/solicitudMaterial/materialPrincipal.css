@@ -121,11 +121,12 @@
                 margin-bottom: 5px;
 
                 .Filtros {
-                    display: flex;
+                    display: flex !important;
                     justify-content: flex-start;
-                    align-items: center;
+                    align-items: center !important;
 
                     label {
+                        white-space: nowrap;
                         margin-right: 5px !important;
                         font-size: 13px;
                         font-weight: 700;
