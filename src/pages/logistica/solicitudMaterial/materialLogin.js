@@ -77,16 +77,16 @@ const MaterialLogin = () => {
     
             if (response.ok) {
                 const data = await response.json();
-                const userRole = data.rol; 
-                const userNombre = data.nombre; 
-                const userCedula = data.cedula; 
-                Cookies.set('userRole', userRole, { expires: 7 });
-                Cookies.set('userNombre', userNombre, { expires: 7 });
-                Cookies.set('userCedula', userCedula, { expires: 7 });
+                Cookies.set('userRole', data.rol, { expires: 7 });
+                Cookies.set('userNombre', data.nombre, { expires: 7 });
+                Cookies.set('userCedula', data.cedula, { expires: 7 });
+                Cookies.set('userCorreo', data.correo, { expires: 7 });
+                Cookies.set('userTelefono', data.telefono, { expires: 7 });
                 Cookies.set('solMatCiudad', "", { expires: 7 });
                 Cookies.set('solMatUUID', "", { expires: 7 });
                 Cookies.set('solMatNombreProyecto', "", { expires: 7 });
                 Cookies.set('solMatEntregaProyectada', "", { expires: 7 });
+                localStorage.removeItem('yaRecargado');
                 navigate('/MaterialPrincipal', { state: { estadoNotificacion:false } });
             } else {
                 const errorText = await response.text();

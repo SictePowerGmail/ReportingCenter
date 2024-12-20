@@ -120,10 +120,19 @@
                 width: 100%;
                 margin-bottom: 5px;
 
+                @media screen and (max-width: 600px) {
+                    flex-direction: column;
+                    align-items: start;
+                }
+
                 .Filtros {
                     display: flex !important;
                     justify-content: flex-start;
                     align-items: center !important;
+
+                    @media screen and (max-width: 600px) {
+                        margin-bottom: 5px;
+                    }
 
                     label {
                         white-space: nowrap;
@@ -160,18 +169,18 @@
                 &::-webkit-scrollbar {
                     width: 10px;
                 }
-        
+
                 &::-webkit-scrollbar-track {
                     background-color: white;
                     border-radius: 10px;
                 }
-        
+
                 &::-webkit-scrollbar-thumb {
                     background-color: #ff8800;
                     border-radius: 10px;
                     border: 5px solid white;
                 }
-        
+
                 &::-webkit-scrollbar-thumb:hover {
                     background: #bd6a0c;
                 }

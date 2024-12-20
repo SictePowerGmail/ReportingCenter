@@ -5,6 +5,7 @@ import Sicte from '../../../images/Sicte 6.png'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ThreeDots } from 'react-loader-spinner';
+import Cookies from 'js-cookie';
 
 const SupervisionLogin = () => {
     const [username, setUsername] = useState('');
@@ -77,9 +78,13 @@ const SupervisionLogin = () => {
 
             if (response.ok) {
                 const data = await response.json();
-                const userRole = data.rol;
-                const userNombre = data.nombre;
-                navigate('/SupervisionPrincipal', { state: { role: userRole, nombre: userNombre, estadoNotificacion: false } });
+                Cookies.set('userRole', data.rol, { expires: 7 });
+                Cookies.set('userNombre', data.nombre, { expires: 7 });
+                Cookies.set('userCedula', data.cedula, { expires: 7 });
+                Cookies.set('userCorreo', data.correo, { expires: 7 });
+                Cookies.set('userTelefono', data.telefono, { expires: 7 });
+                localStorage.removeItem('yaRecargado');
+                navigate('/SupervisionPrincipal', { state: { role: data.rol, nombre: data.nombre, estadoNotificacion: false } });
             } else {
                 const errorText = await response.text();
                 if (response.status === 404) {

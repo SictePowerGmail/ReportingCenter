@@ -68,11 +68,15 @@ const ReporteMaterialPrincipal = () => {
     };
 
     useEffect(() => {
+        const yaRecargado = localStorage.getItem('yaRecargado');
         const cedulaUsuario = Cookies.get('userCedula');
         const nombreUsuario = Cookies.get('userNombre');
 
         if (cedulaUsuario === undefined && nombreUsuario === undefined) {
-            navigate('/MaterialLogin', { state: { estadoNotificacion: false } });
+            navigate('/ReporteMaterialLogin', { state: { estadoNotificacion: false } });
+        } else if (!yaRecargado) {
+            localStorage.setItem('yaRecargado', 'true');
+            window.location.reload();
         }
 
         cargarDatosReporteMaterialTecnico();

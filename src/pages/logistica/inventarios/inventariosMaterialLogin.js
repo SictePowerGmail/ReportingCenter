@@ -74,16 +74,16 @@ const InventariosMaterialLogin = () => {
                 },
                 body: JSON.stringify({ correo: username, contrasena: password }),
             });
-    
+
             if (response.ok) {
                 const data = await response.json();
-                const userRole = data.rol; 
-                const userNombre = data.nombre; 
-                const userCedula = data.cedula; 
-                Cookies.set('userRole', userRole, { expires: 7 });
-                Cookies.set('userNombre', userNombre, { expires: 7 });
-                Cookies.set('userCedula', userCedula, { expires: 7 });
-                navigate('/InventariosMaterialPrincipal', { state: { role:userRole, nombre:userNombre, estadoNotificacion:false } });
+                Cookies.set('userRole', data.rol, { expires: 7 });
+                Cookies.set('userNombre', data.nombre, { expires: 7 });
+                Cookies.set('userCedula', data.cedula, { expires: 7 });
+                Cookies.set('userCorreo', data.correo, { expires: 7 });
+                Cookies.set('userTelefono', data.telefono, { expires: 7 });
+                localStorage.removeItem('yaRecargado');
+                navigate('/InventariosMaterialPrincipal', { state: { role: data.rol, nombre: data.nombre, estadoNotificacion: false } });
             } else {
                 const errorText = await response.text();
                 if (response.status === 404) {

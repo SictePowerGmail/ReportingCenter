@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { Link, Navigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import './navbar.css'
 import { FaHardHat, FaFileAlt, FaTruck, FaBars, FaTimes, FaHome, FaChartLine, FaStar, FaTools, FaChevronDown, FaChevronUp, FaUser } from 'react-icons/fa';
 import { HiClipboardList, HiChartBar, HiOfficeBuilding } from "react-icons/hi";
@@ -24,10 +24,11 @@ function Navbar() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-    const fullName = Cookies.get('nombre');
+    const fullName = Cookies.get('userNombre');
     const initial = fullName ? fullName.charAt(0).toUpperCase() : "";
     const name = fullName ? fullName.split(" ")[0] : "";
     const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth > 530);
+    const yaRecargado = localStorage.getItem('yaRecargado');
 
     const toggleMobileMenu = () => setShowMobileMenu(!showMobileMenu);
 
@@ -44,7 +45,7 @@ function Navbar() {
     };
 
     useEffect(() => {
-        const cedula = Cookies.get('cedula');
+        const cedula = Cookies.get('userCedula');
         if (cedula === "" || cedula === undefined) {
             setIsLogin(false);
         } else {
@@ -100,12 +101,11 @@ function Navbar() {
                 setIsLogin(true);
                 const data = await response.json();
                 Cookies.set('token', data.role, { expires: 7 });
-                Cookies.set('cedula', data.cedula, { expires: 7 });
-                Cookies.set('nombre', data.nombre, { expires: 7 });
-                Cookies.set('correo', data.correo, { expires: 7 });
-                Cookies.set('telefono', data.telefono, { expires: 7 });
-                Cookies.set('rol', data.rol, { expires: 7 });
-                window.location.href = '/ReportingCenter';
+                Cookies.set('userCedula', data.cedula, { expires: 7 });
+                Cookies.set('userNombre', data.nombre, { expires: 7 });
+                Cookies.set('userCorreo', data.correo, { expires: 7 });
+                Cookies.set('userTelefono', data.telefono, { expires: 7 });
+                Cookies.set('userRole', data.rol, { expires: 7 });
             } else {
                 const errorText = await response.text();
                 if (response.status === 404) {
@@ -125,11 +125,11 @@ function Navbar() {
         setIsOpen(false);
         setIsLogin(false);
         Cookies.remove('token');
-        Cookies.remove('cedula');
-        Cookies.remove('nombre');
-        Cookies.remove('correo');
-        Cookies.remove('telefono');
-        Cookies.remove('rol');
+        Cookies.remove('userCedula');
+        Cookies.remove('userNombre');
+        Cookies.remove('userCorreo');
+        Cookies.remove('userTelefono');
+        Cookies.remove('userRole');
         window.location.href = '/ReportingCenter';
     };
 
@@ -139,7 +139,7 @@ function Navbar() {
                 {
                     showMobileMenu ? <FaTimes /> : <FaBars />
                 }
-                {isLargeScreen == true ? (
+                {isLargeScreen === true ? (
                     <div>
                         {isLogin === true ? (
                             <div className='AjusteTitulo2'></div>
@@ -196,11 +196,11 @@ function Navbar() {
                         )}
                     </div>
                     <div className={`menu ${isOpen ? 'open' : ''}`}>
-                        <span>{Cookies.get('correo')}</span>
-                        <span>{Cookies.get('nombre')}</span>
-                        <span>CC: {Cookies.get('cedula')}</span>
-                        <span>Tel: {Cookies.get('telefono')}</span>
-                        <span>Rol: {Cookies.get('rol')}</span>
+                        <span>{Cookies.get('userCorreo')}</span>
+                        <span>{Cookies.get('userNombre')}</span>
+                        <span>CC: {Cookies.get('userCedula')}</span>
+                        <span>Tel: {Cookies.get('userTelefono')}</span>
+                        <span>Rol: {Cookies.get('userRole')}</span>
                         <ul>
                             <Link to="/BasesDeDatos" 
                                 onClick={() => {
@@ -300,7 +300,7 @@ function Navbar() {
                             <div id='SubMenu-Contenido'>
                                 <ul>
                                     <Link id='SubMenu-Contenido-Titulo' to="/Capacidades" onClick={toggleMobileMenu}><li>Capacidades</li></Link>
-                                    <Link id='SubMenu-Contenido-Titulo' to="/SupervisionLogin" onClick={toggleMobileMenu}><li>Supervision</li></Link>
+                                    <Link id='SubMenu-Contenido-Titulo' to={yaRecargado ? "/SupervisionPrincipal" : "/SupervisionLogin"} onClick={toggleMobileMenu}><li>Supervision</li></Link>
                                 </ul>
                             </div>
                         )}
@@ -515,9 +515,9 @@ function Navbar() {
                                     <Link id='SubMenu-Contenido-Titulo' to="/EquiposMovilesR4" onClick={toggleMobileMenu}><li>Equipos en moviles R4</li></Link>
                                     <Link id='SubMenu-Contenido-Titulo' to="/ConsumosOperaciones" onClick={toggleMobileMenu}><li>Consumos Operaciones</li></Link>
                                     <Link id='SubMenu-Contenido-Titulo' to="/DesmonteMantenimiento" onClick={toggleMobileMenu}><li>Desmonte Mantenimiento</li></Link>
-                                    <Link id='SubMenu-Contenido-Titulo' to="/MaterialLogin" onClick={toggleMobileMenu}><li>Solicitud de Material</li></Link>
-                                    <Link id='SubMenu-Contenido-Titulo' to="/ReporteMaterialLogin" onClick={toggleMobileMenu}><li>Reporte Material Tecnico</li></Link>
-                                    <Link id='SubMenu-Contenido-Titulo' to="/InventariosMaterialLogin" onClick={toggleMobileMenu}><li>Inventario Material</li></Link>
+                                    <Link id='SubMenu-Contenido-Titulo' to={yaRecargado ? "/MaterialPrincipal" : "/MaterialLogin"} onClick={toggleMobileMenu}><li>Solicitud de Material</li></Link>
+                                    <Link id='SubMenu-Contenido-Titulo' to={yaRecargado ? "/ReporteMaterialPrincipal" : "/ReporteMaterialLogin"} onClick={toggleMobileMenu}><li>Reporte Material Tecnico</li></Link>
+                                    <Link id='SubMenu-Contenido-Titulo' to={yaRecargado ? "/InventariosMaterialPrincipal" : "/InventariosMaterialLogin"} onClick={toggleMobileMenu}><li>Inventario Material</li></Link>
                                 </ul>
                             </div>
                         )}
@@ -592,7 +592,7 @@ function Navbar() {
                 </ul>
                 {showMobileMenu && (
                     <div className='Version'>
-                        <p>v1.21</p>
+                        <p>v1.22</p>
                     </div>
                 )}
             </div>

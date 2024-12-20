@@ -7,6 +7,7 @@ import axios from 'axios';
 import { Legend, PieChart, Pie, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, LabelList, ResponsiveContainer } from 'recharts';
 import L from 'leaflet';
 import { ThreeDots } from 'react-loader-spinner';
+import Cookies from 'js-cookie';
 
 const SupervisionPrincipal = () => {
     const navigate = useNavigate();
@@ -50,10 +51,10 @@ const SupervisionPrincipal = () => {
     const [listaDia, setListaDia] = useState([]);
     const [listaSupervisor, setListaSupervisor] = useState([]);
     const [listaPlaca, setListaPlaca] = useState([]);
-    const [loading, setLoading] = useState(false); 
+    const [loading, setLoading] = useState(false);
 
     const Agregar = async (event) => {
-        navigate('/SupervisionAgregar', { state: { role:role, nombre:nombre, estadoNotificacion:false } });
+        navigate('/SupervisionAgregar', { state: { role: role, nombre: nombre, estadoNotificacion: false } });
     };
 
     const cargarRegistrosSupervision = async (event) => {
@@ -67,7 +68,7 @@ const SupervisionPrincipal = () => {
                 } else {
                     dataFiltrada = data.filter(item => item.nombre === supervisorSeleccionado);
                 }
-        
+
                 if (fechaSeleccionada !== 'Todo') {
                     dataFiltrada = dataFiltrada.filter(item => {
                         const itemFecha = item.fecha.split(' ')[0];
@@ -106,14 +107,14 @@ const SupervisionPrincipal = () => {
                     // Formatear la fecha en formato YYYY-MM-DD
                     const fechaObj = new Date(item.fecha);
                     const fecha = fechaObj.toISOString().split('T')[0]; // Extraer solo la parte de la fecha
-                
+
                     if (!acc[fecha]) {
                         acc[fecha] = 0;
                     }
                     acc[fecha]++;
                     return acc;
                 }, {});
-                
+
                 // Convertir objeto a array y ordenar por fecha
                 const registrosPorDia2 = Object.entries(registrosPorDia)
                     .map(([fecha, registros]) => {
@@ -124,7 +125,7 @@ const SupervisionPrincipal = () => {
                         };
                     })
                     .sort((a, b) => a.name - b.name);  // Ordenar por día numérico
-                
+
                 setGraficaRegistrosSupervisionDia(registrosPorDia2);
 
                 const registrosPorCadaUno = dataFiltrada.reduce((acc, item) => {
@@ -145,7 +146,7 @@ const SupervisionPrincipal = () => {
                 const registrosPorPlaca = dataFiltrada.reduce((acc, item) => {
                     // Formatear la fecha en formato YYYY-MM-DD
                     const placa = item.placa;
-                
+
                     if (!acc[placa]) {
                         acc[placa] = 0;
                     }
@@ -167,7 +168,7 @@ const SupervisionPrincipal = () => {
                 const registrosPorEPP = dataFiltrada.reduce((acc, item) => {
                     // Formatear la fecha en formato YYYY-MM-DD
                     const epp = item.epp;
-                
+
                     if (!acc[epp]) {
                         acc[epp] = 0;
                     }
@@ -189,7 +190,7 @@ const SupervisionPrincipal = () => {
                 const registrosPorAlturas = dataFiltrada.reduce((acc, item) => {
                     // Formatear la fecha en formato YYYY-MM-DD
                     const alturas = item.alturas;
-                
+
                     if (!acc[alturas]) {
                         acc[alturas] = 0;
                     }
@@ -211,7 +212,7 @@ const SupervisionPrincipal = () => {
                 const registrosPorATS = dataFiltrada.reduce((acc, item) => {
                     // Formatear la fecha en formato YYYY-MM-DD
                     const ats = item.ats;
-                
+
                     if (!acc[ats]) {
                         acc[ats] = 0;
                     }
@@ -233,7 +234,7 @@ const SupervisionPrincipal = () => {
                 const registrosPorEmpalmes = dataFiltrada.reduce((acc, item) => {
                     // Formatear la fecha en formato YYYY-MM-DD
                     const empalmes = item.empalmes;
-                
+
                     if (!acc[empalmes]) {
                         acc[empalmes] = 0;
                     }
@@ -259,7 +260,7 @@ const SupervisionPrincipal = () => {
                 const registrosPorPreoperacional = dataFiltrada.reduce((acc, item) => {
                     // Formatear la fecha en formato YYYY-MM-DD
                     const preoperacional = item.preoperacional;
-                
+
                     if (!acc[preoperacional]) {
                         acc[preoperacional] = 0;
                     }
@@ -281,7 +282,7 @@ const SupervisionPrincipal = () => {
                 const registrosPorVehiculo = dataFiltrada.reduce((acc, item) => {
                     // Formatear la fecha en formato YYYY-MM-DD
                     const vehiculo = item.vehiculo;
-                
+
                     if (!acc[vehiculo]) {
                         acc[vehiculo] = 0;
                     }
@@ -311,24 +312,24 @@ const SupervisionPrincipal = () => {
                     medidorFugas: item.medidorFugas
                 }));
 
-                const respuestasAgrupadasEquipos  = [
+                const respuestasAgrupadasEquipos = [
                     {
-                      name: 'Empalmadora',
-                      si: equipos.filter(item => item.empalmadora === 'Si').length,
-                      no: equipos.filter(item => item.empalmadora === 'No').length,
-                      na: equipos.filter(item => item.empalmadora === 'N/A').length,
+                        name: 'Empalmadora',
+                        si: equipos.filter(item => item.empalmadora === 'Si').length,
+                        no: equipos.filter(item => item.empalmadora === 'No').length,
+                        na: equipos.filter(item => item.empalmadora === 'N/A').length,
                     },
                     {
-                      name: 'OTDR',
-                      si: equipos.filter(item => item.otdr === 'Si').length,
-                      no: equipos.filter(item => item.otdr === 'No').length,
-                      na: equipos.filter(item => item.otdr === 'N/A').length,
+                        name: 'OTDR',
+                        si: equipos.filter(item => item.otdr === 'Si').length,
+                        no: equipos.filter(item => item.otdr === 'No').length,
+                        na: equipos.filter(item => item.otdr === 'N/A').length,
                     },
                     {
-                      name: 'Cortadora',
-                      si: equipos.filter(item => item.cortadora === 'Si').length,
-                      no: equipos.filter(item => item.cortadora === 'No').length,
-                      na: equipos.filter(item => item.cortadora === 'N/A').length,
+                        name: 'Cortadora',
+                        si: equipos.filter(item => item.cortadora === 'Si').length,
+                        no: equipos.filter(item => item.cortadora === 'No').length,
+                        na: equipos.filter(item => item.cortadora === 'N/A').length,
                     },
                     {
                         name: 'Pinza',
@@ -369,7 +370,7 @@ const SupervisionPrincipal = () => {
 
                 const uniqueFecha = new Set();
                 const uniqueDia = new Set();
-                const uniqueMes= new Set();
+                const uniqueMes = new Set();
                 const uniqueAño = new Set();
                 uniqueFecha.add("Todo");
                 uniqueDia.add("Todo");
@@ -448,13 +449,13 @@ const SupervisionPrincipal = () => {
             const firstLocation = data[0];
             const { latitud, longitud } = firstLocation;
             mapRef.current = L.map('map').setView([latitud, longitud], 16);
-    
+
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(mapRef.current);
-    
+
             const locationButton = L.control({ position: 'bottomright' });
-    
+
             locationButton.onAdd = function () {
                 const div = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
                 div.style.backgroundColor = 'white';
@@ -466,20 +467,20 @@ const SupervisionPrincipal = () => {
                 div.style.textAlign = 'center';
                 div.style.lineHeight = '45px';
                 div.innerHTML = '<i class="fa fa-location-arrow" style="font-size: 20px; color: black;"></i>';
-                
+
                 div.onclick = function () {
                     if (data.length > 0) {
                         const bounds = L.latLngBounds(data.map(item => [item.latitud, item.longitud]));
                         mapRef.current.fitBounds(bounds, { padding: [50, 50] });
                     }
                 };
-    
+
                 return div;
             };
             locationButton.addTo(mapRef.current);
 
         } else {
-    
+
             if (mapRef.current) {
                 mapRef.current.eachLayer(layer => {
                     if (layer instanceof L.Marker) {
@@ -487,28 +488,28 @@ const SupervisionPrincipal = () => {
                     }
                 });
             }
-        
+
             data.forEach(item => {
                 addMarkerToMap(item);
             });
-        
+
             if (data.length > 0) {
                 const bounds = L.latLngBounds(data.map(item => [item.latitud, item.longitud]));
                 mapRef.current.fitBounds(bounds, { padding: [50, 50] });
             }
         }
-    };  
+    };
 
     const addMarkerToMap = (item) => {
         const { latitud, longitud, fotoNombre, fecha, ot, nombreCuadrilla, observacion, placa, nombre } = item;
-    
+
         const awesomeMarker = L.AwesomeMarkers.icon({
             icon: 'car',
             prefix: 'fa',
             markerColor: 'blue',
             iconColor: 'white'
         });
-    
+
         // Crea el marcador y añádelo al mapa
         const marker = L.marker([latitud, longitud], { icon: awesomeMarker }).addTo(mapRef.current);
 
@@ -526,7 +527,7 @@ const SupervisionPrincipal = () => {
             .split(' ')
             .map(palabra => palabra.charAt(0).toUpperCase() + palabra.slice(1))
             .join(' ');
-    
+
         // Definir el contenido del popup (inicialmente sin imagen)
         const popupContent = `
             <div>
@@ -534,10 +535,10 @@ const SupervisionPrincipal = () => {
                 <div id="image-container-${fotoNombre}" style="width: 100px; height: auto; text-align: center;"></div>
             </div>
         `;
-    
+
         // Asignar el contenido del popup al marcador
         marker.bindPopup(popupContent);
-    
+
         // Evento de clic en el marcador para cargar la imagen cuando se abre el popup
         marker.on('popupopen', async () => {
             const imageContainer = document.getElementById(`image-container-${fotoNombre}`);
@@ -547,22 +548,22 @@ const SupervisionPrincipal = () => {
             }
         });
     };
-    
+
     const fetchImage = async (imageName) => {
         try {
             const response = await fetch(`https://sicteferias.from-co.net:8120/supervision/ObtenerImagen?imageName=${encodeURIComponent(imageName)}`);
-            
+
             if (!response.ok) {
                 console.error(`Error fetching image: ${response.status} ${response.statusText}`);
                 return null;
             }
-    
+
             const blob = await response.blob();
             if (blob.size === 0) {
                 console.error('Received an empty image blob');
                 return null;
             }
-            
+
             const imageUrl = URL.createObjectURL(blob);
             return imageUrl;
         } catch (error) {
@@ -570,15 +571,21 @@ const SupervisionPrincipal = () => {
             return null;
         }
     };
-    
+
     useEffect(() => {
-        if (!nombre) {
-            navigate('/SupervisionLogin');
-            toast.error('Por favor iniciar sesion', { className: 'toast-error' });
+        const yaRecargado = localStorage.getItem('yaRecargado');
+        const cedulaUsuario = Cookies.get('userCedula');
+        const nombreUsuario = Cookies.get('userNombre');
+
+        if (cedulaUsuario === undefined && nombreUsuario === undefined) {
+            navigate('/SupervisionLogin', { state: { estadoNotificacion: false } });
+        } else if (!yaRecargado) {
+            localStorage.setItem('yaRecargado', 'true');
+            window.location.reload();
         }
 
         if (estadoNotificacion) {
-            navigate('/SupervisionPrincipal', { state: { role:role, nombre:nombre, estadoNotificacion:false } });
+            navigate('/SupervisionPrincipal', { state: { role: role, nombre: nombre, estadoNotificacion: false } });
             toast.success('Datos enviados exitosamente', { className: 'toast-success' });
         }
 
@@ -673,12 +680,12 @@ const SupervisionPrincipal = () => {
                     </div>
                     <div className='RenderizarMapaYGraficos'>
                         <div className='RenderizarMapa'>
-                            
+
                             <div className='Total'>
                                 <i className="fas fa-calculator"></i>
                                 <span>Total acompañamientos: {cantidadAcompañamientos}</span>
                             </div>
-                            
+
                             <div className='UbicacionYPlaca'>
                                 <div className='Ubicacion'>
                                     <div className='Contenedor'>
@@ -697,8 +704,8 @@ const SupervisionPrincipal = () => {
                                         height={510}
                                         data={graficaRegistrosOrdenadosPorPlaca}
                                         layout="vertical"
-                                        >
-                                        <YAxis dataKey="placa" type="category" width={100}/>
+                                    >
+                                        <YAxis dataKey="placa" type="category" width={100} />
                                         <XAxis
                                             type="number" // Cambiado a tipo number para ajustar dinámicamente
                                             domain={[dataMin => dataMin - 1, dataMax => dataMax + 5]}
@@ -714,7 +721,7 @@ const SupervisionPrincipal = () => {
                                     </BarChart>
                                 </div>
                             </div>
-                            
+
                             <div className='SupervisoresYDia'>
                                 <div className='BarraSupervision'>
                                     <div className='TituloBarraSupervision'>
@@ -726,8 +733,8 @@ const SupervisionPrincipal = () => {
                                         height={300}
                                         data={graficaRegistrosSupervisionCadaUno}
                                         layout="vertical"
-                                        >
-                                        <YAxis dataKey="name" type="category" width={100}/>
+                                    >
+                                        <YAxis dataKey="name" type="category" width={100} />
                                         <XAxis
                                             type="number" // Cambiado a tipo number para ajustar dinámicamente
                                             domain={[dataMin => dataMin - 1, dataMax => dataMax + 5]}
@@ -786,7 +793,7 @@ const SupervisionPrincipal = () => {
                                         <Tooltip />
                                     </PieChart>
                                 </div>
-                                <div className='tabla-epp'> 
+                                <div className='tabla-epp'>
                                     <div className='TituloBarraSupervision'>
                                         <i className="fas fa-chart-bar"></i>
                                         <span>Registros por Epp con respuesta negativa</span>
@@ -794,7 +801,7 @@ const SupervisionPrincipal = () => {
                                     <table>
                                         <thead>
                                             <tr>
-                                                {["nombre", "nombreCuadrilla", "placa","fecha", "ot", "eppComentario"].map(col => (
+                                                {["nombre", "nombreCuadrilla", "placa", "fecha", "ot", "eppComentario"].map(col => (
                                                     <th key={col}>{col.charAt(0).toUpperCase() + col.slice(1)}</th>
                                                 ))}
                                             </tr>
@@ -841,7 +848,7 @@ const SupervisionPrincipal = () => {
                                         <Tooltip />
                                     </PieChart>
                                 </div>
-                                <div className='tabla-epp'> 
+                                <div className='tabla-epp'>
                                     <div className='TituloBarraSupervision'>
                                         <i className="fas fa-chart-bar"></i>
                                         <span>Registros por Alturas con respuesta negativa</span>
@@ -849,7 +856,7 @@ const SupervisionPrincipal = () => {
                                     <table>
                                         <thead>
                                             <tr>
-                                                {["nombre", "nombreCuadrilla", "placa","fecha", "ot", "alturasComentario"].map(col => (
+                                                {["nombre", "nombreCuadrilla", "placa", "fecha", "ot", "alturasComentario"].map(col => (
                                                     <th key={col}>{col.charAt(0).toUpperCase() + col.slice(1)}</th>
                                                 ))}
                                             </tr>
@@ -896,7 +903,7 @@ const SupervisionPrincipal = () => {
                                         <Tooltip />
                                     </PieChart>
                                 </div>
-                                <div className='tabla-epp'> 
+                                <div className='tabla-epp'>
                                     <div className='TituloBarraSupervision'>
                                         <i className="fas fa-chart-bar"></i>
                                         <span>Registros por ATS con respuesta negativa</span>
@@ -904,7 +911,7 @@ const SupervisionPrincipal = () => {
                                     <table>
                                         <thead>
                                             <tr>
-                                                {["nombre", "nombreCuadrilla", "placa","fecha", "ot", "atsComentario"].map(col => (
+                                                {["nombre", "nombreCuadrilla", "placa", "fecha", "ot", "atsComentario"].map(col => (
                                                     <th key={col}>{col.charAt(0).toUpperCase() + col.slice(1)}</th>
                                                 ))}
                                             </tr>
@@ -951,8 +958,8 @@ const SupervisionPrincipal = () => {
                                         <Tooltip />
                                     </PieChart>
                                 </div>
-                                <div className='TablasDeEmpalmes'> 
-                                    <div className='tabla-epp'> 
+                                <div className='TablasDeEmpalmes'>
+                                    <div className='tabla-epp'>
                                         <div className='TituloBarraSupervision'>
                                             <i className="fas fa-chart-bar"></i>
                                             <span>Registros de Empalmes con respuesta negativa</span>
@@ -960,7 +967,7 @@ const SupervisionPrincipal = () => {
                                         <table>
                                             <thead>
                                                 <tr>
-                                                    {["nombre", "nombreCuadrilla", "placa","fecha", "ot", "empalmesComentario"].map(col => (
+                                                    {["nombre", "nombreCuadrilla", "placa", "fecha", "ot", "empalmesComentario"].map(col => (
                                                         <th key={col}>{col.charAt(0).toUpperCase() + col.slice(1)}</th>
                                                     ))}
                                                 </tr>
@@ -985,7 +992,7 @@ const SupervisionPrincipal = () => {
                                             </tbody>
                                         </table>
                                     </div>
-                                    <div className='tabla-epp'> 
+                                    <div className='tabla-epp'>
                                         <div className='TituloBarraSupervision'>
                                             <i className="fas fa-chart-bar"></i>
                                             <span>Registros de Empalmes con respuesta positiva</span>
@@ -993,7 +1000,7 @@ const SupervisionPrincipal = () => {
                                         <table>
                                             <thead>
                                                 <tr>
-                                                    {["nombre", "nombreCuadrilla", "placa","fecha", "ot", "empalmesComentario"].map(col => (
+                                                    {["nombre", "nombreCuadrilla", "placa", "fecha", "ot", "empalmesComentario"].map(col => (
                                                         <th key={col}>{col.charAt(0).toUpperCase() + col.slice(1)}</th>
                                                     ))}
                                                 </tr>
@@ -1041,7 +1048,7 @@ const SupervisionPrincipal = () => {
                                         <Tooltip />
                                     </PieChart>
                                 </div>
-                                <div className='tabla-epp'> 
+                                <div className='tabla-epp'>
                                     <div className='TituloBarraSupervision'>
                                         <i className="fas fa-chart-bar"></i>
                                         <span>Registros por Preoperacional con respuesta negativa</span>
@@ -1049,7 +1056,7 @@ const SupervisionPrincipal = () => {
                                     <table>
                                         <thead>
                                             <tr>
-                                                {["nombre", "nombreCuadrilla", "placa","fecha", "ot", "preoperacionalComentario"].map(col => (
+                                                {["nombre", "nombreCuadrilla", "placa", "fecha", "ot", "preoperacionalComentario"].map(col => (
                                                     <th key={col}>{col.charAt(0).toUpperCase() + col.slice(1)}</th>
                                                 ))}
                                             </tr>
@@ -1096,7 +1103,7 @@ const SupervisionPrincipal = () => {
                                         <Tooltip />
                                     </PieChart>
                                 </div>
-                                <div className='tabla-epp'> 
+                                <div className='tabla-epp'>
                                     <div className='TituloBarraSupervision'>
                                         <i className="fas fa-chart-bar"></i>
                                         <span>Registros por Vehiculos con respuesta negativa</span>
@@ -1104,7 +1111,7 @@ const SupervisionPrincipal = () => {
                                     <table>
                                         <thead>
                                             <tr>
-                                                {["nombre", "nombreCuadrilla", "placa","fecha", "ot", "vehiculo","vehiculoComentario"].map(col => (
+                                                {["nombre", "nombreCuadrilla", "placa", "fecha", "ot", "vehiculo", "vehiculoComentario"].map(col => (
                                                     <th key={col}>{col.charAt(0).toUpperCase() + col.slice(1)}</th>
                                                 ))}
                                             </tr>
@@ -1157,7 +1164,7 @@ const SupervisionPrincipal = () => {
                             </div>
 
                             <div className='Observaciones'>
-                                <div className='tabla-epp' id='tabla-observaciones'> 
+                                <div className='tabla-epp' id='tabla-observaciones'>
                                     <div className='TituloBarraSupervision'>
                                         <i className="fas fa-chart-bar"></i>
                                         <span>Observaciones</span>
@@ -1165,7 +1172,7 @@ const SupervisionPrincipal = () => {
                                     <table>
                                         <thead>
                                             <tr>
-                                                {["nombre", "nombreCuadrilla", "placa","fecha", "ot", "observacion"].map(col => (
+                                                {["nombre", "nombreCuadrilla", "placa", "fecha", "ot", "observacion"].map(col => (
                                                     <th key={col}>{col.charAt(0).toUpperCase() + col.slice(1)}</th>
                                                 ))}
                                             </tr>
@@ -1191,7 +1198,7 @@ const SupervisionPrincipal = () => {
                                     </table>
                                 </div>
                             </div>
-                            
+
                         </div>
                     </div>
                     <div>
