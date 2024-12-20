@@ -35,12 +35,12 @@ const MaterialPrincipalBodega = () => {
 
         const datosMaterialDisponible = resultados
             .map(({ bodega, codigo, descrip, unimed, cantidadRestada, indComprado2 }) => ({
-                Bodega: bodega, 
-                Codigo: codigo, 
-                Descripcion: descrip, 
-                Unidad: unimed, 
+                Bodega: bodega,
+                Codigo: codigo,
+                Descripcion: descrip,
+                Unidad: unimed,
                 CantidadDisponible: cantidadRestada,
-                IndComprado: indComprado2 
+                IndComprado: indComprado2
             }))
             .filter((value, index, self) =>
                 index === self.findIndex((t) => (
@@ -181,6 +181,7 @@ const MaterialPrincipalBodega = () => {
                         </table>
                     </div>
                     <div className='Boton'>
+                        <span>Total de ítems: {datosOrdenados.length}</span>
                         <span onClick={() => {
                             setExpandidoMaterialDisponible(!expandidoMaterialDisponible);
                         }}>

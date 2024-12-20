@@ -193,6 +193,18 @@ const MaterialPrincipalSolicitudes = () => {
         }
     });
 
+    const [estadoSeleccionado, setEstadoSeleccionado] = useState("");
+
+    const manejarFiltroEstado = (estado) => {
+        setEstadoSeleccionado(estado);
+    };
+
+    const estadosUnicos = [...new Set(solicitudMaterialSinMat.map((item) => item.estado))];
+
+    const datosFiltradosPorEstado = estadoSeleccionado
+        ? datosOrdenados.filter((item) => item.estado === estadoSeleccionado)
+        : datosOrdenados;
+
     return (
         <div className='Solicitudes'>
             {loading ? (
@@ -208,6 +220,17 @@ const MaterialPrincipalSolicitudes = () => {
             ) : (
                 <>
                     <div className='Botones'>
+                        <div className="Filtros">
+                            <label>Filtrar por estado:</label>
+                            <select className='form-select' onChange={(e) => manejarFiltroEstado(e.target.value)} value={estadoSeleccionado}>
+                                <option value="">Todos</option>
+                                {estadosUnicos.map((estado) => (
+                                    <option key={estado} value={estado}>
+                                        {estado}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
                         <button className='btn btn-success' onClick={descargarArchivoSolicitudMaterial}>Descargar Solicitudes</button>
                     </div>
                     <div className='Subtitulo'>
@@ -235,14 +258,14 @@ const MaterialPrincipalSolicitudes = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {datosOrdenados.length === 0 ? (
+                                {datosFiltradosPorEstado.length === 0 ? (
                                     <tr>
                                         <td colSpan={Object.keys(solicitudMaterialSinMat[0] || {}).length} style={{ textAlign: 'center' }}>
                                             No hay registros
                                         </td>
                                     </tr>
                                 ) : (
-                                    datosOrdenados.slice(0, expandidoSolicitudMaterialSinMat ? datosOrdenados.length : 6).map((fila, index) => (
+                                    datosFiltradosPorEstado.slice(0, expandidoSolicitudMaterialSinMat ? datosFiltradosPorEstado.length : 6).map((fila, index) => (
                                         <tr key={`${fila.fecha}-${fila.cedula}-${fila.uuid}`} onClick={() => manejarClickFilaSolicitudMaterial(fila)}>
                                             {Object.values(fila).map((valor, idx) => (
                                                 <td key={idx} onClick={() => manejarClickFilaSolicitudMaterial(fila)}>
@@ -256,6 +279,7 @@ const MaterialPrincipalSolicitudes = () => {
                         </table>
                     </div>
                     <div className='Boton'>
+                        <span>Total de ítems: {datosFiltradosPorEstado.length}</span>
                         <span onClick={() => {
                             setExpandidoSolicitudMaterialSinMat(!expandidoSolicitudMaterialSinMat);
                         }}>

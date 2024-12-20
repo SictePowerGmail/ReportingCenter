@@ -115,10 +115,28 @@
 
             .Botones {
                 display: flex !important;
-                justify-content: end;
+                justify-content: space-between;
                 align-items: center;
                 width: 100%;
                 margin-bottom: 5px;
+
+                .Filtros {
+                    display: flex;
+                    justify-content: flex-start;
+                    align-items: center;
+
+                    label {
+                        margin-right: 5px !important;
+                        font-size: 13px;
+                        font-weight: 700;
+                        margin: 0;
+                    }
+
+                    select {
+                        font-size: 13px;
+                        width: auto;
+                    }
+                }
             }
 
             .Subtitulo {
@@ -201,7 +219,7 @@
             .Boton {
                 display: flex !important;
                 align-items: center;
-                justify-content: end;
+                justify-content: space-between;
                 margin-top: 10px;
                 margin-bottom: 20px;
                 width: 100%;

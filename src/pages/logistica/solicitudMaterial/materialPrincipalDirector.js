@@ -421,6 +421,7 @@ const MaterialPrincipalDirector = () => {
                         </table>
                     </div>
                     <div className='Boton'>
+                        <span>Total de ítems: {datosOrdenadosPendienteDirector.length}</span>
                         <span onClick={() => {
                             setExpandidoPendDirectSinMat(!expandidoPendDirectSinMat);
                         }}>
@@ -482,6 +483,7 @@ const MaterialPrincipalDirector = () => {
                         </table>
                     </div>
                     <div className='Boton'>
+                        <span>Total de ítems: {datosOrdenadosAprobacionDirector.length}</span>
                         <span onClick={() => {
                             setExpandidoAprobacionDirectSinMat(!expandidoAprobacionDirectSinMat);
                         }}>
@@ -543,6 +545,7 @@ const MaterialPrincipalDirector = () => {
                         </table>
                     </div>
                     <div className='Boton'>
+                        <span>Total de ítems: {datosOrdenadosRechazadoDirector.length}</span>
                         <span onClick={() => {
                             setExpandidoRechazadoDirectSinMat(!expandidoRechazadoDirectSinMat);
                         }}>

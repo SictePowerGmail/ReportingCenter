@@ -406,6 +406,7 @@ const MaterialPrincipalDireccion = () => {
                         </table>
                     </div>
                     <div className='Boton'>
+                        <span>Total de ítems: {datosOrdenadosPendienteDireccionOperacion.length}</span>
                         <span onClick={() => {
                             setExpandidoPendDireccOperaSinMat(!expandidoPendDireccOperaSinMat);
                         }}>
@@ -469,6 +470,7 @@ const MaterialPrincipalDireccion = () => {
                         </table>
                     </div>
                     <div className='Boton'>
+                        <span>Total de ítems: {datosOrdenadosAprobacionDireccionOperacion.length}</span>
                         <span onClick={() => {
                             setExpandidoAprobacionDireccOperaSinMat(!expandidoAprobacionDireccOperaSinMat);
                         }}>
@@ -530,6 +532,7 @@ const MaterialPrincipalDireccion = () => {
                         </table>
                     </div>
                     <div className='Boton'>
+                        <span>Total de ítems: {datosOrdenadosRechazadoDireccionOperacion.length}</span>
                         <span onClick={() => {
                             setExpandidoRechazadoDireccOperaSinMat(!expandidoRechazadoDireccOperaSinMat);
                         }}>

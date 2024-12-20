@@ -427,6 +427,7 @@ const MaterialPrincipalLogistica = () => {
                         </table>
                     </div>
                     <div className='Boton'>
+                        <span>Total de ítems: {datosOrdenadosPendienteAnalista.length}</span>
                         <span onClick={() => {
                             setExpandidoPendAnalistaSinMat(!expandidoPendAnalistaSinMat);
                         }}>
@@ -490,6 +491,7 @@ const MaterialPrincipalLogistica = () => {
                         </table>
                     </div>
                     <div className='Boton'>
+                        <span>Total de ítems: {datosOrdenadosAprobacionAnalista.length}</span>
                         <span onClick={() => {
                             setExpandidoAprobacionAnalistaSinMat(!expandidoAprobacionAnalistaSinMat);
                         }}>
@@ -553,6 +555,7 @@ const MaterialPrincipalLogistica = () => {
                         </table>
                     </div>
                     <div className='Boton'>
+                        <span>Total de ítems: {datosOrdenadosRechazadoAnalista.length}</span>
                         <span onClick={() => {
                             setExpandidoRechazadoAnalistaSinMat(!expandidoRechazadoAnalistaSinMat);
                         }}>
