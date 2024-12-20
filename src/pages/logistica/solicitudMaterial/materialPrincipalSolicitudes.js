@@ -35,6 +35,8 @@ const MaterialPrincipalSolicitudes = () => {
                         estado = "Rechazado por Director";
                     } else if (item.aprobacionDireccionOperacion === "Rechazado") {
                         estado = "Rechazado por Direccion";
+                    } else if (item.estadoProyecto === "Cerrado") {
+                        estado = "Solicitud Cerrada";
                     } else if (cantidadDisponible < cantidadRestante) {
                         estado = "Desabastecido";
                     } else if (item.aprobacionAnalista === "Pendiente") {
@@ -152,7 +154,7 @@ const MaterialPrincipalSolicitudes = () => {
         setVentanaAbiertaSolicitudMaterial(true);
     };
 
-    const manejarCerrarModalSolicitudMaterial = () => {
+    const manejarCerrarModalSolicitudMaterial = async () => {
         setVentanaAbiertaSolicitudMaterial(false);
         setFilaSeleccionadaSolicitudMaterial(null);
         setLoading(true);
@@ -222,8 +224,11 @@ const MaterialPrincipalSolicitudes = () => {
                                             <br />
                                             <input
                                                 type="text"
+                                                value={filtradoSolicitudMaterialSinMat[columna] || ''}
                                                 onClick={(e) => e.stopPropagation()}
-                                                onChange={(e) => manejarCambioFiltroSolicitudMaterial(columna, e.target.value)}
+                                                onChange={(e) => {
+                                                    manejarCambioFiltroSolicitudMaterial(columna, e.target.value);
+                                                }}
                                             />
                                         </th>
                                     ))}

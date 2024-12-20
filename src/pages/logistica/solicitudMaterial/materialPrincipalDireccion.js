@@ -376,6 +376,7 @@ const MaterialPrincipalDireccion = () => {
                                             <br />
                                             <input
                                                 type="text"
+                                                value={filtradoPendDireccOperaSinMat[columna] || ''}
                                                 onClick={(e) => e.stopPropagation()}
                                                 onChange={(e) => manejarCambioFiltroPendienteDireccionOperacion(columna, e.target.value)}
                                             />
@@ -438,6 +439,7 @@ const MaterialPrincipalDireccion = () => {
                                             <br />
                                             <input
                                                 type="text"
+                                                value={filtradoAprobacionDireccOperaSinMat[columna] || ''}
                                                 onClick={(e) => e.stopPropagation()}
                                                 onChange={(e) => manejarCambioFiltroAprobacionDireccionOperacion(columna, e.target.value)}
                                             />
@@ -498,6 +500,7 @@ const MaterialPrincipalDireccion = () => {
                                             <br />
                                             <input
                                                 type="text"
+                                                value={filtradoRechazadoDireccOperaSinMat[columna] || ''}
                                                 onClick={(e) => e.stopPropagation()}
                                                 onChange={(e) => manejarCambioFiltroRechazadoDireccionOperacion(columna, e.target.value)}
                                             />

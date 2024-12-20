@@ -301,6 +301,7 @@ const MaterialPrincipalEntregaBodega = () => {
                                             <br />
                                             <input
                                                 type="text"
+                                                value={filtrosComunes[columna] || ''}
                                                 onClick={(e) => e.stopPropagation()}
                                                 onChange={(e) => manejarCambioFiltroComun(columna, e.target.value)}
                                             />
@@ -361,6 +362,7 @@ const MaterialPrincipalEntregaBodega = () => {
                                             <br />
                                             <input
                                                 type="text"
+                                                value={filtrosComunes[columna] || ''}
                                                 onClick={(e) => e.stopPropagation()}
                                                 onChange={(e) => manejarCambioFiltroComun(columna, e.target.value)}
                                             />
@@ -421,6 +423,7 @@ const MaterialPrincipalEntregaBodega = () => {
                                             <br />
                                             <input
                                                 type="text"
+                                                value={filtrosComunes[columna] || ''}
                                                 onClick={(e) => e.stopPropagation()}
                                                 onChange={(e) => manejarCambioFiltroComun(columna, e.target.value)}
                                             />

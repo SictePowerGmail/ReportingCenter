@@ -397,6 +397,7 @@ const MaterialPrincipalLogistica = () => {
                                             <br />
                                             <input
                                                 type="text"
+                                                value={filtradoPendAnalistaSinMat[columna] || ''}
                                                 onClick={(e) => e.stopPropagation()}
                                                 onChange={(e) => manejarCambioFiltroPendienteAnalista(columna, e.target.value)}
                                             />
@@ -459,6 +460,7 @@ const MaterialPrincipalLogistica = () => {
                                             <br />
                                             <input
                                                 type="text"
+                                                value={filtradoAprobacionAnalistaSinMat[columna] || ''}
                                                 onClick={(e) => e.stopPropagation()}
                                                 onChange={(e) => manejarCambioFiltroAprobacionAnalista(columna, e.target.value)}
                                             />
@@ -521,6 +523,7 @@ const MaterialPrincipalLogistica = () => {
                                             <br />
                                             <input
                                                 type="text"
+                                                value={filtradoRechazadoAnalistaSinMat[columna] || ''}
                                                 onClick={(e) => e.stopPropagation()}
                                                 onChange={(e) => manejarCambioFiltroRechazadoAnalista(columna, e.target.value)}
                                             />

@@ -391,6 +391,7 @@ const MaterialPrincipalDirector = () => {
                                             <br />
                                             <input
                                                 type="text"
+                                                value={filtradoPendDirectSinMat[columna] || ''}
                                                 onClick={(e) => e.stopPropagation()}
                                                 onChange={(e) => manejarCambioFiltroPendienteDirector(columna, e.target.value)}
                                             />
@@ -451,6 +452,7 @@ const MaterialPrincipalDirector = () => {
                                             <br />
                                             <input
                                                 type="text"
+                                                value={filtradoAprobacionDirectSinMat[columna] || ''}
                                                 onClick={(e) => e.stopPropagation()}
                                                 onChange={(e) => manejarCambioFiltroAprobacionDirector(columna, e.target.value)}
                                             />
@@ -511,6 +513,7 @@ const MaterialPrincipalDirector = () => {
                                             <br />
                                             <input
                                                 type="text"
+                                                value={filtradoRechazadoDirectSinMat[columna] || ''}
                                                 onClick={(e) => e.stopPropagation()}
                                                 onChange={(e) => manejarCambioFiltroRechazadoDirector(columna, e.target.value)}
                                             />
