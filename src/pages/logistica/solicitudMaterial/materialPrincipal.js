@@ -194,6 +194,7 @@ const MaterialPrincipal = () => {
 
             const datosFiltradosRegistrosSolicitudMaterialPendienteDespacho = responseRegistrosSolicitudMaterial.data.filter(item =>
                 item.ciudad === ciudadElgida &&
+                item.estadoProyecto === "Abierto" &&
                 item.entregaBodega === "Entregado"
             );
 
@@ -253,7 +254,15 @@ const MaterialPrincipal = () => {
 
             const codigosNegativos = datosRestados.map(item => item.codigo);
 
-            const registrosFiltrados = datosFiltradosRegistrosSolicitudMaterial.filter(item =>
+            const datosFiltradosRegistrosSolicitudMaterialCompleto = responseRegistrosSolicitudMaterial.data.filter(item =>
+                item.ciudad === ciudadElgida &&
+                item.aprobacionAnalista !== "Rechazado" &&
+                item.aprobacionDirector !== "Rechazado" &&
+                item.aprobacionDireccionOperacion !== "Rechazado" &&
+                item.estadoProyecto === "Abierto"
+            );
+
+            const registrosFiltrados = datosFiltradosRegistrosSolicitudMaterialCompleto.filter(item =>
                 codigosNegativos.includes(item.codigoSapMaterial)
             );
 

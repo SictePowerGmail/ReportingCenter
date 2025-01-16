@@ -89,7 +89,6 @@ export const calculoMaterial = async (ciudadElgida) => {
         const datosRestados = datosFiltradosKgprod.map(itemKgprod => {
             const codigo = itemKgprod.codigo;
             const cantidadDisponible = parseInt(itemKgprod.candisp, 10) || 0;
-
             const cantidadSolicitada = Math.max(0, dinamicaRegistrosSolicitudMaterial[codigo] || 0);
             const cantidadEntregada = Math.max(0, dinamicaRegistrosEntregaSolicitudMaterial[codigo] || 0);
             const cantidadPendienteDespacho = Math.max(0, dinamicaRegistrosSolicitudMaterialPendienteDespacho[codigo] || 0);

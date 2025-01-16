@@ -34,12 +34,13 @@ const MaterialPrincipalBodega = () => {
         setResultadoMaterialDisponible(resultados);
 
         const datosMaterialDisponible = resultados
-            .map(({ bodega, codigo, descrip, unimed, cantidadRestada, indComprado2 }) => ({
+            .map(({ bodega, codigo, descrip, unimed, cantidadDisponible, cantidadSolicitada, cantidadPendienteDespacho, indComprado2 }) => ({
                 Bodega: bodega,
                 Codigo: codigo,
                 Descripcion: descrip,
                 Unidad: unimed,
-                CantidadDisponible: cantidadRestada,
+                CantidadDisponible: cantidadDisponible,
+                CantidadReservada: cantidadSolicitada + cantidadPendienteDespacho,
                 IndComprado: indComprado2
             }))
             .filter((value, index, self) =>
