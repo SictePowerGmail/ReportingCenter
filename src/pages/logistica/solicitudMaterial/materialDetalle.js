@@ -356,12 +356,12 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
                 updatedDataConEstado2.reduce((acc, pdfItem) => {
                     const producto = pdfItem.PRODUCTO.trim();
                     const cantidad = parseFloat(pdfItem.CANTIDAD) || 0;
-            
+
                     if (!acc[producto]) {
                         acc[producto] = { PRODUCTO: producto, CANTIDAD: 0 };
                     }
                     acc[producto].CANTIDAD += cantidad;
-            
+
                     return acc;
                 }, {})
             );
@@ -564,11 +564,24 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
 
                         <div className='LecturaPDFs'>
                             {(pdfData.length === 0 && fila[0].entregaBodega === "Pendiente" && pantalla === "EntregaBodega" && rolUsuario !== "LOGISTICA") && (
-                                <div className='EntradaPDFs'>
-                                    <span>Por favor agregue los PDFs de las salidas de material</span>
-                                    <div className='inputPDFs'>
-                                        <input type="file" accept="application/pdf" multiple onChange={lecturaDePDFs} ref={pdfInputRef} />
+                                <div className='panelDivisor'>
+                                    <div className='EntradaPDFs'>
+                                        <span>Por favor agregue los PDFs de las salidas de material</span>
+                                        <div className='inputPDFs'>
+                                            <input type="file" accept="application/pdf" multiple onChange={lecturaDePDFs} ref={pdfInputRef} />
+                                        </div>
                                     </div>
+
+                                    {pantalla === "EntregaBodega" && fila[0].entregaBodega === "Pendiente" && rolUsuario === "admin" && fila[0].estadoProyecto === "Abierto" && proyectoCerradoEstado !== "Cerrado" && (
+                                        <button className='btn btn-danger'
+                                            title='Copiar Texto'
+                                            onClick={() => {
+                                                manejarCierreProyecto();
+                                            }}
+                                        >
+                                            Cerrar Solicitud
+                                        </button>
+                                    )}
                                 </div>
                             )}
                             {pdfsUrl.length > 0 && (
