@@ -121,7 +121,6 @@ const ReporteMaterialDetalle = ({ isOpen, onClose, fila }) => {
                                 <table>
                                     <thead>
                                         <tr>
-                                            <th>Tipo Actividad</th>
                                             <th>Codigo Sap</th>
                                             <th>Descripción de Material</th>
                                             <th>Unidad de Medida</th>
@@ -132,7 +131,6 @@ const ReporteMaterialDetalle = ({ isOpen, onClose, fila }) => {
                                     <tbody>
                                         {fila.map((item) => (
                                             <tr key={item.id}>
-                                                <td data-label="Tipo Actividad"><span>{item.tipoActividad}</span></td>
                                                 <td data-label="Codigo Sap"><span>{item.codigoSap}</span></td>
                                                 <td data-label="Descripcion de Material"><span>{item.descripcion}</span></td>
                                                 <td data-label="Unidad de Medida"><span>{item.unidadMedida}</span></td>

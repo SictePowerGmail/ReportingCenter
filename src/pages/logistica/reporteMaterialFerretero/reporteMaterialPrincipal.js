@@ -26,7 +26,7 @@ const ReporteMaterialPrincipal = () => {
     const [filaSeleccionadaReporteMaterialTecnicoSinMat, setFilaSeleccionadaReporteMaterialTecnicoSinMat] = useState(null);
 
     const cargarDatosReporteMaterialTecnico = () => {
-        axios.get('https://sicteferias.from-co.net:8120/reporteMaterialTecnico/obtenerReporteMaterialTecnico')
+        axios.get('https://sicteferias.from-co.net:8120/reporteMaterialFerretero/obtenerReporteMaterialFerretero')
             .then(response => {
                 let datos = response.data;
                 datos.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
@@ -177,7 +177,7 @@ const ReporteMaterialPrincipal = () => {
                     </div>
 
                     <div className='Titulo'>
-                        <h2>Reporte de Material Tecnico</h2>
+                        <h2>Reporte de Material Ferretero</h2>
                     </div>
 
                     <div className='menuNavegacion'>
@@ -250,6 +250,7 @@ const ReporteMaterialPrincipal = () => {
                                 </table>
                             </div>
                             <div className='Boton'>
+                                <span>Total de ítems: {datosFiltradosReporteMaterialTecnicoSinMat.length}</span>
                                 <span onClick={() => {
                                     setExpandidoReporteMaterialTecnicoSinMat(!expandidoReporteMaterialTecnicoSinMat);
                                 }}>

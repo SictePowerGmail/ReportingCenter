@@ -27,8 +27,6 @@ const ReporteMaterialAgregar = () => {
     const [responsableEntradaTexto, setResponsableEntradaTexto] = useState(Cookies.get('repMatResponsable'));
     const [nodoEntradaTexto, setNodoEntradaTexto] = useState(Cookies.get('repMatNodo'));
     const [filasTabla, setFilasTabla] = useState([]);
-    const tipoActividad = ['Instalacion', 'Desmonte'];
-    const [tipo, setTipo] = useState('');
     const [codigoSap, setCodigoSap] = useState('');
     const [descripcion, setDescripcion] = useState('');
     const [unidadMedida, setUnidadMedida] = useState('');
@@ -109,7 +107,7 @@ const ReporteMaterialAgregar = () => {
             for (const fila of filasTabla) {
                 const { tipo, codigoSap, descripcion, unidadMedida, cantidad, serial } = fila;
 
-                await axios.post("https://sicteferias.from-co.net:8120/reporteMaterialTecnico/cargarDatosReporteMaterialTecnico", {
+                await axios.post("https://sicteferias.from-co.net:8120/reporteMaterialFerretero/cargarDatosReporteMaterialFerretero", {
                     fecha: fechaCorregida,
                     cedula: cedulaUsuario,
                     nombre: nombreUsuario,
@@ -163,7 +161,7 @@ const ReporteMaterialAgregar = () => {
     }, []);
 
     const agregarFila = () => {
-        if (!tipo || !codigoSap || !descripcion || !unidadMedida || !cantidad || (!serialRequerido && !serial)) {
+        if (!codigoSap || !descripcion || !unidadMedida || !cantidad || (!serialRequerido && !serial)) {
             alert("Todos los campos son obligatorios");
             return;
         }
@@ -175,16 +173,15 @@ const ReporteMaterialAgregar = () => {
 
         let nuevaFila;
         if (serialRequerido && !serial) {
-            nuevaFila = { tipo, codigoSap, descripcion, unidadMedida, cantidad, serial: "No requiere Serial" };
+            nuevaFila = { codigoSap, descripcion, unidadMedida, cantidad, serial: "No requiere Serial" };
         } else {
-            nuevaFila = { tipo, codigoSap, descripcion, unidadMedida, cantidad, serial };
+            nuevaFila = { codigoSap, descripcion, unidadMedida, cantidad, serial };
         }
 
         const filasActualizadas = [...filasTabla, nuevaFila];
         Cookies.set('repMatFilas', JSON.stringify(filasActualizadas), { expires: 7 });
         setFilasTabla(filasActualizadas);
 
-        setTipo('');
         setCodigoSap('');
         setDescripcion('');
         setUnidadMedida('');
@@ -208,7 +205,7 @@ const ReporteMaterialAgregar = () => {
             const responseKgprod = await axios.get('https://sicteferias.from-co.net:8120/bodega/kgprod');
             let ciudadKgprod = ['KGPROD_RED_BOG'];
 
-            const datosFiltradosKgprod = ciudadKgprod.length ? responseKgprod.data.filter(item => ciudadKgprod.includes(item.bodega)) : responseKgprod.data;
+            const datosFiltradosKgprod = ciudadKgprod.length ? responseKgprod.data.filter(item => ciudadKgprod.includes(item.bodega) && item.indComprado2 === 'S') : responseKgprod.data;
             setDataKgprod(datosFiltradosKgprod);
 
             const responseLconsum = await axios.get('https://sicteferias.from-co.net:8120/bodega/lconsum');
@@ -217,7 +214,7 @@ const ReporteMaterialAgregar = () => {
             const datosFiltradosLconsum = ciudadLconsum.length ? responseLconsum.data.filter(item => ciudadLconsum.includes(item.bodega)) : responseLconsum.data;
             setDataLconsum(datosFiltradosLconsum);
 
-            const responseReportes = await axios.get('https://sicteferias.from-co.net:8120/reporteMaterialTecnico/obtenerReporteMaterialTecnico')
+            const responseReportes = await axios.get('https://sicteferias.from-co.net:8120/reporteMaterialFerretero/obtenerReporteMaterialFerretero')
             const ots = responseReportes.data.map(item => item.ot);
             setOtsExistentes(ots);
 
@@ -344,7 +341,7 @@ const ReporteMaterialAgregar = () => {
                     ) : (
                         <form className='Formulario'>
                             <div className='Titulo'>
-                                <h3>Reporte de Material Tecnico</h3>
+                                <h3>Reporte de Material Ferretero</h3>
                             </div>
 
                             <div className='contenido'>
@@ -360,8 +357,8 @@ const ReporteMaterialAgregar = () => {
 
                                 <div className='Solicitante'>
                                     <div className='Subtitulo'>
-                                        <i className="fas fa-calendar-alt"></i>
-                                        <h5>Nombre Solicitante</h5>
+                                        <i className="fas fa-user"></i>
+                                        <h5>Nombre Supervisor</h5>
                                     </div>
                                     <input type="text" disabled
                                         value={nombreUsuario}
@@ -370,7 +367,7 @@ const ReporteMaterialAgregar = () => {
 
                                 <div className='Ot'>
                                     <div className='Subtitulo'>
-                                        <i className="fas fa-calendar-alt"></i>
+                                        <i className="fas fa-tools"></i>
                                         <h5>OT</h5>
                                     </div>
                                     <input type="text"
@@ -382,7 +379,7 @@ const ReporteMaterialAgregar = () => {
 
                                 <div className='CodigoMovil'>
                                     <div className='Subtitulo'>
-                                        <i className="fas fa-calendar-alt"></i>
+                                        <i className="fas fa-tag"></i>
                                         <h5>Codigo Movil</h5>
                                     </div>
                                     <input type="text"
@@ -398,7 +395,7 @@ const ReporteMaterialAgregar = () => {
 
                                 <div className='Movil'>
                                     <div className='Subtitulo'>
-                                        <i className="fas fa-calendar-alt"></i>
+                                        <i className="fas fa-car"></i>
                                         <h5>Movil</h5>
                                     </div>
                                     <input
@@ -444,7 +441,7 @@ const ReporteMaterialAgregar = () => {
                             <div className='contenido'>
                                 <div className='Responsable'>
                                     <div className='Subtitulo'>
-                                        <i className="fas fa-calendar-alt"></i>
+                                        <i className="fas fa-user-check"></i>
                                         <h5>Responsable</h5>
                                     </div>
                                     <input type="text"
@@ -460,7 +457,7 @@ const ReporteMaterialAgregar = () => {
 
                                 <div className='Nodo'>
                                     <div className='Subtitulo'>
-                                        <i className="fas fa-calendar-alt"></i>
+                                        <i className="fas fa-project-diagram"></i>
                                         <h5>Nodo</h5>
                                     </div>
                                     <input type="text"
@@ -491,7 +488,6 @@ const ReporteMaterialAgregar = () => {
                                 <table>
                                     <thead>
                                         <tr>
-                                            <th>Tipo de Actividad</th>
                                             <th>Codigo SAP</th>
                                             <th>Descripción del Material</th>
                                             <th>Unidad de Medida</th>
@@ -502,14 +498,6 @@ const ReporteMaterialAgregar = () => {
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td data-label="Tipo de Actividad">
-                                                <select value={tipo} onChange={(e) => setTipo(e.target.value)}>
-                                                    <option value="">Seleccione</option>
-                                                    {tipoActividad.map((actividad) => (
-                                                        <option key={actividad} value={actividad}>{actividad}</option>
-                                                    ))}
-                                                </select>
-                                            </td>
                                             <td data-label="Codigo SAP">
                                                 <input
                                                     type="text"
@@ -611,7 +599,6 @@ const ReporteMaterialAgregar = () => {
                                         <table>
                                             <thead>
                                                 <tr>
-                                                    <th>Tipo de Actividad</th>
                                                     <th>Codigo SAP</th>
                                                     <th>Descripción del Material</th>
                                                     <th>Unidad de Medida</th>
@@ -623,7 +610,6 @@ const ReporteMaterialAgregar = () => {
                                             <tbody>
                                                 {filasTabla.map((fila, index) => (
                                                     <tr key={index}>
-                                                        <td data-label="Tipo de Actividad"><span>{fila.tipo}</span></td>
                                                         <td data-label="Codigo Sap"><span>{fila.codigoSap}</span></td>
                                                         <td data-label="Descripion del Material"><span>{fila.descripcion}</span></td>
                                                         <td data-label="Unidad de Medida"><span>{fila.unidadMedida}</span></td>

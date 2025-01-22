@@ -189,7 +189,7 @@ const ReporteMaterialLogin = () => {
                 )}
 
                 <div className='Version'>
-                    <p>v1.05</p>
+                    <p>v1.06</p>
                 </div>
             </div>
             <div className='Notificaciones'>
