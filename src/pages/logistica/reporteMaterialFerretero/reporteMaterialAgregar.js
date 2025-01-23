@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './reporteMaterialAgregar.css'
 import 'leaflet/dist/leaflet.css';
@@ -9,6 +9,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ThreeDots } from 'react-loader-spinner';
 import Cookies from 'js-cookie';
+import SignatureCanvas from "react-signature-canvas";
 
 const ReporteMaterialAgregar = () => {
     const navigate = useNavigate();
@@ -32,6 +33,7 @@ const ReporteMaterialAgregar = () => {
     const [unidadMedida, setUnidadMedida] = useState('');
     const [cantidad, setCantidad] = useState('');
     const [serial, setSerial] = useState('');
+    const [firma, setFirma] = useState(null);
 
     const formatDate = (date) => {
         const day = date.getDate().toString().padStart(2, '0');
@@ -41,6 +43,16 @@ const ReporteMaterialAgregar = () => {
         const minutes = date.getMinutes().toString().padStart(2, '0');
 
         return `${year}-${month}-${day} ${hours}:${minutes}`;
+    };
+
+    const formatDate2 = (date) => {
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const year = date.getFullYear();
+        const hours = date.getHours().toString().padStart(2, '0');
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+        
+        return `${year}-${month}-${day} ${hours}-${minutes}`;
     };
 
     const enviarFormulario = async (event) => {
@@ -88,7 +100,6 @@ const ReporteMaterialAgregar = () => {
         }
 
         if (filasTabla.some(fila =>
-            !fila.tipo ||
             !fila.codigoSap ||
             !fila.descripcion ||
             !fila.unidadMedida ||
@@ -99,13 +110,26 @@ const ReporteMaterialAgregar = () => {
             return;
         }
 
+        try {
+            const result = await validarImagen();
+            if (!result) {
+                toast.error('Por favor firmar con Nombre y Cedula.', { className: 'toast-error' });
+                return;
+            }
+
+        } catch (error) {
+            toast.error(`Hubo un error al validar la imagen: ${error.message || error}`, { className: 'toast-error' });
+        }
+
         setEnviando(true)
 
         const fechaCorregida = formatDate(fecha);
+        const fechaCorregidaImagen = formatDate2(fecha);
+        const nombreImagen = `${fechaCorregidaImagen}_${otEntradaTexto}_${nombreUsuario}.png`
 
         try {
             for (const fila of filasTabla) {
-                const { tipo, codigoSap, descripcion, unidadMedida, cantidad, serial } = fila;
+                const { codigoSap, descripcion, unidadMedida, cantidad, serial } = fila;
 
                 await axios.post("https://sicteferias.from-co.net:8120/reporteMaterialFerretero/cargarDatosReporteMaterialFerretero", {
                     fecha: fechaCorregida,
@@ -116,13 +140,36 @@ const ReporteMaterialAgregar = () => {
                     movil: movilEntradaTexto,
                     responsable: responsableEntradaTexto,
                     nodo: nodoEntradaTexto,
-                    tipoActividad: tipo,
                     codigoSap: codigoSap,
                     descripcion: descripcion,
                     unidadMedida: unidadMedida,
                     cantidad: cantidad,
-                    serial: serial
+                    serial: serial,
+                    firma: nombreImagen,
                 });
+            }
+
+            const blob = await (await fetch(firma)).blob(); // Convierte el DataURL a un Blob
+            const file = new File([blob], 'firma.png', { type: 'image/png' });
+
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('filename', nombreImagen);
+
+            try {
+                const response = await axios.post('https://sicteferias.from-co.net:8120/reporteMaterialFerretero/cargarDatosReporteMaterialFerreteroFirma', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                });
+
+                if (response.status === 200) {
+                    console.log('Imagen enviada correctamente');
+                } else {
+                    console.error('Error al enviar la imagen');
+                }
+            } catch (error) {
+                console.error('Error al enviar la imagen:', error);
             }
 
             Cookies.set('repMatOt', "", { expires: 7 });
@@ -312,6 +359,60 @@ const ReporteMaterialAgregar = () => {
         }
 
         Cookies.set('repMatOt', valor, { expires: 7 });
+    };
+
+    const sigCanvas = useRef(null);
+
+    const clear = () => {
+        sigCanvas.current.clear();
+    };
+
+    const validarImagen = async () => {
+        const dataURL = sigCanvas.current.toDataURL();
+        const img = new Image();
+        img.src = dataURL;
+
+        return new Promise((resolve, reject) => {
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+
+                canvas.width = img.width;
+                canvas.height = img.height;
+
+                ctx.drawImage(img, 0, 0);
+
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const pixels = imageData.data;
+
+                let hasBlackPixel = false;
+
+                for (let i = 0; i < pixels.length; i += 4) {
+                    const r = pixels[i];
+                    const g = pixels[i + 1];
+                    const b = pixels[i + 2];
+                    const a = pixels[i + 3];
+
+                    if (r === 0 && g === 0 && b === 0 && a !== 0) {
+                        hasBlackPixel = true;
+                        break;
+                    }
+                }
+
+                resolve(hasBlackPixel);
+            };
+
+            img.onerror = (error) => {
+                reject(error);
+            };
+        });
+    };
+
+    const guardarFirmaEnCambio = () => {
+        if (sigCanvas.current) {
+            const dataURL = sigCanvas.current.toDataURL();
+            setFirma(dataURL);
+        }
     };
 
     return (
@@ -620,6 +721,28 @@ const ReporteMaterialAgregar = () => {
                                                 ))}
                                             </tbody>
                                         </table>
+                                    </div>
+
+                                    <div className='lineaHorizaontal'></div>
+
+                                    <div className='SubTitulo'>
+                                        <h4>A continuacion firme con Nombre y Cedula</h4>
+                                    </div>
+
+                                    <div className='firmaSupervisor'>
+                                        <div className="canvasWrapper">
+                                            <SignatureCanvas
+                                                ref={sigCanvas}
+                                                penColor="black"
+                                                canvasProps={{
+                                                    className: "signatureCanvas"
+                                                }}
+                                                onEnd={guardarFirmaEnCambio}
+                                            />
+                                        </div>
+                                        <div className='botones'>
+                                            <button className='btn btn-secondary' onClick={clear}>Limpiar</button>
+                                        </div>
                                     </div>
 
                                     <div className='Enviar'>

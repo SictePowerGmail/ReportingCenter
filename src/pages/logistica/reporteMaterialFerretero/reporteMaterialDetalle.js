@@ -7,11 +7,45 @@ import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const ReporteMaterialDetalle = ({ isOpen, onClose, fila }) => {
     const navigate = useNavigate();
     const contenidoRef = useRef(null);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [imageUrl, setImageUrl] = useState('');
+
+    const obtenerImage = async () => {
+        try {
+            if (!fila || fila.length === 0) {
+                return null;
+            }
+
+            const imageName = fila[0].firma;
+
+            const response = await axios.get(
+                `https://sicteferias.from-co.net:8120/reporteMaterialFerretero/obtenerReporteMaterialFerreteroFirma`,
+                {
+                    params: { imageName },
+                    responseType: 'blob',
+                }
+            );
+
+            if (response.data.size === 0) {
+                console.error('Received an empty image blob');
+                return null;
+            }
+
+            const imageUrl = URL.createObjectURL(response.data);
+            setImageUrl(imageUrl);
+
+        } catch (error) {
+            console.error('Error fetching image:', error);
+            return null;
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
         const cedulaUsuario = Cookies.get('userCedula');
@@ -21,6 +55,10 @@ const ReporteMaterialDetalle = ({ isOpen, onClose, fila }) => {
             navigate('/MaterialLogin', { state: { estadoNotificacion: false } });
         }
     }, []);
+
+    useEffect(() => {
+        obtenerImage();
+    }, [fila]);
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -38,7 +76,7 @@ const ReporteMaterialDetalle = ({ isOpen, onClose, fila }) => {
 
     const generarPDF = async () => {
         const elemento = document.getElementById('contenido-pdf');
-        
+
         const estiloOriginal = document.createElement('style');
         estiloOriginal.innerHTML = `
             #contenido-pdf td::before {
@@ -46,27 +84,27 @@ const ReporteMaterialDetalle = ({ isOpen, onClose, fila }) => {
             }
         `;
         document.head.appendChild(estiloOriginal);
-    
+
         try {
             const canvas = await html2canvas(elemento, {
                 scale: 2,
                 windowWidth: 1400,
             });
-    
+
             const imgData = canvas.toDataURL('image/png');
             const pdf = new jsPDF('p', 'mm', 'a4');
-    
-            const margin = 10; 
+
+            const margin = 10;
             const pdfWidth = pdf.internal.pageSize.getWidth() - margin * 2;
             const pdfHeight = pdf.internal.pageSize.getHeight() - margin * 2;
-    
+
             const imgProps = pdf.getImageProperties(imgData);
-            const imgWidth = pdfWidth; 
+            const imgWidth = pdfWidth;
             const imgHeight = (imgProps.height * imgWidth) / imgProps.width;
-    
+
             const x = margin;
             const y = margin;
-    
+
             pdf.addImage(imgData, 'PNG', x, y, imgWidth, imgHeight);
             pdf.save(`Detalle Registro OT${fila[0].ot}.pdf`);
         } finally {
@@ -140,6 +178,15 @@ const ReporteMaterialDetalle = ({ isOpen, onClose, fila }) => {
                                         ))}
                                     </tbody>
                                 </table>
+                            </div>
+
+                            <div className='Firma'>
+                                <span>Firma del Supervisor</span>
+                                {imageUrl ? (
+                                    <img src={imageUrl} alt="Imagen cargada" className='imagen' />
+                                ) : (
+                                    <p>Cargando imagen...</p>
+                                )}
                             </div>
                         </div>
 
