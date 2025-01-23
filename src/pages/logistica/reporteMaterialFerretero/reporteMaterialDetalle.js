@@ -75,6 +75,7 @@ const ReporteMaterialDetalle = ({ isOpen, onClose, fila }) => {
     }, [onClose]);
 
     const generarPDF = async () => {
+        setLoading(true);
         const elemento = document.getElementById('contenido-pdf');
 
         const estiloOriginal = document.createElement('style');
@@ -109,6 +110,7 @@ const ReporteMaterialDetalle = ({ isOpen, onClose, fila }) => {
             pdf.save(`Detalle Registro OT${fila[0].ot}.pdf`);
         } finally {
             document.head.removeChild(estiloOriginal);
+            setLoading(false);
         }
     };
 
