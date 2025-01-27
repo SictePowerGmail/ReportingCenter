@@ -21,6 +21,9 @@ import OperacionesFacturacion from '../pages/facturacion/OperacionesFacturacion'
 import MinticFacturacion from '../pages/facturacion/MinticFacturacion';
 import SeguimientoMintic from "../pages/facturacion/SeguimientoMintic";
 import SMU from '../pages/facturacion/SMU';
+import ImplementacionesFacturacion from "../pages/facturacion/ImplementacionesFacturacion";
+import MedicionesFacturacion from "../pages/facturacion/MedicionesFacturacion";
+import ObraCivilFacturacion from "../pages/facturacion/ObraCivilFacturacion";
 /* Produccion */
 import RendimientoOperativo from '../pages/produccion/RendimientoOperativo';
 import PlaneacionFinanciero from '../pages/produccion/PlaneacionFinanciero';
@@ -127,6 +130,12 @@ function RutasApp() {
                 return 'Seguimiento Mintic Facturacion';
             case '/SMU':
                 return 'SMU Facturacion';
+            case '/ImplementacionesFacturacion':
+                return 'Implementaciones Facturacion';
+            case '/MedicionesFacturacion':
+                return 'Mediciones Facturacion';
+            case '/ObraCivilFacturacion':
+                return 'Obra Civil Facturacion';
             /* Produccion */
             case '/RendimientoOperativo':
                 return 'Rendimiento Operativo';
@@ -254,6 +263,9 @@ function RutasApp() {
                 <Route path='/MinticFacturacion' exacte element={<MinticFacturacion />} />
                 <Route path='/SeguimientoMintic' exacte element={<SeguimientoMintic />} />
                 <Route path='/SMU' exacte element={<SMU />} />
+                <Route path='/ImplementacionesFacturacion' exacte element={<ImplementacionesFacturacion />} />
+                <Route path='/MedicionesFacturacion' exacte element={<MedicionesFacturacion />} />
+                <Route path='/ObraCivilFacturacion' exacte element={<ObraCivilFacturacion />} />
                 {/* Produccion */}
                 <Route path='/RendimientoOperativo' exacte element={<RendimientoOperativo />} />
                 <Route path='/PlaneacionFinanciero' exact element={<PlaneacionFinanciero />} />

@@ -290,20 +290,20 @@ body,
         width: 220px;
         z-index: 5000;
 
-        ::-webkit-scrollbar {
-            width: 5px;
+        &::-webkit-scrollbar {
+            width: 2px;
         }
 
-        ::-webkit-scrollbar-thumb {
+        &::-webkit-scrollbar-thumb {
             background-color: #e0792a;
             border-radius: 5px;
         }
 
-        ::-webkit-scrollbar-thumb:hover {
+        &::-webkit-scrollbar-thumb:hover {
             background-color: #ff6f00;
         }
 
-        ::-webkit-scrollbar-track {
+        &::-webkit-scrollbar-track {
             background-color: #ddd;
         }
 

@@ -340,6 +340,9 @@ function Navbar() {
                                     <Link id='SubMenu-Contenido-Titulo' to="/MinticFacturacion" onClick={toggleMobileMenu}><li>Mintic</li></Link>
                                     <Link id='SubMenu-Contenido-Titulo' to="/SeguimientoMintic" onClick={toggleMobileMenu}><li>Seguimiento mintic</li></Link>
                                     <Link id='SubMenu-Contenido-Titulo' to="/SMU" onClick={toggleMobileMenu}><li>SMU</li></Link>
+                                    <Link id='SubMenu-Contenido-Titulo' to="/ImplementacionesFacturacion" onClick={toggleMobileMenu}><li>Implementaciones</li></Link>
+                                    <Link id='SubMenu-Contenido-Titulo' to="/MedicionesFacturacion" onClick={toggleMobileMenu}><li>Mediciones</li></Link>
+                                    <Link id='SubMenu-Contenido-Titulo' to="/ObraCivilFacturacion" onClick={toggleMobileMenu}><li>Obra Civil</li></Link>
                                 </ul>
                             </div>
                         )}
@@ -593,7 +596,7 @@ function Navbar() {
                 </ul>
                 {showMobileMenu && (
                     <div className='Version'>
-                        <p>v1.24</p>
+                        <p>v1.25</p>
                     </div>
                 )}
             </div>
