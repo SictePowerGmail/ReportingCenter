@@ -13,8 +13,7 @@ import SupervisionPrincipal from "../pages/reportes/supervision/supervisionPrinc
 import SupervisionAgregar from "../pages/reportes/supervision/supervisionAgregar";
 /* Facturacion */
 import FacturacionConsolidado from '../pages/facturacion/FacturacionConsolidado';
-import PlaneacionFacturacion from '../pages/facturacion/PlaneacionFacturacion';
-import SeguimientoProyectos from '../pages/facturacion/SeguimientoProyectos';
+import ProyectosFacturacion from "../pages/facturacion/ProyectosFacturacion";
 import CorporativoFacturacion from '../pages/facturacion/CorporativoFacturacion';
 import MantenimientoFacturacion from '../pages/facturacion/MantenmimientoFacturacion';
 import OperacionesFacturacion from '../pages/facturacion/OperacionesFacturacion';
@@ -114,10 +113,8 @@ function RutasApp() {
             /* Facturacion */
             case '/ConsolidadoNacionalFacturacion':
                 return 'Consolidado Nacional Facturacion';
-            case '/PlaneacionFacturacion':
-                return 'Planeacion Facturacion';
-            case '/SeguimientoProyectos':
-                return 'Seguimiento Proyectos Facturacion';
+            case '/Proyectos':
+                return 'Proyectos Facturacion';
             case '/CorporativoFacturacion':
                 return 'Corporativo Facturacion';
             case '/MantenimientoFacturacion':
@@ -255,8 +252,7 @@ function RutasApp() {
                 <Route path='/SupervisionAgregar' exacte element={<SupervisionAgregar />} />
                 {/* Facturacion */}
                 <Route path='/ConsolidadoNacionalFacturacion' exacte element={<FacturacionConsolidado />} />
-                <Route path='/PlaneacionFacturacion' exacte element={<PlaneacionFacturacion />} />
-                <Route path='/SeguimientoProyectos' exacte element={<SeguimientoProyectos />} />
+                <Route path='/Proyectos' exacte element={<ProyectosFacturacion />} />
                 <Route path='/CorporativoFacturacion' exacte element={<CorporativoFacturacion />} />
                 <Route path='/MantenimientoFacturacion' exacte element={<MantenimientoFacturacion />} />
                 <Route path='/OperacionesFacturacion' exacte element={<OperacionesFacturacion />} />

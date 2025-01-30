@@ -332,8 +332,7 @@ function Navbar() {
                             <div id='SubMenu-Contenido'>
                                 <ul>
                                     <Link id='SubMenu-Contenido-Titulo' to="/ConsolidadoNacionalFacturacion" onClick={toggleMobileMenu}><li>Consolidado nacional</li></Link>
-                                    <Link id='SubMenu-Contenido-Titulo' to="/PlaneacionFacturacion" onClick={toggleMobileMenu}><li>Proyectos</li></Link>
-                                    <Link id='SubMenu-Contenido-Titulo' to="/SeguimientoProyectos" onClick={toggleMobileMenu}><li>Seguimiento proyectos</li></Link>
+                                    <Link id='SubMenu-Contenido-Titulo' to="/Proyectos" onClick={toggleMobileMenu}><li>Proyectos</li></Link>
                                     <Link id='SubMenu-Contenido-Titulo' to="/CorporativoFacturacion" onClick={toggleMobileMenu}><li>Corporativo</li></Link>
                                     <Link id='SubMenu-Contenido-Titulo' to="/MantenimientoFacturacion" onClick={toggleMobileMenu}><li>Mantenimiento</li></Link>
                                     <Link id='SubMenu-Contenido-Titulo' to="/OperacionesFacturacion" onClick={toggleMobileMenu}><li>Operaciones</li></Link>
@@ -596,7 +595,7 @@ function Navbar() {
                 </ul>
                 {showMobileMenu && (
                     <div className='Version'>
-                        <p>v1.26</p>
+                        <p>v1.27</p>
                     </div>
                 )}
             </div>
