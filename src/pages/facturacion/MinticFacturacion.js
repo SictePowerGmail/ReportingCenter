@@ -6,8 +6,8 @@ function MinticFacturacion() {
   return (
     <div className='powerbi'>
       <iframe
-        title="Mintic facturacion"
-        src="https://app.powerbi.com/reportEmbed?reportId=2ce4ae7a-fc21-4897-82a7-12e55f396d2d&autoAuth=true&ctid=e0bfe90d-20e0-410b-b6f1-429b043d3608"
+        title="Mintic Facturacion"
+        src="https://app.powerbi.com/view?r=eyJrIjoiOWEyZGE5YTEtOTVkNC00ODQyLTkyYzItNjgzZmYwNTRmN2Y3IiwidCI6ImUwYmZlOTBkLTIwZTAtNDEwYi1iNmYxLTQyOWIwNDNkMzYwOCJ9"
       ></iframe>
     </div>
   );

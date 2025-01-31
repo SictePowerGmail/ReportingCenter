@@ -18,7 +18,6 @@ import CorporativoFacturacion from '../pages/facturacion/CorporativoFacturacion'
 import MantenimientoFacturacion from '../pages/facturacion/MantenmimientoFacturacion';
 import OperacionesFacturacion from '../pages/facturacion/OperacionesFacturacion';
 import MinticFacturacion from '../pages/facturacion/MinticFacturacion';
-import SeguimientoMintic from "../pages/facturacion/SeguimientoMintic";
 import SMU from '../pages/facturacion/SMU';
 import ImplementacionesFacturacion from "../pages/facturacion/ImplementacionesFacturacion";
 import MedicionesFacturacion from "../pages/facturacion/MedicionesFacturacion";
@@ -123,8 +122,6 @@ function RutasApp() {
                 return 'Operaciones Facturacion';
             case '/MinticFacturacion':
                 return 'Mintic Facturacion';
-            case '/SeguimientoMintic':
-                return 'Seguimiento Mintic Facturacion';
             case '/SMU':
                 return 'SMU Facturacion';
             case '/ImplementacionesFacturacion':
@@ -257,7 +254,6 @@ function RutasApp() {
                 <Route path='/MantenimientoFacturacion' exacte element={<MantenimientoFacturacion />} />
                 <Route path='/OperacionesFacturacion' exacte element={<OperacionesFacturacion />} />
                 <Route path='/MinticFacturacion' exacte element={<MinticFacturacion />} />
-                <Route path='/SeguimientoMintic' exacte element={<SeguimientoMintic />} />
                 <Route path='/SMU' exacte element={<SMU />} />
                 <Route path='/ImplementacionesFacturacion' exacte element={<ImplementacionesFacturacion />} />
                 <Route path='/MedicionesFacturacion' exacte element={<MedicionesFacturacion />} />
