@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import './supervisionLogin.css'
-import Sicte from '../../../images/Sicte 6.png'
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import Sicte from '../../images/Sicte 6.png'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ThreeDots } from 'react-loader-spinner';
 import Cookies from 'js-cookie';
+import './login.css'
 
-const SupervisionLogin = () => {
+const Login = () => {
+    const location = useLocation();
+    const params = new URLSearchParams(location.search);
+    const tipo = params.get("tipo");
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -83,8 +86,26 @@ const SupervisionLogin = () => {
                 Cookies.set('userCedula', data.cedula, { expires: 7 });
                 Cookies.set('userCorreo', data.correo, { expires: 7 });
                 Cookies.set('userTelefono', data.telefono, { expires: 7 });
+                Cookies.set('repMatOt', "", { expires: 7 });
+                Cookies.set('repMatCodMovil', "", { expires: 7 });
+                Cookies.set('repMatMovil', "", { expires: 7 });
+                Cookies.set('repMatResponsable', "", { expires: 7 });
+                Cookies.set('repMatNodo', "", { expires: 7 });
+                Cookies.set('repMatFilas', "", { expires: 7 });
+                Cookies.set('solMatCiudad', "", { expires: 7 });
+                Cookies.set('solMatUUID', "", { expires: 7 });
+                Cookies.set('solMatNombreProyecto', "", { expires: 7 });
+                Cookies.set('solMatEntregaProyectada', "", { expires: 7 });
                 localStorage.removeItem('yaRecargado');
-                navigate('/SupervisionPrincipal', { state: { role: data.rol, nombre: data.nombre, estadoNotificacion: false } });
+                if (tipo === 'supervision') {
+                    navigate('/SupervisionPrincipal', { state: { estadoNotificacion: false } });
+                } else if (tipo === 'solicitudMaterial') {
+                    navigate('/MaterialPrincipal', { state: { estadoNotificacion: false } });
+                } else if (tipo === 'reporteMaterialFerretero') {
+                    navigate('/ReporteMaterialPrincipal', { state: { estadoNotificacion: false } });
+                } else if (tipo === 'inventarioMaterial') {
+                    navigate('/InventariosMaterialPrincipal', { state: { estadoNotificacion: false } });
+                }
             } else {
                 const errorText = await response.text();
                 if (response.status === 404) {
@@ -99,6 +120,23 @@ const SupervisionLogin = () => {
             setError('Error al conectar con el servidor');
         }
     };
+
+    useEffect(() => {
+        const cedulaUsuario = Cookies.get('userCedula');
+        const nombreUsuario = Cookies.get('userNombre');
+
+        if (cedulaUsuario !== undefined && nombreUsuario !== undefined) {
+            if (tipo === 'supervision') {
+                navigate('/SupervisionPrincipal', { state: { estadoNotificacion: false } });
+            } else if (tipo === 'solicitudMaterial') {
+                navigate('/MaterialPrincipal', { state: { estadoNotificacion: false } });
+            } else if (tipo === 'reporteMaterialFerretero') {
+                navigate('/ReporteMaterialPrincipal', { state: { estadoNotificacion: false } });
+            } else if (tipo === 'inventarioMaterial') {
+                navigate('/InventariosMaterialPrincipal', { state: { estadoNotificacion: false } });
+            }
+        }
+    }, []);
 
     return (
         <div className="Supervision-Login-App">
@@ -184,7 +222,7 @@ const SupervisionLogin = () => {
                 )}
 
                 <div className='Version'>
-                    <p>v1.19</p>
+                    <p>v1.09</p>
                 </div>
             </div>
             <div className='Notificaciones'>
@@ -194,4 +232,4 @@ const SupervisionLogin = () => {
     );
 };
 
-export default SupervisionLogin;
+export default Login;

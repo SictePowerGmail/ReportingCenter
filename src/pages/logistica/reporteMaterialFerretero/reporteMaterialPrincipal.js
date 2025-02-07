@@ -13,7 +13,9 @@ import Cookies from 'js-cookie';
 const ReporteMaterialPrincipal = () => {
     const location = useLocation();
     const [error, setError] = useState('');
-    const { role, nombre, estadoNotificacion } = location.state || {};
+    const { estadoNotificacion } = location.state || {};
+    const role = Cookies.get('userRole');
+    const nombre = Cookies.get('userNombre');
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
     const [carpeta, setCarpeta] = useState('Registros');

@@ -28,8 +28,7 @@ function Navbar() {
     const initial = fullName ? fullName.charAt(0).toUpperCase() : "";
     const name = fullName ? fullName.split(" ")[0] : "";
     const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth > 530);
-    const yaRecargado = localStorage.getItem('yaRecargado');
-
+    
     const toggleMobileMenu = () => setShowMobileMenu(!showMobileMenu);
 
     const closeAllDropdowns = () => {
@@ -84,8 +83,6 @@ function Navbar() {
     const handleLogin = async (event) => {
         event.preventDefault();
         setError('');
-    
-        console.log(JSON.stringify({ correo: username, contrasena: password }),);
 
         try {
             const response = await fetch('https://sicteferias.from-co.net:8120/user/login/login', {
@@ -300,7 +297,7 @@ function Navbar() {
                             <div id='SubMenu-Contenido'>
                                 <ul>
                                     <Link id='SubMenu-Contenido-Titulo' to="/Capacidades" onClick={toggleMobileMenu}><li>Capacidades</li></Link>
-                                    <Link id='SubMenu-Contenido-Titulo' to={yaRecargado ? "/SupervisionPrincipal" : "/SupervisionLogin"} onClick={toggleMobileMenu}><li>Supervision</li></Link>
+                                    <Link id='SubMenu-Contenido-Titulo' to={{ pathname: "/Login", search: "?tipo=supervision" }} onClick={toggleMobileMenu}><li>Supervision</li></Link>
                                 </ul>
                             </div>
                         )}
@@ -517,9 +514,9 @@ function Navbar() {
                                     <Link id='SubMenu-Contenido-Titulo' to="/EquiposMovilesR4" onClick={toggleMobileMenu}><li>Equipos en moviles R4</li></Link>
                                     <Link id='SubMenu-Contenido-Titulo' to="/ConsumosOperaciones" onClick={toggleMobileMenu}><li>Consumos Operaciones</li></Link>
                                     <Link id='SubMenu-Contenido-Titulo' to="/DesmonteMantenimiento" onClick={toggleMobileMenu}><li>Desmonte Mantenimiento</li></Link>
-                                    <Link id='SubMenu-Contenido-Titulo' to={yaRecargado ? "/MaterialPrincipal" : "/MaterialLogin"} onClick={toggleMobileMenu}><li>Solicitud de Material</li></Link>
-                                    <Link id='SubMenu-Contenido-Titulo' to={yaRecargado ? "/ReporteMaterialPrincipal" : "/ReporteMaterialLogin"} onClick={toggleMobileMenu}><li>Reporte Material Ferretero</li></Link>
-                                    <Link id='SubMenu-Contenido-Titulo' to={yaRecargado ? "/InventariosMaterialPrincipal" : "/InventariosMaterialLogin"} onClick={toggleMobileMenu}><li>Inventario Material</li></Link>
+                                    <Link id='SubMenu-Contenido-Titulo' to={{ pathname: "/Login", search: "?tipo=solicitudMaterial" }} onClick={toggleMobileMenu}><li>Solicitud de Material</li></Link>
+                                    <Link id='SubMenu-Contenido-Titulo' to={{ pathname: "/Login", search: "?tipo=reporteMaterialFerretero" }} onClick={toggleMobileMenu}><li>Reporte Material Ferretero</li></Link>
+                                    <Link id='SubMenu-Contenido-Titulo' to={{ pathname: "/Login", search: "?tipo=inventarioMaterial" }} onClick={toggleMobileMenu}><li>Inventario Material</li></Link>
                                 </ul>
                             </div>
                         )}

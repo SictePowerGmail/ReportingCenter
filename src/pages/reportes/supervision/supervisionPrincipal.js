@@ -12,7 +12,9 @@ import Cookies from 'js-cookie';
 const SupervisionPrincipal = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const { role, nombre, estadoNotificacion } = location.state || {};
+    const { estadoNotificacion } = location.state || {};
+    const role = Cookies.get('userRole');
+    const nombre = Cookies.get('userNombre');
     const mapRef = useRef(null);
     const [registrosSupervision, setRegistrosSupervision] = useState({});
     const [graficaRegistrosSupervisionDia, setGraficaRegistrosSupervisionDia] = useState({});

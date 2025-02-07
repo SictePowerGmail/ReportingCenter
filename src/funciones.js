@@ -15,7 +15,6 @@ const obtenerDirectores = async () => {
             .filter(usuario => usuario.rol !== 'CAROLINA FERNANDEZ')
             .map(usuario => usuario.rol);
 
-        
         return directores;
     } catch (error) {
         console.error("Error al obtener la lista de directores:", error);
@@ -28,8 +27,6 @@ let directores = [];
 const cargarDirectores = async () => {
     directores = await obtenerDirectores();
 };
-
-cargarDirectores();
 
 export const ObtenerRolUsuario = (rol) => {
     if (rol === 'SUPERVISION') {
@@ -70,7 +67,6 @@ const cargarRelacionPersonal = async () => {
     RelacionPersonal = await obtenerRelacionPersonal();
 };
 
-cargarRelacionPersonal();
 
 export const ObtenerRelacionPersonalDirectores = (usuario) => {
     const registro = RelacionPersonal.find(item => item.coordinador === usuario);

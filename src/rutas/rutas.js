@@ -6,9 +6,10 @@ import Navbar from "../components/Navbar/navbar";
 import BasesDeDatos from "../pages/menuUsuario/BasesDeDatos";
 /* Inicio */
 import Inicio from '../pages/inicio/Inicio';
+/* Login */
+import Login from "../pages/loginAplicativos/login";
 /* Reportes */
 import Capacidades from '../pages/reportes/capacidades/Capacidades'
-import SupervisionLogin from '../pages/reportes/supervision/supervisionLogin'
 import SupervisionPrincipal from "../pages/reportes/supervision/supervisionPrincipal";
 import SupervisionAgregar from "../pages/reportes/supervision/supervisionAgregar";
 /* Facturacion */
@@ -55,13 +56,10 @@ import EquiposMovilesR2 from "../pages/logistica/EquiposMovilesR2";
 import EquiposMovilesR4 from "../pages/logistica/EquiposMovilesR4";
 import ConsumosOperaciones from "../pages/logistica/ConsumosOperaciones";
 import DesmonteMantenimiento from "../pages/logistica/DesmonteMantenimiento";
-import MaterialLogin from "../pages/logistica/solicitudMaterial/materialLogin";
 import MaterialPrincipal from "../pages/logistica/solicitudMaterial/materialPrincipal";
 import MaterialAgregar from "../pages/logistica/solicitudMaterial/materialAgregar";
-import ReporteMaterialLogin from "../pages/logistica/reporteMaterialFerretero/reporteMaterialLogin";
 import ReporteMaterialPrincipal from "../pages/logistica/reporteMaterialFerretero/reporteMaterialPrincipal";
 import ReporteMaterialAgregar from "../pages/logistica/reporteMaterialFerretero/reporteMaterialAgregar";
-import InventariosMaterialLogin from "../pages/logistica/inventarios/inventariosMaterialLogin";
 import InventariosMaterialPrincipal from "../pages/logistica/inventarios/inventariosMaterialPrincipal";
 import InventariosMaterialAgregar from "../pages/logistica/inventarios/inventariosMaterialAgregar";
 /* Direccion */
@@ -100,11 +98,12 @@ function RutasApp() {
                 return 'Reporting Center';
             case '/ReportingCenter':
                 return 'Reporting Center';
+            /* Login */
+            case '/Login':
+                return 'Iniciar Sesion';
             /* Reportes */
             case '/Capacidades':
                 return 'Capacidades';
-            case '/SupervisionLogin':
-                return 'Supervisión';
             case '/SupervisionPrincipal':
                 return 'Supervisión';
             case '/SupervisionAgregar':
@@ -191,20 +190,14 @@ function RutasApp() {
                 return 'ConsumosOperaciones';
             case '/DesmonteMantenimiento':
                 return 'DesmonteMantenimiento';
-            case '/MaterialLogin':
-                return 'Solicitud Materiales';
             case '/MaterialPrincipal':
                 return 'Solicitud Materiales';
             case '/MaterialAgregar':
                 return 'Solicitud Materiales'
-            case '/ReporteMaterialLogin':
-                return 'Reporte Materiales Tecnico';
             case '/ReporteMaterialPrincipal':
                 return 'Reporte Materiales Tecnico';
             case '/ReporteMaterialAgregar':
                 return 'Reporte Materiales Tecnico'
-            case '/InventariosMaterialLogin':
-                return 'Inventarios Material';
             case '/InventariosMaterialPrincipal':
                 return 'Inventarios Material';
             case '/InventariosMaterialAgregar':
@@ -242,9 +235,10 @@ function RutasApp() {
                 {/* Inicio */}
                 <Route path='/' exact element={<Inicio />} />
                 <Route path='/ReportingCenter' exact element={<Inicio />} />
+                {/* Login */}
+                <Route path='/Login' exact element={<Login />} />
                 {/* Reportes */}
                 <Route path='/Capacidades' exacte element={<Capacidades />} />
-                <Route path='/SupervisionLogin' exacte element={<SupervisionLogin />} />
                 <Route path='/SupervisionPrincipal' exacte element={<SupervisionPrincipal />} />
                 <Route path='/SupervisionAgregar' exacte element={<SupervisionAgregar />} />
                 {/* Facturacion */}
@@ -291,13 +285,10 @@ function RutasApp() {
                 <Route path='/EquiposMovilesR4' exacte element={<EquiposMovilesR4 />} />
                 <Route path='/ConsumosOperaciones' exacte element={<ConsumosOperaciones />} />
                 <Route path='/DesmonteMantenimiento' exacte element={<DesmonteMantenimiento />} />
-                <Route path='/MaterialLogin' exacte element={<MaterialLogin />} />
                 <Route path='/MaterialPrincipal' exacte element={<MaterialPrincipal />} />
                 <Route path='/MaterialAgregar' exacte element={<MaterialAgregar />} />
-                <Route path='/ReporteMaterialLogin' exacte element={<ReporteMaterialLogin />} />
                 <Route path='/ReporteMaterialPrincipal' exacte element={<ReporteMaterialPrincipal />} />
                 <Route path='/ReporteMaterialAgregar' exacte element={<ReporteMaterialAgregar />} />
-                <Route path='/InventariosMaterialLogin' exacte element={<InventariosMaterialLogin />} />
                 <Route path='/InventariosMaterialPrincipal' exacte element={<InventariosMaterialPrincipal />} />
                 <Route path='/InventariosMaterialAgregar' exacte element={<InventariosMaterialAgregar />} />
                 {/* Direccion */}
