@@ -4,6 +4,7 @@ import { initGA, logPageView } from "../analytics";
 import Navbar from "../components/Navbar/navbar";
 /* Menu Usuario */
 import BasesDeDatos from "../pages/menuUsuario/BasesDeDatos";
+import ControlUsuarios from "../pages/menuUsuario/ControlUsuarios";
 /* Inicio */
 import Inicio from '../pages/inicio/Inicio';
 /* Login */
@@ -93,6 +94,8 @@ function RutasApp() {
             /* Menu Usuario */
             case '/BasesDeDatos':
                 return 'Bases De Datos';
+            case '/ControlUsuarios':
+                return 'Control de Usuarios';
             /* Inicio */
             case '/':
                 return 'Reporting Center';
@@ -232,6 +235,7 @@ function RutasApp() {
             <Routes>
                 {/* Menu Usuario */}
                 <Route path='/BasesDeDatos' exact element={<BasesDeDatos />} />
+                <Route path='/ControlUsuarios' exact element={<ControlUsuarios />} />
                 {/* Inicio */}
                 <Route path='/' exact element={<Inicio />} />
                 <Route path='/ReportingCenter' exact element={<Inicio />} />

@@ -227,12 +227,5 @@
             margin-top: 10px;
             text-align: center;
         }
-
-        .Version {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            margin-right: 30px;
-        }
     }
 }

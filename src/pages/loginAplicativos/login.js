@@ -220,10 +220,6 @@ const Login = () => {
                         {error}
                     </p>
                 )}
-
-                <div className='Version'>
-                    <p>v1.09</p>
-                </div>
             </div>
             <div className='Notificaciones'>
                 <ToastContainer />

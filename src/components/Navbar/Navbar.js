@@ -28,7 +28,8 @@ function Navbar() {
     const initial = fullName ? fullName.charAt(0).toUpperCase() : "";
     const name = fullName ? fullName.split(" ")[0] : "";
     const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth > 530);
-    
+    const role = Cookies.get('userRole');
+
     const toggleMobileMenu = () => setShowMobileMenu(!showMobileMenu);
 
     const closeAllDropdowns = () => {
@@ -92,7 +93,7 @@ function Navbar() {
                 },
                 body: JSON.stringify({ correo: username, contrasena: password }), // Convierte los datos a JSON
             });
-    
+
             if (response.ok) {
                 setIsOpen(false);
                 setIsLogin(true);
@@ -153,7 +154,7 @@ function Navbar() {
                         )}
                     </div>
                 )}
-                
+
             </div>
             <div id='Titulo'>
                 <p>
@@ -199,12 +200,22 @@ function Navbar() {
                         <span>Tel: {Cookies.get('userTelefono')}</span>
                         <span>Rol: {Cookies.get('userRole')}</span>
                         <ul>
-                            <Link to="/BasesDeDatos" 
-                                onClick={() => {
-                                    setIsOpen(!isOpen);
-                                    setShowDropdownUser(!showDropdownUser);
-                                }}
-                            ><li>Bases de Datos</li></Link>
+                            {role === 'admin' && (
+                                <Link to="/BasesDeDatos"
+                                    onClick={() => {
+                                        setIsOpen(!isOpen);
+                                        setShowDropdownUser(!showDropdownUser);
+                                    }}
+                                ><li>Bases de Datos</li></Link>
+                            )}
+                            {role === 'admin' && (
+                                <Link to="/ControlUsuarios"
+                                    onClick={() => {
+                                        setIsOpen(!isOpen);
+                                        setShowDropdownUser(!showDropdownUser);
+                                    }}
+                                ><li>Control de Usuarios</li></Link>
+                            )}
                             <li onClick={handleLogout}>Cerrar Sesión</li>
                         </ul>
                     </div>
@@ -233,10 +244,10 @@ function Navbar() {
                         <form onSubmit={handleLogin}>
                             <div>
                                 <label htmlFor="email">Correo</label>
-                                <input 
-                                    type="email" 
-                                    id="email" 
-                                    name="email" 
+                                <input
+                                    type="email"
+                                    id="email"
+                                    name="email"
                                     placeholder="Ingrese el correo"
                                     value={username}
                                     onChange={(e) => setUsername(e.target.value)}
@@ -244,10 +255,10 @@ function Navbar() {
                             </div>
                             <div>
                                 <label htmlFor="password">Contraseña</label>
-                                <input 
-                                    type="password" 
-                                    id="password" 
-                                    name="password" 
+                                <input
+                                    type="password"
+                                    id="password"
+                                    name="password"
                                     placeholder="Ingrese la contraseña"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
@@ -591,7 +602,7 @@ function Navbar() {
                 </ul>
                 {showMobileMenu && (
                     <div className='Version'>
-                        <p>v1.28</p>
+                        <p>v1.29</p>
                     </div>
                 )}
             </div>
