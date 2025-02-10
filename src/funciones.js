@@ -24,13 +24,11 @@ const obtenerDirectores = async () => {
 
 let directores = [];
 
-const cargarDirectores = async () => {
+export const cargarDirectores = async () => {
     directores = await obtenerDirectores();
 };
 
 export const ObtenerRolUsuario = (rol) => {
-    cargarDirectores();
-
     if (rol === 'SUPERVISION') {
         return "SUPERVISION";
     } else if (rol === 'COORDINACION') {
@@ -65,31 +63,26 @@ const obtenerRelacionPersonal = async () => {
 
 let RelacionPersonal = [];
 
-const cargarRelacionPersonal = async () => {
+export const cargarRelacionPersonal = async () => {
     RelacionPersonal = await obtenerRelacionPersonal();
 };
 
-
 export const ObtenerRelacionPersonalDirectores = (usuario) => {
-    cargarRelacionPersonal();
     const registro = RelacionPersonal.find(item => item.coordinador === usuario);
     return registro ? registro.director : null;
 };
 
 export const ObtenerRelacionCiudadBodega = (usuario) => {
-    cargarRelacionPersonal();
     const registro = RelacionPersonal.find(item => item.bodega === usuario);
     return registro ? registro.ciudad : null;
 };
 
 export const ObtenerRelacionCiudadFacturacion = (usuario) => {
-    cargarRelacionPersonal();
     const registros = RelacionPersonal.filter(item => item.facturacion === usuario);
     return registros.length > 0 ? registros.map(item => item.ciudad) : [];
 };
 
 export const ObtenerRelacionCoordinadorAnalistaLogistica = (usuario) => {
-    cargarRelacionPersonal();
     const registros = RelacionPersonal.filter(item => item.coordinador === usuario);
     return registros.length > 0 ? registros.map(item => item.analistaLogistica) : [];
 };

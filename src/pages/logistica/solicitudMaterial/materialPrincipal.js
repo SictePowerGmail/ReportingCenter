@@ -6,7 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ThreeDots } from 'react-loader-spinner';
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import { ObtenerRolUsuario } from '../../../funciones';
+import { ObtenerRolUsuario, cargarDirectores, cargarRelacionPersonal } from '../../../funciones';
 import MaterialPrincipalSolicitudes from './materialPrincipalSolicitudes';
 import MaterialPrincipalDirector from './materialPrincipalDirector';
 import MaterialPrincipalDireccion from './materialPrincipalDireccion';
@@ -38,6 +38,9 @@ const MaterialPrincipal = () => {
         calculo("Armenia");
         calculo("Bogota San Cipriano Corporativo");
         calculo("Bogota San Cipriano Red Externa");
+        
+        cargarDirectores();
+        cargarRelacionPersonal();
 
         //calculoCantidadRestanteDespacho("Manizales");
         //calculoCantidadRestanteDespacho("Pereira");
