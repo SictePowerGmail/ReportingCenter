@@ -68,7 +68,7 @@ export const cargarRelacionPersonal = async () => {
 };
 
 export const ObtenerRelacionPersonalDirectores = (usuario) => {
-    const registro = RelacionPersonal.find(item => item.coordinador === usuario);
+    const registro = RelacionPersonal.find(item => item.coordinador === usuario || item.supervisor === usuario);
     return registro ? registro.director : null;
 };
 
@@ -83,6 +83,6 @@ export const ObtenerRelacionCiudadFacturacion = (usuario) => {
 };
 
 export const ObtenerRelacionCoordinadorAnalistaLogistica = (usuario) => {
-    const registros = RelacionPersonal.filter(item => item.coordinador === usuario);
+    const registros = RelacionPersonal.filter(item => item.coordinador === usuario || item.supervisor === usuario)
     return registros.length > 0 ? registros.map(item => item.analistaLogistica) : [];
 };
