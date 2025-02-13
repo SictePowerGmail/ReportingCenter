@@ -453,14 +453,14 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
                                 <span translate="no"><strong>Ciudad:</strong> {fila[0].ciudad}</span>
                                 <span translate="no"><strong>Diseño:</strong>
                                     {diseñoFile ? (
-                                        <a href={diseñoFile} download={fila[0].diseño}> Descargar Diseño</a>
+                                        <a href={diseñoFile} download={`Diseño ${fila[0].uuid} ${fila[0].nombreProyecto}${fila[0].diseño.substring(fila[0].diseño.lastIndexOf('.'))}`}> Descargar Diseño</a>
                                     ) : (
                                         'Cargando...'
                                     )}
                                 </span>
                                 <span translate="no"><strong>Kmz:</strong>
                                     {kmzFile ? (
-                                        <a href={kmzFile} download={fila[0].kmz}> Descargar KMZ</a>
+                                        <a href={kmzFile} download={`Kmz ${fila[0].uuid} ${fila[0].nombreProyecto}${fila[0].kmz.substring(fila[0].kmz.lastIndexOf('.'))}`}> Descargar KMZ</a>
                                     ) : (
                                         'Cargando...'
                                     )}

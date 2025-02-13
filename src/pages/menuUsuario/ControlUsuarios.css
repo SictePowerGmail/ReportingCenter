@@ -118,7 +118,7 @@
                         margin-bottom: 20px;
 
                         label {
-                            display: flex;
+                            display: flex !important;
                             justify-content: space-between;
                             align-items: center;
                             width: 100%;

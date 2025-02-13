@@ -5,6 +5,8 @@ import './ControlUsuarios.css'
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import { ObtenerRolUsuario, cargarDirectores } from '../../funciones';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function ControlUsuarios() {
     const navigate = useNavigate();
@@ -18,15 +20,19 @@ function ControlUsuarios() {
 
     const cargarDatos = async () => {
         try {
-            const response = await axios.get("https://sicteferias.from-co.net:8120/user");
-            const ajustandoRol = response.data
+            const responseUser = await axios.get("https://sicteferias.from-co.net:8120/user");
+
+            const ajustandoRol = responseUser.data
                 .map(usuario => ({
                     ...usuario,
                     rol: ObtenerTextoMejorado(ObtenerRolUsuario(usuario.rol))
                 }));
+
             const usuariosOrdenados = ajustandoRol
                 .sort((a, b) => a.rol.localeCompare(b.rol))
+
             setUsuarios(usuariosOrdenados);
+
             setLoading(false);
         } catch (error) {
             setError(error);
@@ -282,6 +288,231 @@ function ControlUsuarios() {
         });
     };
 
+    const EditarUsuario = async (usuarioEditado) => {
+        try {
+            setLoading(true);
+
+            const usuarioActualizado = {
+                ...usuarioEditado,
+                rol: usuarioEditado.rol.toLowerCase()
+            };
+
+            const response = await axios.put(
+                `https://sicteferias.from-co.net:8120/user/${usuarioActualizado.id}`,
+                usuarioActualizado,
+                { headers: { "Content-Type": "application/json" } }
+            );
+
+            const nuevaListaUsuarios = usuarios.map(usuario =>
+                usuario.id === usuarioEditado.id ? { ...usuario, ...usuarioEditado } : usuario
+            );
+
+            if (response.status === 200) {
+                setUsuarios(nuevaListaUsuarios);
+                setUsuarioSeleccionado(usuarioEditado);
+                setModalEdicionVisible(false);
+                Cookies.set('userCedula', usuarioActualizado.cedula, { expires: 7 });
+                Cookies.set('userNombre', usuarioActualizado.nombre, { expires: 7 });
+                Cookies.set('userCorreo', usuarioActualizado.correo, { expires: 7 });
+                Cookies.set('userTelefono', usuarioActualizado.telefono, { expires: 7 });
+                Cookies.set('userRole', usuarioActualizado.rol, { expires: 7 });
+                toast.success(`Se edito la informacion correctamente de: ${usuarioActualizado.nombre}`, { className: 'toast-success' });
+            } else {
+                toast.error(`Error al editar los datos de: ${usuarioActualizado.nombre}`, { className: 'toast-success' });
+            }
+
+        } catch (error) {
+            setError(error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const cargarDatosPagesUser = async (usuario) => {
+        try {
+            setLoading(true);
+
+            const responsePagesUser = await axios.get("https://sicteferias.from-co.net:8120/user/pagesUser");
+            const data = responsePagesUser.data;
+            const usuarioEncontrado = data.find(user => user.cedula === usuario.cedula);
+
+            if (usuarioEncontrado) {
+
+                const mappedChecksReportes = {
+                    Capacidades: usuarioEncontrado.reportesCapacidades === "1",
+                    Supervision: usuarioEncontrado.reportesSupervision === "1"
+                }
+
+                setSubChecksReportes(mappedChecksReportes);
+
+                const todosHabilitadosReportes = Object.values(mappedChecksReportes).every(valor => valor === true);
+
+                if (todosHabilitadosReportes) {
+                    setReportes(true);
+                } else {
+                    setReportes(false);
+                }
+
+                const mappedChecksFacturacion = {
+                    ConsolidadoNacional: usuarioEncontrado.facturacionConsolidadoNacional === "1",
+                    Proyectos: usuarioEncontrado.facturacionProyectos === "1",
+                    Corporativo: usuarioEncontrado.facturacionCorporativo === "1",
+                    Mantenimiento: usuarioEncontrado.facturacionMantenimiento === "1",
+                    Operaciones: usuarioEncontrado.facturacionOperaciones === "1",
+                    Mintic: usuarioEncontrado.facturacionMintic === "1",
+                    Smu: usuarioEncontrado.facturacionSmu === "1",
+                    ImplementacionMovil: usuarioEncontrado.facturacionImplementacionMovil === "1",
+                    MedicionesMovil: usuarioEncontrado.facturacionMedicionesMovil === "1",
+                    ObraCivilMovil: usuarioEncontrado.facturacionObraCivilMovil === "1"
+                };
+
+                setSubChecksFacturacion(mappedChecksFacturacion);
+
+                const todosHabilitadosFacturacion = Object.values(mappedChecksFacturacion).every(valor => valor === true);
+
+                if (todosHabilitadosFacturacion) {
+                    setFacturacion(true);
+                } else {
+                    setFacturacion(false);
+                }
+
+                const mappedChecksProduccion = {
+                    ProducionNacional: usuarioEncontrado.producionNacional === "1",
+                    Proyectos: usuarioEncontrado.producionProyectos === "1",
+                    Corporativo: usuarioEncontrado.producionCorporativo === "1",
+                    Mantenimiento: usuarioEncontrado.producionMantenimiento === "1",
+                    Reingenierias: usuarioEncontrado.producionReingenierias === "1",
+                    Operaciones: usuarioEncontrado.producionOperaciones === "1"
+                };
+
+                setSubChecksProduccion(mappedChecksProduccion);
+
+                const todosHabilitadosProduccion = Object.values(mappedChecksProduccion).every(valor => valor === true);
+
+                if (todosHabilitadosProduccion) {
+                    setProduccion(true);
+                } else {
+                    setProduccion(false);
+                }
+
+                const mappedChecksIndicadores = {
+                    HistoricoKpi: usuarioEncontrado.indicadoresHistoricoKpi === "1",
+                    G1Mantenimiento: usuarioEncontrado.indicadoresG1Mantenimiento === "1",
+                    Nps: usuarioEncontrado.indicadoresNps === "1"
+                };
+
+                setSubChecksIndicadores(mappedChecksIndicadores);
+
+                const todosHabilitadosIndicadores = Object.values(mappedChecksIndicadores).every(valor => valor === true);
+
+                if (todosHabilitadosIndicadores) {
+                    setIndicadores(true);
+                } else {
+                    setIndicadores(false);
+                }
+
+                const mappedChecksSsta = {
+                    Ssta: usuarioEncontrado.sstaSsta === "1",
+                    CursoDeAlturas: usuarioEncontrado.sstaCursoDeAlturas === "1",
+                    EntregasPendientesDotacion: usuarioEncontrado.sstaEntregasPendientesDotacion === "1"
+                };
+
+                setSubChecksSsta(mappedChecksSsta);
+
+                const todosHabilitadosSsta = Object.values(mappedChecksSsta).every(valor => valor === true);
+
+                if (todosHabilitadosSsta) {
+                    setSsta(true);
+                } else {
+                    setSsta(false);
+                }
+
+                const mappedChecksPuntuacion = {
+                    Proyectos: usuarioEncontrado.puntuacionProyectos === "1",
+                    Corporativo: usuarioEncontrado.puntuacionCorporativo === "1",
+                    Mantenimiento: usuarioEncontrado.puntuacionMantenimiento === "1",
+                    Reingenierias: usuarioEncontrado.puntuacionReingenierias === "1"
+                };
+
+                setSubChecksPuntuacion(mappedChecksPuntuacion);
+
+                const todosHabilitadosPuntuacion = Object.values(mappedChecksPuntuacion).every(valor => valor === true);
+
+                if (todosHabilitadosPuntuacion) {
+                    setPuntuacion(true);
+                } else {
+                    setPuntuacion(false);
+                }
+
+                const mappedChecksOperacion = {
+                    CumplimientoSlaFo: usuarioEncontrado.operacionCumplimientoSlaFo === "1",
+                    CumplimientoSlaHfc: usuarioEncontrado.operacionCumplimientoSlaHfc === "1",
+                    CorrectivoPreventivo: usuarioEncontrado.operacionCorrectivoPreventivo === "1",
+                    SeguimientoMttoCentro: usuarioEncontrado.operacionSeguimientoMttoCentro === "1",
+                    SeguimientoOperaciones: usuarioEncontrado.operacionSeguimientoOperaciones === "1",
+                    SeguimientoSmu: usuarioEncontrado.operacionSeguimientoSmu === "1",
+                    TecnicoSmu: usuarioEncontrado.operacionTecnicoSmu === "1",
+                    TorreDeControl: usuarioEncontrado.operacionTorreDeControl === "1"
+                };
+
+                setSubChecksOperacion(mappedChecksOperacion);
+
+                const todosHabilitadosOperacion = Object.values(mappedChecksOperacion).every(valor => valor === true);
+
+                if (todosHabilitadosOperacion) {
+                    setOperacion(true);
+                } else {
+                    setOperacion(false);
+                }
+
+                const mappedChecksLogistica = {
+                    EquiposEnMovilesR2: usuarioEncontrado.logisticaEquiposEnMovilesR2 === "1",
+                    EquiposEnMovilesR4: usuarioEncontrado.logisticaEquiposEnMovilesR4 === "1",
+                    ConsumosOperaciones: usuarioEncontrado.logisticaConsumosOperaciones === "1",
+                    DesmonteMantenimiento: usuarioEncontrado.logisticaDesmonteMantenimiento === "1",
+                    SolicitudDeMaterial: usuarioEncontrado.logisticaSolicitudDeMaterial === "1",
+                    ReporteMaterialFerretero: usuarioEncontrado.logisticaReporteMaterialFerretero === "1",
+                    InventarioMaterial: usuarioEncontrado.logisticaInventarioMaterial === "1"
+                };
+
+                setSubChecksLogistica(mappedChecksLogistica);
+
+                const todosHabilitadosLogistica = Object.values(mappedChecksLogistica).every(valor => valor === true);
+
+                if (todosHabilitadosLogistica) {
+                    setLogistica(true);
+                } else {
+                    setLogistica(false);
+                }
+
+                const mappedChecksDireccion = {
+                    Penalizaciones: usuarioEncontrado.direccionPenalizaciones === "1",
+                    CentroDeCostos: usuarioEncontrado.direccionCentroDeCostos === "1",
+                    ComposicionMoviles: usuarioEncontrado.direccionComposicionMoviles === "1",
+                    Compras: usuarioEncontrado.direccionCompras === "1"
+                };
+
+                setSubChecksDireccion(mappedChecksDireccion);
+
+                const todosHabilitadosDireccion = Object.values(mappedChecksDireccion).every(valor => valor === true);
+
+                if (todosHabilitadosDireccion) {
+                    setDireccion(true);
+                } else {
+                    setDireccion(false);
+                }
+
+            } else {
+                console.log("Usuario no encontrado");
+            }
+
+        } catch (error) {
+            setError(error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
         <div className='BasesDeDatos'>
             <div className='contenedor'>
@@ -315,6 +546,7 @@ function ControlUsuarios() {
                                 <div key={index} className="carta" onClick={() => {
                                     setUsuarioSeleccionado(usuario);
                                     setUsuarioEditado(usuario);
+                                    cargarDatosPagesUser(usuario);
                                     setModalVisible(true);
                                 }}>
                                     <i className="fa fa-user"></i>
@@ -599,14 +831,17 @@ function ControlUsuarios() {
                                         <div className='modal-botones'>
                                             <button className='btn btn-danger' onClick={() => setModalEdicionVisible(false)}>Cancelar</button>
                                             <button className='btn btn-success' onClick={() => {
-                                                setUsuarioSeleccionado(usuarioEditado);
-                                                setModalEdicionVisible(false);
+                                                EditarUsuario(usuarioEditado);
                                             }}>Guardar</button>
                                         </div>
                                     </div>
                                 </div>
                             )}
 
+                        </div>
+
+                        <div className='Notificaciones'>
+                            <ToastContainer />
                         </div>
                     </>
                 )}

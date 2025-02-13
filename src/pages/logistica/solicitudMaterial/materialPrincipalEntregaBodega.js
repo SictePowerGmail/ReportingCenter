@@ -71,7 +71,7 @@ const MaterialPrincipalEntregaBodega = () => {
                 setEntregadoEntregaBodegaSinMat(datosFiltradosEntregadoEntregaBodega);
 
                 const datosProyectosCerrados = datos
-                    .filter(item => item.aprobacionDirector === "Aprobado" && item.aprobacionDireccionOperacion === "Aprobado" && item.entregaBodega === "Entregado" && item.estadoProyecto === "Cerrado")
+                    .filter(item => item.aprobacionDirector === "Aprobado" && item.aprobacionDireccionOperacion === "Aprobado" && item.estadoProyecto === "Cerrado")
                     .map(({ fecha, cedula, nombre, ciudad, uuid, nombreProyecto, entregaProyecto }) => ({
                         fecha,
                         cedula,
