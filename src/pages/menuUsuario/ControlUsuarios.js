@@ -17,6 +17,7 @@ function ControlUsuarios() {
     const [modalEdicionVisible, setModalEdicionVisible] = useState(false);
     const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
     const [usuarioEditado, setUsuarioEditado] = useState(null);
+    const [pageUsuarioSeleccionado, setPageUsuarioSeleccionado] = useState([]);
 
     const cargarDatos = async () => {
         try {
@@ -46,8 +47,8 @@ function ControlUsuarios() {
             navigate('/ReportingCenter');
         }
 
-        cargarDatos();
         cargarDirectores();
+        cargarDatos();
     }, []);
 
     const ObtenerTextoMejorado = (rol) => {
@@ -335,6 +336,7 @@ function ControlUsuarios() {
             const responsePagesUser = await axios.get("https://sicteferias.from-co.net:8120/user/pagesUser");
             const data = responsePagesUser.data;
             const usuarioEncontrado = data.find(user => user.cedula === usuario.cedula);
+            setPageUsuarioSeleccionado(usuarioEncontrado);
 
             if (usuarioEncontrado) {
 
@@ -504,6 +506,83 @@ function ControlUsuarios() {
 
             } else {
                 console.log("Usuario no encontrado");
+            }
+
+        } catch (error) {
+            setError(error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const EditarPagesUsuario = async () => {
+        try {
+            setLoading(true);
+
+            const body = {
+                cedula: pageUsuarioSeleccionado.cedula,
+                reportesCapacidades: subChecksReportes.Capacidades ? 1 : 0,
+                reportesSupervision: subChecksReportes.Supervision ? 1 : 0,
+                facturacionConsolidadoNacional: subChecksFacturacion.ConsolidadoNacional ? 1 : 0,
+                facturacionProyectos: subChecksFacturacion.Proyectos ? 1 : 0,
+                facturacionCorporativo: subChecksFacturacion.Corporativo ? 1 : 0,
+                facturacionMantenimiento: subChecksFacturacion.Mantenimiento ? 1 : 0,
+                facturacionOperaciones: subChecksFacturacion.Operaciones ? 1 : 0,
+                facturacionMintic: subChecksFacturacion.Mintic ? 1 : 0,
+                facturacionSmu: subChecksFacturacion.Smu ? 1 : 0,
+                facturacionImplementacionMovil: subChecksFacturacion.ImplementacionMovil ? 1 : 0,
+                facturacionMedicionesMovil: subChecksFacturacion.MedicionesMovil ? 1 : 0,
+                facturacionObraCivilMovil: subChecksFacturacion.ObraCivilMovil ? 1 : 0,
+                producionNacional: subChecksProduccion.ProducionNacional ? 1 : 0,
+                producionProyectos: subChecksProduccion.Proyectos ? 1 : 0,
+                producionCorporativo: subChecksProduccion.Corporativo ? 1 : 0,
+                producionMantenimiento: subChecksProduccion.Mantenimiento ? 1 : 0,
+                producionReingenierias: subChecksProduccion.Reingenierias ? 1 : 0,
+                producionOperaciones: subChecksProduccion.Operaciones ? 1 : 0,
+                indicadoresHistoricoKpi: subChecksIndicadores.HistoricoKpi ? 1 : 0,
+                indicadoresG1Mantenimiento: subChecksIndicadores.G1Mantenimiento ? 1 : 0,
+                indicadoresNps: subChecksIndicadores.Nps ? 1 : 0,
+                sstaSsta: subChecksSsta.Ssta ? 1 : 0,
+                sstaCursoDeAlturas: subChecksSsta.CursoDeAlturas ? 1 : 0,
+                sstaEntregasPendientesDotacion: subChecksSsta.EntregasPendientesDotacion ? 1 : 0,
+                puntuacionProyectos: subChecksPuntuacion.Proyectos ? 1 : 0,
+                puntuacionCorporativo: subChecksPuntuacion.Corporativo ? 1 : 0,
+                puntuacionMantenimiento: subChecksPuntuacion.Mantenimiento ? 1 : 0,
+                puntuacionReingenierias: subChecksPuntuacion.Reingenierias ? 1 : 0,
+                operacionCumplimientoSlaFo: subChecksOperacion.CumplimientoSlaFo ? 1 : 0,
+                operacionCumplimientoSlaHfc: subChecksOperacion.CumplimientoSlaHfc ? 1 : 0,
+                operacionCorrectivoPreventivo: subChecksOperacion.CorrectivoPreventivo ? 1 : 0,
+                operacionSeguimientoMttoCentro: subChecksOperacion.SeguimientoMttoCentro ? 1 : 0,
+                operacionSeguimientoOperaciones: subChecksOperacion.SeguimientoOperaciones ? 1 : 0,
+                operacionSeguimientoSmu: subChecksOperacion.SeguimientoSmu ? 1 : 0,
+                operacionTecnicoSmu: subChecksOperacion.TecnicoSmu ? 1 : 0,
+                operacionTorreDeControl: subChecksOperacion.TorreDeControl ? 1 : 0,
+                logisticaEquiposEnMovilesR2: subChecksLogistica.EquiposEnMovilesR2 ? 1 : 0,
+                logisticaEquiposEnMovilesR4: subChecksLogistica.EquiposEnMovilesR4 ? 1 : 0,
+                logisticaConsumosOperaciones: subChecksLogistica.ConsumosOperaciones ? 1 : 0,
+                logisticaDesmonteMantenimiento: subChecksLogistica.DesmonteMantenimiento ? 1 : 0,
+                logisticaSolicitudDeMaterial: subChecksLogistica.SolicitudDeMaterial ? 1 : 0,
+                logisticaReporteMaterialFerretero: subChecksLogistica.ReporteMaterialFerretero ? 1 : 0,
+                logisticaInventarioMaterial: subChecksLogistica.InventarioMaterial ? 1 : 0,
+                direccionPenalizaciones: subChecksDireccion.Penalizaciones ? 1 : 0,
+                direccionCentroDeCostos: subChecksDireccion.CentroDeCostos ? 1 : 0,
+                direccionComposicionMoviles: subChecksDireccion.ComposicionMoviles ? 1 : 0,
+                direccionCompras: subChecksDireccion.Compras ? 1 : 0,
+            };
+
+            const response = await axios.put(
+                `https://sicteferias.from-co.net:8120/user/pagesUser/${pageUsuarioSeleccionado.id}`,
+                body,
+                { headers: { "Content-Type": "application/json" } }
+            );
+
+            if (response.status === 200) {
+                setModalEdicionVisible(false);
+                setModalVisible(false);
+
+                toast.success(`Se edito permisos correctamente de: ${usuarioEditado.nombre}`, { className: 'toast-success' });
+            } else {
+                toast.error(`Error al editar los datos de: ${usuarioEditado.nombre}`, { className: 'toast-success' });
             }
 
         } catch (error) {
@@ -808,7 +887,7 @@ function ControlUsuarios() {
                                             <button className='btn btn-danger' onClick={() => setModalVisible(false)}>Cancelar</button>
                                             <button
                                                 className='btn btn-success'
-                                                onClick={() => alert("Acción confirmada")}
+                                                onClick={() => EditarPagesUsuario()}
                                             >
                                                 Confirmar
                                             </button>

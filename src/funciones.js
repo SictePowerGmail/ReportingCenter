@@ -43,6 +43,8 @@ export const ObtenerRolUsuario = (rol) => {
         return "admin";
     } else if (rol === 'FACTURACION') {
         return "FACTURACION";
+    } else if (rol === '') {
+        return "INVITADO"
     } else if (directores.includes(rol)) {
         return "DIRECTOR";
     } else {
