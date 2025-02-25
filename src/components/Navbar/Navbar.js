@@ -2,11 +2,10 @@ import React, { useState, useRef, useEffect } from 'react'
 import { Link } from 'react-router-dom';
 import { FaHardHat, FaFileAlt, FaTruck, FaBars, FaTimes, FaHome, FaChartLine, FaStar, FaTools, FaChevronDown, FaChevronUp, FaUser } from 'react-icons/fa';
 import { HiClipboardList, HiChartBar, HiOfficeBuilding } from "react-icons/hi";
-import { ObtenerRolUsuario, cargarDirectores } from '../../funciones';
-import './Navbar.css'
+import { cargarDirectores } from '../../funciones';
+import './navbar.css'
 import Cookies from 'js-cookie';
 import axios from 'axios';
-import EstadoProyectosR4 from '../../pages/logistica/EstadoProyectosR4';
 
 function Navbar() {
     const [showMobileMenu, setShowMobileMenu] = useState(false);
