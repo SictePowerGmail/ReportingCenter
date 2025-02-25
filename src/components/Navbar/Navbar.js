@@ -3,9 +3,10 @@ import { Link } from 'react-router-dom';
 import { FaHardHat, FaFileAlt, FaTruck, FaBars, FaTimes, FaHome, FaChartLine, FaStar, FaTools, FaChevronDown, FaChevronUp, FaUser } from 'react-icons/fa';
 import { HiClipboardList, HiChartBar, HiOfficeBuilding } from "react-icons/hi";
 import { ObtenerRolUsuario, cargarDirectores } from '../../funciones';
-import './navbar.css'
+import './Navbar.css'
 import Cookies from 'js-cookie';
 import axios from 'axios';
+import EstadoProyectosR4 from '../../pages/logistica/EstadoProyectosR4';
 
 function Navbar() {
     const [showMobileMenu, setShowMobileMenu] = useState(false);
@@ -109,7 +110,7 @@ function Navbar() {
                 Cookies.set('userNombre', data.nombre, { expires: 7 });
                 Cookies.set('userCorreo', data.correo, { expires: 7 });
                 Cookies.set('userTelefono', data.telefono, { expires: 7 });
-                Cookies.set('userRole', ObtenerTextoMejorado(ObtenerRolUsuario(data.rol)), { expires: 7 });
+                Cookies.set('userRole', data.rol, { expires: 7 });
                 cargarDatosPagesUser();
             } else {
                 const errorText = await response.text();
@@ -208,7 +209,8 @@ function Navbar() {
         DesmonteMantenimiento: false,
         SolicitudDeMaterial: false,
         ReporteMaterialFerretero: false,
-        InventarioMaterial: false
+        InventarioMaterial: false,
+        EstadoProyectosR4: false
     });
 
     const [direccion, setDireccion] = useState(false);
@@ -370,7 +372,8 @@ function Navbar() {
                     DesmonteMantenimiento: usuarioEncontrado.logisticaDesmonteMantenimiento === "1",
                     SolicitudDeMaterial: usuarioEncontrado.logisticaSolicitudDeMaterial === "1",
                     ReporteMaterialFerretero: usuarioEncontrado.logisticaReporteMaterialFerretero === "1",
-                    InventarioMaterial: usuarioEncontrado.logisticaInventarioMaterial === "1"
+                    InventarioMaterial: usuarioEncontrado.logisticaInventarioMaterial === "1",
+                    EstadoProyectosR4: usuarioEncontrado.logisticaEstadoProyectosR4 === "1"
                 };
 
                 setSubChecksLogistica(mappedChecksLogistica);
@@ -476,7 +479,7 @@ function Navbar() {
                         <span>{Cookies.get('userNombre')}</span>
                         <span>CC: {Cookies.get('userCedula')}</span>
                         <span>Tel: {Cookies.get('userTelefono')}</span>
-                        <span>Rol: {Cookies.get('userRole')}</span>
+                        <span>Rol: {ObtenerTextoMejorado(Cookies.get('userRole'))}</span>
                         <ul>
                             {role === 'admin' && (
                                 <Link to="/BasesDeDatos"
@@ -819,6 +822,7 @@ function Navbar() {
                                         {subChecksLogistica.SolicitudDeMaterial === true && (<Link id='SubMenu-Contenido-Titulo' to={{ pathname: "/Login", search: "?tipo=solicitudMaterial" }} onClick={toggleMobileMenu}><li>Solicitud de Material</li></Link>)}
                                         {subChecksLogistica.ReporteMaterialFerretero === true && (<Link id='SubMenu-Contenido-Titulo' to={{ pathname: "/Login", search: "?tipo=reporteMaterialFerretero" }} onClick={toggleMobileMenu}><li>Reporte Material Ferretero</li></Link>)}
                                         {subChecksLogistica.InventarioMaterial === true && (<Link id='SubMenu-Contenido-Titulo' to={{ pathname: "/Login", search: "?tipo=inventarioMaterial" }} onClick={toggleMobileMenu}><li>Inventario Material</li></Link>)}
+                                        {subChecksLogistica.EstadoProyectosR4 === true && (<Link id='SubMenu-Contenido-Titulo' to="/EstadoProyectosR4" onClick={toggleMobileMenu}><li>Estado Proyectos R4</li></Link>)}
                                     </ul>
                                 </div>
                             )}

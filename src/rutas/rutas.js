@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { HashRouter as Router, Route, Routes, useLocation } from "react-router-dom";
 import { initGA, logPageView } from "../analytics";
-import Navbar from "../components/Navbar/navbar";
+import Navbar from "../components/Navbar/Navbar"
 /* Menu Usuario */
 import BasesDeDatos from "../pages/menuUsuario/BasesDeDatos";
 import ControlUsuarios from "../pages/menuUsuario/ControlUsuarios";
@@ -63,6 +63,7 @@ import ReporteMaterialPrincipal from "../pages/logistica/reporteMaterialFerreter
 import ReporteMaterialAgregar from "../pages/logistica/reporteMaterialFerretero/reporteMaterialAgregar";
 import InventariosMaterialPrincipal from "../pages/logistica/inventarios/inventariosMaterialPrincipal";
 import InventariosMaterialAgregar from "../pages/logistica/inventarios/inventariosMaterialAgregar";
+import EstadoProyectosR4 from "../pages/logistica/EstadoProyectosR4";
 /* Direccion */
 import Penalizaciones from '../pages/direccion/Penalizaciones';
 import CentrosDeCostos from '../pages/direccion/CentrosDeCostos';
@@ -205,6 +206,8 @@ function RutasApp() {
                 return 'Inventarios Material';
             case '/InventariosMaterialAgregar':
                 return 'Inventarios Material'
+            case '/EstadoProyectosR4':
+                return 'Estado Proyectos R4'
             /* Direccion */
             case '/Penalizaciones':
                 return 'Penalizaciones';
@@ -295,6 +298,7 @@ function RutasApp() {
                 <Route path='/ReporteMaterialAgregar' exacte element={<ReporteMaterialAgregar />} />
                 <Route path='/InventariosMaterialPrincipal' exacte element={<InventariosMaterialPrincipal />} />
                 <Route path='/InventariosMaterialAgregar' exacte element={<InventariosMaterialAgregar />} />
+                <Route path='/EstadoProyectosR4' exacte element={<EstadoProyectosR4 />} />
                 {/* Direccion */}
                 <Route path='/Penalizaciones' exacte element={<Penalizaciones />} />
                 <Route path='/Centro_de_costos' exacte element={<CentrosDeCostos />} />

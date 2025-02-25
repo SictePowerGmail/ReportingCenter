@@ -7,6 +7,7 @@ import axios from 'axios';
 import { ObtenerRolUsuario, cargarDirectores } from '../../funciones';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import EstadoProyectosR4 from '../logistica/EstadoProyectosR4';
 
 function ControlUsuarios() {
     const navigate = useNavigate();
@@ -219,7 +220,8 @@ function ControlUsuarios() {
         DesmonteMantenimiento: false,
         SolicitudDeMaterial: false,
         ReporteMaterialFerretero: false,
-        InventarioMaterial: false
+        InventarioMaterial: false,
+        EstadoProyectosR4: false
     });
 
     const handleLogisticaChange = () => {
@@ -474,7 +476,8 @@ function ControlUsuarios() {
                     DesmonteMantenimiento: usuarioEncontrado.logisticaDesmonteMantenimiento === "1",
                     SolicitudDeMaterial: usuarioEncontrado.logisticaSolicitudDeMaterial === "1",
                     ReporteMaterialFerretero: usuarioEncontrado.logisticaReporteMaterialFerretero === "1",
-                    InventarioMaterial: usuarioEncontrado.logisticaInventarioMaterial === "1"
+                    InventarioMaterial: usuarioEncontrado.logisticaInventarioMaterial === "1",
+                    EstadoProyectosR4: usuarioEncontrado.logisticaEstadoProyectosR4 === "1"
                 };
 
                 setSubChecksLogistica(mappedChecksLogistica);
@@ -564,6 +567,7 @@ function ControlUsuarios() {
                 logisticaSolicitudDeMaterial: subChecksLogistica.SolicitudDeMaterial ? 1 : 0,
                 logisticaReporteMaterialFerretero: subChecksLogistica.ReporteMaterialFerretero ? 1 : 0,
                 logisticaInventarioMaterial: subChecksLogistica.InventarioMaterial ? 1 : 0,
+                logisticaEstadoProyectosR4: subChecksLogistica.EstadoProyectosR4 ? 1 : 0,
                 direccionPenalizaciones: subChecksDireccion.Penalizaciones ? 1 : 0,
                 direccionCentroDeCostos: subChecksDireccion.CentroDeCostos ? 1 : 0,
                 direccionComposicionMoviles: subChecksDireccion.ComposicionMoviles ? 1 : 0,
