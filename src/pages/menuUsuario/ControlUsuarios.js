@@ -572,6 +572,7 @@ function ControlUsuarios() {
                 direccionCentroDeCostos: subChecksDireccion.CentroDeCostos ? 1 : 0,
                 direccionComposicionMoviles: subChecksDireccion.ComposicionMoviles ? 1 : 0,
                 direccionCompras: subChecksDireccion.Compras ? 1 : 0,
+                
             };
 
             const response = await axios.put(
