@@ -33,6 +33,27 @@ body,
     justify-content: space-between;
     margin: auto;
 
+    .CargandoPagina {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(255, 255, 255, 1);
+        /* Fondo semitransparente */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+    }
+
     #Icono-Menu {
         display: flex;
         align-items: center;
@@ -42,7 +63,7 @@ body,
         padding-left: 5px;
         padding-right: 5px;
         font-size: 20px;
-    
+
         &:hover {
             color: #ff6f00;
             transition: 0.3s all ease;
@@ -77,21 +98,21 @@ body,
         align-items: center;
         font-family: sans-serif;
         margin: 0 auto;
-    
+
         p {
             &:nth-child(1) {
                 font-size: 24px;
                 color: #fff;
                 margin: auto 8px;
             }
-    
+
             &:nth-child(2) {
                 font-size: 17px;
                 color: #e0792a;
                 margin: auto 8px;
             }
         }
-    
+
         @media screen and (max-width: 860px) {
             p {
                 &:nth-child(2) {
@@ -135,7 +156,7 @@ body,
                 margin-right: 10px;
                 padding: 3px 0px 0px 0px;
             }
-            
+
             .name {
                 font-size: 18px;
                 font-weight: normal;
@@ -146,7 +167,7 @@ body,
                 color: #fff;
                 font-size: 20px;
             }
-            
+
             .iconoMenu {
                 color: #fff;
                 padding-left: 8px;
@@ -219,18 +240,18 @@ body,
                     align-items: center;
                     justify-content: center;
                     padding-top: 5px;
-    
+
                     label {
                         color: #64b2ff;
                         font-weight: normal;
                         width: 250px;
                     }
-    
+
                     input {
                         width: 250px;
                     }
                 }
-    
+
                 button {
                     margin: 15px 0px 10px 0px;
                     display: flex;
@@ -249,7 +270,7 @@ body,
                 font-size: 15px;
             }
         }
-        
+
         .menu.open {
             max-height: 300px;
         }
@@ -259,7 +280,7 @@ body,
         @media screen and (min-width: 531px) {
             width: 160px;
         }
-        
+
         .menu {
             width: 250px;
         }
@@ -269,7 +290,7 @@ body,
         @media screen and (min-width: 531px) {
             width: 150px;
         }
-        
+
         .menu {
             width: 300px;
         }
@@ -356,7 +377,7 @@ body,
                     min-width: 210px;
                     font-family: sans-serif;
                     height: 35px;
-                
+
                     &:hover {
                         color: #fff;
                         background-color: #e0792a;
@@ -390,7 +411,7 @@ body,
                                 font-size: 15px;
                                 flex: 1;
                             }
-                            
+
                             #SubMenu-Titulo-Icono2 {
                                 font-size: 16px;
                                 margin-left: auto;
@@ -419,7 +440,7 @@ body,
                             justify-content: space-between;
                             align-items: center;
                             width: 100%;
-                        
+
                             &:hover {
                                 color: #fff;
                                 background-color: #e0792a;
@@ -513,7 +534,7 @@ body,
                     max-width: 34px;
                     font-family: sans-serif;
                     height: 35px;
-                
+
                     &:hover {
                         color: #fff;
                         background-color: #e0792a;
