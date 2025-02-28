@@ -252,15 +252,15 @@ const SupervisionAgregar = () => {
         const fotoNombre = `${formattedDate}_${foto.name}`
         formData.append('file', foto);
         formData.append("filename", fotoNombre);
-
+        
         try {
-            await axios.post('https://sicteferias.from-co.net:8120/supervision/cargarImagen', formData, {
+            await axios.post(`${process.env.REACT_APP_API_URL}/supervision/cargarImagen`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
             });
             
-            await axios.post("https://sicteferias.from-co.net:8120/supervision/cargarDatos", {
+            await axios.post(`${process.env.REACT_APP_API_URL}/supervision/cargarDatos`, {
                 fecha: formattedDate2,
                 nombre: nombreUsuario,
                 placa: placa,
@@ -330,9 +330,9 @@ const SupervisionAgregar = () => {
             toast.error('Error al subir el archivo o enviar los datos', { className: 'toast-error' });
         }
     };
-
+    
     const cargarDatosPlanta = () => {
-        fetch('https://sicteferias.from-co.net:8120/capacidad/PlantaEnLineaCedulaNombre')
+        fetch(`${process.env.REACT_APP_API_URL}/capacidad/PlantaEnLineaCedulaNombre`)
             .then(response => response.json())
             .then(data => {
                 setDatosPlanta(data);
@@ -344,16 +344,16 @@ const SupervisionAgregar = () => {
     };
 
     const cargarTodosUsuarios = () => {
-        fetch('https://sicteferias.from-co.net:8120/user')
+        fetch(`${process.env.REACT_APP_API_URL}/user`)
             .then(response => response.json())
             .then(data => {
                 setDatosUsuarios(data);
             })
             .catch(error => setError('Error al cargar los datos: ' + error.message));
     };
-
+    
     const cargarRegistrosSupervision = async (event) => {
-        axios.get('https://sicteferias.from-co.net:8120/supervision/RegistrosSupervisionFechaPlaca')
+        axios.get(`${process.env.REACT_APP_API_URL}/supervision/RegistrosSupervisionFechaPlaca`)
             .then(response => {
                 const data = response.data;
 

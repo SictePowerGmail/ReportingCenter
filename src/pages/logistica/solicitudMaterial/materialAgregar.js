@@ -229,8 +229,8 @@ const MaterialAgregar = () => {
         try {
             for (const fila of filasTabla) {
                 const { propiedad, codigoSap, descripcion, unidadMedida, cantidadDisponible, cantidadSolicitada } = fila;
-
-                await axios.post("https://sicteferias.from-co.net:8120/solicitudMaterial/cargarDatos", {
+                
+                await axios.post(`${process.env.REACT_APP_API_URL}/solicitudMaterial/cargarDatos`, {
                     fecha: fechaCorregida,
                     cedula: cedulaUsuario,
                     nombre: nombreUsuario,
@@ -254,14 +254,14 @@ const MaterialAgregar = () => {
                     estadoProyecto: "Abierto"
                 });
             }
-
-            await axios.post('https://sicteferias.from-co.net:8120/solicitudMaterial/cargarKmz', formDataKmz, {
+            
+            await axios.post(`${process.env.REACT_APP_API_URL}/solicitudMaterial/cargarKmz`, formDataKmz, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
             });
-
-            await axios.post('https://sicteferias.from-co.net:8120/solicitudMaterial/cargarDiseño', formDataDiseño, {
+            
+            await axios.post(`${process.env.REACT_APP_API_URL}/solicitudMaterial/cargarDiseño`, formDataDiseño, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -283,7 +283,7 @@ const MaterialAgregar = () => {
 
     const calculo = async () => {
         try {
-            const responseRegistrosSolicitudMaterial = await axios.get('https://sicteferias.from-co.net:8120/solicitudMaterial/RegistrosSolicitudMaterial');
+            const responseRegistrosSolicitudMaterial = await axios.get(`${process.env.REACT_APP_API_URL}/solicitudMaterial/RegistrosSolicitudMaterial`);
             setRegistrosSolicitudMaterial(responseRegistrosSolicitudMaterial.data)
 
             const resultado = await calculoMaterial(ciudadElgida);

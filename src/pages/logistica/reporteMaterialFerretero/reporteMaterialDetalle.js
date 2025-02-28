@@ -22,9 +22,9 @@ const ReporteMaterialDetalle = ({ isOpen, onClose, fila }) => {
             }
 
             const imageName = fila[0].firma;
-
+            
             const response = await axios.get(
-                `https://sicteferias.from-co.net:8120/reporteMaterialFerretero/obtenerReporteMaterialFerreteroFirma`,
+                `${process.env.REACT_APP_API_URL}/reporteMaterialFerretero/obtenerReporteMaterialFerreteroFirma`,
                 {
                     params: { imageName },
                     responseType: 'blob',

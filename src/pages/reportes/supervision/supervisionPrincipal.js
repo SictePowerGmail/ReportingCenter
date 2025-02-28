@@ -58,9 +58,9 @@ const SupervisionPrincipal = () => {
     const Agregar = async (event) => {
         navigate('/SupervisionAgregar', { state: { role: role, nombre: nombre, estadoNotificacion: false } });
     };
-
+    
     const cargarRegistrosSupervision = async (event) => {
-        axios.get('https://sicteferias.from-co.net:8120/supervision/RegistrosSupervision')
+        axios.get(`${process.env.REACT_APP_API_URL}/supervision/RegistrosSupervision`)
             .then(response => {
                 let dataFiltrada;
                 const data = response.data;
@@ -550,10 +550,10 @@ const SupervisionPrincipal = () => {
             }
         });
     };
-
+    
     const fetchImage = async (imageName) => {
         try {
-            const response = await fetch(`https://sicteferias.from-co.net:8120/supervision/ObtenerImagen?imageName=${encodeURIComponent(imageName)}`);
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/supervision/ObtenerImagen?imageName=${encodeURIComponent(imageName)}`);
 
             if (!response.ok) {
                 console.error(`Error fetching image: ${response.status} ${response.statusText}`);

@@ -22,7 +22,7 @@ function ControlUsuarios() {
 
     const cargarDatos = async () => {
         try {
-            const responseUser = await axios.get("https://sicteferias.from-co.net:8120/user");
+            const responseUser = await axios.get(`${process.env.REACT_APP_API_URL}/user`);
 
             const ajustandoRol = responseUser.data
                 .map(usuario => ({
@@ -301,7 +301,7 @@ function ControlUsuarios() {
             };
 
             const response = await axios.put(
-                `https://sicteferias.from-co.net:8120/user/${usuarioActualizado.id}`,
+                `${process.env.REACT_APP_API_URL}/user/${usuarioActualizado.id}`,
                 usuarioActualizado,
                 { headers: { "Content-Type": "application/json" } }
             );
@@ -334,8 +334,8 @@ function ControlUsuarios() {
     const cargarDatosPagesUser = async (usuario) => {
         try {
             setLoading(true);
-
-            const responsePagesUser = await axios.get("https://sicteferias.from-co.net:8120/user/pagesUser");
+            
+            const responsePagesUser = await axios.get(`${process.env.REACT_APP_API_URL}/user/pagesUser`);
             const data = responsePagesUser.data;
             const usuarioEncontrado = data.find(user => user.cedula === usuario.cedula);
             setPageUsuarioSeleccionado(usuarioEncontrado);
@@ -574,9 +574,9 @@ function ControlUsuarios() {
                 direccionCompras: subChecksDireccion.Compras ? 1 : 0,
                 
             };
-
+            
             const response = await axios.put(
-                `https://sicteferias.from-co.net:8120/user/pagesUser/${pageUsuarioSeleccionado.id}`,
+                `${process.env.REACT_APP_API_URL}/user/pagesUser/${pageUsuarioSeleccionado.id}`,
                 body,
                 { headers: { "Content-Type": "application/json" } }
             );

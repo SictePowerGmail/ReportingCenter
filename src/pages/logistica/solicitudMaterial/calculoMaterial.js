@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const calculoMaterial = async (ciudadElgida) => {
     try {
-        const responseKgprod = await axios.get('https://sicteferias.from-co.net:8120/bodega/kgprod');
+        const responseKgprod = await axios.get(`${process.env.REACT_APP_API_URL}/bodega/kgprod`);
         let ciudad;
 
         if (ciudadElgida === "Manizales") {
@@ -21,7 +21,7 @@ export const calculoMaterial = async (ciudadElgida) => {
 
         const datosFiltradosKgprod = ciudad.length ? responseKgprod.data.filter(item => ciudad.includes(item.bodega)) : responseKgprod.data;
 
-        const responseRegistrosSolicitudMaterial = await axios.get('https://sicteferias.from-co.net:8120/solicitudMaterial/RegistrosSolicitudMaterial');
+        const responseRegistrosSolicitudMaterial = await axios.get(`${process.env.REACT_APP_API_URL}/solicitudMaterial/RegistrosSolicitudMaterial`);
 
         const datosFiltradosRegistrosSolicitudMaterial = responseRegistrosSolicitudMaterial.data.filter(item =>
             item.ciudad === ciudadElgida &&
@@ -63,8 +63,8 @@ export const calculoMaterial = async (ciudadElgida) => {
 
             return acumulador;
         }, {});
-
-        const responseRegistrosEntregadoSolicitudMaterial = await axios.get('https://sicteferias.from-co.net:8120/solicitudMaterial/RegistrosEntregadosSolicitudMaterial');
+        
+        const responseRegistrosEntregadoSolicitudMaterial = await axios.get(`${process.env.REACT_APP_API_URL}/solicitudMaterial/RegistrosEntregadosSolicitudMaterial`);
 
         const hoy = new Date().toISOString().split("T")[0];
 

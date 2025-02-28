@@ -34,7 +34,7 @@ const RecuperarContraseña = () => {
         }
 
         try {
-            const response = await fetch(`https://sicteferias.from-co.net:8120/user/validarToken?token=${token}`, {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/user/validarToken?token=${token}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -46,7 +46,7 @@ const RecuperarContraseña = () => {
 
                 if (message === 'Token valido') {
                     try {
-                        const tokens = await fetch('https://sicteferias.from-co.net:8120/user/tokens', {
+                        const tokens = await fetch(`${process.env.REACT_APP_API_URL}/user/tokens`, {
                             method: 'GET',
                             headers: {
                                 'Content-Type': 'application/json',
@@ -59,7 +59,7 @@ const RecuperarContraseña = () => {
                         if (tokenData) {
 
                             try {
-                                await axios.post('https://sicteferias.from-co.net:8120/user/actualizarContrasena', { emailToken, password2 });
+                                await axios.post(`${process.env.REACT_APP_API_URL}/user/actualizarContrasena`, { emailToken, password2 });
                                 toast.success('Cambio de contraseña exitoso', { className: 'toast-success' });
                                 navigate('/ReportingCenter');
                             } catch (error) {

@@ -152,8 +152,8 @@ const MaterialPrincipal = () => {
     const calculo = async (ciudadElgida) => {
         try {
             setLoading(true);
-
-            const responseKgprod = await axios.get('https://sicteferias.from-co.net:8120/bodega/kgprod');
+            
+            const responseKgprod = await axios.get(`${process.env.REACT_APP_API_URL}/bodega/kgprod`);
             let ciudad;
 
             if (ciudadElgida === "Manizales") {
@@ -171,8 +171,8 @@ const MaterialPrincipal = () => {
             }
 
             const datosFiltradosKgprod = ciudad.length ? responseKgprod.data.filter(item => ciudad.includes(item.bodega)) : responseKgprod.data;
-
-            const responseRegistrosSolicitudMaterial = await axios.get('https://sicteferias.from-co.net:8120/solicitudMaterial/RegistrosSolicitudMaterial');
+            
+            const responseRegistrosSolicitudMaterial = await axios.get(`${process.env.REACT_APP_API_URL}/solicitudMaterial/RegistrosSolicitudMaterial`);
 
             const datosFiltradosRegistrosSolicitudMaterial = responseRegistrosSolicitudMaterial.data.filter(item =>
                 item.ciudad === ciudadElgida &&
@@ -213,8 +213,8 @@ const MaterialPrincipal = () => {
 
                 return acumulador;
             }, {});
-
-            const responseRegistrosEntregadoSolicitudMaterial = await axios.get('https://sicteferias.from-co.net:8120/solicitudMaterial/RegistrosEntregadosSolicitudMaterial');
+            
+            const responseRegistrosEntregadoSolicitudMaterial = await axios.get(`${process.env.REACT_APP_API_URL}/solicitudMaterial/RegistrosEntregadosSolicitudMaterial`);
 
             const hoy = new Date().toISOString().split("T")[0];
 
@@ -304,8 +304,8 @@ const MaterialPrincipal = () => {
 
             const ids = resultado.map(item => item.id);
             const cantidades = resultado.map(item => item.cantidadDisponibleMaterial)
-
-            await axios.post('https://sicteferias.from-co.net:8120/solicitudMaterial/actualizarEstadoCantidadDisponibleMaterial',
+            
+            await axios.post(`${process.env.REACT_APP_API_URL}/solicitudMaterial/actualizarEstadoCantidadDisponibleMaterial`,
                 {
                     ids, cantidades
                 },

@@ -29,7 +29,7 @@ const Login = () => {
         setEnviando(true);
 
         try {
-            const usuarios = await fetch('https://sicteferias.from-co.net:8120/user', {
+            const usuarios = await fetch(`${process.env.REACT_APP_API_URL}/user`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -40,7 +40,7 @@ const Login = () => {
             const emailExiste = usuariosData.some(usuario => usuario.correo === email);
 
             if (emailExiste) {
-                const response = await fetch('https://sicteferias.from-co.net:8120/user/enviarToken', {
+                const response = await fetch(`${process.env.REACT_APP_API_URL}/user/enviarToken`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -71,7 +71,7 @@ const Login = () => {
         setError('');
 
         try {
-            const response = await fetch('https://sicteferias.from-co.net:8120/user/login/login', {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/user/login/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

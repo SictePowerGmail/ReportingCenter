@@ -91,7 +91,7 @@ function Navbar() {
         setError('');
 
         try {
-            const response = await fetch('https://sicteferias.from-co.net:8120/user/login/login', {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/user/login/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json', // Cambia el tipo de contenido a application/json
@@ -229,7 +229,7 @@ function Navbar() {
 
     const cargarDatosPagesUser = async (usuario) => {
         try {
-            const responsePagesUser = await axios.get("https://sicteferias.from-co.net:8120/user/pagesUser");
+            const responsePagesUser = await axios.get(`${process.env.REACT_APP_API_URL}/user/pagesUser`);
             const data = responsePagesUser.data;
             const cedula = Cookies.get('userCedula');
 

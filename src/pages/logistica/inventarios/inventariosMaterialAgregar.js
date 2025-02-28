@@ -88,8 +88,8 @@ const InventariosMaterialAgregar = () => {
         try {
             for (const fila of filasTabla) {
                 const { codigoSap, descripcion, unidadMedida, cantidad, serial } = fila;
-
-                await axios.post("https://sicteferias.from-co.net:8120/inventarioMaterial/cargarDatos", {
+                
+                await axios.post(`${process.env.REACT_APP_API_URL}/inventarioMaterial/cargarDatos`, {
                     fecha: fechaCorregida,
                     cedula: cedulaUsuario,
                     nombre: nombreUsuario,
@@ -179,13 +179,13 @@ const InventariosMaterialAgregar = () => {
 
     const CargarDatos = async () => {
         try {
-            const responseKgprod = await axios.get('https://sicteferias.from-co.net:8120/bodega/kgprod');
+            const responseKgprod = await axios.get(`${process.env.REACT_APP_API_URL}/bodega/kgprod`);
             let ciudadKgprod = ['KGPROD_RED_BOG'];
 
             const datosFiltradosKgprod = ciudadKgprod.length ? responseKgprod.data.filter(item => ciudadKgprod.includes(item.bodega)) : responseKgprod.data;
             setDataKgprod(datosFiltradosKgprod);
 
-            const responseLconsum = await axios.get('https://sicteferias.from-co.net:8120/bodega/lconsum');
+            const responseLconsum = await axios.get(`${process.env.REACT_APP_API_URL}/bodega/lconsum`);
             let ciudadLconsum = ['LCONSUM_RED_BOG'];
 
             const datosFiltradosLconsum = ciudadLconsum.length ? responseLconsum.data.filter(item => ciudadLconsum.includes(item.bodega)) : responseLconsum.data;

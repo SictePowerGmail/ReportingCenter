@@ -29,7 +29,7 @@ const InventariosMaterialPrincipal = () => {
     const [filaSeleccionadaInventarioMaterialSinMat, setFilaSeleccionadaInventarioMaterialSinMat] = useState(null);
 
     const cargarDatosInventarioMaterial = () => {
-        axios.get('https://sicteferias.from-co.net:8120/inventarioMaterial/RegistrosInventarioMaterial')
+        axios.get(`${process.env.REACT_APP_API_URL}/inventarioMaterial/RegistrosInventarioMaterial`)
             .then(response => {
                 let datos = response.data;
                 datos.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));

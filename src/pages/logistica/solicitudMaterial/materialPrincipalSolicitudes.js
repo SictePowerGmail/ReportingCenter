@@ -18,9 +18,9 @@ const MaterialPrincipalSolicitudes = () => {
     const [registrosSolicitudMaterial, setRegistrosSolicitudMaterial] = useState([]);
     const rolUsuario = ObtenerRolUsuario(Cookies.get('userRole'));
     const nombreUsuario = Cookies.get('userNombre');
-
+    
     const cargarDatosRegistrosSolicitudMaterial = () => {
-        axios.get('https://sicteferias.from-co.net:8120/solicitudMaterial/RegistrosSolicitudMaterial')
+        axios.get(`${process.env.REACT_APP_API_URL}/solicitudMaterial/RegistrosSolicitudMaterial`)
             .then(response => {
                 let datos = response.data;
 

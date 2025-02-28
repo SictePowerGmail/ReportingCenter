@@ -28,7 +28,7 @@ const ReporteMaterialPrincipal = () => {
     const [filaSeleccionadaReporteMaterialTecnicoSinMat, setFilaSeleccionadaReporteMaterialTecnicoSinMat] = useState(null);
 
     const cargarDatosReporteMaterialTecnico = () => {
-        axios.get('https://sicteferias.from-co.net:8120/reporteMaterialFerretero/obtenerReporteMaterialFerretero')
+        axios.get(`${process.env.REACT_APP_API_URL}/reporteMaterialFerretero/obtenerReporteMaterialFerretero`)
             .then(response => {
                 let datos = response.data;
                 datos.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));

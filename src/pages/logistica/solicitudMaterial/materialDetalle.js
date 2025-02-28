@@ -73,7 +73,7 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
 
         for (const pdfNombre of pdfs) {
             try {
-                const response = await axios.get(`https://sicteferias.from-co.net:8120/solicitudMaterial/ObtenerPDF`, {
+                const response = await axios.get(`${process.env.REACT_APP_API_URL}/solicitudMaterial/ObtenerPDF`, {
                     params: { "fileName": pdfNombre },
                     responseType: 'blob',
                 });
@@ -85,9 +85,9 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
                 console.error(`Error al enviar el PDF ${pdfNombre} al backend:`, error);
                 toast.error(`Error al cargar el PDF: ${pdfNombre}`, { className: 'toast-success' });
             }
-
+            
             try {
-                const response = await axios.post('https://sicteferias.from-co.net:8120/solicitudMaterial/leerPDF', { "rutaPdf": pdfNombre },
+                const response = await axios.post(`${process.env.REACT_APP_API_URL}/solicitudMaterial/leerPDF`, { "rutaPdf": pdfNombre },
                     {
                         headers: {
                             'Content-Type': 'application/json',
@@ -114,11 +114,11 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
             }
         }
     }
-
+    
     const fetchArchivo = async (fileName, tipo) => {
         try {
             if (tipo === 'diseño') {
-                const response = await axios.get(`https://sicteferias.from-co.net:8120/solicitudMaterial/ObtenerDiseño`, {
+                const response = await axios.get(`${process.env.REACT_APP_API_URL}/solicitudMaterial/ObtenerDiseño`, {
                     params: { fileName },
                     responseType: 'blob'
                 });
@@ -126,7 +126,7 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
                 const url = URL.createObjectURL(response.data);
                 setDiseñoFile(url);
             } else if (tipo === 'kmz') {
-                const response = await axios.get(`https://sicteferias.from-co.net:8120/solicitudMaterial/ObtenerKmz`, {
+                const response = await axios.get(`${process.env.REACT_APP_API_URL}/solicitudMaterial/ObtenerKmz`, {
                     params: { fileName },
                     responseType: 'blob'
                 });
@@ -210,10 +210,10 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
         } else {
             observacionesTemporal = observacionesBodega;
         }
-
+        
         if (estadoCargue === 'normal') {
             try {
-                await axios.post('https://sicteferias.from-co.net:8120/solicitudMaterial/actualizarEstadoEntregaBodega', { ids, estado, observacionesTemporal });
+                await axios.post(`${process.env.REACT_APP_API_URL}/solicitudMaterial/actualizarEstadoEntregaBodega`, { ids, estado, observacionesTemporal });
                 console.log('Solicitud enviada correctamente entrega bodega');
             } catch (error) {
                 console.error('Error al enviar los IDs al backend:', error);
@@ -231,9 +231,9 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
             const pdfNombresNuevosFormateados = pdfNombresNuevos.map(pdf => `${formattedDate3}_${pdf}`).join(",");
             pdfNombre = `${prfNombreAnterior},${pdfNombresNuevosFormateados}`
         }
-
+        
         try {
-            await axios.post('https://sicteferias.from-co.net:8120/solicitudMaterial/actualizarEstadoEntregaBodegaPDFs', { ids, pdfNombre });
+            await axios.post(`${process.env.REACT_APP_API_URL}/solicitudMaterial/actualizarEstadoEntregaBodegaPDFs`, { ids, pdfNombre });
             console.log('Solicitud enviada correctamente entrega bodega pdfs');
         } catch (error) {
             console.error('Error al enviar los IDs al backend:', error);
@@ -260,9 +260,9 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
             const pdfNombre = `${formattedDate3}_${nombre}`;
             formDataPdf.append('file', pdf);
             formDataPdf.append("filename", pdfNombre);
-
+            
             try {
-                await axios.post('https://sicteferias.from-co.net:8120/solicitudMaterial/cargarPDF', formDataPdf, {
+                await axios.post(`${process.env.REACT_APP_API_URL}/solicitudMaterial/cargarPDF`, formDataPdf, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                     },
@@ -285,9 +285,9 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
                 nombre = pdfNombresNuevos[i]
             }
             const pdfNombre = `${formattedDate3}_${nombre}`;
-
+            
             try {
-                const response = await axios.post('https://sicteferias.from-co.net:8120/solicitudMaterial/leerPDF',
+                const response = await axios.post(`${process.env.REACT_APP_API_URL}/solicitudMaterial/leerPDF`,
                     { "rutaPdf": pdfNombre },
                     {
                         headers: {
@@ -316,9 +316,9 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
                 }
 
                 for (const row of updatedDataConEstado) {
-
+                    
                     try {
-                        await axios.post('https://sicteferias.from-co.net:8120/solicitudMaterial/cargarDatosEntregados',
+                        await axios.post(`${process.env.REACT_APP_API_URL}/solicitudMaterial/cargarDatosEntregados`,
                             {
                                 fechaEntrega: formattedDate2,
                                 ciudad: fila[0].ciudad,
@@ -381,9 +381,9 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
         });
 
         const cantidades = fila2.map(item => item.cantidadRestantePorDespacho);
-
+        
         try {
-            await axios.post('https://sicteferias.from-co.net:8120/solicitudMaterial/actualizarEstadoCantidadRestantePorDespacho',
+            await axios.post(`${process.env.REACT_APP_API_URL}/solicitudMaterial/actualizarEstadoCantidadRestantePorDespacho`,
                 {
                     ids, cantidades
                 },
@@ -409,9 +409,9 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
         setLoading(true);
         const ids = fila.map(item => item.id);
         const pdfNombre = "Cerrado"
-
+        
         try {
-            await axios.post('https://sicteferias.from-co.net:8120/solicitudMaterial/actualizarEstadoCierreProyecto', { ids, pdfNombre });
+            await axios.post(`${process.env.REACT_APP_API_URL}/solicitudMaterial/actualizarEstadoCierreProyecto`, { ids, pdfNombre });
             console.log('Solicitud enviada correctamente cerrar proyecto');
             setProyectoCerradoEstado('Cerrado');
         } catch (error) {

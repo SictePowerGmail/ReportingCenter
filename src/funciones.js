@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const obtenerDirectores = async () => {
     try {
-        const response = await axios.get('https://sicteferias.from-co.net:8120/user');
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/user`);
         const usuarios = response.data;
 
         const directores = usuarios
@@ -54,7 +54,7 @@ export const ObtenerRolUsuario = (rol) => {
 
 const obtenerRelacionPersonal = async () => {
     try {
-        const response = await axios.get('https://sicteferias.from-co.net:8120/solicitudMaterial/RelacionPersonal');
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/solicitudMaterial/RelacionPersonal`);
 
         return response.data;
     } catch (error) {

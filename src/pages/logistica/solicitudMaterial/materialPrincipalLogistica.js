@@ -16,9 +16,9 @@ const MaterialPrincipalLogistica = () => {
     const [registrosSolicitudMaterial, setRegistrosSolicitudMaterial] = useState([]);
     const rolUsuario = ObtenerRolUsuario(Cookies.get('userRole'));
     const nombreUsuario = Cookies.get('userNombre');
-
+    
     const cargarDatosRegistrosSolicitudMaterial = () => {
-        axios.get('https://sicteferias.from-co.net:8120/solicitudMaterial/RegistrosSolicitudMaterial')
+        axios.get(`${process.env.REACT_APP_API_URL}/solicitudMaterial/RegistrosSolicitudMaterial`)
             .then(response => {
                 let datos = response.data;
                 datos.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
@@ -185,9 +185,9 @@ const MaterialPrincipalLogistica = () => {
         } else {
             observacionesTemporal = observacionesPendAnalista;
         }
-
+        
         try {
-            await axios.post('https://sicteferias.from-co.net:8120/solicitudMaterial/actualizarEstadoAnalista', { ids, estado, observacionesTemporal, fechaRegistro });
+            await axios.post(`${process.env.REACT_APP_API_URL}/solicitudMaterial/actualizarEstadoAnalista`, { ids, estado, observacionesTemporal, fechaRegistro });
             console.log('Solicitud enviada correctamente');
             toast.success('Solicitud aprobada', { className: 'toast-success' });
         } catch (error) {
@@ -212,9 +212,9 @@ const MaterialPrincipalLogistica = () => {
         } else {
             observacionesTemporal = observacionesPendAnalista;
         }
-
+        
         try {
-            await axios.post('https://sicteferias.from-co.net:8120/solicitudMaterial/actualizarEstadoAnalista', { ids, estado, observacionesTemporal, fechaRegistro });
+            await axios.post(`${process.env.REACT_APP_API_URL}/solicitudMaterial/actualizarEstadoAnalista`, { ids, estado, observacionesTemporal, fechaRegistro });
             console.log('Solicitud enviada correctamente');
             toast.success('Solicitud Rechazada', { className: 'toast-success' });
         } catch (error) {
