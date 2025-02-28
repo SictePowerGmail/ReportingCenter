@@ -4,7 +4,7 @@ import { FaHardHat, FaFileAlt, FaTruck, FaBars, FaTimes, FaHome, FaChartLine, Fa
 import { HiClipboardList, HiChartBar, HiOfficeBuilding } from "react-icons/hi";
 import { cargarDirectores } from '../../funciones';
 import { ThreeDots } from 'react-loader-spinner';
-import './navbar.css'
+import './Navbar.css'
 import Cookies from 'js-cookie';
 import axios from 'axios';
 
@@ -144,7 +144,7 @@ function Navbar() {
         Cookies.remove('userCorreo');
         Cookies.remove('userTelefono');
         Cookies.remove('userRole');
-        window.location.href = '/';
+        window.location.href = '/ReportingCenter/';
     };
 
     const [reportes, setReportes] = useState(false);
