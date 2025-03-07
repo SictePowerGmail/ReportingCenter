@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { Link } from 'react-router-dom';
-import { FaHardHat, FaFileAlt, FaTruck, FaBars, FaTimes, FaHome, FaChartLine, FaStar, FaTools, FaChevronDown, FaChevronUp, FaUser, FaBoxes } from 'react-icons/fa';
+import { FaHardHat, FaFileAlt, FaTruck, FaBars, FaTimes, FaHome, FaChartLine, FaStar, FaTools, FaChevronDown, FaChevronUp, FaUser, FaBoxes, FaUserTie } from 'react-icons/fa';
 import { HiClipboardList, HiChartBar, HiOfficeBuilding } from "react-icons/hi";
 import { cargarDirectores } from '../../funciones';
 import { ThreeDots } from 'react-loader-spinner';
@@ -21,6 +21,7 @@ function Navbar() {
     const [showDropdownDireccion, setShowDropdownDireccion] = useState(false);
     const [showDropdownSSTA, setShowDropdownSSTA] = useState(false);
     const [showDropdownParqueAutomotor, setShowDropdownParqueAutomotor] = useState(false);    
+    const [showDropdownRecursosHumanos, setShowDropdownRecursosHumanos] = useState(false);    
     const [isMobile, setIsMobile] = useState(window.innerWidth < 600);
     const menuRef = useRef(null);
     const [isOpen, setIsOpen] = useState(false);
@@ -48,6 +49,7 @@ function Navbar() {
         setShowDropdownDireccion(false);
         setShowDropdownSSTA(false);
         setShowDropdownParqueAutomotor(false);
+        setShowDropdownRecursosHumanos(false);
     };
 
     useEffect(() => {
@@ -237,6 +239,11 @@ function Navbar() {
     const [parqueAutomotor, setParqueAutomotor] = useState(false);
     const [subChecksParqueAutomotor, setSubChecksParqueAutomotor] = useState({
         Moviles: false,
+    });
+
+    const [recursosHumanos, setRecursosHumanos] = useState(true);
+    const [subChecksRecursosHumanos, setSubChecksRecursosHumanos] = useState({
+        ChatBot: true,
     });
 
     const cargarDatosPagesUser = async (usuario) => {
@@ -746,9 +753,9 @@ function Navbar() {
                                             <ul>
                                                 {subChecksIndicadores.HistoricoKpi && (<Link id='SubMenu-Contenido-Titulo' to="/HistoricoKPI" onClick={toggleMobileMenu}><li>Histórico KPI</li></Link>)}
                                                 {subChecksIndicadores.G1Mantenimiento && (<Link id='SubMenu-Contenido-Titulo' to="/MantenimientoTecnico" onClick={toggleMobileMenu}><li>G1 Mantenimiento</li></Link>)}
+                                                {subChecksIndicadores.G2G8MasivoCentro && (<Link id='SubMenu-Contenido-Titulo' to="/G2G8MasivoCentro" onClick={toggleMobileMenu}><li>G2 - G8 Masivo Centro</li></Link>)}
                                                 {/*<Link id='SubMenu-Contenido-Titulo' to="/Mintic" onClick={toggleMobileMenu}>G5 MINTIC</Link>*/}
                                                 {subChecksIndicadores.Nps && (<Link id='SubMenu-Contenido-Titulo' to="/NPS" onClick={toggleMobileMenu}><li>NPS</li></Link>)}
-                                                {subChecksIndicadores.G2G8MasivoCentro && (<Link id='SubMenu-Contenido-Titulo' to="/G2G8MasivoCentro" onClick={toggleMobileMenu}><li>G2-G8 Masivo Centro</li></Link>)}
                                             </ul>
                                         </div>
                                     )}
@@ -975,11 +982,44 @@ function Navbar() {
                                 </li>
                             )}
 
+                            {recursosHumanos === true && (
+                                <li id='SubMenu'>
+                                    <div id='SubMenu-Titulo' onClick={() => {
+                                        closeAllDropdowns();
+                                        if (showMobileMenu === false) {
+                                            toggleMobileMenu()
+                                        }
+                                        setShowDropdownRecursosHumanos(!showDropdownRecursosHumanos)
+                                    }}>
+                                        <span id='SubMenu-Titulo-Contenedor'>
+                                            <span id='SubMenu-Titulo-Icono'><FaUserTie /></span>
+                                            {showMobileMenu && (
+                                                <div>
+                                                    <span id="SubMenu-Titulo-Texto">Recursos Humanos</span>
+                                                    <span id="SubMenu-Titulo-Icono2">
+                                                        {
+                                                            showDropdownRecursosHumanos ? <FaChevronUp /> : <FaChevronDown />
+                                                        }
+                                                    </span>
+                                                </div>
+                                            )}
+                                        </span>
+                                    </div>
+                                    {showMobileMenu && showDropdownRecursosHumanos && (
+                                        <div id='SubMenu-Contenido'>
+                                            <ul>
+                                                {subChecksRecursosHumanos.ChatBot === true && (<Link id='SubMenu-Contenido-Titulo' to="/ChatBot" onClick={toggleMobileMenu}><li>ChatBot</li></Link>)}
+                                            </ul>
+                                        </div>
+                                    )}
+                                </li>
+                            )}
+
                         </ul>
 
                         {showMobileMenu && (
                             <div className='Version'>
-                                <p>v1.36</p>
+                                <p>v1.37</p>
                             </div>
                         )}
                     </div>

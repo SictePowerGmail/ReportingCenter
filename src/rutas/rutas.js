@@ -76,6 +76,8 @@ import CursosDeAlturas from "../pages/ssta/CursosDeAlturas";
 import EntregasPendientesDotacion from "../pages/ssta/EntregasPendientesDotacion";
 /* Parque Automotor */
 import Moviles from "../pages/parqueAutomotor/Moviles";
+/* Recursos Humanos */
+import ChatBot from "../pages/recursosHumanos/ChatBot";
 /* Recuperar Contraseña */
 import RecuperarContraseña from "../pages/recuperarContraseña/recuperarContraseña";
 
@@ -232,6 +234,9 @@ function RutasApp() {
             /* Parque Automotor */
             case '/Moviles':
                 return 'Moviles'
+            /* Recursos Humanos */
+            case '/ChatBot':
+                return 'ChatBot'
             /* Recuperar Contrasena */
             case '/RecuperarContrasena':
                 return 'RecuperarContrasena';
@@ -319,6 +324,8 @@ function RutasApp() {
                 <Route path='/EntregasPendientesDotacion' exacte element={<EntregasPendientesDotacion />} />
                 {/* Parque Automotor */}
                 <Route path='/Moviles' exacte element={<Moviles />} />
+                {/* Recursos Humanos */}
+                <Route path='/ChatBot' exacte element={<ChatBot />} />
                 {/* Recuperar Contraseña */}
                 <Route path='/RecuperarContrasena' exacte element={<RecuperarContraseña />} />
             </Routes>

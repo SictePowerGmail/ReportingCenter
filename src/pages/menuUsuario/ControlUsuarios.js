@@ -634,7 +634,7 @@ function ControlUsuarios() {
     };
 
     return (
-        <div className='BasesDeDatos'>
+        <div className='ControlUsuarios'>
             <div className='contenedor'>
                 {loading ? (
                     <div className="CargandoPagina">
