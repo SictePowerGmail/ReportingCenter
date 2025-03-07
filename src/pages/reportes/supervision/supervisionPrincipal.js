@@ -448,7 +448,9 @@ const SupervisionPrincipal = () => {
 
     const generarMapa = async (data) => {
         if (mapRef.current === null) {
+            console.log(data)
             const firstLocation = data[0];
+            console.log(firstLocation)
             const { latitud, longitud } = firstLocation;
             mapRef.current = L.map('map').setView([latitud, longitud], 16);
 
