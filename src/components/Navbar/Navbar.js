@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { Link } from 'react-router-dom';
-import { FaHardHat, FaFileAlt, FaTruck, FaBars, FaTimes, FaHome, FaChartLine, FaStar, FaTools, FaChevronDown, FaChevronUp, FaUser } from 'react-icons/fa';
+import { FaHardHat, FaFileAlt, FaTruck, FaBars, FaTimes, FaHome, FaChartLine, FaStar, FaTools, FaChevronDown, FaChevronUp, FaUser, FaBoxes } from 'react-icons/fa';
 import { HiClipboardList, HiChartBar, HiOfficeBuilding } from "react-icons/hi";
 import { cargarDirectores } from '../../funciones';
 import { ThreeDots } from 'react-loader-spinner';
@@ -20,6 +20,7 @@ function Navbar() {
     const [showDropdownLogistica, setShowDropdownLogistica] = useState(false);
     const [showDropdownDireccion, setShowDropdownDireccion] = useState(false);
     const [showDropdownSSTA, setShowDropdownSSTA] = useState(false);
+    const [showDropdownParqueAutomotor, setShowDropdownParqueAutomotor] = useState(false);    
     const [isMobile, setIsMobile] = useState(window.innerWidth < 600);
     const menuRef = useRef(null);
     const [isOpen, setIsOpen] = useState(false);
@@ -46,6 +47,7 @@ function Navbar() {
         setShowDropdownLogistica(false);
         setShowDropdownDireccion(false);
         setShowDropdownSSTA(false);
+        setShowDropdownParqueAutomotor(false);
     };
 
     useEffect(() => {
@@ -181,7 +183,8 @@ function Navbar() {
     const [subChecksIndicadores, setSubChecksIndicadores] = useState({
         HistoricoKpi: false,
         G1Mantenimiento: false,
-        Nps: false
+        Nps: false,
+        G2G8MasivoCentro: false
     });
 
     const [puntuacion, setPuntuacion] = useState(false);
@@ -229,6 +232,11 @@ function Navbar() {
         Ssta: false,
         CursoDeAlturas: false,
         EntregasPendientesDotacion: false
+    });
+
+    const [parqueAutomotor, setParqueAutomotor] = useState(false);
+    const [subChecksParqueAutomotor, setSubChecksParqueAutomotor] = useState({
+        Moviles: false,
     });
 
     const cargarDatosPagesUser = async (usuario) => {
@@ -302,7 +310,8 @@ function Navbar() {
                 const mappedChecksIndicadores = {
                     HistoricoKpi: usuarioEncontrado.indicadoresHistoricoKpi === "1",
                     G1Mantenimiento: usuarioEncontrado.indicadoresG1Mantenimiento === "1",
-                    Nps: usuarioEncontrado.indicadoresNps === "1"
+                    Nps: usuarioEncontrado.indicadoresNps === "1",
+                    G2G8MasivoCentro: usuarioEncontrado.indicadoresG2G8MasivoCentro === "1",
                 };
 
                 setSubChecksIndicadores(mappedChecksIndicadores);
@@ -405,6 +414,20 @@ function Navbar() {
                     setDireccion(true);
                 } else {
                     setDireccion(false);
+                }
+
+                const mappedChecksParqueAutomotor = {
+                    Moviles: usuarioEncontrado.parqueAutomotorMoviles === "1",
+                };
+
+                setSubChecksParqueAutomotor(mappedChecksParqueAutomotor);
+
+                const algunHabilitadosParqueAutomotor = Object.values(mappedChecksParqueAutomotor).some(valor => valor === true);
+
+                if (algunHabilitadosParqueAutomotor) {
+                    setParqueAutomotor(true);
+                } else {
+                    setParqueAutomotor(false);
                 }
 
             } else {
@@ -725,6 +748,7 @@ function Navbar() {
                                                 {subChecksIndicadores.G1Mantenimiento && (<Link id='SubMenu-Contenido-Titulo' to="/MantenimientoTecnico" onClick={toggleMobileMenu}><li>G1 Mantenimiento</li></Link>)}
                                                 {/*<Link id='SubMenu-Contenido-Titulo' to="/Mintic" onClick={toggleMobileMenu}>G5 MINTIC</Link>*/}
                                                 {subChecksIndicadores.Nps && (<Link id='SubMenu-Contenido-Titulo' to="/NPS" onClick={toggleMobileMenu}><li>NPS</li></Link>)}
+                                                {subChecksIndicadores.G2G8MasivoCentro && (<Link id='SubMenu-Contenido-Titulo' to="/G2G8MasivoCentro" onClick={toggleMobileMenu}><li>G2-G8 Masivo Centro</li></Link>)}
                                             </ul>
                                         </div>
                                     )}
@@ -817,7 +841,7 @@ function Navbar() {
                                         setShowDropdownLogistica(!showDropdownLogistica)
                                     }}>
                                         <span id='SubMenu-Titulo-Contenedor'>
-                                            <span id='SubMenu-Titulo-Icono'><FaTruck /></span>
+                                            <span id='SubMenu-Titulo-Icono'><FaBoxes /></span>
                                             {showMobileMenu && (
                                                 <div>
                                                     <span id="SubMenu-Titulo-Texto">Logistica</span>
@@ -875,7 +899,7 @@ function Navbar() {
                                             <ul>
                                                 {subChecksDireccion.Penalizaciones === true && (<Link id='SubMenu-Contenido-Titulo' to="/Penalizaciones" onClick={toggleMobileMenu}><li>Penalizaciones</li></Link>)}
                                                 {subChecksDireccion.CentroDeCostos === true && (<Link id='SubMenu-Contenido-Titulo' to="/Centro_de_costos" onClick={toggleMobileMenu}><li>Centros de costos</li></Link>)}
-                                                {subChecksDireccion.ComposicionMoviles === true && (<Link id='SubMenu-Contenido-Titulo' to="/Moviles" onClick={toggleMobileMenu}><li>Composición móviles</li></Link>)}
+                                                {subChecksDireccion.ComposicionMoviles === true && (<Link id='SubMenu-Contenido-Titulo' to="/ComposicionMoviles" onClick={toggleMobileMenu}><li>Composición móviles</li></Link>)}
                                                 {subChecksDireccion.Compras === true && (<Link id='SubMenu-Contenido-Titulo' to="/Compras" onClick={toggleMobileMenu}><li>Compras</li></Link>)}
                                             </ul>
                                         </div>
@@ -918,10 +942,44 @@ function Navbar() {
                                 </li>
                             )}
 
+                            {parqueAutomotor === true && (
+                                <li id='SubMenu'>
+                                    <div id='SubMenu-Titulo' onClick={() => {
+                                        closeAllDropdowns();
+                                        if (showMobileMenu === false) {
+                                            toggleMobileMenu()
+                                        }
+                                        setShowDropdownParqueAutomotor(!showDropdownParqueAutomotor)
+                                    }}>
+                                        <span id='SubMenu-Titulo-Contenedor'>
+                                            <span id='SubMenu-Titulo-Icono'><FaTruck /></span>
+                                            {showMobileMenu && (
+                                                <div>
+                                                    <span id="SubMenu-Titulo-Texto">Parque Automotor</span>
+                                                    <span id="SubMenu-Titulo-Icono2">
+                                                        {
+                                                            showDropdownParqueAutomotor ? <FaChevronUp /> : <FaChevronDown />
+                                                        }
+                                                    </span>
+                                                </div>
+                                            )}
+                                        </span>
+                                    </div>
+                                    {showMobileMenu && showDropdownParqueAutomotor && (
+                                        <div id='SubMenu-Contenido'>
+                                            <ul>
+                                                {subChecksParqueAutomotor.Moviles === true && (<Link id='SubMenu-Contenido-Titulo' to="/Moviles" onClick={toggleMobileMenu}><li>Moviles</li></Link>)}
+                                            </ul>
+                                        </div>
+                                    )}
+                                </li>
+                            )}
+
                         </ul>
+
                         {showMobileMenu && (
                             <div className='Version'>
-                                <p>v1.35</p>
+                                <p>v1.36</p>
                             </div>
                         )}
                     </div>

@@ -36,6 +36,7 @@ import HistoricoKPI from '../pages/indicadores/HistoricoKPI';
 import MantenimientoTecnico from '../pages/indicadores/MantenimientoTecnico';
 import Mintic from '../pages/indicadores/Mintic';
 import NPS from '../pages/indicadores/NPS';
+import G2G8MasivoCentro from "../pages/indicadores/G2G8MasivoCentro";
 /* Puntuacion */
 import PlaneacionPuntuacion from '../pages/puntuacion/PlaneacionPuntuacion';
 import CorporativoPuntuacion from '../pages/puntuacion/CorporativoPuntuacion';
@@ -67,12 +68,14 @@ import EstadoProyectosR4 from "../pages/logistica/EstadoProyectosR4";
 /* Direccion */
 import Penalizaciones from '../pages/direccion/Penalizaciones';
 import CentrosDeCostos from '../pages/direccion/CentrosDeCostos';
-import Moviles from '../pages/direccion/Moviles';
+import ComposicionMoviles from '../pages/direccion/ComposicionMoviles';
 import Compras from '../pages/direccion/Compras';
 /* SSTA */
 import SSTA from '../pages/ssta/SSTA';
 import CursosDeAlturas from "../pages/ssta/CursosDeAlturas";
 import EntregasPendientesDotacion from "../pages/ssta/EntregasPendientesDotacion";
+/* Parque Automotor */
+import Moviles from "../pages/parqueAutomotor/Moviles";
 /* Recuperar Contraseña */
 import RecuperarContraseña from "../pages/recuperarContraseña/recuperarContraseña";
 
@@ -155,6 +158,8 @@ function RutasApp() {
                 return 'Mintic';
             case '/NPS':
                 return 'NPS';
+            case '/G2G8MasivoCentro':
+                return 'G2-G8 Masivo Centro'
             /* Puntuacion */
             case '/PlaneacionPuntuacion':
                 return 'Planeacion Puntuacion';
@@ -213,8 +218,8 @@ function RutasApp() {
                 return 'Penalizaciones';
             case '/Centro_de_costos':
                 return 'Centro_de_costos';
-            case '/Moviles':
-                return 'Moviles';
+            case '/ComposicionMoviles':
+                return 'Composicion Moviles';
             case '/Compras':
                 return 'Compras';
             /* SSTA */
@@ -224,6 +229,9 @@ function RutasApp() {
                 return 'CursosDeAlturas';
             case '/EntregasPendientesDotacion':
                 return 'EntregasPendientesDotacion'
+            /* Parque Automotor */
+            case '/Moviles':
+                return 'Moviles'
             /* Recuperar Contrasena */
             case '/RecuperarContrasena':
                 return 'RecuperarContrasena';
@@ -271,6 +279,7 @@ function RutasApp() {
                 <Route path='/MantenimientoTecnico' exact element={<MantenimientoTecnico />} />
                 <Route path='/Mintic' exacte element={<Mintic />} />
                 <Route path='/NPS' exacte element={<NPS />} />
+                <Route path='/G2G8MasivoCentro' exacte element={<G2G8MasivoCentro />} />
                 {/* Puntuacion */}
                 <Route path='/PlaneacionPuntuacion' exact element={<PlaneacionPuntuacion />} />
                 <Route path='/CorporativoPuntuacion' exact element={<CorporativoPuntuacion />} />
@@ -302,12 +311,14 @@ function RutasApp() {
                 {/* Direccion */}
                 <Route path='/Penalizaciones' exacte element={<Penalizaciones />} />
                 <Route path='/Centro_de_costos' exacte element={<CentrosDeCostos />} />
-                <Route path='/Moviles' exacte element={<Moviles />} />
+                <Route path='/ComposicionMoviles' exacte element={<ComposicionMoviles />} />
                 <Route path='/Compras' exacte element={<Compras />} />
                 {/* SSTA */}
                 <Route path='/SSTA' exacte element={<SSTA />} />
                 <Route path='/CursosDeAlturas' exacte element={<CursosDeAlturas />} />
                 <Route path='/EntregasPendientesDotacion' exacte element={<EntregasPendientesDotacion />} />
+                {/* Parque Automotor */}
+                <Route path='/Moviles' exacte element={<Moviles />} />
                 {/* Recuperar Contraseña */}
                 <Route path='/RecuperarContrasena' exacte element={<RecuperarContraseña />} />
             </Routes>

@@ -7,7 +7,6 @@ import axios from 'axios';
 import { ObtenerRolUsuario, cargarDirectores } from '../../funciones';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import EstadoProyectosR4 from '../logistica/EstadoProyectosR4';
 
 function ControlUsuarios() {
     const navigate = useNavigate();
@@ -144,7 +143,8 @@ function ControlUsuarios() {
     const [subChecksIndicadores, setSubChecksIndicadores] = useState({
         HistoricoKpi: false,
         G1Mantenimiento: false,
-        Nps: false
+        Nps: false,
+        G2G8MasivoCentro: false
     });
 
     const handleIndicadoresChange = () => {
@@ -284,6 +284,26 @@ function ControlUsuarios() {
         }));
     };
 
+    const [parqueAutomotor, setParqueAutomotor] = useState(false);
+    const [subChecksParqueAutomotor, setSubChecksParqueAutomotor] = useState({
+        Moviles: false
+    });
+
+    const handleParqueAutomotorChange = () => {
+        const newState = !parqueAutomotor;
+        setParqueAutomotor(newState);
+        setSubChecksParqueAutomotor((prevState) =>
+            Object.fromEntries(Object.keys(prevState).map(key => [key, newState]))
+        );
+    };
+
+    const handleSubCheckChangeParqueAutomotor = (name) => {
+        setSubChecksParqueAutomotor(prevState => ({
+            ...prevState,
+            [name]: !prevState[name]
+        }));
+    };
+
     const handleUsuarioEditadoChange = (e) => {
         setUsuarioEditado({
             ...usuarioEditado,
@@ -402,7 +422,8 @@ function ControlUsuarios() {
                 const mappedChecksIndicadores = {
                     HistoricoKpi: usuarioEncontrado.indicadoresHistoricoKpi === "1",
                     G1Mantenimiento: usuarioEncontrado.indicadoresG1Mantenimiento === "1",
-                    Nps: usuarioEncontrado.indicadoresNps === "1"
+                    Nps: usuarioEncontrado.indicadoresNps === "1",
+                    G2G8MasivoCentro: usuarioEncontrado.indicadoresG2G8MasivoCentro === "1"
                 };
 
                 setSubChecksIndicadores(mappedChecksIndicadores);
@@ -507,6 +528,20 @@ function ControlUsuarios() {
                     setDireccion(false);
                 }
 
+                const mappedChecksParqueAutomotor = {
+                    Moviles: usuarioEncontrado.parqueAutomotorMoviles === "1",
+                };
+
+                setSubChecksParqueAutomotor(mappedChecksParqueAutomotor);
+
+                const todosHabilitadosParqueAutomotor = Object.values(mappedChecksParqueAutomotor).every(valor => valor === true);
+
+                if (todosHabilitadosParqueAutomotor) {
+                    setParqueAutomotor(true);
+                } else {
+                    setParqueAutomotor(false);
+                }
+
             } else {
                 console.log("Usuario no encontrado");
             }
@@ -545,6 +580,7 @@ function ControlUsuarios() {
                 indicadoresHistoricoKpi: subChecksIndicadores.HistoricoKpi ? 1 : 0,
                 indicadoresG1Mantenimiento: subChecksIndicadores.G1Mantenimiento ? 1 : 0,
                 indicadoresNps: subChecksIndicadores.Nps ? 1 : 0,
+                indicadoresG2G8MasivoCentro: subChecksIndicadores.G2G8MasivoCentro ? 1 : 0,
                 sstaSsta: subChecksSsta.Ssta ? 1 : 0,
                 sstaCursoDeAlturas: subChecksSsta.CursoDeAlturas ? 1 : 0,
                 sstaEntregasPendientesDotacion: subChecksSsta.EntregasPendientesDotacion ? 1 : 0,
@@ -572,7 +608,7 @@ function ControlUsuarios() {
                 direccionCentroDeCostos: subChecksDireccion.CentroDeCostos ? 1 : 0,
                 direccionComposicionMoviles: subChecksDireccion.ComposicionMoviles ? 1 : 0,
                 direccionCompras: subChecksDireccion.Compras ? 1 : 0,
-                
+                parqueAutomotor: subChecksParqueAutomotor.Moviles ? 1 : 0,
             };
             
             const response = await axios.put(
@@ -880,6 +916,29 @@ function ControlUsuarios() {
                                                                 checked={subChecksDireccion[key]}
                                                                 onChange={() => handleSubCheckChangeDireccion(key)}
                                                                 disabled={direccion}
+                                                            />
+                                                            <span>{key.replace(/([A-Z])/g, ' $1').trim()}</span>
+                                                        </label>
+                                                    ))}
+                                                </div>
+
+                                                <label className='subTitulo'>
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={parqueAutomotor}
+                                                        onChange={handleParqueAutomotorChange}
+                                                    />
+                                                    <span>Parque Automotor</span>
+                                                </label>
+
+                                                <div className='lista'>
+                                                    {Object.keys(subChecksParqueAutomotor).map((key) => (
+                                                        <label key={key} style={{ display: "block" }}>
+                                                            <input
+                                                                type="checkbox"
+                                                                checked={subChecksParqueAutomotor[key]}
+                                                                onChange={() => handleSubCheckChangeParqueAutomotor(key)}
+                                                                disabled={parqueAutomotor}
                                                             />
                                                             <span>{key.replace(/([A-Z])/g, ' $1').trim()}</span>
                                                         </label>

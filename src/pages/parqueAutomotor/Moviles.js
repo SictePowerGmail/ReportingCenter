@@ -7,7 +7,7 @@ function Moviles() {
     <div className='powerbi'>
       <iframe
         title="Moviles"
-        src="https://app.powerbi.com/view?r=eyJrIjoiNzJjNjViMTgtMjYwZi00MTNhLThhMDctYmE3MjFmM2Q5MDQxIiwidCI6ImUwYmZlOTBkLTIwZTAtNDEwYi1iNmYxLTQyOWIwNDNkMzYwOCJ9"
+        src="https://app.powerbi.com/view?r=eyJrIjoiNGZmYWI5MDItZWY1YS00YzZiLTlkN2MtMzNmODMwYjMyMmM4IiwidCI6ImUwYmZlOTBkLTIwZTAtNDEwYi1iNmYxLTQyOWIwNDNkMzYwOCJ9"
       ></iframe>
     </div>
   );
