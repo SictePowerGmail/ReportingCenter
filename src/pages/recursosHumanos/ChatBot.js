@@ -16,6 +16,7 @@ function ChatBot() {
     const [loading, setLoading] = useState(true);
     const columnasVisibles = ["id", "registro", "stage", "nombreApellido", "ciudad", "cargo", "estadoFinal"];
     const [data, setData] = useState(true);
+    const [dataConfirmados, setDataConfirmados] = useState(true);
     const [dataAll, setDataAll] = useState(true);
     const columnasMapeadas = {
         id: "id",
@@ -27,17 +28,69 @@ function ChatBot() {
         estadoFinal: "estadoProceso"
     };
 
+    const formatFechaHora = (fechaTexto) => {
+        const meses = {
+            "enero": "01", "febrero": "02", "marzo": "03", "abril": "04",
+            "mayo": "05", "junio": "06", "julio": "07", "agosto": "08",
+            "septiembre": "09", "octubre": "10", "noviembre": "11", "diciembre": "12"
+        };
+
+        const regex = /(\d{1,2}) de (\w+) de (\d{4}) a las (\d{1,2}):(\d{2}) (\w{2})/;
+        const match = fechaTexto.match(regex);
+
+        if (!match) return ""; // Si el formato es incorrecto, retorna vacío
+
+        let [, dia, mesTexto, año, horas, minutos, ampm] = match;
+        let mes = meses[mesTexto.toLowerCase()];
+
+        // Convertir horas a formato 24h
+        if (ampm.toLowerCase() === "pm" && horas !== "12") horas = String(Number(horas) + 12);
+        if (ampm.toLowerCase() === "am" && horas === "12") horas = "00";
+
+        return `${año}-${mes}-${dia.padStart(2, "0")}T${horas.padStart(2, "0")}:${minutos}`;
+    };
+
     const cargarDatos = async () => {
         try {
             const responseChatbot = await axios.get(`${process.env.REACT_APP_API_URL}/recursosHumanos/RegistrosChatbot`);
             const sortedData = responseChatbot.data.sort((a, b) => b.id - a.id);
             setDataAll(sortedData)
+
             const sortedData2 = sortedData.map(row => Object.fromEntries(
                 Object.entries(row)
                     .filter(([key]) => columnasVisibles.includes(key))
                     .map(([key, value]) => [columnasMapeadas[key] || key, value])
             ));
             setData(sortedData2);
+
+            const hoy = new Date();
+            const hoyISO = hoy.toISOString().split("T")[0]; // Obtiene 'YYYY-MM-DD'
+
+            const dataFiltrada = sortedData
+                .filter(row => row.estadoFinal === "Confirmado" || row.estadoFinal === "Finalizado")
+                .filter((row) => {
+
+                    if (!row.fechaHora) {
+                        return false;
+                    }
+
+                    const fechaISO = formatFechaHora(row.fechaHora);
+                    if (!fechaISO) {
+                        return false;
+                    }
+
+                    const fechaSolo = fechaISO.split("T")[0];
+
+                    return fechaSolo === hoyISO || fechaSolo > hoyISO;
+                });
+
+            const sortedData3 = dataFiltrada.map(row => Object.fromEntries(
+                Object.entries(row)
+                    .filter(([key]) => columnasVisibles.includes(key))
+                    .map(([key, value]) => [columnasMapeadas[key] || key, value])
+            ));
+
+            setDataConfirmados(sortedData3);
 
             setLoading(false);
         } catch (error) {
@@ -52,12 +105,11 @@ function ChatBot() {
             navigate('/ReportingCenter');
         }
 
-        cargarDirectores();
         cargarDatos();
     }, []);
 
-    const [filters, setFilters] = useState({});
-    const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
+    const [filtersPendientes, setFiltersPendientes] = useState({});
+    const [sortConfigPendientes, setSortConfigPendientes] = useState({ key: null, direction: "asc" });
 
     const formatHeader = (key) => {
         return key
@@ -66,30 +118,67 @@ function ChatBot() {
             .trim();
     };
 
-    const filteredData = Array.isArray(data) ? data.filter((row) =>
-        Object.keys(filters).every((key) =>
-            row[key]?.toString().toLowerCase().includes(filters[key]?.toLowerCase() || "")
-        )
-    ) : [];
+    const filteredDataPendientes = Array.isArray(data)
+        ? data
+            .filter(row => row.estadoProceso === "Pendiente")
+            .filter((row) =>
+                Object.keys(filtersPendientes).every((key) =>
+                    row[key]?.toString().toLowerCase().includes(filtersPendientes[key]?.toLowerCase() || "")
+                )
+            ) : [];
 
     // Ordenar datos
-    const sortedData = [...filteredData].sort((a, b) => {
-        if (!sortConfig.key) return 0;
-        const valA = a[sortConfig.key] || "";
-        const valB = b[sortConfig.key] || "";
-        return sortConfig.direction === "asc"
+    const sortedDataPendientes = [...filteredDataPendientes].sort((a, b) => {
+        if (!sortConfigPendientes.key) return 0;
+        const valA = a[sortConfigPendientes.key] || "";
+        const valB = b[sortConfigPendientes.key] || "";
+        return sortConfigPendientes.direction === "asc"
             ? valA.toString().localeCompare(valB.toString())
             : valB.toString().localeCompare(valA.toString());
     });
 
     // Manejo de filtros
-    const handleFilterChange = (key, value) => {
-        setFilters({ ...filters, [key]: value });
+    const handleFilterChangePendientes = (key, value) => {
+        setFiltersPendientes({ ...filtersPendientes, [key]: value });
     };
 
     // Manejo de ordenamiento
-    const handleSort = (key) => {
-        setSortConfig((prev) => ({
+    const handleSortPendientes = (key) => {
+        setSortConfigPendientes((prev) => ({
+            key,
+            direction: prev.key === key && prev.direction === "asc" ? "desc" : "asc",
+        }));
+    };
+
+    const [filtersConfirmado, setFiltersConfirmado] = useState({});
+    const [sortConfigConfirmado, setSortConfigConfirmado] = useState({ key: null, direction: "asc" });
+
+    const filteredDataConfirmado = Array.isArray(dataConfirmados)
+        ? dataConfirmados
+            .filter((row) =>
+                Object.keys(filtersConfirmado).every((key) =>
+                    row[key]?.toString().toLowerCase().includes(filtersConfirmado[key]?.toLowerCase() || "")
+                )
+            ) : [];
+
+    // Ordenar datos
+    const sortedDataConfirmado = [...filteredDataConfirmado].sort((a, b) => {
+        if (!sortConfigConfirmado.key) return 0;
+        const valA = a[sortConfigConfirmado.key] || "";
+        const valB = b[sortConfigConfirmado.key] || "";
+        return sortConfigConfirmado.direction === "asc"
+            ? valA.toString().localeCompare(valB.toString())
+            : valB.toString().localeCompare(valA.toString());
+    });
+
+    // Manejo de filtros
+    const handleFilterChangeConfirmado = (key, value) => {
+        setFiltersConfirmado({ ...filtersConfirmado, [key]: value });
+    };
+
+    // Manejo de ordenamiento
+    const handleSortConfirmado = (key) => {
+        setSortConfigConfirmado((prev) => ({
             key,
             direction: prev.key === key && prev.direction === "asc" ? "desc" : "asc",
         }));
@@ -159,28 +248,6 @@ function ChatBot() {
         setSelectedRow(null);
     };
 
-    const formatFechaHora = (fechaTexto) => {
-        const meses = {
-            "enero": "01", "febrero": "02", "marzo": "03", "abril": "04",
-            "mayo": "05", "junio": "06", "julio": "07", "agosto": "08",
-            "septiembre": "09", "octubre": "10", "noviembre": "11", "diciembre": "12"
-        };
-
-        const regex = /(\d{1,2}) de (\w+) de (\d{4}) a las (\d{1,2}):(\d{2}) (\w{2})/;
-        const match = fechaTexto.match(regex);
-
-        if (!match) return ""; // Si el formato es incorrecto, retorna vacío
-
-        let [, dia, mesTexto, año, horas, minutos, ampm] = match;
-        let mes = meses[mesTexto.toLowerCase()];
-
-        // Convertir horas a formato 24h
-        if (ampm.toLowerCase() === "pm" && horas !== "12") horas = String(Number(horas) + 12);
-        if (ampm.toLowerCase() === "am" && horas === "12") horas = "00";
-
-        return `${año}-${mes}-${dia.padStart(2, "0")}T${horas.padStart(2, "0")}:${minutos}`;
-    };
-
     const formatFechaHoraSalida = (fechaISO) => {
         if (!fechaISO) return "";
 
@@ -206,6 +273,16 @@ function ChatBot() {
 
         if (!editedRow.fechaHora || !editedRow.estadoFinal) {
             toast.error("Debe completar la fecha y el estado final.");
+            return;
+        }
+
+        const validarFormatoFechaHora = (fechaHora) => {
+            const regex = /^(lunes|martes|miércoles|jueves|viernes|sábado|domingo), \d{1,2} de (enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre) de \d{4} a las \d{1,2}:\d{2} (am|pm)$/i;
+            return regex.test(fechaHora);
+        };
+
+        if (!validarFormatoFechaHora(editedRow.fechaHora)) {
+            toast.error("El formato de la fecha no es válido.");
             return;
         }
 
@@ -263,17 +340,20 @@ function ChatBot() {
                             <button className='btn btn-success' onClick={descargarArchivo}>Descargar Registros</button>
                         </div>
 
+                        <div className='Subtitulo'>
+                            <span>Solicitudes Pendientes</span>
+                        </div>
                         <div className='tabla'>
                             <table className="table table-bordered">
                                 <thead >
                                     <tr>
                                         {Object.keys(data[0]).map((key) => (
-                                            <th key={key} onClick={() => handleSort(key)}>
-                                                {formatHeader(key)} {sortConfig.key === key ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
+                                            <th key={key} onClick={() => handleSortPendientes(key)}>
+                                                {formatHeader(key)} {sortConfigPendientes.key === key ? (sortConfigPendientes.direction === "asc" ? "▲" : "▼") : ""}
                                                 <input
                                                     type="text"
                                                     className="form-control"
-                                                    onChange={(e) => handleFilterChange(key, e.target.value)}
+                                                    onChange={(e) => handleFilterChangePendientes(key, e.target.value)}
                                                     onClick={(e) => e.stopPropagation()}
                                                 />
                                             </th>
@@ -281,7 +361,7 @@ function ChatBot() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {sortedData.map((row) => (
+                                    {sortedDataPendientes.map((row) => (
                                         <tr key={row.id} onClick={() => handleRowClick(row)}>
                                             {Object.values(row).map((cell, i) => (
                                                 <td key={i} >{cell || "-"}</td>
@@ -290,6 +370,44 @@ function ChatBot() {
                                     ))}
                                 </tbody>
                             </table>
+                        </div>
+                        <div className='registros primero'>
+                            <span>Total de registros: {sortedDataPendientes.length}</span>
+                        </div>
+                        
+                        <div className='Subtitulo'>
+                            <span>Solicitudes Confirmadas</span>
+                        </div>
+                        <div className='tabla'>
+                            <table className="table table-bordered">
+                                <thead >
+                                    <tr>
+                                        {Object.keys(data[0]).map((key) => (
+                                            <th key={key} onClick={() => handleSortConfirmado(key)}>
+                                                {formatHeader(key)} {sortConfigConfirmado.key === key ? (sortConfigConfirmado.direction === "asc" ? "▲" : "▼") : ""}
+                                                <input
+                                                    type="text"
+                                                    className="form-control"
+                                                    onChange={(e) => handleFilterChangeConfirmado(key, e.target.value)}
+                                                    onClick={(e) => e.stopPropagation()}
+                                                />
+                                            </th>
+                                        ))}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {sortedDataConfirmado.map((row) => (
+                                        <tr key={row.id} onClick={() => handleRowClick(row)}>
+                                            {Object.values(row).map((cell, i) => (
+                                                <td key={i} >{cell || "-"}</td>
+                                            ))}
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div className='registros'>
+                            <span>Total de registros: {sortedDataConfirmado.length}</span>
                         </div>
 
                         {selectedRow && (
@@ -318,7 +436,18 @@ function ChatBot() {
                                                         type="datetime-local"
                                                         className="form-control"
                                                         value={formatFechaHora(editedRow[key] || "")}
-                                                        onChange={(e) => handleInputChange(key, formatFechaHoraSalida(e.target.value))}
+                                                        onChange={(e) => {
+                                                            const fechaIngresada = new Date(e.target.value);
+                                                            const fechaActual = new Date();
+                                                            fechaActual.setHours(0, 0, 0, 0);
+
+                                                            if (fechaIngresada >= fechaActual) {
+                                                                handleInputChange(key, formatFechaHoraSalida(e.target.value));
+                                                            } else {
+                                                                toast.error("No puedes seleccionar una fecha anterior a hoy.");
+                                                            }
+                                                        }}
+                                                        min={new Date().toISOString().slice(0, 16)}
                                                     />
                                                 ) : (
                                                     <input
