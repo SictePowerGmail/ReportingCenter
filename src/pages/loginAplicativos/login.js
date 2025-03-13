@@ -105,6 +105,8 @@ const Login = () => {
                     navigate('/ReporteMaterialPrincipal', { state: { estadoNotificacion: false } });
                 } else if (tipo === 'inventarioMaterial') {
                     navigate('/InventariosMaterialPrincipal', { state: { estadoNotificacion: false } });
+                } else if (tipo === 'ChatBot') {
+                    navigate('/ChatBot');
                 }
             } else {
                 const errorText = await response.text();
@@ -134,6 +136,8 @@ const Login = () => {
                 navigate('/ReporteMaterialPrincipal', { state: { estadoNotificacion: false } });
             } else if (tipo === 'inventarioMaterial') {
                 navigate('/InventariosMaterialPrincipal', { state: { estadoNotificacion: false } });
+            } else if (tipo === 'ChatBot') {
+                navigate('/ChatBot');
             }
         }
     }, []);

@@ -212,6 +212,26 @@ function ControlUsuarios() {
         }));
     };
 
+    const [gestionHumana, setGestionHumana] = useState(false);
+    const [subChecksGestionHumana, setSubChecksGestionHumana] = useState({
+        ChatBot: false
+    });
+
+    const handleGestionHumanaChange = () => {
+        const newState = !gestionHumana;
+        setGestionHumana(newState);
+        setSubChecksGestionHumana((prevState) =>
+            Object.fromEntries(Object.keys(prevState).map(key => [key, newState]))
+        );
+    };
+
+    const handleSubCheckChangeGestionHumana = (name) => {
+        setSubChecksGestionHumana(prevState => ({
+            ...prevState,
+            [name]: !prevState[name]
+        }));
+    };
+
     const [logistica, setLogistica] = useState(false);
     const [subChecksLogistica, setSubChecksLogistica] = useState({
         EquiposEnMovilesR2: false,
@@ -542,6 +562,20 @@ function ControlUsuarios() {
                     setParqueAutomotor(false);
                 }
 
+                const mappedChecksGestionHumana = {
+                    ChatBot: usuarioEncontrado.gestionHumanaChatbot === "1",
+                };
+
+                setSubChecksGestionHumana(mappedChecksGestionHumana);
+
+                const todosHabilitadosGestionHumana = Object.values(mappedChecksGestionHumana).every(valor => valor === true);
+
+                if (todosHabilitadosGestionHumana) {
+                    setGestionHumana(true);
+                } else {
+                    setGestionHumana(false);
+                }
+
             } else {
                 console.log("Usuario no encontrado");
             }
@@ -609,6 +643,7 @@ function ControlUsuarios() {
                 direccionComposicionMoviles: subChecksDireccion.ComposicionMoviles ? 1 : 0,
                 direccionCompras: subChecksDireccion.Compras ? 1 : 0,
                 parqueAutomotor: subChecksParqueAutomotor.Moviles ? 1 : 0,
+                gestionHumana: subChecksGestionHumana.ChatBot ? 1 : 0,
             };
             
             const response = await axios.put(
@@ -866,6 +901,29 @@ function ControlUsuarios() {
                                                                 checked={subChecksOperacion[key]}
                                                                 onChange={() => handleSubCheckChangeOperacion(key)}
                                                                 disabled={operacion}
+                                                            />
+                                                            <span>{key.replace(/([A-Z])/g, ' $1').trim()}</span>
+                                                        </label>
+                                                    ))}
+                                                </div>
+
+                                                <label className='subTitulo'>
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={gestionHumana}
+                                                        onChange={handleGestionHumanaChange}
+                                                    />
+                                                    <span>Gestion Humana</span>
+                                                </label>
+
+                                                <div className='lista'>
+                                                    {Object.keys(subChecksGestionHumana).map((key) => (
+                                                        <label key={key} style={{ display: "block" }}>
+                                                            <input
+                                                                type="checkbox"
+                                                                checked={subChecksGestionHumana[key]}
+                                                                onChange={() => handleSubCheckChangeGestionHumana(key)}
+                                                                disabled={gestionHumana}
                                                             />
                                                             <span>{key.replace(/([A-Z])/g, ' $1').trim()}</span>
                                                         </label>

@@ -4,11 +4,11 @@ import { ThreeDots } from 'react-loader-spinner';
 import './ChatBot.css'
 import Cookies from 'js-cookie';
 import axios from 'axios';
-import { cargarDirectores } from '../../funciones';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
+import { cargarRelacionPersonal, ObtenerRelacionCiudadAuxiliar } from '../../funciones';
 
 function ChatBot() {
     const navigate = useNavigate();
@@ -18,6 +18,8 @@ function ChatBot() {
     const [data, setData] = useState(true);
     const [dataConfirmados, setDataConfirmados] = useState(true);
     const [dataAll, setDataAll] = useState(true);
+    const cedulaUsuario = Cookies.get('userCedula');
+    const nombreUsuario = Cookies.get('userNombre');
     const columnasMapeadas = {
         id: "id",
         registro: "registro",
@@ -53,10 +55,17 @@ function ChatBot() {
     const cargarDatos = async () => {
         try {
             const responseChatbot = await axios.get(`${process.env.REACT_APP_API_URL}/recursosHumanos/RegistrosChatbot`);
+                
             const sortedData = responseChatbot.data.sort((a, b) => b.id - a.id);
             setDataAll(sortedData)
 
-            const sortedData2 = sortedData.map(row => Object.fromEntries(
+            const ciudad = ObtenerRelacionCiudadAuxiliar(nombreUsuario);
+            
+            const datafiltrada = ciudad
+                ? sortedData.filter(item => item.ciudad === ciudad)
+                : sortedData;
+
+            const sortedData2 = datafiltrada.map(row => Object.fromEntries(
                 Object.entries(row)
                     .filter(([key]) => columnasVisibles.includes(key))
                     .map(([key, value]) => [columnasMapeadas[key] || key, value])
@@ -66,7 +75,7 @@ function ChatBot() {
             const hoy = new Date();
             const hoyISO = hoy.toISOString().split("T")[0]; // Obtiene 'YYYY-MM-DD'
 
-            const dataFiltrada = sortedData
+            const dataFiltrada2 = datafiltrada
                 .filter(row => row.estadoFinal === "Confirmado" || row.estadoFinal === "Finalizado")
                 .filter((row) => {
 
@@ -84,7 +93,7 @@ function ChatBot() {
                     return fechaSolo === hoyISO || fechaSolo > hoyISO;
                 });
 
-            const sortedData3 = dataFiltrada.map(row => Object.fromEntries(
+            const sortedData3 = dataFiltrada2.map(row => Object.fromEntries(
                 Object.entries(row)
                     .filter(([key]) => columnasVisibles.includes(key))
                     .map(([key, value]) => [columnasMapeadas[key] || key, value])
@@ -100,11 +109,16 @@ function ChatBot() {
     };
 
     useEffect(() => {
-        const role = Cookies.get('userRole');
-        if (role !== "admin") {
-            navigate('/ReportingCenter');
+        const yaRecargado = localStorage.getItem('yaRecargado');
+
+        if (cedulaUsuario === undefined && nombreUsuario === undefined) {
+            navigate('/ReportingCenter', { state: { estadoNotificacion: false } });
+        } else if (!yaRecargado) {
+            localStorage.setItem('yaRecargado', 'true');
+            window.location.reload();
         }
 
+        cargarRelacionPersonal();
         cargarDatos();
     }, []);
 
@@ -374,7 +388,7 @@ function ChatBot() {
                         <div className='registros primero'>
                             <span>Total de registros: {sortedDataPendientes.length}</span>
                         </div>
-                        
+
                         <div className='Subtitulo'>
                             <span>Solicitudes Confirmadas</span>
                         </div>

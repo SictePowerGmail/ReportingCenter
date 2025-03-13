@@ -55,7 +55,6 @@ export const ObtenerRolUsuario = (rol) => {
 const obtenerRelacionPersonal = async () => {
     try {
         const response = await axios.get(`${process.env.REACT_APP_API_URL}/solicitudMaterial/RelacionPersonal`);
-
         return response.data;
     } catch (error) {
         console.error("Error al obtener la lista de directores:", error);
@@ -87,4 +86,9 @@ export const ObtenerRelacionCiudadFacturacion = (usuario) => {
 export const ObtenerRelacionCoordinadorAnalistaLogistica = (usuario) => {
     const registros = RelacionPersonal.filter(item => item.coordinador === usuario || item.supervisor === usuario)
     return registros.length > 0 ? registros.map(item => item.analistaLogistica) : [];
+};
+
+export const ObtenerRelacionCiudadAuxiliar = (usuario) => {
+    const registro = RelacionPersonal.find(item => item.auxiliar === usuario);
+    return registro ? registro.ciudad : null;
 };

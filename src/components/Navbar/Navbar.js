@@ -21,7 +21,7 @@ function Navbar() {
     const [showDropdownDireccion, setShowDropdownDireccion] = useState(false);
     const [showDropdownSSTA, setShowDropdownSSTA] = useState(false);
     const [showDropdownParqueAutomotor, setShowDropdownParqueAutomotor] = useState(false);    
-    const [showDropdownRecursosHumanos, setShowDropdownRecursosHumanos] = useState(false);    
+    const [showDropdownGestionHumana, setShowDropdownGestionHumana] = useState(false);    
     const [isMobile, setIsMobile] = useState(window.innerWidth < 600);
     const menuRef = useRef(null);
     const [isOpen, setIsOpen] = useState(false);
@@ -49,7 +49,7 @@ function Navbar() {
         setShowDropdownDireccion(false);
         setShowDropdownSSTA(false);
         setShowDropdownParqueAutomotor(false);
-        setShowDropdownRecursosHumanos(false);
+        setShowDropdownGestionHumana(false);
     };
 
     useEffect(() => {
@@ -241,9 +241,9 @@ function Navbar() {
         Moviles: false,
     });
 
-    const [recursosHumanos, setRecursosHumanos] = useState(true);
-    const [subChecksRecursosHumanos, setSubChecksRecursosHumanos] = useState({
-        ChatBot: true,
+    const [gestionHumana, setGestionHumana] = useState(false);
+    const [subChecksGestionHumana, setSubChecksGestionHumana] = useState({
+        ChatBot: false,
     });
 
     const cargarDatosPagesUser = async (usuario) => {
@@ -435,6 +435,20 @@ function Navbar() {
                     setParqueAutomotor(true);
                 } else {
                     setParqueAutomotor(false);
+                }
+
+                const mappedChecksGestionHumana = {
+                    Chatbot: usuarioEncontrado.gestionHumanaChatbot === "1",
+                };
+
+                setSubChecksGestionHumana(mappedChecksGestionHumana);
+
+                const algunHabilitadosGestionHumana = Object.values(mappedChecksGestionHumana).some(valor => valor === true);
+
+                if (algunHabilitadosGestionHumana) {
+                    setGestionHumana(true);
+                } else {
+                    setGestionHumana(false);
                 }
 
             } else {
@@ -982,39 +996,38 @@ function Navbar() {
                                 </li>
                             )}
 
-                            {recursosHumanos === true && (
+                            {gestionHumana === true && (
                                 <li id='SubMenu'>
                                     <div id='SubMenu-Titulo' onClick={() => {
                                         closeAllDropdowns();
                                         if (showMobileMenu === false) {
                                             toggleMobileMenu()
                                         }
-                                        setShowDropdownRecursosHumanos(!showDropdownRecursosHumanos)
+                                        setShowDropdownGestionHumana(!showDropdownGestionHumana)
                                     }}>
                                         <span id='SubMenu-Titulo-Contenedor'>
                                             <span id='SubMenu-Titulo-Icono'><FaUserTie /></span>
                                             {showMobileMenu && (
                                                 <div>
-                                                    <span id="SubMenu-Titulo-Texto">Recursos Humanos</span>
+                                                    <span id="SubMenu-Titulo-Texto">Gestion Humana</span>
                                                     <span id="SubMenu-Titulo-Icono2">
                                                         {
-                                                            showDropdownRecursosHumanos ? <FaChevronUp /> : <FaChevronDown />
+                                                            showDropdownGestionHumana ? <FaChevronUp /> : <FaChevronDown />
                                                         }
                                                     </span>
                                                 </div>
                                             )}
                                         </span>
                                     </div>
-                                    {showMobileMenu && showDropdownRecursosHumanos && (
+                                    {showMobileMenu && showDropdownGestionHumana && (
                                         <div id='SubMenu-Contenido'>
                                             <ul>
-                                                {subChecksRecursosHumanos.ChatBot === true && (<Link id='SubMenu-Contenido-Titulo' to="/ChatBot" onClick={toggleMobileMenu}><li>ChatBot</li></Link>)}
+                                                {subChecksGestionHumana.Chatbot === true && (<Link id='SubMenu-Contenido-Titulo' to={{ pathname: "/Login", search: "?tipo=ChatBot" }} onClick={toggleMobileMenu}><li>ChatBot</li></Link>)}
                                             </ul>
                                         </div>
                                     )}
                                 </li>
                             )}
-
                         </ul>
 
                         {showMobileMenu && (
