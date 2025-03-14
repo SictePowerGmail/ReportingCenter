@@ -20,8 +20,8 @@ function Navbar() {
     const [showDropdownLogistica, setShowDropdownLogistica] = useState(false);
     const [showDropdownDireccion, setShowDropdownDireccion] = useState(false);
     const [showDropdownSSTA, setShowDropdownSSTA] = useState(false);
-    const [showDropdownParqueAutomotor, setShowDropdownParqueAutomotor] = useState(false);    
-    const [showDropdownGestionHumana, setShowDropdownGestionHumana] = useState(false);    
+    const [showDropdownParqueAutomotor, setShowDropdownParqueAutomotor] = useState(false);
+    const [showDropdownGestionHumana, setShowDropdownGestionHumana] = useState(false);
     const [isMobile, setIsMobile] = useState(window.innerWidth < 600);
     const menuRef = useRef(null);
     const [isOpen, setIsOpen] = useState(false);
@@ -233,7 +233,7 @@ function Navbar() {
     const [subChecksSsta, setSubChecksSsta] = useState({
         Ssta: false,
         CursoDeAlturas: false,
-        EntregasPendientesDotacion: false
+        EntregasPendientesDotacion: false,
     });
 
     const [parqueAutomotor, setParqueAutomotor] = useState(false);
@@ -244,6 +244,7 @@ function Navbar() {
     const [gestionHumana, setGestionHumana] = useState(false);
     const [subChecksGestionHumana, setSubChecksGestionHumana] = useState({
         ChatBot: false,
+        Carnetizacion: true,
     });
 
     const cargarDatosPagesUser = async (usuario) => {
@@ -334,7 +335,7 @@ function Navbar() {
                 const mappedChecksSsta = {
                     Ssta: usuarioEncontrado.sstaSsta === "1",
                     CursoDeAlturas: usuarioEncontrado.sstaCursoDeAlturas === "1",
-                    EntregasPendientesDotacion: usuarioEncontrado.sstaEntregasPendientesDotacion === "1"
+                    EntregasPendientesDotacion: usuarioEncontrado.sstaEntregasPendientesDotacion === "1",
                 };
 
                 setSubChecksSsta(mappedChecksSsta);
@@ -439,6 +440,7 @@ function Navbar() {
 
                 const mappedChecksGestionHumana = {
                     Chatbot: usuarioEncontrado.gestionHumanaChatbot === "1",
+                    Carnetizacion: true,
                 };
 
                 setSubChecksGestionHumana(mappedChecksGestionHumana);
@@ -1023,6 +1025,7 @@ function Navbar() {
                                         <div id='SubMenu-Contenido'>
                                             <ul>
                                                 {subChecksGestionHumana.Chatbot === true && (<Link id='SubMenu-Contenido-Titulo' to={{ pathname: "/Login", search: "?tipo=ChatBot" }} onClick={toggleMobileMenu}><li>ChatBot</li></Link>)}
+                                                {role === 'admin' && subChecksGestionHumana.Carnetizacion === true && (<Link id='SubMenu-Contenido-Titulo' to={{ pathname: "/Login", search: "?tipo=Carnetizacion" }} onClick={toggleMobileMenu}><li>Carnetizacion</li></Link>) }
                                             </ul>
                                         </div>
                                     )}

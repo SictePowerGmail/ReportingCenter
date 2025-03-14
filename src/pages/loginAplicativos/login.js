@@ -107,6 +107,8 @@ const Login = () => {
                     navigate('/InventariosMaterialPrincipal', { state: { estadoNotificacion: false } });
                 } else if (tipo === 'ChatBot') {
                     navigate('/ChatBot');
+                } else if (tipo === 'Carnetizacion') {
+                    navigate('/Carnetizacion');
                 }
             } else {
                 const errorText = await response.text();
@@ -138,6 +140,8 @@ const Login = () => {
                 navigate('/InventariosMaterialPrincipal', { state: { estadoNotificacion: false } });
             } else if (tipo === 'ChatBot') {
                 navigate('/ChatBot');
+            } else if (tipo === 'Carnetizacion') {
+                navigate('/Carnetizacion');
             }
         }
     }, []);

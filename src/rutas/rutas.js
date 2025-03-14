@@ -78,6 +78,7 @@ import EntregasPendientesDotacion from "../pages/ssta/EntregasPendientesDotacion
 import Moviles from "../pages/parqueAutomotor/Moviles";
 /* Gestion Humana */
 import ChatBot from "../pages/gestionHumana/ChatBot";
+import Carnetizacion from "../pages/gestionHumana/Carnetizacion";
 /* Recuperar Contraseña */
 import RecuperarContraseña from "../pages/recuperarContraseña/recuperarContraseña";
 
@@ -237,6 +238,8 @@ function RutasApp() {
             /* Gestion Humana */
             case '/ChatBot':
                 return 'ChatBot'
+            case '/Carnetizacion':
+                return 'Carnetizacion'
             /* Recuperar Contrasena */
             case '/RecuperarContrasena':
                 return 'RecuperarContrasena';
@@ -326,6 +329,7 @@ function RutasApp() {
                 <Route path='/Moviles' exacte element={<Moviles />} />
                 {/* Gestion Humana */}
                 <Route path='/ChatBot' exacte element={<ChatBot />} />
+                <Route path='/Carnetizacion' exacte element={<Carnetizacion />} />
                 {/* Recuperar Contraseña */}
                 <Route path='/RecuperarContrasena' exacte element={<RecuperarContraseña />} />
             </Routes>
