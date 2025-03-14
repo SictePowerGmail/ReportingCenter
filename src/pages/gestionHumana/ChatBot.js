@@ -55,14 +55,14 @@ function ChatBot() {
     const cargarDatos = async () => {
         try {
             const responseChatbot = await axios.get(`${process.env.REACT_APP_API_URL}/recursosHumanos/RegistrosChatbot`);
-                
+
             const sortedData = responseChatbot.data.sort((a, b) => b.id - a.id);
             setDataAll(sortedData)
 
             const ciudad = ObtenerRelacionCiudadAuxiliar(nombreUsuario);
-            
+
             const datafiltrada = ciudad
-                ? sortedData.filter(item => item.ciudad === ciudad)
+                ? sortedData.filter(item => ciudad.includes(item.ciudad))
                 : sortedData;
 
             const sortedData2 = datafiltrada.map(row => Object.fromEntries(

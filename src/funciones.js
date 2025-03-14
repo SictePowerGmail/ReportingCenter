@@ -89,6 +89,6 @@ export const ObtenerRelacionCoordinadorAnalistaLogistica = (usuario) => {
 };
 
 export const ObtenerRelacionCiudadAuxiliar = (usuario) => {
-    const registro = RelacionPersonal.find(item => item.auxiliar === usuario);
-    return registro ? registro.ciudad : null;
+    const registros = RelacionPersonal.filter(item => item.auxiliar === usuario);
+    return registros.length > 0 ? registros.map(registro => registro.ciudad) : null;
 };
