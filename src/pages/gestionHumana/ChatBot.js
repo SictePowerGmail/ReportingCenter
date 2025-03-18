@@ -14,19 +14,29 @@ function ChatBot() {
     const navigate = useNavigate();
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(true);
-    const columnasVisibles = ["id", "registro", "stage", "nombreApellido", "ciudad", "cargo", "estadoFinal"];
+    const columnasVisiblesPendientes = ["id", "registro", "stage", "nombreApellido", "ciudad", "cargo", "estadoFinal"];
+    const columnasVisiblesConfirmados = ["id", "fechaHora", "nombreApellido", "ciudad", "cargo", "observaciones", "estadoFinal"];
     const [data, setData] = useState(true);
     const [dataConfirmados, setDataConfirmados] = useState(true);
     const [dataAll, setDataAll] = useState(true);
     const cedulaUsuario = Cookies.get('userCedula');
     const nombreUsuario = Cookies.get('userNombre');
-    const columnasMapeadas = {
+    const columnasMapeadasPendientes = {
         id: "id",
         registro: "registro",
         stage: "estadoChat",
         nombreApellido: "nombreApellido",
         ciudad: "ciudad",
         cargo: "cargo",
+        estadoFinal: "estadoProceso"
+    };
+    const columnasMapeadasConfirmados = {
+        id: "id",
+        fechaHora: "fechaEntrevista",
+        nombreApellido: "nombreApellido",
+        ciudad: "ciudad",
+        cargo: "cargo",
+        observaciones: "observaciones",
         estadoFinal: "estadoProceso"
     };
 
@@ -67,8 +77,8 @@ function ChatBot() {
 
             const sortedData2 = datafiltrada.map(row => Object.fromEntries(
                 Object.entries(row)
-                    .filter(([key]) => columnasVisibles.includes(key))
-                    .map(([key, value]) => [columnasMapeadas[key] || key, value])
+                    .filter(([key]) => columnasVisiblesPendientes.includes(key))
+                    .map(([key, value]) => [columnasMapeadasPendientes[key] || key, value])
             ));
             setData(sortedData2);
 
@@ -93,11 +103,13 @@ function ChatBot() {
                     return fechaSolo === hoyISO || fechaSolo > hoyISO;
                 });
 
-            const sortedData3 = dataFiltrada2.map(row => Object.fromEntries(
-                Object.entries(row)
-                    .filter(([key]) => columnasVisibles.includes(key))
-                    .map(([key, value]) => [columnasMapeadas[key] || key, value])
-            ));
+            const sortedData3 = dataFiltrada2.map(row =>
+                Object.fromEntries(
+                    columnasVisiblesConfirmados
+                        .filter(key => key in row)
+                        .map(key => [columnasMapeadasConfirmados[key] || key, row[key]])
+                )
+            );
 
             setDataConfirmados(sortedData3);
 
@@ -165,7 +177,7 @@ function ChatBot() {
     };
 
     const [filtersConfirmado, setFiltersConfirmado] = useState({});
-    const [sortConfigConfirmado, setSortConfigConfirmado] = useState({ key: null, direction: "asc" });
+    const [sortConfigConfirmado, setSortConfigConfirmado] = useState({ key: 'fechaEntrevista', direction: "asc" });
 
     const filteredDataConfirmado = Array.isArray(dataConfirmados)
         ? dataConfirmados
@@ -180,6 +192,7 @@ function ChatBot() {
         if (!sortConfigConfirmado.key) return 0;
         const valA = a[sortConfigConfirmado.key] || "";
         const valB = b[sortConfigConfirmado.key] || "";
+
         return sortConfigConfirmado.direction === "asc"
             ? valA.toString().localeCompare(valB.toString())
             : valB.toString().localeCompare(valA.toString());
@@ -389,6 +402,14 @@ function ChatBot() {
                             <span>Total de registros: {sortedDataPendientes.length}</span>
                         </div>
 
+                        {/* id
+                        fecha entrevitsa
+                        nombreApellido
+                        ciudad
+                        cargo
+                        observaciones
+                        estado proceso */}
+
                         <div className='Subtitulo'>
                             <span>Solicitudes Confirmadas</span>
                         </div>
@@ -396,7 +417,7 @@ function ChatBot() {
                             <table className="table table-bordered">
                                 <thead >
                                     <tr>
-                                        {Object.keys(data[0]).map((key) => (
+                                        {Object.keys(dataConfirmados[0]).map((key) => (
                                             <th key={key} onClick={() => handleSortConfirmado(key)}>
                                                 {formatHeader(key)} {sortConfigConfirmado.key === key ? (sortConfigConfirmado.direction === "asc" ? "▲" : "▼") : ""}
                                                 <input
@@ -412,8 +433,10 @@ function ChatBot() {
                                 <tbody>
                                     {sortedDataConfirmado.map((row) => (
                                         <tr key={row.id} onClick={() => handleRowClick(row)}>
-                                            {Object.values(row).map((cell, i) => (
-                                                <td key={i} >{cell || "-"}</td>
+                                            {Object.keys(row).map((columnKey, i) => (
+                                                <td key={i}>
+                                                    {columnKey === "fechaEntrevista" ? formatFechaHora(row[columnKey]).replace("T", " ")  : row[columnKey] || "-"}
+                                                </td>
                                             ))}
                                         </tr>
                                     ))}
