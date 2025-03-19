@@ -283,10 +283,11 @@ const MaterialAgregar = () => {
 
     const calculo = async () => {
         try {
+            const responseKgprod = await axios.get(`${process.env.REACT_APP_API_URL}/bodega/kgprod`);
             const responseRegistrosSolicitudMaterial = await axios.get(`${process.env.REACT_APP_API_URL}/solicitudMaterial/RegistrosSolicitudMaterial`);
             setRegistrosSolicitudMaterial(responseRegistrosSolicitudMaterial.data)
 
-            const resultado = await calculoMaterial(ciudadElgida);
+            const resultado = await calculoMaterial(ciudadElgida, responseKgprod.data);
 
             return resultado
         } catch (error) {
