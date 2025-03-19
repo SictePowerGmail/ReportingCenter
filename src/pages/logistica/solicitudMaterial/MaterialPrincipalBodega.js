@@ -9,13 +9,14 @@ import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import { calculoMaterial } from './calculoMaterial';
 
-const MaterialPrincipalBodega = () => {
+const MaterialPrincipalBodega = ({ dataKgprod }) => {
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
     const [resultadoMaterialDisponible, setResultadoMaterialDisponible] = useState([]);
     const [resultadoMaterialDisponibleCorto, setResultadoMaterialDisponibleCorto] = useState([]);
 
     const MaterialDisponible = async () => {
+
         const ciudades = [
             "Manizales",
             "Pereira",
@@ -23,11 +24,11 @@ const MaterialPrincipalBodega = () => {
             "Bogota San Cipriano Corporativo",
             "Bogota San Cipriano Red Externa"
         ];
-
+        
         const resultados = [];
 
         for (const ciudad of ciudades) {
-            const resultado = await calculoMaterial(ciudad);
+            const resultado = await calculoMaterial(ciudad, dataKgprod);
             resultados.push(...resultado);
         }
 

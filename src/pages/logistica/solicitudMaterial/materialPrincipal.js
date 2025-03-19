@@ -462,7 +462,7 @@ const MaterialPrincipal = () => {
                     )}
 
                     {carpeta === "MaterialBodega" && (
-                        <MaterialPrincipalBodega />
+                        <MaterialPrincipalBodega dataKgprod={dataKgprod} />
                     )}
 
                     <div className='Notificaciones'>

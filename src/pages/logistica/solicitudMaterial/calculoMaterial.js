@@ -1,8 +1,12 @@
+import { useRef } from 'react';
 import axios from 'axios';
 
-export const calculoMaterial = async (ciudadElgida) => {
+const cacheRegistrosSolicitudMaterial = { data: null };
+const cacheRegistrosEntregadoSolicitudMaterial = { data: null };
+
+export const calculoMaterial = async (ciudadElgida, dataKgprod) => {
+
     try {
-        const responseKgprod = await axios.get(`${process.env.REACT_APP_API_URL}/bodega/kgprod`);
         let ciudad;
 
         if (ciudadElgida === "Manizales") {
@@ -19,11 +23,17 @@ export const calculoMaterial = async (ciudadElgida) => {
             ciudad = []
         }
 
-        const datosFiltradosKgprod = ciudad.length ? responseKgprod.data.filter(item => ciudad.includes(item.bodega)) : responseKgprod.data;
+        const datosFiltradosKgprod = ciudad.length ? dataKgprod.filter(item => ciudad.includes(item.bodega)) : dataKgprod;
 
-        const responseRegistrosSolicitudMaterial = await axios.get(`${process.env.REACT_APP_API_URL}/solicitudMaterial/RegistrosSolicitudMaterial`);
+        if (cacheRegistrosSolicitudMaterial.data) {
+            console.log("Usando datos en caché");
+        } else {
+            console.log("Haciendo petición a la API");
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/solicitudMaterial/RegistrosSolicitudMaterial`);
+            cacheRegistrosSolicitudMaterial.data = response.data;
+        }
 
-        const datosFiltradosRegistrosSolicitudMaterial = responseRegistrosSolicitudMaterial.data.filter(item =>
+        const datosFiltradosRegistrosSolicitudMaterial = cacheRegistrosSolicitudMaterial.data.filter(item =>
             item.ciudad === ciudadElgida &&
             item.estadoProyecto === "Abierto" &&
             item.aprobacionAnalista !== "Rechazado" &&
@@ -45,7 +55,7 @@ export const calculoMaterial = async (ciudadElgida) => {
             return acumulador;
         }, {});
 
-        const datosFiltradosRegistrosSolicitudMaterialPendienteDespacho = responseRegistrosSolicitudMaterial.data.filter(item =>
+        const datosFiltradosRegistrosSolicitudMaterialPendienteDespacho = cacheRegistrosSolicitudMaterial.data.filter(item =>
             item.ciudad === ciudadElgida &&
             item.estadoProyecto === "Abierto" &&
             item.entregaBodega === "Entregado"
@@ -63,12 +73,18 @@ export const calculoMaterial = async (ciudadElgida) => {
 
             return acumulador;
         }, {});
-        
-        const responseRegistrosEntregadoSolicitudMaterial = await axios.get(`${process.env.REACT_APP_API_URL}/solicitudMaterial/RegistrosEntregadosSolicitudMaterial`);
+
+        if (cacheRegistrosEntregadoSolicitudMaterial.data) {
+            console.log("Usando datos en caché");
+        } else {
+            console.log("Haciendo petición a la API");
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/solicitudMaterial/RegistrosEntregadosSolicitudMaterial`);
+            cacheRegistrosEntregadoSolicitudMaterial.data = response.data;
+        }
 
         const hoy = new Date().toISOString().split("T")[0];
 
-        const datosFiltradosRegistrosEntregadoSolicitudMaterial = responseRegistrosEntregadoSolicitudMaterial.data.filter(item =>
+        const datosFiltradosRegistrosEntregadoSolicitudMaterial = cacheRegistrosEntregadoSolicitudMaterial.data.filter(item =>
             item.ciudad === ciudadElgida &&
             item.fechaEntrega.slice(0, 10) === hoy
         );
