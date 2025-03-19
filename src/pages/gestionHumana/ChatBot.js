@@ -85,7 +85,7 @@ function ChatBot() {
             const hoy = new Date();
             const hoyISO = hoy.toISOString().split("T")[0]; // Obtiene 'YYYY-MM-DD'
 
-            const dataFiltrada2 = datafiltrada
+            const dataFiltrada2 = (datafiltrada || [])
                 .filter(row => row.estadoFinal === "Confirmado" || row.estadoFinal === "Finalizado")
                 .filter((row) => {
 
@@ -103,13 +103,13 @@ function ChatBot() {
                     return fechaSolo === hoyISO || fechaSolo > hoyISO;
                 });
 
-            const sortedData3 = dataFiltrada2.map(row =>
+            const sortedData3 = dataFiltrada2.length > 0 ? dataFiltrada2.map(row =>
                 Object.fromEntries(
                     columnasVisiblesConfirmados
                         .filter(key => key in row)
                         .map(key => [columnasMapeadasConfirmados[key] || key, row[key]])
                 )
-            );
+            ) : [];
 
             setDataConfirmados(sortedData3);
 
@@ -401,14 +401,6 @@ function ChatBot() {
                         <div className='registros primero'>
                             <span>Total de registros: {sortedDataPendientes.length}</span>
                         </div>
-
-                        {/* id
-                        fecha entrevitsa
-                        nombreApellido
-                        ciudad
-                        cargo
-                        observaciones
-                        estado proceso */}
 
                         <div className='Subtitulo'>
                             <span>Solicitudes Confirmadas</span>

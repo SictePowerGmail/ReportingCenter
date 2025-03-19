@@ -1035,7 +1035,7 @@ function Navbar() {
 
                         {showMobileMenu && (
                             <div className='Version'>
-                                <p>v1.41</p>
+                                <p>v1.42</p>
                             </div>
                         )}
                     </div>

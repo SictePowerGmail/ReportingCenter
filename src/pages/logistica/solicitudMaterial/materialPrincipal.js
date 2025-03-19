@@ -20,6 +20,7 @@ const MaterialPrincipal = () => {
     const navigate = useNavigate();
     const [carpeta, setCarpeta] = useState('Solicitudes');
     const rolUsuario = ObtenerRolUsuario(Cookies.get('userRole'));
+    const [dataKgprod, setDataKgprod] = useState(null);
 
     useEffect(() => {
         const yaRecargado = localStorage.getItem('yaRecargado');
@@ -38,7 +39,7 @@ const MaterialPrincipal = () => {
         calculo("Armenia");
         calculo("Bogota San Cipriano Corporativo");
         calculo("Bogota San Cipriano Red Externa");
-        
+
         cargarDirectores();
         cargarRelacionPersonal();
 
@@ -149,11 +150,27 @@ const MaterialPrincipal = () => {
     //     }
     // }
 
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                if (!dataKgprod) {
+                    const response = await axios.get(`${process.env.REACT_APP_API_URL}/bodega/kgprod`);
+                    setDataKgprod(response.data);
+                }
+            } catch (error) {
+                console.error("Error al obtener datos:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+    }, [dataKgprod]);
+
     const calculo = async (ciudadElgida) => {
         try {
             setLoading(true);
-            
-            const responseKgprod = await axios.get(`${process.env.REACT_APP_API_URL}/bodega/kgprod`);
+
             let ciudad;
 
             if (ciudadElgida === "Manizales") {
@@ -170,8 +187,8 @@ const MaterialPrincipal = () => {
                 ciudad = []
             }
 
-            const datosFiltradosKgprod = ciudad.length ? responseKgprod.data.filter(item => ciudad.includes(item.bodega)) : responseKgprod.data;
-            
+            const datosFiltradosKgprod = ciudad.length ? dataKgprod.filter(item => ciudad.includes(item.bodega)) : dataKgprod;
+
             const responseRegistrosSolicitudMaterial = await axios.get(`${process.env.REACT_APP_API_URL}/solicitudMaterial/RegistrosSolicitudMaterial`);
 
             const datosFiltradosRegistrosSolicitudMaterial = responseRegistrosSolicitudMaterial.data.filter(item =>
@@ -213,7 +230,7 @@ const MaterialPrincipal = () => {
 
                 return acumulador;
             }, {});
-            
+
             const responseRegistrosEntregadoSolicitudMaterial = await axios.get(`${process.env.REACT_APP_API_URL}/solicitudMaterial/RegistrosEntregadosSolicitudMaterial`);
 
             const hoy = new Date().toISOString().split("T")[0];
@@ -304,7 +321,7 @@ const MaterialPrincipal = () => {
 
             const ids = resultado.map(item => item.id);
             const cantidades = resultado.map(item => item.cantidadDisponibleMaterial)
-            
+
             await axios.post(`${process.env.REACT_APP_API_URL}/solicitudMaterial/actualizarEstadoCantidadDisponibleMaterial`,
                 {
                     ids, cantidades
