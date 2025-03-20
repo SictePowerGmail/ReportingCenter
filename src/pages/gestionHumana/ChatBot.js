@@ -14,7 +14,7 @@ function ChatBot() {
     const navigate = useNavigate();
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(true);
-    const columnasVisiblesPendientes = ["id", "registro", "stage", "nombreApellido", "ciudad", "cargo", "estadoFinal"];
+    const columnasVisiblesPendientes = ["id", "registro", "fechaHora", "nombreApellido", "ciudad", "cargo", "estadoFinal"];
     const columnasVisiblesConfirmados = ["id", "fechaHora", "nombreApellido", "ciudad", "cargo", "observaciones", "estadoFinal"];
     const [data, setData] = useState(true);
     const [dataConfirmados, setDataConfirmados] = useState(true);
@@ -24,7 +24,7 @@ function ChatBot() {
     const columnasMapeadasPendientes = {
         id: "id",
         registro: "registro",
-        stage: "estadoChat",
+        fechaHora: "fechaEntrevista",
         nombreApellido: "nombreApellido",
         ciudad: "ciudad",
         cargo: "cargo",
@@ -41,6 +41,8 @@ function ChatBot() {
     };
 
     const formatFechaHora = (fechaTexto) => {
+        if (fechaTexto === "-") return "-";
+        
         const meses = {
             "enero": "01", "febrero": "02", "marzo": "03", "abril": "04",
             "mayo": "05", "junio": "06", "julio": "07", "agosto": "08",
@@ -59,7 +61,7 @@ function ChatBot() {
         if (ampm.toLowerCase() === "pm" && horas !== "12") horas = String(Number(horas) + 12);
         if (ampm.toLowerCase() === "am" && horas === "12") horas = "00";
 
-        return `${año}-${mes}-${dia.padStart(2, "0")}T${horas.padStart(2, "0")}:${minutos}`;
+        return `${año}-${mes}-${dia.padStart(2, "0")} ${horas.padStart(2, "0")}:${minutos}`;
     };
 
     const cargarDatos = async () => {
@@ -75,11 +77,17 @@ function ChatBot() {
                 ? sortedData.filter(item => ciudad.includes(item.ciudad))
                 : sortedData;
 
-            const sortedData2 = datafiltrada.map(row => Object.fromEntries(
-                Object.entries(row)
-                    .filter(([key]) => columnasVisiblesPendientes.includes(key))
-                    .map(([key, value]) => [columnasMapeadasPendientes[key] || key, value])
-            ));
+            const sortedData2 = datafiltrada.length > 0 ? datafiltrada.map(row =>
+                Object.fromEntries(
+                    columnasVisiblesPendientes
+                        .filter(key => key in row)
+                        .map(key => [
+                            columnasMapeadasPendientes[key] || key, 
+                            key === "fechaHora" ? formatFechaHora(row[key]) : row[key]
+                        ])
+                )
+            ) : [];
+
             setData(sortedData2);
 
             const hoy = new Date();
@@ -135,7 +143,7 @@ function ChatBot() {
     }, []);
 
     const [filtersPendientes, setFiltersPendientes] = useState({});
-    const [sortConfigPendientes, setSortConfigPendientes] = useState({ key: null, direction: "asc" });
+    const [sortConfigPendientes, setSortConfigPendientes] = useState({ key: "fechaEntrevista", direction: "asc" });
 
     const formatHeader = (key) => {
         return key
@@ -212,8 +220,13 @@ function ChatBot() {
     };
 
     const descargarArchivo = () => {
+        const ciudad = ObtenerRelacionCiudadAuxiliar(nombreUsuario);
 
-        const dataProcesada = dataAll.map(row =>
+        const datafiltrada = ciudad
+                ? dataAll.filter(item => ciudad.includes(item.ciudad))
+                : dataAll;
+
+        const dataProcesada = datafiltrada.map(row =>
             Object.fromEntries(
                 Object.entries(row).map(([key, value]) => [key, value || "-"])
             )
@@ -298,8 +311,8 @@ function ChatBot() {
 
     const enviarDatos = async () => {
 
-        if (!editedRow.fechaHora || !editedRow.estadoFinal) {
-            toast.error("Debe completar la fecha y el estado final.");
+        if (!editedRow.fechaHora || !editedRow.estadoFinal || !editedRow.cargo) {
+            toast.error("Debe completar todos los campos.");
             return;
         }
 
@@ -315,6 +328,7 @@ function ChatBot() {
 
         const datosAEnviar = {
             id: editedRow.id,
+            cargo: editedRow.cargo,
             fechaHora: editedRow.fechaHora,
             estadoFinal: editedRow.estadoFinal,
             observaciones: editedRow.observaciones || ""
@@ -427,7 +441,7 @@ function ChatBot() {
                                         <tr key={row.id} onClick={() => handleRowClick(row)}>
                                             {Object.keys(row).map((columnKey, i) => (
                                                 <td key={i}>
-                                                    {columnKey === "fechaEntrevista" ? formatFechaHora(row[columnKey]).replace("T", " ")  : row[columnKey] || "-"}
+                                                    {columnKey === "fechaEntrevista" ? formatFechaHora(row[columnKey])  : row[columnKey] || "-"}
                                                 </td>
                                             ))}
                                         </tr>
@@ -478,13 +492,24 @@ function ChatBot() {
                                                         }}
                                                         min={new Date().toISOString().slice(0, 16)}
                                                     />
+                                                ) : key === "cargo" ? (
+                                                    <select
+                                                        className="form-control"
+                                                        value={editedRow[key] || ""}
+                                                        onChange={(e) => handleInputChange(key, e.target.value)}
+                                                    >
+                                                        <option value="">Seleccionar...</option>
+                                                        <option value="Ayudante (Sin Moto)">Ayudante (Sin Moto)</option>
+                                                        <option value="Conductor">Conductor</option>
+                                                        <option value="Motorizados">Motorizados</option>
+                                                    </select>
                                                 ) : (
                                                     <input
                                                         type="text"
                                                         className="form-control"
                                                         value={editedRow[key] || ""}
                                                         onChange={(e) => handleInputChange(key, e.target.value)}
-                                                        disabled={index < array.length - 3}
+                                                        disabled={!(index >= array.length - 3)}
                                                     />
                                                 )}
                                             </div>
