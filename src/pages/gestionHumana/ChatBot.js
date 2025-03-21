@@ -561,60 +561,62 @@ function ChatBot() {
                                     </div>
                                     <div className="modal-form">
                                         {Object.entries(selectedRow).map(([key, value], index, array) => (
-                                            <div key={key} className="form-group">
-                                                <label>{formatHeader(key)}:</label>
-                                                {key === "estadoFinal" ? (
-                                                    <select
-                                                        className="form-control"
-                                                        value={editedRow[key] || ""}
-                                                        onChange={(e) => handleInputChange(key, e.target.value)}
-                                                    >
-                                                        <option value="">Seleccionar...</option>
-                                                        <option value="Pendiente">Pendiente</option>
-                                                        <option value="No Continua">No Continua</option>
-                                                        <option value="Confirmado">Confirmado</option>
-                                                    </select>
-                                                ) : key === "fechaHora" ? (
-                                                    <input
-                                                        type="datetime-local"
-                                                        className="form-control"
-                                                        value={formatFechaHora(editedRow[key] || "")}
-                                                        onChange={(e) => {
-                                                            const fechaIngresada = new Date(e.target.value);
-                                                            const fechaActual = new Date();
-                                                            fechaActual.setHours(0, 0, 0, 0);
+                                            !["asistencia", "fechaHoraInicial", "seleccion", "examenesMedicos", "contratacion", "estadoContratacion"].includes(key) && (
+                                                <div key={key} className="form-group">
+                                                    <label>{formatHeader(key)}:</label>
+                                                    {key === "estadoFinal" ? (
+                                                        <select
+                                                            className="form-control"
+                                                            value={editedRow[key] || ""}
+                                                            onChange={(e) => handleInputChange(key, e.target.value)}
+                                                        >
+                                                            <option value="">Seleccionar...</option>
+                                                            <option value="Pendiente">Pendiente</option>
+                                                            <option value="No Continua">No Continua</option>
+                                                            <option value="Confirmado">Confirmado</option>
+                                                        </select>
+                                                    ) : key === "fechaHora" ? (
+                                                        <input
+                                                            type="datetime-local"
+                                                            className="form-control"
+                                                            value={formatFechaHora(editedRow[key] || "")}
+                                                            onChange={(e) => {
+                                                                const fechaIngresada = new Date(e.target.value);
+                                                                const fechaActual = new Date();
+                                                                fechaActual.setHours(0, 0, 0, 0);
 
-                                                            if (fechaIngresada >= fechaActual) {
-                                                                handleInputChange(key, formatFechaHoraSalida(e.target.value));
-                                                            } else {
-                                                                toast.error("No puedes seleccionar una fecha anterior a hoy.");
-                                                            }
-                                                        }}
-                                                        min={new Date().toISOString().slice(0, 16)}
-                                                    />
-                                                ) : key === "cargo" ? (
-                                                    <select
-                                                        className="form-control"
-                                                        value={editedRow[key] || ""}
-                                                        onChange={(e) => handleInputChange(key, e.target.value)}
-                                                    >
-                                                        <option value="">Seleccionar...</option>
-                                                        <option value="Ayudante (Sin Moto)">Ayudante (Sin Moto)</option>
-                                                        <option value="Conductor">Conductor</option>
-                                                        <option value="Motorizados">Motorizados</option>
-                                                    </select>
-                                                ) : (
-                                                    <input
-                                                        type="text"
-                                                        className="form-control"
-                                                        value={editedRow[key] || ""}
-                                                        onChange={(e) => handleInputChange(key, e.target.value)}
-                                                        disabled={!(index >= array.length - 3)}
-                                                    />
-                                                )}
-                                            </div>
+                                                                if (fechaIngresada >= fechaActual) {
+                                                                    handleInputChange(key, formatFechaHoraSalida(e.target.value));
+                                                                } else {
+                                                                    toast.error("No puedes seleccionar una fecha anterior a hoy.");
+                                                                }
+                                                            }}
+                                                            min={new Date().toISOString().slice(0, 16)}
+                                                        />
+                                                    ) : key === "cargo" ? (
+                                                        <select
+                                                            className="form-control"
+                                                            value={editedRow[key] || ""}
+                                                            onChange={(e) => handleInputChange(key, e.target.value)}
+                                                        >
+                                                            <option value="">Seleccionar...</option>
+                                                            <option value="Ayudante (Sin Moto)">Ayudante (Sin Moto)</option>
+                                                            <option value="Conductor">Conductor</option>
+                                                            <option value="Motorizados">Motorizados</option>
+                                                        </select>
+                                                    ) : (
+                                                        <input
+                                                            type="text"
+                                                            className="form-control"
+                                                            value={editedRow[key] || ""}
+                                                            onChange={(e) => handleInputChange(key, e.target.value)}
+                                                            disabled={!["observaciones", "estadoFinal", "fechaHora"].includes(key)}
+                                                        />
+                                                    )}
+                                                </div>
+                                            )
                                         ))}
-                                        {clickHistorico && (
+                                        {clickHistorico === true && (
                                             <>
                                                 <div className="form-group">
                                                     <label>Asistencia:</label>
