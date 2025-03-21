@@ -112,6 +112,23 @@
                             background-color: #ffffff;
                             /* Color para filas impares */
                         }
+
+                        td {
+                            &.contratado {
+                                background-color: #28a745 !important;
+                                color: white !important;
+                            }
+                            
+                            &.no-continua {
+                                background-color: #dc3545 !important;
+                                color: white !important;
+                            }
+                            
+                            &.en-proceso {
+                                background-color: #ffc107 !important;
+                                color: black !important;
+                            }
+                        }
                     }
                 }
             }

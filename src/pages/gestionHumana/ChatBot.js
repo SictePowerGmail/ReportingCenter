@@ -16,6 +16,7 @@ function ChatBot() {
     const [loading, setLoading] = useState(true);
     const columnasVisiblesPendientes = ["id", "registro", "fechaHora", "nombreApellido", "ciudad", "cargo", "estadoFinal"];
     const columnasVisiblesConfirmados = ["id", "fechaHora", "nombreApellido", "ciudad", "cargo", "observaciones", "estadoFinal"];
+    const columnasVisiblesHistorico = ["id", "fechaHora", "nombreApellido", "ciudad", "cargo", "observaciones", "estadoContratacion"];
     const [data, setData] = useState(true);
     const [dataConfirmados, setDataConfirmados] = useState(true);
     const [dataAll, setDataAll] = useState(true);
@@ -39,6 +40,15 @@ function ChatBot() {
         cargo: "cargo",
         observaciones: "observaciones",
         estadoFinal: "estadoProceso"
+    };
+    const columnasMapeadasHistorico = {
+        id: "id",
+        fechaHora: "fechaEntrevista",
+        nombreApellido: "nombreApellido",
+        ciudad: "ciudad",
+        cargo: "cargo",
+        observaciones: "observaciones",
+        estadoContratacion: "estadoContratacion"
     };
 
     const formatFechaHora = (fechaTexto) => {
@@ -90,7 +100,6 @@ function ChatBot() {
             ) : [];
 
             setData(sortedData2);
-            setDataHistorico(sortedData2)
 
             const hoy = new Date();
             const hoyISO = hoy.toISOString().split("T")[0]; // Obtiene 'YYYY-MM-DD'
@@ -113,8 +122,6 @@ function ChatBot() {
                     return fechaSolo === hoyISO || fechaSolo > hoyISO;
                 });
 
-            console.log(dataFiltrada2)
-
             const sortedData3 = dataFiltrada2.length > 0 ? dataFiltrada2.map(row =>
                 Object.fromEntries(
                     columnasVisiblesConfirmados
@@ -126,9 +133,23 @@ function ChatBot() {
                 )
             ) : [];
 
-            console.log(sortedData3)
-
             setDataConfirmados(sortedData3);
+
+            const dataFiltrada3 = (datafiltrada || [])
+                .filter(row => row.estadoFinal === "Confirmado" || row.estadoFinal === "Finalizado");
+
+            const sortedData4 = dataFiltrada3.length > 0 ? dataFiltrada3.map(row =>
+                Object.fromEntries(
+                    columnasVisiblesHistorico
+                        .filter(key => key in row)
+                        .map(key => [
+                            columnasMapeadasHistorico[key] || key,
+                            key === "fechaHora" ? formatFechaHora(row[key]) : row[key]
+                        ])
+                )
+            ) : [];
+
+            setDataHistorico(sortedData4)
 
             setLoading(false);
         } catch (error) {
@@ -371,11 +392,13 @@ function ChatBot() {
         }
 
         const estadoContratacion =
-            editedRow.asistencia === "Si" && editedRow.seleccion === "Si" && editedRow.examenesMedicos === "Si" && editedRow.contratacion === "Si"
-                ? "Contratado"
-                : [editedRow.asistencia, editedRow.seleccion, editedRow.examenesMedicos, editedRow.contratacion].includes("No")
-                    ? "No continua"
-                    : "En proceso";
+            editedRow.estadoFinal === "No Continua"
+                ? "No continua"
+                : editedRow.asistencia === "Si" && editedRow.seleccion === "Si" && editedRow.examenesMedicos === "Si" && editedRow.contratacion === "Si"
+                    ? "Contratado"
+                    : [editedRow.asistencia, editedRow.seleccion, editedRow.examenesMedicos, editedRow.contratacion].includes("No")
+                        ? "No continua"
+                        : "En proceso";
 
         const datosAEnviar = {
             id: editedRow.id,
@@ -415,6 +438,19 @@ function ChatBot() {
     };
 
     const [clickHistorico, setClickHistorico] = useState(false);
+
+    const getEstadoClass = (estado) => {
+        switch (estado) {
+            case "Contratado":
+                return "contratado";
+            case "No continua":
+                return "no-continua";
+            case "En proceso":
+                return "en-proceso";
+            default:
+                return "";
+        }
+    };
 
     return (
         <div className='ChatBot'>
@@ -516,7 +552,7 @@ function ChatBot() {
                         </div>
 
                         <div className='Subtitulo'>
-                            <span>Solicitudes Historicas</span>
+                            <span>Solicitudes Historicas Confirmados</span>
                         </div>
                         <div className='tabla'>
                             <table className="table table-bordered">
@@ -542,7 +578,12 @@ function ChatBot() {
                                             setClickHistorico(true);
                                         }}>
                                             {Object.keys(row).map((columnKey, i) => (
-                                                <td key={i} >{row[columnKey] || "-"}</td>
+                                                <td
+                                                    key={i}
+                                                    className={columnKey === "estadoContratacion" ? getEstadoClass(row[columnKey]) : ""}
+                                                >
+                                                    {row[columnKey] || "-"}
+                                                </td>
                                             ))}
                                         </tr>
                                     ))}
@@ -624,6 +665,7 @@ function ChatBot() {
                                                         className="form-control"
                                                         value={editedRow.asistencia || ""}
                                                         onChange={(e) => handleInputChange("asistencia", e.target.value)}
+                                                        disabled={editedRow.estadoFinal !== "Confirmado"}
                                                     >
                                                         <option value="">Seleccionar...</option>
                                                         <option value="Si">Sí</option>
@@ -668,6 +710,15 @@ function ChatBot() {
                                                         <option value="Si">Sí</option>
                                                         <option value="No">No</option>
                                                     </select>
+                                                </div>
+                                                <div className="form-group">
+                                                    <label>Estado Contratacion:</label>
+                                                    <input
+                                                        type="text"
+                                                        className="form-control"
+                                                        value={editedRow.estadoContratacion || ""}
+                                                        disabled
+                                                    />
                                                 </div>
                                             </>
                                         )}
