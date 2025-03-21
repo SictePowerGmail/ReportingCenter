@@ -19,6 +19,7 @@ function ChatBot() {
     const [data, setData] = useState(true);
     const [dataConfirmados, setDataConfirmados] = useState(true);
     const [dataAll, setDataAll] = useState(true);
+    const [dataHistorico, setDataHistorico] = useState(true);
     const cedulaUsuario = Cookies.get('userCedula');
     const nombreUsuario = Cookies.get('userNombre');
     const columnasMapeadasPendientes = {
@@ -42,7 +43,7 @@ function ChatBot() {
 
     const formatFechaHora = (fechaTexto) => {
         if (fechaTexto === "-") return "-";
-        
+
         const meses = {
             "enero": "01", "febrero": "02", "marzo": "03", "abril": "04",
             "mayo": "05", "junio": "06", "julio": "07", "agosto": "08",
@@ -82,13 +83,14 @@ function ChatBot() {
                     columnasVisiblesPendientes
                         .filter(key => key in row)
                         .map(key => [
-                            columnasMapeadasPendientes[key] || key, 
+                            columnasMapeadasPendientes[key] || key,
                             key === "fechaHora" ? formatFechaHora(row[key]) : row[key]
                         ])
                 )
             ) : [];
 
             setData(sortedData2);
+            setDataHistorico(sortedData2)
 
             const hoy = new Date();
             const hoyISO = hoy.toISOString().split("T")[0]; // Obtiene 'YYYY-MM-DD'
@@ -111,13 +113,20 @@ function ChatBot() {
                     return fechaSolo === hoyISO || fechaSolo > hoyISO;
                 });
 
+            console.log(dataFiltrada2)
+
             const sortedData3 = dataFiltrada2.length > 0 ? dataFiltrada2.map(row =>
                 Object.fromEntries(
                     columnasVisiblesConfirmados
                         .filter(key => key in row)
-                        .map(key => [columnasMapeadasConfirmados[key] || key, row[key]])
+                        .map(key => [
+                            columnasMapeadasConfirmados[key] || key,
+                            key === "fechaHora" ? formatFechaHora(row[key]) : row[key]
+                        ])
                 )
             ) : [];
+
+            console.log(sortedData3)
 
             setDataConfirmados(sortedData3);
 
@@ -142,15 +151,15 @@ function ChatBot() {
         cargarDatos();
     }, []);
 
-    const [filtersPendientes, setFiltersPendientes] = useState({});
-    const [sortConfigPendientes, setSortConfigPendientes] = useState({ key: "fechaEntrevista", direction: "asc" });
-
     const formatHeader = (key) => {
         return key
             .replace(/([A-Z])/g, " $1")
             .replace(/^./, (str) => str.toUpperCase())
             .trim();
     };
+
+    const [filtersPendientes, setFiltersPendientes] = useState({});
+    const [sortConfigPendientes, setSortConfigPendientes] = useState({ key: "fechaEntrevista", direction: "asc" });
 
     const filteredDataPendientes = Array.isArray(data)
         ? data
@@ -219,12 +228,47 @@ function ChatBot() {
         }));
     };
 
+    const [filtersHistorico, setFiltersHistorico] = useState({});
+    const [sortConfigHistorico, setSortConfigHistorico] = useState({ key: 'fechaEntrevista', direction: "desc" });
+
+    const filteredDataHistorico = Array.isArray(dataHistorico)
+        ? dataHistorico
+            .filter((row) =>
+                Object.keys(filtersHistorico).every((key) =>
+                    row[key]?.toString().toLowerCase().includes(filtersHistorico[key]?.toLowerCase() || "")
+                )
+            ) : [];
+
+    // Ordenar datos
+    const sortedDataHistorico = [...filteredDataHistorico].sort((a, b) => {
+        if (!sortConfigHistorico.key) return 0;
+        const valA = a[sortConfigHistorico.key] || "";
+        const valB = b[sortConfigHistorico.key] || "";
+
+        return sortConfigHistorico.direction === "asc"
+            ? valA.toString().localeCompare(valB.toString())
+            : valB.toString().localeCompare(valA.toString());
+    });
+
+    // Manejo de filtros
+    const handleFilterChangeHistorico = (key, value) => {
+        setFiltersHistorico({ ...filtersHistorico, [key]: value });
+    };
+
+    // Manejo de ordenamiento
+    const handleSortHistorico = (key) => {
+        setSortConfigHistorico((prev) => ({
+            key,
+            direction: prev.key === key && prev.direction === "asc" ? "desc" : "asc",
+        }));
+    };
+
     const descargarArchivo = () => {
         const ciudad = ObtenerRelacionCiudadAuxiliar(nombreUsuario);
 
         const datafiltrada = ciudad
-                ? dataAll.filter(item => ciudad.includes(item.ciudad))
-                : dataAll;
+            ? dataAll.filter(item => ciudad.includes(item.ciudad))
+            : dataAll;
 
         const dataProcesada = datafiltrada.map(row =>
             Object.fromEntries(
@@ -326,12 +370,24 @@ function ChatBot() {
             return;
         }
 
+        const estadoContratacion =
+            editedRow.asistencia === "Si" && editedRow.seleccion === "Si" && editedRow.examenesMedicos === "Si" && editedRow.contratacion === "Si"
+                ? "Contratado"
+                : [editedRow.asistencia, editedRow.seleccion, editedRow.examenesMedicos, editedRow.contratacion].includes("No")
+                    ? "No continua"
+                    : "En proceso";
+
         const datosAEnviar = {
             id: editedRow.id,
             cargo: editedRow.cargo,
             fechaHora: editedRow.fechaHora,
             estadoFinal: editedRow.estadoFinal,
-            observaciones: editedRow.observaciones || ""
+            observaciones: editedRow.observaciones || "",
+            asistencia: editedRow.asistencia || "",
+            seleccion: editedRow.seleccion || "",
+            examenesMedicos: editedRow.examenesMedicos || "",
+            contratacion: editedRow.contratacion || "",
+            estadoContratacion
         };
 
         try {
@@ -357,6 +413,8 @@ function ChatBot() {
             toast.error(`Error al actualizar: ${error.message}`, { className: "toast-error" });
         }
     };
+
+    const [clickHistorico, setClickHistorico] = useState(false);
 
     return (
         <div className='ChatBot'>
@@ -403,7 +461,10 @@ function ChatBot() {
                                 </thead>
                                 <tbody>
                                     {sortedDataPendientes.map((row) => (
-                                        <tr key={row.id} onClick={() => handleRowClick(row)}>
+                                        <tr key={row.id} onClick={() => {
+                                            handleRowClick(row);
+                                            setClickHistorico(false);
+                                        }}>
                                             {Object.values(row).map((cell, i) => (
                                                 <td key={i} >{cell || "-"}</td>
                                             ))}
@@ -438,11 +499,50 @@ function ChatBot() {
                                 </thead>
                                 <tbody>
                                     {sortedDataConfirmado.map((row) => (
-                                        <tr key={row.id} onClick={() => handleRowClick(row)}>
+                                        <tr key={row.id} onClick={() => {
+                                            handleRowClick(row);
+                                            setClickHistorico(false);
+                                        }}>
                                             {Object.keys(row).map((columnKey, i) => (
-                                                <td key={i}>
-                                                    {columnKey === "fechaEntrevista" ? formatFechaHora(row[columnKey])  : row[columnKey] || "-"}
-                                                </td>
+                                                <td key={i} >{row[columnKey] || "-"}</td>
+                                            ))}
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div className='registros segundo'>
+                            <span>Total de registros: {sortedDataConfirmado.length}</span>
+                        </div>
+
+                        <div className='Subtitulo'>
+                            <span>Solicitudes Historicas</span>
+                        </div>
+                        <div className='tabla'>
+                            <table className="table table-bordered">
+                                <thead >
+                                    <tr>
+                                        {Object.keys(dataHistorico[0]).map((key) => (
+                                            <th key={key} onClick={() => handleSortHistorico(key)}>
+                                                {formatHeader(key)} {sortConfigHistorico.key === key ? (sortConfigHistorico.direction === "asc" ? "▲" : "▼") : ""}
+                                                <input
+                                                    type="text"
+                                                    className="form-control"
+                                                    onChange={(e) => handleFilterChangeHistorico(key, e.target.value)}
+                                                    onClick={(e) => e.stopPropagation()}
+                                                />
+                                            </th>
+                                        ))}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {sortedDataHistorico.map((row) => (
+                                        <tr key={row.id} onClick={() => {
+                                            handleRowClick(row);
+                                            setClickHistorico(true);
+                                        }}>
+                                            {Object.keys(row).map((columnKey, i) => (
+                                                <td key={i} >{row[columnKey] || "-"}</td>
                                             ))}
                                         </tr>
                                     ))}
@@ -450,7 +550,7 @@ function ChatBot() {
                             </table>
                         </div>
                         <div className='registros'>
-                            <span>Total de registros: {sortedDataConfirmado.length}</span>
+                            <span>Total de registros: {sortedDataHistorico.length}</span>
                         </div>
 
                         {selectedRow && (
@@ -514,6 +614,61 @@ function ChatBot() {
                                                 )}
                                             </div>
                                         ))}
+                                        {clickHistorico && (
+                                            <>
+                                                <div className="form-group">
+                                                    <label>Asistencia:</label>
+                                                    <select
+                                                        className="form-control"
+                                                        value={editedRow.asistencia || ""}
+                                                        onChange={(e) => handleInputChange("asistencia", e.target.value)}
+                                                    >
+                                                        <option value="">Seleccionar...</option>
+                                                        <option value="Si">Sí</option>
+                                                        <option value="No">No</option>
+                                                    </select>
+                                                </div>
+                                                <div className="form-group">
+                                                    <label>Seleccion:</label>
+                                                    <select
+                                                        className="form-control"
+                                                        value={editedRow.seleccion || ""}
+                                                        onChange={(e) => handleInputChange("seleccion", e.target.value)}
+                                                        disabled={editedRow.asistencia !== "Si"}
+                                                    >
+                                                        <option value="">Seleccionar...</option>
+                                                        <option value="Si">Sí</option>
+                                                        <option value="No">No</option>
+                                                    </select>
+                                                </div>
+                                                <div className="form-group">
+                                                    <label>Examenes Medicos:</label>
+                                                    <select
+                                                        className="form-control"
+                                                        value={editedRow.examenesMedicos || ""}
+                                                        onChange={(e) => handleInputChange("examenesMedicos", e.target.value)}
+                                                        disabled={editedRow.asistencia !== "Si" || editedRow.seleccion !== "Si"}
+                                                    >
+                                                        <option value="">Seleccionar...</option>
+                                                        <option value="Si">Sí</option>
+                                                        <option value="No">No</option>
+                                                    </select>
+                                                </div>
+                                                <div className="form-group">
+                                                    <label>Contratacion:</label>
+                                                    <select
+                                                        className="form-control"
+                                                        value={editedRow.contratacion || ""}
+                                                        onChange={(e) => handleInputChange("contratacion", e.target.value)}
+                                                        disabled={editedRow.asistencia !== "Si" || editedRow.seleccion !== "Si" || editedRow.examenesMedicos !== "Si"}
+                                                    >
+                                                        <option value="">Seleccionar...</option>
+                                                        <option value="Si">Sí</option>
+                                                        <option value="No">No</option>
+                                                    </select>
+                                                </div>
+                                            </>
+                                        )}
                                     </div>
 
                                     <div className='botones'>
