@@ -9,6 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import { cargarRelacionPersonal, ObtenerRelacionCiudadAuxiliar } from '../../funciones';
+import { FaBriefcase } from "react-icons/fa";
 
 function ChatBot() {
     const navigate = useNavigate();
@@ -306,7 +307,9 @@ function ChatBot() {
         saveAs(blob, 'Registros Chatbot.xlsx');
     };
 
-    const [selectedRow, setSelectedRow] = useState(null);
+    const [selectedCreateRow, setSelectedCreateRow] = useState(null);
+    const [createRow, setCreateRow] = useState({});
+    const [selectedEditedRow, setSelectedEditedRow] = useState(null);
     const [editedRow, setEditedRow] = useState({});
 
     const handleRowClick = (row) => {
@@ -342,16 +345,28 @@ function ChatBot() {
             ])
         );
 
-        setSelectedRow(renamedRow);
+        setSelectedEditedRow(renamedRow);
         setEditedRow(renamedRow);
     };
 
-    const handleInputChange = (key, value) => {
+    const handleInputChangeEdit = (key, value) => {
         setEditedRow((prev) => ({ ...prev, [key]: value }));
     };
 
     const closeModal = () => {
-        setSelectedRow(null);
+        setSelectedEditedRow(null);
+        setSelectedCreateRow(null);
+        setCreateRow({
+            nombreApellido: "",
+            celular: "",
+            ciudad: "",
+            cargo: "",
+            fechaHora: ""
+        });
+    };
+
+    const handleInputChangeCreate = (key, value) => {
+        setCreateRow((prev) => ({ ...prev, [key]: value }));
     };
 
     const formatFechaHoraSalida = (fechaISO) => {
@@ -375,7 +390,7 @@ function ChatBot() {
         return `${diaSemana}, ${dia} de ${mes} de ${año} a las ${horas}:${minutos} ${ampm}`;
     };
 
-    const enviarDatos = async () => {
+    const enviarDatosEdit = async () => {
 
         if (!editedRow.fechaHora || !editedRow.estadoFinal || !editedRow.cargo) {
             toast.error("Debe completar todos los campos.");
@@ -438,6 +453,70 @@ function ChatBot() {
         }
     };
 
+    const obtenerFechaActual = () => {
+        const fecha = new Date();
+        const año = fecha.getFullYear();
+        const mes = String(fecha.getMonth() + 1).padStart(2, "0");
+        const dia = String(fecha.getDate()).padStart(2, "0");
+        const horas = String(fecha.getHours()).padStart(2, "0");
+        const minutos = String(fecha.getMinutes()).padStart(2, "0");
+        const segundos = String(fecha.getSeconds()).padStart(2, "0");
+
+        return `${año}-${mes}-${dia} ${horas}:${minutos}:${segundos}`;
+    };
+
+    const enviarDatosCreate = async () => {
+
+        if (!createRow.nombreApellido || !createRow.celular || !createRow.ciudad || !createRow.cargo || !createRow.fechaHora) {
+            toast.error("Debe completar todos los campos.");
+            return;
+        }
+
+        const validarFormatoFechaHora = (fechaHora) => {
+            const regex = /^(lunes|martes|miércoles|jueves|viernes|sábado|domingo), \d{1,2} de (enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre) de \d{4} a las \d{1,2}:\d{2} (am|pm)$/i;
+            return regex.test(fechaHora);
+        };
+
+        if (!validarFormatoFechaHora(createRow.fechaHora)) {
+            toast.error("El formato de la fecha no es válido.");
+            return;
+        }
+
+        const registroFecha = obtenerFechaActual();
+
+        const datosAEnviar = {
+            registro: registroFecha,
+            fuente: "Computrabajo",
+            stage: "Completado",
+            nombreApellido: createRow.nombreApellido,
+            celular: createRow.celular,
+            ciudad: createRow.ciudad || "",
+            cargo: createRow.cargo || "",
+            fechaHora: createRow.fechaHora || "",
+            fechaHoraInicial: createRow.fechaHora || "",
+            estadoFinal: "Pendiente"
+        };
+
+        try {
+            const response = await axios.post(
+                "https://sicte-sas-capacidades-backend.onrender.com/recursosHumanos/registrarDatosChatBot",
+                datosAEnviar,
+                {
+                    headers: { "Content-Type": "application/json" }
+                }
+            );
+
+            toast.success('Datos enviados correctamente.');
+            closeModal();
+            setTimeout(() => {
+                cargarDatos();
+            }, 700);
+
+        } catch (error) {
+            toast.error(`Error al crear el usuario: ${error.message}`, { className: "toast-error" });
+        }
+    };
+
     const [clickHistorico, setClickHistorico] = useState(false);
 
     const getEstadoClass = (estado) => {
@@ -473,6 +552,12 @@ function ChatBot() {
                         </div>
 
                         <div className='botones'>
+                            <button className="btn btn-primary" onClick={() => {
+                                setSelectedCreateRow(true);
+                            }}>
+                                <FaBriefcase className='icono-computrabajo' />
+                                Computrabajo
+                            </button>
                             <button className='btn btn-success' onClick={descargarArchivo}>Descargar Registros</button>
                         </div>
 
@@ -595,14 +680,14 @@ function ChatBot() {
                             <span>Total de registros: {sortedDataHistorico.length}</span>
                         </div>
 
-                        {selectedRow && (
+                        {selectedEditedRow && (
                             <div className="modal-overlay" onClick={closeModal}>
                                 <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                                     <div className="detalle-fijo">
                                         <h4>Detalle</h4>
                                     </div>
                                     <div className="modal-form">
-                                        {Object.entries(selectedRow).map(([key, value], index, array) => (
+                                        {Object.entries(selectedEditedRow).map(([key, value], index, array) => (
                                             !["asistencia", "fechaHoraInicial", "seleccion", "examenesMedicos", "contratacion", "estadoContratacion"].includes(key) && (
                                                 <div key={key} className="form-group">
                                                     <label>{formatHeader(key)}:</label>
@@ -610,7 +695,7 @@ function ChatBot() {
                                                         <select
                                                             className="form-control"
                                                             value={editedRow[key] || ""}
-                                                            onChange={(e) => handleInputChange(key, e.target.value)}
+                                                            onChange={(e) => handleInputChangeEdit(key, e.target.value)}
                                                         >
                                                             <option value="">Seleccionar...</option>
                                                             <option value="Pendiente">Pendiente</option>
@@ -628,7 +713,7 @@ function ChatBot() {
                                                                 fechaActual.setHours(0, 0, 0, 0);
 
                                                                 if (fechaIngresada >= fechaActual) {
-                                                                    handleInputChange(key, formatFechaHoraSalida(e.target.value));
+                                                                    handleInputChangeEdit(key, formatFechaHoraSalida(e.target.value));
                                                                 } else {
                                                                     toast.error("No puedes seleccionar una fecha anterior a hoy.");
                                                                 }
@@ -639,7 +724,7 @@ function ChatBot() {
                                                         <select
                                                             className="form-control"
                                                             value={editedRow[key] || ""}
-                                                            onChange={(e) => handleInputChange(key, e.target.value)}
+                                                            onChange={(e) => handleInputChangeEdit(key, e.target.value)}
                                                         >
                                                             <option value="">Seleccionar...</option>
                                                             <option value="Ayudante (Sin Moto)">Ayudante (Sin Moto)</option>
@@ -651,7 +736,7 @@ function ChatBot() {
                                                             type="text"
                                                             className="form-control"
                                                             value={editedRow[key] || ""}
-                                                            onChange={(e) => handleInputChange(key, e.target.value)}
+                                                            onChange={(e) => handleInputChangeEdit(key, e.target.value)}
                                                             disabled={!["observaciones", "estadoFinal", "fechaHora"].includes(key)}
                                                         />
                                                     )}
@@ -665,7 +750,7 @@ function ChatBot() {
                                                     <select
                                                         className="form-control"
                                                         value={editedRow.asistencia || ""}
-                                                        onChange={(e) => handleInputChange("asistencia", e.target.value)}
+                                                        onChange={(e) => handleInputChangeEdit("asistencia", e.target.value)}
                                                         disabled={editedRow.estadoFinal !== "Confirmado"}
                                                     >
                                                         <option value="">Seleccionar...</option>
@@ -678,7 +763,7 @@ function ChatBot() {
                                                     <select
                                                         className="form-control"
                                                         value={editedRow.seleccion || ""}
-                                                        onChange={(e) => handleInputChange("seleccion", e.target.value)}
+                                                        onChange={(e) => handleInputChangeEdit("seleccion", e.target.value)}
                                                         disabled={editedRow.asistencia !== "Si"}
                                                     >
                                                         <option value="">Seleccionar...</option>
@@ -691,7 +776,7 @@ function ChatBot() {
                                                     <select
                                                         className="form-control"
                                                         value={editedRow.examenesMedicos || ""}
-                                                        onChange={(e) => handleInputChange("examenesMedicos", e.target.value)}
+                                                        onChange={(e) => handleInputChangeEdit("examenesMedicos", e.target.value)}
                                                         disabled={editedRow.asistencia !== "Si" || editedRow.seleccion !== "Si"}
                                                     >
                                                         <option value="">Seleccionar...</option>
@@ -704,7 +789,7 @@ function ChatBot() {
                                                     <select
                                                         className="form-control"
                                                         value={editedRow.contratacion || ""}
-                                                        onChange={(e) => handleInputChange("contratacion", e.target.value)}
+                                                        onChange={(e) => handleInputChangeEdit("contratacion", e.target.value)}
                                                         disabled={editedRow.asistencia !== "Si" || editedRow.seleccion !== "Si" || editedRow.examenesMedicos !== "Si"}
                                                     >
                                                         <option value="">Seleccionar...</option>
@@ -727,7 +812,86 @@ function ChatBot() {
 
                                     <div className='botones'>
                                         <button className='btn btn-danger' onClick={closeModal}>Cerrar</button>
-                                        <button className='btn btn-success' onClick={enviarDatos}>Actualizar</button>
+                                        <button className='btn btn-success' onClick={enviarDatosEdit}>Actualizar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {selectedCreateRow && (
+                            <div className="modal-overlay" onClick={closeModal}>
+                                <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                                    <div className="detalle-fijo">
+                                        <h4>Computrabajo</h4>
+                                    </div>
+                                    <div className="modal-form">
+                                        {["nombreApellido", "celular", "ciudad", "cargo", "fechaHora"].map((key) => (
+                                            <div key={key} className="form-group">
+                                                <label>{formatHeader(key)}:</label>
+                                                {key === "cargo" ? (
+                                                    <select
+                                                        className="form-control"
+                                                        value={createRow[key] || ""}
+                                                        onChange={(e) => handleInputChangeCreate(key, e.target.value)}
+                                                    >
+                                                        <option value="">Seleccionar...</option>
+                                                        <option value="Ayudante (Sin Moto)">Ayudante (Sin Moto)</option>
+                                                        <option value="Conductor">Conductor</option>
+                                                        <option value="Motorizados">Motorizados</option>
+                                                    </select>
+                                                ) : key === "fechaHora" ? (
+                                                    <input
+                                                        type="datetime-local"
+                                                        className="form-control"
+                                                        value={formatFechaHora(createRow[key] || "")}
+                                                        onChange={(e) => {
+                                                            const fechaIngresada = new Date(e.target.value);
+                                                            const fechaActual = new Date();
+                                                            fechaActual.setHours(0, 0, 0, 0);
+
+                                                            if (fechaIngresada >= fechaActual) {
+                                                                handleInputChangeCreate(key, formatFechaHoraSalida(e.target.value));
+                                                            } else {
+                                                                toast.error("No puedes seleccionar una fecha anterior a hoy.");
+                                                            }
+                                                        }}
+                                                        min={new Date().toISOString().slice(0, 16)}
+                                                    />
+                                                ) : key === "ciudad" ? (
+                                                    <select
+                                                        className="form-control"
+                                                        value={createRow[key] || ""}
+                                                        onChange={(e) => handleInputChangeCreate(key, e.target.value)}
+                                                    >
+                                                        <option value="">Seleccionar...</option>
+                                                        <option value="Armenia">Armenia</option>
+                                                        <option value="Bogotá">Bogotá</option>
+                                                        <option value="Manizales">Manizales</option>
+                                                        <option value="Pereira">Pereira</option>
+                                                        <option value="Zipaquirá y Sabana Norte">Zipaquirá y Sabana Norte</option>
+                                                    </select>
+                                                ) : key === "celular" ? (
+                                                    <input
+                                                        type="text"
+                                                        className="form-control"
+                                                        value={createRow[key] || ""}
+                                                        onChange={(e) => handleInputChangeCreate(key, e.target.value.replace(/\D/g, ""))}
+                                                    />
+                                                ) : (
+                                                    <input
+                                                        type="text"
+                                                        className="form-control"
+                                                        value={createRow[key] || ""}
+                                                        onChange={(e) => handleInputChangeCreate(key, e.target.value)}
+                                                    />
+                                                )}
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    <div className='botones'>
+                                        <button className='btn btn-danger' onClick={closeModal}>Cerrar</button>
+                                        <button className='btn btn-success' onClick={enviarDatosCreate}>Crear</button>
                                     </div>
                                 </div>
                             </div>

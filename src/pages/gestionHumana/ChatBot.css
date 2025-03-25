@@ -37,9 +37,13 @@
         }
 
         .botones {
-            display: flex;
-            justify-content: end;
+            display: flex !important;
+            justify-content: space-between;
             margin-bottom: 10px;
+
+            .icono-computrabajo {
+                margin-right: 5px;
+            }
         }
 
         .Subtitulo {
