@@ -14,7 +14,7 @@ function ChatBot() {
     const navigate = useNavigate();
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(true);
-    const columnasVisiblesPendientes = ["id", "registro", "fechaHora", "nombreApellido", "ciudad", "cargo", "estadoFinal"];
+    const columnasVisiblesPendientes = ["id", "registro", "fechaHora", "nombreApellido", "ciudad", "cargo", "observaciones", "estadoFinal"];
     const columnasVisiblesConfirmados = ["id", "fechaHora", "nombreApellido", "ciudad", "cargo", "observaciones", "estadoFinal"];
     const columnasVisiblesHistorico = ["id", "fechaHora", "nombreApellido", "ciudad", "cargo", "observaciones", "estadoContratacion"];
     const [data, setData] = useState(true);
@@ -30,6 +30,7 @@ function ChatBot() {
         nombreApellido: "nombreApellido",
         ciudad: "ciudad",
         cargo: "cargo",
+        observaciones: "observaciones",
         estadoFinal: "estadoProceso"
     };
     const columnasMapeadasConfirmados = {
