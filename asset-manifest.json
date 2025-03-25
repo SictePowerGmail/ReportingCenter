@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/ReportingCenter/static/css/main.39cc18f3.css",
-    "main.js": "/ReportingCenter/static/js/main.e6ee6de4.js",
+    "main.css": "/ReportingCenter/static/css/main.8e15fb25.css",
+    "main.js": "/ReportingCenter/static/js/main.f0003359.js",
     "static/js/213.3acf702f.chunk.js": "/ReportingCenter/static/js/213.3acf702f.chunk.js",
     "static/js/732.7a8fa0dd.chunk.js": "/ReportingCenter/static/js/732.7a8fa0dd.chunk.js",
     "static/media/fa-solid-900.ttf": "/ReportingCenter/static/media/fa-solid-900.2582b0e4bcf85eceead0.ttf",
@@ -22,13 +22,13 @@
     "static/media/fa-v4compatibility.ttf": "/ReportingCenter/static/media/fa-v4compatibility.da94ef451f4969af06e6.ttf",
     "static/media/fa-v4compatibility.woff2": "/ReportingCenter/static/media/fa-v4compatibility.ea8f94e1d22e0d35ccd4.woff2",
     "index.html": "/ReportingCenter/index.html",
-    "main.39cc18f3.css.map": "/ReportingCenter/static/css/main.39cc18f3.css.map",
-    "main.e6ee6de4.js.map": "/ReportingCenter/static/js/main.e6ee6de4.js.map",
+    "main.8e15fb25.css.map": "/ReportingCenter/static/css/main.8e15fb25.css.map",
+    "main.f0003359.js.map": "/ReportingCenter/static/js/main.f0003359.js.map",
     "213.3acf702f.chunk.js.map": "/ReportingCenter/static/js/213.3acf702f.chunk.js.map",
     "732.7a8fa0dd.chunk.js.map": "/ReportingCenter/static/js/732.7a8fa0dd.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.39cc18f3.css",
-    "static/js/main.e6ee6de4.js"
+    "static/css/main.8e15fb25.css",
+    "static/js/main.f0003359.js"
   ]
 }
