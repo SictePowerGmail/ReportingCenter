@@ -164,40 +164,6 @@ function Carnetizacion() {
         }));
     };
 
-    const [filtersConfirmado, setFiltersConfirmado] = useState({});
-    const [sortConfigConfirmado, setSortConfigConfirmado] = useState({ key: null, direction: "asc" });
-
-    const filteredDataConfirmado = Array.isArray(dataConfirmados)
-        ? dataConfirmados
-            .filter((row) =>
-                Object.keys(filtersConfirmado).every((key) =>
-                    row[key]?.toString().toLowerCase().includes(filtersConfirmado[key]?.toLowerCase() || "")
-                )
-            ) : [];
-
-    // Ordenar datos
-    const sortedDataConfirmado = [...filteredDataConfirmado].sort((a, b) => {
-        if (!sortConfigConfirmado.key) return 0;
-        const valA = a[sortConfigConfirmado.key] || "";
-        const valB = b[sortConfigConfirmado.key] || "";
-        return sortConfigConfirmado.direction === "asc"
-            ? valA.toString().localeCompare(valB.toString())
-            : valB.toString().localeCompare(valA.toString());
-    });
-
-    // Manejo de filtros
-    const handleFilterChangeConfirmado = (key, value) => {
-        setFiltersConfirmado({ ...filtersConfirmado, [key]: value });
-    };
-
-    // Manejo de ordenamiento
-    const handleSortConfirmado = (key) => {
-        setSortConfigConfirmado((prev) => ({
-            key,
-            direction: prev.key === key && prev.direction === "asc" ? "desc" : "asc",
-        }));
-    };
-
     const descargarArchivo = () => {
 
         const dataProcesada = dataAll.map(row =>
@@ -214,7 +180,9 @@ function Carnetizacion() {
         saveAs(blob, 'Registros Chatbot.xlsx');
     };
 
+
     const [selectedRow, setSelectedRow] = useState(null);
+    const [selectedRowEdit, setSelectedRowEdit] = useState(null);
     const [editedRow, setEditedRow] = useState({});
 
     const handleRowClick = (row) => {
@@ -250,16 +218,17 @@ function Carnetizacion() {
             ])
         );
 
-        setSelectedRow(renamedRow);
+        setSelectedRowEdit(renamedRow);
         setEditedRow(renamedRow);
     };
 
-    const handleInputChange = (key, value) => {
+    const handleInputChangeEdit = (key, value) => {
         setEditedRow((prev) => ({ ...prev, [key]: value }));
     };
 
     const closeModal = () => {
         setSelectedRow(null);
+        setSelectedRowEdit(null);
     };
 
     const formatFechaHoraSalida = (fechaISO) => {
@@ -283,7 +252,7 @@ function Carnetizacion() {
         return `${diaSemana}, ${dia} de ${mes} de ${año} a las ${horas}:${minutos} ${ampm}`;
     };
 
-    const enviarDatos = async () => {
+    const enviarDatosEditados = async () => {
 
         if (!editedRow.fechaHora || !editedRow.estadoFinal) {
             toast.error("Debe completar la fecha y el estado final.");
@@ -331,6 +300,31 @@ function Carnetizacion() {
         }
     };
 
+    const [formData, setFormData] = useState({
+        cedulaSupervisor: "",
+        nombreSupervisor: "",
+        cedulaTecnico: "",
+        nombreTecnico: "",
+        tipoCarnet: "",
+        solicitud: "",
+        foto: "",
+        segmento: "",
+        estado: ""
+    });
+
+    const handleInputChangeCargar = (key, value) => {
+        setFormData({ ...formData, [key]: value });
+    };
+
+    const enviarDatosCargar = () => {
+        if (!formData.nombreSupervisor || !formData.nombreTecnico || !formData.carne || !formData.solicitud) {
+            toast.error("Todos los campos son obligatorios");
+            return;
+        }
+        console.log("Datos enviados:", formData);
+        toast.success("Formulario enviado con éxito");
+    };
+
     return (
         <div className='Carnetizacion'>
             <div className='contenedor'>
@@ -352,10 +346,15 @@ function Carnetizacion() {
 
                         <div className='botones'>
                             <button className='btn btn-success' onClick={descargarArchivo}>Descargar Registros</button>
+                            <button className="btn-flotante"
+                                onClick={() => {
+                                    setSelectedRow(true);
+                                }}
+                            >+</button>
                         </div>
 
                         <div className='Subtitulo'>
-                            <span>Solicitudes Pendientes</span>
+                            <span>Solicitudes</span>
                         </div>
                         <div className='tabla'>
                             <table className="table table-bordered">
@@ -389,56 +388,21 @@ function Carnetizacion() {
                             <span>Total de registros: {sortedDataPendientes.length}</span>
                         </div>
 
-                        <div className='Subtitulo'>
-                            <span>Solicitudes Confirmadas</span>
-                        </div>
-                        <div className='tabla'>
-                            <table className="table table-bordered">
-                                <thead >
-                                    <tr>
-                                        {Object.keys(data[0]).map((key) => (
-                                            <th key={key} onClick={() => handleSortConfirmado(key)}>
-                                                {formatHeader(key)} {sortConfigConfirmado.key === key ? (sortConfigConfirmado.direction === "asc" ? "▲" : "▼") : ""}
-                                                <input
-                                                    type="text"
-                                                    className="form-control"
-                                                    onChange={(e) => handleFilterChangeConfirmado(key, e.target.value)}
-                                                    onClick={(e) => e.stopPropagation()}
-                                                />
-                                            </th>
-                                        ))}
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {sortedDataConfirmado.map((row) => (
-                                        <tr key={row.id} onClick={() => handleRowClick(row)}>
-                                            {Object.values(row).map((cell, i) => (
-                                                <td key={i} >{cell || "-"}</td>
-                                            ))}
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                        <div className='registros'>
-                            <span>Total de registros: {sortedDataConfirmado.length}</span>
-                        </div>
-
-                        {selectedRow && (
+                        {selectedRowEdit && (
                             <div className="modal-overlay" onClick={closeModal}>
                                 <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                                     <div className="detalle-fijo">
                                         <h4>Detalle</h4>
                                     </div>
                                     <div className="modal-form">
-                                        {Object.entries(selectedRow).map(([key, value], index, array) => (
+                                        {Object.entries(selectedRowEdit).map(([key, value], index, array) => (
                                             <div key={key} className="form-group">
                                                 <label>{formatHeader(key)}:</label>
                                                 {key === "estadoFinal" ? (
                                                     <select
                                                         className="form-control"
                                                         value={editedRow[key] || ""}
-                                                        onChange={(e) => handleInputChange(key, e.target.value)}
+                                                        onChange={(e) => handleInputChangeEdit(key, e.target.value)}
                                                     >
                                                         <option value="">Seleccionar...</option>
                                                         <option value="Pendiente">Pendiente</option>
@@ -456,7 +420,7 @@ function Carnetizacion() {
                                                             fechaActual.setHours(0, 0, 0, 0);
 
                                                             if (fechaIngresada >= fechaActual) {
-                                                                handleInputChange(key, formatFechaHoraSalida(e.target.value));
+                                                                handleInputChangeEdit(key, formatFechaHoraSalida(e.target.value));
                                                             } else {
                                                                 toast.error("No puedes seleccionar una fecha anterior a hoy.");
                                                             }
@@ -468,7 +432,7 @@ function Carnetizacion() {
                                                         type="text"
                                                         className="form-control"
                                                         value={editedRow[key] || ""}
-                                                        onChange={(e) => handleInputChange(key, e.target.value)}
+                                                        onChange={(e) => handleInputChangeEdit(key, e.target.value)}
                                                         disabled={index < array.length - 3}
                                                     />
                                                 )}
@@ -478,7 +442,89 @@ function Carnetizacion() {
 
                                     <div className='botones'>
                                         <button className='btn btn-danger' onClick={closeModal}>Cerrar</button>
-                                        <button className='btn btn-success' onClick={enviarDatos}>Actualizar</button>
+                                        <button className='btn btn-success' onClick={enviarDatosEditados}>Actualizar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {selectedRow && (
+                            <div className="modal-overlay" onClick={closeModal}>
+                                <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                                    <div className="detalle-fijo">
+                                        <h4>Nueva Solicitud</h4>
+                                    </div>
+                                    <div className="modal-form">
+                                        {Object.entries(formData)
+                                            .filter(([key]) => key !== "estado")
+                                            .map(([key, value], index, array) => (
+                                                <div key={key} className="form-group">
+                                                    <label>{formatHeader(key)}:</label>
+                                                    {key === "tipoCarnet" ? (
+                                                        <select
+                                                            className="form-control"
+                                                            value={formData[key] || ""}
+                                                            onChange={(e) => handleInputChangeCargar(key, e.target.value)}
+                                                        >
+                                                            <option value="">Seleccionar...</option>
+                                                            <option value="Claro">Claro</option>
+                                                            <option value="Sicte">Sicte</option>
+                                                            <option value="Tarjeta de Acceso">Tarjeta de Acceso</option>
+                                                        </select>
+                                                    ) : key === "solicitud" ? (
+                                                        <select
+                                                            className="form-control"
+                                                            value={formData[key] || ""}
+                                                            onChange={(e) => handleInputChangeCargar(key, e.target.value)}
+                                                        >
+                                                            <option value="">Seleccionar...</option>
+                                                            <option value="Deterioro">Deterioro</option>
+                                                            <option value="Perdida">Perdida</option>
+                                                            <option value="Primera Vez">Primera Vez</option>
+                                                        </select>
+                                                    ) : key === "segmento" ? (
+                                                        <select
+                                                            className="form-control"
+                                                            value={formData[key] || ""}
+                                                            onChange={(e) => handleInputChangeCargar(key, e.target.value)}
+                                                        >
+                                                            <option value="">Seleccionar...</option>
+                                                            <option value="Operaciones">Operaciones</option>
+                                                            <option value="Red Externa">Red Externa</option>
+                                                            <option value="Corporativo">Corporativo</option>
+                                                        </select>
+                                                    ) : key === "cedulaSupervisor" ? (
+                                                        <input
+                                                            type="text"
+                                                            className="form-control"
+                                                            value={formData[key] || ""}
+                                                            onChange={(e) => handleInputChangeCargar(key, e.target.value.replace(/\D/g, ""))}
+                                                            onInput={(e) => e.target.value = e.target.value.replace(/\D/g, "")}
+                                                            pattern="\d*"
+                                                        />
+                                                    ) : key === "cedulaTecnico" ? (
+                                                        <input
+                                                            type="text"
+                                                            className="form-control"
+                                                            value={formData[key] || ""}
+                                                            onChange={(e) => handleInputChangeCargar(key, e.target.value.replace(/\D/g, ""))}
+                                                            onInput={(e) => e.target.value = e.target.value.replace(/\D/g, "")}
+                                                            pattern="\d*"
+                                                        />
+                                                    ) : (
+                                                        <input
+                                                            type="text"
+                                                            className="form-control"
+                                                            value={formData[key] || ""}
+                                                            onChange={(e) => handleInputChangeCargar(key, e.target.value)}
+                                                        />
+                                                    )}
+                                                </div>
+                                            ))}
+                                    </div>
+                                    <div className='botones'>
+                                        <button className='btn btn-danger' onClick={closeModal}>Cerrar</button>
+                                        <button className='btn btn-success' onClick={enviarDatosCargar}>Crear</button>
                                     </div>
                                 </div>
                             </div>
