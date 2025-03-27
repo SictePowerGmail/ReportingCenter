@@ -85,7 +85,7 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
                 console.error(`Error al enviar el PDF ${pdfNombre} al backend:`, error);
                 toast.error(`Error al cargar el PDF: ${pdfNombre}`, { className: 'toast-success' });
             }
-            
+
             try {
                 const response = await axios.post(`${process.env.REACT_APP_API_URL}/solicitudMaterial/leerPDF`, { "rutaPdf": pdfNombre },
                     {
@@ -114,7 +114,7 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
             }
         }
     }
-    
+
     const fetchArchivo = async (fileName, tipo) => {
         try {
             if (tipo === 'diseño') {
@@ -210,7 +210,7 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
         } else {
             observacionesTemporal = observacionesBodega;
         }
-        
+
         if (estadoCargue === 'normal') {
             try {
                 await axios.post(`${process.env.REACT_APP_API_URL}/solicitudMaterial/actualizarEstadoEntregaBodega`, { ids, estado, observacionesTemporal });
@@ -231,7 +231,7 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
             const pdfNombresNuevosFormateados = pdfNombresNuevos.map(pdf => `${formattedDate3}_${pdf}`).join(",");
             pdfNombre = `${prfNombreAnterior},${pdfNombresNuevosFormateados}`
         }
-        
+
         try {
             await axios.post(`${process.env.REACT_APP_API_URL}/solicitudMaterial/actualizarEstadoEntregaBodegaPDFs`, { ids, pdfNombre });
             console.log('Solicitud enviada correctamente entrega bodega pdfs');
@@ -260,7 +260,7 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
             const pdfNombre = `${formattedDate3}_${nombre}`;
             formDataPdf.append('file', pdf);
             formDataPdf.append("filename", pdfNombre);
-            
+
             try {
                 await axios.post(`${process.env.REACT_APP_API_URL}/solicitudMaterial/cargarPDF`, formDataPdf, {
                     headers: {
@@ -285,7 +285,7 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
                 nombre = pdfNombresNuevos[i]
             }
             const pdfNombre = `${formattedDate3}_${nombre}`;
-            
+
             try {
                 const response = await axios.post(`${process.env.REACT_APP_API_URL}/solicitudMaterial/leerPDF`,
                     { "rutaPdf": pdfNombre },
@@ -316,7 +316,7 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
                 }
 
                 for (const row of updatedDataConEstado) {
-                    
+
                     try {
                         await axios.post(`${process.env.REACT_APP_API_URL}/solicitudMaterial/cargarDatosEntregados`,
                             {
@@ -381,7 +381,7 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
         });
 
         const cantidades = fila2.map(item => item.cantidadRestantePorDespacho);
-        
+
         try {
             await axios.post(`${process.env.REACT_APP_API_URL}/solicitudMaterial/actualizarEstadoCantidadRestantePorDespacho`,
                 {
@@ -409,7 +409,7 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
         setLoading(true);
         const ids = fila.map(item => item.id);
         const pdfNombre = "Cerrado"
-        
+
         try {
             await axios.post(`${process.env.REACT_APP_API_URL}/solicitudMaterial/actualizarEstadoCierreProyecto`, { ids, pdfNombre });
             console.log('Solicitud enviada correctamente cerrar proyecto');
@@ -563,16 +563,18 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
                         </div>
 
                         <div className='LecturaPDFs'>
-                            {(pdfData.length === 0 && fila[0].entregaBodega === "Pendiente" && pantalla === "EntregaBodega" && rolUsuario !== "LOGISTICA") && (
+                            {(pdfData.length === 0 && fila[0].entregaBodega === "Pendiente" && pantalla === "EntregaBodega") && (
                                 <div className='panelDivisor'>
-                                    <div className='EntradaPDFs'>
-                                        <span>Por favor agregue los PDFs de las salidas de material</span>
-                                        <div className='inputPDFs'>
-                                            <input type="file" accept="application/pdf" multiple onChange={lecturaDePDFs} ref={pdfInputRef} />
+                                    {rolUsuario !== "LOGISTICA" && (
+                                        <div className='EntradaPDFs'>
+                                            <span>Por favor agregue los PDFs de las salidas de material</span>
+                                            <div className='inputPDFs'>
+                                                <input type="file" accept="application/pdf" multiple onChange={lecturaDePDFs} ref={pdfInputRef} />
+                                            </div>
                                         </div>
-                                    </div>
+                                    )}
 
-                                    {pantalla === "EntregaBodega" && fila[0].entregaBodega === "Pendiente" && rolUsuario === "admin" && fila[0].estadoProyecto === "Abierto" && proyectoCerradoEstado !== "Cerrado" && (
+                                    {pantalla === "EntregaBodega" && fila[0].entregaBodega === "Pendiente" && (rolUsuario === "admin" || rolUsuario === "LOGISTICA") && fila[0].estadoProyecto === "Abierto" && proyectoCerradoEstado !== "Cerrado" && (
                                         <button className='btn btn-danger'
                                             title='Copiar Texto'
                                             onClick={() => {
@@ -738,14 +740,16 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
                         )}
 
                         <div className='LecturaPDFs'>
-                            {(pdfDataNuevos.length === 0 && fila[0].entregaBodega !== "Pendiente" && pantalla === "EntregaBodega" && rolUsuario !== "LOGISTICA" && fila[0].estadoProyecto === "Abierto" && proyectoCerradoEstado !== "Cerrado") && (
+                            {(pdfDataNuevos.length === 0 && fila[0].entregaBodega !== "Pendiente" && pantalla === "EntregaBodega" && fila[0].estadoProyecto === "Abierto" && proyectoCerradoEstado !== "Cerrado") && (
                                 <div className='panelDivisor'>
-                                    <div className='EntradaPDFs'>
-                                        <span>Por favor agregue los nuevos PDFs de salidas de material</span>
-                                        <div className='inputPDFs'>
-                                            <input type="file" accept="application/pdf" multiple onChange={lecturaDePDFsNuevos} ref={pdfInputRefNuevos} />
+                                    {rolUsuario !== "LOGISTICA" && (
+                                        <div className='EntradaPDFs'>
+                                            <span>Por favor agregue los nuevos PDFs de salidas de material</span>
+                                            <div className='inputPDFs'>
+                                                <input type="file" accept="application/pdf" multiple onChange={lecturaDePDFsNuevos} ref={pdfInputRefNuevos} />
+                                            </div>
                                         </div>
-                                    </div>
+                                    )}
                                     {pantalla === "EntregaBodega" && fila[0].entregaBodega === "Entregado" && fila[0].estadoProyecto === "Abierto" && proyectoCerradoEstado !== "Cerrado" && (
                                         <button className='btn btn-danger'
                                             title='Copiar Texto'
