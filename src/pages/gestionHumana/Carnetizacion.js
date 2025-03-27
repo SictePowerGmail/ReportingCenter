@@ -8,26 +8,25 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
-import { cargarRelacionPersonal, ObtenerRelacionCiudadAuxiliar } from '../../funciones';
 
 function Carnetizacion() {
     const navigate = useNavigate();
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(true);
-    const columnasVisibles = ["id", "registro", "stage", "nombreApellido", "ciudad", "cargo", "estadoFinal"];
+    const columnasVisibles = ["id", "registro", "nombreSupervisor", "nombreTecnico", "tipoCarnet", "solicitud", "segmento", "estado"];
     const [data, setData] = useState(true);
-    const [dataConfirmados, setDataConfirmados] = useState(true);
     const [dataAll, setDataAll] = useState(true);
     const cedulaUsuario = Cookies.get('userCedula');
     const nombreUsuario = Cookies.get('userNombre');
     const columnasMapeadas = {
         id: "id",
-        registro: "registro",
-        stage: "estadoChat",
-        nombreApellido: "nombreApellido",
-        ciudad: "ciudad",
-        cargo: "cargo",
-        estadoFinal: "estadoProceso"
+        registro: "fechaRegistro",
+        nombreSupervisor: "nombreSupervisor",
+        nombreTecnico: "nombreTecnico",
+        tipoCarnet: "tipoCarnet",
+        solicitud: "solicitud",
+        segmento: "segmento",
+        estado: "estado"
     };
 
     const formatFechaHora = (fechaTexto) => {
@@ -54,52 +53,17 @@ function Carnetizacion() {
 
     const cargarDatos = async () => {
         try {
-            const responseChatbot = await axios.get(`${process.env.REACT_APP_API_URL}/recursosHumanos/RegistrosChatbot`);
+            const responseChatbot = await axios.get(`${process.env.REACT_APP_API_URL}/carnetizacion/Registros`);
 
             const sortedData = responseChatbot.data.sort((a, b) => b.id - a.id);
             setDataAll(sortedData)
 
-            const ciudad = ObtenerRelacionCiudadAuxiliar(nombreUsuario);
-
-            const datafiltrada = ciudad
-                ? sortedData.filter(item => ciudad.includes(item.ciudad))
-                : sortedData;
-
-            const sortedData2 = datafiltrada.map(row => Object.fromEntries(
+            const sortedData2 = sortedData.map(row => Object.fromEntries(
                 Object.entries(row)
                     .filter(([key]) => columnasVisibles.includes(key))
                     .map(([key, value]) => [columnasMapeadas[key] || key, value])
             ));
             setData(sortedData2);
-
-            const hoy = new Date();
-            const hoyISO = hoy.toISOString().split("T")[0]; // Obtiene 'YYYY-MM-DD'
-
-            const dataFiltrada2 = datafiltrada
-                .filter(row => row.estadoFinal === "Confirmado" || row.estadoFinal === "Finalizado")
-                .filter((row) => {
-
-                    if (!row.fechaHora) {
-                        return false;
-                    }
-
-                    const fechaISO = formatFechaHora(row.fechaHora);
-                    if (!fechaISO) {
-                        return false;
-                    }
-
-                    const fechaSolo = fechaISO.split("T")[0];
-
-                    return fechaSolo === hoyISO || fechaSolo > hoyISO;
-                });
-
-            const sortedData3 = dataFiltrada2.map(row => Object.fromEntries(
-                Object.entries(row)
-                    .filter(([key]) => columnasVisibles.includes(key))
-                    .map(([key, value]) => [columnasMapeadas[key] || key, value])
-            ));
-
-            setDataConfirmados(sortedData3);
 
             setLoading(false);
         } catch (error) {
@@ -118,12 +82,11 @@ function Carnetizacion() {
             window.location.reload();
         }
 
-        cargarRelacionPersonal();
         cargarDatos();
     }, []);
 
-    const [filtersPendientes, setFiltersPendientes] = useState({});
-    const [sortConfigPendientes, setSortConfigPendientes] = useState({ key: null, direction: "asc" });
+    const [filters, setFilters] = useState({});
+    const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
 
     const formatHeader = (key) => {
         return key
@@ -132,33 +95,32 @@ function Carnetizacion() {
             .trim();
     };
 
-    const filteredDataPendientes = Array.isArray(data)
+    const filteredData = Array.isArray(data)
         ? data
-            .filter(row => row.estadoProceso === "Pendiente")
             .filter((row) =>
-                Object.keys(filtersPendientes).every((key) =>
-                    row[key]?.toString().toLowerCase().includes(filtersPendientes[key]?.toLowerCase() || "")
+                Object.keys(filters).every((key) =>
+                    row[key]?.toString().toLowerCase().includes(filters[key]?.toLowerCase() || "")
                 )
             ) : [];
 
     // Ordenar datos
-    const sortedDataPendientes = [...filteredDataPendientes].sort((a, b) => {
-        if (!sortConfigPendientes.key) return 0;
-        const valA = a[sortConfigPendientes.key] || "";
-        const valB = b[sortConfigPendientes.key] || "";
-        return sortConfigPendientes.direction === "asc"
+    const sortedData = [...filteredData].sort((a, b) => {
+        if (!sortConfig.key) return 0;
+        const valA = a[sortConfig.key] || "";
+        const valB = b[sortConfig.key] || "";
+        return sortConfig.direction === "asc"
             ? valA.toString().localeCompare(valB.toString())
             : valB.toString().localeCompare(valA.toString());
     });
 
     // Manejo de filtros
-    const handleFilterChangePendientes = (key, value) => {
-        setFiltersPendientes({ ...filtersPendientes, [key]: value });
+    const handleFilterChange = (key, value) => {
+        setFilters({ ...filters, [key]: value });
     };
 
     // Manejo de ordenamiento
-    const handleSortPendientes = (key) => {
-        setSortConfigPendientes((prev) => ({
+    const handleSort = (key) => {
+        setSortConfig((prev) => ({
             key,
             direction: prev.key === key && prev.direction === "asc" ? "desc" : "asc",
         }));
@@ -188,38 +150,8 @@ function Carnetizacion() {
     const handleRowClick = (row) => {
         const selectedData = dataAll.find(item => item.id === row.id);
 
-        const columnasAEliminar = {
-            "Ayudante (Sin Moto)": ["respuestaFiltro1", "respuestaFiltro2", "respuestaFiltro3"],
-            "Conductor": ["respuestaFiltro3"],
-        };
-
-        const filteredRow = Object.fromEntries(
-            Object.entries(selectedData).filter(
-                ([key]) => !(columnasAEliminar[row.cargo] || []).includes(key)
-            )
-        );
-
-        const nombresColumnas = {
-            "Conductor": {
-                "respuestaFiltro1": "Experiencia de conduccion",
-                "respuestaFiltro2": "Tipo de Licencia",
-            },
-            "Motorizados": {
-                "respuestaFiltro1": "Motocicleta Propia",
-                "respuestaFiltro2": "Moto Tipo Scooter",
-                "respuestaFiltro3": "Antiguedad de Licencia A2",
-            },
-        };
-
-        const renamedRow = Object.fromEntries(
-            Object.entries(filteredRow).map(([key, value]) => [
-                nombresColumnas[selectedData.cargo]?.[key] || key,
-                value
-            ])
-        );
-
-        setSelectedRowEdit(renamedRow);
-        setEditedRow(renamedRow);
+        setSelectedRowEdit(selectedData);
+        setEditedRow(selectedData);
     };
 
     const handleInputChangeEdit = (key, value) => {
@@ -229,6 +161,17 @@ function Carnetizacion() {
     const closeModal = () => {
         setSelectedRow(null);
         setSelectedRowEdit(null);
+        setFormData({
+            cedulaSupervisor: "",
+            nombreSupervisor: "",
+            cedulaTecnico: "",
+            nombreTecnico: "",
+            tipoCarnet: "",
+            solicitud: "",
+            foto: "",
+            segmento: "",
+            estado: ""
+        });
     };
 
     const formatFechaHoraSalida = (fechaISO) => {
@@ -316,13 +259,61 @@ function Carnetizacion() {
         setFormData({ ...formData, [key]: value });
     };
 
-    const enviarDatosCargar = () => {
-        if (!formData.nombreSupervisor || !formData.nombreTecnico || !formData.carne || !formData.solicitud) {
+    const obtenerFechaActual = () => {
+        const fecha = new Date();
+        const año = fecha.getFullYear();
+        const mes = String(fecha.getMonth() + 1).padStart(2, "0");
+        const dia = String(fecha.getDate()).padStart(2, "0");
+        const horas = String(fecha.getHours()).padStart(2, "0");
+        const minutos = String(fecha.getMinutes()).padStart(2, "0");
+        const segundos = String(fecha.getSeconds()).padStart(2, "0");
+
+        return `${año}-${mes}-${dia} ${horas}:${minutos}:${segundos}`;
+    };
+
+    const enviarDatosCargar = async () => {
+        if (!formData.cedulaSupervisor || !formData.nombreSupervisor || !formData.cedulaTecnico || !formData.nombreTecnico || !formData.tipoCarnet || !formData.solicitud || !formData.foto || !formData.segmento) {
             toast.error("Todos los campos son obligatorios");
             return;
         }
+
         console.log("Datos enviados:", formData);
-        toast.success("Formulario enviado con éxito");
+
+        const datosAEnviar = {
+            registro: obtenerFechaActual(),
+            cedulaSupervisor: formData.cedulaSupervisor,
+            nombreSupervisor: formData.nombreSupervisor,
+            cedulaTecnico: formData.cedulaTecnico,
+            nombreTecnico: formData.nombreTecnico,
+            tipoCarnet: formData.tipoCarnet,
+            solicitud: formData.solicitud,
+            foto: formData.foto,
+            segmento: formData.segmento,
+            estado: formData.estado
+        };
+
+        try {
+            const response = await fetch("https://sicte-sas-capacidades-backend.onrender.com/carnetizacion/crearRegistro", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(datosAEnviar),
+            });
+
+            if (!response.ok) {
+                toast.error('Error al actualizar los datos.', { className: 'toast-error' });
+            } else {
+                toast.success('Datos enviados correctamente.');
+                closeModal();
+                setTimeout(() => {
+                    cargarDatos();
+                }, 700);
+            }
+
+        } catch (error) {
+            toast.error(`Error al actualizar: ${error.message}`, { className: "toast-error" });
+        }
     };
 
     return (
@@ -361,12 +352,12 @@ function Carnetizacion() {
                                 <thead >
                                     <tr>
                                         {Object.keys(data[0]).map((key) => (
-                                            <th key={key} onClick={() => handleSortPendientes(key)}>
-                                                {formatHeader(key)} {sortConfigPendientes.key === key ? (sortConfigPendientes.direction === "asc" ? "▲" : "▼") : ""}
+                                            <th key={key} onClick={() => handleSort(key)}>
+                                                {formatHeader(key)} {sortConfig.key === key ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
                                                 <input
                                                     type="text"
                                                     className="form-control"
-                                                    onChange={(e) => handleFilterChangePendientes(key, e.target.value)}
+                                                    onChange={(e) => handleFilterChange(key, e.target.value)}
                                                     onClick={(e) => e.stopPropagation()}
                                                 />
                                             </th>
@@ -374,7 +365,7 @@ function Carnetizacion() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {sortedDataPendientes.map((row) => (
+                                    {sortedData.map((row) => (
                                         <tr key={row.id} onClick={() => handleRowClick(row)}>
                                             {Object.values(row).map((cell, i) => (
                                                 <td key={i} >{cell || "-"}</td>
@@ -385,7 +376,7 @@ function Carnetizacion() {
                             </table>
                         </div>
                         <div className='registros primero'>
-                            <span>Total de registros: {sortedDataPendientes.length}</span>
+                            <span>Total de registros: {sortedData.length}</span>
                         </div>
 
                         {selectedRowEdit && (
@@ -433,7 +424,7 @@ function Carnetizacion() {
                                                         className="form-control"
                                                         value={editedRow[key] || ""}
                                                         onChange={(e) => handleInputChangeEdit(key, e.target.value)}
-                                                        disabled={index < array.length - 3}
+                                                        disabled={index < array.length - 1}
                                                     />
                                                 )}
                                             </div>
