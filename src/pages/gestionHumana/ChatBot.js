@@ -494,7 +494,7 @@ function ChatBot() {
             cargo: createRow.cargo || "",
             fechaHora: createRow.fechaHora || "",
             fechaHoraInicial: createRow.fechaHora || "",
-            estadoFinal: "Completado"
+            estadoFinal: "Confirmado"
         };
 
         try {
