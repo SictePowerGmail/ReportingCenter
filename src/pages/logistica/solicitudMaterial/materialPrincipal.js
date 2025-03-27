@@ -196,6 +196,7 @@ const MaterialPrincipal = () => {
                 item.aprobacionAnalista !== "Rechazado" &&
                 item.aprobacionDirector !== "Rechazado" &&
                 item.aprobacionDireccionOperacion !== "Rechazado" &&
+                item.estadoProyecto === "Abierto" &&
                 item.entregaBodega !== "Entregado"
             );
 
@@ -321,8 +322,6 @@ const MaterialPrincipal = () => {
 
             const ids = resultado.map(item => item.id);
             const cantidades = resultado.map(item => item.cantidadDisponibleMaterial)
-            console.log(ids)
-            console.log(cantidades)
 
             await axios.post(`${process.env.REACT_APP_API_URL}/solicitudMaterial/actualizarEstadoCantidadDisponibleMaterial`,
                 {
