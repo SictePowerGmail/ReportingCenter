@@ -187,8 +187,6 @@ const MaterialPrincipal = () => {
                 ciudad = []
             }
 
-            console.log(dataKgprodActualizado);
-
             const datosFiltradosKgprod = ciudad.length ? dataKgprodActualizado.filter(item => ciudad.includes(item.bodega)) : dataKgprodActualizado;
 
             const responseRegistrosSolicitudMaterial = await axios.get(`${process.env.REACT_APP_API_URL}/solicitudMaterial/RegistrosSolicitudMaterial`);
@@ -316,10 +314,6 @@ const MaterialPrincipal = () => {
                         registroPorFecha.cantidadDisponibleMaterial = cantidadDisponible;
                         registroPorFecha.cantidadDisponibleMaterial = Math.max(0, registroPorFecha.cantidadDisponibleMaterial);
                         cantidadDisponible -= cantidadRestantePorDespacho;
-
-                        const codigoEspecifico = "4028942SIC";
-                        const registrosFiltrados = registroPorFecha.filter(registro => registro.codigoSapMaterial === codigoEspecifico);
-                        console.log(registrosFiltrados);
                     });
                 }
 
