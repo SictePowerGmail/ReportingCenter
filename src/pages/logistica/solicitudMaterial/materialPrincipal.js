@@ -150,26 +150,26 @@ const MaterialPrincipal = () => {
     //     }
     // }
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                if (!dataKgprod) {
-                    const response = await axios.get(`${process.env.REACT_APP_API_URL}/bodega/kgprod`);
-                    setDataKgprod(response.data);
-                }
-            } catch (error) {
-                console.error("Error al obtener datos:", error);
-            } finally {
-                setLoading(false);
+    const fetchDataKgprod = async () => {
+        try {
+            if (!dataKgprod) {
+                const response = await axios.get(`${process.env.REACT_APP_API_URL}/bodega/kgprod`);
+                setDataKgprod(response.data);
+                return response.data;
             }
-        };
-
-        fetchData();
-    }, [dataKgprod]);
+            return dataKgprod;
+        } catch (error) {
+            console.error("Error al obtener datos:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const calculo = async (ciudadElgida) => {
         try {
             setLoading(true);
+
+            const dataKgprodActualizado = await fetchDataKgprod();
 
             let ciudad;
 
@@ -187,7 +187,9 @@ const MaterialPrincipal = () => {
                 ciudad = []
             }
 
-            const datosFiltradosKgprod = ciudad.length ? dataKgprod.filter(item => ciudad.includes(item.bodega)) : dataKgprod;
+            console.log(dataKgprodActualizado);
+
+            const datosFiltradosKgprod = ciudad.length ? dataKgprodActualizado.filter(item => ciudad.includes(item.bodega)) : dataKgprodActualizado;
 
             const responseRegistrosSolicitudMaterial = await axios.get(`${process.env.REACT_APP_API_URL}/solicitudMaterial/RegistrosSolicitudMaterial`);
 
@@ -314,6 +316,10 @@ const MaterialPrincipal = () => {
                         registroPorFecha.cantidadDisponibleMaterial = cantidadDisponible;
                         registroPorFecha.cantidadDisponibleMaterial = Math.max(0, registroPorFecha.cantidadDisponibleMaterial);
                         cantidadDisponible -= cantidadRestantePorDespacho;
+
+                        const codigoEspecifico = "4028942SIC";
+                        const registrosFiltrados = registroPorFecha.filter(registro => registro.codigoSapMaterial === codigoEspecifico);
+                        console.log(registrosFiltrados);
                     });
                 }
 
