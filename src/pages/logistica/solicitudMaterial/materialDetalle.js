@@ -272,6 +272,8 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
                 console.error(`Error al enviar el PDF ${pdfNombre} al backend:`, error);
                 toast.error(`Error al cargar el PDF: ${pdfNombre}`, { className: 'toast-success' });
             }
+
+            await new Promise(resolve => setTimeout(resolve, 2000));
         }
 
         const formattedDate2 = formatDate2(fechaActual);

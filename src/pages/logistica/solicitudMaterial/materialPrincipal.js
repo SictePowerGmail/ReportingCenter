@@ -34,11 +34,7 @@ const MaterialPrincipal = () => {
             window.location.reload();
         }
 
-        calculo("Manizales");
-        calculo("Pereira");
-        calculo("Armenia");
-        calculo("Bogota San Cipriano Corporativo");
-        calculo("Bogota San Cipriano Red Externa");
+        calculo();
 
         cargarDirectores();
         cargarRelacionPersonal();
@@ -165,178 +161,170 @@ const MaterialPrincipal = () => {
         }
     };
 
-    const calculo = async (ciudadElgida) => {
+    const calculo = async () => {
         try {
             setLoading(true);
 
             const dataKgprodActualizado = await fetchDataKgprod();
 
-            let ciudad;
-
-            if (ciudadElgida === "Manizales") {
-                ciudad = ['KGPROD_MZL'];
-            } else if (ciudadElgida === "Pereira") {
-                ciudad = ['KGPROD_PER'];
-            } else if (ciudadElgida === "Armenia") {
-                ciudad = ['KGPROD_ARM'];
-            } else if (ciudadElgida === "Bogota San Cipriano Corporativo") {
-                ciudad = ['KGPROD_CORP_BOG'];
-            } else if (ciudadElgida === "Bogota San Cipriano Red Externa") {
-                ciudad = ['KGPROD_RED_BOG'];
-            } else {
-                ciudad = []
-            }
-
-            const datosFiltradosKgprod = ciudad.length ? dataKgprodActualizado.filter(item => ciudad.includes(item.bodega)) : dataKgprodActualizado;
+            const ciudades = {
+                "Manizales": ['KGPROD_MZL'],
+                "Pereira": ['KGPROD_PER'],
+                "Armenia": ['KGPROD_ARM'],
+                "Bogota San Cipriano Corporativo": ['KGPROD_CORP_BOG'],
+                "Bogota San Cipriano Red Externa": ['KGPROD_RED_BOG']
+            };
 
             const responseRegistrosSolicitudMaterial = await axios.get(`${process.env.REACT_APP_API_URL}/solicitudMaterial/RegistrosSolicitudMaterial`);
-
-            const datosFiltradosRegistrosSolicitudMaterial = responseRegistrosSolicitudMaterial.data.filter(item =>
-                item.ciudad === ciudadElgida &&
-                item.aprobacionAnalista !== "Rechazado" &&
-                item.aprobacionDirector !== "Rechazado" &&
-                item.aprobacionDireccionOperacion !== "Rechazado" &&
-                item.estadoProyecto === "Abierto" &&
-                item.entregaBodega !== "Entregado"
-            );
-
-            const dinamicaRegistrosSolicitudMaterial = datosFiltradosRegistrosSolicitudMaterial.reduce((acumulador, item) => {
-                const codigo = item.codigoSapMaterial;
-                const cantidad = parseInt(item.cantidadSolicitadaMaterial, 10) || 0;
-
-                if (acumulador[codigo]) {
-                    acumulador[codigo] += cantidad;
-                } else {
-                    acumulador[codigo] = cantidad;
-                }
-
-                return acumulador;
-            }, {});
-
-            const datosFiltradosRegistrosSolicitudMaterialPendienteDespacho = responseRegistrosSolicitudMaterial.data.filter(item =>
-                item.ciudad === ciudadElgida &&
-                item.estadoProyecto === "Abierto" &&
-                item.entregaBodega === "Entregado"
-            );
-
-            const dinamicaRegistrosSolicitudMaterialPendienteDespacho = datosFiltradosRegistrosSolicitudMaterialPendienteDespacho.reduce((acumulador, item) => {
-                const codigo = item.codigoSapMaterial;
-                const cantidad = parseInt(item.cantidadRestantePorDespacho, 10) || 0;
-
-                if (acumulador[codigo]) {
-                    acumulador[codigo] += cantidad;
-                } else {
-                    acumulador[codigo] = cantidad;
-                }
-
-                return acumulador;
-            }, {});
-
             const responseRegistrosEntregadoSolicitudMaterial = await axios.get(`${process.env.REACT_APP_API_URL}/solicitudMaterial/RegistrosEntregadosSolicitudMaterial`);
 
-            const hoy = new Date().toISOString().split("T")[0];
+            for (const [ciudadElgida, bodega] of Object.entries(ciudades)) {
 
-            const datosFiltradosRegistrosEntregadoSolicitudMaterial = responseRegistrosEntregadoSolicitudMaterial.data.filter(item =>
-                item.ciudad === ciudadElgida &&
-                item.fechaEntrega.slice(0, 10) === hoy
-            );
+                const datosFiltradosKgprod = bodega.length ? dataKgprodActualizado.filter(item => bodega.includes(item.bodega)) : dataKgprodActualizado;
 
-            const dinamicaRegistrosEntregaSolicitudMaterial = datosFiltradosRegistrosEntregadoSolicitudMaterial.reduce((acumulador, item) => {
-                const codigo = item.codigoSapMaterial;
-                const cantidad = parseInt(item.cantidadSolicitadaMaterial, 10) || 0;
+                const datosFiltradosRegistrosSolicitudMaterial = responseRegistrosSolicitudMaterial.data.filter(item =>
+                    item.ciudad === ciudadElgida &&
+                    item.aprobacionAnalista !== "Rechazado" &&
+                    item.aprobacionDirector !== "Rechazado" &&
+                    item.aprobacionDireccionOperacion !== "Rechazado" &&
+                    item.estadoProyecto === "Abierto" &&
+                    item.entregaBodega !== "Entregado"
+                );
 
-                if (acumulador[codigo]) {
-                    acumulador[codigo] += cantidad;
-                } else {
-                    acumulador[codigo] = cantidad;
-                }
+                const dinamicaRegistrosSolicitudMaterial = datosFiltradosRegistrosSolicitudMaterial.reduce((acumulador, item) => {
+                    const codigo = item.codigoSapMaterial;
+                    const cantidad = parseInt(item.cantidadSolicitadaMaterial, 10) || 0;
 
-                return acumulador;
-            }, {});
+                    if (acumulador[codigo]) {
+                        acumulador[codigo] += cantidad;
+                    } else {
+                        acumulador[codigo] = cantidad;
+                    }
 
-            const datosRestados = datosFiltradosKgprod.map(itemKgprod => {
-                const codigo = itemKgprod.codigo;
-                const cantidadDisponible = parseInt(itemKgprod.candisp, 10) || 0;
-                const cantidadSolicitada = dinamicaRegistrosSolicitudMaterial[codigo] || 0;
-                const cantidadEntregada = dinamicaRegistrosEntregaSolicitudMaterial[codigo] || 0;
-                const cantidadPendienteDespacho = dinamicaRegistrosSolicitudMaterialPendienteDespacho[codigo] || 0;
+                    return acumulador;
+                }, {});
 
-                const nuevaCantidad = cantidadDisponible - cantidadSolicitada - cantidadEntregada - cantidadPendienteDespacho;
+                const datosFiltradosRegistrosSolicitudMaterialPendienteDespacho = responseRegistrosSolicitudMaterial.data.filter(item =>
+                    item.ciudad === ciudadElgida &&
+                    item.estadoProyecto === "Abierto" &&
+                    item.entregaBodega === "Entregado"
+                );
 
-                return {
-                    ...itemKgprod,
-                    cantidadRestada: nuevaCantidad,
-                    cantidadSolicitada,
-                    cantidadEntregada,
-                    cantidadDisponible,
-                    cantidadPendienteDespacho
-                };
-            });
+                const dinamicaRegistrosSolicitudMaterialPendienteDespacho = datosFiltradosRegistrosSolicitudMaterialPendienteDespacho.reduce((acumulador, item) => {
+                    const codigo = item.codigoSapMaterial;
+                    const cantidad = parseInt(item.cantidadRestantePorDespacho, 10) || 0;
 
-            const codigosNegativos = datosRestados.map(item => item.codigo);
+                    if (acumulador[codigo]) {
+                        acumulador[codigo] += cantidad;
+                    } else {
+                        acumulador[codigo] = cantidad;
+                    }
 
-            const datosFiltradosRegistrosSolicitudMaterialCompleto = responseRegistrosSolicitudMaterial.data.filter(item =>
-                item.ciudad === ciudadElgida &&
-                item.aprobacionAnalista !== "Rechazado" &&
-                item.aprobacionDirector !== "Rechazado" &&
-                item.aprobacionDireccionOperacion !== "Rechazado" &&
-                item.estadoProyecto === "Abierto"
-            );
+                    return acumulador;
+                }, {});
 
-            const registrosFiltrados = datosFiltradosRegistrosSolicitudMaterialCompleto.filter(item =>
-                codigosNegativos.includes(item.codigoSapMaterial)
-            );
+                const hoy = new Date().toISOString().split("T")[0];
 
-            const resultado = registrosFiltrados.reduce((acc, registro) => {
-                const codigo = registro.codigoSapMaterial;
+                const datosFiltradosRegistrosEntregadoSolicitudMaterial = responseRegistrosEntregadoSolicitudMaterial.data.filter(item =>
+                    item.ciudad === ciudadElgida &&
+                    item.fechaEntrega.slice(0, 10) === hoy
+                );
 
-                const datoNegativo = datosRestados.find(item => item.codigo === codigo);
-                const datoFiltrado = datosFiltradosKgprod.find(item => item.codigo === codigo);
+                const dinamicaRegistrosEntregaSolicitudMaterial = datosFiltradosRegistrosEntregadoSolicitudMaterial.reduce((acumulador, item) => {
+                    const codigo = item.codigoSapMaterial;
+                    const cantidad = parseInt(item.cantidadSolicitadaMaterial, 10) || 0;
 
-                if (datoNegativo && datoFiltrado) {
-                    let cantidadDisponible = parseInt(datoFiltrado.candisp, 10) || 0;
+                    if (acumulador[codigo]) {
+                        acumulador[codigo] += cantidad;
+                    } else {
+                        acumulador[codigo] = cantidad;
+                    }
 
-                    const registrosPorCodigo = acc
-                        .filter(item => item.codigoSapMaterial === codigo)
-                        .sort((a, b) => new Date(a.fecha) - new Date(b.fecha))
-                        .reduce((unique, item) => {
-                            const seen = unique.map.get(item.id);
-                            if (!seen) {
-                                unique.map.set(item.id, true);
-                                unique.list.push(item);
-                            }
-                            return unique;
-                        }, { list: [], map: new Map() }).list;
+                    return acumulador;
+                }, {});
 
-                    registrosPorCodigo.forEach((registroPorFecha, index) => {
-                        const cantidadRestantePorDespacho = parseInt(registroPorFecha.cantidadRestantePorDespacho, 10) || 0;
+                const datosRestados = datosFiltradosKgprod.map(itemKgprod => {
+                    const codigo = itemKgprod.codigo;
+                    const cantidadDisponible = parseInt(itemKgprod.candisp, 10) || 0;
+                    const cantidadSolicitada = dinamicaRegistrosSolicitudMaterial[codigo] || 0;
+                    const cantidadEntregada = dinamicaRegistrosEntregaSolicitudMaterial[codigo] || 0;
+                    const cantidadPendienteDespacho = dinamicaRegistrosSolicitudMaterialPendienteDespacho[codigo] || 0;
 
-                        registroPorFecha.cantidadDisponibleMaterial = cantidadDisponible;
-                        registroPorFecha.cantidadDisponibleMaterial = Math.max(0, registroPorFecha.cantidadDisponibleMaterial);
-                        cantidadDisponible -= cantidadRestantePorDespacho;
-                    });
-                }
+                    const nuevaCantidad = cantidadDisponible - cantidadSolicitada - cantidadEntregada - cantidadPendienteDespacho;
 
-                return [...acc, ...registrosFiltrados.filter(item => item.codigoSapMaterial === codigo)];
-            }, []);
+                    return {
+                        ...itemKgprod,
+                        cantidadRestada: nuevaCantidad,
+                        cantidadSolicitada,
+                        cantidadEntregada,
+                        cantidadDisponible,
+                        cantidadPendienteDespacho
+                    };
+                });
 
-            const ids = resultado.map(item => item.id);
-            const cantidades = resultado.map(item => item.cantidadDisponibleMaterial)
+                const codigosNegativos = datosRestados.map(item => item.codigo);
 
-            await axios.post(`${process.env.REACT_APP_API_URL}/solicitudMaterial/actualizarEstadoCantidadDisponibleMaterial`,
-                {
-                    ids, cantidades
-                },
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
+                const datosFiltradosRegistrosSolicitudMaterialCompleto = responseRegistrosSolicitudMaterial.data.filter(item =>
+                    item.ciudad === ciudadElgida &&
+                    item.aprobacionAnalista !== "Rechazado" &&
+                    item.aprobacionDirector !== "Rechazado" &&
+                    item.aprobacionDireccionOperacion !== "Rechazado" &&
+                    item.estadoProyecto === "Abierto"
+                );
+
+                const registrosFiltrados = datosFiltradosRegistrosSolicitudMaterialCompleto.filter(item =>
+                    codigosNegativos.includes(item.codigoSapMaterial)
+                );
+
+                const resultado = registrosFiltrados.reduce((acc, registro) => {
+                    const codigo = registro.codigoSapMaterial;
+
+                    const datoNegativo = datosRestados.find(item => item.codigo === codigo);
+                    const datoFiltrado = datosFiltradosKgprod.find(item => item.codigo === codigo);
+
+                    if (datoNegativo && datoFiltrado) {
+                        let cantidadDisponible = parseInt(datoFiltrado.candisp, 10) || 0;
+
+                        const registrosPorCodigo = acc
+                            .filter(item => item.codigoSapMaterial === codigo)
+                            .sort((a, b) => new Date(a.fecha) - new Date(b.fecha))
+                            .reduce((unique, item) => {
+                                const seen = unique.map.get(item.id);
+                                if (!seen) {
+                                    unique.map.set(item.id, true);
+                                    unique.list.push(item);
+                                }
+                                return unique;
+                            }, { list: [], map: new Map() }).list;
+
+                        registrosPorCodigo.forEach((registroPorFecha, index) => {
+                            const cantidadRestantePorDespacho = parseInt(registroPorFecha.cantidadRestantePorDespacho, 10) || 0;
+
+                            registroPorFecha.cantidadDisponibleMaterial = cantidadDisponible;
+                            registroPorFecha.cantidadDisponibleMaterial = Math.max(0, registroPorFecha.cantidadDisponibleMaterial);
+                            cantidadDisponible -= cantidadRestantePorDespacho;
+                        });
+                    }
+
+                    return [...acc, ...registrosFiltrados.filter(item => item.codigoSapMaterial === codigo)];
+                }, []);
+
+                const ids = resultado.map(item => item.id);
+                const cantidades = resultado.map(item => item.cantidadDisponibleMaterial)
+
+                await axios.post(`${process.env.REACT_APP_API_URL}/solicitudMaterial/actualizarEstadoCantidadDisponibleMaterial`,
+                    {
+                        ids, cantidades
                     },
-                }
-            );
+                    {
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                    }
+                );
+            }
 
             setLoading(false);
-
-            return resultado
 
         } catch (error) {
             setError(error);
