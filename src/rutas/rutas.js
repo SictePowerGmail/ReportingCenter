@@ -46,6 +46,7 @@ import ReingenieriasPuntuacion from '../pages/puntuacion/ReingenieriasPuntuacion
 import BacklogFO from '../pages/operacion/Backlog_FO';
 import BacklogHFC from '../pages/operacion/Backlog_HFC';
 import MantenimientoPuntuacionTMRF from '../pages/operacion/MantenimientoPuntuacionTMRF';
+import RecursoOperaciones from "../pages/operacion/RecursoOperaciones";
 import Seguimiento from '../pages/operacion/Seguimiento';
 import SeguimientoOperaciones from "../pages/operacion/SeguimientoOperaciones";
 import SeguimientoOperacionesMovil from "../pages/operacion/SeguimientoOperacionesMovil";
@@ -179,6 +180,8 @@ function RutasApp() {
                 return 'Mantenimiento Backlog HFC';
             case '/MantenimientoPuntuacionTMRF':
                 return 'Mantenimiento Puntuacion TMRF';
+            case '/RecursoOperaciones':
+                return 'Recurso Operaciones';
             case '/Seguimiento':
                 return 'Seguimiento';
             case '/SeguimientoOperaciones':
@@ -297,6 +300,7 @@ function RutasApp() {
                 <Route path='/MantenimientoBacklogFO' exacte element={<BacklogFO />} />
                 <Route path='/MantenimientoBacklogHFC' exacte element={<BacklogHFC />} />
                 <Route path='/MantenimientoPuntuacionTMRF' exact element={<MantenimientoPuntuacionTMRF />} />
+                <Route path='/RecursoOperaciones' exact element={<RecursoOperaciones />} />
                 <Route path='/Seguimiento' exact element={<Seguimiento />} />
                 <Route path='/SeguimientoOperaciones' exacte element={<SeguimientoOperaciones />} />
                 <Route path='/SeguimientoOperacionesMovil' exacte element={<SeguimientoOperacionesMovil />} />

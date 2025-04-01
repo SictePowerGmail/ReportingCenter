@@ -190,6 +190,7 @@ function ControlUsuarios() {
         CumplimientoSlaFo: false,
         CumplimientoSlaHfc: false,
         CorrectivoPreventivo: false,
+        RecursoOperaciones: false,
         SeguimientoMttoCentro: false,
         SeguimientoOperaciones: false,
         SeguimientoSmu: false,
@@ -214,7 +215,8 @@ function ControlUsuarios() {
 
     const [gestionHumana, setGestionHumana] = useState(false);
     const [subChecksGestionHumana, setSubChecksGestionHumana] = useState({
-        ChatBot: false
+        ChatBot: false,
+        Carnetizacion: false
     });
 
     const handleGestionHumanaChange = () => {
@@ -493,6 +495,7 @@ function ControlUsuarios() {
                     CumplimientoSlaFo: usuarioEncontrado.operacionCumplimientoSlaFo === "1",
                     CumplimientoSlaHfc: usuarioEncontrado.operacionCumplimientoSlaHfc === "1",
                     CorrectivoPreventivo: usuarioEncontrado.operacionCorrectivoPreventivo === "1",
+                    RecursoOperaciones: usuarioEncontrado.operacionRecursoOperaciones === "1",
                     SeguimientoMttoCentro: usuarioEncontrado.operacionSeguimientoMttoCentro === "1",
                     SeguimientoOperaciones: usuarioEncontrado.operacionSeguimientoOperaciones === "1",
                     SeguimientoSmu: usuarioEncontrado.operacionSeguimientoSmu === "1",
@@ -564,6 +567,7 @@ function ControlUsuarios() {
 
                 const mappedChecksGestionHumana = {
                     ChatBot: usuarioEncontrado.gestionHumanaChatbot === "1",
+                    Carnetizacion: usuarioEncontrado.gestionHumanaCarnetizacion === "1",
                 };
 
                 setSubChecksGestionHumana(mappedChecksGestionHumana);
@@ -625,6 +629,7 @@ function ControlUsuarios() {
                 operacionCumplimientoSlaFo: subChecksOperacion.CumplimientoSlaFo ? 1 : 0,
                 operacionCumplimientoSlaHfc: subChecksOperacion.CumplimientoSlaHfc ? 1 : 0,
                 operacionCorrectivoPreventivo: subChecksOperacion.CorrectivoPreventivo ? 1 : 0,
+                operacionRecursoOperaciones: subChecksOperacion.RecursoOperaciones ? 1 : 0,
                 operacionSeguimientoMttoCentro: subChecksOperacion.SeguimientoMttoCentro ? 1 : 0,
                 operacionSeguimientoOperaciones: subChecksOperacion.SeguimientoOperaciones ? 1 : 0,
                 operacionSeguimientoSmu: subChecksOperacion.SeguimientoSmu ? 1 : 0,
@@ -642,8 +647,9 @@ function ControlUsuarios() {
                 direccionCentroDeCostos: subChecksDireccion.CentroDeCostos ? 1 : 0,
                 direccionComposicionMoviles: subChecksDireccion.ComposicionMoviles ? 1 : 0,
                 direccionCompras: subChecksDireccion.Compras ? 1 : 0,
-                parqueAutomotor: subChecksParqueAutomotor.Moviles ? 1 : 0,
-                gestionHumana: subChecksGestionHumana.ChatBot ? 1 : 0,
+                parqueAutomotorMoviles: subChecksParqueAutomotor.Moviles ? 1 : 0,
+                gestionHumanaChatbot: subChecksGestionHumana.ChatBot ? 1 : 0,
+                gestionHumanaCarnetizacion: subChecksGestionHumana.Carnetizacion ? 1 : 0,
             };
             
             const response = await axios.put(

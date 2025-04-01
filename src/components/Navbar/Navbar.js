@@ -202,6 +202,7 @@ function Navbar() {
         CumplimientoSlaFo: false,
         CumplimientoSlaHfc: false,
         CorrectivoPreventivo: false,
+        RecursoOperaciones: false,
         SeguimientoMttoCentro: false,
         SeguimientoOperaciones: false,
         SeguimientoSmu: false,
@@ -244,7 +245,7 @@ function Navbar() {
     const [gestionHumana, setGestionHumana] = useState(false);
     const [subChecksGestionHumana, setSubChecksGestionHumana] = useState({
         ChatBot: false,
-        Carnetizacion: true,
+        Carnetizacion: false,
     });
 
     const cargarDatosPagesUser = async (usuario) => {
@@ -369,6 +370,7 @@ function Navbar() {
                     CumplimientoSlaFo: usuarioEncontrado.operacionCumplimientoSlaFo === "1",
                     CumplimientoSlaHfc: usuarioEncontrado.operacionCumplimientoSlaHfc === "1",
                     CorrectivoPreventivo: usuarioEncontrado.operacionCorrectivoPreventivo === "1",
+                    RecursoOperaciones: usuarioEncontrado.operacionRecursoOperaciones === "1",
                     SeguimientoMttoCentro: usuarioEncontrado.operacionSeguimientoMttoCentro === "1",
                     SeguimientoOperaciones: usuarioEncontrado.operacionSeguimientoOperaciones === "1",
                     SeguimientoSmu: usuarioEncontrado.operacionSeguimientoSmu === "1",
@@ -440,7 +442,7 @@ function Navbar() {
 
                 const mappedChecksGestionHumana = {
                     Chatbot: usuarioEncontrado.gestionHumanaChatbot === "1",
-                    Carnetizacion: true,
+                    Carnetizacion: usuarioEncontrado.gestionHumanaCarnetizacion === "1",
                 };
 
                 setSubChecksGestionHumana(mappedChecksGestionHumana);
@@ -843,6 +845,7 @@ function Navbar() {
                                                 {subChecksOperacion.CumplimientoSlaFo === true && (<Link id='SubMenu-Contenido-Titulo' to="/MantenimientoBacklogFO" onClick={toggleMobileMenu}><li>Cumplimiento SLA FO</li></Link>)}
                                                 {subChecksOperacion.CumplimientoSlaHfc === true && (<Link id='SubMenu-Contenido-Titulo' to="/MantenimientoBacklogHFC" onClick={toggleMobileMenu}><li>Cumplimiento SLA HFC</li></Link>)}
                                                 {subChecksOperacion.CorrectivoPreventivo === true && (<Link id='SubMenu-Contenido-Titulo' to="/MantenimientoPuntuacionTMRF" onClick={toggleMobileMenu}><li>Correctivo - Preventivo</li></Link>)}
+                                                {subChecksOperacion.RecursoOperaciones === true && (<Link id='SubMenu-Contenido-Titulo' to="/RecursoOperaciones" onClick={toggleMobileMenu}><li>Recurso Operaciones</li></Link>)}
                                                 {subChecksOperacion.SeguimientoMttoCentro === true && (<Link id='SubMenu-Contenido-Titulo' to="/Seguimiento" onClick={toggleMobileMenu}><li>Seguimiento MTTO Centro</li></Link>)}
                                                 {subChecksOperacion.SeguimientoOperaciones === true && (<Link id='SubMenu-Contenido-Titulo' to={isMobile ? "/SeguimientoOperacionesMovil" : "/SeguimientoOperaciones"} onClick={toggleMobileMenu}><li>Seguimiento Operaciones</li></Link>)}
                                                 {subChecksOperacion.SeguimientoSmu === true && (<Link id='SubMenu-Contenido-Titulo' to={isMobile ? "/SeguimientoSMUMovil" : "/SeguimientoSMU"} onClick={toggleMobileMenu}><li>Seguimiento SMU</li></Link>)}
@@ -1025,7 +1028,7 @@ function Navbar() {
                                         <div id='SubMenu-Contenido'>
                                             <ul>
                                                 {subChecksGestionHumana.Chatbot === true && (<Link id='SubMenu-Contenido-Titulo' to={{ pathname: "/Login", search: "?tipo=ChatBot" }} onClick={toggleMobileMenu}><li>ChatBot</li></Link>)}
-                                                {role === 'admin' && subChecksGestionHumana.Carnetizacion === true && (<Link id='SubMenu-Contenido-Titulo' to={{ pathname: "/Login", search: "?tipo=Carnetizacion" }} onClick={toggleMobileMenu}><li>Carnetizacion</li></Link>) }
+                                                {subChecksGestionHumana.Carnetizacion === true && (<Link id='SubMenu-Contenido-Titulo' to={{ pathname: "/Login", search: "?tipo=Carnetizacion" }} onClick={toggleMobileMenu}><li>Carnetizacion</li></Link>) }
                                             </ul>
                                         </div>
                                     )}
@@ -1035,7 +1038,7 @@ function Navbar() {
 
                         {showMobileMenu && (
                             <div className='Version'>
-                                <p>v1.55</p>
+                                <p>v1.56</p>
                             </div>
                         )}
                     </div>

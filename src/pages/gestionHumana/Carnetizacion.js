@@ -13,6 +13,7 @@ function Carnetizacion() {
     const navigate = useNavigate();
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(true);
+    const [enviando, setEnviando] = useState(false);
     const columnasVisibles = ["id", "registro", "nombreSupervisor", "nombreTecnico", "tipoCarnet", "solicitud", "segmento", "estado"];
     const [data, setData] = useState(true);
     const [dataAll, setDataAll] = useState(true);
@@ -139,7 +140,7 @@ function Carnetizacion() {
         XLSX.utils.book_append_sheet(libro, hoja, 'Datos');
         const archivoExcel = XLSX.write(libro, { bookType: 'xlsx', type: 'array' });
         const blob = new Blob([archivoExcel], { type: 'application/octet-stream' });
-        saveAs(blob, 'Registros Chatbot.xlsx');
+        saveAs(blob, 'Registros Carnetizacion.xlsx');
     };
 
 
@@ -149,9 +150,18 @@ function Carnetizacion() {
 
     const handleRowClick = (row) => {
         const selectedData = dataAll.find(item => item.id === row.id);
+        setEnviando(true);
+        setSelectedRowEdit(true);
 
-        setSelectedRowEdit(selectedData);
-        setEditedRow(selectedData);
+        if (selectedData && selectedData.foto) {
+            fetchImage(selectedData.foto)
+                .then(imageUrl => {
+                    setSelectedRowEdit({ ...selectedData, imageUrl });
+                    setEditedRow(selectedData);
+                    setEnviando(false);
+                })
+                .catch(error => console.error("Error al obtener la imagen:", error));
+        }
     };
 
     const handleInputChangeEdit = (key, value) => {
@@ -271,13 +281,38 @@ function Carnetizacion() {
         return `${año}-${mes}-${dia} ${horas}:${minutos}:${segundos}`;
     };
 
+    const formatDate = (date) => {
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const year = date.getFullYear();
+        const hours = date.getHours().toString().padStart(2, '0');
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+
+        return `${year}-${month}-${day} ${hours}-${minutes}`;
+    };
+
     const enviarDatosCargar = async () => {
         if (!formData.cedulaSupervisor || !formData.nombreSupervisor || !formData.cedulaTecnico || !formData.nombreTecnico || !formData.tipoCarnet || !formData.solicitud || !formData.foto || !formData.segmento) {
             toast.error("Todos los campos son obligatorios");
             return;
         }
 
-        console.log("Datos enviados:", formData);
+        setEnviando(true);
+        const formattedDate = formatDate(new Date());
+        const formDataImagen = new FormData();
+        const fotoNombre = `${formattedDate}_${formData.foto.name}`
+        formDataImagen.append('file', formData.foto);
+        formDataImagen.append("filename", fotoNombre);
+
+        try {
+            await axios.post(`${process.env.REACT_APP_API_URL}/carnetizacion/cargarImagen`, formDataImagen, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+        } catch (error) {
+            toast.error(`Error: ${error.message}`, { className: "toast-error" });
+        }
 
         const datosAEnviar = {
             registro: obtenerFechaActual(),
@@ -287,13 +322,13 @@ function Carnetizacion() {
             nombreTecnico: formData.nombreTecnico,
             tipoCarnet: formData.tipoCarnet,
             solicitud: formData.solicitud,
-            foto: formData.foto,
+            foto: fotoNombre,
             segmento: formData.segmento,
             estado: formData.estado
         };
 
         try {
-            const response = await fetch("https://sicte-sas-capacidades-backend.onrender.com/carnetizacion/crearRegistro", {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/carnetizacion/crearRegistro`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -304,15 +339,37 @@ function Carnetizacion() {
             if (!response.ok) {
                 toast.error('Error al actualizar los datos.', { className: 'toast-error' });
             } else {
+                setEnviando(false);
                 toast.success('Datos enviados correctamente.');
                 closeModal();
-                setTimeout(() => {
-                    cargarDatos();
-                }, 700);
+                cargarDatos();
             }
 
         } catch (error) {
             toast.error(`Error al actualizar: ${error.message}`, { className: "toast-error" });
+        }
+    };
+
+    const fetchImage = async (imageName) => {
+        try {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/carnetizacion/ObtenerImagen?imageName=${encodeURIComponent(imageName)}`);
+
+            if (!response.ok) {
+                console.error(`Error fetching image: ${response.status} ${response.statusText}`);
+                return null;
+            }
+
+            const blob = await response.blob();
+            if (blob.size === 0) {
+                console.error('Received an empty image blob');
+                return null;
+            }
+
+            const imageUrl = URL.createObjectURL(blob);
+            return imageUrl;
+        } catch (error) {
+            console.error('Error:', error);
+            return null;
         }
     };
 
@@ -382,59 +439,90 @@ function Carnetizacion() {
                         {selectedRowEdit && (
                             <div className="modal-overlay" onClick={closeModal}>
                                 <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                                    <div className="detalle-fijo">
-                                        <h4>Detalle</h4>
-                                    </div>
-                                    <div className="modal-form">
-                                        {Object.entries(selectedRowEdit).map(([key, value], index, array) => (
-                                            <div key={key} className="form-group">
-                                                <label>{formatHeader(key)}:</label>
-                                                {key === "estadoFinal" ? (
-                                                    <select
-                                                        className="form-control"
-                                                        value={editedRow[key] || ""}
-                                                        onChange={(e) => handleInputChangeEdit(key, e.target.value)}
-                                                    >
-                                                        <option value="">Seleccionar...</option>
-                                                        <option value="Pendiente">Pendiente</option>
-                                                        <option value="No Continua">No Continua</option>
-                                                        <option value="Confirmado">Confirmado</option>
-                                                    </select>
-                                                ) : key === "fechaHora" ? (
-                                                    <input
-                                                        type="datetime-local"
-                                                        className="form-control"
-                                                        value={formatFechaHora(editedRow[key] || "")}
-                                                        onChange={(e) => {
-                                                            const fechaIngresada = new Date(e.target.value);
-                                                            const fechaActual = new Date();
-                                                            fechaActual.setHours(0, 0, 0, 0);
-
-                                                            if (fechaIngresada >= fechaActual) {
-                                                                handleInputChangeEdit(key, formatFechaHoraSalida(e.target.value));
-                                                            } else {
-                                                                toast.error("No puedes seleccionar una fecha anterior a hoy.");
-                                                            }
-                                                        }}
-                                                        min={new Date().toISOString().slice(0, 16)}
-                                                    />
-                                                ) : (
-                                                    <input
-                                                        type="text"
-                                                        className="form-control"
-                                                        value={editedRow[key] || ""}
-                                                        onChange={(e) => handleInputChangeEdit(key, e.target.value)}
-                                                        disabled={index < array.length - 1}
-                                                    />
-                                                )}
+                                    {enviando ? (
+                                        <div className="CargandoPagina">
+                                            <ThreeDots
+                                                type="ThreeDots"
+                                                color="#0B1A46"
+                                                height={200}
+                                                width={200}
+                                            />
+                                            <p>... Cargando Datos ...</p>
+                                        </div>
+                                    ) : (
+                                        <>
+                                            <div className="detalle-fijo">
+                                                <h4>Detalle</h4>
                                             </div>
-                                        ))}
-                                    </div>
+                                            <div className="modal-form">
+                                                {Object.entries(selectedRowEdit)
+                                                    .filter(([key]) => key !== "imageUrl")
+                                                    .map(([key, value], index, array) => (
+                                                        <div key={key} className="form-group">
+                                                            <label>{formatHeader(key)}:</label>
+                                                            {key === "estadoFinal" ? (
+                                                                <select
+                                                                    className="form-control"
+                                                                    value={editedRow[key] || ""}
+                                                                    onChange={(e) => handleInputChangeEdit(key, e.target.value)}
+                                                                >
+                                                                    <option value="">Seleccionar...</option>
+                                                                    <option value="Pendiente">Pendiente</option>
+                                                                    <option value="No Continua">No Continua</option>
+                                                                    <option value="Confirmado">Confirmado</option>
+                                                                </select>
+                                                            ) : key === "fechaHora" ? (
+                                                                <input
+                                                                    type="datetime-local"
+                                                                    className="form-control"
+                                                                    value={formatFechaHora(editedRow[key] || "")}
+                                                                    onChange={(e) => {
+                                                                        const fechaIngresada = new Date(e.target.value);
+                                                                        const fechaActual = new Date();
+                                                                        fechaActual.setHours(0, 0, 0, 0);
 
-                                    <div className='botones'>
-                                        <button className='btn btn-danger' onClick={closeModal}>Cerrar</button>
-                                        <button className='btn btn-success' onClick={enviarDatosEditados}>Actualizar</button>
-                                    </div>
+                                                                        if (fechaIngresada >= fechaActual) {
+                                                                            handleInputChangeEdit(key, formatFechaHoraSalida(e.target.value));
+                                                                        } else {
+                                                                            toast.error("No puedes seleccionar una fecha anterior a hoy.");
+                                                                        }
+                                                                    }}
+                                                                    min={new Date().toISOString().slice(0, 16)}
+                                                                />
+                                                            ) : key === "foto" ? (
+                                                                <>
+                                                                    <input
+                                                                        type="text"
+                                                                        className="form-control"
+                                                                        value={editedRow[key] || ""}
+                                                                        onChange={(e) => handleInputChangeEdit(key, e.target.value)}
+                                                                        disabled
+                                                                    />
+                                                                    {selectedRowEdit?.imageUrl && (
+                                                                        <button className='btn btn-primary' onClick={() => window.open(selectedRowEdit.imageUrl, "_blank")}>
+                                                                            Ver Imagen
+                                                                        </button>
+                                                                    )}
+                                                                </>
+                                                            ) : (
+                                                                <input
+                                                                    type="text"
+                                                                    className="form-control"
+                                                                    value={editedRow[key] || ""}
+                                                                    onChange={(e) => handleInputChangeEdit(key, e.target.value)}
+                                                                    disabled={index < array.length - 1}
+                                                                />
+                                                            )}
+                                                        </div>
+                                                    ))}
+                                            </div>
+
+                                            <div className='botones'>
+                                                <button className='btn btn-danger' onClick={closeModal}>Cerrar</button>
+                                                <button className='btn btn-success' onClick={enviarDatosEditados}>Actualizar</button>
+                                            </div>
+                                        </>
+                                    )}
                                 </div>
                             </div>
                         )}
@@ -442,81 +530,102 @@ function Carnetizacion() {
                         {selectedRow && (
                             <div className="modal-overlay" onClick={closeModal}>
                                 <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                                    <div className="detalle-fijo">
-                                        <h4>Nueva Solicitud</h4>
-                                    </div>
-                                    <div className="modal-form">
-                                        {Object.entries(formData)
-                                            .filter(([key]) => key !== "estado")
-                                            .map(([key, value], index, array) => (
-                                                <div key={key} className="form-group">
-                                                    <label>{formatHeader(key)}:</label>
-                                                    {key === "tipoCarnet" ? (
-                                                        <select
-                                                            className="form-control"
-                                                            value={formData[key] || ""}
-                                                            onChange={(e) => handleInputChangeCargar(key, e.target.value)}
-                                                        >
-                                                            <option value="">Seleccionar...</option>
-                                                            <option value="Claro">Claro</option>
-                                                            <option value="Sicte">Sicte</option>
-                                                            <option value="Tarjeta de Acceso">Tarjeta de Acceso</option>
-                                                        </select>
-                                                    ) : key === "solicitud" ? (
-                                                        <select
-                                                            className="form-control"
-                                                            value={formData[key] || ""}
-                                                            onChange={(e) => handleInputChangeCargar(key, e.target.value)}
-                                                        >
-                                                            <option value="">Seleccionar...</option>
-                                                            <option value="Deterioro">Deterioro</option>
-                                                            <option value="Perdida">Perdida</option>
-                                                            <option value="Primera Vez">Primera Vez</option>
-                                                        </select>
-                                                    ) : key === "segmento" ? (
-                                                        <select
-                                                            className="form-control"
-                                                            value={formData[key] || ""}
-                                                            onChange={(e) => handleInputChangeCargar(key, e.target.value)}
-                                                        >
-                                                            <option value="">Seleccionar...</option>
-                                                            <option value="Operaciones">Operaciones</option>
-                                                            <option value="Red Externa">Red Externa</option>
-                                                            <option value="Corporativo">Corporativo</option>
-                                                        </select>
-                                                    ) : key === "cedulaSupervisor" ? (
-                                                        <input
-                                                            type="text"
-                                                            className="form-control"
-                                                            value={formData[key] || ""}
-                                                            onChange={(e) => handleInputChangeCargar(key, e.target.value.replace(/\D/g, ""))}
-                                                            onInput={(e) => e.target.value = e.target.value.replace(/\D/g, "")}
-                                                            pattern="\d*"
-                                                        />
-                                                    ) : key === "cedulaTecnico" ? (
-                                                        <input
-                                                            type="text"
-                                                            className="form-control"
-                                                            value={formData[key] || ""}
-                                                            onChange={(e) => handleInputChangeCargar(key, e.target.value.replace(/\D/g, ""))}
-                                                            onInput={(e) => e.target.value = e.target.value.replace(/\D/g, "")}
-                                                            pattern="\d*"
-                                                        />
-                                                    ) : (
-                                                        <input
-                                                            type="text"
-                                                            className="form-control"
-                                                            value={formData[key] || ""}
-                                                            onChange={(e) => handleInputChangeCargar(key, e.target.value)}
-                                                        />
-                                                    )}
-                                                </div>
-                                            ))}
-                                    </div>
-                                    <div className='botones'>
-                                        <button className='btn btn-danger' onClick={closeModal}>Cerrar</button>
-                                        <button className='btn btn-success' onClick={enviarDatosCargar}>Crear</button>
-                                    </div>
+                                    {enviando ? (
+                                        <div className="CargandoPagina">
+                                            <ThreeDots
+                                                type="ThreeDots"
+                                                color="#0B1A46"
+                                                height={200}
+                                                width={200}
+                                            />
+                                            <p>... Enviando Datos ...</p>
+                                        </div>
+                                    ) : (
+                                        <>
+                                            <div className="detalle-fijo">
+                                                <h4>Nueva Solicitud</h4>
+                                            </div>
+                                            <div className="modal-form">
+                                                {Object.entries(formData)
+                                                    .filter(([key]) => key !== "estado")
+                                                    .map(([key, value], index, array) => (
+                                                        <div key={key} className="form-group">
+                                                            <label>{formatHeader(key)}:</label>
+                                                            {key === "tipoCarnet" ? (
+                                                                <select
+                                                                    className="form-control"
+                                                                    value={formData[key] || ""}
+                                                                    onChange={(e) => handleInputChangeCargar(key, e.target.value)}
+                                                                >
+                                                                    <option value="">Seleccionar...</option>
+                                                                    <option value="Claro">Claro</option>
+                                                                    <option value="Sicte">Sicte</option>
+                                                                    <option value="Tarjeta de Acceso">Tarjeta de Acceso</option>
+                                                                </select>
+                                                            ) : key === "solicitud" ? (
+                                                                <select
+                                                                    className="form-control"
+                                                                    value={formData[key] || ""}
+                                                                    onChange={(e) => handleInputChangeCargar(key, e.target.value)}
+                                                                >
+                                                                    <option value="">Seleccionar...</option>
+                                                                    <option value="Deterioro">Deterioro</option>
+                                                                    <option value="Perdida">Perdida</option>
+                                                                    <option value="Primera Vez">Primera Vez</option>
+                                                                </select>
+                                                            ) : key === "segmento" ? (
+                                                                <select
+                                                                    className="form-control"
+                                                                    value={formData[key] || ""}
+                                                                    onChange={(e) => handleInputChangeCargar(key, e.target.value)}
+                                                                >
+                                                                    <option value="">Seleccionar...</option>
+                                                                    <option value="Operaciones">Operaciones</option>
+                                                                    <option value="Red Externa">Red Externa</option>
+                                                                    <option value="Corporativo">Corporativo</option>
+                                                                </select>
+                                                            ) : key === "cedulaSupervisor" ? (
+                                                                <input
+                                                                    type="text"
+                                                                    className="form-control"
+                                                                    value={formData[key] || ""}
+                                                                    onChange={(e) => handleInputChangeCargar(key, e.target.value.replace(/\D/g, ""))}
+                                                                    onInput={(e) => e.target.value = e.target.value.replace(/\D/g, "")}
+                                                                    pattern="\d*"
+                                                                />
+                                                            ) : key === "cedulaTecnico" ? (
+                                                                <input
+                                                                    type="text"
+                                                                    className="form-control"
+                                                                    value={formData[key] || ""}
+                                                                    onChange={(e) => handleInputChangeCargar(key, e.target.value.replace(/\D/g, ""))}
+                                                                    onInput={(e) => e.target.value = e.target.value.replace(/\D/g, "")}
+                                                                    pattern="\d*"
+                                                                />
+                                                            ) : key === "foto" ? (
+                                                                <input
+                                                                    type="file"
+                                                                    className="form-control"
+                                                                    accept="image/*"
+                                                                    onChange={(e) => handleInputChangeCargar(key, e.target.files[0])}
+                                                                />
+                                                            ) : (
+                                                                <input
+                                                                    type="text"
+                                                                    className="form-control"
+                                                                    value={formData[key] || ""}
+                                                                    onChange={(e) => handleInputChangeCargar(key, e.target.value)}
+                                                                />
+                                                            )}
+                                                        </div>
+                                                    ))}
+                                            </div>
+                                            <div className='botones'>
+                                                <button className='btn btn-danger' onClick={closeModal}>Cerrar</button>
+                                                <button className='btn btn-success' onClick={enviarDatosCargar}>Crear</button>
+                                            </div>
+                                        </>
+                                    )}
                                 </div>
                             </div>
                         )}
