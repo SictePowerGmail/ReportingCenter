@@ -223,12 +223,15 @@ const MaterialPrincipal = () => {
                     return acumulador;
                 }, {});
 
-                const hoy = new Date().toISOString().split("T")[0];
+                const datosFiltradosRegistrosEntregadoSolicitudMaterial = responseRegistrosEntregadoSolicitudMaterial.data.filter(item => {
+                    if (item.ciudad !== ciudadElgida) return false;
 
-                const datosFiltradosRegistrosEntregadoSolicitudMaterial = responseRegistrosEntregadoSolicitudMaterial.data.filter(item =>
-                    item.ciudad === ciudadElgida &&
-                    item.fechaEntrega.slice(0, 10) === hoy
-                );
+                    const fechaEntrega = new Date(item.fechaEntrega + ":00");
+
+                    const ultimaFechaDescarga = new Date(Math.max(...datosFiltradosKgprod.map(d => new Date(d.fechaDescarga).getTime())));
+
+                    return fechaEntrega > ultimaFechaDescarga;
+                });
 
                 const dinamicaRegistrosEntregaSolicitudMaterial = datosFiltradosRegistrosEntregadoSolicitudMaterial.reduce((acumulador, item) => {
                     const codigo = item.codigoSapMaterial;
