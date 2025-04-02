@@ -19,6 +19,7 @@ function Carnetizacion() {
     const [dataAll, setDataAll] = useState(true);
     const cedulaUsuario = Cookies.get('userCedula');
     const nombreUsuario = Cookies.get('userNombre');
+    const rolUsuario = Cookies.get('userRole');
     const columnasMapeadas = {
         id: "id",
         registro: "fechaRegistro",
@@ -324,7 +325,7 @@ function Carnetizacion() {
             solicitud: formData.solicitud,
             foto: fotoNombre,
             segmento: formData.segmento,
-            estado: formData.estado
+            estado: "Pendiente"
         };
 
         try {
@@ -436,7 +437,7 @@ function Carnetizacion() {
                             <span>Total de registros: {sortedData.length}</span>
                         </div>
 
-                        {selectedRowEdit && (
+                        {selectedRowEdit && (rolUsuario === 'AUXILIAR GH' || rolUsuario === 'admin') && (
                             <div className="modal-overlay" onClick={closeModal}>
                                 <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                                     {enviando ? (
@@ -504,6 +505,58 @@ function Carnetizacion() {
                                                                         </button>
                                                                     )}
                                                                 </>
+                                                            ) : key === "estado" ? (
+                                                                <select
+                                                                    className="form-control"
+                                                                    value={editedRow[key] || ""}
+                                                                    onChange={(e) => handleInputChangeEdit(key, e.target.value)}
+                                                                >
+                                                                    {(() => {
+                                                                        if (editedRow.tipoCarnet === "Claro" && editedRow.solicitud === "Perdida") {
+                                                                            return (
+                                                                                <>
+                                                                                    <option value="Pendiente">Pendiente</option>
+                                                                                    <option value="Asignacion Consecutivo">Asignacion Consecutivo</option>
+                                                                                    <option value="Solicitud Envianda a Claro">Solicitud Envianda a Claro</option>
+                                                                                    <option value="Recoger Carnet en Recepcion">Recoger Carnet en Recepcion</option>
+                                                                                </>
+                                                                            );
+                                                                        } else if (editedRow.tipoCarnet === "Claro" && editedRow.solicitud === "Deterioro") {
+                                                                            return (
+                                                                                <>
+                                                                                    <option value="Pendiente">Pendiente</option>
+                                                                                    {editedRow.segmento !== "Operaciones" && (
+                                                                                        <option value="Asignacion Consecutivo">Asignacion Consecutivo</option>
+                                                                                    )}
+                                                                                    <option value="Solicitud Envianda a Claro">Solicitud Envianda a Claro</option>
+                                                                                    <option value="Recoger Carnet en Recepcion">Recoger Carnet en Recepcion</option>
+                                                                                </>
+                                                                            );
+                                                                        } else if ((editedRow.tipoCarnet === "Sicte" || editedRow.tipoCarnet === "Tarjeta de Acceso") && (editedRow.solicitud === "Perdida" || editedRow.solicitud === "Deterioro")) {
+                                                                            return (
+                                                                                <>
+                                                                                    <option value="Pendiente">Pendiente</option>
+                                                                                    <option value="Asignado">Asignado</option>
+                                                                                    <option value="Asignado y Entregado">Asignado y Entregado</option>
+                                                                                </>
+                                                                            );
+                                                                        } else if ((editedRow.tipoCarnet === "Sicte" || editedRow.tipoCarnet === "Tarjeta de Acceso") && editedRow.solicitud === "Primera Vez") {
+                                                                            return (
+                                                                                <>
+                                                                                    <option value="Pendiente">Pendiente</option>
+                                                                                    <option value="Entregado">Entregado</option>
+                                                                                </>
+                                                                            );
+                                                                        } else {
+                                                                            return (
+                                                                                <>
+                                                                                    <option value="Pendiente">Pendiente</option>
+                                                                                    <option value="Entregado">Entregado</option>
+                                                                                </>
+                                                                            );
+                                                                        }
+                                                                    })()}
+                                                                </select>
                                                             ) : (
                                                                 <input
                                                                     type="text"
@@ -538,7 +591,7 @@ function Carnetizacion() {
                                                 height={200}
                                                 width={200}
                                             />
-                                            <p>... Enviando Datos ...</p>
+                                            <p>... Cargando Datos ...</p>
                                         </div>
                                     ) : (
                                         <>
@@ -567,11 +620,27 @@ function Carnetizacion() {
                                                                     className="form-control"
                                                                     value={formData[key] || ""}
                                                                     onChange={(e) => handleInputChangeCargar(key, e.target.value)}
+                                                                    disabled = {!formData.tipoCarnet}
                                                                 >
                                                                     <option value="">Seleccionar...</option>
-                                                                    <option value="Deterioro">Deterioro</option>
-                                                                    <option value="Perdida">Perdida</option>
-                                                                    <option value="Primera Vez">Primera Vez</option>
+                                                                    {(() => {
+                                                                        if (formData.tipoCarnet === "Claro") {
+                                                                            return (
+                                                                                <>
+                                                                                    <option value="Deterioro">Deterioro</option>
+                                                                                    <option value="Perdida">Perdida</option>
+                                                                                </>
+                                                                            );
+                                                                        } else if (formData.tipoCarnet === "Sicte" || formData.tipoCarnet === "Tarjeta de Acceso") {
+                                                                            return (
+                                                                                <>
+                                                                                    <option value="Deterioro">Deterioro</option>
+                                                                                    <option value="Perdida">Perdida</option>
+                                                                                    <option value="Primera Vez">Primera Vez</option>
+                                                                                </>
+                                                                            );
+                                                                        }
+                                                                    })()}
                                                                 </select>
                                                             ) : key === "segmento" ? (
                                                                 <select
