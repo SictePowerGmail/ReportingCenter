@@ -568,30 +568,36 @@ function ChatBot() {
                             <table className="table table-bordered">
                                 <thead >
                                     <tr>
-                                        {Object.keys(data[0]).map((key) => (
-                                            <th key={key} onClick={() => handleSortPendientes(key)}>
-                                                {formatHeader(key)} {sortConfigPendientes.key === key ? (sortConfigPendientes.direction === "asc" ? "▲" : "▼") : ""}
-                                                <input
-                                                    type="text"
-                                                    className="form-control"
-                                                    onChange={(e) => handleFilterChangePendientes(key, e.target.value)}
-                                                    onClick={(e) => e.stopPropagation()}
-                                                />
-                                            </th>
-                                        ))}
+                                        {data.length > 0 ? (
+                                            Object.keys(data[0]).map((key) => (
+                                                <th key={key} onClick={() => handleSortPendientes(key)}>
+                                                    {formatHeader(key)} {sortConfigPendientes.key === key ? (sortConfigPendientes.direction === "asc" ? "▲" : "▼") : ""}
+                                                    <input
+                                                        type="text"
+                                                        className="form-control"
+                                                        onChange={(e) => handleFilterChangePendientes(key, e.target.value)}
+                                                        onClick={(e) => e.stopPropagation()}
+                                                    />
+                                                </th>
+                                            ))
+                                        ) : (
+                                            <th colSpan="100%" style={{ textAlign: "center" }}>No hay datos disponibles</th>
+                                        )}
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {sortedDataPendientes.map((row) => (
-                                        <tr key={row.id} onClick={() => {
-                                            handleRowClick(row);
-                                            setClickHistorico(false);
-                                        }}>
-                                            {Object.values(row).map((cell, i) => (
-                                                <td key={i} >{cell || "-"}</td>
-                                            ))}
-                                        </tr>
-                                    ))}
+                                    {sortedDataPendientes.length > 0 && (
+                                        sortedDataPendientes.map((row) => (
+                                            <tr key={row.id} onClick={() => {
+                                                handleRowClick(row);
+                                                setClickHistorico(false);
+                                            }}>
+                                                {Object.values(row).map((cell, i) => (
+                                                    <td key={i} >{cell || "-"}</td>
+                                                ))}
+                                            </tr>
+                                        ))
+                                    )}
                                 </tbody>
                             </table>
                         </div>
@@ -606,30 +612,36 @@ function ChatBot() {
                             <table className="table table-bordered">
                                 <thead >
                                     <tr>
-                                        {Object.keys(dataConfirmados[0]).map((key) => (
-                                            <th key={key} onClick={() => handleSortConfirmado(key)}>
-                                                {formatHeader(key)} {sortConfigConfirmado.key === key ? (sortConfigConfirmado.direction === "asc" ? "▲" : "▼") : ""}
-                                                <input
-                                                    type="text"
-                                                    className="form-control"
-                                                    onChange={(e) => handleFilterChangeConfirmado(key, e.target.value)}
-                                                    onClick={(e) => e.stopPropagation()}
-                                                />
-                                            </th>
-                                        ))}
+                                        {dataConfirmados.length > 0 ? (
+                                            Object.keys(dataConfirmados[0]).map((key) => (
+                                                <th key={key} onClick={() => handleSortConfirmado(key)}>
+                                                    {formatHeader(key)} {sortConfigConfirmado.key === key ? (sortConfigConfirmado.direction === "asc" ? "▲" : "▼") : ""}
+                                                    <input
+                                                        type="text"
+                                                        className="form-control"
+                                                        onChange={(e) => handleFilterChangeConfirmado(key, e.target.value)}
+                                                        onClick={(e) => e.stopPropagation()}
+                                                    />
+                                                </th>
+                                            ))
+                                        ) : (
+                                            <th colSpan="100%" style={{ textAlign: "center" }}>No hay datos disponibles</th>
+                                        )}
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {sortedDataConfirmado.map((row) => (
-                                        <tr key={row.id} onClick={() => {
-                                            handleRowClick(row);
-                                            setClickHistorico(false);
-                                        }}>
-                                            {Object.keys(row).map((columnKey, i) => (
-                                                <td key={i} >{row[columnKey] || "-"}</td>
-                                            ))}
-                                        </tr>
-                                    ))}
+                                    {sortedDataConfirmado.length > 0 && (
+                                        sortedDataConfirmado.map((row) => (
+                                            <tr key={row.id} onClick={() => {
+                                                handleRowClick(row);
+                                                setClickHistorico(false);
+                                            }}>
+                                                {Object.keys(row).map((columnKey, i) => (
+                                                    <td key={i} >{row[columnKey] || "-"}</td>
+                                                ))}
+                                            </tr>
+                                        ))
+                                    )}
                                 </tbody>
                             </table>
                         </div>
@@ -644,35 +656,41 @@ function ChatBot() {
                             <table className="table table-bordered">
                                 <thead >
                                     <tr>
-                                        {Object.keys(dataHistorico[0]).map((key) => (
-                                            <th key={key} onClick={() => handleSortHistorico(key)}>
-                                                {formatHeader(key)} {sortConfigHistorico.key === key ? (sortConfigHistorico.direction === "asc" ? "▲" : "▼") : ""}
-                                                <input
-                                                    type="text"
-                                                    className="form-control"
-                                                    onChange={(e) => handleFilterChangeHistorico(key, e.target.value)}
-                                                    onClick={(e) => e.stopPropagation()}
-                                                />
-                                            </th>
-                                        ))}
+                                        {dataHistorico.length > 0 ? (
+                                            Object.keys(dataHistorico[0]).map((key) => (
+                                                <th key={key} onClick={() => handleSortHistorico(key)}>
+                                                    {formatHeader(key)} {sortConfigHistorico.key === key ? (sortConfigHistorico.direction === "asc" ? "▲" : "▼") : ""}
+                                                    <input
+                                                        type="text"
+                                                        className="form-control"
+                                                        onChange={(e) => handleFilterChangeHistorico(key, e.target.value)}
+                                                        onClick={(e) => e.stopPropagation()}
+                                                    />
+                                                </th>
+                                            ))
+                                        ) : (
+                                            <th colSpan="100%" style={{ textAlign: "center" }}>No hay datos disponibles</th>
+                                        )}
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {sortedDataHistorico.map((row) => (
-                                        <tr key={row.id} onClick={() => {
-                                            handleRowClick(row);
-                                            setClickHistorico(true);
-                                        }}>
-                                            {Object.keys(row).map((columnKey, i) => (
-                                                <td
-                                                    key={i}
-                                                    className={columnKey === "estadoContratacion" ? getEstadoClass(row[columnKey]) : ""}
-                                                >
-                                                    {row[columnKey] || "-"}
-                                                </td>
-                                            ))}
-                                        </tr>
-                                    ))}
+                                    {sortedDataHistorico.length > 0 && (
+                                        sortedDataHistorico.map((row) => (
+                                            <tr key={row.id} onClick={() => {
+                                                handleRowClick(row);
+                                                setClickHistorico(true);
+                                            }}>
+                                                {Object.keys(row).map((columnKey, i) => (
+                                                    <td
+                                                        key={i}
+                                                        className={columnKey === "estadoContratacion" ? getEstadoClass(row[columnKey]) : ""}
+                                                    >
+                                                        {row[columnKey] || "-"}
+                                                    </td>
+                                                ))}
+                                            </tr>
+                                        ))
+                                    )}
                                 </tbody>
                             </table>
                         </div>
