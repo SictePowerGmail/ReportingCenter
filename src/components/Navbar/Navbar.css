@@ -41,7 +41,7 @@ body,
         height: 100%;
 
         position: fixed;
-        top: 0;
+        top: 40px;
         left: 0;
         width: 100vw;
         height: 100vh;
@@ -308,11 +308,11 @@ body,
         position: absolute;
         top: 40px;
         flex-direction: column;
-        width: 220px;
+        width: auto;
         z-index: 5000;
 
         &::-webkit-scrollbar {
-            width: 2px;
+            width: 5px;
         }
 
         &::-webkit-scrollbar-thumb {
@@ -330,6 +330,8 @@ body,
 
         #Menu {
             padding: 3px 3px;
+            display: flex;
+            flex-direction: column;
 
             #SubMenu {
                 display: inline-block;
@@ -372,7 +374,7 @@ body,
                     text-decoration: none;
                     cursor: pointer;
                     color: #64b2ff;
-                    padding: 5px 3px;
+                    padding: 5px 5px 5px 3px;
                     margin: 2px 0px;
                     min-width: 210px;
                     font-family: sans-serif;
@@ -413,8 +415,9 @@ body,
                             }
 
                             #SubMenu-Titulo-Icono2 {
-                                font-size: 16px;
+                                font-size: 12px;
                                 margin-left: auto;
+                                margin-right: 5px;
                             }
                         }
                     }

@@ -109,13 +109,17 @@ const Login = () => {
                     navigate('/ChatBot');
                 } else if (tipo === 'Carnetizacion') {
                     navigate('/Carnetizacion');
+                } else if  (tipo === 'Inicio') {
+                    navigate('/');
                 }
             } else {
                 const errorText = await response.text();
                 if (response.status === 404) {
-                    setError('Usuario no encontrado');
+                    // setError('Usuario no encontrado');
+                    toast.error("Usuario no encontrado", { className: 'toast-error' });
                 } else if (response.status === 401) {
-                    setError('Contraseña incorrecta');
+                    // setError('Contraseña incorrecta');
+                    toast.error("Contraseña incorrecta", { className: 'toast-error' });
                 } else {
                     setError('Error inesperado: ' + errorText);
                 }
@@ -142,6 +146,8 @@ const Login = () => {
                 navigate('/ChatBot');
             } else if (tipo === 'Carnetizacion') {
                 navigate('/Carnetizacion');
+            } else if  (tipo === 'Inicio') {
+                navigate('/');
             }
         }
     }, []);

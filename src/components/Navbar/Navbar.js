@@ -1,8 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FaHardHat, FaFileAlt, FaTruck, FaBars, FaTimes, FaHome, FaChartLine, FaStar, FaTools, FaChevronDown, FaChevronUp, FaUser, FaBoxes, FaUserTie } from 'react-icons/fa';
 import { HiClipboardList, HiChartBar, HiOfficeBuilding } from "react-icons/hi";
-import { cargarDirectores } from '../../funciones';
 import { ThreeDots } from 'react-loader-spinner';
 import './Navbar.css'
 import Cookies from 'js-cookie';
@@ -26,8 +25,6 @@ function Navbar() {
     const menuRef = useRef(null);
     const [isOpen, setIsOpen] = useState(false);
     const [isLogin, setIsLogin] = useState(false);
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const fullName = Cookies.get('userNombre');
     const initial = fullName ? fullName.charAt(0).toUpperCase() : "";
@@ -35,6 +32,7 @@ function Navbar() {
     const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth > 530);
     const role = Cookies.get('userRole');
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
 
     const toggleMobileMenu = () => setShowMobileMenu(!showMobileMenu);
 
@@ -62,7 +60,7 @@ function Navbar() {
         }
 
         cargarDatosPagesUser()
-    }, [isLogin]);
+    }, [isLogin, role]);
 
     useEffect(() => {
         const handleResize = () => {
@@ -91,48 +89,6 @@ function Navbar() {
         };
 
     }, [menuRef]);
-
-    const handleLogin = async (event) => {
-        event.preventDefault();
-        setError('');
-
-        try {
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/user/login/login`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json', // Cambia el tipo de contenido a application/json
-                },
-                body: JSON.stringify({ correo: username, contrasena: password }), // Convierte los datos a JSON
-            });
-
-            if (response.ok) {
-                setIsOpen(false);
-                setIsLogin(true);
-                cargarDirectores();
-                const data = await response.json();
-                Cookies.set('token', data.role, { expires: 7 });
-                Cookies.set('userCedula', data.cedula, { expires: 7 });
-                Cookies.set('userNombre', data.nombre, { expires: 7 });
-                Cookies.set('userCorreo', data.correo, { expires: 7 });
-                Cookies.set('userTelefono', data.telefono, { expires: 7 });
-                Cookies.set('userRole', data.rol, { expires: 7 });
-                cargarDatosPagesUser();
-            } else {
-                const errorText = await response.text();
-                if (response.status === 404) {
-                    setError('Usuario no encontrado');
-                } else if (response.status === 401) {
-                    setError('Contraseña incorrecta');
-                } else {
-                    setError('Error inesperado: ' + errorText);
-                }
-            }
-        } catch (error) {
-            setError('Error al conectar con el servidor');
-        } finally {
-            window.location.reload();
-        }
-    };
 
     const ObtenerTextoMejorado = (rol) => {
         if (!rol) return "";
@@ -468,6 +424,110 @@ function Navbar() {
 
     return (
         <div id='Contenedor'>
+
+            <div id='Icono-Menu' onClick={() => setShowMobileMenu(!showMobileMenu)}>
+                {
+                    showMobileMenu ? <FaTimes /> : <FaBars />
+                }
+                {isLargeScreen === true ? (
+                    <div>
+                        {isLogin === true ? (
+                            <div className='AjusteTitulo2'></div>
+                        ) : (
+                            <div className='AjusteTitulo1'></div>
+                        )}
+                    </div>
+                ) : (
+                    <div>
+                        {isLogin === true ? (
+                            <div className='AjusteTitulo4'></div>
+                        ) : (
+                            <div className='AjusteTitulo3'></div>
+                        )}
+                    </div>
+                )}
+
+            </div>
+            <div id='Titulo'>
+                <p>
+                    Sicte CCOT
+                </p>
+                <p>
+                    Centro de Control de Operaciones Técnicas
+                </p>
+            </div>
+            {isLogin === true ? (
+                <div id='Login' className='ON'>
+                    <div className="circle-container"
+                        onClick={() => {
+                            setIsOpen(!isOpen);
+                            setShowDropdownUser(!showDropdownUser);
+                        }}
+                    >
+                        {isLargeScreen ? (
+                            <div>
+                                <div className="circle">{initial}</div>
+                                <span className="name">{name}</span>
+                                <span className='iconoMenu'>
+                                    {
+                                        showDropdownUser ? <FaChevronUp /> : <FaChevronDown />
+                                    }
+                                </span>
+                            </div>
+                        ) : (
+                            <div>
+                                <div className="circle">{initial}</div>
+                                <span className='iconoMenu'>
+                                    {
+                                        showDropdownUser ? <FaChevronUp /> : <FaChevronDown />
+                                    }
+                                </span>
+                            </div>
+                        )}
+                    </div>
+                    <div className={`menu ${isOpen ? 'open' : ''}`}>
+                        <span>{Cookies.get('userCorreo')}</span>
+                        <span>{Cookies.get('userNombre')}</span>
+                        <span>CC: {Cookies.get('userCedula')}</span>
+                        <span>Tel: {Cookies.get('userTelefono')}</span>
+                        <span>Rol: {ObtenerTextoMejorado(Cookies.get('userRole'))}</span>
+                        <ul>
+                            {role === 'admin' && (
+                                <Link to="/BasesDeDatos"
+                                    onClick={() => {
+                                        setIsOpen(!isOpen);
+                                        setShowDropdownUser(!showDropdownUser);
+                                    }}
+                                ><li>Bases de Datos</li></Link>
+                            )}
+                            {role === 'admin' && (
+                                <Link to="/ControlUsuarios"
+                                    onClick={() => {
+                                        setIsOpen(!isOpen);
+                                        setShowDropdownUser(!showDropdownUser);
+                                    }}
+                                ><li>Control de Usuarios</li></Link>
+                            )}
+                            <li onClick={handleLogout}>Cerrar Sesión</li>
+                        </ul>
+                    </div>
+                </div>
+            ) : (
+                <div id='Login' className='OFF'>
+                    <div className="circle-container"
+                        onClick={() => {
+                            navigate('/Login?tipo=Inicio');
+                        }}
+                    >
+                        {isLargeScreen ? (
+                            <span className="name">Iniciar Sesión</span>
+                        ) : (
+                            <FaUser className="icon" />
+                        )}
+                    </div>
+                </div>
+            )}
+
             {loading ? (
                 <div className="CargandoPagina">
                     <ThreeDots
@@ -480,144 +540,6 @@ function Navbar() {
                 </div>
             ) : (
                 <>
-                    <div id='Icono-Menu' onClick={() => setShowMobileMenu(!showMobileMenu)}>
-                        {
-                            showMobileMenu ? <FaTimes /> : <FaBars />
-                        }
-                        {isLargeScreen === true ? (
-                            <div>
-                                {isLogin === true ? (
-                                    <div className='AjusteTitulo2'></div>
-                                ) : (
-                                    <div className='AjusteTitulo1'></div>
-                                )}
-                            </div>
-                        ) : (
-                            <div>
-                                {isLogin === true ? (
-                                    <div className='AjusteTitulo4'></div>
-                                ) : (
-                                    <div className='AjusteTitulo3'></div>
-                                )}
-                            </div>
-                        )}
-
-                    </div>
-                    <div id='Titulo'>
-                        <p>
-                            Sicte CCOT
-                        </p>
-                        <p>
-                            Centro de Control de Operaciones Técnicas
-                        </p>
-                    </div>
-                    {isLogin === true ? (
-                        <div id='Login' className='ON'>
-                            <div className="circle-container"
-                                onClick={() => {
-                                    setIsOpen(!isOpen);
-                                    setShowDropdownUser(!showDropdownUser);
-                                }}
-                            >
-                                {isLargeScreen ? (
-                                    <div>
-                                        <div className="circle">{initial}</div>
-                                        <span className="name">{name}</span>
-                                        <span className='iconoMenu'>
-                                            {
-                                                showDropdownUser ? <FaChevronUp /> : <FaChevronDown />
-                                            }
-                                        </span>
-                                    </div>
-                                ) : (
-                                    <div>
-                                        <div className="circle">{initial}</div>
-                                        <span className='iconoMenu'>
-                                            {
-                                                showDropdownUser ? <FaChevronUp /> : <FaChevronDown />
-                                            }
-                                        </span>
-                                    </div>
-                                )}
-                            </div>
-                            <div className={`menu ${isOpen ? 'open' : ''}`}>
-                                <span>{Cookies.get('userCorreo')}</span>
-                                <span>{Cookies.get('userNombre')}</span>
-                                <span>CC: {Cookies.get('userCedula')}</span>
-                                <span>Tel: {Cookies.get('userTelefono')}</span>
-                                <span>Rol: {ObtenerTextoMejorado(Cookies.get('userRole'))}</span>
-                                <ul>
-                                    {role === 'admin' && (
-                                        <Link to="/BasesDeDatos"
-                                            onClick={() => {
-                                                setIsOpen(!isOpen);
-                                                setShowDropdownUser(!showDropdownUser);
-                                            }}
-                                        ><li>Bases de Datos</li></Link>
-                                    )}
-                                    {role === 'admin' && (
-                                        <Link to="/ControlUsuarios"
-                                            onClick={() => {
-                                                setIsOpen(!isOpen);
-                                                setShowDropdownUser(!showDropdownUser);
-                                            }}
-                                        ><li>Control de Usuarios</li></Link>
-                                    )}
-                                    <li onClick={handleLogout}>Cerrar Sesión</li>
-                                </ul>
-                            </div>
-                        </div>
-                    ) : (
-                        <div id='Login' className='OFF'>
-                            <div className="circle-container"
-                                onClick={() => {
-                                    setIsOpen(!isOpen);
-                                    setShowDropdownUser(!showDropdownUser);
-                                }}
-                            >
-                                {isLargeScreen ? (
-                                    <span className="name">Iniciar Sesión</span>
-                                ) : (
-                                    <FaUser className="icon" />
-                                )}
-
-                                <span className='iconoMenu'>
-                                    {
-                                        showDropdownUser ? <FaChevronUp /> : <FaChevronDown />
-                                    }
-                                </span>
-                            </div>
-                            <div className={`menu ${isOpen ? 'open' : ''}`}>
-                                <form onSubmit={handleLogin}>
-                                    <div>
-                                        <label htmlFor="email">Correo</label>
-                                        <input
-                                            type="email"
-                                            id="email"
-                                            name="email"
-                                            placeholder="Ingrese el correo"
-                                            value={username}
-                                            onChange={(e) => setUsername(e.target.value)}
-                                            required />
-                                    </div>
-                                    <div>
-                                        <label htmlFor="password">Contraseña</label>
-                                        <input
-                                            type="password"
-                                            id="password"
-                                            name="password"
-                                            placeholder="Ingrese la contraseña"
-                                            value={password}
-                                            onChange={(e) => setPassword(e.target.value)}
-                                            required />
-                                    </div>
-                                    <button type="submit" className='btn '>Ingresar</button>
-                                </form>
-                                {error && <p>{error}</p>}
-                            </div>
-                        </div>
-                    )}
-
                     <div id='MenuContainer' className={showMobileMenu ? 'abierto' : 'Cerrado'} ref={menuRef}>
                         <ul id='Menu'>
                             <li id='SubMenu' className={showMobileMenu ? 'abierto' : 'Cerrado'} >
@@ -1028,7 +950,7 @@ function Navbar() {
                                         <div id='SubMenu-Contenido'>
                                             <ul>
                                                 {subChecksGestionHumana.Chatbot === true && (<Link id='SubMenu-Contenido-Titulo' to={{ pathname: "/Login", search: "?tipo=ChatBot" }} onClick={toggleMobileMenu}><li>ChatBot</li></Link>)}
-                                                {subChecksGestionHumana.Carnetizacion === true && (<Link id='SubMenu-Contenido-Titulo' to={{ pathname: "/Login", search: "?tipo=Carnetizacion" }} onClick={toggleMobileMenu}><li>Carnetizacion</li></Link>) }
+                                                {subChecksGestionHumana.Carnetizacion === true && (<Link id='SubMenu-Contenido-Titulo' to={{ pathname: "/Login", search: "?tipo=Carnetizacion" }} onClick={toggleMobileMenu}><li>Carnetizacion</li></Link>)}
                                             </ul>
                                         </div>
                                     )}
@@ -1038,7 +960,7 @@ function Navbar() {
 
                         {showMobileMenu && (
                             <div className='Version'>
-                                <p>v1.59</p>
+                                <p>v1.60</p>
                             </div>
                         )}
                     </div>

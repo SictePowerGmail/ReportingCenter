@@ -106,9 +106,9 @@ function RutasApp() {
                 return 'Control de Usuarios';
             /* Inicio */
             case '/':
-                return 'Reporting Center';
+                return 'Sicte CCOT';
             case '/ReportingCenter':
-                return 'Reporting Center';
+                return 'Sicte CCOT';
             /* Login */
             case '/Login':
                 return 'Iniciar Sesion';
