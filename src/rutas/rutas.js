@@ -223,7 +223,7 @@ function RutasApp() {
             case '/Penalizaciones':
                 return 'Penalizaciones';
             case '/Centro_de_costos':
-                return 'Centro_de_costos';
+                return 'Centro de costos';
             case '/ComposicionMoviles':
                 return 'Composicion Moviles';
             case '/Compras':
@@ -232,9 +232,9 @@ function RutasApp() {
             case '/SSTA':
                 return 'SSTA';
             case '/CursosDeAlturas':
-                return 'CursosDeAlturas';
+                return 'Cursos de Alturas';
             case '/EntregasPendientesDotacion':
-                return 'EntregasPendientesDotacion'
+                return 'Entregas Pendientes Dotacion'
             /* Parque Automotor */
             case '/Moviles':
                 return 'Moviles'
@@ -245,7 +245,7 @@ function RutasApp() {
                 return 'Carnetizacion'
             /* Recuperar Contrasena */
             case '/RecuperarContrasena':
-                return 'RecuperarContrasena';
+                return 'Recuperar Contrasena';
             default:
                 return 'Validar';
         }
@@ -253,89 +253,90 @@ function RutasApp() {
 
     return (
         <>
-            <Navbar />
             <Routes>
-                {/* Menu Usuario */}
-                <Route path='/BasesDeDatos' exact element={<BasesDeDatos />} />
-                <Route path='/ControlUsuarios' exact element={<ControlUsuarios />} />
-                {/* Inicio */}
-                <Route path='/' exact element={<Inicio />} />
-                <Route path='/ReportingCenter' exact element={<Inicio />} />
-                {/* Login */}
-                <Route path='/Login' exact element={<Login />} />
-                {/* Reportes */}
-                <Route path='/Capacidades' exacte element={<Capacidades />} />
-                <Route path='/SupervisionPrincipal' exacte element={<SupervisionPrincipal />} />
-                <Route path='/SupervisionAgregar' exacte element={<SupervisionAgregar />} />
-                {/* Facturacion */}
-                <Route path='/ConsolidadoNacionalFacturacion' exacte element={<FacturacionConsolidado />} />
-                <Route path='/Proyectos' exacte element={<ProyectosFacturacion />} />
-                <Route path='/CorporativoFacturacion' exacte element={<CorporativoFacturacion />} />
-                <Route path='/MantenimientoFacturacion' exacte element={<MantenimientoFacturacion />} />
-                <Route path='/OperacionesFacturacion' exacte element={<OperacionesFacturacion />} />
-                <Route path='/MinticFacturacion' exacte element={<MinticFacturacion />} />
-                <Route path='/SMU' exacte element={<SMU />} />
-                <Route path='/ImplementacionesFacturacion' exacte element={<ImplementacionesFacturacion />} />
-                <Route path='/MedicionesFacturacion' exacte element={<MedicionesFacturacion />} />
-                <Route path='/ObraCivilFacturacion' exacte element={<ObraCivilFacturacion />} />
-                {/* Produccion */}
-                <Route path='/RendimientoOperativo' exacte element={<RendimientoOperativo />} />
-                <Route path='/PlaneacionFinanciero' exact element={<PlaneacionFinanciero />} />
-                <Route path='/CorporativoFinanciero' exact element={<CorporativoFinanciero />} />
-                <Route path='/MantenimientoFinanciero' exact element={<MantenimientoFinanciero />} />
-                <Route path='/ReingenieriaFinanciero' exacte element={<ReingenieriaFinanciero />} />
-                <Route path='/OperacionesFinanciero' exacte element={<OperacionesFinanciero />} />
-                {/* Indicadores */}
-                <Route path='/HistoricoKPI' exacte element={<HistoricoKPI />} />
-                <Route path='/MantenimientoTecnico' exact element={<MantenimientoTecnico />} />
-                <Route path='/Mintic' exacte element={<Mintic />} />
-                <Route path='/NPS' exacte element={<NPS />} />
-                <Route path='/G2G8MasivoCentro' exacte element={<G2G8MasivoCentro />} />
-                {/* Puntuacion */}
-                <Route path='/PlaneacionPuntuacion' exact element={<PlaneacionPuntuacion />} />
-                <Route path='/CorporativoPuntuacion' exact element={<CorporativoPuntuacion />} />
-                <Route path='/MantenimientoPuntuacion' exact element={<MantenimientoPuntuacion />} />
-                <Route path='/ReingenieriasPuntuacion' exacte element={<ReingenieriasPuntuacion />} />
-                {/* Operacion */}
-                <Route path='/MantenimientoBacklogFO' exacte element={<BacklogFO />} />
-                <Route path='/MantenimientoBacklogHFC' exacte element={<BacklogHFC />} />
-                <Route path='/MantenimientoPuntuacionTMRF' exact element={<MantenimientoPuntuacionTMRF />} />
-                <Route path='/RecursoOperaciones' exact element={<RecursoOperaciones />} />
-                <Route path='/Seguimiento' exact element={<Seguimiento />} />
-                <Route path='/SeguimientoOperaciones' exacte element={<SeguimientoOperaciones />} />
-                <Route path='/SeguimientoOperacionesMovil' exacte element={<SeguimientoOperacionesMovil />} />
-                <Route path='/SeguimientoSMU' exacte element={<SeguimientoSMU />} />
-                <Route path='/SeguimientoSMUMovil' exacte element={<SeguimientoSMUMovil />} />
-                <Route path='/SMU_Tecnico' exacte element={<SMU_Tecnico />} />
-                <Route path='/TorreDeControl' exacte element={<TorreControl />} />
-                {/* Logistica */}
-                <Route path='/EquiposMovilesR2' exacte element={<EquiposMovilesR2 />} />
-                <Route path='/EquiposMovilesR4' exacte element={<EquiposMovilesR4 />} />
-                <Route path='/ConsumosOperaciones' exacte element={<ConsumosOperaciones />} />
-                <Route path='/DesmonteMantenimiento' exacte element={<DesmonteMantenimiento />} />
-                <Route path='/MaterialPrincipal' exacte element={<MaterialPrincipal />} />
-                <Route path='/MaterialAgregar' exacte element={<MaterialAgregar />} />
-                <Route path='/ReporteMaterialPrincipal' exacte element={<ReporteMaterialPrincipal />} />
-                <Route path='/ReporteMaterialAgregar' exacte element={<ReporteMaterialAgregar />} />
-                <Route path='/InventariosMaterialPrincipal' exacte element={<InventariosMaterialPrincipal />} />
-                <Route path='/InventariosMaterialAgregar' exacte element={<InventariosMaterialAgregar />} />
-                <Route path='/EstadoProyectosR4' exacte element={<EstadoProyectosR4 />} />
-                {/* Direccion */}
-                <Route path='/Penalizaciones' exacte element={<Penalizaciones />} />
-                <Route path='/Centro_de_costos' exacte element={<CentrosDeCostos />} />
-                <Route path='/ComposicionMoviles' exacte element={<ComposicionMoviles />} />
-                <Route path='/Compras' exacte element={<Compras />} />
-                {/* SSTA */}
-                <Route path='/SSTA' exacte element={<SSTA />} />
-                <Route path='/CursosDeAlturas' exacte element={<CursosDeAlturas />} />
-                <Route path='/EntregasPendientesDotacion' exacte element={<EntregasPendientesDotacion />} />
-                {/* Parque Automotor */}
-                <Route path='/Moviles' exacte element={<Moviles />} />
-                {/* Gestion Humana */}
-                <Route path='/ChatBot' exacte element={<ChatBot />} />
-                <Route path='/Carnetizacion' exacte element={<Carnetizacion />} />
-                {/* Recuperar Contraseña */}
-                <Route path='/RecuperarContrasena' exacte element={<RecuperarContraseña />} />
+                <Route path='/' exact element={<Navbar />} >
+                    {/* Menu Usuario */}
+                    <Route path='/BasesDeDatos' exact element={<BasesDeDatos />} />
+                    <Route path='/ControlUsuarios' exact element={<ControlUsuarios />} />
+                    {/* Inicio */}
+                    <Route path='/' exact element={<Inicio />} />
+                    <Route path='/ReportingCenter' exact element={<Inicio />} />
+                    {/* Login */}
+                    <Route path='/Login' exact element={<Login />} />
+                    {/* Reportes */}
+                    <Route path='/Capacidades' exacte element={<Capacidades />} />
+                    <Route path='/SupervisionPrincipal' exacte element={<SupervisionPrincipal />} />
+                    <Route path='/SupervisionAgregar' exacte element={<SupervisionAgregar />} />
+                    {/* Facturacion */}
+                    <Route path='/ConsolidadoNacionalFacturacion' exacte element={<FacturacionConsolidado />} />
+                    <Route path='/Proyectos' exacte element={<ProyectosFacturacion />} />
+                    <Route path='/CorporativoFacturacion' exacte element={<CorporativoFacturacion />} />
+                    <Route path='/MantenimientoFacturacion' exacte element={<MantenimientoFacturacion />} />
+                    <Route path='/OperacionesFacturacion' exacte element={<OperacionesFacturacion />} />
+                    <Route path='/MinticFacturacion' exacte element={<MinticFacturacion />} />
+                    <Route path='/SMU' exacte element={<SMU />} />
+                    <Route path='/ImplementacionesFacturacion' exacte element={<ImplementacionesFacturacion />} />
+                    <Route path='/MedicionesFacturacion' exacte element={<MedicionesFacturacion />} />
+                    <Route path='/ObraCivilFacturacion' exacte element={<ObraCivilFacturacion />} />
+                    {/* Produccion */}
+                    <Route path='/RendimientoOperativo' exacte element={<RendimientoOperativo />} />
+                    <Route path='/PlaneacionFinanciero' exact element={<PlaneacionFinanciero />} />
+                    <Route path='/CorporativoFinanciero' exact element={<CorporativoFinanciero />} />
+                    <Route path='/MantenimientoFinanciero' exact element={<MantenimientoFinanciero />} />
+                    <Route path='/ReingenieriaFinanciero' exacte element={<ReingenieriaFinanciero />} />
+                    <Route path='/OperacionesFinanciero' exacte element={<OperacionesFinanciero />} />
+                    {/* Indicadores */}
+                    <Route path='/HistoricoKPI' exacte element={<HistoricoKPI />} />
+                    <Route path='/MantenimientoTecnico' exact element={<MantenimientoTecnico />} />
+                    <Route path='/Mintic' exacte element={<Mintic />} />
+                    <Route path='/NPS' exacte element={<NPS />} />
+                    <Route path='/G2G8MasivoCentro' exacte element={<G2G8MasivoCentro />} />
+                    {/* Puntuacion */}
+                    <Route path='/PlaneacionPuntuacion' exact element={<PlaneacionPuntuacion />} />
+                    <Route path='/CorporativoPuntuacion' exact element={<CorporativoPuntuacion />} />
+                    <Route path='/MantenimientoPuntuacion' exact element={<MantenimientoPuntuacion />} />
+                    <Route path='/ReingenieriasPuntuacion' exacte element={<ReingenieriasPuntuacion />} />
+                    {/* Operacion */}
+                    <Route path='/MantenimientoBacklogFO' exacte element={<BacklogFO />} />
+                    <Route path='/MantenimientoBacklogHFC' exacte element={<BacklogHFC />} />
+                    <Route path='/MantenimientoPuntuacionTMRF' exact element={<MantenimientoPuntuacionTMRF />} />
+                    <Route path='/RecursoOperaciones' exact element={<RecursoOperaciones />} />
+                    <Route path='/Seguimiento' exact element={<Seguimiento />} />
+                    <Route path='/SeguimientoOperaciones' exacte element={<SeguimientoOperaciones />} />
+                    <Route path='/SeguimientoOperacionesMovil' exacte element={<SeguimientoOperacionesMovil />} />
+                    <Route path='/SeguimientoSMU' exacte element={<SeguimientoSMU />} />
+                    <Route path='/SeguimientoSMUMovil' exacte element={<SeguimientoSMUMovil />} />
+                    <Route path='/SMU_Tecnico' exacte element={<SMU_Tecnico />} />
+                    <Route path='/TorreDeControl' exacte element={<TorreControl />} />
+                    {/* Logistica */}
+                    <Route path='/EquiposMovilesR2' exacte element={<EquiposMovilesR2 />} />
+                    <Route path='/EquiposMovilesR4' exacte element={<EquiposMovilesR4 />} />
+                    <Route path='/ConsumosOperaciones' exacte element={<ConsumosOperaciones />} />
+                    <Route path='/DesmonteMantenimiento' exacte element={<DesmonteMantenimiento />} />
+                    <Route path='/MaterialPrincipal' exacte element={<MaterialPrincipal />} />
+                    <Route path='/MaterialAgregar' exacte element={<MaterialAgregar />} />
+                    <Route path='/ReporteMaterialPrincipal' exacte element={<ReporteMaterialPrincipal />} />
+                    <Route path='/ReporteMaterialAgregar' exacte element={<ReporteMaterialAgregar />} />
+                    <Route path='/InventariosMaterialPrincipal' exacte element={<InventariosMaterialPrincipal />} />
+                    <Route path='/InventariosMaterialAgregar' exacte element={<InventariosMaterialAgregar />} />
+                    <Route path='/EstadoProyectosR4' exacte element={<EstadoProyectosR4 />} />
+                    {/* Direccion */}
+                    <Route path='/Penalizaciones' exacte element={<Penalizaciones />} />
+                    <Route path='/Centro_de_costos' exacte element={<CentrosDeCostos />} />
+                    <Route path='/ComposicionMoviles' exacte element={<ComposicionMoviles />} />
+                    <Route path='/Compras' exacte element={<Compras />} />
+                    {/* SSTA */}
+                    <Route path='/SSTA' exacte element={<SSTA />} />
+                    <Route path='/CursosDeAlturas' exacte element={<CursosDeAlturas />} />
+                    <Route path='/EntregasPendientesDotacion' exacte element={<EntregasPendientesDotacion />} />
+                    {/* Parque Automotor */}
+                    <Route path='/Moviles' exacte element={<Moviles />} />
+                    {/* Gestion Humana */}
+                    <Route path='/ChatBot' exacte element={<ChatBot />} />
+                    <Route path='/Carnetizacion' exacte element={<Carnetizacion />} />
+                    {/* Recuperar Contraseña */}
+                    <Route path='/RecuperarContrasena' exacte element={<RecuperarContraseña />} />
+                </Route>
             </Routes>
         </>
     );

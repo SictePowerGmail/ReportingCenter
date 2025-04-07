@@ -52,23 +52,25 @@ const RecuperarContraseña = () => {
                                 'Content-Type': 'application/json',
                             },
                         });
-            
+
                         const tokensData = await tokens.json();
                         const tokenData = tokensData.find(item => item.token === token);
                         const emailToken = tokenData.email
                         if (tokenData) {
 
                             try {
-                                await axios.post(`${process.env.REACT_APP_API_URL}/user/actualizarContrasena`, { emailToken, password2 });
                                 toast.success('Cambio de contraseña exitoso', { className: 'toast-success' });
-                                navigate('/ReportingCenter');
+                                await axios.post(`${process.env.REACT_APP_API_URL}/user/actualizarContrasena`, { emailToken, password2 });
+                                setTimeout(() => {
+                                    navigate('/ReportingCenter');
+                                }, 1000);
                             } catch (error) {
                                 toast.error('Cambio de contraseña fallido', { className: 'toast-success' });
                             }
 
                         } else {
                             toast.error("Token no encontrado.", { className: 'toast-error' });
-                        }   
+                        }
                     } catch (error) {
                         setError('Error al conectar con el servidor');
                     }
@@ -90,7 +92,7 @@ const RecuperarContraseña = () => {
         const hash = window.location.hash;
         const params = new URLSearchParams(hash.split('?')[1]);
         const tokenFromUrl = params.get('token');
-        
+
         if (tokenFromUrl) {
             setToken(tokenFromUrl);
         } else {

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom';
+import { Outlet, Link, useNavigate } from 'react-router-dom';
 import { FaHardHat, FaFileAlt, FaTruck, FaBars, FaTimes, FaHome, FaChartLine, FaStar, FaTools, FaChevronDown, FaChevronUp, FaUser, FaBoxes, FaUserTie } from 'react-icons/fa';
 import { HiClipboardList, HiChartBar, HiOfficeBuilding } from "react-icons/hi";
 import { ThreeDots } from 'react-loader-spinner';
@@ -882,7 +882,7 @@ function Navbar() {
                                         <div id='SubMenu-Contenido'>
                                             <ul>
                                                 {subChecksSsta.Ssta === true && (<Link id='SubMenu-Contenido-Titulo' to="/SSTA" onClick={toggleMobileMenu}><li>SSTA</li></Link>)}
-                                                {subChecksSsta.CursoDeAlturas === true && (<Link id='SubMenu-Contenido-Titulo' to="/CursosDeAlturas" onClick={toggleMobileMenu}><li>Cursos de Alturas</li></Link>)}
+                                                {subChecksSsta.CursoDeAlturas === true && (<Link id='SubMenu-Contenido-Titulo' to="/CursosDeAlturas" onClick={toggleMobileMenu}><li>Indicadores Capacitaciones</li></Link>)}
                                                 {subChecksSsta.EntregasPendientesDotacion === true && (<Link id='SubMenu-Contenido-Titulo' to="/EntregasPendientesDotacion" onClick={toggleMobileMenu}><li>Entregas Pendientes Dotación</li></Link>)}
                                             </ul>
                                         </div>
@@ -966,6 +966,10 @@ function Navbar() {
                     </div>
                 </>
             )}
+
+            <div id="Contenido">
+                <Outlet />
+            </div>
         </div>
     );
 }
