@@ -1,6 +1,6 @@
 .Supervision-Agregar {
     width: calc(100%);
-    height: calc(100% - 40px);
+    height: 100%;
     display: flex; /* Usa el modelo de caja flexible */
     justify-content: center; /* Centra horizontalmente */
     align-items: center; /* Centra verticalmente */

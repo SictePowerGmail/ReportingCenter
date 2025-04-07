@@ -882,7 +882,7 @@ function Navbar() {
                                         <div id='SubMenu-Contenido'>
                                             <ul>
                                                 {subChecksSsta.Ssta === true && (<Link id='SubMenu-Contenido-Titulo' to="/SSTA" onClick={toggleMobileMenu}><li>SSTA</li></Link>)}
-                                                {subChecksSsta.CursoDeAlturas === true && (<Link id='SubMenu-Contenido-Titulo' to="/CursosDeAlturas" onClick={toggleMobileMenu}><li>Indicadores Capacitaciones</li></Link>)}
+                                                {subChecksSsta.CursoDeAlturas === true && (<Link id='SubMenu-Contenido-Titulo' to="/CursosDeAlturas" onClick={toggleMobileMenu}><li>Indicadores Capacitación</li></Link>)}
                                                 {subChecksSsta.EntregasPendientesDotacion === true && (<Link id='SubMenu-Contenido-Titulo' to="/EntregasPendientesDotacion" onClick={toggleMobileMenu}><li>Entregas Pendientes Dotación</li></Link>)}
                                             </ul>
                                         </div>
@@ -960,16 +960,16 @@ function Navbar() {
 
                         {showMobileMenu && (
                             <div className='Version'>
-                                <p>v1.60</p>
+                                <p>v1.61</p>
                             </div>
                         )}
                     </div>
+
+                    <div id="Contenido">
+                        <Outlet />
+                    </div>
                 </>
             )}
-
-            <div id="Contenido">
-                <Outlet />
-            </div>
         </div>
     );
 }
