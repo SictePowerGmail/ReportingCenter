@@ -9,6 +9,7 @@ body,
     align-items: center;
     justify-content: center;
     height: calc(100vh - 40px);
+    width: 100%;
     overflow: hidden;
     padding-left: 40px;
 
