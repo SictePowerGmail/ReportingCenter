@@ -7,7 +7,7 @@ function ReingenieriaFinanciero() {
     <div className='powerbi'>
       <iframe
         title="Financiero reingenierias"
-        src="https://app.powerbi.com/reportEmbed?reportId=393686bd-88d1-4286-98d4-9dd6b1b67804&autoAuth=true&ctid=e0bfe90d-20e0-410b-b6f1-429b043d3608"
+        src="https://app.powerbi.com/view?r=eyJrIjoiOTJiMjhmNDItMzFkZi00Y2ZmLWJiODEtMzc3MjNkMzAxZDQ0IiwidCI6ImUwYmZlOTBkLTIwZTAtNDEwYi1iNmYxLTQyOWIwNDNkMzYwOCJ9"
       ></iframe>
     </div>
   );

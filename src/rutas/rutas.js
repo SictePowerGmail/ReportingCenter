@@ -25,7 +25,7 @@ import ImplementacionesFacturacion from "../pages/facturacion/ImplementacionesFa
 import MedicionesFacturacion from "../pages/facturacion/MedicionesFacturacion";
 import ObraCivilFacturacion from "../pages/facturacion/ObraCivilFacturacion";
 /* Produccion */
-import RendimientoOperativo from '../pages/produccion/RendimientoOperativo';
+import ProductividadNacional from '../pages/produccion/ProductividadNacional';
 import PlaneacionFinanciero from '../pages/produccion/PlaneacionFinanciero';
 import CorporativoFinanciero from '../pages/produccion/CorporativoFinanciero';
 import MantenimientoFinanciero from '../pages/produccion/MantenimientoFinanciero';
@@ -48,10 +48,9 @@ import BacklogHFC from '../pages/operacion/Backlog_HFC';
 import MantenimientoPuntuacionTMRF from '../pages/operacion/MantenimientoPuntuacionTMRF';
 import RecursoOperaciones from "../pages/operacion/RecursoOperaciones";
 import Seguimiento from '../pages/operacion/Seguimiento';
-import SeguimientoOperaciones from "../pages/operacion/SeguimientoOperaciones";
-import SeguimientoOperacionesMovil from "../pages/operacion/SeguimientoOperacionesMovil";
+import SeguimientoOperacionesCentro from "../pages/operacion/SeguimientoOperacionesCentro";
+import SeguimientoOperacionesNorte from "../pages/operacion/SeguimientoOperacionesNorte";
 import SeguimientoSMU from '../pages/operacion/SeguimientoSMU';
-import SeguimientoSMUMovil from '../pages/operacion/SeguimientoSMUMovil';
 import SMU_Tecnico from '../pages/operacion/SMU_Tecnico';
 import TorreControl from '../pages/operacion/TorreControl';
 /* Logistica */
@@ -141,8 +140,8 @@ function RutasApp() {
             case '/ObraCivilFacturacion':
                 return 'Obra Civil Facturacion';
             /* Produccion */
-            case '/RendimientoOperativo':
-                return 'Rendimiento Operativo';
+            case '/ProductividadNacional':
+                return 'Productividad Nacional';
             case '/PlaneacionFinanciero':
                 return 'Planeacion Financiero';
             case '/CorporativoFinanciero':
@@ -184,14 +183,12 @@ function RutasApp() {
                 return 'Recurso Operaciones';
             case '/Seguimiento':
                 return 'Seguimiento';
-            case '/SeguimientoOperaciones':
-                return 'Seguimiento Operaciones';
-            case '/SeguimientoOperacionesMovil':
-                return 'Seguimiento Operaciones Movil';
+            case '/SeguimientoOperacionesCentro':
+                return 'Seguimiento Operaciones Centro';
+            case '/SeguimientoOperacionesNorte':
+                return 'Seguimiento Operaciones Norte';
             case '/SeguimientoSMU':
                 return 'Seguimiento SMU';
-            case '/SeguimientoSMUMovil':
-                return 'Seguimiento SMU Movil';
             case '/SMU_Tecnico':
                 return 'SMU Tecnico';
             case '/TorreDeControl':
@@ -279,7 +276,7 @@ function RutasApp() {
                     <Route path='/MedicionesFacturacion' exacte element={<MedicionesFacturacion />} />
                     <Route path='/ObraCivilFacturacion' exacte element={<ObraCivilFacturacion />} />
                     {/* Produccion */}
-                    <Route path='/RendimientoOperativo' exacte element={<RendimientoOperativo />} />
+                    <Route path='/ProductividadNacional' exacte element={<ProductividadNacional />} />
                     <Route path='/PlaneacionFinanciero' exact element={<PlaneacionFinanciero />} />
                     <Route path='/CorporativoFinanciero' exact element={<CorporativoFinanciero />} />
                     <Route path='/MantenimientoFinanciero' exact element={<MantenimientoFinanciero />} />
@@ -302,10 +299,9 @@ function RutasApp() {
                     <Route path='/MantenimientoPuntuacionTMRF' exact element={<MantenimientoPuntuacionTMRF />} />
                     <Route path='/RecursoOperaciones' exact element={<RecursoOperaciones />} />
                     <Route path='/Seguimiento' exact element={<Seguimiento />} />
-                    <Route path='/SeguimientoOperaciones' exacte element={<SeguimientoOperaciones />} />
-                    <Route path='/SeguimientoOperacionesMovil' exacte element={<SeguimientoOperacionesMovil />} />
+                    <Route path='/SeguimientoOperacionesCentro' exacte element={<SeguimientoOperacionesCentro />} />
+                    <Route path='/SeguimientoOperacionesNorte' exacte element={<SeguimientoOperacionesNorte />} />
                     <Route path='/SeguimientoSMU' exacte element={<SeguimientoSMU />} />
-                    <Route path='/SeguimientoSMUMovil' exacte element={<SeguimientoSMUMovil />} />
                     <Route path='/SMU_Tecnico' exacte element={<SMU_Tecnico />} />
                     <Route path='/TorreDeControl' exacte element={<TorreControl />} />
                     {/* Logistica */}

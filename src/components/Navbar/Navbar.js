@@ -21,7 +21,6 @@ function Navbar() {
     const [showDropdownSSTA, setShowDropdownSSTA] = useState(false);
     const [showDropdownParqueAutomotor, setShowDropdownParqueAutomotor] = useState(false);
     const [showDropdownGestionHumana, setShowDropdownGestionHumana] = useState(false);
-    const [isMobile, setIsMobile] = useState(window.innerWidth < 600);
     const menuRef = useRef(null);
     const [isOpen, setIsOpen] = useState(false);
     const [isLogin, setIsLogin] = useState(false);
@@ -64,7 +63,6 @@ function Navbar() {
 
     useEffect(() => {
         const handleResize = () => {
-            setIsMobile(window.innerWidth < 600);
             setIsLargeScreen(window.innerWidth > 530);
         };
 
@@ -160,7 +158,8 @@ function Navbar() {
         CorrectivoPreventivo: false,
         RecursoOperaciones: false,
         SeguimientoMttoCentro: false,
-        SeguimientoOperaciones: false,
+        SeguimientoOperacionesCentro: false,
+        SeguimientoOperacionesNorte: false,
         SeguimientoSmu: false,
         TecnicoSmu: false,
         TorreDeControl: false
@@ -328,7 +327,8 @@ function Navbar() {
                     CorrectivoPreventivo: usuarioEncontrado.operacionCorrectivoPreventivo === "1",
                     RecursoOperaciones: usuarioEncontrado.operacionRecursoOperaciones === "1",
                     SeguimientoMttoCentro: usuarioEncontrado.operacionSeguimientoMttoCentro === "1",
-                    SeguimientoOperaciones: usuarioEncontrado.operacionSeguimientoOperaciones === "1",
+                    SeguimientoOperacionesCentro: usuarioEncontrado.operacionSeguimientoOperacionesCentro === "1",
+                    SeguimientoOperacionesNorte: usuarioEncontrado.operacionSeguimientoOperacionesNorte === "1",
                     SeguimientoSmu: usuarioEncontrado.operacionSeguimientoSmu === "1",
                     TecnicoSmu: usuarioEncontrado.operacionTecnicoSmu === "1",
                     TorreDeControl: usuarioEncontrado.operacionTorreDeControl === "1"
@@ -653,7 +653,7 @@ function Navbar() {
                                     {showMobileMenu && showDropdownProduccion && (
                                         <div id='SubMenu-Contenido'>
                                             <ul>
-                                                {subChecksProduccion.ProducionNacional === true && (<Link id='SubMenu-Contenido-Titulo' to="/RendimientoOperativo" onClick={toggleMobileMenu}><li>Productividad nacional</li></Link>)}
+                                                {subChecksProduccion.ProducionNacional === true && (<Link id='SubMenu-Contenido-Titulo' to="/ProductividadNacional" onClick={toggleMobileMenu}><li>Productividad nacional</li></Link>)}
                                                 {subChecksProduccion.Proyectos === true && (<Link id='SubMenu-Contenido-Titulo' to="/PlaneacionFinanciero" onClick={toggleMobileMenu}><li>Proyectos</li></Link>)}
                                                 {subChecksProduccion.Corporativo === true && (<Link id='SubMenu-Contenido-Titulo' to="/CorporativoFinanciero" onClick={toggleMobileMenu}><li>Corporativo</li></Link>)}
                                                 {subChecksProduccion.Mantenimiento === true && (<Link id='SubMenu-Contenido-Titulo' to="/MantenimientoFinanciero" onClick={toggleMobileMenu}><li>Mantenimiento</li></Link>)}
@@ -769,8 +769,9 @@ function Navbar() {
                                                 {subChecksOperacion.CorrectivoPreventivo === true && (<Link id='SubMenu-Contenido-Titulo' to="/MantenimientoPuntuacionTMRF" onClick={toggleMobileMenu}><li>Correctivo - Preventivo</li></Link>)}
                                                 {subChecksOperacion.RecursoOperaciones === true && (<Link id='SubMenu-Contenido-Titulo' to="/RecursoOperaciones" onClick={toggleMobileMenu}><li>Recurso Operaciones</li></Link>)}
                                                 {subChecksOperacion.SeguimientoMttoCentro === true && (<Link id='SubMenu-Contenido-Titulo' to="/Seguimiento" onClick={toggleMobileMenu}><li>Seguimiento MTTO Centro</li></Link>)}
-                                                {subChecksOperacion.SeguimientoOperaciones === true && (<Link id='SubMenu-Contenido-Titulo' to={isMobile ? "/SeguimientoOperacionesMovil" : "/SeguimientoOperaciones"} onClick={toggleMobileMenu}><li>Seguimiento Operaciones</li></Link>)}
-                                                {subChecksOperacion.SeguimientoSmu === true && (<Link id='SubMenu-Contenido-Titulo' to={isMobile ? "/SeguimientoSMUMovil" : "/SeguimientoSMU"} onClick={toggleMobileMenu}><li>Seguimiento SMU</li></Link>)}
+                                                {subChecksOperacion.SeguimientoOperacionesCentro === true && (<Link id='SubMenu-Contenido-Titulo' to="/SeguimientoOperacionesCentro" onClick={toggleMobileMenu}><li>Seguimiento Operaciones Centro</li></Link>)}
+                                                {subChecksOperacion.SeguimientoOperacionesNorte === true && (<Link id='SubMenu-Contenido-Titulo' to="/SeguimientoOperacionesNorte" onClick={toggleMobileMenu}><li>Seguimiento Operaciones Norte</li></Link>)}
+                                                {subChecksOperacion.SeguimientoSmu === true && (<Link id='SubMenu-Contenido-Titulo' to="/SeguimientoSMU" onClick={toggleMobileMenu}><li>Seguimiento SMU</li></Link>)}
                                                 {subChecksOperacion.TecnicoSmu === true && (<Link id='SubMenu-Contenido-Titulo' to="/SMU_Tecnico" onClick={toggleMobileMenu}><li>Técnico SMU</li></Link>)}
                                                 {subChecksOperacion.TorreDeControl === true && (<Link id='SubMenu-Contenido-Titulo' to="/TorreDeControl" onClick={toggleMobileMenu}><li>Torre de control</li></Link>)}
                                             </ul>
@@ -960,7 +961,7 @@ function Navbar() {
 
                         {showMobileMenu && (
                             <div className='Version'>
-                                <p>v1.63</p>
+                                <p>v1.64</p>
                             </div>
                         )}
                     </div>

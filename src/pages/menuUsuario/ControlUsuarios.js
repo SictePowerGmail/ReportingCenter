@@ -192,7 +192,8 @@ function ControlUsuarios() {
         CorrectivoPreventivo: false,
         RecursoOperaciones: false,
         SeguimientoMttoCentro: false,
-        SeguimientoOperaciones: false,
+        SeguimientoOperacionesCentro: false,
+        SeguimientoOperacionesNorte: false,
         SeguimientoSmu: false,
         TecnicoSmu: false,
         TorreDeControl: false
@@ -497,7 +498,8 @@ function ControlUsuarios() {
                     CorrectivoPreventivo: usuarioEncontrado.operacionCorrectivoPreventivo === "1",
                     RecursoOperaciones: usuarioEncontrado.operacionRecursoOperaciones === "1",
                     SeguimientoMttoCentro: usuarioEncontrado.operacionSeguimientoMttoCentro === "1",
-                    SeguimientoOperaciones: usuarioEncontrado.operacionSeguimientoOperaciones === "1",
+                    SeguimientoOperacionesCentro: usuarioEncontrado.operacionSeguimientoOperacionesCentro === "1",
+                    SeguimientoOperacionesNorte: usuarioEncontrado.operacionSeguimientoOperacionesNorte === "1",
                     SeguimientoSmu: usuarioEncontrado.operacionSeguimientoSmu === "1",
                     TecnicoSmu: usuarioEncontrado.operacionTecnicoSmu === "1",
                     TorreDeControl: usuarioEncontrado.operacionTorreDeControl === "1"
@@ -631,7 +633,8 @@ function ControlUsuarios() {
                 operacionCorrectivoPreventivo: subChecksOperacion.CorrectivoPreventivo ? 1 : 0,
                 operacionRecursoOperaciones: subChecksOperacion.RecursoOperaciones ? 1 : 0,
                 operacionSeguimientoMttoCentro: subChecksOperacion.SeguimientoMttoCentro ? 1 : 0,
-                operacionSeguimientoOperaciones: subChecksOperacion.SeguimientoOperaciones ? 1 : 0,
+                operacionSeguimientoOperacionesCentro: subChecksOperacion.SeguimientoOperacionesCentro ? 1 : 0,
+                operacionSeguimientoOperacionesNorte: subChecksOperacion.SeguimientoOperacionesNorte ? 1 : 0,
                 operacionSeguimientoSmu: subChecksOperacion.SeguimientoSmu ? 1 : 0,
                 operacionTecnicoSmu: subChecksOperacion.TecnicoSmu ? 1 : 0,
                 operacionTorreDeControl: subChecksOperacion.TorreDeControl ? 1 : 0,
@@ -789,6 +792,29 @@ function ControlUsuarios() {
                                                         </label>
                                                     ))}
                                                 </div>
+
+                                                <label className='subTitulo'>
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={gestionHumana}
+                                                        onChange={handleGestionHumanaChange}
+                                                    />
+                                                    <span>Gestion Humana</span>
+                                                </label>
+
+                                                <div className='lista'>
+                                                    {Object.keys(subChecksGestionHumana).map((key) => (
+                                                        <label key={key} style={{ display: "block" }}>
+                                                            <input
+                                                                type="checkbox"
+                                                                checked={subChecksGestionHumana[key]}
+                                                                onChange={() => handleSubCheckChangeGestionHumana(key)}
+                                                                disabled={gestionHumana}
+                                                            />
+                                                            <span>{key.replace(/([A-Z])/g, ' $1').trim()}</span>
+                                                        </label>
+                                                    ))}
+                                                </div>
                                             </div>
 
                                             <div className="linea-vertical"></div>
@@ -907,29 +933,6 @@ function ControlUsuarios() {
                                                                 checked={subChecksOperacion[key]}
                                                                 onChange={() => handleSubCheckChangeOperacion(key)}
                                                                 disabled={operacion}
-                                                            />
-                                                            <span>{key.replace(/([A-Z])/g, ' $1').trim()}</span>
-                                                        </label>
-                                                    ))}
-                                                </div>
-
-                                                <label className='subTitulo'>
-                                                    <input
-                                                        type="checkbox"
-                                                        checked={gestionHumana}
-                                                        onChange={handleGestionHumanaChange}
-                                                    />
-                                                    <span>Gestion Humana</span>
-                                                </label>
-
-                                                <div className='lista'>
-                                                    {Object.keys(subChecksGestionHumana).map((key) => (
-                                                        <label key={key} style={{ display: "block" }}>
-                                                            <input
-                                                                type="checkbox"
-                                                                checked={subChecksGestionHumana[key]}
-                                                                onChange={() => handleSubCheckChangeGestionHumana(key)}
-                                                                disabled={gestionHumana}
                                                             />
                                                             <span>{key.replace(/([A-Z])/g, ' $1').trim()}</span>
                                                         </label>
