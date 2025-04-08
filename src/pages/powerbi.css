@@ -2,10 +2,9 @@
     align-items: center;
     display: flex;
     justify-content: center;
-    overflow: hidden;    
+    overflow: hidden;
     height: 100%;
     width: 100%;
-    padding-left: 40px;
 
     iframe {
         height: 100%;

@@ -4,7 +4,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding-left: 40px;
 
     @media screen and (max-width: 600px) {
         padding-left: 0;

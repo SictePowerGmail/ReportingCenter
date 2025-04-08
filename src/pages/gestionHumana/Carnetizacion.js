@@ -441,7 +441,7 @@ function Carnetizacion() {
                             <div className="modal-overlay" onClick={closeModal}>
                                 <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                                     {enviando ? (
-                                        <div className="CargandoPagina">
+                                        <div className="EnviandoDatos">
                                             <ThreeDots
                                                 type="ThreeDots"
                                                 color="#0B1A46"
@@ -584,7 +584,7 @@ function Carnetizacion() {
                             <div className="modal-overlay" onClick={closeModal}>
                                 <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                                     {enviando ? (
-                                        <div className="CargandoPagina">
+                                        <div className="EnviandoDatos">
                                             <ThreeDots
                                                 type="ThreeDots"
                                                 color="#0B1A46"

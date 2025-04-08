@@ -33,8 +33,6 @@ function Navbar() {
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
-    const toggleMobileMenu = () => setShowMobileMenu(!showMobileMenu);
-
     const closeAllDropdowns = () => {
         setShowDropdownReportes(false);
         setShowDropdownFacturacion(false);
@@ -68,7 +66,6 @@ function Navbar() {
 
         const handleClickOutside = (event) => {
             if (menuRef.current && !menuRef.current.contains(event.target)) {
-                setShowMobileMenu(false);
                 closeAllDropdowns();
             }
 
@@ -539,11 +536,11 @@ function Navbar() {
                     <p>... Cargando Datos ...</p>
                 </div>
             ) : (
-                <>
+                <div className="MainLayout">
                     <div id='MenuContainer' className={showMobileMenu ? 'abierto' : 'Cerrado'} ref={menuRef}>
                         <ul id='Menu'>
                             <li id='SubMenu' className={showMobileMenu ? 'abierto' : 'Cerrado'} >
-                                <Link id='SubMenu-Titulo-Solo' className={showMobileMenu ? 'abierto' : 'Cerrado'} to='/' onClick={showMobileMenu ? toggleMobileMenu : ''}>
+                                <Link id='SubMenu-Titulo-Solo' className={showMobileMenu ? 'abierto' : 'Cerrado'} to='/' >
                                     <span id='SubMenu-Titulo-Icono'><FaHome /></span>
                                     {showMobileMenu && (
                                         <span id="SubMenu-Titulo-Texto">Inicio</span>
@@ -556,7 +553,7 @@ function Navbar() {
                                     <div id='SubMenu-Titulo' onClick={() => {
                                         closeAllDropdowns();
                                         if (showMobileMenu === false) {
-                                            toggleMobileMenu()
+                                            setShowMobileMenu(true);
                                         }
                                         setShowDropdownReportes(!showDropdownReportes);
                                     }}>
@@ -577,8 +574,8 @@ function Navbar() {
                                     {showMobileMenu && showDropdownReportes && (
                                         <div id='SubMenu-Contenido'>
                                             <ul>
-                                                {subChecksReportes.Capacidades === true && (<Link id='SubMenu-Contenido-Titulo' to="/Capacidades" onClick={toggleMobileMenu}><li>Capacidades</li></Link>)}
-                                                {subChecksReportes.Supervision === true && (<Link id='SubMenu-Contenido-Titulo' to={{ pathname: "/Login", search: "?tipo=supervision" }} onClick={toggleMobileMenu}><li>Supervision</li></Link>)}
+                                                {subChecksReportes.Capacidades === true && (<Link id='SubMenu-Contenido-Titulo' to="/Capacidades" ><li>Capacidades</li></Link>)}
+                                                {subChecksReportes.Supervision === true && (<Link id='SubMenu-Contenido-Titulo' to={{ pathname: "/Login", search: "?tipo=supervision" }} ><li>Supervision</li></Link>)}
                                             </ul>
                                         </div>
                                     )}
@@ -590,7 +587,7 @@ function Navbar() {
                                     <div id='SubMenu-Titulo' onClick={() => {
                                         closeAllDropdowns();
                                         if (showMobileMenu === false) {
-                                            toggleMobileMenu()
+                                            setShowMobileMenu(true);
                                         }
                                         setShowDropdownFacturacion(!showDropdownFacturacion);
                                     }}>
@@ -611,16 +608,16 @@ function Navbar() {
                                     {showMobileMenu && showDropdownFacturacion && (
                                         <div id='SubMenu-Contenido'>
                                             <ul>
-                                                {subChecksFacturacion.ConsolidadoNacional === true && (<Link id='SubMenu-Contenido-Titulo' to="/ConsolidadoNacionalFacturacion" onClick={toggleMobileMenu}><li>Consolidado nacional</li></Link>)}
-                                                {subChecksFacturacion.Proyectos === true && (<Link id='SubMenu-Contenido-Titulo' to="/Proyectos" onClick={toggleMobileMenu}><li>Proyectos</li></Link>)}
-                                                {subChecksFacturacion.Corporativo === true && (<Link id='SubMenu-Contenido-Titulo' to="/CorporativoFacturacion" onClick={toggleMobileMenu}><li>Corporativo</li></Link>)}
-                                                {subChecksFacturacion.Mantenimiento === true && (<Link id='SubMenu-Contenido-Titulo' to="/MantenimientoFacturacion" onClick={toggleMobileMenu}><li>Mantenimiento</li></Link>)}
-                                                {subChecksFacturacion.Operaciones === true && (<Link id='SubMenu-Contenido-Titulo' to="/OperacionesFacturacion" onClick={toggleMobileMenu}><li>Operaciones</li></Link>)}
-                                                {subChecksFacturacion.Mintic === true && (<Link id='SubMenu-Contenido-Titulo' to="/MinticFacturacion" onClick={toggleMobileMenu}><li>Mintic</li></Link>)}
-                                                {subChecksFacturacion.Smu === true && (<Link id='SubMenu-Contenido-Titulo' to="/SMU" onClick={toggleMobileMenu}><li>SMU</li></Link>)}
-                                                {subChecksFacturacion.ImplementacionMovil === true && (<Link id='SubMenu-Contenido-Titulo' to="/ImplementacionesFacturacion" onClick={toggleMobileMenu}><li>Implementacion Movil</li></Link>)}
-                                                {subChecksFacturacion.MedicionesMovil === true && (<Link id='SubMenu-Contenido-Titulo' to="/MedicionesFacturacion" onClick={toggleMobileMenu}><li>Mediciones Movil</li></Link>)}
-                                                {subChecksFacturacion.ObraCivilMovil === true && (<Link id='SubMenu-Contenido-Titulo' to="/ObraCivilFacturacion" onClick={toggleMobileMenu}><li>Obra Civil Movil</li></Link>)}
+                                                {subChecksFacturacion.ConsolidadoNacional === true && (<Link id='SubMenu-Contenido-Titulo' to="/ConsolidadoNacionalFacturacion" ><li>Consolidado nacional</li></Link>)}
+                                                {subChecksFacturacion.Proyectos === true && (<Link id='SubMenu-Contenido-Titulo' to="/Proyectos" ><li>Proyectos</li></Link>)}
+                                                {subChecksFacturacion.Corporativo === true && (<Link id='SubMenu-Contenido-Titulo' to="/CorporativoFacturacion" ><li>Corporativo</li></Link>)}
+                                                {subChecksFacturacion.Mantenimiento === true && (<Link id='SubMenu-Contenido-Titulo' to="/MantenimientoFacturacion" ><li>Mantenimiento</li></Link>)}
+                                                {subChecksFacturacion.Operaciones === true && (<Link id='SubMenu-Contenido-Titulo' to="/OperacionesFacturacion" ><li>Operaciones</li></Link>)}
+                                                {subChecksFacturacion.Mintic === true && (<Link id='SubMenu-Contenido-Titulo' to="/MinticFacturacion" ><li>Mintic</li></Link>)}
+                                                {subChecksFacturacion.Smu === true && (<Link id='SubMenu-Contenido-Titulo' to="/SMU" ><li>SMU</li></Link>)}
+                                                {subChecksFacturacion.ImplementacionMovil === true && (<Link id='SubMenu-Contenido-Titulo' to="/ImplementacionesFacturacion" ><li>Implementacion Movil</li></Link>)}
+                                                {subChecksFacturacion.MedicionesMovil === true && (<Link id='SubMenu-Contenido-Titulo' to="/MedicionesFacturacion" ><li>Mediciones Movil</li></Link>)}
+                                                {subChecksFacturacion.ObraCivilMovil === true && (<Link id='SubMenu-Contenido-Titulo' to="/ObraCivilFacturacion" ><li>Obra Civil Movil</li></Link>)}
                                             </ul>
                                         </div>
                                     )}
@@ -632,7 +629,7 @@ function Navbar() {
                                     <div id='SubMenu-Titulo' onClick={() => {
                                         closeAllDropdowns();
                                         if (showMobileMenu === false) {
-                                            toggleMobileMenu()
+                                            setShowMobileMenu(true);
                                         }
                                         setShowDropdownProduccion(!showDropdownProduccion)
                                     }}>
@@ -653,12 +650,12 @@ function Navbar() {
                                     {showMobileMenu && showDropdownProduccion && (
                                         <div id='SubMenu-Contenido'>
                                             <ul>
-                                                {subChecksProduccion.ProducionNacional === true && (<Link id='SubMenu-Contenido-Titulo' to="/ProductividadNacional" onClick={toggleMobileMenu}><li>Productividad nacional</li></Link>)}
-                                                {subChecksProduccion.Proyectos === true && (<Link id='SubMenu-Contenido-Titulo' to="/PlaneacionFinanciero" onClick={toggleMobileMenu}><li>Proyectos</li></Link>)}
-                                                {subChecksProduccion.Corporativo === true && (<Link id='SubMenu-Contenido-Titulo' to="/CorporativoFinanciero" onClick={toggleMobileMenu}><li>Corporativo</li></Link>)}
-                                                {subChecksProduccion.Mantenimiento === true && (<Link id='SubMenu-Contenido-Titulo' to="/MantenimientoFinanciero" onClick={toggleMobileMenu}><li>Mantenimiento</li></Link>)}
-                                                {subChecksProduccion.Reingenierias === true && (<Link id='SubMenu-Contenido-Titulo' to="/ReingenieriaFinanciero" onClick={toggleMobileMenu}><li>Reingenierias</li></Link>)}
-                                                {subChecksProduccion.Operaciones === true && (<Link id='SubMenu-Contenido-Titulo' to="/OperacionesFinanciero" onClick={toggleMobileMenu}><li>Operaciones</li></Link>)}
+                                                {subChecksProduccion.ProducionNacional === true && (<Link id='SubMenu-Contenido-Titulo' to="/ProductividadNacional" ><li>Productividad nacional</li></Link>)}
+                                                {subChecksProduccion.Proyectos === true && (<Link id='SubMenu-Contenido-Titulo' to="/PlaneacionFinanciero" ><li>Proyectos</li></Link>)}
+                                                {subChecksProduccion.Corporativo === true && (<Link id='SubMenu-Contenido-Titulo' to="/CorporativoFinanciero" ><li>Corporativo</li></Link>)}
+                                                {subChecksProduccion.Mantenimiento === true && (<Link id='SubMenu-Contenido-Titulo' to="/MantenimientoFinanciero" ><li>Mantenimiento</li></Link>)}
+                                                {subChecksProduccion.Reingenierias === true && (<Link id='SubMenu-Contenido-Titulo' to="/ReingenieriaFinanciero" ><li>Reingenierias</li></Link>)}
+                                                {subChecksProduccion.Operaciones === true && (<Link id='SubMenu-Contenido-Titulo' to="/OperacionesFinanciero" ><li>Operaciones</li></Link>)}
                                             </ul>
                                         </div>
                                     )}
@@ -670,7 +667,7 @@ function Navbar() {
                                     <div id='SubMenu-Titulo' onClick={() => {
                                         closeAllDropdowns();
                                         if (showMobileMenu === false) {
-                                            toggleMobileMenu()
+                                            setShowMobileMenu(true);
                                         }
                                         setShowDropdownIndicadores(!showDropdownIndicadores)
                                     }}>
@@ -691,11 +688,11 @@ function Navbar() {
                                     {showMobileMenu && showDropdownIndicadores && (
                                         <div id='SubMenu-Contenido'>
                                             <ul>
-                                                {subChecksIndicadores.HistoricoKpi && (<Link id='SubMenu-Contenido-Titulo' to="/HistoricoKPI" onClick={toggleMobileMenu}><li>Histórico KPI</li></Link>)}
-                                                {subChecksIndicadores.G1Mantenimiento && (<Link id='SubMenu-Contenido-Titulo' to="/MantenimientoTecnico" onClick={toggleMobileMenu}><li>G1 Mantenimiento</li></Link>)}
-                                                {subChecksIndicadores.G2G8MasivoCentro && (<Link id='SubMenu-Contenido-Titulo' to="/G2G8MasivoCentro" onClick={toggleMobileMenu}><li>G2 - G8 Masivo Centro</li></Link>)}
-                                                {/*<Link id='SubMenu-Contenido-Titulo' to="/Mintic" onClick={toggleMobileMenu}>G5 MINTIC</Link>*/}
-                                                {subChecksIndicadores.Nps && (<Link id='SubMenu-Contenido-Titulo' to="/NPS" onClick={toggleMobileMenu}><li>NPS</li></Link>)}
+                                                {subChecksIndicadores.HistoricoKpi && (<Link id='SubMenu-Contenido-Titulo' to="/HistoricoKPI" ><li>Histórico KPI</li></Link>)}
+                                                {subChecksIndicadores.G1Mantenimiento && (<Link id='SubMenu-Contenido-Titulo' to="/MantenimientoTecnico" ><li>G1 Mantenimiento</li></Link>)}
+                                                {subChecksIndicadores.G2G8MasivoCentro && (<Link id='SubMenu-Contenido-Titulo' to="/G2G8MasivoCentro" ><li>G2 - G8 Masivo Centro</li></Link>)}
+                                                {/*<Link id='SubMenu-Contenido-Titulo' to="/Mintic" >G5 MINTIC</Link>*/}
+                                                {subChecksIndicadores.Nps && (<Link id='SubMenu-Contenido-Titulo' to="/NPS" ><li>NPS</li></Link>)}
                                             </ul>
                                         </div>
                                     )}
@@ -707,7 +704,7 @@ function Navbar() {
                                     <div id='SubMenu-Titulo' onClick={() => {
                                         closeAllDropdowns();
                                         if (showMobileMenu === false) {
-                                            toggleMobileMenu()
+                                            setShowMobileMenu(true);
                                         }
                                         setShowDropdownPuntuacion(!showDropdownPuntuacion)
                                     }}>
@@ -728,10 +725,10 @@ function Navbar() {
                                     {showMobileMenu && showDropdownPuntuacion && (
                                         <div id='SubMenu-Contenido'>
                                             <ul>
-                                                {subChecksPuntuacion.Proyectos && (<Link id='SubMenu-Contenido-Titulo' to="/PlaneacionPuntuacion" onClick={toggleMobileMenu}><li>Proyectos</li></Link>)}
-                                                {subChecksPuntuacion.Corporativo && (<Link id='SubMenu-Contenido-Titulo' to="/CorporativoPuntuacion" onClick={toggleMobileMenu}><li>Corporativo</li></Link>)}
-                                                {subChecksPuntuacion.Mantenimiento && (<Link id='SubMenu-Contenido-Titulo' to="/MantenimientoPuntuacion" onClick={toggleMobileMenu}><li>Mantenimiento</li></Link>)}
-                                                {subChecksPuntuacion.Reingenierias && (<Link id='SubMenu-Contenido-Titulo' to="/ReingenieriasPuntuacion" onClick={toggleMobileMenu}><li>Reingenierias</li></Link>)}
+                                                {subChecksPuntuacion.Proyectos && (<Link id='SubMenu-Contenido-Titulo' to="/PlaneacionPuntuacion" ><li>Proyectos</li></Link>)}
+                                                {subChecksPuntuacion.Corporativo && (<Link id='SubMenu-Contenido-Titulo' to="/CorporativoPuntuacion" ><li>Corporativo</li></Link>)}
+                                                {subChecksPuntuacion.Mantenimiento && (<Link id='SubMenu-Contenido-Titulo' to="/MantenimientoPuntuacion" ><li>Mantenimiento</li></Link>)}
+                                                {subChecksPuntuacion.Reingenierias && (<Link id='SubMenu-Contenido-Titulo' to="/ReingenieriasPuntuacion" ><li>Reingenierias</li></Link>)}
                                             </ul>
                                         </div>
                                     )}
@@ -743,7 +740,7 @@ function Navbar() {
                                     <div id='SubMenu-Titulo' onClick={() => {
                                         closeAllDropdowns();
                                         if (showMobileMenu === false) {
-                                            toggleMobileMenu()
+                                            setShowMobileMenu(true);
                                         }
                                         setShowDropdownMantenimiento(!showDropdownMantenimiento)
                                     }}>
@@ -764,16 +761,16 @@ function Navbar() {
                                     {showMobileMenu && showDropdownMantenimiento && (
                                         <div id='SubMenu-Contenido'>
                                             <ul>
-                                                {subChecksOperacion.CumplimientoSlaFo === true && (<Link id='SubMenu-Contenido-Titulo' to="/MantenimientoBacklogFO" onClick={toggleMobileMenu}><li>Cumplimiento SLA FO</li></Link>)}
-                                                {subChecksOperacion.CumplimientoSlaHfc === true && (<Link id='SubMenu-Contenido-Titulo' to="/MantenimientoBacklogHFC" onClick={toggleMobileMenu}><li>Cumplimiento SLA HFC</li></Link>)}
-                                                {subChecksOperacion.CorrectivoPreventivo === true && (<Link id='SubMenu-Contenido-Titulo' to="/MantenimientoPuntuacionTMRF" onClick={toggleMobileMenu}><li>Correctivo - Preventivo</li></Link>)}
-                                                {subChecksOperacion.RecursoOperaciones === true && (<Link id='SubMenu-Contenido-Titulo' to="/RecursoOperaciones" onClick={toggleMobileMenu}><li>Recurso Operaciones</li></Link>)}
-                                                {subChecksOperacion.SeguimientoMttoCentro === true && (<Link id='SubMenu-Contenido-Titulo' to="/Seguimiento" onClick={toggleMobileMenu}><li>Seguimiento MTTO Centro</li></Link>)}
-                                                {subChecksOperacion.SeguimientoOperacionesCentro === true && (<Link id='SubMenu-Contenido-Titulo' to="/SeguimientoOperacionesCentro" onClick={toggleMobileMenu}><li>Seguimiento Operaciones Centro</li></Link>)}
-                                                {subChecksOperacion.SeguimientoOperacionesNorte === true && (<Link id='SubMenu-Contenido-Titulo' to="/SeguimientoOperacionesNorte" onClick={toggleMobileMenu}><li>Seguimiento Operaciones Norte</li></Link>)}
-                                                {subChecksOperacion.SeguimientoSmu === true && (<Link id='SubMenu-Contenido-Titulo' to="/SeguimientoSMU" onClick={toggleMobileMenu}><li>Seguimiento SMU</li></Link>)}
-                                                {subChecksOperacion.TecnicoSmu === true && (<Link id='SubMenu-Contenido-Titulo' to="/SMU_Tecnico" onClick={toggleMobileMenu}><li>Técnico SMU</li></Link>)}
-                                                {subChecksOperacion.TorreDeControl === true && (<Link id='SubMenu-Contenido-Titulo' to="/TorreDeControl" onClick={toggleMobileMenu}><li>Torre de control</li></Link>)}
+                                                {subChecksOperacion.CumplimientoSlaFo === true && (<Link id='SubMenu-Contenido-Titulo' to="/MantenimientoBacklogFO" ><li>Cumplimiento SLA FO</li></Link>)}
+                                                {subChecksOperacion.CumplimientoSlaHfc === true && (<Link id='SubMenu-Contenido-Titulo' to="/MantenimientoBacklogHFC" ><li>Cumplimiento SLA HFC</li></Link>)}
+                                                {subChecksOperacion.CorrectivoPreventivo === true && (<Link id='SubMenu-Contenido-Titulo' to="/MantenimientoPuntuacionTMRF" ><li>Correctivo - Preventivo</li></Link>)}
+                                                {subChecksOperacion.RecursoOperaciones === true && (<Link id='SubMenu-Contenido-Titulo' to="/RecursoOperaciones" ><li>Recurso Operaciones</li></Link>)}
+                                                {subChecksOperacion.SeguimientoMttoCentro === true && (<Link id='SubMenu-Contenido-Titulo' to="/Seguimiento" ><li>Seguimiento MTTO Centro</li></Link>)}
+                                                {subChecksOperacion.SeguimientoOperacionesCentro === true && (<Link id='SubMenu-Contenido-Titulo' to="/SeguimientoOperacionesCentro" ><li>Seguimiento Operaciones Centro</li></Link>)}
+                                                {subChecksOperacion.SeguimientoOperacionesNorte === true && (<Link id='SubMenu-Contenido-Titulo' to="/SeguimientoOperacionesNorte" ><li>Seguimiento Operaciones Norte</li></Link>)}
+                                                {subChecksOperacion.SeguimientoSmu === true && (<Link id='SubMenu-Contenido-Titulo' to="/SeguimientoSMU" ><li>Seguimiento SMU</li></Link>)}
+                                                {subChecksOperacion.TecnicoSmu === true && (<Link id='SubMenu-Contenido-Titulo' to="/SMU_Tecnico" ><li>Técnico SMU</li></Link>)}
+                                                {subChecksOperacion.TorreDeControl === true && (<Link id='SubMenu-Contenido-Titulo' to="/TorreDeControl" ><li>Torre de control</li></Link>)}
                                             </ul>
                                         </div>
                                     )}
@@ -785,7 +782,7 @@ function Navbar() {
                                     <div id='SubMenu-Titulo' onClick={() => {
                                         closeAllDropdowns();
                                         if (showMobileMenu === false) {
-                                            toggleMobileMenu()
+                                            setShowMobileMenu(true);
                                         }
                                         setShowDropdownLogistica(!showDropdownLogistica)
                                     }}>
@@ -806,14 +803,14 @@ function Navbar() {
                                     {showMobileMenu && showDropdownLogistica && (
                                         <div id='SubMenu-Contenido'>
                                             <ul>
-                                                {subChecksLogistica.EquiposEnMovilesR2 === true && (<Link id='SubMenu-Contenido-Titulo' to="/EquiposMovilesR2" onClick={toggleMobileMenu}><li>Equipos en moviles R2</li></Link>)}
-                                                {subChecksLogistica.EquiposEnMovilesR4 === true && (<Link id='SubMenu-Contenido-Titulo' to="/EquiposMovilesR4" onClick={toggleMobileMenu}><li>Equipos en moviles R4</li></Link>)}
-                                                {subChecksLogistica.ConsumosOperaciones === true && (<Link id='SubMenu-Contenido-Titulo' to="/ConsumosOperaciones" onClick={toggleMobileMenu}><li>Consumos Operaciones</li></Link>)}
-                                                {subChecksLogistica.DesmonteMantenimiento === true && (<Link id='SubMenu-Contenido-Titulo' to="/DesmonteMantenimiento" onClick={toggleMobileMenu}><li>Desmonte Mantenimiento</li></Link>)}
-                                                {subChecksLogistica.SolicitudDeMaterial === true && (<Link id='SubMenu-Contenido-Titulo' to={{ pathname: "/Login", search: "?tipo=solicitudMaterial" }} onClick={toggleMobileMenu}><li>Solicitud de Material</li></Link>)}
-                                                {subChecksLogistica.ReporteMaterialFerretero === true && (<Link id='SubMenu-Contenido-Titulo' to={{ pathname: "/Login", search: "?tipo=reporteMaterialFerretero" }} onClick={toggleMobileMenu}><li>Reporte Material Ferretero</li></Link>)}
-                                                {subChecksLogistica.InventarioMaterial === true && (<Link id='SubMenu-Contenido-Titulo' to={{ pathname: "/Login", search: "?tipo=inventarioMaterial" }} onClick={toggleMobileMenu}><li>Inventario Material</li></Link>)}
-                                                {subChecksLogistica.EstadoProyectosR4 === true && (<Link id='SubMenu-Contenido-Titulo' to="/EstadoProyectosR4" onClick={toggleMobileMenu}><li>Estado Proyectos R4</li></Link>)}
+                                                {subChecksLogistica.EquiposEnMovilesR2 === true && (<Link id='SubMenu-Contenido-Titulo' to="/EquiposMovilesR2" ><li>Equipos en moviles R2</li></Link>)}
+                                                {subChecksLogistica.EquiposEnMovilesR4 === true && (<Link id='SubMenu-Contenido-Titulo' to="/EquiposMovilesR4" ><li>Equipos en moviles R4</li></Link>)}
+                                                {subChecksLogistica.ConsumosOperaciones === true && (<Link id='SubMenu-Contenido-Titulo' to="/ConsumosOperaciones" ><li>Consumos Operaciones</li></Link>)}
+                                                {subChecksLogistica.DesmonteMantenimiento === true && (<Link id='SubMenu-Contenido-Titulo' to="/DesmonteMantenimiento" ><li>Desmonte Mantenimiento</li></Link>)}
+                                                {subChecksLogistica.SolicitudDeMaterial === true && (<Link id='SubMenu-Contenido-Titulo' to={{ pathname: "/Login", search: "?tipo=solicitudMaterial" }} ><li>Solicitud de Material</li></Link>)}
+                                                {subChecksLogistica.ReporteMaterialFerretero === true && (<Link id='SubMenu-Contenido-Titulo' to={{ pathname: "/Login", search: "?tipo=reporteMaterialFerretero" }} ><li>Reporte Material Ferretero</li></Link>)}
+                                                {subChecksLogistica.InventarioMaterial === true && (<Link id='SubMenu-Contenido-Titulo' to={{ pathname: "/Login", search: "?tipo=inventarioMaterial" }} ><li>Inventario Material</li></Link>)}
+                                                {subChecksLogistica.EstadoProyectosR4 === true && (<Link id='SubMenu-Contenido-Titulo' to="/EstadoProyectosR4" ><li>Estado Proyectos R4</li></Link>)}
                                             </ul>
                                         </div>
                                     )}
@@ -825,7 +822,7 @@ function Navbar() {
                                     <div id='SubMenu-Titulo' onClick={() => {
                                         closeAllDropdowns();
                                         if (showMobileMenu === false) {
-                                            toggleMobileMenu()
+                                            setShowMobileMenu(true);
                                         }
                                         setShowDropdownDireccion(!showDropdownDireccion)
                                     }}>
@@ -846,10 +843,10 @@ function Navbar() {
                                     {showMobileMenu && showDropdownDireccion && (
                                         <div id='SubMenu-Contenido'>
                                             <ul>
-                                                {subChecksDireccion.Penalizaciones === true && (<Link id='SubMenu-Contenido-Titulo' to="/Penalizaciones" onClick={toggleMobileMenu}><li>Penalizaciones</li></Link>)}
-                                                {subChecksDireccion.CentroDeCostos === true && (<Link id='SubMenu-Contenido-Titulo' to="/Centro_de_costos" onClick={toggleMobileMenu}><li>Centros de costos</li></Link>)}
-                                                {subChecksDireccion.ComposicionMoviles === true && (<Link id='SubMenu-Contenido-Titulo' to="/ComposicionMoviles" onClick={toggleMobileMenu}><li>Composición móviles</li></Link>)}
-                                                {subChecksDireccion.Compras === true && (<Link id='SubMenu-Contenido-Titulo' to="/Compras" onClick={toggleMobileMenu}><li>Compras</li></Link>)}
+                                                {subChecksDireccion.Penalizaciones === true && (<Link id='SubMenu-Contenido-Titulo' to="/Penalizaciones" ><li>Penalizaciones</li></Link>)}
+                                                {subChecksDireccion.CentroDeCostos === true && (<Link id='SubMenu-Contenido-Titulo' to="/Centro_de_costos" ><li>Centros de costos</li></Link>)}
+                                                {subChecksDireccion.ComposicionMoviles === true && (<Link id='SubMenu-Contenido-Titulo' to="/ComposicionMoviles" ><li>Composición móviles</li></Link>)}
+                                                {subChecksDireccion.Compras === true && (<Link id='SubMenu-Contenido-Titulo' to="/Compras" ><li>Compras</li></Link>)}
                                             </ul>
                                         </div>
                                     )}
@@ -861,7 +858,7 @@ function Navbar() {
                                     <div id='SubMenu-Titulo' onClick={() => {
                                         closeAllDropdowns();
                                         if (showMobileMenu === false) {
-                                            toggleMobileMenu()
+                                            setShowMobileMenu(true);
                                         }
                                         setShowDropdownSSTA(!showDropdownSSTA)
                                     }}>
@@ -882,9 +879,9 @@ function Navbar() {
                                     {showMobileMenu && showDropdownSSTA && (
                                         <div id='SubMenu-Contenido'>
                                             <ul>
-                                                {subChecksSsta.Ssta === true && (<Link id='SubMenu-Contenido-Titulo' to="/SSTA" onClick={toggleMobileMenu}><li>SSTA</li></Link>)}
-                                                {subChecksSsta.CursoDeAlturas === true && (<Link id='SubMenu-Contenido-Titulo' to="/CursosDeAlturas" onClick={toggleMobileMenu}><li>Indicadores Capacitación</li></Link>)}
-                                                {subChecksSsta.EntregasPendientesDotacion === true && (<Link id='SubMenu-Contenido-Titulo' to="/EntregasPendientesDotacion" onClick={toggleMobileMenu}><li>Entregas Pendientes Dotación</li></Link>)}
+                                                {subChecksSsta.Ssta === true && (<Link id='SubMenu-Contenido-Titulo' to="/SSTA" ><li>SSTA</li></Link>)}
+                                                {subChecksSsta.CursoDeAlturas === true && (<Link id='SubMenu-Contenido-Titulo' to="/CursosDeAlturas" ><li>Indicadores Capacitación</li></Link>)}
+                                                {subChecksSsta.EntregasPendientesDotacion === true && (<Link id='SubMenu-Contenido-Titulo' to="/EntregasPendientesDotacion" ><li>Entregas Pendientes Dotación</li></Link>)}
                                             </ul>
                                         </div>
                                     )}
@@ -896,7 +893,7 @@ function Navbar() {
                                     <div id='SubMenu-Titulo' onClick={() => {
                                         closeAllDropdowns();
                                         if (showMobileMenu === false) {
-                                            toggleMobileMenu()
+                                            setShowMobileMenu(true);
                                         }
                                         setShowDropdownParqueAutomotor(!showDropdownParqueAutomotor)
                                     }}>
@@ -917,7 +914,7 @@ function Navbar() {
                                     {showMobileMenu && showDropdownParqueAutomotor && (
                                         <div id='SubMenu-Contenido'>
                                             <ul>
-                                                {subChecksParqueAutomotor.Moviles === true && (<Link id='SubMenu-Contenido-Titulo' to="/Moviles" onClick={toggleMobileMenu}><li>Moviles</li></Link>)}
+                                                {subChecksParqueAutomotor.Moviles === true && (<Link id='SubMenu-Contenido-Titulo' to="/Moviles" ><li>Moviles</li></Link>)}
                                             </ul>
                                         </div>
                                     )}
@@ -929,7 +926,7 @@ function Navbar() {
                                     <div id='SubMenu-Titulo' onClick={() => {
                                         closeAllDropdowns();
                                         if (showMobileMenu === false) {
-                                            toggleMobileMenu()
+                                            setShowMobileMenu(true);
                                         }
                                         setShowDropdownGestionHumana(!showDropdownGestionHumana)
                                     }}>
@@ -950,8 +947,8 @@ function Navbar() {
                                     {showMobileMenu && showDropdownGestionHumana && (
                                         <div id='SubMenu-Contenido'>
                                             <ul>
-                                                {subChecksGestionHumana.Chatbot === true && (<Link id='SubMenu-Contenido-Titulo' to={{ pathname: "/Login", search: "?tipo=ChatBot" }} onClick={toggleMobileMenu}><li>ChatBot</li></Link>)}
-                                                {subChecksGestionHumana.Carnetizacion === true && (<Link id='SubMenu-Contenido-Titulo' to={{ pathname: "/Login", search: "?tipo=Carnetizacion" }} onClick={toggleMobileMenu}><li>Carnetizacion</li></Link>)}
+                                                {subChecksGestionHumana.Chatbot === true && (<Link id='SubMenu-Contenido-Titulo' to={{ pathname: "/Login", search: "?tipo=ChatBot" }} ><li>ChatBot</li></Link>)}
+                                                {subChecksGestionHumana.Carnetizacion === true && (<Link id='SubMenu-Contenido-Titulo' to={{ pathname: "/Login", search: "?tipo=Carnetizacion" }} ><li>Carnetizacion</li></Link>)}
                                             </ul>
                                         </div>
                                     )}
@@ -961,7 +958,7 @@ function Navbar() {
 
                         {showMobileMenu && (
                             <div className='Version'>
-                                <p>v1.65</p>
+                                <p>v1.66</p>
                             </div>
                         )}
                     </div>
@@ -969,7 +966,7 @@ function Navbar() {
                     <div id="Contenido">
                         <Outlet />
                     </div>
-                </>
+                </div>
             )}
         </div>
     );
