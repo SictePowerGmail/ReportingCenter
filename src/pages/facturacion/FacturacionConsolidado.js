@@ -7,7 +7,7 @@ function FacturacionConsolidado() {
     <div className='powerbi'>
       <iframe
         title="Consolidado facturacion"
-        src="https://app.powerbi.com/reportEmbed?reportId=dae58578-0860-4693-8dd2-346071b5fc2d&autoAuth=true&ctid=e0bfe90d-20e0-410b-b6f1-429b043d3608"
+        src="https://app.powerbi.com/view?r=eyJrIjoiMjNkODVlMjEtODc3YS00ZjA2LWI0NmEtNmFjZTgyMzhhMzZkIiwidCI6ImUwYmZlOTBkLTIwZTAtNDEwYi1iNmYxLTQyOWIwNDNkMzYwOCJ9"
       ></iframe>
     </div>
   );

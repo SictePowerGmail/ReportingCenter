@@ -7,7 +7,7 @@ function OperacionesFacturacion() {
     <div className='powerbi'>
       <iframe
         title="Facturación operaciones"
-        src="https://app.powerbi.com/reportEmbed?reportId=18dca057-81ed-47ba-9cbc-fdc150f22621&autoAuth=true&ctid=e0bfe90d-20e0-410b-b6f1-429b043d3608"
+        src="https://app.powerbi.com/view?r=eyJrIjoiZDBiMTRiZDgtZTA3Mi00MzIxLWFhYzYtNGI1MzE2NGQ1MWMxIiwidCI6ImUwYmZlOTBkLTIwZTAtNDEwYi1iNmYxLTQyOWIwNDNkMzYwOCJ9"
       ></iframe>
     </div>
   );

@@ -7,7 +7,7 @@ function MantenimientoFacturacion() {
     <div className='powerbi'>
       <iframe
         title="Mantenimiento facturacion"
-        src="https://app.powerbi.com/reportEmbed?reportId=fcfbec1b-da73-491c-aabc-23045ec0a975&autoAuth=true&ctid=e0bfe90d-20e0-410b-b6f1-429b043d3608"
+        src="https://app.powerbi.com/view?r=eyJrIjoiMmQ5YzIwNzktZTk2OS00YjkxLWEwYjctMzU4MjA2ZGIwYzJkIiwidCI6ImUwYmZlOTBkLTIwZTAtNDEwYi1iNmYxLTQyOWIwNDNkMzYwOCJ9"
       ></iframe>
     </div>
   );

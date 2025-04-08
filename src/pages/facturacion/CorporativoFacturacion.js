@@ -7,7 +7,7 @@ function CorporativoFacturacion() {
     <div className='powerbi'>
       <iframe
         title="Corporativo facturacion"
-        src="https://app.powerbi.com/reportEmbed?reportId=a8b6ab9c-8bec-4dda-9e35-d077c9863beb&autoAuth=true&ctid=e0bfe90d-20e0-410b-b6f1-429b043d3608"
+        src="https://app.powerbi.com/view?r=eyJrIjoiZDQwOWM2OTMtZGE4NC00ZjMwLWIxZTktMjg2NTY2NzVhNmE4IiwidCI6ImUwYmZlOTBkLTIwZTAtNDEwYi1iNmYxLTQyOWIwNDNkMzYwOCJ9"
       ></iframe>
     </div>
   );

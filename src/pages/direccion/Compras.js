@@ -7,7 +7,7 @@ function Compras() {
         <div className='powerbi'>
             <iframe
                 title="Compras"
-                src="https://app.powerbi.com/reportEmbed?reportId=9a12192e-ddee-47e8-a732-e5b404a1a41a&autoAuth=true&ctid=e0bfe90d-20e0-410b-b6f1-429b043d3608"
+                src="https://app.powerbi.com/view?r=eyJrIjoiMDQ4MWUwMTAtMmI4NS00NTdmLTljZTQtZTE2MGVjYmIyMjljIiwidCI6ImUwYmZlOTBkLTIwZTAtNDEwYi1iNmYxLTQyOWIwNDNkMzYwOCJ9"
             ></iframe>
         </div>
     );
