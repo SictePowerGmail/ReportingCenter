@@ -8,6 +8,7 @@ import Cookies from 'js-cookie';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import { calculoMaterial } from './calculoMaterial';
+import axios from 'axios';
 
 const MaterialPrincipalBodega = ({ dataKgprod }) => {
     const [loading, setLoading] = useState(true);
@@ -24,7 +25,7 @@ const MaterialPrincipalBodega = ({ dataKgprod }) => {
             "Bogota San Cipriano Corporativo",
             "Bogota San Cipriano Red Externa"
         ];
-        
+
         const resultados = [];
 
         for (const ciudad of ciudades) {
@@ -35,15 +36,18 @@ const MaterialPrincipalBodega = ({ dataKgprod }) => {
         setResultadoMaterialDisponible(resultados);
 
         const datosMaterialDisponible = resultados
-            .map(({ bodega, codigo, descrip, unimed, cantidadDisponible, cantidadSolicitada, cantidadPendienteDespacho, indComprado2 }) => ({
-                Bodega: bodega,
-                Codigo: codigo,
-                Descripcion: descrip,
-                Unidad: unimed,
-                CantidadDisponible: cantidadDisponible,
-                CantidadReservada: cantidadSolicitada + cantidadPendienteDespacho,
-                IndComprado: indComprado2
-            }))
+            .map(({ bodega, codigo, descrip, unimed, cantidadDisponible, cantidadSolicitada, cantidadPendienteDespacho, indComprado2 }) => {
+
+                return {
+                    Bodega: bodega,
+                    Codigo: codigo,
+                    Descripcion: descrip,
+                    Unidad: unimed,
+                    IndComprado: indComprado2,
+                    CantidadDisponible: cantidadDisponible,
+                    CantidadReservada: cantidadSolicitada + cantidadPendienteDespacho
+                };
+            })
             .filter((value, index, self) =>
                 index === self.findIndex((t) => (
                     t.Bodega === value.Bodega && t.Codigo === value.Codigo

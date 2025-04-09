@@ -298,7 +298,7 @@ body,
     .MainLayout {
         display: flex;
         height: calc(100vh - 40px);
-        width: 100%;
+        width: 100% !important;
 
         #MenuContainer.abierto {
             height: calc(100vh - 40px);
