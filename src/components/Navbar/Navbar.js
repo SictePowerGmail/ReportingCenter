@@ -203,7 +203,7 @@ function Navbar() {
     const cargarDatosPagesUser = async (usuario) => {
         try {
             setLoading(true);
-            const responsePagesUser = await axios.get(`${process.env.REACT_APP_API_URL}/user/pagesUser`);
+            const responsePagesUser = await axios.get(`${process.env.REACT_APP_API_URL}/usuarios/pagesUser`);
             const data = responsePagesUser.data;
             const cedula = Cookies.get('userCedula');
 

@@ -71,7 +71,7 @@ const Login = () => {
         setError('');
 
         try {
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/user/login/login`, {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/usuarios/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
