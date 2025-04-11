@@ -79,7 +79,7 @@ function ChatBot() {
 
     const cargarDatos = async () => {
         try {
-            const responseChatbot = await axios.get(`${process.env.REACT_APP_API_URL}/recursosHumanos/RegistrosChatbot`);
+            const responseChatbot = await axios.get(`${process.env.REACT_APP_API_URL}/chatbot/registros`);
 
             const sortedData = responseChatbot.data.sort((a, b) => b.id - a.id);
             setDataAll(sortedData)
@@ -430,7 +430,7 @@ function ChatBot() {
         };
 
         try {
-            const response = await fetch("https://sicte-sas-capacidades-backend.onrender.com/recursosHumanos/actualizarDatosChatBot", {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/chatbot/actualizarDatos`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -499,7 +499,7 @@ function ChatBot() {
 
         try {
             const response = await axios.post(
-                "https://sicte-sas-capacidades-backend.onrender.com/recursosHumanos/registrarDatosChatBot",
+                `${process.env.REACT_APP_API_URL}/chatbot/registrarDatos`,
                 datosAEnviar,
                 {
                     headers: { "Content-Type": "application/json" }
