@@ -73,7 +73,7 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
 
         for (const pdfNombre of pdfs) {
             try {
-                const response = await axios.get(`${process.env.REACT_APP_API_URL}/solicitudMaterial/ObtenerPDF`, {
+                const response = await axios.get(`${process.env.REACT_APP_API_URL}/solicitudMaterial/obtenerPDF`, {
                     params: { "fileName": pdfNombre },
                     responseType: 'blob',
                 });
@@ -118,7 +118,7 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
     const fetchArchivo = async (fileName, tipo) => {
         try {
             if (tipo === 'diseño') {
-                const response = await axios.get(`${process.env.REACT_APP_API_URL}/solicitudMaterial/ObtenerDiseño`, {
+                const response = await axios.get(`${process.env.REACT_APP_API_URL}/solicitudMaterial/obtenerDiseno`, {
                     params: { fileName },
                     responseType: 'blob'
                 });
@@ -126,7 +126,7 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
                 const url = URL.createObjectURL(response.data);
                 setDiseñoFile(url);
             } else if (tipo === 'kmz') {
-                const response = await axios.get(`${process.env.REACT_APP_API_URL}/solicitudMaterial/ObtenerKmz`, {
+                const response = await axios.get(`${process.env.REACT_APP_API_URL}/solicitudMaterial/obtenerKmz`, {
                     params: { fileName },
                     responseType: 'blob'
                 });
@@ -410,10 +410,10 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
     const manejarCierreProyecto = async () => {
         setLoading(true);
         const ids = fila.map(item => item.id);
-        const pdfNombre = "Cerrado"
+        const estadoProyecto = "Cerrado"
 
         try {
-            await axios.post(`${process.env.REACT_APP_API_URL}/solicitudMaterial/actualizarEstadoCierreProyecto`, { ids, pdfNombre });
+            await axios.post(`${process.env.REACT_APP_API_URL}/solicitudMaterial/actualizarEstadoCierreProyecto`, { ids, estadoProyecto });
             console.log('Solicitud enviada correctamente cerrar proyecto');
             setProyectoCerradoEstado('Cerrado');
         } catch (error) {

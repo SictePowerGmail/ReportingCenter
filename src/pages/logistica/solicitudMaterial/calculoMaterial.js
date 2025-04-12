@@ -23,13 +23,13 @@ export const calculoMaterial = async (ciudadElgida, dataKgprod) => {
             ciudad = []
         }
 
-        const datosFiltradosKgprod = ciudad.length ? dataKgprod.filter(item => ciudad.includes(item.bodega)) : dataKgprod;
+        const datosFiltradosKgprod = ciudad.length ? dataKgprod.filter(item => ciudad.includes(item.Bodega)) : dataKgprod;
 
         if (cacheRegistrosSolicitudMaterial.data) {
             console.log("Usando datos en caché");
         } else {
             console.log("Haciendo petición a la API");
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/solicitudMaterial/RegistrosSolicitudMaterial`);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/solicitudMaterial/registros`);
             cacheRegistrosSolicitudMaterial.data = response.data;
         }
 
@@ -78,7 +78,7 @@ export const calculoMaterial = async (ciudadElgida, dataKgprod) => {
             console.log("Usando datos en caché");
         } else {
             console.log("Haciendo petición a la API");
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/solicitudMaterial/RegistrosEntregadosSolicitudMaterial`);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/solicitudMaterial/registrosEntregados`);
             cacheRegistrosEntregadoSolicitudMaterial.data = response.data;
         }
 
@@ -120,7 +120,6 @@ export const calculoMaterial = async (ciudadElgida, dataKgprod) => {
                 cantidadPendienteDespacho
             };
         });
-
 
         return datosRestados
     } catch (error) {

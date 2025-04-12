@@ -42,7 +42,7 @@ const MaterialPrincipal = () => {
     const fetchDataKgprod = async () => {
         try {
             if (!dataKgprod) {
-                const response = await axios.get(`${process.env.REACT_APP_API_URL}/bodega/kgprod`);
+                const response = await axios.get(`${process.env.REACT_APP_API_URL}/solicitudMaterial/kgprod`);
                 setDataKgprod(response.data);
                 return response.data;
             }
@@ -68,8 +68,8 @@ const MaterialPrincipal = () => {
                 "Bogota San Cipriano Red Externa": ['KGPROD_RED_BOG']
             };
 
-            const responseRegistrosSolicitudMaterial = await axios.get(`${process.env.REACT_APP_API_URL}/solicitudMaterial/RegistrosSolicitudMaterial`);
-            const responseRegistrosEntregadoSolicitudMaterial = await axios.get(`${process.env.REACT_APP_API_URL}/solicitudMaterial/RegistrosEntregadosSolicitudMaterial`);
+            const responseRegistrosSolicitudMaterial = await axios.get(`${process.env.REACT_APP_API_URL}/solicitudMaterial/registros`);
+            const responseRegistrosEntregadoSolicitudMaterial = await axios.get(`${process.env.REACT_APP_API_URL}/solicitudMaterial/registrosEntregados`);
 
             for (const [ciudadElgida, bodega] of Object.entries(ciudades)) {
 

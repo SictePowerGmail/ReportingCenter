@@ -261,7 +261,7 @@ const MaterialAgregar = () => {
                 },
             });
             
-            await axios.post(`${process.env.REACT_APP_API_URL}/solicitudMaterial/cargarDiseño`, formDataDiseño, {
+            await axios.post(`${process.env.REACT_APP_API_URL}/solicitudMaterial/cargarDiseno`, formDataDiseño, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -283,8 +283,8 @@ const MaterialAgregar = () => {
 
     const calculo = async () => {
         try {
-            const responseKgprod = await axios.get(`${process.env.REACT_APP_API_URL}/bodega/kgprod`);
-            const responseRegistrosSolicitudMaterial = await axios.get(`${process.env.REACT_APP_API_URL}/solicitudMaterial/RegistrosSolicitudMaterial`);
+            const responseKgprod = await axios.get(`${process.env.REACT_APP_API_URL}/solicitudMaterial/kgprod`);
+            const responseRegistrosSolicitudMaterial = await axios.get(`${process.env.REACT_APP_API_URL}/solicitudMaterial/registros`);
             setRegistrosSolicitudMaterial(responseRegistrosSolicitudMaterial.data)
 
             const resultado = await calculoMaterial(ciudadElgida, responseKgprod.data);
@@ -602,11 +602,11 @@ const MaterialAgregar = () => {
                                                             let datosFiltradosCodigosSap;
 
                                                             if (propiedad === "Sicte") {
-                                                                datosFiltradosDescripciones = dataKgprod.filter(item => item.indComprado2 === "S");
-                                                                datosFiltradosCodigosSap = dataKgprod.filter(item => item.indComprado2 === "S");
+                                                                datosFiltradosDescripciones = dataKgprod.filter(item => item.ind_comprado_2 === "S");
+                                                                datosFiltradosCodigosSap = dataKgprod.filter(item => item.ind_comprado_2 === "S");
                                                             } else if (propiedad === "Claro") {
-                                                                datosFiltradosDescripciones = dataKgprod.filter(item => item.indComprado2 === "N");
-                                                                datosFiltradosCodigosSap = dataKgprod.filter(item => item.indComprado2 === "N");
+                                                                datosFiltradosDescripciones = dataKgprod.filter(item => item.ind_comprado_2 === "N");
+                                                                datosFiltradosCodigosSap = dataKgprod.filter(item => item.ind_comprado_2 === "N");
                                                             } else {
                                                                 datosFiltradosDescripciones = dataKgprod;
                                                                 datosFiltradosCodigosSap = dataKgprod;
@@ -706,7 +706,7 @@ const MaterialAgregar = () => {
                                                                             propiedad = "N";
                                                                         }
 
-                                                                        const elementoEncontrado = dataKgprod.find(item => item.codigo === sugerencia && item.indComprado2 === propiedad);
+                                                                        const elementoEncontrado = dataKgprod.find(item => item.codigo === sugerencia && item.ind_comprado_2 === propiedad);
                                                                         const nuevaUnidadMedida = [...unidadMedida];
                                                                         nuevaUnidadMedida[index] = elementoEncontrado.unimed;
                                                                         setUnidadMedida(nuevaUnidadMedida);
@@ -787,7 +787,7 @@ const MaterialAgregar = () => {
                                                                             propiedad = "N";
                                                                         }
 
-                                                                        const elementoEncontrado = dataKgprod.find(item => item.descrip === sugerencia && item.indComprado2 === propiedad);
+                                                                        const elementoEncontrado = dataKgprod.find(item => item.descrip === sugerencia && item.ind_comprado_2 === propiedad);
                                                                         const nuevaUnidadMedida = [...unidadMedida];
                                                                         nuevaUnidadMedida[index] = elementoEncontrado.unimed;
                                                                         setUnidadMedida(nuevaUnidadMedida);

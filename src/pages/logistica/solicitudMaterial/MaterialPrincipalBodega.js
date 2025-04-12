@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './materialPrincipal.css'
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ThreeDots } from 'react-loader-spinner';
 import Cookies from 'js-cookie';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import { calculoMaterial } from './calculoMaterial';
-import axios from 'axios';
 
 const MaterialPrincipalBodega = ({ dataKgprod }) => {
     const [loading, setLoading] = useState(true);
@@ -36,14 +35,14 @@ const MaterialPrincipalBodega = ({ dataKgprod }) => {
         setResultadoMaterialDisponible(resultados);
 
         const datosMaterialDisponible = resultados
-            .map(({ bodega, codigo, descrip, unimed, cantidadDisponible, cantidadSolicitada, cantidadPendienteDespacho, indComprado2 }) => {
+            .map(({ Bodega, codigo, descrip, unimed, cantidadDisponible, cantidadSolicitada, cantidadPendienteDespacho, ind_comprado_2 }) => {
 
                 return {
-                    Bodega: bodega,
+                    Bodega: Bodega,
                     Codigo: codigo,
                     Descripcion: descrip,
                     Unidad: unimed,
-                    IndComprado: indComprado2,
+                    IndComprado: ind_comprado_2,
                     CantidadDisponible: cantidadDisponible,
                     CantidadReservada: cantidadSolicitada + cantidadPendienteDespacho
                 };

@@ -21,7 +21,7 @@ function ControlUsuarios() {
 
     const cargarDatos = async () => {
         try {
-            const responseUser = await axios.get(`${process.env.REACT_APP_API_URL}/user`);
+            const responseUser = await axios.get(`${process.env.REACT_APP_API_URL}/usuarios/users`);
 
             const ajustandoRol = responseUser.data
                 .map(usuario => ({
@@ -344,7 +344,7 @@ function ControlUsuarios() {
             };
 
             const response = await axios.put(
-                `${process.env.REACT_APP_API_URL}/user/${usuarioActualizado.id}`,
+                `${process.env.REACT_APP_API_URL}/usuarios/users/${usuarioActualizado.id}`,
                 usuarioActualizado,
                 { headers: { "Content-Type": "application/json" } }
             );
@@ -378,7 +378,7 @@ function ControlUsuarios() {
         try {
             setLoading(true);
             
-            const responsePagesUser = await axios.get(`${process.env.REACT_APP_API_URL}/user/pagesUser`);
+            const responsePagesUser = await axios.get(`${process.env.REACT_APP_API_URL}/usuarios/pagesUser`);
             const data = responsePagesUser.data;
             const usuarioEncontrado = data.find(user => user.cedula === usuario.cedula);
             setPageUsuarioSeleccionado(usuarioEncontrado);
@@ -656,7 +656,7 @@ function ControlUsuarios() {
             };
             
             const response = await axios.put(
-                `${process.env.REACT_APP_API_URL}/user/pagesUser/${pageUsuarioSeleccionado.id}`,
+                `${process.env.REACT_APP_API_URL}/usuarios/pagesUser/${pageUsuarioSeleccionado.id}`,
                 body,
                 { headers: { "Content-Type": "application/json" } }
             );

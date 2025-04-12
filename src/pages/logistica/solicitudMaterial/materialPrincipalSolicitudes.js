@@ -20,7 +20,7 @@ const MaterialPrincipalSolicitudes = () => {
     const nombreUsuario = Cookies.get('userNombre');
     
     const cargarDatosRegistrosSolicitudMaterial = () => {
-        axios.get(`${process.env.REACT_APP_API_URL}/solicitudMaterial/RegistrosSolicitudMaterial`)
+        axios.get(`${process.env.REACT_APP_API_URL}/solicitudMaterial/registros`)
             .then(response => {
                 let datos = response.data;
 

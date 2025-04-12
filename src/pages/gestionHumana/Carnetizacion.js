@@ -55,7 +55,7 @@ function Carnetizacion() {
 
     const cargarDatos = async () => {
         try {
-            const responseChatbot = await axios.get(`${process.env.REACT_APP_API_URL}/carnetizacion/Registros`);
+            const responseChatbot = await axios.get(`${process.env.REACT_APP_API_URL}/carnetizacion/registros`);
 
             const sortedData = responseChatbot.data.sort((a, b) => b.id - a.id);
             setDataAll(sortedData)
@@ -208,30 +208,13 @@ function Carnetizacion() {
 
     const enviarDatosEditados = async () => {
 
-        if (!editedRow.fechaHora || !editedRow.estadoFinal) {
-            toast.error("Debe completar la fecha y el estado final.");
-            return;
-        }
-
-        const validarFormatoFechaHora = (fechaHora) => {
-            const regex = /^(lunes|martes|miércoles|jueves|viernes|sábado|domingo), \d{1,2} de (enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre) de \d{4} a las \d{1,2}:\d{2} (am|pm)$/i;
-            return regex.test(fechaHora);
-        };
-
-        if (!validarFormatoFechaHora(editedRow.fechaHora)) {
-            toast.error("El formato de la fecha no es válido.");
-            return;
-        }
-
         const datosAEnviar = {
             id: editedRow.id,
-            fechaHora: editedRow.fechaHora,
-            estadoFinal: editedRow.estadoFinal,
-            observaciones: editedRow.observaciones || ""
+            estado: editedRow.estado
         };
 
         try {
-            const response = await fetch("https://sicte-sas-capacidades-backend.onrender.com/recursosHumanos/actualizarDatosChatBot", {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/carnetizacion/actualizarDatos`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -353,7 +336,7 @@ function Carnetizacion() {
 
     const fetchImage = async (imageName) => {
         try {
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/carnetizacion/ObtenerImagen?imageName=${encodeURIComponent(imageName)}`);
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/carnetizacion/obtenerImagen?imageName=${encodeURIComponent(imageName)}`);
 
             if (!response.ok) {
                 console.error(`Error fetching image: ${response.status} ${response.statusText}`);
@@ -409,27 +392,33 @@ function Carnetizacion() {
                             <table className="table table-bordered">
                                 <thead >
                                     <tr>
-                                        {Object.keys(data[0]).map((key) => (
-                                            <th key={key} onClick={() => handleSort(key)}>
-                                                {formatHeader(key)} {sortConfig.key === key ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
-                                                <input
-                                                    type="text"
-                                                    className="form-control"
-                                                    onChange={(e) => handleFilterChange(key, e.target.value)}
-                                                    onClick={(e) => e.stopPropagation()}
-                                                />
-                                            </th>
-                                        ))}
+                                        {data.length > 0 ? (
+                                            Object.keys(data[0]).map((key) => (
+                                                <th key={key} onClick={() => handleSort(key)}>
+                                                    {formatHeader(key)} {sortConfig.key === key ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
+                                                    <input
+                                                        type="text"
+                                                        className="form-control"
+                                                        onChange={(e) => handleFilterChange(key, e.target.value)}
+                                                        onClick={(e) => e.stopPropagation()}
+                                                    />
+                                                </th>
+                                            ))
+                                        ) : (
+                                            <th colSpan="100%" style={{ textAlign: "center" }}>No hay datos disponibles</th>
+                                        )}
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {sortedData.map((row) => (
-                                        <tr key={row.id} onClick={() => handleRowClick(row)}>
-                                            {Object.values(row).map((cell, i) => (
-                                                <td key={i} >{cell || "-"}</td>
-                                            ))}
-                                        </tr>
-                                    ))}
+                                    {sortedData.length > 0 && (
+                                        sortedData.map((row) => (
+                                            <tr key={row.id} onClick={() => handleRowClick(row)}>
+                                                {Object.values(row).map((cell, i) => (
+                                                    <td key={i} >{cell || "-"}</td>
+                                                ))}
+                                            </tr>
+                                        ))
+                                    )}
                                 </tbody>
                             </table>
                         </div>
@@ -453,7 +442,7 @@ function Carnetizacion() {
                                     ) : (
                                         <>
                                             <div className="detalle-fijo">
-                                                <h4>Detalle</h4>
+                                                <h4><strong>Detalle</strong></h4>
                                             </div>
                                             <div className="modal-form">
                                                 {Object.entries(selectedRowEdit)
@@ -461,36 +450,7 @@ function Carnetizacion() {
                                                     .map(([key, value], index, array) => (
                                                         <div key={key} className="form-group">
                                                             <label>{formatHeader(key)}:</label>
-                                                            {key === "estadoFinal" ? (
-                                                                <select
-                                                                    className="form-control"
-                                                                    value={editedRow[key] || ""}
-                                                                    onChange={(e) => handleInputChangeEdit(key, e.target.value)}
-                                                                >
-                                                                    <option value="">Seleccionar...</option>
-                                                                    <option value="Pendiente">Pendiente</option>
-                                                                    <option value="No Continua">No Continua</option>
-                                                                    <option value="Confirmado">Confirmado</option>
-                                                                </select>
-                                                            ) : key === "fechaHora" ? (
-                                                                <input
-                                                                    type="datetime-local"
-                                                                    className="form-control"
-                                                                    value={formatFechaHora(editedRow[key] || "")}
-                                                                    onChange={(e) => {
-                                                                        const fechaIngresada = new Date(e.target.value);
-                                                                        const fechaActual = new Date();
-                                                                        fechaActual.setHours(0, 0, 0, 0);
-
-                                                                        if (fechaIngresada >= fechaActual) {
-                                                                            handleInputChangeEdit(key, formatFechaHoraSalida(e.target.value));
-                                                                        } else {
-                                                                            toast.error("No puedes seleccionar una fecha anterior a hoy.");
-                                                                        }
-                                                                    }}
-                                                                    min={new Date().toISOString().slice(0, 16)}
-                                                                />
-                                                            ) : key === "foto" ? (
+                                                            {key === "foto" ? (
                                                                 <>
                                                                     <input
                                                                         type="text"
@@ -620,7 +580,7 @@ function Carnetizacion() {
                                                                     className="form-control"
                                                                     value={formData[key] || ""}
                                                                     onChange={(e) => handleInputChangeCargar(key, e.target.value)}
-                                                                    disabled = {!formData.tipoCarnet}
+                                                                    disabled={!formData.tipoCarnet}
                                                                 >
                                                                     <option value="">Seleccionar...</option>
                                                                     {(() => {
