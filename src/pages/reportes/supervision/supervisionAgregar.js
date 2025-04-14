@@ -260,7 +260,7 @@ const SupervisionAgregar = () => {
                 },
             });
             
-            await axios.post(`${process.env.REACT_APP_API_URL}/supervision/cargarDatos`, {
+            await axios.post(`${process.env.REACT_APP_API_URL}/supervision/crearRegistro`, {
                 fecha: formattedDate2,
                 nombre: nombreUsuario,
                 placa: placa,
@@ -332,7 +332,7 @@ const SupervisionAgregar = () => {
     };
     
     const cargarDatosPlanta = () => {
-        fetch(`${process.env.REACT_APP_API_URL}/capacidad/PlantaEnLineaCedulaNombre`)
+        fetch(`${process.env.REACT_APP_API_URL}/supervision/plantaEnLineaCedulaNombre`)
             .then(response => response.json())
             .then(data => {
                 setDatosPlanta(data);
@@ -344,7 +344,7 @@ const SupervisionAgregar = () => {
     };
 
     const cargarTodosUsuarios = () => {
-        fetch(`${process.env.REACT_APP_API_URL}/user`)
+        fetch(`${process.env.REACT_APP_API_URL}/usuarios/users`)
             .then(response => response.json())
             .then(data => {
                 setDatosUsuarios(data);
@@ -353,7 +353,7 @@ const SupervisionAgregar = () => {
     };
     
     const cargarRegistrosSupervision = async (event) => {
-        axios.get(`${process.env.REACT_APP_API_URL}/supervision/RegistrosSupervisionFechaPlaca`)
+        axios.get(`${process.env.REACT_APP_API_URL}/supervision/registrosFechaPlaca`)
             .then(response => {
                 const data = response.data;
 

@@ -60,7 +60,7 @@ const SupervisionPrincipal = () => {
     };
     
     const cargarRegistrosSupervision = async (event) => {
-        axios.get(`${process.env.REACT_APP_API_URL}/supervision/RegistrosSupervision`)
+        axios.get(`${process.env.REACT_APP_API_URL}/supervision/registros`)
             .then(response => {
                 let dataFiltrada;
                 const data = response.data;
@@ -503,7 +503,7 @@ const SupervisionPrincipal = () => {
     };
 
     const addMarkerToMap = (item) => {
-        const { latitud, longitud, fotoNombre, fecha, ot, nombreCuadrilla, observacion, placa, nombre } = item;
+        const { latitud, longitud, foto_nombre, fecha, ot, nombre_cuadrilla, observacion, placa, nombre } = item;
 
         const awesomeMarker = L.AwesomeMarkers.icon({
             icon: 'car',
@@ -516,7 +516,7 @@ const SupervisionPrincipal = () => {
         const marker = L.marker([latitud, longitud], { icon: awesomeMarker }).addTo(mapRef.current);
 
         // Separar el nombre en partes
-        const partesNombre = nombreCuadrilla.split(" ");
+        const partesNombre = nombre_cuadrilla.split(" ");
 
         // Obtener el primer apellido y el primer nombre
         const primerApellido = partesNombre[0];
@@ -534,7 +534,7 @@ const SupervisionPrincipal = () => {
         const popupContent = `
             <div>
                 <h6><strong>Fecha: </strong>${fecha}<br><strong>Supervisor: </strong>${nombre}<br><strong>Placa: </strong>${placa}<br><strong>Nombre Tecnico: </strong>${nombreCapitalizado}<br><strong>OT: </strong>${ot}<br><strong>Observación: </strong>${observacion}</h6>
-                <div id="image-container-${fotoNombre}" style="width: 100px; height: auto; text-align: center;"></div>
+                <div id="image-container-${foto_nombre}" style="width: 100px; height: auto; text-align: center;"></div>
             </div>
         `;
 
@@ -543,17 +543,17 @@ const SupervisionPrincipal = () => {
 
         // Evento de clic en el marcador para cargar la imagen cuando se abre el popup
         marker.on('popupopen', async () => {
-            const imageContainer = document.getElementById(`image-container-${fotoNombre}`);
+            const imageContainer = document.getElementById(`image-container-${foto_nombre}`);
             if (imageContainer) {
-                const imageUrl = await fetchImage(fotoNombre);
-                imageContainer.innerHTML = imageUrl ? `<img src="${imageUrl}" alt="${fotoNombre}" style="width: 150px; height: auto;"/>` : `<p>No image available</p>`;
+                const imageUrl = await fetchImage(foto_nombre);
+                imageContainer.innerHTML = imageUrl ? `<img src="${imageUrl}" alt="${foto_nombre}" style="width: 150px; height: auto;"/>` : `<p>No image available</p>`;
             }
         });
     };
     
     const fetchImage = async (imageName) => {
         try {
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/supervision/ObtenerImagen?imageName=${encodeURIComponent(imageName)}`);
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/supervision/obtenerImagen?imageName=${encodeURIComponent(imageName)}`);
 
             if (!response.ok) {
                 console.error(`Error fetching image: ${response.status} ${response.statusText}`);
