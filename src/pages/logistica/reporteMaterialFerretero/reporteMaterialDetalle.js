@@ -24,7 +24,7 @@ const ReporteMaterialDetalle = ({ isOpen, onClose, fila }) => {
             const imageName = fila[0].firma;
             
             const response = await axios.get(
-                `${process.env.REACT_APP_API_URL}/reporteMaterialFerretero/obtenerReporteMaterialFerreteroFirma`,
+                `${process.env.REACT_APP_API_URL}/reporteFerretero/obtenerImagen`,
                 {
                     params: { imageName },
                     responseType: 'blob',
@@ -61,6 +61,11 @@ const ReporteMaterialDetalle = ({ isOpen, onClose, fila }) => {
     }, [fila]);
 
     useEffect(() => {
+        if (imageUrl) {
+            URL.revokeObjectURL(imageUrl);
+            setImageUrl('');
+        }
+        
         const handleClickOutside = (event) => {
             if (contenidoRef.current && !contenidoRef.current.contains(event.target)) {
                 onClose();

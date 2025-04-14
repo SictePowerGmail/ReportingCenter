@@ -28,7 +28,7 @@ const ReporteMaterialPrincipal = () => {
     const [filaSeleccionadaReporteMaterialTecnicoSinMat, setFilaSeleccionadaReporteMaterialTecnicoSinMat] = useState(null);
 
     const cargarDatosReporteMaterialTecnico = () => {
-        axios.get(`${process.env.REACT_APP_API_URL}/reporteMaterialFerretero/obtenerReporteMaterialFerretero`)
+        axios.get(`${process.env.REACT_APP_API_URL}/reporteFerretero/registros`)
             .then(response => {
                 let datos = response.data;
                 datos.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
@@ -116,8 +116,8 @@ const ReporteMaterialPrincipal = () => {
     };
 
     const manejarCerrarModalReporteMaterialTecnicoSinMat = () => {
-        setVentanaAbiertaReporteMaterialTecnicoSinMat(false);
         setFilaSeleccionadaReporteMaterialTecnicoSinMat(null);
+        setVentanaAbiertaReporteMaterialTecnicoSinMat(false);        
     };
 
     const descargarArchivo = () => {

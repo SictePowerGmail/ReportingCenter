@@ -131,7 +131,7 @@ const ReporteMaterialAgregar = () => {
             for (const fila of filasTabla) {
                 const { codigoSap, descripcion, unidadMedida, cantidad, serial } = fila;
                 
-                await axios.post(`${process.env.REACT_APP_API_URL}/reporteMaterialFerretero/cargarDatosReporteMaterialFerretero`, {
+                await axios.post(`${process.env.REACT_APP_API_URL}/reporteFerretero/crearRegistro`, {
                     fecha: fechaCorregida,
                     cedula: cedulaUsuario,
                     nombre: nombreUsuario,
@@ -157,7 +157,7 @@ const ReporteMaterialAgregar = () => {
             formData.append('filename', nombreImagen);
             
             try {
-                const response = await axios.post(`${process.env.REACT_APP_API_URL}/reporteMaterialFerretero/cargarDatosReporteMaterialFerreteroFirma`, formData, {
+                const response = await axios.post(`${process.env.REACT_APP_API_URL}/reporteFerretero/cargarImagen`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                     },
@@ -249,19 +249,19 @@ const ReporteMaterialAgregar = () => {
 
     const CargarDatos = async () => {
         try {
-            const responseKgprod = await axios.get(`${process.env.REACT_APP_API_URL}/bodega/kgprod`);
+            const responseKgprod = await axios.get(`${process.env.REACT_APP_API_URL}/reporteFerretero/kgprod`);
             let ciudadKgprod = ['KGPROD_RED_BOG'];
 
-            const datosFiltradosKgprod = ciudadKgprod.length ? responseKgprod.data.filter(item => ciudadKgprod.includes(item.bodega) && item.indComprado2 === 'S') : responseKgprod.data;
+            const datosFiltradosKgprod = ciudadKgprod.length ? responseKgprod.data.filter(item => ciudadKgprod.includes(item.Bodega) && item.ind_comprado_2 === 'S') : responseKgprod.data;
             setDataKgprod(datosFiltradosKgprod);
 
-            const responseLconsum = await axios.get(`${process.env.REACT_APP_API_URL}/bodega/lconsum`);
+            const responseLconsum = await axios.get(`${process.env.REACT_APP_API_URL}/reporteFerretero/lconsum`);
             let ciudadLconsum = ['LCONSUM_RED_BOG'];
 
-            const datosFiltradosLconsum = ciudadLconsum.length ? responseLconsum.data.filter(item => ciudadLconsum.includes(item.bodega)) : responseLconsum.data;
+            const datosFiltradosLconsum = ciudadLconsum.length ? responseLconsum.data.filter(item => ciudadLconsum.includes(item.Bodega)) : responseLconsum.data;
             setDataLconsum(datosFiltradosLconsum);
 
-            const responseReportes = await axios.get(`${process.env.REACT_APP_API_URL}/reporteMaterialFerretero/obtenerReporteMaterialFerretero`)
+            const responseReportes = await axios.get(`${process.env.REACT_APP_API_URL}/reporteFerretero/registros`)
             const ots = responseReportes.data.map(item => item.ot);
             setOtsExistentes(ots);
 
