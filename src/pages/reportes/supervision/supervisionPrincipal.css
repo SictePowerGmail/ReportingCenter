@@ -128,12 +128,9 @@
         }
 
         .RenderizarMapaYGraficos {
-            display: flex;
-            /* Usa el modelo de caja flexible */
+            display: flex !important;
             justify-content: baseline;
-            /* Centra horizontalmente */
             align-items: baseline;
-            /* Centra verticalmente */
 
             @media screen and (max-width: 600px) {
                 display: contents;
@@ -141,13 +138,10 @@
             }
 
             .RenderizarMapa {
-                display: flex;
-                /* Usa el modelo de caja flexible */
+                display: flex !important;
                 flex-direction: column;
                 justify-content: center;
-                /* Centra horizontalmente */
                 align-items: center;
-                /* Centra verticalmente */
 
                 @media screen and (max-width: 600px) {
                     display: contents;
@@ -187,7 +181,7 @@
                 .Epps,
                 .SupervisoresYDia,
                 .UbicacionYPlaca {
-                    display: flex;
+                    display: flex !important;
                     justify-content: center;
                     align-items: baseline;
 
