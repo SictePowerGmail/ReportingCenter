@@ -78,12 +78,9 @@
         }
 
         .RenderizarFiltros {
-            display: flex;
-            /* Usa el modelo de caja flexible */
+            display: flex !important;
             justify-content: center;
-            /* Centra horizontalmente */
             align-items: baseline;
-            /* Centra verticalmente */
 
             @media screen and (max-width: 600px) {
                 display: contents;
