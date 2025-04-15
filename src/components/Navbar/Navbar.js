@@ -574,7 +574,7 @@ function Navbar() {
                                     {showMobileMenu && showDropdownReportes && (
                                         <div id='SubMenu-Contenido'>
                                             <ul>
-                                                {subChecksReportes.Capacidades === true && (<Link id='SubMenu-Contenido-Titulo' to="/Capacidades" ><li>Capacidades</li></Link>)}
+                                                {subChecksReportes.Capacidades === true && (<Link id='SubMenu-Contenido-Titulo' to={{ pathname: "/Login", search: "?tipo=Capacidades" }} ><li>Capacidades</li></Link>)}
                                                 {subChecksReportes.Supervision === true && (<Link id='SubMenu-Contenido-Titulo' to={{ pathname: "/Login", search: "?tipo=supervision" }} ><li>Supervision</li></Link>)}
                                             </ul>
                                         </div>
@@ -958,7 +958,7 @@ function Navbar() {
 
                         {showMobileMenu && (
                             <div className='Version'>
-                                <p>v1.67</p>
+                                <p>v1.68</p>
                             </div>
                         )}
                     </div>

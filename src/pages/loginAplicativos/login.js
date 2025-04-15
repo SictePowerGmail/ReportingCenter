@@ -111,6 +111,8 @@ const Login = () => {
                     navigate('/Carnetizacion');
                 } else if  (tipo === 'Inicio') {
                     navigate('/');
+                } else if (tipo === 'Capacidades') {
+                    navigate('/Capacidades');
                 }
             } else {
                 const errorText = await response.text();
@@ -148,6 +150,8 @@ const Login = () => {
                 navigate('/Carnetizacion');
             } else if  (tipo === 'Inicio') {
                 navigate('/');
+            } else if (tipo === 'Capacidades') {
+                navigate('/Capacidades');
             }
         }
     }, []);

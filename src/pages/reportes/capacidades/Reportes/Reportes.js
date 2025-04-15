@@ -1,0 +1,220 @@
+import React from 'react';
+import { useState, useEffect } from 'react';
+import  '../Principal/Capacidades.css'
+import '@fortawesome/fontawesome-free/css/all.min.css';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
+import { ThreeDots } from 'react-loader-spinner';
+
+const Reportes = ({ role }) => {
+    const [datos, setDatos] = useState([]);
+    const [filtros, setFiltros] = useState({});
+    const [error, setError] = useState('');
+    const [ordenarCampo, setOrdenarCampo] = useState('nombreCompleto');
+    const [ordenarOrden, setOrdenarOrden] = useState('asc');
+    const [totalItems, setTotalItems] = useState(0);
+    const [loading, setLoading] = useState(true);
+    const [mesAnioSeleccionado, setMesAnioSeleccionado] = useState('');
+
+    const cargarDatos = () => {
+        fetch('https://sicteferias.from-co.net:8120/capacidad/TodoBackup')
+            .then(response => response.json())
+            .then(data => {
+                setDatos(data);
+                setLoading(false);
+
+                if (data.length > 0) {
+                    const fechas = data.map(item => new Date(item.fechaReporte));
+                    const ultimaFecha = new Date(Math.max(...fechas));
+                    const mesAnio = `${ultimaFecha.getMonth() + 1}-${ultimaFecha.getFullYear()}`;
+                    setMesAnioSeleccionado(mesAnio);
+                }
+            })
+            .catch(error => {
+                setError('Error al cargar los datos: ' + error.message);
+                setLoading(false); 
+            });
+    };
+
+    useEffect(() => {
+        //BotonLimpiarFiltros();
+        //setDatos([]);
+        cargarDatos();
+    }, []);
+
+    const BotonLimpiarFiltros = () => {
+        setFiltros({});
+        document.querySelectorAll('input[type="text"]').forEach(input => {
+            input.value = '';
+        });
+    };
+
+    const clickEncabezados = (columna) => {
+        if (ordenarCampo === columna) {
+            // Cambiar el orden de clasificación si ya se ha ordenado por la misma columna
+            setOrdenarOrden(ordenarOrden === 'asc' ? 'desc' : 'asc');
+        } else {
+            // Si se selecciona una nueva columna, ordenarla de forma ascendente
+            setOrdenarCampo(columna);
+            setOrdenarOrden('asc');
+        }
+    };
+
+    useEffect(() => {
+        setTotalItems(filtrarDatos.length);
+    }, [filtros, mesAnioSeleccionado]);
+
+    const clickAplicarFiltros = (e, columna) => {
+        const Valor = e.target.value;
+        setFiltros({ ...filtros, [columna]: Valor });
+    };
+
+    const getMesesAnios = () => {
+        const uniqueDates = new Set();
+        datos.forEach(item => {
+            if (item.fechaReporte) {
+                const date = new Date(item.fechaReporte);
+                const mesAnio = `${date.getMonth() + 1}-${date.getFullYear()}`;
+                uniqueDates.add(mesAnio);
+            }
+        });
+        return Array.from(uniqueDates);
+    };
+
+    const filtrarDatos = datos.filter(item => {
+        for (let key in filtros) {
+            if (filtros[key] && item[key] && !item[key].toLowerCase().includes(filtros[key].toLowerCase())) {
+                return false;
+            }
+        }
+        if (mesAnioSeleccionado) {
+            const [mes, anio] = mesAnioSeleccionado.split('-');
+            const fecha = new Date(item.fechaReporte);
+            if (fecha.getMonth() + 1 !== parseInt(mes) || fecha.getFullYear() !== parseInt(anio)) {
+                return false;
+            }
+        }
+        return true;
+    });
+
+
+    const ordenarDatos = filtrarDatos.sort((a, b) => {
+        if (ordenarCampo) {
+            // Convertir los valores a minúsculas para asegurar una comparación insensible a mayúsculas y minúsculas
+            const valueA = typeof a[ordenarCampo] === 'string' ? a[ordenarCampo].toLowerCase() : a[ordenarCampo];
+            const valueB = typeof b[ordenarCampo] === 'string' ? b[ordenarCampo].toLowerCase() : b[ordenarCampo];
+
+            if (valueA < valueB) {
+                return ordenarOrden === 'asc' ? -1 : 1;
+            }
+            if (valueA > valueB) {
+                return ordenarOrden === 'asc' ? 1 : -1;
+            }
+            return 0;
+        } else {
+            return 0;
+        }
+    });
+
+    const getIconoFiltro = (columna) => {
+        if (ordenarCampo === columna) {
+            return ordenarOrden === 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down';
+        }
+        return 'fas fa-sort';
+    };
+
+    const exportarExcel = () => {
+        const ws = XLSX.utils.json_to_sheet(ordenarDatos);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Datos');
+        const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+        const [mes, anio] = mesAnioSeleccionado.split('-');
+        let nombreArchivo = `Reporte ${mes}-${anio}.xlsx`;
+        saveAs(new Blob([wbout], { type: 'application/octet-stream' }), nombreArchivo);
+    };
+    
+    const formatearValorEsperado = (valorEsperado) => {
+        const valor = valorEsperado !== "null" ? valorEsperado : 0;
+        const formatter = new Intl.NumberFormat('es-CO', {
+            style: 'currency',
+            currency: 'COP'
+        });
+        return formatter.format(valor);
+    };
+
+    return (
+        <div>
+            {loading ? (
+                <div id="CargandoPagina">
+                    <ThreeDots
+                        type="ThreeDots"
+                        color="#0B1A46"
+                        height={200}
+                        width={200}
+                    />
+                    <p>... Cargando Datos ...</p>
+                </div>
+            ) : (
+                <div id='Principal-Visualizar'>
+                    <div id='Botones-Encabezado'>
+                        <button id='Boton-Borrar-Filtros' className="btn btn-secondary" onClick={BotonLimpiarFiltros}><i className="fas fa-filter"></i> Borrar Filtros</button>
+                        <div className="Fecha-Reporte-Select">
+                            <select id='Fecha-Reporte-Boton' value={mesAnioSeleccionado} onChange={(e) => setMesAnioSeleccionado(e.target.value)} className="select-box">
+                                {getMesesAnios().map((mesAnio, index) => (
+                                    <option key={index} value={mesAnio}>
+                                        {mesAnio}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <button id='Boton-Exportar-Excel' className="btn btn-secondary" onClick={exportarExcel}><i className="fas fa-file-excel"></i> Exportar</button>
+                    </div>
+                    <div className="tabla-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    {['cedula', 'nombreCompleto', 'cargo', 'centroCosto', 'nomina', 'regional', 'ciudadTrabajo', 'red', 'cliente', 'area', 'subArea', 'tipoDeMovil', 'tipoFacturacion', 'movil', 'coordinador', 'director', 'valorEsperado', 'placa', 'fechaReporte', 'mes', 'año', 'turnos', 'personas', 'carpeta'].map(columna => (
+                                        <th key={columna}>
+                                            <div>
+                                                {columna.charAt(0).toUpperCase() + columna.slice(1)} <i className={getIconoFiltro(columna)} onClick={() => clickEncabezados(columna)} style={{ cursor: 'pointer' }}></i>
+                                            </div>
+                                            <input type="text" onKeyDown={e => {
+                                                    if (e.key === 'Enter') {
+                                                        clickAplicarFiltros(e, columna);
+                                                    }
+                                                }}
+                                            />
+                                        </th>
+                                    ))}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {ordenarDatos.map((item, index) => (
+                                    <tr key={index}>
+                                        {Object.keys(item).slice(1)
+                                        .filter(key => key !== 'codigoSap')
+                                        .filter(key => key !== 'contratista')
+                                        .filter(key => key !== 'tipoCarro')
+                                        .map((key, i) => (
+                                            <td key={i}>
+                                                {key === 'movil' ? (parseFloat(item[key]).toFixed(3)) : key === 'personas' ? (parseFloat(item[key]).toFixed(0)) : key === 'valorEsperado' ? formatearValorEsperado(item[key]) : item[key]}
+                                            </td>
+                                        ))}
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id='piePagina'>
+                        <p>Total de items: {totalItems}</p> 
+                        <div id='Botones-piePagina'>
+                            
+                        </div>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+};
+
+export default Reportes;
