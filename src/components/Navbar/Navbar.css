@@ -302,12 +302,12 @@ body,
 
         #MenuContainer.abierto {
             height: calc(100vh - 40px);
+            width: 270px;
             display: flex;
             background-color: #0F1D2B;
             flex-direction: column;
             transition: 0.2s all ease;
             flex-direction: column;
-            width: 270px;
             overflow-y: auto;
             overflow-x: hidden;
 

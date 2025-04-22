@@ -10,7 +10,7 @@ import Inicio from '../pages/inicio/Inicio';
 /* Login */
 import Login from "../pages/loginAplicativos/login";
 /* Reportes */
-import Capacidades from "../pages/reportes/capacidades/Principal/Capacidades";
+import Capacidades from "../pages/reportes/capacidades/Capacidades";
 import SupervisionPrincipal from "../pages/reportes/supervision/supervisionPrincipal";
 import SupervisionAgregar from "../pages/reportes/supervision/supervisionAgregar";
 /* Facturacion */
