@@ -105,7 +105,9 @@ const MaterialPrincipal = () => {
 
                 const dinamicaRegistrosSolicitudMaterialPendienteDespacho = datosFiltradosRegistrosSolicitudMaterialPendienteDespacho.reduce((acumulador, item) => {
                     const codigo = item.codigoSapMaterial;
-                    const cantidad = parseInt(item.cantidadRestantePorDespacho, 10) || 0;
+                    let cantidad = parseInt(item.cantidadRestantePorDespacho, 10) || 0;
+
+                    cantidad = Math.max(0, cantidad);
 
                     if (acumulador[codigo]) {
                         acumulador[codigo] += cantidad;
