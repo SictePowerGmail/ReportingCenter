@@ -74,6 +74,7 @@ import Compras from '../pages/direccion/Compras';
 import SSTA from '../pages/ssta/SSTA';
 import CursosDeAlturas from "../pages/ssta/CursosDeAlturas";
 import EntregasPendientesDotacion from "../pages/ssta/EntregasPendientesDotacion";
+import UbicacionDeActividades from "../pages/ssta/UbicacionDeActividades";
 /* Parque Automotor */
 import Moviles from "../pages/parqueAutomotor/Moviles";
 /* Gestion Humana */
@@ -232,6 +233,8 @@ function RutasApp() {
                 return 'Cursos de Alturas';
             case '/EntregasPendientesDotacion':
                 return 'Entregas Pendientes Dotacion'
+            case '/UbicacionDeActividades':
+                return 'Ubicacion de Actividades'
             /* Parque Automotor */
             case '/Moviles':
                 return 'Moviles'
@@ -325,6 +328,7 @@ function RutasApp() {
                     <Route path='/SSTA' exacte element={<SSTA />} />
                     <Route path='/CursosDeAlturas' exacte element={<CursosDeAlturas />} />
                     <Route path='/EntregasPendientesDotacion' exacte element={<EntregasPendientesDotacion />} />
+                    <Route path='/UbicacionDeActividades' exacte element={<UbicacionDeActividades />} />
                     {/* Parque Automotor */}
                     <Route path='/Moviles' exacte element={<Moviles />} />
                     {/* Gestion Humana */}

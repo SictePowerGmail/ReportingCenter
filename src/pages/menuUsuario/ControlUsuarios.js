@@ -289,7 +289,8 @@ function ControlUsuarios() {
     const [subChecksSsta, setSubChecksSsta] = useState({
         Ssta: false,
         CursoDeAlturas: false,
-        EntregasPendientesDotacion: false
+        EntregasPendientesDotacion: false,
+        UbicacionDeActividades: false,
     });
 
     const handleSstaChange = () => {
@@ -462,7 +463,8 @@ function ControlUsuarios() {
                 const mappedChecksSsta = {
                     Ssta: usuarioEncontrado.sstaSsta === "1",
                     CursoDeAlturas: usuarioEncontrado.sstaCursoDeAlturas === "1",
-                    EntregasPendientesDotacion: usuarioEncontrado.sstaEntregasPendientesDotacion === "1"
+                    EntregasPendientesDotacion: usuarioEncontrado.sstaEntregasPendientesDotacion === "1",
+                    UbicacionDeActividades: usuarioEncontrado.sstaUbicacionDeActividades === "1",
                 };
 
                 setSubChecksSsta(mappedChecksSsta);
@@ -624,6 +626,7 @@ function ControlUsuarios() {
                 sstaSsta: subChecksSsta.Ssta ? 1 : 0,
                 sstaCursoDeAlturas: subChecksSsta.CursoDeAlturas ? 1 : 0,
                 sstaEntregasPendientesDotacion: subChecksSsta.EntregasPendientesDotacion ? 1 : 0,
+                sstaUbicacionDeActividades: subChecksSsta.UbicacionDeActividades ? 1 : 0,
                 puntuacionProyectos: subChecksPuntuacion.Proyectos ? 1 : 0,
                 puntuacionCorporativo: subChecksPuntuacion.Corporativo ? 1 : 0,
                 puntuacionMantenimiento: subChecksPuntuacion.Mantenimiento ? 1 : 0,

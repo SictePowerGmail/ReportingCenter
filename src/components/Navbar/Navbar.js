@@ -187,6 +187,7 @@ function Navbar() {
         Ssta: false,
         CursoDeAlturas: false,
         EntregasPendientesDotacion: false,
+        UbicacionDeActividades: false,
     });
 
     const [parqueAutomotor, setParqueAutomotor] = useState(false);
@@ -289,6 +290,7 @@ function Navbar() {
                     Ssta: usuarioEncontrado.sstaSsta === "1",
                     CursoDeAlturas: usuarioEncontrado.sstaCursoDeAlturas === "1",
                     EntregasPendientesDotacion: usuarioEncontrado.sstaEntregasPendientesDotacion === "1",
+                    UbicacionDeActividades: usuarioEncontrado.sstaUbicacionDeActividades === "1",
                 };
 
                 setSubChecksSsta(mappedChecksSsta);
@@ -882,6 +884,7 @@ function Navbar() {
                                                 {subChecksSsta.Ssta === true && (<Link id='SubMenu-Contenido-Titulo' to="/SSTA" ><li>SSTA</li></Link>)}
                                                 {subChecksSsta.CursoDeAlturas === true && (<Link id='SubMenu-Contenido-Titulo' to="/CursosDeAlturas" ><li>Indicadores Capacitación</li></Link>)}
                                                 {subChecksSsta.EntregasPendientesDotacion === true && (<Link id='SubMenu-Contenido-Titulo' to="/EntregasPendientesDotacion" ><li>Entregas Pendientes Dotación</li></Link>)}
+                                                {subChecksSsta.UbicacionDeActividades === true && (<Link id='SubMenu-Contenido-Titulo' to="/UbicacionDeActividades" ><li>Ubicacion de Actividades</li></Link>)}
                                             </ul>
                                         </div>
                                     )}
@@ -958,7 +961,7 @@ function Navbar() {
 
                         {showMobileMenu && (
                             <div className='Version'>
-                                <p>v1.70</p>
+                                <p>v1.71</p>
                             </div>
                         )}
                     </div>
