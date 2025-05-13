@@ -65,11 +65,13 @@ import ReporteMaterialAgregar from "../pages/logistica/reporteMaterialFerretero/
 import InventariosMaterialPrincipal from "../pages/logistica/inventarios/inventariosMaterialPrincipal";
 import InventariosMaterialAgregar from "../pages/logistica/inventarios/inventariosMaterialAgregar";
 import EstadoProyectosR4 from "../pages/logistica/EstadoProyectosR4";
+import Activos from "../pages/logistica/Activos";
 /* Direccion */
 import Penalizaciones from '../pages/direccion/Penalizaciones';
 import CentrosDeCostos from '../pages/direccion/CentrosDeCostos';
 import ComposicionMoviles from '../pages/direccion/ComposicionMoviles';
 import Compras from '../pages/direccion/Compras';
+import CapacidadesTablero from "../pages/direccion/CapacidadesTablero";
 /* SSTA */
 import SSTA from '../pages/ssta/SSTA';
 import CursosDeAlturas from "../pages/ssta/CursosDeAlturas";
@@ -217,6 +219,8 @@ function RutasApp() {
                 return 'Inventarios Material'
             case '/EstadoProyectosR4':
                 return 'Estado Proyectos R4'
+            case '/Activos':
+                return 'Activos'
             /* Direccion */
             case '/Penalizaciones':
                 return 'Penalizaciones';
@@ -226,6 +230,8 @@ function RutasApp() {
                 return 'Composicion Moviles';
             case '/Compras':
                 return 'Compras';
+            case '/CapacidadesTablero':
+                return 'Capacidades';
             /* SSTA */
             case '/SSTA':
                 return 'SSTA';
@@ -319,11 +325,13 @@ function RutasApp() {
                     <Route path='/InventariosMaterialPrincipal' exacte element={<InventariosMaterialPrincipal />} />
                     <Route path='/InventariosMaterialAgregar' exacte element={<InventariosMaterialAgregar />} />
                     <Route path='/EstadoProyectosR4' exacte element={<EstadoProyectosR4 />} />
+                    <Route path='/Activos' exacte element={<Activos />} />
                     {/* Direccion */}
                     <Route path='/Penalizaciones' exacte element={<Penalizaciones />} />
                     <Route path='/Centro_de_costos' exacte element={<CentrosDeCostos />} />
                     <Route path='/ComposicionMoviles' exacte element={<ComposicionMoviles />} />
                     <Route path='/Compras' exacte element={<Compras />} />
+                    <Route path='/CapacidadesTablero' exacte element={<CapacidadesTablero />} />
                     {/* SSTA */}
                     <Route path='/SSTA' exacte element={<SSTA />} />
                     <Route path='/CursosDeAlturas' exacte element={<CursosDeAlturas />} />

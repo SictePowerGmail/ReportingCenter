@@ -7,6 +7,7 @@ import axios from 'axios';
 import { ObtenerRolUsuario, cargarDirectores } from '../../funciones';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Activos from '../logistica/Activos';
 
 function ControlUsuarios() {
     const navigate = useNavigate();
@@ -244,7 +245,8 @@ function ControlUsuarios() {
         SolicitudDeMaterial: false,
         ReporteMaterialFerretero: false,
         InventarioMaterial: false,
-        EstadoProyectosR4: false
+        EstadoProyectosR4: false,
+        Activos: false,
     });
 
     const handleLogisticaChange = () => {
@@ -267,7 +269,8 @@ function ControlUsuarios() {
         Penalizaciones: false,
         CentroDeCostos: false,
         ComposicionMoviles: false,
-        Compras: false
+        Compras: false,
+        Capacidades: false,
     });
 
     const handleDireccionChange = () => {
@@ -525,7 +528,8 @@ function ControlUsuarios() {
                     SolicitudDeMaterial: usuarioEncontrado.logisticaSolicitudDeMaterial === "1",
                     ReporteMaterialFerretero: usuarioEncontrado.logisticaReporteMaterialFerretero === "1",
                     InventarioMaterial: usuarioEncontrado.logisticaInventarioMaterial === "1",
-                    EstadoProyectosR4: usuarioEncontrado.logisticaEstadoProyectosR4 === "1"
+                    EstadoProyectosR4: usuarioEncontrado.logisticaEstadoProyectosR4 === "1",
+                    Activos: usuarioEncontrado.logisticaActivos === "1",
                 };
 
                 setSubChecksLogistica(mappedChecksLogistica);
@@ -542,7 +546,8 @@ function ControlUsuarios() {
                     Penalizaciones: usuarioEncontrado.direccionPenalizaciones === "1",
                     CentroDeCostos: usuarioEncontrado.direccionCentroDeCostos === "1",
                     ComposicionMoviles: usuarioEncontrado.direccionComposicionMoviles === "1",
-                    Compras: usuarioEncontrado.direccionCompras === "1"
+                    Compras: usuarioEncontrado.direccionCompras === "1",
+                    Capacidades: usuarioEncontrado.direccionCapacidades === "1",
                 };
 
                 setSubChecksDireccion(mappedChecksDireccion);
@@ -649,10 +654,12 @@ function ControlUsuarios() {
                 logisticaReporteMaterialFerretero: subChecksLogistica.ReporteMaterialFerretero ? 1 : 0,
                 logisticaInventarioMaterial: subChecksLogistica.InventarioMaterial ? 1 : 0,
                 logisticaEstadoProyectosR4: subChecksLogistica.EstadoProyectosR4 ? 1 : 0,
+                logisticaActivos: subChecksLogistica.Activos ? 1 : 0,
                 direccionPenalizaciones: subChecksDireccion.Penalizaciones ? 1 : 0,
                 direccionCentroDeCostos: subChecksDireccion.CentroDeCostos ? 1 : 0,
                 direccionComposicionMoviles: subChecksDireccion.ComposicionMoviles ? 1 : 0,
                 direccionCompras: subChecksDireccion.Compras ? 1 : 0,
+                direccionCapacidades: subChecksDireccion.Capacidades ? 1 : 0,
                 parqueAutomotorMoviles: subChecksParqueAutomotor.Moviles ? 1 : 0,
                 gestionHumanaChatbot: subChecksGestionHumana.ChatBot ? 1 : 0,
                 gestionHumanaCarnetizacion: subChecksGestionHumana.Carnetizacion ? 1 : 0,

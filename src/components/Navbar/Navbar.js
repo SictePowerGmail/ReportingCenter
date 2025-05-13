@@ -171,7 +171,8 @@ function Navbar() {
         SolicitudDeMaterial: false,
         ReporteMaterialFerretero: false,
         InventarioMaterial: false,
-        EstadoProyectosR4: false
+        EstadoProyectosR4: false,
+        Activos: false,
     });
 
     const [direccion, setDireccion] = useState(false);
@@ -179,7 +180,8 @@ function Navbar() {
         Penalizaciones: false,
         CentroDeCostos: false,
         ComposicionMoviles: false,
-        Compras: false
+        Compras: false,
+        Capacidades: false,
     });
 
     const [ssta, setSsta] = useState(false);
@@ -351,7 +353,8 @@ function Navbar() {
                     SolicitudDeMaterial: usuarioEncontrado.logisticaSolicitudDeMaterial === "1",
                     ReporteMaterialFerretero: usuarioEncontrado.logisticaReporteMaterialFerretero === "1",
                     InventarioMaterial: usuarioEncontrado.logisticaInventarioMaterial === "1",
-                    EstadoProyectosR4: usuarioEncontrado.logisticaEstadoProyectosR4 === "1"
+                    EstadoProyectosR4: usuarioEncontrado.logisticaEstadoProyectosR4 === "1",
+                    Activos: usuarioEncontrado.logisticaActivos === "1",
                 };
 
                 setSubChecksLogistica(mappedChecksLogistica);
@@ -368,7 +371,8 @@ function Navbar() {
                     Penalizaciones: usuarioEncontrado.direccionPenalizaciones === "1",
                     CentroDeCostos: usuarioEncontrado.direccionCentroDeCostos === "1",
                     ComposicionMoviles: usuarioEncontrado.direccionComposicionMoviles === "1",
-                    Compras: usuarioEncontrado.direccionCompras === "1"
+                    Compras: usuarioEncontrado.direccionCompras === "1",
+                    Capacidades: usuarioEncontrado.direccionCapacidades === "1",
                 };
 
                 setSubChecksDireccion(mappedChecksDireccion);
@@ -813,6 +817,7 @@ function Navbar() {
                                                 {subChecksLogistica.ReporteMaterialFerretero === true && (<Link id='SubMenu-Contenido-Titulo' to={{ pathname: "/Login", search: "?tipo=reporteMaterialFerretero" }} ><li>Reporte Material Ferretero</li></Link>)}
                                                 {subChecksLogistica.InventarioMaterial === true && (<Link id='SubMenu-Contenido-Titulo' to={{ pathname: "/Login", search: "?tipo=inventarioMaterial" }} ><li>Inventario Material</li></Link>)}
                                                 {subChecksLogistica.EstadoProyectosR4 === true && (<Link id='SubMenu-Contenido-Titulo' to="/EstadoProyectosR4" ><li>Estado Proyectos R4</li></Link>)}
+                                                {subChecksLogistica.Activos === true && (<Link id='SubMenu-Contenido-Titulo' to="/Activos" ><li>Activos</li></Link>)}
                                             </ul>
                                         </div>
                                     )}
@@ -849,6 +854,7 @@ function Navbar() {
                                                 {subChecksDireccion.CentroDeCostos === true && (<Link id='SubMenu-Contenido-Titulo' to="/Centro_de_costos" ><li>Centros de costos</li></Link>)}
                                                 {subChecksDireccion.ComposicionMoviles === true && (<Link id='SubMenu-Contenido-Titulo' to="/ComposicionMoviles" ><li>Composición móviles</li></Link>)}
                                                 {subChecksDireccion.Compras === true && (<Link id='SubMenu-Contenido-Titulo' to="/Compras" ><li>Compras</li></Link>)}
+                                                {subChecksDireccion.Capacidades === true && (<Link id='SubMenu-Contenido-Titulo' to="/CapacidadesTablero" ><li>Capacidades</li></Link>)}
                                             </ul>
                                         </div>
                                     )}
