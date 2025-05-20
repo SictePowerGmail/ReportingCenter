@@ -73,7 +73,7 @@ const MaterialPrincipal = () => {
 
             for (const [ciudadElgida, bodega] of Object.entries(ciudades)) {
 
-                const datosFiltradosKgprod = bodega.length ? dataKgprodActualizado.filter(item => bodega.includes(item.bodega)) : dataKgprodActualizado;
+                const datosFiltradosKgprod = bodega.length ? dataKgprodActualizado.filter(item => bodega.includes(item.Bodega)) : dataKgprodActualizado;
 
                 const datosFiltradosRegistrosSolicitudMaterial = responseRegistrosSolicitudMaterial.data.filter(item =>
                     item.ciudad === ciudadElgida &&
@@ -176,7 +176,6 @@ const MaterialPrincipal = () => {
 
                 const resultado = registrosFiltrados.reduce((acc, registro) => {
                     const codigo = registro.codigoSapMaterial;
-
                     const datoNegativo = datosRestados.find(item => item.codigo === codigo);
                     const datoFiltrado = datosFiltradosKgprod.find(item => item.codigo === codigo);
 
