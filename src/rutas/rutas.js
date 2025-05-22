@@ -54,8 +54,7 @@ import SeguimientoSMU from '../pages/operacion/SeguimientoSMU';
 import SMU_Tecnico from '../pages/operacion/SMU_Tecnico';
 import TorreControl from '../pages/operacion/TorreControl';
 /* Logistica */
-import EquiposMovilesR2 from "../pages/logistica/EquiposMovilesR2";
-import EquiposMovilesR4 from "../pages/logistica/EquiposMovilesR4";
+import EquiposMoviles from "../pages/logistica/EquiposMoviles";
 import ConsumosOperaciones from "../pages/logistica/ConsumosOperaciones";
 import DesmonteMantenimiento from "../pages/logistica/DesmonteMantenimiento";
 import MaterialPrincipal from "../pages/logistica/solicitudMaterial/materialPrincipal";
@@ -197,10 +196,8 @@ function RutasApp() {
             case '/TorreDeControl':
                 return 'Torre De Control';
             /* Logistica */
-            case '/EquiposMovilesR2':
-                return 'Equipos Moviles R2';
-            case '/EquiposMovilesR4':
-                return 'Equipos Moviles R4';
+            case '/EquiposMoviles':
+                return 'Equipos Moviles';
             case '/ConsumosOperaciones':
                 return 'ConsumosOperaciones';
             case '/DesmonteMantenimiento':
@@ -314,8 +311,7 @@ function RutasApp() {
                     <Route path='/SMU_Tecnico' exacte element={<SMU_Tecnico />} />
                     <Route path='/TorreDeControl' exacte element={<TorreControl />} />
                     {/* Logistica */}
-                    <Route path='/EquiposMovilesR2' exacte element={<EquiposMovilesR2 />} />
-                    <Route path='/EquiposMovilesR4' exacte element={<EquiposMovilesR4 />} />
+                    <Route path='/EquiposMoviles' exacte element={<EquiposMoviles />} />
                     <Route path='/ConsumosOperaciones' exacte element={<ConsumosOperaciones />} />
                     <Route path='/DesmonteMantenimiento' exacte element={<DesmonteMantenimiento />} />
                     <Route path='/MaterialPrincipal' exacte element={<MaterialPrincipal />} />

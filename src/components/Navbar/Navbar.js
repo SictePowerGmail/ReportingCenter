@@ -164,8 +164,7 @@ function Navbar() {
 
     const [logistica, setLogistica] = useState(false);
     const [subChecksLogistica, setSubChecksLogistica] = useState({
-        EquiposEnMovilesR2: false,
-        EquiposEnMovilesR4: false,
+        EquiposEnMoviles: false,
         ConsumosOperaciones: false,
         DesmonteMantenimiento: false,
         SolicitudDeMaterial: false,
@@ -346,8 +345,7 @@ function Navbar() {
                 }
 
                 const mappedChecksLogistica = {
-                    EquiposEnMovilesR2: usuarioEncontrado.logisticaEquiposEnMovilesR2 === "1",
-                    EquiposEnMovilesR4: usuarioEncontrado.logisticaEquiposEnMovilesR4 === "1",
+                    EquiposEnMoviles: usuarioEncontrado.logisticaEquiposEnMoviles === "1",
                     ConsumosOperaciones: usuarioEncontrado.logisticaConsumosOperaciones === "1",
                     DesmonteMantenimiento: usuarioEncontrado.logisticaDesmonteMantenimiento === "1",
                     SolicitudDeMaterial: usuarioEncontrado.logisticaSolicitudDeMaterial === "1",
@@ -809,8 +807,7 @@ function Navbar() {
                                     {showMobileMenu && showDropdownLogistica && (
                                         <div id='SubMenu-Contenido'>
                                             <ul>
-                                                {subChecksLogistica.EquiposEnMovilesR2 === true && (<Link id='SubMenu-Contenido-Titulo' to="/EquiposMovilesR2" ><li>Equipos en moviles R2</li></Link>)}
-                                                {subChecksLogistica.EquiposEnMovilesR4 === true && (<Link id='SubMenu-Contenido-Titulo' to="/EquiposMovilesR4" ><li>Equipos en moviles R4</li></Link>)}
+                                                {subChecksLogistica.EquiposEnMoviles === true && (<Link id='SubMenu-Contenido-Titulo' to="/EquiposMoviles" ><li>Equipos en moviles</li></Link>)}
                                                 {subChecksLogistica.ConsumosOperaciones === true && (<Link id='SubMenu-Contenido-Titulo' to="/ConsumosOperaciones" ><li>Consumos Operaciones</li></Link>)}
                                                 {subChecksLogistica.DesmonteMantenimiento === true && (<Link id='SubMenu-Contenido-Titulo' to="/DesmonteMantenimiento" ><li>Desmonte Mantenimiento</li></Link>)}
                                                 {subChecksLogistica.SolicitudDeMaterial === true && (<Link id='SubMenu-Contenido-Titulo' to={{ pathname: "/Login", search: "?tipo=solicitudMaterial" }} ><li>Solicitud de Material</li></Link>)}
@@ -967,7 +964,7 @@ function Navbar() {
 
                         {showMobileMenu && (
                             <div className='Version'>
-                                <p>v1.72</p>
+                                <p>v1.73</p>
                             </div>
                         )}
                     </div>

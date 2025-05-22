@@ -238,8 +238,7 @@ function ControlUsuarios() {
 
     const [logistica, setLogistica] = useState(false);
     const [subChecksLogistica, setSubChecksLogistica] = useState({
-        EquiposEnMovilesR2: false,
-        EquiposEnMovilesR4: false,
+        EquiposEnMoviles: false,
         ConsumosOperaciones: false,
         DesmonteMantenimiento: false,
         SolicitudDeMaterial: false,
@@ -521,8 +520,7 @@ function ControlUsuarios() {
                 }
 
                 const mappedChecksLogistica = {
-                    EquiposEnMovilesR2: usuarioEncontrado.logisticaEquiposEnMovilesR2 === "1",
-                    EquiposEnMovilesR4: usuarioEncontrado.logisticaEquiposEnMovilesR4 === "1",
+                    EquiposEnMoviles: usuarioEncontrado.logisticaEquiposEnMoviles === "1",
                     ConsumosOperaciones: usuarioEncontrado.logisticaConsumosOperaciones === "1",
                     DesmonteMantenimiento: usuarioEncontrado.logisticaDesmonteMantenimiento === "1",
                     SolicitudDeMaterial: usuarioEncontrado.logisticaSolicitudDeMaterial === "1",
@@ -646,8 +644,7 @@ function ControlUsuarios() {
                 operacionSeguimientoSmu: subChecksOperacion.SeguimientoSmu ? 1 : 0,
                 operacionTecnicoSmu: subChecksOperacion.TecnicoSmu ? 1 : 0,
                 operacionTorreDeControl: subChecksOperacion.TorreDeControl ? 1 : 0,
-                logisticaEquiposEnMovilesR2: subChecksLogistica.EquiposEnMovilesR2 ? 1 : 0,
-                logisticaEquiposEnMovilesR4: subChecksLogistica.EquiposEnMovilesR4 ? 1 : 0,
+                logisticaEquiposEnMoviles: subChecksLogistica.EquiposEnMoviles ? 1 : 0,
                 logisticaConsumosOperaciones: subChecksLogistica.ConsumosOperaciones ? 1 : 0,
                 logisticaDesmonteMantenimiento: subChecksLogistica.DesmonteMantenimiento ? 1 : 0,
                 logisticaSolicitudDeMaterial: subChecksLogistica.SolicitudDeMaterial ? 1 : 0,
