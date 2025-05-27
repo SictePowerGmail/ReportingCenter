@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import imagen from '../../images/01.jpg'
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
+import '../powerbi.css'
 
 function Inicio() {
   const navigate = useNavigate();

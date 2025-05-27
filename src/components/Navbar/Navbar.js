@@ -1,11 +1,19 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { Outlet, Link, useNavigate } from 'react-router-dom';
-import { FaHardHat, FaFileAlt, FaTruck, FaBars, FaTimes, FaHome, FaChartLine, FaStar, FaTools, FaChevronDown, FaChevronLeft, FaUser, FaBoxes, FaUserTie } from 'react-icons/fa';
+import { FaHardHat, FaFileAlt, FaTruck, FaBars, FaTimes, FaHome, FaChartLine, FaStar, FaTools, FaSearch, FaChevronLeft, FaUser, FaBoxes, FaUserTie, FaSun, FaMoon } from 'react-icons/fa';
 import { HiClipboardList, HiChartBar, HiOfficeBuilding } from "react-icons/hi";
 import { ThreeDots } from 'react-loader-spinner';
 import './Navbar.css'
 import Cookies from 'js-cookie';
 import axios from 'axios';
+import Logo from '../../images/Logo Original.png'
+import Logo2 from '../../images/Logo Original 2.png'
+import RSV from '../../images/RSV.png'
+import SGS from '../../images/SGS.png'
+import PREAD from '../../images/PREAD.png'
+import Colombia from '../../images/Flag_Colombia.png'
+import EEUU from '../../images/Flag_United_States.png'
+import { useTranslation } from 'react-i18next';
 
 function Navbar() {
     const [showMobileMenu, setShowMobileMenu] = useState(true);
@@ -32,6 +40,9 @@ function Navbar() {
     const role = Cookies.get('userRole');
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
+    const [esModoClaro, setEsModoClaro] = useState(true);
+    const { i18n, t } = useTranslation();
+    const [mostrarMenuIdioma, setMostrarMenuIdioma] = useState(false);
 
     const closeAllDropdowns = () => {
         setShowDropdownReportes(false);
@@ -72,6 +83,10 @@ function Navbar() {
             if (!Array.from(document.getElementsByClassName('Login')).some(el => el.contains(event.target))) {
                 setShowDropdownUser(false);
                 setIsOpen(false);
+            }
+
+            if (!Array.from(document.getElementsByClassName('idiomaMenu')).some(el => el.contains(event.target))) {
+                setMostrarMenuIdioma(false);
             }
         };
 
@@ -423,420 +438,482 @@ function Navbar() {
         }
     };
 
+    const toggleModo = () => {
+        setEsModoClaro(!esModoClaro);
+    };
+
+    const cambiarIdioma = (idioma) => {
+        i18n.changeLanguage(idioma);
+        setMostrarMenuIdioma(false);
+    };
+
+    useEffect(() => {
+        if (esModoClaro) {
+            document.body.classList.remove('dark-mode');
+        } else {
+            document.body.classList.add('dark-mode');
+        }
+    }, [esModoClaro]);
+
     return (
         <div className='contenedor'>
+            <div className={`menuLateral ${showMobileMenu ? 'abierto' : 'cerrado'}`} ref={menuRef}>
+                <div className={`logo ${showMobileMenu ? 'abierto' : 'cerrado'}`}>
+                    {showMobileMenu ? <img src={Logo} alt="Logo" /> : <img src={Logo2} alt="Logo" />}
+                </div>
 
-            <div className={`menuLateral ${showMobileMenu ? 'abierto' : 'Cerrado'}`} ref={menuRef}>
-                <ul className='Menu'>
-                    <li className={`SubMenu ${showMobileMenu ? 'abierto' : 'Cerrado'}`}>
-                        <Link className={`SubMenu-Titulo-Solo ${showMobileMenu ? 'abierto' : 'Cerrado'}`} to='/' >
-                            <span className='SubMenu-Titulo-Icono'><FaHome /></span>
-                            {showMobileMenu && (
-                                <span className="SubMenu-Titulo-Texto">Inicio</span>
-                            )}
-                        </Link>
-                    </li>
-
-                    {reportes === true && (
-                        <li className='SubMenu'>
-                            <div className='SubMenu-Titulo' onClick={() => {
-                                closeAllDropdowns();
-                                if (showMobileMenu === false) {
-                                    setShowMobileMenu(true);
-                                }
-                                setShowDropdownReportes(!showDropdownReportes);
-                            }}>
-                                <span className='SubMenu-Titulo-Contenedor'>
-                                    <span className='SubMenu-Titulo-Icono'><FaFileAlt /></span>
-                                    {showMobileMenu && (
-                                        <div>
-                                            <span className="SubMenu-Titulo-Texto">Reportes</span>
-                                            <span className="SubMenu-Titulo-Icono2">
-                                                <FaChevronLeft className={`icono-flecha ${showDropdownReportes ? 'rotado' : ''}`} />
-                                            </span>
-                                        </div>
-                                    )}
-                                </span>
-                            </div>
-                            <div className={`SubMenu-Contenido ${showMobileMenu && showDropdownReportes ? 'visible' : 'oculto'}`}>
-                                <ul>
-                                    {subChecksReportes.Capacidades === true && (<Link className='SubMenu-Contenido-Titulo' to={{ pathname: "/Login", search: "?tipo=Capacidades" }} ><li>Capacidades</li></Link>)}
-                                    {subChecksReportes.Supervision === true && (<Link className='SubMenu-Contenido-Titulo' to={{ pathname: "/Login", search: "?tipo=supervision" }} ><li>Supervision</li></Link>)}
-                                </ul>
-                            </div>
+                <div className='menu'>
+                    <ul className='Menu'>
+                        <span className={`sub-titulo ${showMobileMenu ? 'abierto' : 'cerrado'}`}>Aplicativos</span>
+                        <li className={`SubMenu ${showMobileMenu ? 'abierto' : 'cerrado'}`}>
+                            <Link className={`SubMenu-Titulo-Solo ${showMobileMenu ? 'abierto' : 'cerrado'}`} to='/' >
+                                <span className='SubMenu-Titulo-Icono'><FaHome /></span>
+                                {showMobileMenu && (
+                                    <span className="SubMenu-Titulo-Texto">{t('navbar.home')}</span>
+                                )}
+                            </Link>
                         </li>
-                    )}
 
-                    {facturacion === true && (
-                        <li className='SubMenu'>
-                            <div className='SubMenu-Titulo' onClick={() => {
-                                closeAllDropdowns();
-                                if (showMobileMenu === false) {
-                                    setShowMobileMenu(true);
-                                }
-                                setShowDropdownFacturacion(!showDropdownFacturacion);
-                            }}>
-                                <span className='SubMenu-Titulo-Contenedor'>
-                                    <span className='SubMenu-Titulo-Icono'><HiClipboardList /></span>
-                                    {showMobileMenu && (
-                                        <div>
-                                            <span className="SubMenu-Titulo-Texto">Facturación</span>
-                                            <span className="SubMenu-Titulo-Icono2">
-                                                <FaChevronLeft className={`icono-flecha ${showDropdownFacturacion ? 'rotado' : ''}`} />
-                                            </span>
-                                        </div>
-                                    )}
-                                </span>
-                            </div>
-                            <div className={`SubMenu-Contenido ${showMobileMenu && showDropdownFacturacion ? 'visible' : 'oculto'}`}>
-                                <ul>
-                                    {subChecksFacturacion.ConsolidadoNacional === true && (<Link className='SubMenu-Contenido-Titulo' to="/ConsolidadoNacionalFacturacion" ><li>Consolidado nacional</li></Link>)}
-                                    {subChecksFacturacion.Proyectos === true && (<Link className='SubMenu-Contenido-Titulo' to="/Proyectos" ><li>Proyectos</li></Link>)}
-                                    {subChecksFacturacion.Corporativo === true && (<Link className='SubMenu-Contenido-Titulo' to="/CorporativoFacturacion" ><li>Corporativo</li></Link>)}
-                                    {subChecksFacturacion.Mantenimiento === true && (<Link className='SubMenu-Contenido-Titulo' to="/MantenimientoFacturacion" ><li>Mantenimiento</li></Link>)}
-                                    {subChecksFacturacion.Operaciones === true && (<Link className='SubMenu-Contenido-Titulo' to="/OperacionesFacturacion" ><li>Operaciones</li></Link>)}
-                                    {subChecksFacturacion.Mintic === true && (<Link className='SubMenu-Contenido-Titulo' to="/MinticFacturacion" ><li>Mintic</li></Link>)}
-                                    {subChecksFacturacion.Smu === true && (<Link className='SubMenu-Contenido-Titulo' to="/SMU" ><li>SMU</li></Link>)}
-                                    {subChecksFacturacion.ImplementacionMovil === true && (<Link className='SubMenu-Contenido-Titulo' to="/ImplementacionesFacturacion" ><li>Implementacion Movil</li></Link>)}
-                                    {subChecksFacturacion.MedicionesMovil === true && (<Link className='SubMenu-Contenido-Titulo' to="/MedicionesFacturacion" ><li>Mediciones Movil</li></Link>)}
-                                    {subChecksFacturacion.ObraCivilMovil === true && (<Link className='SubMenu-Contenido-Titulo' to="/ObraCivilFacturacion" ><li>Obra Civil Movil</li></Link>)}
-                                </ul>
-                            </div>
-                        </li>
-                    )}
+                        {reportes === true && (
+                            <li className='SubMenu'>
+                                <div className='SubMenu-Titulo' onClick={() => {
+                                    closeAllDropdowns();
+                                    if (showMobileMenu === false) {
+                                        setShowMobileMenu(true);
+                                    }
+                                    setShowDropdownReportes(!showDropdownReportes);
+                                }}>
+                                    <span className={`SubMenu-Titulo-Contenedor ${showMobileMenu ? 'abierto' : 'cerrado'}`}>
+                                        <span className='SubMenu-Titulo-Icono'><FaFileAlt /></span>
+                                        {showMobileMenu && (
+                                            <div>
+                                                <span className="SubMenu-Titulo-Texto">Reportes</span>
+                                                <span className="SubMenu-Titulo-Icono2">
+                                                    <FaChevronLeft className={`icono-flecha ${showDropdownReportes ? 'rotado' : ''}`} />
+                                                </span>
+                                            </div>
+                                        )}
+                                    </span>
+                                </div>
+                                <div className={`SubMenu-Contenido ${showMobileMenu && showDropdownReportes ? 'visible' : 'oculto'}`}>
+                                    <ul>
+                                        {subChecksReportes.Capacidades === true && (<Link className='SubMenu-Contenido-Titulo' to={{ pathname: "/Login", search: "?tipo=Capacidades" }} ><li>Capacidades</li></Link>)}
+                                        {subChecksReportes.Supervision === true && (<Link className='SubMenu-Contenido-Titulo' to={{ pathname: "/Login", search: "?tipo=supervision" }} ><li>Supervision</li></Link>)}
+                                    </ul>
+                                </div>
+                            </li>
+                        )}
 
-                    {produccion === true && (
-                        <li className='SubMenu'>
-                            <div className='SubMenu-Titulo' onClick={() => {
-                                closeAllDropdowns();
-                                if (showMobileMenu === false) {
-                                    setShowMobileMenu(true);
-                                }
-                                setShowDropdownProduccion(!showDropdownProduccion)
-                            }}>
-                                <span className='SubMenu-Titulo-Contenedor'>
-                                    <span className='SubMenu-Titulo-Icono'><HiChartBar /></span>
-                                    {showMobileMenu && (
-                                        <div>
-                                            <span className="SubMenu-Titulo-Texto">Producción</span>
-                                            <span className="SubMenu-Titulo-Icono2">
-                                                <FaChevronLeft className={`icono-flecha ${showDropdownProduccion ? 'rotado' : ''}`} />
-                                            </span>
-                                        </div>
-                                    )}
-                                </span>
-                            </div>
-                            <div className={`SubMenu-Contenido ${showMobileMenu && showDropdownProduccion ? 'visible' : 'oculto'}`}>
-                                <ul>
-                                    {subChecksProduccion.ProducionNacional === true && (<Link className='SubMenu-Contenido-Titulo' to="/ProductividadNacional" ><li>Productividad nacional</li></Link>)}
-                                    {subChecksProduccion.Proyectos === true && (<Link className='SubMenu-Contenido-Titulo' to="/PlaneacionFinanciero" ><li>Proyectos</li></Link>)}
-                                    {subChecksProduccion.Corporativo === true && (<Link className='SubMenu-Contenido-Titulo' to="/CorporativoFinanciero" ><li>Corporativo</li></Link>)}
-                                    {subChecksProduccion.Mantenimiento === true && (<Link className='SubMenu-Contenido-Titulo' to="/MantenimientoFinanciero" ><li>Mantenimiento</li></Link>)}
-                                    {subChecksProduccion.Reingenierias === true && (<Link className='SubMenu-Contenido-Titulo' to="/ReingenieriaFinanciero" ><li>Reingenierias</li></Link>)}
-                                    {subChecksProduccion.Operaciones === true && (<Link className='SubMenu-Contenido-Titulo' to="/OperacionesFinanciero" ><li>Operaciones</li></Link>)}
-                                </ul>
-                            </div>
-                        </li>
-                    )}
+                        <span className={`sub-titulo ${showMobileMenu ? 'abierto' : 'cerrado'}`}>Desempeño Financiero</span>
+                        {facturacion === true && (
+                            <li className='SubMenu'>
+                                <div className='SubMenu-Titulo' onClick={() => {
+                                    closeAllDropdowns();
+                                    if (showMobileMenu === false) {
+                                        setShowMobileMenu(true);
+                                    }
+                                    setShowDropdownFacturacion(!showDropdownFacturacion);
+                                }}>
+                                    <span className={`SubMenu-Titulo-Contenedor ${showMobileMenu ? 'abierto' : 'cerrado'}`}>
+                                        <span className='SubMenu-Titulo-Icono'><HiClipboardList /></span>
+                                        {showMobileMenu && (
+                                            <div>
+                                                <span className="SubMenu-Titulo-Texto">Facturación</span>
+                                                <span className="SubMenu-Titulo-Icono2">
+                                                    <FaChevronLeft className={`icono-flecha ${showDropdownFacturacion ? 'rotado' : ''}`} />
+                                                </span>
+                                            </div>
+                                        )}
+                                    </span>
+                                </div>
+                                <div className={`SubMenu-Contenido ${showMobileMenu && showDropdownFacturacion ? 'visible' : 'oculto'}`}>
+                                    <ul>
+                                        {subChecksFacturacion.ConsolidadoNacional === true && (<Link className='SubMenu-Contenido-Titulo' to="/ConsolidadoNacionalFacturacion" ><li>Consolidado nacional</li></Link>)}
+                                        {subChecksFacturacion.Proyectos === true && (<Link className='SubMenu-Contenido-Titulo' to="/Proyectos" ><li>Proyectos</li></Link>)}
+                                        {subChecksFacturacion.Corporativo === true && (<Link className='SubMenu-Contenido-Titulo' to="/CorporativoFacturacion" ><li>Corporativo</li></Link>)}
+                                        {subChecksFacturacion.Mantenimiento === true && (<Link className='SubMenu-Contenido-Titulo' to="/MantenimientoFacturacion" ><li>Mantenimiento</li></Link>)}
+                                        {subChecksFacturacion.Operaciones === true && (<Link className='SubMenu-Contenido-Titulo' to="/OperacionesFacturacion" ><li>Operaciones</li></Link>)}
+                                        {subChecksFacturacion.Mintic === true && (<Link className='SubMenu-Contenido-Titulo' to="/MinticFacturacion" ><li>Mintic</li></Link>)}
+                                        {subChecksFacturacion.Smu === true && (<Link className='SubMenu-Contenido-Titulo' to="/SMU" ><li>SMU</li></Link>)}
+                                        {subChecksFacturacion.ImplementacionMovil === true && (<Link className='SubMenu-Contenido-Titulo' to="/ImplementacionesFacturacion" ><li>Implementacion Movil</li></Link>)}
+                                        {subChecksFacturacion.MedicionesMovil === true && (<Link className='SubMenu-Contenido-Titulo' to="/MedicionesFacturacion" ><li>Mediciones Movil</li></Link>)}
+                                        {subChecksFacturacion.ObraCivilMovil === true && (<Link className='SubMenu-Contenido-Titulo' to="/ObraCivilFacturacion" ><li>Obra Civil Movil</li></Link>)}
+                                    </ul>
+                                </div>
+                            </li>
+                        )}
 
-                    {indicadores === true && (
-                        <li className='SubMenu'>
-                            <div className='SubMenu-Titulo' onClick={() => {
-                                closeAllDropdowns();
-                                if (showMobileMenu === false) {
-                                    setShowMobileMenu(true);
-                                }
-                                setShowDropdownIndicadores(!showDropdownIndicadores)
-                            }}>
-                                <span className='SubMenu-Titulo-Contenedor'>
-                                    <span className='SubMenu-Titulo-Icono'><FaChartLine /></span>
-                                    {showMobileMenu && (
-                                        <div>
-                                            <span className="SubMenu-Titulo-Texto">Indicadores</span>
-                                            <span className="SubMenu-Titulo-Icono2">
-                                                <FaChevronLeft className={`icono-flecha ${showDropdownIndicadores ? 'rotado' : ''}`} />
-                                            </span>
-                                        </div>
-                                    )}
-                                </span>
-                            </div>
-                            <div className={`SubMenu-Contenido ${showMobileMenu && showDropdownIndicadores ? 'visible' : 'oculto'}`}>
-                                <ul>
-                                    {subChecksIndicadores.HistoricoKpi && (<Link className='SubMenu-Contenido-Titulo' to="/HistoricoKPI" ><li>Histórico KPI</li></Link>)}
-                                    {subChecksIndicadores.G1Mantenimiento && (<Link className='SubMenu-Contenido-Titulo' to="/MantenimientoTecnico" ><li>G1 Mantenimiento</li></Link>)}
-                                    {subChecksIndicadores.G2G8MasivoCentro && (<Link className='SubMenu-Contenido-Titulo' to="/G2G8MasivoCentro" ><li>G2 - G8 Masivo Centro</li></Link>)}
-                                    {/*<Link className='SubMenu-Contenido-Titulo' to="/Mintic" >G5 MINTIC</Link>*/}
-                                    {subChecksIndicadores.Nps && (<Link className='SubMenu-Contenido-Titulo' to="/NPS" ><li>NPS</li></Link>)}
-                                </ul>
-                            </div>
-                        </li>
-                    )}
+                        {produccion === true && (
+                            <li className='SubMenu'>
+                                <div className='SubMenu-Titulo' onClick={() => {
+                                    closeAllDropdowns();
+                                    if (showMobileMenu === false) {
+                                        setShowMobileMenu(true);
+                                    }
+                                    setShowDropdownProduccion(!showDropdownProduccion)
+                                }}>
+                                    <span className={`SubMenu-Titulo-Contenedor ${showMobileMenu ? 'abierto' : 'cerrado'}`}>
+                                        <span className='SubMenu-Titulo-Icono'><HiChartBar /></span>
+                                        {showMobileMenu && (
+                                            <div>
+                                                <span className="SubMenu-Titulo-Texto">Producción</span>
+                                                <span className="SubMenu-Titulo-Icono2">
+                                                    <FaChevronLeft className={`icono-flecha ${showDropdownProduccion ? 'rotado' : ''}`} />
+                                                </span>
+                                            </div>
+                                        )}
+                                    </span>
+                                </div>
+                                <div className={`SubMenu-Contenido ${showMobileMenu && showDropdownProduccion ? 'visible' : 'oculto'}`}>
+                                    <ul>
+                                        {subChecksProduccion.ProducionNacional === true && (<Link className='SubMenu-Contenido-Titulo' to="/ProductividadNacional" ><li>Productividad nacional</li></Link>)}
+                                        {subChecksProduccion.Proyectos === true && (<Link className='SubMenu-Contenido-Titulo' to="/PlaneacionFinanciero" ><li>Proyectos</li></Link>)}
+                                        {subChecksProduccion.Corporativo === true && (<Link className='SubMenu-Contenido-Titulo' to="/CorporativoFinanciero" ><li>Corporativo</li></Link>)}
+                                        {subChecksProduccion.Mantenimiento === true && (<Link className='SubMenu-Contenido-Titulo' to="/MantenimientoFinanciero" ><li>Mantenimiento</li></Link>)}
+                                        {subChecksProduccion.Reingenierias === true && (<Link className='SubMenu-Contenido-Titulo' to="/ReingenieriaFinanciero" ><li>Reingenierias</li></Link>)}
+                                        {subChecksProduccion.Operaciones === true && (<Link className='SubMenu-Contenido-Titulo' to="/OperacionesFinanciero" ><li>Operaciones</li></Link>)}
+                                    </ul>
+                                </div>
+                            </li>
+                        )}
 
-                    {puntuacion === true && (
-                        <li className='SubMenu'>
-                            <div className='SubMenu-Titulo' onClick={() => {
-                                closeAllDropdowns();
-                                if (showMobileMenu === false) {
-                                    setShowMobileMenu(true);
-                                }
-                                setShowDropdownPuntuacion(!showDropdownPuntuacion)
-                            }}>
-                                <span className='SubMenu-Titulo-Contenedor'>
-                                    <span className='SubMenu-Titulo-Icono'><FaStar /></span>
-                                    {showMobileMenu && (
-                                        <div>
-                                            <span className="SubMenu-Titulo-Texto">Puntuación</span>
-                                            <span className="SubMenu-Titulo-Icono2">
-                                                <FaChevronLeft className={`icono-flecha ${showDropdownPuntuacion ? 'rotado' : ''}`} />
-                                            </span>
-                                        </div>
-                                    )}
-                                </span>
-                            </div>
-                            <div className={`SubMenu-Contenido ${showMobileMenu && showDropdownPuntuacion ? 'visible' : 'oculto'}`}>
-                                <ul>
-                                    {subChecksPuntuacion.Proyectos && (<Link className='SubMenu-Contenido-Titulo' to="/PlaneacionPuntuacion" ><li>Proyectos</li></Link>)}
-                                    {subChecksPuntuacion.Corporativo && (<Link className='SubMenu-Contenido-Titulo' to="/CorporativoPuntuacion" ><li>Corporativo</li></Link>)}
-                                    {subChecksPuntuacion.Mantenimiento && (<Link className='SubMenu-Contenido-Titulo' to="/MantenimientoPuntuacion" ><li>Mantenimiento</li></Link>)}
-                                    {subChecksPuntuacion.Reingenierias && (<Link className='SubMenu-Contenido-Titulo' to="/ReingenieriasPuntuacion" ><li>Reingenierias</li></Link>)}
-                                </ul>
-                            </div>
-                        </li>
-                    )}
+                        {indicadores === true && (
+                            <li className='SubMenu'>
+                                <div className='SubMenu-Titulo' onClick={() => {
+                                    closeAllDropdowns();
+                                    if (showMobileMenu === false) {
+                                        setShowMobileMenu(true);
+                                    }
+                                    setShowDropdownIndicadores(!showDropdownIndicadores)
+                                }}>
+                                    <span className={`SubMenu-Titulo-Contenedor ${showMobileMenu ? 'abierto' : 'cerrado'}`}>
+                                        <span className='SubMenu-Titulo-Icono'><FaChartLine /></span>
+                                        {showMobileMenu && (
+                                            <div>
+                                                <span className="SubMenu-Titulo-Texto">Indicadores</span>
+                                                <span className="SubMenu-Titulo-Icono2">
+                                                    <FaChevronLeft className={`icono-flecha ${showDropdownIndicadores ? 'rotado' : ''}`} />
+                                                </span>
+                                            </div>
+                                        )}
+                                    </span>
+                                </div>
+                                <div className={`SubMenu-Contenido ${showMobileMenu && showDropdownIndicadores ? 'visible' : 'oculto'}`}>
+                                    <ul>
+                                        {subChecksIndicadores.HistoricoKpi && (<Link className='SubMenu-Contenido-Titulo' to="/HistoricoKPI" ><li>Histórico KPI</li></Link>)}
+                                        {subChecksIndicadores.G1Mantenimiento && (<Link className='SubMenu-Contenido-Titulo' to="/MantenimientoTecnico" ><li>G1 Mantenimiento</li></Link>)}
+                                        {subChecksIndicadores.G2G8MasivoCentro && (<Link className='SubMenu-Contenido-Titulo' to="/G2G8MasivoCentro" ><li>G2 - G8 Masivo Centro</li></Link>)}
+                                        {/*<Link className='SubMenu-Contenido-Titulo' to="/Mintic" >G5 MINTIC</Link>*/}
+                                        {subChecksIndicadores.Nps && (<Link className='SubMenu-Contenido-Titulo' to="/NPS" ><li>NPS</li></Link>)}
+                                    </ul>
+                                </div>
+                            </li>
+                        )}
 
-                    {operacion === true && (
-                        <li className='SubMenu'>
-                            <div className='SubMenu-Titulo' onClick={() => {
-                                closeAllDropdowns();
-                                if (showMobileMenu === false) {
-                                    setShowMobileMenu(true);
-                                }
-                                setShowDropdownMantenimiento(!showDropdownMantenimiento)
-                            }}>
-                                <span className='SubMenu-Titulo-Contenedor'>
-                                    <span className='SubMenu-Titulo-Icono'><FaTools /></span>
-                                    {showMobileMenu && (
-                                        <div>
-                                            <span className="SubMenu-Titulo-Texto">Operación</span>
-                                            <span className="SubMenu-Titulo-Icono2">
-                                                <FaChevronLeft className={`icono-flecha ${showDropdownMantenimiento ? 'rotado' : ''}`} />
-                                            </span>
-                                        </div>
-                                    )}
-                                </span>
-                            </div>
-                            <div className={`SubMenu-Contenido ${showMobileMenu && showDropdownMantenimiento ? 'visible' : 'oculto'}`}>
-                                <ul>
-                                    {subChecksOperacion.CumplimientoSlaFo === true && (<Link className='SubMenu-Contenido-Titulo' to="/MantenimientoBacklogFO" ><li>Cumplimiento SLA FO</li></Link>)}
-                                    {subChecksOperacion.CumplimientoSlaHfc === true && (<Link className='SubMenu-Contenido-Titulo' to="/MantenimientoBacklogHFC" ><li>Cumplimiento SLA HFC</li></Link>)}
-                                    {subChecksOperacion.CorrectivoPreventivo === true && (<Link className='SubMenu-Contenido-Titulo' to="/MantenimientoPuntuacionTMRF" ><li>Correctivo - Preventivo</li></Link>)}
-                                    {subChecksOperacion.RecursoOperaciones === true && (<Link className='SubMenu-Contenido-Titulo' to="/RecursoOperaciones" ><li>Recurso Operaciones</li></Link>)}
-                                    {subChecksOperacion.SeguimientoMttoCentro === true && (<Link className='SubMenu-Contenido-Titulo' to="/Seguimiento" ><li>Seguimiento MTTO Centro</li></Link>)}
-                                    {subChecksOperacion.SeguimientoOperacionesCentro === true && (<Link className='SubMenu-Contenido-Titulo' to="/SeguimientoOperacionesCentro" ><li>Seguimiento Operaciones Centro</li></Link>)}
-                                    {subChecksOperacion.SeguimientoOperacionesNorte === true && (<Link className='SubMenu-Contenido-Titulo' to="/SeguimientoOperacionesNorte" ><li>Seguimiento Operaciones Norte</li></Link>)}
-                                    {subChecksOperacion.SeguimientoSmu === true && (<Link className='SubMenu-Contenido-Titulo' to="/SeguimientoSMU" ><li>Seguimiento SMU</li></Link>)}
-                                    {subChecksOperacion.TecnicoSmu === true && (<Link className='SubMenu-Contenido-Titulo' to="/SMU_Tecnico" ><li>Técnico SMU</li></Link>)}
-                                    {subChecksOperacion.TorreDeControl === true && (<Link className='SubMenu-Contenido-Titulo' to="/TorreDeControl" ><li>Torre de control</li></Link>)}
-                                </ul>
-                            </div>
-                        </li>
-                    )}
+                        <span className={`sub-titulo ${showMobileMenu ? 'abierto' : 'cerrado'}`}>Rendimiento Operativo</span>
+                        {puntuacion === true && (
+                            <li className='SubMenu'>
+                                <div className='SubMenu-Titulo' onClick={() => {
+                                    closeAllDropdowns();
+                                    if (showMobileMenu === false) {
+                                        setShowMobileMenu(true);
+                                    }
+                                    setShowDropdownPuntuacion(!showDropdownPuntuacion)
+                                }}>
+                                    <span className={`SubMenu-Titulo-Contenedor ${showMobileMenu ? 'abierto' : 'cerrado'}`}>
+                                        <span className='SubMenu-Titulo-Icono'><FaStar /></span>
+                                        {showMobileMenu && (
+                                            <div>
+                                                <span className="SubMenu-Titulo-Texto">Puntuación</span>
+                                                <span className="SubMenu-Titulo-Icono2">
+                                                    <FaChevronLeft className={`icono-flecha ${showDropdownPuntuacion ? 'rotado' : ''}`} />
+                                                </span>
+                                            </div>
+                                        )}
+                                    </span>
+                                </div>
+                                <div className={`SubMenu-Contenido ${showMobileMenu && showDropdownPuntuacion ? 'visible' : 'oculto'}`}>
+                                    <ul>
+                                        {subChecksPuntuacion.Proyectos && (<Link className='SubMenu-Contenido-Titulo' to="/PlaneacionPuntuacion" ><li>Proyectos</li></Link>)}
+                                        {subChecksPuntuacion.Corporativo && (<Link className='SubMenu-Contenido-Titulo' to="/CorporativoPuntuacion" ><li>Corporativo</li></Link>)}
+                                        {subChecksPuntuacion.Mantenimiento && (<Link className='SubMenu-Contenido-Titulo' to="/MantenimientoPuntuacion" ><li>Mantenimiento</li></Link>)}
+                                        {subChecksPuntuacion.Reingenierias && (<Link className='SubMenu-Contenido-Titulo' to="/ReingenieriasPuntuacion" ><li>Reingenierias</li></Link>)}
+                                    </ul>
+                                </div>
+                            </li>
+                        )}
 
-                    {logistica === true && (
-                        <li className='SubMenu'>
-                            <div className='SubMenu-Titulo' onClick={() => {
-                                closeAllDropdowns();
-                                if (showMobileMenu === false) {
-                                    setShowMobileMenu(true);
-                                }
-                                setShowDropdownLogistica(!showDropdownLogistica)
-                            }}>
-                                <span className='SubMenu-Titulo-Contenedor'>
-                                    <span className='SubMenu-Titulo-Icono'><FaBoxes /></span>
-                                    {showMobileMenu && (
-                                        <div>
-                                            <span className="SubMenu-Titulo-Texto">Logistica</span>
-                                            <span className="SubMenu-Titulo-Icono2">
-                                                <FaChevronLeft className={`icono-flecha ${showDropdownLogistica ? 'rotado' : ''}`} />
-                                            </span>
-                                        </div>
-                                    )}
-                                </span>
-                            </div>
-                            <div className={`SubMenu-Contenido ${showMobileMenu && showDropdownLogistica ? 'visible' : 'oculto'}`}>
-                                <ul>
-                                    {subChecksLogistica.EquiposEnMoviles === true && (<Link className='SubMenu-Contenido-Titulo' to="/EquiposMoviles" ><li>Equipos en moviles</li></Link>)}
-                                    {subChecksLogistica.ConsumosOperaciones === true && (<Link className='SubMenu-Contenido-Titulo' to="/ConsumosOperaciones" ><li>Consumos Operaciones</li></Link>)}
-                                    {subChecksLogistica.DesmonteMantenimiento === true && (<Link className='SubMenu-Contenido-Titulo' to="/DesmonteMantenimiento" ><li>Desmonte Mantenimiento</li></Link>)}
-                                    {subChecksLogistica.SolicitudDeMaterial === true && (<Link className='SubMenu-Contenido-Titulo' to={{ pathname: "/Login", search: "?tipo=solicitudMaterial" }} ><li>Solicitud de Material</li></Link>)}
-                                    {subChecksLogistica.ReporteMaterialFerretero === true && (<Link className='SubMenu-Contenido-Titulo' to={{ pathname: "/Login", search: "?tipo=reporteMaterialFerretero" }} ><li>Reporte Material Ferretero</li></Link>)}
-                                    {subChecksLogistica.InventarioMaterial === true && (<Link className='SubMenu-Contenido-Titulo' to={{ pathname: "/Login", search: "?tipo=inventarioMaterial" }} ><li>Inventario Material</li></Link>)}
-                                    {subChecksLogistica.EstadoProyectosR4 === true && (<Link className='SubMenu-Contenido-Titulo' to="/EstadoProyectosR4" ><li>Estado Proyectos R4</li></Link>)}
-                                    {subChecksLogistica.Activos === true && (<Link className='SubMenu-Contenido-Titulo' to="/Activos" ><li>Activos</li></Link>)}
-                                </ul>
-                            </div>
-                        </li>
-                    )}
+                        {operacion === true && (
+                            <li className='SubMenu'>
+                                <div className='SubMenu-Titulo' onClick={() => {
+                                    closeAllDropdowns();
+                                    if (showMobileMenu === false) {
+                                        setShowMobileMenu(true);
+                                    }
+                                    setShowDropdownMantenimiento(!showDropdownMantenimiento)
+                                }}>
+                                    <span className={`SubMenu-Titulo-Contenedor ${showMobileMenu ? 'abierto' : 'cerrado'}`}>
+                                        <span className='SubMenu-Titulo-Icono'><FaTools /></span>
+                                        {showMobileMenu && (
+                                            <div>
+                                                <span className="SubMenu-Titulo-Texto">Operación</span>
+                                                <span className="SubMenu-Titulo-Icono2">
+                                                    <FaChevronLeft className={`icono-flecha ${showDropdownMantenimiento ? 'rotado' : ''}`} />
+                                                </span>
+                                            </div>
+                                        )}
+                                    </span>
+                                </div>
+                                <div className={`SubMenu-Contenido ${showMobileMenu && showDropdownMantenimiento ? 'visible' : 'oculto'}`}>
+                                    <ul>
+                                        {subChecksOperacion.CumplimientoSlaFo === true && (<Link className='SubMenu-Contenido-Titulo' to="/MantenimientoBacklogFO" ><li>Cumplimiento SLA FO</li></Link>)}
+                                        {subChecksOperacion.CumplimientoSlaHfc === true && (<Link className='SubMenu-Contenido-Titulo' to="/MantenimientoBacklogHFC" ><li>Cumplimiento SLA HFC</li></Link>)}
+                                        {subChecksOperacion.CorrectivoPreventivo === true && (<Link className='SubMenu-Contenido-Titulo' to="/MantenimientoPuntuacionTMRF" ><li>Correctivo - Preventivo</li></Link>)}
+                                        {subChecksOperacion.RecursoOperaciones === true && (<Link className='SubMenu-Contenido-Titulo' to="/RecursoOperaciones" ><li>Recurso Operaciones</li></Link>)}
+                                        {subChecksOperacion.SeguimientoMttoCentro === true && (<Link className='SubMenu-Contenido-Titulo' to="/Seguimiento" ><li>Seguimiento MTTO Centro</li></Link>)}
+                                        {subChecksOperacion.SeguimientoOperacionesCentro === true && (<Link className='SubMenu-Contenido-Titulo' to="/SeguimientoOperacionesCentro" ><li>Seguimiento Operaciones Centro</li></Link>)}
+                                        {subChecksOperacion.SeguimientoOperacionesNorte === true && (<Link className='SubMenu-Contenido-Titulo' to="/SeguimientoOperacionesNorte" ><li>Seguimiento Operaciones Norte</li></Link>)}
+                                        {subChecksOperacion.SeguimientoSmu === true && (<Link className='SubMenu-Contenido-Titulo' to="/SeguimientoSMU" ><li>Seguimiento SMU</li></Link>)}
+                                        {subChecksOperacion.TecnicoSmu === true && (<Link className='SubMenu-Contenido-Titulo' to="/SMU_Tecnico" ><li>Técnico SMU</li></Link>)}
+                                        {subChecksOperacion.TorreDeControl === true && (<Link className='SubMenu-Contenido-Titulo' to="/TorreDeControl" ><li>Torre de control</li></Link>)}
+                                    </ul>
+                                </div>
+                            </li>
+                        )}
 
-                    {direccion === true && (
-                        <li className='SubMenu'>
-                            <div className='SubMenu-Titulo' onClick={() => {
-                                closeAllDropdowns();
-                                if (showMobileMenu === false) {
-                                    setShowMobileMenu(true);
-                                }
-                                setShowDropdownDireccion(!showDropdownDireccion)
-                            }}>
-                                <span className='SubMenu-Titulo-Contenedor'>
-                                    <span className='SubMenu-Titulo-Icono'><HiOfficeBuilding /></span>
-                                    {showMobileMenu && (
-                                        <div>
-                                            <span className="SubMenu-Titulo-Texto">Dirección</span>
-                                            <span className="SubMenu-Titulo-Icono2">
-                                                <FaChevronLeft className={`icono-flecha ${showDropdownDireccion ? 'rotado' : ''}`} />
-                                            </span>
-                                        </div>
-                                    )}
-                                </span>
-                            </div>
-                            <div className={`SubMenu-Contenido ${showMobileMenu && showDropdownDireccion ? 'visible' : 'oculto'}`}>
-                                <ul>
-                                    {subChecksDireccion.Penalizaciones === true && (<Link className='SubMenu-Contenido-Titulo' to="/Penalizaciones" ><li>Penalizaciones</li></Link>)}
-                                    {subChecksDireccion.CentroDeCostos === true && (<Link className='SubMenu-Contenido-Titulo' to="/Centro_de_costos" ><li>Centros de costos</li></Link>)}
-                                    {subChecksDireccion.ComposicionMoviles === true && (<Link className='SubMenu-Contenido-Titulo' to="/ComposicionMoviles" ><li>Composición móviles</li></Link>)}
-                                    {subChecksDireccion.Compras === true && (<Link className='SubMenu-Contenido-Titulo' to="/Compras" ><li>Compras</li></Link>)}
-                                    {subChecksDireccion.Capacidades === true && (<Link className='SubMenu-Contenido-Titulo' to="/CapacidadesTablero" ><li>Capacidades</li></Link>)}
-                                </ul>
-                            </div>
-                        </li>
-                    )}
+                        <span className={`sub-titulo ${showMobileMenu ? 'abierto' : 'cerrado'}`}>Cadena de Suministro</span>
+                        {logistica === true && (
+                            <li className='SubMenu'>
+                                <div className='SubMenu-Titulo' onClick={() => {
+                                    closeAllDropdowns();
+                                    if (showMobileMenu === false) {
+                                        setShowMobileMenu(true);
+                                    }
+                                    setShowDropdownLogistica(!showDropdownLogistica)
+                                }}>
+                                    <span className={`SubMenu-Titulo-Contenedor ${showMobileMenu ? 'abierto' : 'cerrado'}`}>
+                                        <span className='SubMenu-Titulo-Icono'><FaBoxes /></span>
+                                        {showMobileMenu && (
+                                            <div>
+                                                <span className="SubMenu-Titulo-Texto">Logistica</span>
+                                                <span className="SubMenu-Titulo-Icono2">
+                                                    <FaChevronLeft className={`icono-flecha ${showDropdownLogistica ? 'rotado' : ''}`} />
+                                                </span>
+                                            </div>
+                                        )}
+                                    </span>
+                                </div>
+                                <div className={`SubMenu-Contenido ${showMobileMenu && showDropdownLogistica ? 'visible' : 'oculto'}`}>
+                                    <ul>
+                                        {subChecksLogistica.EquiposEnMoviles === true && (<Link className='SubMenu-Contenido-Titulo' to="/EquiposMoviles" ><li>Equipos en moviles</li></Link>)}
+                                        {subChecksLogistica.ConsumosOperaciones === true && (<Link className='SubMenu-Contenido-Titulo' to="/ConsumosOperaciones" ><li>Consumos Operaciones</li></Link>)}
+                                        {subChecksLogistica.DesmonteMantenimiento === true && (<Link className='SubMenu-Contenido-Titulo' to="/DesmonteMantenimiento" ><li>Desmonte Mantenimiento</li></Link>)}
+                                        {subChecksLogistica.SolicitudDeMaterial === true && (<Link className='SubMenu-Contenido-Titulo' to={{ pathname: "/Login", search: "?tipo=solicitudMaterial" }} ><li>Solicitud de Material</li></Link>)}
+                                        {subChecksLogistica.ReporteMaterialFerretero === true && (<Link className='SubMenu-Contenido-Titulo' to={{ pathname: "/Login", search: "?tipo=reporteMaterialFerretero" }} ><li>Reporte Material Ferretero</li></Link>)}
+                                        {subChecksLogistica.InventarioMaterial === true && (<Link className='SubMenu-Contenido-Titulo' to={{ pathname: "/Login", search: "?tipo=inventarioMaterial" }} ><li>Inventario Material</li></Link>)}
+                                        {subChecksLogistica.EstadoProyectosR4 === true && (<Link className='SubMenu-Contenido-Titulo' to="/EstadoProyectosR4" ><li>Estado Proyectos R4</li></Link>)}
+                                        {subChecksLogistica.Activos === true && (<Link className='SubMenu-Contenido-Titulo' to="/Activos" ><li>Activos</li></Link>)}
+                                    </ul>
+                                </div>
+                            </li>
+                        )}
 
-                    {ssta === true && (
-                        <li className='SubMenu'>
-                            <div className='SubMenu-Titulo' onClick={() => {
-                                closeAllDropdowns();
-                                if (showMobileMenu === false) {
-                                    setShowMobileMenu(true);
-                                }
-                                setShowDropdownSSTA(!showDropdownSSTA)
-                            }}>
-                                <span className='SubMenu-Titulo-Contenedor'>
-                                    <span className='SubMenu-Titulo-Icono'><FaHardHat /></span>
-                                    {showMobileMenu && (
-                                        <div>
-                                            <span className="SubMenu-Titulo-Texto">SSTA</span>
-                                            <span className="SubMenu-Titulo-Icono2">
-                                                <FaChevronLeft className={`icono-flecha ${showDropdownSSTA ? 'rotado' : ''}`} />
-                                            </span>
-                                        </div>
-                                    )}
-                                </span>
-                            </div>
-                            <div className={`SubMenu-Contenido ${showMobileMenu && showDropdownSSTA ? 'visible' : 'oculto'}`}>
-                                <ul>
-                                    {subChecksSsta.Ssta === true && (<Link className='SubMenu-Contenido-Titulo' to="/SSTA" ><li>SSTA</li></Link>)}
-                                    {subChecksSsta.CursoDeAlturas === true && (<Link className='SubMenu-Contenido-Titulo' to="/CursosDeAlturas" ><li>Indicadores Capacitación</li></Link>)}
-                                    {subChecksSsta.EntregasPendientesDotacion === true && (<Link className='SubMenu-Contenido-Titulo' to="/EntregasPendientesDotacion" ><li>Entregas Pendientes Dotación</li></Link>)}
-                                    {subChecksSsta.UbicacionDeActividades === true && (<Link className='SubMenu-Contenido-Titulo' to="/UbicacionDeActividades" ><li>Ubicacion de Actividades</li></Link>)}
-                                </ul>
-                            </div>
-                        </li>
-                    )}
+                        {direccion === true && (
+                            <li className='SubMenu'>
+                                <div className='SubMenu-Titulo' onClick={() => {
+                                    closeAllDropdowns();
+                                    if (showMobileMenu === false) {
+                                        setShowMobileMenu(true);
+                                    }
+                                    setShowDropdownDireccion(!showDropdownDireccion)
+                                }}>
+                                    <span className={`SubMenu-Titulo-Contenedor ${showMobileMenu ? 'abierto' : 'cerrado'}`}>
+                                        <span className='SubMenu-Titulo-Icono'><HiOfficeBuilding /></span>
+                                        {showMobileMenu && (
+                                            <div>
+                                                <span className="SubMenu-Titulo-Texto">Dirección</span>
+                                                <span className="SubMenu-Titulo-Icono2">
+                                                    <FaChevronLeft className={`icono-flecha ${showDropdownDireccion ? 'rotado' : ''}`} />
+                                                </span>
+                                            </div>
+                                        )}
+                                    </span>
+                                </div>
+                                <div className={`SubMenu-Contenido ${showMobileMenu && showDropdownDireccion ? 'visible' : 'oculto'}`}>
+                                    <ul>
+                                        {subChecksDireccion.Penalizaciones === true && (<Link className='SubMenu-Contenido-Titulo' to="/Penalizaciones" ><li>Penalizaciones</li></Link>)}
+                                        {subChecksDireccion.CentroDeCostos === true && (<Link className='SubMenu-Contenido-Titulo' to="/Centro_de_costos" ><li>Centros de costos</li></Link>)}
+                                        {subChecksDireccion.ComposicionMoviles === true && (<Link className='SubMenu-Contenido-Titulo' to="/ComposicionMoviles" ><li>Composición móviles</li></Link>)}
+                                        {subChecksDireccion.Compras === true && (<Link className='SubMenu-Contenido-Titulo' to="/Compras" ><li>Compras</li></Link>)}
+                                        {subChecksDireccion.Capacidades === true && (<Link className='SubMenu-Contenido-Titulo' to="/CapacidadesTablero" ><li>Capacidades</li></Link>)}
+                                    </ul>
+                                </div>
+                            </li>
+                        )}
 
-                    {parqueAutomotor === true && (
-                        <li className='SubMenu'>
-                            <div className='SubMenu-Titulo' onClick={() => {
-                                closeAllDropdowns();
-                                if (showMobileMenu === false) {
-                                    setShowMobileMenu(true);
-                                }
-                                setShowDropdownParqueAutomotor(!showDropdownParqueAutomotor)
-                            }}>
-                                <span className='SubMenu-Titulo-Contenedor'>
-                                    <span className='SubMenu-Titulo-Icono'><FaTruck /></span>
-                                    {showMobileMenu && (
-                                        <div>
-                                            <span className="SubMenu-Titulo-Texto">Parque Automotor</span>
-                                            <span className="SubMenu-Titulo-Icono2">
-                                                <FaChevronLeft className={`icono-flecha ${showDropdownParqueAutomotor ? 'rotado' : ''}`} />
-                                            </span>
-                                        </div>
-                                    )}
-                                </span>
-                            </div>
-                            <div className={`SubMenu-Contenido ${showMobileMenu && showDropdownParqueAutomotor ? 'visible' : 'oculto'}`}>
-                                <ul>
-                                    {subChecksParqueAutomotor.Moviles === true && (<Link className='SubMenu-Contenido-Titulo' to="/Moviles" ><li>Moviles</li></Link>)}
-                                </ul>
-                            </div>
-                        </li>
-                    )}
+                        <span className={`sub-titulo ${showMobileMenu ? 'abierto' : 'cerrado'}`}>HSEQ</span>
+                        {ssta === true && (
+                            <li className='SubMenu'>
+                                <div className='SubMenu-Titulo' onClick={() => {
+                                    closeAllDropdowns();
+                                    if (showMobileMenu === false) {
+                                        setShowMobileMenu(true);
+                                    }
+                                    setShowDropdownSSTA(!showDropdownSSTA)
+                                }}>
+                                    <span className={`SubMenu-Titulo-Contenedor ${showMobileMenu ? 'abierto' : 'cerrado'}`}>
+                                        <span className='SubMenu-Titulo-Icono'><FaHardHat /></span>
+                                        {showMobileMenu && (
+                                            <div>
+                                                <span className="SubMenu-Titulo-Texto">SSTA</span>
+                                                <span className="SubMenu-Titulo-Icono2">
+                                                    <FaChevronLeft className={`icono-flecha ${showDropdownSSTA ? 'rotado' : ''}`} />
+                                                </span>
+                                            </div>
+                                        )}
+                                    </span>
+                                </div>
+                                <div className={`SubMenu-Contenido ${showMobileMenu && showDropdownSSTA ? 'visible' : 'oculto'}`}>
+                                    <ul>
+                                        {subChecksSsta.Ssta === true && (<Link className='SubMenu-Contenido-Titulo' to="/SSTA" ><li>SSTA</li></Link>)}
+                                        {subChecksSsta.CursoDeAlturas === true && (<Link className='SubMenu-Contenido-Titulo' to="/CursosDeAlturas" ><li>Indicadores Capacitación</li></Link>)}
+                                        {subChecksSsta.EntregasPendientesDotacion === true && (<Link className='SubMenu-Contenido-Titulo' to="/EntregasPendientesDotacion" ><li>Entregas Pendientes Dotación</li></Link>)}
+                                        {subChecksSsta.UbicacionDeActividades === true && (<Link className='SubMenu-Contenido-Titulo' to="/UbicacionDeActividades" ><li>Ubicacion de Actividades</li></Link>)}
+                                    </ul>
+                                </div>
+                            </li>
+                        )}
 
-                    {gestionHumana === true && (
-                        <li className='SubMenu'>
-                            <div className='SubMenu-Titulo' onClick={() => {
-                                closeAllDropdowns();
-                                if (showMobileMenu === false) {
-                                    setShowMobileMenu(true);
-                                }
-                                setShowDropdownGestionHumana(!showDropdownGestionHumana)
-                            }}>
-                                <span className='SubMenu-Titulo-Contenedor'>
-                                    <span className='SubMenu-Titulo-Icono'><FaUserTie /></span>
-                                    {showMobileMenu && (
-                                        <div>
-                                            <span className="SubMenu-Titulo-Texto">Gestion Humana</span>
-                                            <span className="SubMenu-Titulo-Icono2">
-                                                <FaChevronLeft className={`icono-flecha ${showDropdownGestionHumana ? 'rotado' : ''}`} />
-                                            </span>
-                                        </div>
-                                    )}
-                                </span>
-                            </div>
-                            <div className={`SubMenu-Contenido ${showMobileMenu && showDropdownGestionHumana ? 'visible' : 'oculto'}`}>
-                                <ul>
-                                    {subChecksGestionHumana.Chatbot === true && (<Link className='SubMenu-Contenido-Titulo' to={{ pathname: "/Login", search: "?tipo=ChatBot" }} ><li>ChatBot</li></Link>)}
-                                    {subChecksGestionHumana.Carnetizacion === true && (<Link className='SubMenu-Contenido-Titulo' to={{ pathname: "/Login", search: "?tipo=Carnetizacion" }} ><li>Carnetizacion</li></Link>)}
-                                </ul>
-                            </div>
-                        </li>
-                    )}
-                </ul>
+                        {parqueAutomotor === true && (
+                            <li className='SubMenu'>
+                                <div className='SubMenu-Titulo' onClick={() => {
+                                    closeAllDropdowns();
+                                    if (showMobileMenu === false) {
+                                        setShowMobileMenu(true);
+                                    }
+                                    setShowDropdownParqueAutomotor(!showDropdownParqueAutomotor)
+                                }}>
+                                    <span className={`SubMenu-Titulo-Contenedor ${showMobileMenu ? 'abierto' : 'cerrado'}`}>
+                                        <span className='SubMenu-Titulo-Icono'><FaTruck /></span>
+                                        {showMobileMenu && (
+                                            <div>
+                                                <span className="SubMenu-Titulo-Texto">Parque Automotor</span>
+                                                <span className="SubMenu-Titulo-Icono2">
+                                                    <FaChevronLeft className={`icono-flecha ${showDropdownParqueAutomotor ? 'rotado' : ''}`} />
+                                                </span>
+                                            </div>
+                                        )}
+                                    </span>
+                                </div>
+                                <div className={`SubMenu-Contenido ${showMobileMenu && showDropdownParqueAutomotor ? 'visible' : 'oculto'}`}>
+                                    <ul>
+                                        {subChecksParqueAutomotor.Moviles === true && (<Link className='SubMenu-Contenido-Titulo' to="/Moviles" ><li>Moviles</li></Link>)}
+                                    </ul>
+                                </div>
+                            </li>
+                        )}
+
+                        {gestionHumana === true && (
+                            <li className='SubMenu'>
+                                <div className='SubMenu-Titulo' onClick={() => {
+                                    closeAllDropdowns();
+                                    if (showMobileMenu === false) {
+                                        setShowMobileMenu(true);
+                                    }
+                                    setShowDropdownGestionHumana(!showDropdownGestionHumana)
+                                }}>
+                                    <span className={`SubMenu-Titulo-Contenedor ${showMobileMenu ? 'abierto' : 'cerrado'}`}>
+                                        <span className='SubMenu-Titulo-Icono'><FaUserTie /></span>
+                                        {showMobileMenu && (
+                                            <div>
+                                                <span className="SubMenu-Titulo-Texto">Gestion Humana</span>
+                                                <span className="SubMenu-Titulo-Icono2">
+                                                    <FaChevronLeft className={`icono-flecha ${showDropdownGestionHumana ? 'rotado' : ''}`} />
+                                                </span>
+                                            </div>
+                                        )}
+                                    </span>
+                                </div>
+                                <div className={`SubMenu-Contenido ${showMobileMenu && showDropdownGestionHumana ? 'visible' : 'oculto'}`}>
+                                    <ul>
+                                        {subChecksGestionHumana.Chatbot === true && (<Link className='SubMenu-Contenido-Titulo' to={{ pathname: "/Login", search: "?tipo=ChatBot" }} ><li>ChatBot</li></Link>)}
+                                        {subChecksGestionHumana.Carnetizacion === true && (<Link className='SubMenu-Contenido-Titulo' to={{ pathname: "/Login", search: "?tipo=Carnetizacion" }} ><li>Carnetizacion</li></Link>)}
+                                    </ul>
+                                </div>
+                            </li>
+                        )}
+                    </ul>
+                </div>
             </div>
+
+            <div className='lineaVertical'></div>
 
             <div className='sub-contenedor'>
                 <div className='barraSuperior'>
-                    <div className='Icono-Menu' onClick={() => setShowMobileMenu(!showMobileMenu)}>
-                        {
-                            showMobileMenu ? <FaTimes /> : <FaBars />
-                        }
-                        {isLargeScreen === true ? (
-                            <div>
-                                {isLogin === true ? (
-                                    <div className='AjusteTitulo2'></div>
-                                ) : (
-                                    <div className='AjusteTitulo1'></div>
-                                )}
-                            </div>
-                        ) : (
-                            <div>
-                                {isLogin === true ? (
-                                    <div className='AjusteTitulo4'></div>
-                                ) : (
-                                    <div className='AjusteTitulo3'></div>
-                                )}
-                            </div>
-                        )}
-
-                    </div>
                     <div className='Titulo'>
-                        <p>
-                            Sicte CCOT
+                        <div className='Icono-Menu' onClick={() => {
+                            closeAllDropdowns()
+                            setShowMobileMenu(!showMobileMenu)
+                        }}>
+                            <FaBars />
+                            {isLargeScreen === true ? (
+                                <div>
+                                    {isLogin === true ? (
+                                        <div className='AjusteTitulo2'></div>
+                                    ) : (
+                                        <div className='AjusteTitulo1'></div>
+                                    )}
+                                </div>
+                            ) : (
+                                <div>
+                                    {isLogin === true ? (
+                                        <div className='AjusteTitulo4'></div>
+                                    ) : (
+                                        <div className='AjusteTitulo3'></div>
+                                    )}
+                                </div>
+                            )}
+
+                        </div>
+
+                        <p className='pCorto'>
+                            CCOT
                         </p>
-                        <p>
+                        <p className='pLargo'>
                             Centro de Control de Operaciones Técnicas
                         </p>
                     </div>
+
+                    <div className="buscador">
+                        <input
+                            type="text"
+                            placeholder="Buscar..."
+                            className="form-control"
+                        />
+                        <span className="icono-lupa"><FaSearch /></span>
+                    </div>
+
+                    <div className="idioma-selector">
+                        <button onClick={() => setMostrarMenuIdioma(!mostrarMenuIdioma)} className="bandera-btn">
+                            {i18n.language === 'es' && <img src={Colombia} alt="Colombia" />}
+                            {i18n.language === 'en' && <img src={EEUU} alt="USA" />}
+                        </button>
+                        <div className={`idiomaMenu ${mostrarMenuIdioma ? 'abierto' : ''}`}>
+                            <button className="opcionIdioma" onClick={() => cambiarIdioma('es')}>
+                                <img src={Colombia} alt="Colombia" /> Español
+                            </button >
+                            <button className="opcionIdioma" onClick={() => cambiarIdioma('en')}>
+                                <img src={EEUU} alt="USA" /> Inglés
+                            </button >
+                        </div>
+                    </div>
+
+                    <div className='modoClaro'>
+                        <button onClick={toggleModo}>
+                            {esModoClaro ? <FaSun color="#facc15" /> : <FaMoon color="#64748b" />}
+                        </button>
+                    </div>
+
                     {isLogin === true ? (
                         <div className='Login ON'>
                             <div className="circle-container"
@@ -896,18 +973,28 @@ function Navbar() {
                                     navigate('/Login?tipo=Inicio');
                                 }}
                             >
-                                {isLargeScreen ? (
-                                    <span className="name">Iniciar Sesión</span>
-                                ) : (
-                                    <FaUser className="icon" />
-                                )}
+                                <FaUser className="icon" />
                             </div>
                         </div>
                     )}
                 </div>
 
+                <div className='lineaHorizontal'></div>
+
                 <div className="contenido">
                     <Outlet />
+                </div>
+
+                <div className='lineaHorizontal'></div>
+
+                <div className='pieDePagina'>
+                    <span>Por <a href="https://www.sicte.com" target="_blank" rel="noopener noreferrer">Sicte S.A.S.</a></span>
+
+                    <div className='logos'>
+                        <img src={RSV} alt="Logo" title="Buenas Prácticas de Seguridad Vial 2023" />
+                        <img src={PREAD} alt="Logo" title="Programa de Excelencia Ambiental Distrital" />
+                        <img src={SGS} alt="Logo" title="Certificacion en ISO 9001, ISO 14001, ISO 45001" />
+                    </div>
                 </div>
             </div>
         </div>
