@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { Outlet, Link, useNavigate } from 'react-router-dom';
+import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { FaHardHat, FaFileAlt, FaTruck, FaBars, FaTimes, FaHome, FaChartLine, FaStar, FaTools, FaSearch, FaChevronLeft, FaUser, FaBoxes, FaUserTie, FaSun, FaMoon } from 'react-icons/fa';
 import { HiClipboardList, HiChartBar, HiOfficeBuilding } from "react-icons/hi";
 import { ThreeDots } from 'react-loader-spinner';
@@ -8,12 +8,12 @@ import Cookies from 'js-cookie';
 import axios from 'axios';
 import Logo from '../../images/Logo Original.png'
 import Logo2 from '../../images/Logo Original 2.png'
-import RSV from '../../images/RSV.png'
 import SGS from '../../images/SGS.png'
-import PREAD from '../../images/PREAD.png'
+import SGS2 from '../../images/SGS 2.png'
 import Colombia from '../../images/Flag_Colombia.png'
 import EEUU from '../../images/Flag_United_States.png'
 import { useTranslation } from 'react-i18next';
+import { getPageTitle } from '../../rutas/pageTitles';
 
 function Navbar() {
     const [showMobileMenu, setShowMobileMenu] = useState(true);
@@ -40,9 +40,13 @@ function Navbar() {
     const role = Cookies.get('userRole');
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
-    const [esModoClaro, setEsModoClaro] = useState(true);
+    const [esModoClaro, setEsModoClaro] = useState(() => {
+        return Cookies.get('dark-Mode') === 'true';
+    });;
     const { i18n, t } = useTranslation();
     const [mostrarMenuIdioma, setMostrarMenuIdioma] = useState(false);
+    const location = useLocation();
+    const tituloActual = getPageTitle(location.pathname) || 'Inicio';
 
     const closeAllDropdowns = () => {
         setShowDropdownReportes(false);
@@ -439,11 +443,14 @@ function Navbar() {
     };
 
     const toggleModo = () => {
-        setEsModoClaro(!esModoClaro);
+        const cambio = !esModoClaro;
+        setEsModoClaro(cambio);
+        Cookies.set('dark-Mode', String(cambio));
     };
 
     const cambiarIdioma = (idioma) => {
         i18n.changeLanguage(idioma);
+        Cookies.set('idioma', idioma);
         setMostrarMenuIdioma(false);
     };
 
@@ -457,25 +464,124 @@ function Navbar() {
 
     return (
         <div className='contenedor'>
-            <div className={`menuLateral ${showMobileMenu ? 'abierto' : 'cerrado'}`} ref={menuRef}>
-                <div className={`logo ${showMobileMenu ? 'abierto' : 'cerrado'}`}>
-                    {showMobileMenu ? <img src={Logo} alt="Logo" /> : <img src={Logo2} alt="Logo" />}
+            <div className='barraSuperior'>
+                <div className='Logo'>
+                    <div className='Icono-Menu' onClick={() => {
+                        closeAllDropdowns()
+                        setShowMobileMenu(!showMobileMenu)
+                    }}>
+                        <FaBars />
+                    </div>
+
+                    <div className={`logo ${showMobileMenu ? 'abierto' : 'cerrado'}`}>
+                        {esModoClaro ? <img src={Logo} alt="Logo" /> : <img src={Logo2} alt="Logo" />}
+                    </div>
                 </div>
 
-                <div className='menu'>
-                    <ul className='Menu'>
-                        <span className={`sub-titulo ${showMobileMenu ? 'abierto' : 'cerrado'}`}>Aplicativos</span>
-                        <li className={`SubMenu ${showMobileMenu ? 'abierto' : 'cerrado'}`}>
-                            <Link className={`SubMenu-Titulo-Solo ${showMobileMenu ? 'abierto' : 'cerrado'}`} to='/' >
-                                <span className='SubMenu-Titulo-Icono'><FaHome /></span>
-                                {showMobileMenu && (
-                                    <span className="SubMenu-Titulo-Texto">{t('navbar.home')}</span>
-                                )}
-                            </Link>
-                        </li>
+                <div className='Titulo'>
+                    <p>
+                        <strong>CCOT</strong>{tituloActual !== "Sicte CCOT" && (<span> - {tituloActual}</span>)}
+                    </p>
+                </div>
 
-                        {reportes === true && (
-                            <li className='SubMenu'>
+                <div className="buscador">
+                    <input
+                        type="text"
+                        placeholder="Buscar..."
+                        className="form-control"
+                    />
+                    <span className="icono-lupa"><FaSearch /></span>
+                </div>
+
+                <div className="idioma-selector">
+                    <button onClick={() => setMostrarMenuIdioma(!mostrarMenuIdioma)} className="bandera-btn">
+                        {i18n.language === 'es' && <img src={Colombia} alt="Colombia" />}
+                        {i18n.language === 'en' && <img src={EEUU} alt="USA" />}
+                    </button>
+                    <div className={`idiomaMenu ${mostrarMenuIdioma ? 'abierto' : ''}`}>
+                        <button className="opcionIdioma" onClick={() => cambiarIdioma('es')}>
+                            <img src={Colombia} alt="Colombia" /> Español
+                        </button >
+                        <button className="opcionIdioma" onClick={() => cambiarIdioma('en')}>
+                            <img src={EEUU} alt="USA" /> Inglés
+                        </button >
+                    </div>
+                </div>
+
+                <div className='modoClaro'>
+                    <button onClick={toggleModo}>
+                        {esModoClaro ? <FaSun color="#facc15" /> : <FaMoon color="#64748b" />}
+                    </button>
+                </div>
+
+                {isLogin === true ? (
+                    <div className='Login ON'>
+                        <div className="circle-container"
+                            onClick={() => {
+                                setIsOpen(!isOpen);
+                                setShowDropdownUser(!showDropdownUser);
+                            }}
+                        >
+                            <div className="circle">{initial}</div>
+                        </div>
+                        <div className={`menu ${isOpen ? 'open' : ''}`}>
+                            <span>{Cookies.get('userCorreo')}</span>
+                            <span>{Cookies.get('userNombre')}</span>
+                            <span>CC: {Cookies.get('userCedula')}</span>
+                            <span>Tel: {Cookies.get('userTelefono')}</span>
+                            <span>Rol: {ObtenerTextoMejorado(Cookies.get('userRole'))}</span>
+                            <ul>
+                                {role === 'admin' && (
+                                    <Link to="/BasesDeDatos"
+                                        onClick={() => {
+                                            setIsOpen(!isOpen);
+                                            setShowDropdownUser(!showDropdownUser);
+                                        }}
+                                    ><li>Bases de Datos</li></Link>
+                                )}
+                                {role === 'admin' && (
+                                    <Link to="/ControlUsuarios"
+                                        onClick={() => {
+                                            setIsOpen(!isOpen);
+                                            setShowDropdownUser(!showDropdownUser);
+                                        }}
+                                    ><li>Control de Usuarios</li></Link>
+                                )}
+                                <li onClick={handleLogout}>Cerrar Sesión</li>
+                            </ul>
+                        </div>
+                    </div>
+                ) : (
+                    <div className='Login OFF'>
+                        <div className="circle-container"
+                            onClick={() => {
+                                navigate('/Login?tipo=Inicio');
+                            }}
+                        >
+                            <FaUser className="icon" />
+                        </div>
+                    </div>
+                )}
+            </div>
+
+            <div className='lineaHorizontal'></div>
+
+            <div className='sub-contenedor'>
+
+                <div className={`menuLateral ${showMobileMenu ? 'abierto' : 'cerrado'}`} ref={menuRef}>
+                    <div className='menu'>
+                        <ul className='Menu'>
+                            <span className={`sub-titulo ${showMobileMenu ? 'abierto' : 'cerrado'}`}>Aplicativos</span>
+                            <li className={`SubMenu ${showMobileMenu ? 'abierto' : 'cerrado'}`}>
+                                <Link className={`SubMenu-Titulo-Solo ${showMobileMenu ? 'abierto' : 'cerrado'}`} to='/' >
+                                    <span className='SubMenu-Titulo-Icono'><FaHome /></span>
+                                    {showMobileMenu && (
+                                        <span className="SubMenu-Titulo-Texto">{t('navbar.home')}</span>
+                                    )}
+                                </Link>
+                            </li>
+
+                            <li className={`SubMenu ${reportes ? 'visible' : 'oculto'}`}>
                                 <div className='SubMenu-Titulo' onClick={() => {
                                     closeAllDropdowns();
                                     if (showMobileMenu === false) {
@@ -502,11 +608,9 @@ function Navbar() {
                                     </ul>
                                 </div>
                             </li>
-                        )}
 
-                        <span className={`sub-titulo ${showMobileMenu ? 'abierto' : 'cerrado'}`}>Desempeño Financiero</span>
-                        {facturacion === true && (
-                            <li className='SubMenu'>
+                            <span className={`sub-titulo ${showMobileMenu ? 'abierto' : 'cerrado'}`}>Desempeño Financiero</span>
+                            <li className={`SubMenu ${facturacion ? 'visible' : 'oculto'}`}>
                                 <div className='SubMenu-Titulo' onClick={() => {
                                     closeAllDropdowns();
                                     if (showMobileMenu === false) {
@@ -541,10 +645,8 @@ function Navbar() {
                                     </ul>
                                 </div>
                             </li>
-                        )}
 
-                        {produccion === true && (
-                            <li className='SubMenu'>
+                            <li className={`SubMenu ${produccion ? 'visible' : 'oculto'}`}>
                                 <div className='SubMenu-Titulo' onClick={() => {
                                     closeAllDropdowns();
                                     if (showMobileMenu === false) {
@@ -575,10 +677,8 @@ function Navbar() {
                                     </ul>
                                 </div>
                             </li>
-                        )}
 
-                        {indicadores === true && (
-                            <li className='SubMenu'>
+                            <li className={`SubMenu ${indicadores ? 'visible' : 'oculto'}`}>
                                 <div className='SubMenu-Titulo' onClick={() => {
                                     closeAllDropdowns();
                                     if (showMobileMenu === false) {
@@ -608,11 +708,9 @@ function Navbar() {
                                     </ul>
                                 </div>
                             </li>
-                        )}
 
-                        <span className={`sub-titulo ${showMobileMenu ? 'abierto' : 'cerrado'}`}>Rendimiento Operativo</span>
-                        {puntuacion === true && (
-                            <li className='SubMenu'>
+                            <span className={`sub-titulo ${showMobileMenu ? 'abierto' : 'cerrado'}`}>Rendimiento Operativo</span>
+                            <li className={`SubMenu ${puntuacion ? 'visible' : 'oculto'}`}>
                                 <div className='SubMenu-Titulo' onClick={() => {
                                     closeAllDropdowns();
                                     if (showMobileMenu === false) {
@@ -641,10 +739,8 @@ function Navbar() {
                                     </ul>
                                 </div>
                             </li>
-                        )}
 
-                        {operacion === true && (
-                            <li className='SubMenu'>
+                            <li className={`SubMenu ${operacion ? 'visible' : 'oculto'}`}>
                                 <div className='SubMenu-Titulo' onClick={() => {
                                     closeAllDropdowns();
                                     if (showMobileMenu === false) {
@@ -679,11 +775,9 @@ function Navbar() {
                                     </ul>
                                 </div>
                             </li>
-                        )}
 
-                        <span className={`sub-titulo ${showMobileMenu ? 'abierto' : 'cerrado'}`}>Cadena de Suministro</span>
-                        {logistica === true && (
-                            <li className='SubMenu'>
+                            <span className={`sub-titulo ${showMobileMenu ? 'abierto' : 'cerrado'}`}>Cadena de Suministro</span>
+                            <li className={`SubMenu ${logistica ? 'visible' : 'oculto'}`}>
                                 <div className='SubMenu-Titulo' onClick={() => {
                                     closeAllDropdowns();
                                     if (showMobileMenu === false) {
@@ -716,10 +810,8 @@ function Navbar() {
                                     </ul>
                                 </div>
                             </li>
-                        )}
 
-                        {direccion === true && (
-                            <li className='SubMenu'>
+                            <li className={`SubMenu ${direccion ? 'visible' : 'oculto'}`}>
                                 <div className='SubMenu-Titulo' onClick={() => {
                                     closeAllDropdowns();
                                     if (showMobileMenu === false) {
@@ -749,11 +841,9 @@ function Navbar() {
                                     </ul>
                                 </div>
                             </li>
-                        )}
 
-                        <span className={`sub-titulo ${showMobileMenu ? 'abierto' : 'cerrado'}`}>HSEQ</span>
-                        {ssta === true && (
-                            <li className='SubMenu'>
+                            <span className={`sub-titulo ${showMobileMenu ? 'abierto' : 'cerrado'}`}>HSEQ</span>
+                            <li className={`SubMenu ${ssta ? 'visible' : 'oculto'}`}>
                                 <div className='SubMenu-Titulo' onClick={() => {
                                     closeAllDropdowns();
                                     if (showMobileMenu === false) {
@@ -782,10 +872,8 @@ function Navbar() {
                                     </ul>
                                 </div>
                             </li>
-                        )}
 
-                        {parqueAutomotor === true && (
-                            <li className='SubMenu'>
+                            <li className={`SubMenu ${parqueAutomotor ? 'visible' : 'oculto'}`}>
                                 <div className='SubMenu-Titulo' onClick={() => {
                                     closeAllDropdowns();
                                     if (showMobileMenu === false) {
@@ -811,10 +899,8 @@ function Navbar() {
                                     </ul>
                                 </div>
                             </li>
-                        )}
 
-                        {gestionHumana === true && (
-                            <li className='SubMenu'>
+                            <li className={`SubMenu ${gestionHumana ? 'visible' : 'oculto'}`}>
                                 <div className='SubMenu-Titulo' onClick={() => {
                                     closeAllDropdowns();
                                     if (showMobileMenu === false) {
@@ -841,160 +927,18 @@ function Navbar() {
                                     </ul>
                                 </div>
                             </li>
-                        )}
-                    </ul>
-                </div>
-            </div>
+                        </ul>
 
-            <div className='lineaVertical'></div>
-
-            <div className='sub-contenedor'>
-                <div className='barraSuperior'>
-                    <div className='Titulo'>
-                        <div className='Icono-Menu' onClick={() => {
-                            closeAllDropdowns()
-                            setShowMobileMenu(!showMobileMenu)
-                        }}>
-                            <FaBars />
-                            {isLargeScreen === true ? (
-                                <div>
-                                    {isLogin === true ? (
-                                        <div className='AjusteTitulo2'></div>
-                                    ) : (
-                                        <div className='AjusteTitulo1'></div>
-                                    )}
-                                </div>
-                            ) : (
-                                <div>
-                                    {isLogin === true ? (
-                                        <div className='AjusteTitulo4'></div>
-                                    ) : (
-                                        <div className='AjusteTitulo3'></div>
-                                    )}
-                                </div>
-                            )}
-
-                        </div>
-
-                        <p className='pCorto'>
-                            CCOT
-                        </p>
-                        <p className='pLargo'>
-                            Centro de Control de Operaciones Técnicas
-                        </p>
-                    </div>
-
-                    <div className="buscador">
-                        <input
-                            type="text"
-                            placeholder="Buscar..."
-                            className="form-control"
-                        />
-                        <span className="icono-lupa"><FaSearch /></span>
-                    </div>
-
-                    <div className="idioma-selector">
-                        <button onClick={() => setMostrarMenuIdioma(!mostrarMenuIdioma)} className="bandera-btn">
-                            {i18n.language === 'es' && <img src={Colombia} alt="Colombia" />}
-                            {i18n.language === 'en' && <img src={EEUU} alt="USA" />}
-                        </button>
-                        <div className={`idiomaMenu ${mostrarMenuIdioma ? 'abierto' : ''}`}>
-                            <button className="opcionIdioma" onClick={() => cambiarIdioma('es')}>
-                                <img src={Colombia} alt="Colombia" /> Español
-                            </button >
-                            <button className="opcionIdioma" onClick={() => cambiarIdioma('en')}>
-                                <img src={EEUU} alt="USA" /> Inglés
-                            </button >
+                        <div className='Logo2'>
+                            {showMobileMenu ? <img src={SGS} alt="Logo" /> : <img src={SGS2} alt="Logo" />}
                         </div>
                     </div>
-
-                    <div className='modoClaro'>
-                        <button onClick={toggleModo}>
-                            {esModoClaro ? <FaSun color="#facc15" /> : <FaMoon color="#64748b" />}
-                        </button>
-                    </div>
-
-                    {isLogin === true ? (
-                        <div className='Login ON'>
-                            <div className="circle-container"
-                                onClick={() => {
-                                    setIsOpen(!isOpen);
-                                    setShowDropdownUser(!showDropdownUser);
-                                }}
-                            >
-                                {isLargeScreen ? (
-                                    <div>
-                                        <div className="circle">{initial}</div>
-                                        <span className="name">{name}</span>
-                                        <span className='iconoMenu'>
-                                            <FaChevronLeft className={`icono-flecha ${showDropdownUser ? 'rotado' : ''}`} />
-                                        </span>
-                                    </div>
-                                ) : (
-                                    <div>
-                                        <div className="circle">{initial}</div>
-                                        <span className='iconoMenu'>
-                                            <FaChevronLeft className={`icono-flecha ${showDropdownUser ? 'rotado' : ''}`} />
-                                        </span>
-                                    </div>
-                                )}
-                            </div>
-                            <div className={`menu ${isOpen ? 'open' : ''}`}>
-                                <span>{Cookies.get('userCorreo')}</span>
-                                <span>{Cookies.get('userNombre')}</span>
-                                <span>CC: {Cookies.get('userCedula')}</span>
-                                <span>Tel: {Cookies.get('userTelefono')}</span>
-                                <span>Rol: {ObtenerTextoMejorado(Cookies.get('userRole'))}</span>
-                                <ul>
-                                    {role === 'admin' && (
-                                        <Link to="/BasesDeDatos"
-                                            onClick={() => {
-                                                setIsOpen(!isOpen);
-                                                setShowDropdownUser(!showDropdownUser);
-                                            }}
-                                        ><li>Bases de Datos</li></Link>
-                                    )}
-                                    {role === 'admin' && (
-                                        <Link to="/ControlUsuarios"
-                                            onClick={() => {
-                                                setIsOpen(!isOpen);
-                                                setShowDropdownUser(!showDropdownUser);
-                                            }}
-                                        ><li>Control de Usuarios</li></Link>
-                                    )}
-                                    <li onClick={handleLogout}>Cerrar Sesión</li>
-                                </ul>
-                            </div>
-                        </div>
-                    ) : (
-                        <div className='Login OFF'>
-                            <div className="circle-container"
-                                onClick={() => {
-                                    navigate('/Login?tipo=Inicio');
-                                }}
-                            >
-                                <FaUser className="icon" />
-                            </div>
-                        </div>
-                    )}
                 </div>
 
-                <div className='lineaHorizontal'></div>
+                <div className='lineaVertical'></div>
 
-                <div className="contenido">
+                <div className={`contenido ${showMobileMenu ? 'visible' : 'oculto'}`}>
                     <Outlet />
-                </div>
-
-                <div className='lineaHorizontal'></div>
-
-                <div className='pieDePagina'>
-                    <span>Por <a href="https://www.sicte.com" target="_blank" rel="noopener noreferrer">Sicte S.A.S.</a></span>
-
-                    <div className='logos'>
-                        <img src={RSV} alt="Logo" title="Buenas Prácticas de Seguridad Vial 2023" />
-                        <img src={PREAD} alt="Logo" title="Programa de Excelencia Ambiental Distrital" />
-                        <img src={SGS} alt="Logo" title="Certificacion en ISO 9001, ISO 14001, ISO 45001" />
-                    </div>
                 </div>
             </div>
         </div>

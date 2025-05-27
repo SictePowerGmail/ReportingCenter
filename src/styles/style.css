@@ -6,8 +6,8 @@
     --background-text-hover: #444444;
     --background-lineas: #d6d6d6;
 
-    --webkit-scrollbar-thumb: #e0792a;
-    --webkit-scrollbar-thumb-hover: #ff6f00;
+    --webkit-scrollbar-thumb: #444444;
+    --webkit-scrollbar-thumb-hover: #676767;
     --webkit-scrollbar-track: #ffffff;
 
     --text: #454545;
@@ -25,7 +25,7 @@ body.dark-mode {
     --background-menu-cuerpo: #111827;
     --background-menu-piePagina: #1f2937;
     --background-text-hover: #f3f4f6;
-    --background-lineas: #374151;
+    --background-lineas: #9199a4;
 
     --webkit-scrollbar-thumb: #334155;
     --webkit-scrollbar-thumb-hover: #1e293b;
