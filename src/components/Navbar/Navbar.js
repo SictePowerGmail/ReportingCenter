@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
-import { FaHardHat, FaFileAlt, FaTruck, FaBars, FaTimes, FaHome, FaChartLine, FaStar, FaTools, FaSearch, FaChevronLeft, FaUser, FaBoxes, FaUserTie, FaSun, FaMoon } from 'react-icons/fa';
+import { FaHardHat, FaFileAlt, FaTruck, FaBars, FaDatabase, FaUsersCog, FaSignOutAlt, FaHome, FaChartLine, FaStar, FaTools, FaSearch, FaChevronLeft, FaUser, FaBoxes, FaUserTie, FaSun, FaMoon } from 'react-icons/fa';
 import { HiClipboardList, HiChartBar, HiOfficeBuilding } from "react-icons/hi";
 import { ThreeDots } from 'react-loader-spinner';
 import './Navbar.css'
@@ -525,30 +525,37 @@ function Navbar() {
                             <div className="circle">{initial}</div>
                         </div>
                         <div className={`menu ${isOpen ? 'open' : ''}`}>
-                            <span>{Cookies.get('userCorreo')}</span>
-                            <span>{Cookies.get('userNombre')}</span>
-                            <span>CC: {Cookies.get('userCedula')}</span>
-                            <span>Tel: {Cookies.get('userTelefono')}</span>
-                            <span>Rol: {ObtenerTextoMejorado(Cookies.get('userRole'))}</span>
-                            <ul>
-                                {role === 'admin' && (
+                            <div className="circle-container">
+                                <div className="circle">{initial}</div>
+                            </div>
+                            <span className='Cuerpo nombre'>Hola, {name}</span>
+                            <div className='linea'></div>
+                            <span className='Cuerpo'>{Cookies.get('userCorreo')}</span>
+                            <span className='Cuerpo'>{Cookies.get('userNombre')}</span>
+                            <span className='Cuerpo'>CC: {Cookies.get('userCedula')}</span>
+                            <span className='Cuerpo'>Tel: {Cookies.get('userTelefono')}</span>
+                            <span className='Cuerpo'>Rol: {ObtenerTextoMejorado(Cookies.get('userRole'))}</span>
+                            {role === 'admin' && (
+                                <>
+                                    <div className='linea'></div>
                                     <Link to="/BasesDeDatos"
                                         onClick={() => {
                                             setIsOpen(!isOpen);
                                             setShowDropdownUser(!showDropdownUser);
                                         }}
-                                    ><li>Bases de Datos</li></Link>
-                                )}
-                                {role === 'admin' && (
-                                    <Link to="/ControlUsuarios"
-                                        onClick={() => {
-                                            setIsOpen(!isOpen);
-                                            setShowDropdownUser(!showDropdownUser);
-                                        }}
-                                    ><li>Control de Usuarios</li></Link>
-                                )}
-                                <li onClick={handleLogout}>Cerrar Sesión</li>
-                            </ul>
+                                    ><span className='Enlace'><FaDatabase />Bases de Datos</span></Link>
+                                </>
+                            )}
+                            {role === 'admin' && (
+                                <Link to="/ControlUsuarios"
+                                    onClick={() => {
+                                        setIsOpen(!isOpen);
+                                        setShowDropdownUser(!showDropdownUser);
+                                    }}
+                                ><span className='Enlace'><FaUsersCog />Control de Usuarios</span></Link>
+                            )}
+                            <div className='linea'></div>
+                            <span className='Enlace' onClick={handleLogout}><FaSignOutAlt />Cerrar Sesión</span>
                         </div>
                     </div>
                 ) : (

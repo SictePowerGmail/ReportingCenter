@@ -1,10 +1,12 @@
+@import '../../styles/style.css';
+
 .Supervision-Login-App {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100%;
     width: 100%;
-    background-color: #E6E6E6;
+    background-color: var(--background-menu-cuerpo-aplicativos);
 
     @media screen and (max-width: 600px) {
         flex-direction: column;

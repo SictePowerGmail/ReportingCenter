@@ -532,6 +532,24 @@ function ChatBot() {
         }
     };
 
+    const [currentPagePendientes, setCurrentPagePendientes] = useState(1);
+    const rowsPerPagePendientes = 10;
+    const indexOfLastRowPendientes = currentPagePendientes * rowsPerPagePendientes;
+    const indexOfFirstRowPendientes = indexOfLastRowPendientes - rowsPerPagePendientes;
+    const currentRowsPendientes = sortedDataPendientes.slice(indexOfFirstRowPendientes, indexOfLastRowPendientes);
+
+    const [currentPageConfirmado, setCurrentPageConfirmado] = useState(1);
+    const rowsPerPageConfirmado = 10;
+    const indexOfLastRowConfirmado = currentPageConfirmado * rowsPerPageConfirmado;
+    const indexOfFirstRowConfirmado = indexOfLastRowConfirmado - rowsPerPageConfirmado;
+    const currentRowsConfirmado = sortedDataConfirmado.slice(indexOfFirstRowConfirmado, indexOfLastRowConfirmado);
+
+    const [currentPageHistorico, setCurrentPageHistorico] = useState(1);
+    const rowsPerPageHistorico = 10;
+    const indexOfLastRowHistorico = currentPageHistorico * rowsPerPageHistorico;
+    const indexOfFirstRowHistorico = indexOfLastRowHistorico - rowsPerPageHistorico;
+    const currentRowsHistorico = sortedDataHistorico.slice(indexOfFirstRowHistorico, indexOfLastRowHistorico);
+
     return (
         <div className='ChatBot'>
             <div className='contenedor'>
@@ -586,8 +604,8 @@ function ChatBot() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {sortedDataPendientes.length > 0 && (
-                                        sortedDataPendientes.map((row) => (
+                                    {currentRowsPendientes.length > 0 && (
+                                        currentRowsPendientes.map((row) => (
                                             <tr key={row.id} onClick={() => {
                                                 handleRowClick(row);
                                                 setClickHistorico(false);
@@ -600,6 +618,27 @@ function ChatBot() {
                                     )}
                                 </tbody>
                             </table>
+                        </div>
+                        <div className="paginacion">
+                            <button
+                                onClick={() => setCurrentPagePendientes((prev) => Math.max(prev - 1, 1))}
+                                disabled={currentPagePendientes === 1}
+                            >
+                                Anterior
+                            </button>
+                            <span>Página {currentPagePendientes}</span>
+                            <button
+                                onClick={() =>
+                                    setCurrentPagePendientes((prev) =>
+                                        prev < Math.ceil(sortedDataPendientes.length / rowsPerPagePendientes)
+                                            ? prev + 1
+                                            : prev
+                                    )
+                                }
+                                disabled={currentPagePendientes >= Math.ceil(sortedDataPendientes.length / rowsPerPagePendientes)}
+                            >
+                                Siguiente
+                            </button>
                         </div>
                         <div className='registros primero'>
                             <span>Total de registros: {sortedDataPendientes.length}</span>
@@ -630,8 +669,8 @@ function ChatBot() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {sortedDataConfirmado.length > 0 && (
-                                        sortedDataConfirmado.map((row) => (
+                                    {currentRowsConfirmado.length > 0 && (
+                                        currentRowsConfirmado.map((row) => (
                                             <tr key={row.id} onClick={() => {
                                                 handleRowClick(row);
                                                 setClickHistorico(false);
@@ -644,6 +683,27 @@ function ChatBot() {
                                     )}
                                 </tbody>
                             </table>
+                        </div>
+                        <div className="paginacion">
+                            <button
+                                onClick={() => setCurrentPageConfirmado((prev) => Math.max(prev - 1, 1))}
+                                disabled={currentPageConfirmado === 1}
+                            >
+                                Anterior
+                            </button>
+                            <span>Página {currentPageConfirmado}</span>
+                            <button
+                                onClick={() =>
+                                    setCurrentPageConfirmado((prev) =>
+                                        prev < Math.ceil(sortedDataConfirmado.length / rowsPerPageConfirmado)
+                                            ? prev + 1
+                                            : prev
+                                    )
+                                }
+                                disabled={currentPageConfirmado >= Math.ceil(sortedDataConfirmado.length / rowsPerPageConfirmado)}
+                            >
+                                Siguiente
+                            </button>
                         </div>
                         <div className='registros segundo'>
                             <span>Total de registros: {sortedDataConfirmado.length}</span>
@@ -674,8 +734,8 @@ function ChatBot() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {sortedDataHistorico.length > 0 && (
-                                        sortedDataHistorico.map((row) => (
+                                    {currentRowsHistorico.length > 0 && (
+                                        currentRowsHistorico.map((row) => (
                                             <tr key={row.id} onClick={() => {
                                                 handleRowClick(row);
                                                 setClickHistorico(true);
@@ -693,6 +753,27 @@ function ChatBot() {
                                     )}
                                 </tbody>
                             </table>
+                        </div>
+                        <div className="paginacion">
+                            <button
+                                onClick={() => setCurrentPageHistorico((prev) => Math.max(prev - 1, 1))}
+                                disabled={currentPageHistorico === 1}
+                            >
+                                Anterior
+                            </button>
+                            <span>Página {currentPageHistorico}</span>
+                            <button
+                                onClick={() =>
+                                    setCurrentPageHistorico((prev) =>
+                                        prev < Math.ceil(sortedDataHistorico.length / rowsPerPageHistorico)
+                                            ? prev + 1
+                                            : prev
+                                    )
+                                }
+                                disabled={currentPageHistorico >= Math.ceil(sortedDataHistorico.length / rowsPerPageHistorico)}
+                            >
+                                Siguiente
+                            </button>
                         </div>
                         <div className='registros'>
                             <span>Total de registros: {sortedDataHistorico.length}</span>

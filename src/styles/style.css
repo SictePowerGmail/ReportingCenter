@@ -2,7 +2,7 @@
     --background-menu-laterial: #ffffff;
     --background-menu-superior: #ffffff;
     --background-menu-cuerpo: #ffffff;
-    --background-menu-piePagina: #ffffff;
+    --background-menu-cuerpo-aplicativos: #E6E6E6;
     --background-text-hover: #444444;
     --background-lineas: #d6d6d6;
 
@@ -23,7 +23,6 @@ body.dark-mode {
     --background-menu-laterial: #1f2937;
     --background-menu-superior: #1f2937;
     --background-menu-cuerpo: #111827;
-    --background-menu-piePagina: #1f2937;
     --background-text-hover: #f3f4f6;
     --background-lineas: #9199a4;
 

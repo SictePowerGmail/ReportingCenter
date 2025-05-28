@@ -1,13 +1,14 @@
 .Carnetizacion {
     width: 100%;
-    height: calc(100vh - 40px - 10px);
+    height: 100%;
 
     @media screen and (max-width: 600px) {
         padding-left: 0;
     }
 
     .contenedor {
-        margin: 10px;
+        display: flex;
+        width: 100%;
         background-color: #fff;
         height: calc(100% - 10px);
         border-radius: 10px;
