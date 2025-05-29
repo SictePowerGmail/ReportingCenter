@@ -41,8 +41,9 @@ function Navbar() {
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
     const [esModoClaro, setEsModoClaro] = useState(() => {
-        return Cookies.get('dark-Mode') === 'true';
-    });;
+        const cookieValue = Cookies.get('dark-Mode');
+        return cookieValue === undefined ? true : cookieValue === 'true';
+    });
     const { i18n, t } = useTranslation();
     const [mostrarMenuIdioma, setMostrarMenuIdioma] = useState(false);
     const location = useLocation();
@@ -936,9 +937,9 @@ function Navbar() {
                             </li>
                         </ul>
 
-                        <div className='Logo2'>
+                        {/* <div className='Logo2'>
                             {showMobileMenu ? <img src={SGS} alt="Logo" /> : <img src={SGS2} alt="Logo" />}
-                        </div>
+                        </div> */}
                     </div>
                 </div>
 

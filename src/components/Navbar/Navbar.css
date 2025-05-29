@@ -587,7 +587,7 @@
                             .SubMenu-Titulo-Contenedor {
                                 display: flex;
                                 height: 20px;
-                                width: 100%;
+                                width: 100% !important;
 
                                 &.abierto {
                                     margin-left: 8px;
@@ -614,7 +614,7 @@
                                     display: flex;
                                     justify-content: space-between;
                                     align-items: center;
-                                    width: 100%;
+                                    width: 100% !important;
 
                                     .SubMenu-Titulo-Texto {
                                         font-size: var(--font-size-text);
