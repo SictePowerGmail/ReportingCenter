@@ -49,8 +49,8 @@
 
         .btn-flotante {
             position: absolute;
-            top: 20px;
-            right: 20px;
+            top: 10px;
+            right: 10px;
             width: 60px;
             height: 60px;
             background-color: #007bff;
@@ -95,6 +95,7 @@
 
         .menuNavegacion {
             width: 100%;
+            padding-top: 20px;
 
             ul {
                 li {
@@ -136,22 +137,22 @@
                 &::-webkit-scrollbar {
                     width: 10px;
                 }
-        
+
                 &::-webkit-scrollbar-track {
                     background-color: white;
                     border-radius: 10px;
                 }
-        
+
                 &::-webkit-scrollbar-thumb {
                     background-color: #ff8800;
                     border-radius: 10px;
                     border: 5px solid white;
                 }
-        
+
                 &::-webkit-scrollbar-thumb:hover {
                     background: #bd6a0c;
                 }
-                
+
                 table {
                     width: 100%;
                     border-collapse: collapse;
@@ -196,6 +197,18 @@
                         text-align: center;
                     }
                 }
+            }
+
+            .paginacion {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                width: 100%;
+                padding: 2px 5px;
+                border: 1px solid var(--background-lineas);
+                border-bottom-left-radius: 8px;
+                border-bottom-right-radius: 8px;
+                background-color: white;
             }
 
             .Boton {

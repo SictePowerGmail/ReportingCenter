@@ -1,3 +1,5 @@
+@import '../../styles/style.css';
+
 .ChatBot {
     width: 100%;
     height: 100%;
@@ -61,10 +63,9 @@
 
         .tabla {
             width: 100%;
-            min-height: 300px;
+            min-height: 350px;
             max-height: 60%;
             overflow: auto;
-            border-radius: 0px 0px 10px 10px;
             table-layout: auto;
 
             table {
@@ -122,12 +123,12 @@
                                 background-color: #28a745 !important;
                                 color: white !important;
                             }
-                            
+
                             &.no-continua {
                                 background-color: #dc3545 !important;
                                 color: white !important;
                             }
-                            
+
                             &.en-proceso {
                                 background-color: #ffc107 !important;
                                 color: black !important;
@@ -138,10 +139,23 @@
             }
         }
 
+        .paginacion {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 2px 5px;
+            border: 1px solid var(--background-lineas);
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+            background-color: white;
+        }
+
         .registros {
             margin-top: 10px;
 
-            &.primero, &.segundo {
+            &.primero,
+            &.segundo {
                 margin-bottom: 30px;
             }
         }

@@ -378,10 +378,6 @@ const MaterialAgregar = () => {
                         </div>
                     ) : (
                         <form className='Formulario'>
-                            <div className='Titulo'>
-                                <h3>Solicitud de Material</h3>
-                            </div>
-
                             <div className='contenido'>
                                 <div className='Fecha'>
                                     <div className='Subtitulo'>

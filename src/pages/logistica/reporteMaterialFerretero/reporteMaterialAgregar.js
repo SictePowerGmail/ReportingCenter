@@ -441,10 +441,6 @@ const ReporteMaterialAgregar = () => {
                         </div>
                     ) : (
                         <form className='Formulario'>
-                            <div className='Titulo'>
-                                <h3>Reporte de Material Ferretero</h3>
-                            </div>
-
                             <div className='contenido'>
                                 <div className='Fecha'>
                                     <div className='Subtitulo'>

@@ -250,10 +250,6 @@ const MaterialPrincipal = () => {
                         >+</button>
                     </div>
 
-                    <div className='Titulo'>
-                        <h2>Solicitudes de Material</h2>
-                    </div>
-
                     <div className='menuNavegacion'>
                         <ul className="nav nav-tabs">
                             <li className="nav-item">

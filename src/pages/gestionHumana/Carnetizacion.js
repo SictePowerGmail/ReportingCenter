@@ -372,10 +372,6 @@ function Carnetizacion() {
                     </div>
                 ) : (
                     <>
-                        <div className='Titulo'>
-                            <h2>Registros Carnetizacion</h2>
-                        </div>
-
                         <div className='botones'>
                             <button className='btn btn-success' onClick={descargarArchivo}>Descargar Registros</button>
                             <button className="btn-flotante"

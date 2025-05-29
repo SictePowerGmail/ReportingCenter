@@ -273,6 +273,24 @@ const MaterialPrincipalEntregaBodega = () => {
         }
     });
 
+    const [currentPagePendiente, setCurrentPagePendiente] = useState(1);
+    const rowsPerPagePendiente = 5;
+    const indexOfLastRowPendiente = currentPagePendiente * rowsPerPagePendiente;
+    const indexOfFirstRowPendiente = indexOfLastRowPendiente - rowsPerPagePendiente;
+    const currentRowsPendiente = datosOrdenadosPendienteEntregaBodega.slice(indexOfFirstRowPendiente, indexOfLastRowPendiente);
+
+    const [currentPageEntragada, setCurrentPageEntragada] = useState(1);
+    const rowsPerPageEntragada = 5;
+    const indexOfLastRowEntragada = currentPageEntragada * rowsPerPageEntragada;
+    const indexOfFirstRowEntragada = indexOfLastRowEntragada - rowsPerPageEntragada;
+    const currentRowsEntragada = datosOrdenadosEntregadoEntregaBodega.slice(indexOfFirstRowEntragada, indexOfLastRowEntragada);
+
+    const [currentPageCerrados, setCurrentPageCerrados] = useState(1);
+    const rowsPerPageCerrados = 5;
+    const indexOfLastRowCerrados = currentPageCerrados * rowsPerPageCerrados;
+    const indexOfFirstRowCerrados = indexOfLastRowCerrados - rowsPerPageCerrados;
+    const currentRowsCerrados = datosOrdenadosProyectosCerrados.slice(indexOfFirstRowCerrados, indexOfLastRowCerrados);
+
     return (
         <div className='EntregaBodega'>
             {loading ? (
@@ -310,14 +328,14 @@ const MaterialPrincipalEntregaBodega = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {datosOrdenadosPendienteEntregaBodega.length === 0 ? (
+                                {currentRowsPendiente.length === 0 ? (
                                     <tr>
                                         <td colSpan={Object.keys(pendienteEntregaBodegaSinMat[0] || {}).length} style={{ textAlign: 'center' }}>
                                             No hay registros
                                         </td>
                                     </tr>
                                 ) : (
-                                    datosOrdenadosPendienteEntregaBodega.slice(0, expandidoPendienteEntregaBodegaSinMat ? datosOrdenadosPendienteEntregaBodega.length : 5).map((fila, index) => (
+                                    currentRowsPendiente.map((fila, index) => (
                                         <tr key={`${fila.fecha}-${fila.cedula}-${fila.uuid}`} onClick={() => manejarClickFilaPendienteEntregaBodega(fila)}>
                                             {Object.values(fila).map((valor, idx) => (
                                                 <td key={idx} onClick={() => manejarClickFilaPendienteEntregaBodega(fila)}>
@@ -330,13 +348,29 @@ const MaterialPrincipalEntregaBodega = () => {
                             </tbody>
                         </table>
                     </div>
+                    <div className="paginacion">
+                        <button className='btn btn-secondary'
+                            onClick={() => setCurrentPagePendiente((prev) => Math.max(prev - 1, 1))}
+                            disabled={currentPagePendiente === 1}
+                        >
+                            Anterior
+                        </button>
+                        <span>Página {currentPagePendiente} de {Math.ceil(datosOrdenadosPendienteEntregaBodega.length / rowsPerPagePendiente)}</span>
+                        <button className='btn btn-secondary'
+                            onClick={() =>
+                                setCurrentPagePendiente((prev) =>
+                                    prev < Math.ceil(datosOrdenadosPendienteEntregaBodega.length / rowsPerPagePendiente)
+                                        ? prev + 1
+                                        : prev
+                                )
+                            }
+                            disabled={currentPagePendiente >= Math.ceil(datosOrdenadosPendienteEntregaBodega.length / rowsPerPagePendiente)}
+                        >
+                            Siguiente
+                        </button>
+                    </div>
                     <div className='Boton'>
                         <span>Total de ítems: {datosOrdenadosPendienteEntregaBodega.length}</span>
-                        <span onClick={() => {
-                            setExpandidoPendienteEntregaBodegaSinMat(!expandidoPendienteEntregaBodegaSinMat);
-                        }}>
-                            {expandidoPendienteEntregaBodegaSinMat ? "Mostrar menos" : "Mostrar mas"}
-                        </span>
                     </div>
                     <MaterialDetalle
                         isOpen={ventanaAbiertaPendienteEntregaBodega}
@@ -372,14 +406,14 @@ const MaterialPrincipalEntregaBodega = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {datosOrdenadosEntregadoEntregaBodega.length === 0 ? (
+                                {currentRowsEntragada.length === 0 ? (
                                     <tr>
                                         <td colSpan={Object.keys(entregadoEntregaBodegaSinMat[0] || {}).length} style={{ textAlign: 'center' }}>
                                             No hay registros
                                         </td>
                                     </tr>
                                 ) : (
-                                    datosOrdenadosEntregadoEntregaBodega.slice(0, expandidoEntregadoEntregaBodegaSinMat ? datosOrdenadosEntregadoEntregaBodega.length : 5).map((fila, index) => (
+                                    currentRowsEntragada.map((fila, index) => (
                                         <tr key={`${fila.fecha}-${fila.cedula}-${fila.uuid}`} onClick={() => manejarClickFilaEntregadoEntregaBodega(fila)}>
                                             {Object.values(fila).map((valor, idx) => (
                                                 <td key={idx} onClick={() => manejarClickFilaEntregadoEntregaBodega(fila)}>
@@ -392,13 +426,29 @@ const MaterialPrincipalEntregaBodega = () => {
                             </tbody>
                         </table>
                     </div>
+                    <div className="paginacion">
+                        <button className='btn btn-secondary'
+                            onClick={() => setCurrentPageEntragada((prev) => Math.max(prev - 1, 1))}
+                            disabled={currentPageEntragada === 1}
+                        >
+                            Anterior
+                        </button>
+                        <span>Página {currentPageEntragada} de {Math.ceil(datosOrdenadosEntregadoEntregaBodega.length / rowsPerPageEntragada)}</span>
+                        <button className='btn btn-secondary'
+                            onClick={() =>
+                                setCurrentPageEntragada((prev) =>
+                                    prev < Math.ceil(datosOrdenadosEntregadoEntregaBodega.length / rowsPerPageEntragada)
+                                        ? prev + 1
+                                        : prev
+                                )
+                            }
+                            disabled={currentPageEntragada >= Math.ceil(datosOrdenadosEntregadoEntregaBodega.length / rowsPerPageEntragada)}
+                        >
+                            Siguiente
+                        </button>
+                    </div>
                     <div className='Boton'>
                         <span>Total de ítems: {datosOrdenadosEntregadoEntregaBodega.length}</span>
-                        <span onClick={() => {
-                            setExpandidoEntregadoEntregaBodegaSinMat(!expandidoEntregadoEntregaBodegaSinMat);
-                        }}>
-                            {expandidoEntregadoEntregaBodegaSinMat ? "Mostrar menos" : "Mostrar mas"}
-                        </span>
                     </div>
                     <MaterialDetalle
                         isOpen={ventanaAbiertaEntregadoEntregaBodega}
@@ -434,14 +484,14 @@ const MaterialPrincipalEntregaBodega = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {datosOrdenadosProyectosCerrados.length === 0 ? (
+                                {currentRowsCerrados.length === 0 ? (
                                     <tr>
                                         <td colSpan={Object.keys(proyectosCerradosSinMat[0] || {}).length} style={{ textAlign: 'center' }}>
                                             No hay registros
                                         </td>
                                     </tr>
                                 ) : (
-                                    datosOrdenadosProyectosCerrados.slice(0, expandidoProyectosCerradosSinMat ? datosOrdenadosProyectosCerrados.length : 5).map((fila, index) => (
+                                    currentRowsCerrados.map((fila, index) => (
                                         <tr key={`${fila.fecha}-${fila.cedula}-${fila.uuid}`} onClick={() => manejarClickFilaProyectosCerrados(fila)}>
                                             {Object.values(fila).map((valor, idx) => (
                                                 <td key={idx} onClick={() => manejarClickFilaProyectosCerrados(fila)}>
@@ -454,13 +504,29 @@ const MaterialPrincipalEntregaBodega = () => {
                             </tbody>
                         </table>
                     </div>
+                     <div className="paginacion">
+                        <button className='btn btn-secondary'
+                            onClick={() => setCurrentPageCerrados((prev) => Math.max(prev - 1, 1))}
+                            disabled={currentPageCerrados === 1}
+                        >
+                            Anterior
+                        </button>
+                        <span>Página {currentPageCerrados} de {Math.ceil(datosOrdenadosProyectosCerrados.length / rowsPerPageCerrados)}</span>
+                        <button className='btn btn-secondary'
+                            onClick={() =>
+                                setCurrentPageCerrados((prev) =>
+                                    prev < Math.ceil(datosOrdenadosProyectosCerrados.length / rowsPerPageCerrados)
+                                        ? prev + 1
+                                        : prev
+                                )
+                            }
+                            disabled={currentPageCerrados >= Math.ceil(datosOrdenadosProyectosCerrados.length / rowsPerPageCerrados)}
+                        >
+                            Siguiente
+                        </button>
+                    </div>
                     <div className='Boton'>
                         <span>Total de ítems: {datosOrdenadosProyectosCerrados.length}</span>
-                        <span onClick={() => {
-                            setExpandidoProyectosCerradosSinMat(!expandidoProyectosCerradosSinMat);
-                        }}>
-                            {expandidoProyectosCerradosSinMat ? "Mostrar menos" : "Mostrar mas"}
-                        </span>
                     </div>
                     <MaterialDetalle
                         isOpen={ventanaAbiertaProyectosCerrados}

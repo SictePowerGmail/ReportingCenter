@@ -117,7 +117,7 @@ const ReporteMaterialPrincipal = () => {
 
     const manejarCerrarModalReporteMaterialTecnicoSinMat = () => {
         setFilaSeleccionadaReporteMaterialTecnicoSinMat(null);
-        setVentanaAbiertaReporteMaterialTecnicoSinMat(false);        
+        setVentanaAbiertaReporteMaterialTecnicoSinMat(false);
     };
 
     const descargarArchivo = () => {
@@ -156,6 +156,12 @@ const ReporteMaterialPrincipal = () => {
         return datosOrdenados;
     };
 
+    const [currentPage, setCurrentPage] = useState(1);
+    const rowsPerPage = 10;
+    const indexOfLastRow = currentPage * rowsPerPage;
+    const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+    const currentRows = ordenarDatos().slice(indexOfFirstRow, indexOfLastRow);
+
     return (
         <div className="reporteMaterialPrincipal">
             {loading ? (
@@ -176,10 +182,6 @@ const ReporteMaterialPrincipal = () => {
                                 navigate('/ReporteMaterialAgregar', { state: { role: role, nombre: nombre, estadoNotificacion: false } });
                             }}
                         >+</button>
-                    </div>
-
-                    <div className='Titulo'>
-                        <h2>Reporte de Material Ferretero</h2>
                     </div>
 
                     <div className='menuNavegacion'>
@@ -229,15 +231,14 @@ const ReporteMaterialPrincipal = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {ordenarDatos().length === 0 ? (
+                                        {currentRows.length === 0 ? (
                                             <tr>
                                                 <td colSpan={Object.keys(reporteMaterialTecnicoSinMat[0] || {}).length}>
                                                     No hay registros
                                                 </td>
                                             </tr>
                                         ) : (
-                                            ordenarDatos()
-                                                .slice(0, expandidoReporteMaterialTecnicoSinMat ? datosFiltradosReporteMaterialTecnicoSinMat.length : 8)
+                                            currentRows
                                                 .map((fila, index) => (
                                                     <tr key={`${fila.fecha}-${fila.cedula}`} onClick={() => manejarClickFilaReporteMaterialTecnicoSinMat(fila)}>
                                                         {Object.values(fila).map((valor, idx) => (
@@ -251,13 +252,30 @@ const ReporteMaterialPrincipal = () => {
                                     </tbody>
                                 </table>
                             </div>
+
+                            <div className="paginacion">
+                                <button className='btn btn-secondary'
+                                    onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                                    disabled={currentPage === 1}
+                                >
+                                    Anterior
+                                </button>
+                                <span>Página {currentPage} de {Math.ceil(ordenarDatos().length / rowsPerPage)}</span>
+                                <button className='btn btn-secondary'
+                                    onClick={() =>
+                                        setCurrentPage((prev) =>
+                                            prev < Math.ceil(ordenarDatos().length / rowsPerPage)
+                                                ? prev + 1
+                                                : prev
+                                        )
+                                    }
+                                    disabled={currentPage >= Math.ceil(ordenarDatos().length / rowsPerPage)}
+                                >
+                                    Siguiente
+                                </button>
+                            </div>
                             <div className='Boton'>
                                 <span>Total de ítems: {datosFiltradosReporteMaterialTecnicoSinMat.length}</span>
-                                <span onClick={() => {
-                                    setExpandidoReporteMaterialTecnicoSinMat(!expandidoReporteMaterialTecnicoSinMat);
-                                }}>
-                                    {expandidoReporteMaterialTecnicoSinMat ? "Mostrar menos" : "Mostrar mas"}
-                                </span>
                             </div>
                             <ReporteMaterialDetalle
                                 isOpen={ventanaAbiertaReporteMaterialTecnicoSinMat}

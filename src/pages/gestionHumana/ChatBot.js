@@ -565,10 +565,6 @@ function ChatBot() {
                     </div>
                 ) : (
                     <>
-                        <div className='Titulo'>
-                            <h2>Registros Chatbot</h2>
-                        </div>
-
                         <div className='botones'>
                             <button className="btn btn-primary" onClick={() => {
                                 setSelectedCreateRow(true);
@@ -620,14 +616,14 @@ function ChatBot() {
                             </table>
                         </div>
                         <div className="paginacion">
-                            <button
+                            <button className='btn btn-secondary'
                                 onClick={() => setCurrentPagePendientes((prev) => Math.max(prev - 1, 1))}
                                 disabled={currentPagePendientes === 1}
                             >
                                 Anterior
                             </button>
-                            <span>Página {currentPagePendientes}</span>
-                            <button
+                            <span>Página {currentPagePendientes} de {Math.ceil(sortedDataPendientes.length / rowsPerPagePendientes)}</span>
+                            <button className='btn btn-secondary'
                                 onClick={() =>
                                     setCurrentPagePendientes((prev) =>
                                         prev < Math.ceil(sortedDataPendientes.length / rowsPerPagePendientes)
@@ -685,14 +681,14 @@ function ChatBot() {
                             </table>
                         </div>
                         <div className="paginacion">
-                            <button
+                            <button className='btn btn-secondary'
                                 onClick={() => setCurrentPageConfirmado((prev) => Math.max(prev - 1, 1))}
                                 disabled={currentPageConfirmado === 1}
                             >
                                 Anterior
                             </button>
-                            <span>Página {currentPageConfirmado}</span>
-                            <button
+                            <span>Página {currentPageConfirmado} de {Math.ceil(sortedDataConfirmado.length / rowsPerPageConfirmado)}</span>
+                            <button className='btn btn-secondary'
                                 onClick={() =>
                                     setCurrentPageConfirmado((prev) =>
                                         prev < Math.ceil(sortedDataConfirmado.length / rowsPerPageConfirmado)
@@ -755,14 +751,14 @@ function ChatBot() {
                             </table>
                         </div>
                         <div className="paginacion">
-                            <button
+                            <button className='btn btn-secondary'
                                 onClick={() => setCurrentPageHistorico((prev) => Math.max(prev - 1, 1))}
                                 disabled={currentPageHistorico === 1}
                             >
                                 Anterior
                             </button>
-                            <span>Página {currentPageHistorico}</span>
-                            <button
+                            <span>Página {currentPageHistorico} de {Math.ceil(sortedDataHistorico.length / rowsPerPageHistorico)}</span>
+                            <button className='btn btn-secondary'
                                 onClick={() =>
                                     setCurrentPageHistorico((prev) =>
                                         prev < Math.ceil(sortedDataHistorico.length / rowsPerPageHistorico)

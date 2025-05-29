@@ -480,7 +480,7 @@ function Navbar() {
 
                 <div className='Titulo'>
                     <p>
-                        <strong>CCOT</strong>{tituloActual !== "Sicte CCOT" && (<span> - {tituloActual}</span>)}
+                        <strong>CCOT</strong>{tituloActual !== "Sicte CCOT" && (<span>{tituloActual}</span>)}
                     </p>
                 </div>
 
@@ -811,7 +811,7 @@ function Navbar() {
                                         {subChecksLogistica.DesmonteMantenimiento === true && (<Link className='SubMenu-Contenido-Titulo' to="/DesmonteMantenimiento" ><li>Desmonte Mantenimiento</li></Link>)}
                                         {subChecksLogistica.SolicitudDeMaterial === true && (<Link className='SubMenu-Contenido-Titulo' to={{ pathname: "/Login", search: "?tipo=solicitudMaterial" }} ><li>Solicitud de Material</li></Link>)}
                                         {subChecksLogistica.ReporteMaterialFerretero === true && (<Link className='SubMenu-Contenido-Titulo' to={{ pathname: "/Login", search: "?tipo=reporteMaterialFerretero" }} ><li>Reporte Material Ferretero</li></Link>)}
-                                        {subChecksLogistica.InventarioMaterial === true && (<Link className='SubMenu-Contenido-Titulo' to={{ pathname: "/Login", search: "?tipo=inventarioMaterial" }} ><li>Inventario Material</li></Link>)}
+                                        {/* {subChecksLogistica.InventarioMaterial === true && (<Link className='SubMenu-Contenido-Titulo' to={{ pathname: "/Login", search: "?tipo=inventarioMaterial" }} ><li>Inventario Material</li></Link>)} */}
                                         {subChecksLogistica.EstadoProyectosR4 === true && (<Link className='SubMenu-Contenido-Titulo' to="/EstadoProyectosR4" ><li>Estado Proyectos R4</li></Link>)}
                                         {subChecksLogistica.Activos === true && (<Link className='SubMenu-Contenido-Titulo' to="/Activos" ><li>Activos</li></Link>)}
                                     </ul>

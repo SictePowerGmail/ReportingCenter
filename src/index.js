@@ -5,6 +5,7 @@ import App from './App';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './components/Traduccion/i18n'
+import './pages/Inicio.scss';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 

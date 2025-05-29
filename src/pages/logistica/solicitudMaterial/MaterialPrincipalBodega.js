@@ -126,6 +126,12 @@ const MaterialPrincipalBodega = ({ dataKgprod }) => {
         }
     });
 
+    const [currentPage, setCurrentPage] = useState(1);
+    const rowsPerPage = 10;
+    const indexOfLastRow = currentPage * rowsPerPage;
+    const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+    const currentRows = datosOrdenados.slice(indexOfFirstRow, indexOfLastRow);
+
     return (
         <div className='Solicitudes'>
             {loading ? (
@@ -165,14 +171,14 @@ const MaterialPrincipalBodega = ({ dataKgprod }) => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {datosOrdenados.length === 0 ? (
+                                {currentRows.length === 0 ? (
                                     <tr>
                                         <td colSpan={Object.keys(resultadoMaterialDisponibleCorto[0] || {}).length} style={{ textAlign: 'center' }}>
                                             No hay registros
                                         </td>
                                     </tr>
                                 ) : (
-                                    datosOrdenados.slice(0, expandidoMaterialDisponible ? datosOrdenados.length : 10).map((fila, index) => (
+                                    currentRows.map((fila, index) => (
                                         <tr key={`${fila.Bodega}-${fila.Codigo}`}>
                                             {Object.values(fila).map((valor, idx) => (
                                                 <td key={idx}>
@@ -185,13 +191,29 @@ const MaterialPrincipalBodega = ({ dataKgprod }) => {
                             </tbody>
                         </table>
                     </div>
+                    <div className="paginacion">
+                        <button className='btn btn-secondary'
+                            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                            disabled={currentPage === 1}
+                        >
+                            Anterior
+                        </button>
+                        <span>Página {currentPage} de {Math.ceil(datosOrdenados.length / rowsPerPage)}</span>
+                        <button className='btn btn-secondary'
+                            onClick={() =>
+                                setCurrentPage((prev) =>
+                                    prev < Math.ceil(datosOrdenados.length / rowsPerPage)
+                                        ? prev + 1
+                                        : prev
+                                )
+                            }
+                            disabled={currentPage >= Math.ceil(datosOrdenados.length / rowsPerPage)}
+                        >
+                            Siguiente
+                        </button>
+                    </div>
                     <div className='Boton'>
                         <span>Total de ítems: {datosOrdenados.length}</span>
-                        <span onClick={() => {
-                            setExpandidoMaterialDisponible(!expandidoMaterialDisponible);
-                        }}>
-                            {expandidoMaterialDisponible ? "Mostrar menos" : "Mostrar mas"}
-                        </span>
                     </div>
 
                     <div className='Notificaciones'>

@@ -107,9 +107,9 @@ export const getPageTitle = (pathname) => {
         case '/MaterialAgregar':
             return 'Solicitud Materiales'
         case '/ReporteMaterialPrincipal':
-            return 'Reporte Materiales Tecnico';
+            return 'Reporte Material Ferretero';
         case '/ReporteMaterialAgregar':
-            return 'Reporte Materiales Tecnico'
+            return 'Reporte Material Ferretero'
         case '/InventariosMaterialPrincipal':
             return 'Inventarios Material';
         case '/InventariosMaterialAgregar':

@@ -18,7 +18,7 @@ const MaterialPrincipalSolicitudes = () => {
     const [registrosSolicitudMaterial, setRegistrosSolicitudMaterial] = useState([]);
     const rolUsuario = ObtenerRolUsuario(Cookies.get('userRole'));
     const nombreUsuario = Cookies.get('userNombre');
-    
+
     const cargarDatosRegistrosSolicitudMaterial = () => {
         axios.get(`${process.env.REACT_APP_API_URL}/solicitudMaterial/registros`)
             .then(response => {
@@ -205,6 +205,12 @@ const MaterialPrincipalSolicitudes = () => {
         ? datosOrdenados.filter((item) => item.estado === estadoSeleccionado)
         : datosOrdenados;
 
+    const [currentPage, setCurrentPage] = useState(1);
+    const rowsPerPage = 10;
+    const indexOfLastRow = currentPage * rowsPerPage;
+    const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+    const currentRows = datosFiltradosPorEstado.slice(indexOfFirstRow, indexOfLastRow);
+
     return (
         <div className='Solicitudes'>
             {loading ? (
@@ -258,14 +264,14 @@ const MaterialPrincipalSolicitudes = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {datosFiltradosPorEstado.length === 0 ? (
+                                {currentRows.length === 0 ? (
                                     <tr>
                                         <td colSpan={Object.keys(solicitudMaterialSinMat[0] || {}).length} style={{ textAlign: 'center' }}>
                                             No hay registros
                                         </td>
                                     </tr>
                                 ) : (
-                                    datosFiltradosPorEstado.slice(0, expandidoSolicitudMaterialSinMat ? datosFiltradosPorEstado.length : 10).map((fila, index) => (
+                                    currentRows.map((fila, index) => (
                                         <tr key={`${fila.fecha}-${fila.cedula}-${fila.uuid}`} onClick={() => manejarClickFilaSolicitudMaterial(fila)}>
                                             {Object.values(fila).map((valor, idx) => (
                                                 <td key={idx} onClick={() => manejarClickFilaSolicitudMaterial(fila)}>
@@ -278,13 +284,29 @@ const MaterialPrincipalSolicitudes = () => {
                             </tbody>
                         </table>
                     </div>
+                    <div className="paginacion">
+                        <button className='btn btn-secondary'
+                            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                            disabled={currentPage === 1}
+                        >
+                            Anterior
+                        </button>
+                        <span>Página {currentPage} de {Math.ceil(datosFiltradosPorEstado.length / rowsPerPage)}</span>
+                        <button className='btn btn-secondary'
+                            onClick={() =>
+                                setCurrentPage((prev) =>
+                                    prev < Math.ceil(datosFiltradosPorEstado.length / rowsPerPage)
+                                        ? prev + 1
+                                        : prev
+                                )
+                            }
+                            disabled={currentPage >= Math.ceil(datosFiltradosPorEstado.length / rowsPerPage)}
+                        >
+                            Siguiente
+                        </button>
+                    </div>
                     <div className='Boton'>
                         <span>Total de ítems: {datosFiltradosPorEstado.length}</span>
-                        <span onClick={() => {
-                            setExpandidoSolicitudMaterialSinMat(!expandidoSolicitudMaterialSinMat);
-                        }}>
-                            {expandidoSolicitudMaterialSinMat ? "Mostrar menos" : "Mostrar mas"}
-                        </span>
                     </div>
                     <MaterialDetalle
                         isOpen={ventanaAbiertaSolicitudMaterial}

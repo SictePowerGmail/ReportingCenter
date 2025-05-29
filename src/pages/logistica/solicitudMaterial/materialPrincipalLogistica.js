@@ -16,7 +16,7 @@ const MaterialPrincipalLogistica = () => {
     const [registrosSolicitudMaterial, setRegistrosSolicitudMaterial] = useState([]);
     const rolUsuario = ObtenerRolUsuario(Cookies.get('userRole'));
     const nombreUsuario = Cookies.get('userNombre');
-    
+
     const cargarDatosRegistrosSolicitudMaterial = () => {
         axios.get(`${process.env.REACT_APP_API_URL}/solicitudMaterial/registros`)
             .then(response => {
@@ -185,7 +185,7 @@ const MaterialPrincipalLogistica = () => {
         } else {
             observacionesTemporal = observacionesPendAnalista;
         }
-        
+
         try {
             await axios.post(`${process.env.REACT_APP_API_URL}/solicitudMaterial/actualizarEstadoAnalista`, { ids, estado, observacionesTemporal, fechaRegistro });
             console.log('Solicitud enviada correctamente');
@@ -212,7 +212,7 @@ const MaterialPrincipalLogistica = () => {
         } else {
             observacionesTemporal = observacionesPendAnalista;
         }
-        
+
         try {
             await axios.post(`${process.env.REACT_APP_API_URL}/solicitudMaterial/actualizarEstadoAnalista`, { ids, estado, observacionesTemporal, fechaRegistro });
             console.log('Solicitud enviada correctamente');
@@ -369,6 +369,24 @@ const MaterialPrincipalLogistica = () => {
         }
     });
 
+    const [currentPagePendiente, setCurrentPagePendiente] = useState(1);
+    const rowsPerPagePendiente = 5;
+    const indexOfLastRowPendiente = currentPagePendiente * rowsPerPagePendiente;
+    const indexOfFirstRowPendiente = indexOfLastRowPendiente - rowsPerPagePendiente;
+    const currentRowsPendiente = datosOrdenadosPendienteAnalista.slice(indexOfFirstRowPendiente, indexOfLastRowPendiente);
+
+    const [currentPageAprobacion, setCurrentPageAprobacion] = useState(1);
+    const rowsPerPageAprobacion = 5;
+    const indexOfLastRowAprobacion = currentPageAprobacion * rowsPerPageAprobacion;
+    const indexOfFirstRowAprobacion = indexOfLastRowAprobacion - rowsPerPageAprobacion;
+    const currentRowsAprobacion = datosOrdenadosAprobacionAnalista.slice(indexOfFirstRowAprobacion, indexOfLastRowAprobacion);
+
+    const [currentPageRechazado, setCurrentPageRechazado] = useState(1);
+    const rowsPerPageRechazado = 5;
+    const indexOfLastRowRechazado = currentPageRechazado * rowsPerPageRechazado;
+    const indexOfFirstRowRechazado = indexOfLastRowRechazado - rowsPerPageRechazado;
+    const currentRowsRechazado = datosOrdenadosRechazadoAnalista.slice(indexOfFirstRowRechazado, indexOfLastRowRechazado);
+
     return (
         <div className='Analista'>
             {loading ? (
@@ -406,14 +424,14 @@ const MaterialPrincipalLogistica = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {datosOrdenadosPendienteAnalista.length === 0 ? (
+                                {currentRowsPendiente.length === 0 ? (
                                     <tr>
                                         <td colSpan={Object.keys(pendienteAnalistaSinMat[0] || {}).length} style={{ textAlign: 'center' }}>
                                             No hay registros
                                         </td>
                                     </tr>
                                 ) : (
-                                    datosOrdenadosPendienteAnalista.slice(0, expandidoPendAnalistaSinMat ? datosOrdenadosPendienteAnalista.length : 5).map((fila, index) => (
+                                    currentRowsPendiente.map((fila, index) => (
                                         <tr key={`${fila.fecha}-${fila.cedula}-${fila.uuid}`} onClick={() => manejarClickFilaPendienteAnalista(fila)}>
                                             {Object.values(fila).map((valor, idx) => (
                                                 <td key={idx} onClick={() => manejarClickFilaPendienteAnalista(fila)}>
@@ -426,13 +444,29 @@ const MaterialPrincipalLogistica = () => {
                             </tbody>
                         </table>
                     </div>
+                    <div className="paginacion">
+                        <button className='btn btn-secondary'
+                            onClick={() => setCurrentPagePendiente((prev) => Math.max(prev - 1, 1))}
+                            disabled={currentPagePendiente === 1}
+                        >
+                            Anterior
+                        </button>
+                        <span>Página {currentPagePendiente} de {Math.ceil(datosOrdenadosPendienteAnalista.length / rowsPerPagePendiente)}</span>
+                        <button className='btn btn-secondary'
+                            onClick={() =>
+                                setCurrentPagePendiente((prev) =>
+                                    prev < Math.ceil(datosOrdenadosPendienteAnalista.length / rowsPerPagePendiente)
+                                        ? prev + 1
+                                        : prev
+                                )
+                            }
+                            disabled={currentPagePendiente >= Math.ceil(datosOrdenadosPendienteAnalista.length / rowsPerPagePendiente)}
+                        >
+                            Siguiente
+                        </button>
+                    </div>
                     <div className='Boton'>
                         <span>Total de ítems: {datosOrdenadosPendienteAnalista.length}</span>
-                        <span onClick={() => {
-                            setExpandidoPendAnalistaSinMat(!expandidoPendAnalistaSinMat);
-                        }}>
-                            {expandidoPendAnalistaSinMat ? "Mostrar menos" : "Mostrar mas"}
-                        </span>
                     </div>
                     <MaterialDetalle
                         isOpen={ventanaAbiertaPendienteAnalista}
@@ -470,14 +504,14 @@ const MaterialPrincipalLogistica = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {datosOrdenadosAprobacionAnalista.length === 0 ? (
+                                {currentRowsAprobacion.length === 0 ? (
                                     <tr>
                                         <td colSpan={Object.keys(aprobacionAnalistaSinMat[0] || {}).length} style={{ textAlign: 'center' }}>
                                             No hay registros
                                         </td>
                                     </tr>
                                 ) : (
-                                    datosOrdenadosAprobacionAnalista.slice(0, expandidoAprobacionAnalistaSinMat ? datosOrdenadosAprobacionAnalista.length : 5).map((fila, index) => (
+                                    currentRowsAprobacion.map((fila, index) => (
                                         <tr key={`${fila.fecha}-${fila.cedula}-${fila.uuid}`} onClick={() => manejarClickFilaAprobacionAnalista(fila)}>
                                             {Object.values(fila).map((valor, idx) => (
                                                 <td key={idx} onClick={() => manejarClickFilaAprobacionAnalista(fila)}>
@@ -490,13 +524,29 @@ const MaterialPrincipalLogistica = () => {
                             </tbody>
                         </table>
                     </div>
+                    <div className="paginacion">
+                        <button className='btn btn-secondary'
+                            onClick={() => setCurrentPageAprobacion((prev) => Math.max(prev - 1, 1))}
+                            disabled={currentPageAprobacion === 1}
+                        >
+                            Anterior
+                        </button>
+                        <span>Página {currentPageAprobacion} de {Math.ceil(datosOrdenadosAprobacionAnalista.length / rowsPerPageAprobacion)}</span>
+                        <button className='btn btn-secondary'
+                            onClick={() =>
+                                setCurrentPageAprobacion((prev) =>
+                                    prev < Math.ceil(datosOrdenadosAprobacionAnalista.length / rowsPerPageAprobacion)
+                                        ? prev + 1
+                                        : prev
+                                )
+                            }
+                            disabled={currentPageAprobacion >= Math.ceil(datosOrdenadosAprobacionAnalista.length / rowsPerPageAprobacion)}
+                        >
+                            Siguiente
+                        </button>
+                    </div>
                     <div className='Boton'>
                         <span>Total de ítems: {datosOrdenadosAprobacionAnalista.length}</span>
-                        <span onClick={() => {
-                            setExpandidoAprobacionAnalistaSinMat(!expandidoAprobacionAnalistaSinMat);
-                        }}>
-                            {expandidoAprobacionAnalistaSinMat ? "Mostrar menos" : "Mostrar mas"}
-                        </span>
                     </div>
                     <MaterialDetalle
                         isOpen={ventanaAbiertaAprobacionAnalista}
@@ -534,14 +584,14 @@ const MaterialPrincipalLogistica = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {datosOrdenadosRechazadoAnalista.length === 0 ? (
+                                {currentRowsRechazado.length === 0 ? (
                                     <tr>
                                         <td colSpan={Object.keys(rechazadoAnalistaSinMat[0] || {}).length} style={{ textAlign: 'center' }}>
                                             No hay registros
                                         </td>
                                     </tr>
                                 ) : (
-                                    datosOrdenadosRechazadoAnalista.slice(0, expandidoRechazadoAnalistaSinMat ? datosOrdenadosRechazadoAnalista.length : 5).map((fila, index) => (
+                                    currentRowsRechazado.map((fila, index) => (
                                         <tr key={`${fila.fecha}-${fila.cedula}-${fila.uuid}`} onClick={() => manejarClickFilaRechazadoAnalista(fila)}>
                                             {Object.values(fila).map((valor, idx) => (
                                                 <td key={idx} onClick={() => manejarClickFilaRechazadoAnalista(fila)}>
@@ -554,13 +604,29 @@ const MaterialPrincipalLogistica = () => {
                             </tbody>
                         </table>
                     </div>
+                    <div className="paginacion">
+                        <button className='btn btn-secondary'
+                            onClick={() => setCurrentPageRechazado((prev) => Math.max(prev - 1, 1))}
+                            disabled={currentPageRechazado === 1}
+                        >
+                            Anterior
+                        </button>
+                        <span>Página {currentPageRechazado} de {Math.ceil(datosOrdenadosRechazadoAnalista.length / rowsPerPageRechazado)}</span>
+                        <button className='btn btn-secondary'
+                            onClick={() =>
+                                setCurrentPageRechazado((prev) =>
+                                    prev < Math.ceil(datosOrdenadosRechazadoAnalista.length / rowsPerPageRechazado)
+                                        ? prev + 1
+                                        : prev
+                                )
+                            }
+                            disabled={currentPageRechazado >= Math.ceil(datosOrdenadosRechazadoAnalista.length / rowsPerPageRechazado)}
+                        >
+                            Siguiente
+                        </button>
+                    </div>
                     <div className='Boton'>
                         <span>Total de ítems: {datosOrdenadosRechazadoAnalista.length}</span>
-                        <span onClick={() => {
-                            setExpandidoRechazadoAnalistaSinMat(!expandidoRechazadoAnalistaSinMat);
-                        }}>
-                            {expandidoRechazadoAnalistaSinMat ? "Mostrar menos" : "Mostrar mas"}
-                        </span>
                     </div>
                     <MaterialDetalle
                         isOpen={ventanaAbiertaRechazadoAnalista}

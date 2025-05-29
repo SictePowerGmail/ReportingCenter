@@ -47,6 +47,7 @@
     "reactstrap": "^9.1.1",
     "recharts": "^2.12.7",
     "responsivemenu": "file:",
+    "sass": "^1.89.0",
     "slick-carousel": "^1.8.1",
     "styled-components": "^5.3.5",
     "sweetalert": "^2.1.2",

@@ -9,13 +9,12 @@ import imagen7 from '../../images/Electr 2.jpg'
 import imagen8 from '../../images/Telec 3.jpg'
 import imagen9 from '../../images/Electr 3.jpg'
 import imagen10 from '../../images/Telec 4.jpg'
-
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import '../powerbi.css'
+import '../Inicio.scss'
 
 function Inicio() {
   const navigate = useNavigate();
@@ -46,6 +45,10 @@ function Inicio() {
 
   return (
     <div className="div-Imagen">
+      <div className="titulo-carrusel">
+        <h1>CENTRO DE CONTROL DE OPERACIONES TECNICAS</h1>
+        <div className='lineaHorizontal'></div>
+      </div>
       <Slider {...settings}>
         {imagenes.map((img, idx) => (
           <div key={idx}>
