@@ -16,7 +16,7 @@ import { useTranslation } from 'react-i18next';
 import { getPageTitle } from '../../rutas/pageTitles';
 
 function Navbar() {
-    const [showMobileMenu, setShowMobileMenu] = useState(true);
+    const [showMobileMenu, setShowMobileMenu] = useState(false);
     const [showDropdownUser, setShowDropdownUser] = useState(false);
     const [showDropdownReportes, setShowDropdownReportes] = useState(false);
     const [showDropdownFacturacion, setShowDropdownFacturacion] = useState(false);
