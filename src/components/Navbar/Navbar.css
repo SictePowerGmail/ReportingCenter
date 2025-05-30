@@ -748,7 +748,7 @@
                 width: calc(100% - 250px - 2px);
 
                 @media screen and (max-width: 1000px) {
-                    width: 100%;
+                    width: 100% !important;
 
                     &::after {
                         content: "";
@@ -772,7 +772,7 @@
                 }
 
                 @media screen and (max-width: 1000px) {
-                    width: 100%;
+                    width: 100% !important;
                 }
             }
 
