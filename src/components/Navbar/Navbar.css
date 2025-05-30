@@ -467,6 +467,16 @@
                 opacity: 1;
             }
 
+            @media screen and (max-width: 1000px) {
+                position: fixed;
+                top: 72px;
+                left: 0;
+                z-index: 999;
+                height: 100vh;
+                width: 250px;
+                max-width: 0;
+            }
+
             .menu {
                 display: flex;
                 flex-direction: column;
@@ -732,9 +742,27 @@
 
         .contenido {
             display: flex;
+            position: relative;
 
             &.visible {
                 width: calc(100% - 250px - 2px);
+
+                @media screen and (max-width: 1000px) {
+                    width: 100%;
+
+                    &::after {
+                        content: "";
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        background: rgba(0, 0, 0, 0.6);
+                        z-index: 2;
+                        pointer-events: none;
+                    }
+
+                }
             }
 
             &.oculto {
