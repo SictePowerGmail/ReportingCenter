@@ -53,6 +53,7 @@ import SeguimientoOperacionesNorte from "../pages/operacion/SeguimientoOperacion
 import SeguimientoSMU from '../pages/operacion/SeguimientoSMU';
 import SMU_Tecnico from '../pages/operacion/SMU_Tecnico';
 import TorreControl from '../pages/operacion/TorreControl';
+import EnelCronograma from "../pages/operacion/EnelCronograma";
 /* Logistica */
 import EquiposMoviles from "../pages/logistica/EquiposMoviles";
 import ConsumosOperaciones from "../pages/logistica/ConsumosOperaciones";
@@ -65,6 +66,7 @@ import InventariosMaterialPrincipal from "../pages/logistica/inventarios/inventa
 import InventariosMaterialAgregar from "../pages/logistica/inventarios/inventariosMaterialAgregar";
 import EstadoProyectosR4 from "../pages/logistica/EstadoProyectosR4";
 import Activos from "../pages/logistica/Activos";
+import ReporteSicte from "../pages/logistica/ReporteSicte";
 /* Direccion */
 import Penalizaciones from '../pages/direccion/Penalizaciones';
 import CentrosDeCostos from '../pages/direccion/CentrosDeCostos';
@@ -155,6 +157,7 @@ function RutasApp() {
                     <Route path='/SeguimientoSMU' exacte element={<SeguimientoSMU />} />
                     <Route path='/SMU_Tecnico' exacte element={<SMU_Tecnico />} />
                     <Route path='/TorreDeControl' exacte element={<TorreControl />} />
+                    <Route path='/EnelCronograma' exacte element={<EnelCronograma />} />
                     {/* Logistica */}
                     <Route path='/EquiposMoviles' exacte element={<EquiposMoviles />} />
                     <Route path='/ConsumosOperaciones' exacte element={<ConsumosOperaciones />} />
@@ -167,6 +170,7 @@ function RutasApp() {
                     <Route path='/InventariosMaterialAgregar' exacte element={<InventariosMaterialAgregar />} />
                     <Route path='/EstadoProyectosR4' exacte element={<EstadoProyectosR4 />} />
                     <Route path='/Activos' exacte element={<Activos />} />
+                    <Route path='/ReporteSicte' exacte element={<ReporteSicte />} />
                     {/* Direccion */}
                     <Route path='/Penalizaciones' exacte element={<Penalizaciones />} />
                     <Route path='/Centro_de_costos' exacte element={<CentrosDeCostos />} />

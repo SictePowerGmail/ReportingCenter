@@ -197,7 +197,8 @@ function ControlUsuarios() {
         SeguimientoOperacionesNorte: false,
         SeguimientoSmu: false,
         TecnicoSmu: false,
-        TorreDeControl: false
+        TorreDeControl: false,
+        EnelCronograma: false,
     });
 
     const handleOperacionChange = () => {
@@ -246,6 +247,7 @@ function ControlUsuarios() {
         InventarioMaterial: false,
         EstadoProyectosR4: false,
         Activos: false,
+        ReporteSicte: false,
     });
 
     const handleLogisticaChange = () => {
@@ -506,7 +508,8 @@ function ControlUsuarios() {
                     SeguimientoOperacionesNorte: usuarioEncontrado.operacionSeguimientoOperacionesNorte === "1",
                     SeguimientoSmu: usuarioEncontrado.operacionSeguimientoSmu === "1",
                     TecnicoSmu: usuarioEncontrado.operacionTecnicoSmu === "1",
-                    TorreDeControl: usuarioEncontrado.operacionTorreDeControl === "1"
+                    TorreDeControl: usuarioEncontrado.operacionTorreDeControl === "1",
+                    EnelCronograma: usuarioEncontrado.operacionEnelCronograma === "1",
                 };
 
                 setSubChecksOperacion(mappedChecksOperacion);
@@ -528,6 +531,7 @@ function ControlUsuarios() {
                     InventarioMaterial: usuarioEncontrado.logisticaInventarioMaterial === "1",
                     EstadoProyectosR4: usuarioEncontrado.logisticaEstadoProyectosR4 === "1",
                     Activos: usuarioEncontrado.logisticaActivos === "1",
+                    ReporteSicte: usuarioEncontrado.logisticaReporteSicte === "1",
                 };
 
                 setSubChecksLogistica(mappedChecksLogistica);
@@ -644,6 +648,7 @@ function ControlUsuarios() {
                 operacionSeguimientoSmu: subChecksOperacion.SeguimientoSmu ? 1 : 0,
                 operacionTecnicoSmu: subChecksOperacion.TecnicoSmu ? 1 : 0,
                 operacionTorreDeControl: subChecksOperacion.TorreDeControl ? 1 : 0,
+                operacionEnelCronograma: subChecksOperacion.EnelCronograma ? 1 : 0,
                 logisticaEquiposEnMoviles: subChecksLogistica.EquiposEnMoviles ? 1 : 0,
                 logisticaConsumosOperaciones: subChecksLogistica.ConsumosOperaciones ? 1 : 0,
                 logisticaDesmonteMantenimiento: subChecksLogistica.DesmonteMantenimiento ? 1 : 0,
@@ -652,6 +657,7 @@ function ControlUsuarios() {
                 logisticaInventarioMaterial: subChecksLogistica.InventarioMaterial ? 1 : 0,
                 logisticaEstadoProyectosR4: subChecksLogistica.EstadoProyectosR4 ? 1 : 0,
                 logisticaActivos: subChecksLogistica.Activos ? 1 : 0,
+                logisticaReporteSicte: subChecksLogistica.ReporteSicte ? 1 : 0,
                 direccionPenalizaciones: subChecksDireccion.Penalizaciones ? 1 : 0,
                 direccionCentroDeCostos: subChecksDireccion.CentroDeCostos ? 1 : 0,
                 direccionComposicionMoviles: subChecksDireccion.ComposicionMoviles ? 1 : 0,

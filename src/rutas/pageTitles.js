@@ -95,6 +95,8 @@ export const getPageTitle = (pathname) => {
             return 'SMU Tecnico';
         case '/TorreDeControl':
             return 'Torre De Control';
+        case '/EnelCronograma':
+            return 'Enel Cronograma';
         /* Logistica */
         case '/EquiposMoviles':
             return 'Equipos Moviles';
@@ -118,6 +120,8 @@ export const getPageTitle = (pathname) => {
             return 'Estado Proyectos R4'
         case '/Activos':
             return 'Activos'
+        case '/ReporteSicte':
+            return 'Reporte Sicte'
         /* Direccion */
         case '/Penalizaciones':
             return 'Penalizaciones';

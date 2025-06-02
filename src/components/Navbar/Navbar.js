@@ -179,7 +179,8 @@ function Navbar() {
         SeguimientoOperacionesNorte: false,
         SeguimientoSmu: false,
         TecnicoSmu: false,
-        TorreDeControl: false
+        TorreDeControl: false,
+        EnelCronograma: false,
     });
 
     const [logistica, setLogistica] = useState(false);
@@ -192,6 +193,7 @@ function Navbar() {
         InventarioMaterial: false,
         EstadoProyectosR4: false,
         Activos: false,
+        ReporteSicte: false,
     });
 
     const [direccion, setDireccion] = useState(false);
@@ -351,7 +353,8 @@ function Navbar() {
                     SeguimientoOperacionesNorte: usuarioEncontrado.operacionSeguimientoOperacionesNorte === "1",
                     SeguimientoSmu: usuarioEncontrado.operacionSeguimientoSmu === "1",
                     TecnicoSmu: usuarioEncontrado.operacionTecnicoSmu === "1",
-                    TorreDeControl: usuarioEncontrado.operacionTorreDeControl === "1"
+                    TorreDeControl: usuarioEncontrado.operacionTorreDeControl === "1",
+                    EnelCronograma: usuarioEncontrado.operacionEnelCronograma === "1",
                 };
 
                 setSubChecksOperacion(mappedChecksOperacion);
@@ -373,6 +376,7 @@ function Navbar() {
                     InventarioMaterial: usuarioEncontrado.logisticaInventarioMaterial === "1",
                     EstadoProyectosR4: usuarioEncontrado.logisticaEstadoProyectosR4 === "1",
                     Activos: usuarioEncontrado.logisticaActivos === "1",
+                    ReporteSicte: usuarioEncontrado.logisticaReporteSicte === "1",
                 };
 
                 setSubChecksLogistica(mappedChecksLogistica);
@@ -780,6 +784,7 @@ function Navbar() {
                                         {subChecksOperacion.SeguimientoSmu === true && (<Link className='SubMenu-Contenido-Titulo' to="/SeguimientoSMU" ><li>Seguimiento SMU</li></Link>)}
                                         {subChecksOperacion.TecnicoSmu === true && (<Link className='SubMenu-Contenido-Titulo' to="/SMU_Tecnico" ><li>Técnico SMU</li></Link>)}
                                         {subChecksOperacion.TorreDeControl === true && (<Link className='SubMenu-Contenido-Titulo' to="/TorreDeControl" ><li>Torre de control</li></Link>)}
+                                        {subChecksOperacion.EnelCronograma === true && (<Link className='SubMenu-Contenido-Titulo' to="/EnelCronograma" ><li>Enel Cronograma</li></Link>)}
                                     </ul>
                                 </div>
                             </li>
@@ -815,6 +820,7 @@ function Navbar() {
                                         {/* {subChecksLogistica.InventarioMaterial === true && (<Link className='SubMenu-Contenido-Titulo' to={{ pathname: "/Login", search: "?tipo=inventarioMaterial" }} ><li>Inventario Material</li></Link>)} */}
                                         {subChecksLogistica.EstadoProyectosR4 === true && (<Link className='SubMenu-Contenido-Titulo' to="/EstadoProyectosR4" ><li>Estado Proyectos R4</li></Link>)}
                                         {subChecksLogistica.Activos === true && (<Link className='SubMenu-Contenido-Titulo' to="/Activos" ><li>Activos</li></Link>)}
+                                        {subChecksLogistica.ReporteSicte === true && (<Link className='SubMenu-Contenido-Titulo' to="/ReporteSicte" ><li>Reporte Sicte</li></Link>)}
                                     </ul>
                                 </div>
                             </li>
