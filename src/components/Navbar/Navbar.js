@@ -124,10 +124,14 @@ function Navbar() {
         window.location.href = '/ReportingCenter/';
     };
 
-    const [reportes, setReportes] = useState(false);
-    const [subChecksReportes, setSubChecksReportes] = useState({
+    const [aplicativos, setAplicativos] = useState(false);
+    const [subChecksAplicativos, setSubChecksAplicativos] = useState({
         Capacidades: false,
-        Supervision: false
+        Supervision: false,
+        SolicitudDeMaterial: false,
+        ReporteMaterialFerretero: false,
+        ChatBot: false,
+        Carnetizacion: false,
     });
 
     const [facturacion, setFacturacion] = useState(false);
@@ -188,8 +192,6 @@ function Navbar() {
     const [subChecksLogistica, setSubChecksLogistica] = useState({
         EquiposEnMoviles: false,
         DesmonteMantenimiento: false,
-        SolicitudDeMaterial: false,
-        ReporteMaterialFerretero: false,
         InventarioMaterial: false,
         EstadoProyectosR4: false,
         Activos: false,
@@ -219,12 +221,6 @@ function Navbar() {
         Moviles: false,
     });
 
-    const [gestionHumana, setGestionHumana] = useState(false);
-    const [subChecksGestionHumana, setSubChecksGestionHumana] = useState({
-        ChatBot: false,
-        Carnetizacion: false,
-    });
-
     const mapearGrupoDesdeUsuario = (usuario, prefijo) => {
         const subChecks = Object.entries(usuario)
             .filter(([key]) => key.startsWith(prefijo))
@@ -249,9 +245,9 @@ function Navbar() {
 
             if (usuarioEncontrado) {
 
-                const { subChecks: checksReportes, algunoActivo: activoReportes } = mapearGrupoDesdeUsuario(usuarioEncontrado, "reportes");
-                setSubChecksReportes(checksReportes);
-                setReportes(activoReportes);
+                const { subChecks: checksAplicativos, algunoActivo: activoAplicativos } = mapearGrupoDesdeUsuario(usuarioEncontrado, "aplicativos");
+                setSubChecksAplicativos(checksAplicativos);
+                setAplicativos(activoAplicativos);
 
                 const { subChecks: checksFacturacion, algunoActivo: activoFacturacion } = mapearGrupoDesdeUsuario(usuarioEncontrado, "facturacion");
                 setSubChecksFacturacion(checksFacturacion);
@@ -288,10 +284,6 @@ function Navbar() {
                 const { subChecks: checksParqueAutomotor, algunoActivo: activoParqueAutomotor } = mapearGrupoDesdeUsuario(usuarioEncontrado, "parqueAutomotor");
                 setSubChecksParqueAutomotor(checksParqueAutomotor);
                 setParqueAutomotor(activoParqueAutomotor);
-
-                const { subChecks: checksGestionHumana, algunoActivo: activoGestionHumana } = mapearGrupoDesdeUsuario(usuarioEncontrado, "gestionHumana");
-                setSubChecksGestionHumana(checksGestionHumana);
-                setGestionHumana(activoGestionHumana);
 
             } else {
                 console.log("Usuario no encontrado");
@@ -446,7 +438,7 @@ function Navbar() {
                         <ul className='Menu'>
                             <span className={`sub-titulo ${showMobileMenu ? 'abierto' : 'cerrado'}`}>Aplicativos</span>
                             <li className={`SubMenu ${showMobileMenu ? 'abierto' : 'cerrado'}`}>
-                                {subChecksReportes.Capacidades === true &&
+                                {subChecksAplicativos.Capacidades === true &&
                                     (<Link className={`SubMenu-Titulo-Solo ${showMobileMenu ? 'abierto' : 'cerrado'}`} to={{ pathname: "/Login", search: "?tipo=Capacidades" }} >
                                         <span className='SubMenu-Titulo-Icono'><FaChartBar /></span>
                                         {showMobileMenu && (
@@ -457,7 +449,7 @@ function Navbar() {
                             </li>
 
                             <li className={`SubMenu ${showMobileMenu ? 'abierto' : 'cerrado'}`}>
-                                {subChecksReportes.Supervision === true &&
+                                {subChecksAplicativos.Supervision === true &&
                                     (<Link className={`SubMenu-Titulo-Solo ${showMobileMenu ? 'abierto' : 'cerrado'}`} to={{ pathname: "/Login", search: "?tipo=supervision" }} >
                                         <span className='SubMenu-Titulo-Icono'><FaUserCog /></span>
                                         {showMobileMenu && (
@@ -468,7 +460,7 @@ function Navbar() {
                             </li>
 
                             <li className={`SubMenu ${showMobileMenu ? 'abierto' : 'cerrado'}`}>
-                                {subChecksLogistica.SolicitudDeMaterial === true &&
+                                {subChecksAplicativos.SolicitudDeMaterial === true &&
                                     (<Link className={`SubMenu-Titulo-Solo ${showMobileMenu ? 'abierto' : 'cerrado'}`} to={{ pathname: "/Login", search: "?tipo=solicitudMaterial" }} >
                                         <span className='SubMenu-Titulo-Icono'><MdInventory2 /></span>
                                         {showMobileMenu && (
@@ -479,7 +471,7 @@ function Navbar() {
                             </li>
 
                             <li className={`SubMenu ${showMobileMenu ? 'abierto' : 'cerrado'}`}>
-                                {subChecksLogistica.ReporteMaterialFerretero === true &&
+                                {subChecksAplicativos.ReporteMaterialFerretero === true &&
                                     (<Link className={`SubMenu-Titulo-Solo ${showMobileMenu ? 'abierto' : 'cerrado'}`} to={{ pathname: "/Login", search: "?tipo=reporteMaterialFerretero" }} >
                                         <span className='SubMenu-Titulo-Icono'><GiToolbox /></span>
                                         {showMobileMenu && (
@@ -490,7 +482,7 @@ function Navbar() {
                             </li>
 
                             <li className={`SubMenu ${showMobileMenu ? 'abierto' : 'cerrado'}`}>
-                                {subChecksGestionHumana.Chatbot === true &&
+                                {subChecksAplicativos.Chatbot === true &&
                                     (<Link className={`SubMenu-Titulo-Solo ${showMobileMenu ? 'abierto' : 'cerrado'}`} to={{ pathname: "/Login", search: "?tipo=ChatBot" }} >
                                         <span className='SubMenu-Titulo-Icono'><FaRobot /></span>
                                         {showMobileMenu && (
@@ -501,7 +493,7 @@ function Navbar() {
                             </li>
 
                             <li className={`SubMenu ${showMobileMenu ? 'abierto' : 'cerrado'}`}>
-                                {subChecksGestionHumana.Carnetizacion === true &&
+                                {subChecksAplicativos.Carnetizacion === true &&
                                     (<Link className={`SubMenu-Titulo-Solo ${showMobileMenu ? 'abierto' : 'cerrado'}`} to={{ pathname: "/Login", search: "?tipo=Carnetizacion" }} >
                                         <span className='SubMenu-Titulo-Icono'><FaIdBadge /></span>
                                         {showMobileMenu && (
