@@ -181,6 +181,7 @@ function Navbar() {
         TecnicoSmu: false,
         TorreDeControl: false,
         EnelCronograma: false,
+        InspeccionesEnel: false,
     });
 
     const [logistica, setLogistica] = useState(false);
@@ -194,6 +195,7 @@ function Navbar() {
         EstadoProyectosR4: false,
         Activos: false,
         ReporteSicte: false,
+        CriticidadEquipos: false,
     });
 
     const [direccion, setDireccion] = useState(false);
@@ -641,6 +643,7 @@ function Navbar() {
                                         {subChecksOperacion.TecnicoSmu === true && (<Link className='SubMenu-Contenido-Titulo' to="/SMU_Tecnico" ><li>Técnico SMU</li></Link>)}
                                         {subChecksOperacion.TorreDeControl === true && (<Link className='SubMenu-Contenido-Titulo' to="/TorreDeControl" ><li>Torre de control</li></Link>)}
                                         {subChecksOperacion.EnelCronograma === true && (<Link className='SubMenu-Contenido-Titulo' to="/EnelCronograma" ><li>Enel Cronograma</li></Link>)}
+                                        {subChecksOperacion.InspeccionesEnel === true && (<Link className='SubMenu-Contenido-Titulo' to="/InspeccionesEnel" ><li>Inspecciones Enel</li></Link>)}                                        
                                     </ul>
                                 </div>
                             </li>
@@ -677,6 +680,7 @@ function Navbar() {
                                         {subChecksLogistica.EstadoProyectosR4 === true && (<Link className='SubMenu-Contenido-Titulo' to="/EstadoProyectosR4" ><li>Estado Proyectos R4</li></Link>)}
                                         {subChecksLogistica.Activos === true && (<Link className='SubMenu-Contenido-Titulo' to="/Activos" ><li>Activos</li></Link>)}
                                         {subChecksLogistica.ReporteSicte === true && (<Link className='SubMenu-Contenido-Titulo' to="/ReporteSicte" ><li>Reporte Sicte</li></Link>)}
+                                        {subChecksLogistica.CriticidadEquipos === true && (<Link className='SubMenu-Contenido-Titulo' to="/CriticidadEquipos" ><li>Criticidad Equipos</li></Link>)}
                                     </ul>
                                 </div>
                             </li>

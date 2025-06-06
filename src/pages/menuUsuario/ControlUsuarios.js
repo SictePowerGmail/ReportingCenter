@@ -131,6 +131,7 @@ function ControlUsuarios() {
                 TecnicoSmu: false,
                 TorreDeControl: false,
                 EnelCronograma: false,
+                InspeccionesEnel: false,
             }
         },
         gestionHumana: {
@@ -152,6 +153,7 @@ function ControlUsuarios() {
                 EstadoProyectosR4: false,
                 Activos: false,
                 ReporteSicte: false,
+                CriticidadEquipos: false,
             }
         },
         direccion: {
