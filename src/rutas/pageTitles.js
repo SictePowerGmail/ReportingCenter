@@ -13,13 +13,25 @@ export const getPageTitle = (pathname) => {
         /* Login */
         case '/Login':
             return 'Iniciar Sesion';
-        /* Reportes */
+        /* Aplicativos */
         case '/Capacidades':
             return 'Capacidades';
         case '/SupervisionPrincipal':
             return 'Supervisión';
         case '/SupervisionAgregar':
             return 'Supervisión';
+        case '/MaterialPrincipal':
+            return 'Solicitud Materiales';
+        case '/MaterialAgregar':
+            return 'Solicitud Materiales'
+        case '/ReporteMaterialPrincipal':
+            return 'Reporte Material Ferretero';
+        case '/ReporteMaterialAgregar':
+            return 'Reporte Material Ferretero'
+        case '/ChatBot':
+            return 'ChatBot'
+        case '/Carnetizacion':
+            return 'Carnetizacion'
         /* Facturacion */
         case '/ConsolidadoNacionalFacturacion':
             return 'Consolidado Nacional Facturacion';
@@ -98,14 +110,6 @@ export const getPageTitle = (pathname) => {
             return 'Equipos Moviles';
         case '/DesmonteMantenimiento':
             return 'DesmonteMantenimiento';
-        case '/MaterialPrincipal':
-            return 'Solicitud Materiales';
-        case '/MaterialAgregar':
-            return 'Solicitud Materiales'
-        case '/ReporteMaterialPrincipal':
-            return 'Reporte Material Ferretero';
-        case '/ReporteMaterialAgregar':
-            return 'Reporte Material Ferretero'
         case '/InventariosMaterialPrincipal':
             return 'Inventarios Material';
         case '/InventariosMaterialAgregar':
@@ -141,11 +145,6 @@ export const getPageTitle = (pathname) => {
         /* Parque Automotor */
         case '/Moviles':
             return 'Moviles'
-        /* Gestion Humana */
-        case '/ChatBot':
-            return 'ChatBot'
-        case '/Carnetizacion':
-            return 'Carnetizacion'
         /* Recuperar Contrasena */
         case '/RecuperarContrasena':
             return 'Recuperar Contrasena';

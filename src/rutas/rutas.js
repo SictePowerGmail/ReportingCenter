@@ -9,10 +9,16 @@ import ControlUsuarios from "../pages/menuUsuario/ControlUsuarios";
 import Inicio from '../pages/inicio/Inicio';
 /* Login */
 import Login from "../pages/loginAplicativos/login";
-/* Reportes */
+/* Aplicativos */
 import Capacidades from "../pages/reportes/capacidades/Capacidades";
 import SupervisionPrincipal from "../pages/reportes/supervision/supervisionPrincipal";
 import SupervisionAgregar from "../pages/reportes/supervision/supervisionAgregar";
+import MaterialPrincipal from "../pages/logistica/solicitudMaterial/materialPrincipal";
+import MaterialAgregar from "../pages/logistica/solicitudMaterial/materialAgregar";
+import ReporteMaterialPrincipal from "../pages/logistica/reporteMaterialFerretero/reporteMaterialPrincipal";
+import ReporteMaterialAgregar from "../pages/logistica/reporteMaterialFerretero/reporteMaterialAgregar";
+import ChatBot from "../pages/gestionHumana/ChatBot";
+import Carnetizacion from "../pages/gestionHumana/Carnetizacion";
 /* Facturacion */
 import FacturacionConsolidado from '../pages/facturacion/FacturacionConsolidado';
 import ProyectosFacturacion from "../pages/facturacion/ProyectosFacturacion";
@@ -55,10 +61,6 @@ import InspeccionesEnel from "../pages/operacion/InspeccionesEnel";
 /* Logistica */
 import EquiposMoviles from "../pages/logistica/EquiposMoviles";
 import DesmonteMantenimiento from "../pages/logistica/DesmonteMantenimiento";
-import MaterialPrincipal from "../pages/logistica/solicitudMaterial/materialPrincipal";
-import MaterialAgregar from "../pages/logistica/solicitudMaterial/materialAgregar";
-import ReporteMaterialPrincipal from "../pages/logistica/reporteMaterialFerretero/reporteMaterialPrincipal";
-import ReporteMaterialAgregar from "../pages/logistica/reporteMaterialFerretero/reporteMaterialAgregar";
 import InventariosMaterialPrincipal from "../pages/logistica/inventarios/inventariosMaterialPrincipal";
 import InventariosMaterialAgregar from "../pages/logistica/inventarios/inventariosMaterialAgregar";
 import EstadoProyectosR4 from "../pages/logistica/EstadoProyectosR4";
@@ -78,9 +80,6 @@ import EntregasPendientesDotacion from "../pages/ssta/EntregasPendientesDotacion
 import UbicacionDeActividades from "../pages/ssta/UbicacionDeActividades";
 /* Parque Automotor */
 import Moviles from "../pages/parqueAutomotor/Moviles";
-/* Gestion Humana */
-import ChatBot from "../pages/gestionHumana/ChatBot";
-import Carnetizacion from "../pages/gestionHumana/Carnetizacion";
 /* Recuperar Contraseña */
 import RecuperarContraseña from "../pages/recuperarContraseña/recuperarContraseña";
 import { getPageTitle } from "./pageTitles";
@@ -111,10 +110,16 @@ function RutasApp() {
                     <Route path='/ReportingCenter' exact element={<Inicio />} />
                     {/* Login */}
                     <Route path='/Login' exact element={<Login />} />
-                    {/* Reportes */}
+                    {/* Aplicativos */}
                     <Route path='/Capacidades' exacte element={<Capacidades />} />
                     <Route path='/SupervisionPrincipal' exacte element={<SupervisionPrincipal />} />
                     <Route path='/SupervisionAgregar' exacte element={<SupervisionAgregar />} />
+                    <Route path='/MaterialPrincipal' exacte element={<MaterialPrincipal />} />
+                    <Route path='/MaterialAgregar' exacte element={<MaterialAgregar />} />
+                    <Route path='/ReporteMaterialPrincipal' exacte element={<ReporteMaterialPrincipal />} />
+                    <Route path='/ReporteMaterialAgregar' exacte element={<ReporteMaterialAgregar />} />
+                    <Route path='/ChatBot' exacte element={<ChatBot />} />
+                    <Route path='/Carnetizacion' exacte element={<Carnetizacion />} />
                     {/* Facturacion */}
                     <Route path='/ConsolidadoNacionalFacturacion' exacte element={<FacturacionConsolidado />} />
                     <Route path='/Proyectos' exacte element={<ProyectosFacturacion />} />
@@ -157,10 +162,6 @@ function RutasApp() {
                     {/* Logistica */}
                     <Route path='/EquiposMoviles' exacte element={<EquiposMoviles />} />
                     <Route path='/DesmonteMantenimiento' exacte element={<DesmonteMantenimiento />} />
-                    <Route path='/MaterialPrincipal' exacte element={<MaterialPrincipal />} />
-                    <Route path='/MaterialAgregar' exacte element={<MaterialAgregar />} />
-                    <Route path='/ReporteMaterialPrincipal' exacte element={<ReporteMaterialPrincipal />} />
-                    <Route path='/ReporteMaterialAgregar' exacte element={<ReporteMaterialAgregar />} />
                     <Route path='/InventariosMaterialPrincipal' exacte element={<InventariosMaterialPrincipal />} />
                     <Route path='/InventariosMaterialAgregar' exacte element={<InventariosMaterialAgregar />} />
                     <Route path='/EstadoProyectosR4' exacte element={<EstadoProyectosR4 />} />
@@ -180,9 +181,6 @@ function RutasApp() {
                     <Route path='/UbicacionDeActividades' exacte element={<UbicacionDeActividades />} />
                     {/* Parque Automotor */}
                     <Route path='/Moviles' exacte element={<Moviles />} />
-                    {/* Gestion Humana */}
-                    <Route path='/ChatBot' exacte element={<ChatBot />} />
-                    <Route path='/Carnetizacion' exacte element={<Carnetizacion />} />
                     {/* Recuperar Contraseña */}
                     <Route path='/RecuperarContrasena' exacte element={<RecuperarContraseña />} />
                 </Route>

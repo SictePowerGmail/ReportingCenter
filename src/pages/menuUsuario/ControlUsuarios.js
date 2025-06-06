@@ -66,11 +66,15 @@ function ControlUsuarios() {
     );
 
     const [grupos, setGrupos] = useState({
-        reportes: {
+        aplicativos: {
             activo: false,
             subChecks: {
                 Capacidades: false,
-                Supervision: false
+                Supervision: false,
+                SolicitudDeMaterial: false,
+                ReporteMaterialFerretero: false,
+                ChatBot: false,
+                Carnetizacion: false,
             }
         },
         facturacion: {
@@ -132,20 +136,11 @@ function ControlUsuarios() {
                 InspeccionesEnel: false,
             }
         },
-        gestionHumana: {
-            activo: false,
-            subChecks: {
-                ChatBot: false,
-                Carnetizacion: false
-            }
-        },
         logistica: {
             activo: false,
             subChecks: {
                 EquiposEnMoviles: false,
                 DesmonteMantenimiento: false,
-                SolicitudDeMaterial: false,
-                ReporteMaterialFerretero: false,
                 InventarioMaterial: false,
                 EstadoProyectosR4: false,
                 Activos: false,
@@ -287,7 +282,7 @@ function ControlUsuarios() {
 
             if (usuarioEncontrado) {
                 const nuevoGrupos = {
-                    reportes: mapearGrupoDesdeUsuario(usuarioEncontrado, "reportes"),
+                    aplicativos: mapearGrupoDesdeUsuario(usuarioEncontrado, "aplicativos"),
                     facturacion: mapearGrupoDesdeUsuario(usuarioEncontrado, "facturacion"),
                     productividad: mapearGrupoDesdeUsuario(usuarioEncontrado, "productividad"),
                     indicadores: mapearGrupoDesdeUsuario(usuarioEncontrado, "indicadores"),
@@ -297,7 +292,6 @@ function ControlUsuarios() {
                     logistica: mapearGrupoDesdeUsuario(usuarioEncontrado, "logistica"),
                     administracion: mapearGrupoDesdeUsuario(usuarioEncontrado, "administracion"),
                     parqueAutomotor: mapearGrupoDesdeUsuario(usuarioEncontrado, "parqueAutomotor"),
-                    gestionHumana: mapearGrupoDesdeUsuario(usuarioEncontrado, "gestionHumana"),
                 };
 
                 setGrupos(nuevoGrupos);
@@ -423,20 +417,20 @@ function ControlUsuarios() {
                                                 <label className='subTitulo'>
                                                     <input
                                                         type="checkbox"
-                                                        checked={grupos.reportes.activo}
-                                                        onChange={() => toggleGrupo("reportes")}
+                                                        checked={grupos.aplicativos.activo}
+                                                        onChange={() => toggleGrupo("aplicativos")}
                                                     />
-                                                    <span>Reportes</span>
+                                                    <span>Aplicativos</span>
                                                 </label>
 
                                                 <div className='lista'>
-                                                    {Object.keys(grupos.reportes.subChecks).map((key) => (
+                                                    {Object.keys(grupos.aplicativos.subChecks).map((key) => (
                                                         <label key={key} style={{ display: "block" }}>
                                                             <input
                                                                 type="checkbox"
-                                                                checked={grupos.reportes.subChecks[key]}
-                                                                onChange={() => toggleSubCheck("reportes", key)}
-                                                                disabled={grupos.reportes.activo}
+                                                                checked={grupos.aplicativos.subChecks[key]}
+                                                                onChange={() => toggleSubCheck("aplicativos", key)}
+                                                                disabled={grupos.aplicativos.activo}
                                                             />
                                                             <span>{key.replace(/([A-Z])/g, ' $1').trim()}</span>
                                                         </label>
@@ -460,29 +454,6 @@ function ControlUsuarios() {
                                                                 checked={grupos.facturacion.subChecks[key]}
                                                                 onChange={() => toggleSubCheck("facturacion", key)}
                                                                 disabled={grupos.facturacion.activo}
-                                                            />
-                                                            <span>{key.replace(/([A-Z])/g, ' $1').trim()}</span>
-                                                        </label>
-                                                    ))}
-                                                </div>
-
-                                                <label className='subTitulo'>
-                                                    <input
-                                                        type="checkbox"
-                                                        checked={grupos.gestionHumana.activo}
-                                                        onChange={() => toggleGrupo("gestionHumana")}
-                                                    />
-                                                    <span>Gestion Humana</span>
-                                                </label>
-
-                                                <div className='lista'>
-                                                    {Object.keys(grupos.gestionHumana.subChecks).map((key) => (
-                                                        <label key={key} style={{ display: "block" }}>
-                                                            <input
-                                                                type="checkbox"
-                                                                checked={grupos.gestionHumana.subChecks[key]}
-                                                                onChange={() => toggleSubCheck("gestionHumana", key)}
-                                                                disabled={grupos.gestionHumana.activo}
                                                             />
                                                             <span>{key.replace(/([A-Z])/g, ' $1').trim()}</span>
                                                         </label>
