@@ -24,7 +24,7 @@ import SMU from '../pages/facturacion/SMU';
 import ImplementacionesFacturacion from "../pages/facturacion/ImplementacionesFacturacion";
 import MedicionesFacturacion from "../pages/facturacion/MedicionesFacturacion";
 import ObraCivilFacturacion from "../pages/facturacion/ObraCivilFacturacion";
-/* Produccion */
+/* Productividad */
 import ProductividadNacional from '../pages/produccion/ProductividadNacional';
 import PlaneacionFinanciero from '../pages/produccion/PlaneacionFinanciero';
 import CorporativoFinanciero from '../pages/produccion/CorporativoFinanciero';
@@ -34,7 +34,6 @@ import OperacionesFinanciero from '../pages/produccion/OperacionesFinanciero';
 /* Indicadores */
 import HistoricoKPI from '../pages/indicadores/HistoricoKPI';
 import MantenimientoTecnico from '../pages/indicadores/MantenimientoTecnico';
-import Mintic from '../pages/indicadores/Mintic';
 import NPS from '../pages/indicadores/NPS';
 import G2G8MasivoCentro from "../pages/indicadores/G2G8MasivoCentro";
 /* Puntuacion */
@@ -47,17 +46,14 @@ import BacklogFO from '../pages/operacion/Backlog_FO';
 import BacklogHFC from '../pages/operacion/Backlog_HFC';
 import MantenimientoPuntuacionTMRF from '../pages/operacion/MantenimientoPuntuacionTMRF';
 import RecursoOperaciones from "../pages/operacion/RecursoOperaciones";
-import Seguimiento from '../pages/operacion/Seguimiento';
 import SeguimientoOperacionesCentro from "../pages/operacion/SeguimientoOperacionesCentro";
 import SeguimientoOperacionesNorte from "../pages/operacion/SeguimientoOperacionesNorte";
 import SeguimientoSMU from '../pages/operacion/SeguimientoSMU';
 import SMU_Tecnico from '../pages/operacion/SMU_Tecnico';
-import TorreControl from '../pages/operacion/TorreControl';
 import EnelCronograma from "../pages/operacion/EnelCronograma";
 import InspeccionesEnel from "../pages/operacion/InspeccionesEnel";
 /* Logistica */
 import EquiposMoviles from "../pages/logistica/EquiposMoviles";
-import ConsumosOperaciones from "../pages/logistica/ConsumosOperaciones";
 import DesmonteMantenimiento from "../pages/logistica/DesmonteMantenimiento";
 import MaterialPrincipal from "../pages/logistica/solicitudMaterial/materialPrincipal";
 import MaterialAgregar from "../pages/logistica/solicitudMaterial/materialAgregar";
@@ -75,7 +71,7 @@ import CentrosDeCostos from '../pages/direccion/CentrosDeCostos';
 import ComposicionMoviles from '../pages/direccion/ComposicionMoviles';
 import Compras from '../pages/direccion/Compras';
 import CapacidadesTablero from "../pages/direccion/CapacidadesTablero";
-/* SSTA */
+/* HSEQ */
 import SSTA from '../pages/ssta/SSTA';
 import CursosDeAlturas from "../pages/ssta/CursosDeAlturas";
 import EntregasPendientesDotacion from "../pages/ssta/EntregasPendientesDotacion";
@@ -130,7 +126,7 @@ function RutasApp() {
                     <Route path='/ImplementacionesFacturacion' exacte element={<ImplementacionesFacturacion />} />
                     <Route path='/MedicionesFacturacion' exacte element={<MedicionesFacturacion />} />
                     <Route path='/ObraCivilFacturacion' exacte element={<ObraCivilFacturacion />} />
-                    {/* Produccion */}
+                    {/* Productividad */}
                     <Route path='/ProductividadNacional' exacte element={<ProductividadNacional />} />
                     <Route path='/PlaneacionFinanciero' exact element={<PlaneacionFinanciero />} />
                     <Route path='/CorporativoFinanciero' exact element={<CorporativoFinanciero />} />
@@ -140,7 +136,6 @@ function RutasApp() {
                     {/* Indicadores */}
                     <Route path='/HistoricoKPI' exacte element={<HistoricoKPI />} />
                     <Route path='/MantenimientoTecnico' exact element={<MantenimientoTecnico />} />
-                    <Route path='/Mintic' exacte element={<Mintic />} />
                     <Route path='/NPS' exacte element={<NPS />} />
                     <Route path='/G2G8MasivoCentro' exacte element={<G2G8MasivoCentro />} />
                     {/* Puntuacion */}
@@ -153,17 +148,14 @@ function RutasApp() {
                     <Route path='/MantenimientoBacklogHFC' exacte element={<BacklogHFC />} />
                     <Route path='/MantenimientoPuntuacionTMRF' exact element={<MantenimientoPuntuacionTMRF />} />
                     <Route path='/RecursoOperaciones' exact element={<RecursoOperaciones />} />
-                    <Route path='/Seguimiento' exact element={<Seguimiento />} />
                     <Route path='/SeguimientoOperacionesCentro' exacte element={<SeguimientoOperacionesCentro />} />
                     <Route path='/SeguimientoOperacionesNorte' exacte element={<SeguimientoOperacionesNorte />} />
                     <Route path='/SeguimientoSMU' exacte element={<SeguimientoSMU />} />
                     <Route path='/SMU_Tecnico' exacte element={<SMU_Tecnico />} />
-                    <Route path='/TorreDeControl' exacte element={<TorreControl />} />
                     <Route path='/EnelCronograma' exacte element={<EnelCronograma />} />
                     <Route path='/InspeccionesEnel' exacte element={<InspeccionesEnel />} />
                     {/* Logistica */}
                     <Route path='/EquiposMoviles' exacte element={<EquiposMoviles />} />
-                    <Route path='/ConsumosOperaciones' exacte element={<ConsumosOperaciones />} />
                     <Route path='/DesmonteMantenimiento' exacte element={<DesmonteMantenimiento />} />
                     <Route path='/MaterialPrincipal' exacte element={<MaterialPrincipal />} />
                     <Route path='/MaterialAgregar' exacte element={<MaterialAgregar />} />
@@ -181,7 +173,7 @@ function RutasApp() {
                     <Route path='/ComposicionMoviles' exacte element={<ComposicionMoviles />} />
                     <Route path='/Compras' exacte element={<Compras />} />
                     <Route path='/CapacidadesTablero' exacte element={<CapacidadesTablero />} />
-                    {/* SSTA */}
+                    {/* HSEQ */}
                     <Route path='/SSTA' exacte element={<SSTA />} />
                     <Route path='/CursosDeAlturas' exacte element={<CursosDeAlturas />} />
                     <Route path='/EntregasPendientesDotacion' exacte element={<EntregasPendientesDotacion />} />

@@ -88,7 +88,7 @@ function ControlUsuarios() {
                 ObraCivilMovil: false
             }
         },
-        produccion: {
+        productividad: {
             activo: false,
             subChecks: {
                 ProducionNacional: false,
@@ -124,12 +124,10 @@ function ControlUsuarios() {
                 CumplimientoSlaHfc: false,
                 CorrectivoPreventivo: false,
                 RecursoOperaciones: false,
-                SeguimientoMttoCentro: false,
                 SeguimientoOperacionesCentro: false,
                 SeguimientoOperacionesNorte: false,
                 SeguimientoSmu: false,
                 TecnicoSmu: false,
-                TorreDeControl: false,
                 EnelCronograma: false,
                 InspeccionesEnel: false,
             }
@@ -145,7 +143,6 @@ function ControlUsuarios() {
             activo: false,
             subChecks: {
                 EquiposEnMoviles: false,
-                ConsumosOperaciones: false,
                 DesmonteMantenimiento: false,
                 SolicitudDeMaterial: false,
                 ReporteMaterialFerretero: false,
@@ -156,7 +153,7 @@ function ControlUsuarios() {
                 CriticidadEquipos: false,
             }
         },
-        direccion: {
+        administracion: {
             activo: false,
             subChecks: {
                 Penalizaciones: false,
@@ -166,7 +163,7 @@ function ControlUsuarios() {
                 Capacidades: false,
             }
         },
-        ssta: {
+        hseq: {
             activo: false,
             subChecks: {
                 Ssta: false,
@@ -292,13 +289,13 @@ function ControlUsuarios() {
                 const nuevoGrupos = {
                     reportes: mapearGrupoDesdeUsuario(usuarioEncontrado, "reportes"),
                     facturacion: mapearGrupoDesdeUsuario(usuarioEncontrado, "facturacion"),
-                    produccion: mapearGrupoDesdeUsuario(usuarioEncontrado, "produccion"),
+                    productividad: mapearGrupoDesdeUsuario(usuarioEncontrado, "productividad"),
                     indicadores: mapearGrupoDesdeUsuario(usuarioEncontrado, "indicadores"),
-                    ssta: mapearGrupoDesdeUsuario(usuarioEncontrado, "ssta"),
+                    hseq: mapearGrupoDesdeUsuario(usuarioEncontrado, "hseq"),
                     puntuacion: mapearGrupoDesdeUsuario(usuarioEncontrado, "puntuacion"),
                     operacion: mapearGrupoDesdeUsuario(usuarioEncontrado, "operacion"),
                     logistica: mapearGrupoDesdeUsuario(usuarioEncontrado, "logistica"),
-                    direccion: mapearGrupoDesdeUsuario(usuarioEncontrado, "direccion"),
+                    administracion: mapearGrupoDesdeUsuario(usuarioEncontrado, "administracion"),
                     parqueAutomotor: mapearGrupoDesdeUsuario(usuarioEncontrado, "parqueAutomotor"),
                     gestionHumana: mapearGrupoDesdeUsuario(usuarioEncontrado, "gestionHumana"),
                 };
@@ -499,20 +496,20 @@ function ControlUsuarios() {
                                                 <label className='subTitulo'>
                                                     <input
                                                         type="checkbox"
-                                                        checked={grupos.produccion.activo}
-                                                        onChange={() => toggleGrupo("produccion")}
+                                                        checked={grupos.productividad.activo}
+                                                        onChange={() => toggleGrupo("productividad")}
                                                     />
-                                                    <span>Produccion</span>
+                                                    <span>Productividad</span>
                                                 </label>
 
                                                 <div className='lista'>
-                                                    {Object.keys(grupos.produccion.subChecks).map((key) => (
+                                                    {Object.keys(grupos.productividad.subChecks).map((key) => (
                                                         <label key={key} style={{ display: "block" }}>
                                                             <input
                                                                 type="checkbox"
-                                                                checked={grupos.produccion.subChecks[key]}
-                                                                onChange={() => toggleSubCheck("produccion", key)}
-                                                                disabled={grupos.produccion.activo}
+                                                                checked={grupos.productividad.subChecks[key]}
+                                                                onChange={() => toggleSubCheck("productividad", key)}
+                                                                disabled={grupos.productividad.activo}
                                                             />
                                                             <span>{key.replace(/([A-Z])/g, ' $1').trim()}</span>
                                                         </label>
@@ -545,20 +542,20 @@ function ControlUsuarios() {
                                                 <label className='subTitulo'>
                                                     <input
                                                         type="checkbox"
-                                                        checked={grupos.ssta.activo}
-                                                        onChange={() => toggleGrupo("ssta")}
+                                                        checked={grupos.hseq.activo}
+                                                        onChange={() => toggleGrupo("hseq")}
                                                     />
-                                                    <span>Ssta</span>
+                                                    <span>Hseq</span>
                                                 </label>
 
                                                 <div className='lista'>
-                                                    {Object.keys(grupos.ssta.subChecks).map((key) => (
+                                                    {Object.keys(grupos.hseq.subChecks).map((key) => (
                                                         <label key={key} style={{ display: "block" }}>
                                                             <input
                                                                 type="checkbox"
-                                                                checked={grupos.ssta.subChecks[key]}
-                                                                onChange={() => toggleSubCheck("ssta", key)}
-                                                                disabled={grupos.ssta.activo}
+                                                                checked={grupos.hseq.subChecks[key]}
+                                                                onChange={() => toggleSubCheck("hseq", key)}
+                                                                disabled={grupos.hseq.activo}
                                                             />
                                                             <span>{key.replace(/([A-Z])/g, ' $1').trim()}</span>
                                                         </label>
@@ -645,20 +642,20 @@ function ControlUsuarios() {
                                                 <label className='subTitulo'>
                                                     <input
                                                         type="checkbox"
-                                                        checked={grupos.direccion.activo}
-                                                        onChange={() => toggleGrupo("direccion")}
+                                                        checked={grupos.administracion.activo}
+                                                        onChange={() => toggleGrupo("administracion")}
                                                     />
-                                                    <span>Direccion</span>
+                                                    <span>Administracion</span>
                                                 </label>
 
                                                 <div className='lista'>
-                                                    {Object.keys(grupos.direccion.subChecks).map((key) => (
+                                                    {Object.keys(grupos.administracion.subChecks).map((key) => (
                                                         <label key={key} style={{ display: "block" }}>
                                                             <input
                                                                 type="checkbox"
-                                                                checked={grupos.direccion.subChecks[key]}
-                                                                onChange={() => toggleSubCheck("direccion", key)}
-                                                                disabled={grupos.direccion.activo}
+                                                                checked={grupos.administracion.subChecks[key]}
+                                                                onChange={() => toggleSubCheck("administracion", key)}
+                                                                disabled={grupos.administracion.activo}
                                                             />
                                                             <span>{key.replace(/([A-Z])/g, ' $1').trim()}</span>
                                                         </label>

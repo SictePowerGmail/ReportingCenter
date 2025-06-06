@@ -41,7 +41,7 @@ export const getPageTitle = (pathname) => {
             return 'Mediciones Facturacion';
         case '/ObraCivilFacturacion':
             return 'Obra Civil Facturacion';
-        /* Produccion */
+        /* Productividad */
         case '/ProductividadNacional':
             return 'Productividad Nacional';
         case '/PlaneacionFinanciero':
@@ -59,8 +59,6 @@ export const getPageTitle = (pathname) => {
             return 'Historico KPI';
         case '/MantenimientoTecnico':
             return 'Mantenimiento Tecnico';
-        case '/Mintic':
-            return 'Mintic';
         case '/NPS':
             return 'NPS';
         case '/G2G8MasivoCentro':
@@ -83,8 +81,6 @@ export const getPageTitle = (pathname) => {
             return 'Mantenimiento Puntuacion TMRF';
         case '/RecursoOperaciones':
             return 'Recurso Operaciones';
-        case '/Seguimiento':
-            return 'Seguimiento';
         case '/SeguimientoOperacionesCentro':
             return 'Seguimiento Operaciones Centro';
         case '/SeguimientoOperacionesNorte':
@@ -93,8 +89,6 @@ export const getPageTitle = (pathname) => {
             return 'Seguimiento SMU';
         case '/SMU_Tecnico':
             return 'SMU Tecnico';
-        case '/TorreDeControl':
-            return 'Torre De Control';
         case '/EnelCronograma':
             return 'Enel Cronograma';
         case '/InspeccionesEnel':
@@ -102,8 +96,6 @@ export const getPageTitle = (pathname) => {
         /* Logistica */
         case '/EquiposMoviles':
             return 'Equipos Moviles';
-        case '/ConsumosOperaciones':
-            return 'ConsumosOperaciones';
         case '/DesmonteMantenimiento':
             return 'DesmonteMantenimiento';
         case '/MaterialPrincipal':
@@ -137,7 +129,7 @@ export const getPageTitle = (pathname) => {
             return 'Compras';
         case '/CapacidadesTablero':
             return 'Capacidades';
-        /* SSTA */
+        /* HSEQ */
         case '/SSTA':
             return 'SSTA';
         case '/CursosDeAlturas':
