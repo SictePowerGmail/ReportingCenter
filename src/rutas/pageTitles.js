@@ -97,6 +97,8 @@ export const getPageTitle = (pathname) => {
             return 'Torre De Control';
         case '/EnelCronograma':
             return 'Enel Cronograma';
+        case '/InspeccionesEnel':
+            return 'Inspecciones Enel';
         /* Logistica */
         case '/EquiposMoviles':
             return 'Equipos Moviles';
@@ -122,6 +124,8 @@ export const getPageTitle = (pathname) => {
             return 'Activos'
         case '/ReporteSicte':
             return 'Reporte Sicte'
+        case '/CriticidadEquipos':
+            return 'Criticidad Equipos'
         /* Direccion */
         case '/Penalizaciones':
             return 'Penalizaciones';

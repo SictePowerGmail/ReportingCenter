@@ -65,272 +65,121 @@ function ControlUsuarios() {
         )
     );
 
-    const [reportes, setReportes] = useState(false);
-    const [subChecksReportes, setSubChecksReportes] = useState({
-        Capacidades: false,
-        Supervision: false
+    const [grupos, setGrupos] = useState({
+        reportes: {
+            activo: false,
+            subChecks: {
+                Capacidades: false,
+                Supervision: false
+            }
+        },
+        facturacion: {
+            activo: false,
+            subChecks: {
+                ConsolidadoNacional: false,
+                Proyectos: false,
+                Corporativo: false,
+                Mantenimiento: false,
+                Operaciones: false,
+                Mintic: false,
+                Smu: false,
+                ImplementacionMovil: false,
+                MedicionesMovil: false,
+                ObraCivilMovil: false
+            }
+        },
+        produccion: {
+            activo: false,
+            subChecks: {
+                ProducionNacional: false,
+                Proyectos: false,
+                Corporativo: false,
+                Mantenimiento: false,
+                Reingenierias: false,
+                Operaciones: false
+            }
+        },
+        indicadores: {
+            activo: false,
+            subChecks: {
+                HistoricoKpi: false,
+                G1Mantenimiento: false,
+                Nps: false,
+                G2G8MasivoCentro: false
+            }
+        },
+        puntuacion: {
+            activo: false,
+            subChecks: {
+                Proyectos: false,
+                Corporativo: false,
+                Mantenimiento: false,
+                Reingenierias: false
+            }
+        },
+        operacion: {
+            activo: false,
+            subChecks: {
+                CumplimientoSlaFo: false,
+                CumplimientoSlaHfc: false,
+                CorrectivoPreventivo: false,
+                RecursoOperaciones: false,
+                SeguimientoMttoCentro: false,
+                SeguimientoOperacionesCentro: false,
+                SeguimientoOperacionesNorte: false,
+                SeguimientoSmu: false,
+                TecnicoSmu: false,
+                TorreDeControl: false,
+                EnelCronograma: false,
+            }
+        },
+        gestionHumana: {
+            activo: false,
+            subChecks: {
+                ChatBot: false,
+                Carnetizacion: false
+            }
+        },
+        logistica: {
+            activo: false,
+            subChecks: {
+                EquiposEnMoviles: false,
+                ConsumosOperaciones: false,
+                DesmonteMantenimiento: false,
+                SolicitudDeMaterial: false,
+                ReporteMaterialFerretero: false,
+                InventarioMaterial: false,
+                EstadoProyectosR4: false,
+                Activos: false,
+                ReporteSicte: false,
+            }
+        },
+        direccion: {
+            activo: false,
+            subChecks: {
+                Penalizaciones: false,
+                CentroDeCostos: false,
+                ComposicionMoviles: false,
+                Compras: false,
+                Capacidades: false,
+            }
+        },
+        ssta: {
+            activo: false,
+            subChecks: {
+                Ssta: false,
+                CursoDeAlturas: false,
+                EntregasPendientesDotacion: false,
+                UbicacionDeActividades: false,
+            }
+        },
+        parqueAutomotor: {
+            activo: false,
+            subChecks: {
+                Moviles: false
+            }
+        }
     });
-
-    const handleReportesChange = () => {
-        const newState = !reportes;
-        setReportes(newState);
-        setSubChecksReportes((prevState) =>
-            Object.fromEntries(Object.keys(prevState).map(key => [key, newState]))
-        );
-    };
-
-    const handleSubCheckChangeReportes = (name) => {
-        setSubChecksReportes(prevState => ({
-            ...prevState,
-            [name]: !prevState[name]
-        }));
-    };
-
-    const [facturacion, setFacturacion] = useState(false);
-    const [subChecksFacturacion, setSubChecksFacturacion] = useState({
-        ConsolidadoNacional: false,
-        Proyectos: false,
-        Corporativo: false,
-        Mantenimiento: false,
-        Operaciones: false,
-        Mintic: false,
-        Smu: false,
-        ImplementacionMovil: false,
-        MedicionesMovil: false,
-        ObraCivilMovil: false
-    });
-
-    const handleFacturacionChange = () => {
-        const newState = !facturacion;
-        setFacturacion(newState);
-        setSubChecksFacturacion((prevState) =>
-            Object.fromEntries(Object.keys(prevState).map(key => [key, newState]))
-        );
-    };
-
-    const handleSubCheckChangeFacturacion = (name) => {
-        setSubChecksFacturacion(prevState => ({
-            ...prevState,
-            [name]: !prevState[name]
-        }));
-    };
-
-    const [produccion, setProduccion] = useState(false);
-    const [subChecksProduccion, setSubChecksProduccion] = useState({
-        ProducionNacional: false,
-        Proyectos: false,
-        Corporativo: false,
-        Mantenimiento: false,
-        Reingenierias: false,
-        Operaciones: false
-    });
-
-    const handleProduccionChange = () => {
-        const newState = !produccion;
-        setProduccion(newState);
-        setSubChecksProduccion((prevState) =>
-            Object.fromEntries(Object.keys(prevState).map(key => [key, newState]))
-        );
-    };
-
-    const handleSubCheckChangeProduccion = (name) => {
-        setSubChecksProduccion(prevState => ({
-            ...prevState,
-            [name]: !prevState[name]
-        }));
-    };
-
-    const [indicadores, setIndicadores] = useState(false);
-    const [subChecksIndicadores, setSubChecksIndicadores] = useState({
-        HistoricoKpi: false,
-        G1Mantenimiento: false,
-        Nps: false,
-        G2G8MasivoCentro: false
-    });
-
-    const handleIndicadoresChange = () => {
-        const newState = !indicadores;
-        setIndicadores(newState);
-        setSubChecksIndicadores((prevState) =>
-            Object.fromEntries(Object.keys(prevState).map(key => [key, newState]))
-        );
-    };
-
-    const handleSubCheckChangeIndicadores = (name) => {
-        setSubChecksIndicadores(prevState => ({
-            ...prevState,
-            [name]: !prevState[name]
-        }));
-    };
-
-    const [puntuacion, setPuntuacion] = useState(false);
-    const [subChecksPuntuacion, setSubChecksPuntuacion] = useState({
-        Proyectos: false,
-        Corporativo: false,
-        Mantenimiento: false,
-        Reingenierias: false
-    });
-
-    const handlePuntuacionChange = () => {
-        const newState = !puntuacion;
-        setPuntuacion(newState);
-        setSubChecksPuntuacion((prevState) =>
-            Object.fromEntries(Object.keys(prevState).map(key => [key, newState]))
-        );
-    };
-
-    const handleSubCheckChangePuntuacion = (name) => {
-        setSubChecksPuntuacion(prevState => ({
-            ...prevState,
-            [name]: !prevState[name]
-        }));
-    };
-
-    const [operacion, setOperacion] = useState(false);
-    const [subChecksOperacion, setSubChecksOperacion] = useState({
-        CumplimientoSlaFo: false,
-        CumplimientoSlaHfc: false,
-        CorrectivoPreventivo: false,
-        RecursoOperaciones: false,
-        SeguimientoMttoCentro: false,
-        SeguimientoOperacionesCentro: false,
-        SeguimientoOperacionesNorte: false,
-        SeguimientoSmu: false,
-        TecnicoSmu: false,
-        TorreDeControl: false,
-        EnelCronograma: false,
-    });
-
-    const handleOperacionChange = () => {
-        const newState = !operacion;
-        setOperacion(newState);
-        setSubChecksOperacion((prevState) =>
-            Object.fromEntries(Object.keys(prevState).map(key => [key, newState]))
-        );
-    };
-
-    const handleSubCheckChangeOperacion = (name) => {
-        setSubChecksOperacion(prevState => ({
-            ...prevState,
-            [name]: !prevState[name]
-        }));
-    };
-
-    const [gestionHumana, setGestionHumana] = useState(false);
-    const [subChecksGestionHumana, setSubChecksGestionHumana] = useState({
-        ChatBot: false,
-        Carnetizacion: false
-    });
-
-    const handleGestionHumanaChange = () => {
-        const newState = !gestionHumana;
-        setGestionHumana(newState);
-        setSubChecksGestionHumana((prevState) =>
-            Object.fromEntries(Object.keys(prevState).map(key => [key, newState]))
-        );
-    };
-
-    const handleSubCheckChangeGestionHumana = (name) => {
-        setSubChecksGestionHumana(prevState => ({
-            ...prevState,
-            [name]: !prevState[name]
-        }));
-    };
-
-    const [logistica, setLogistica] = useState(false);
-    const [subChecksLogistica, setSubChecksLogistica] = useState({
-        EquiposEnMoviles: false,
-        ConsumosOperaciones: false,
-        DesmonteMantenimiento: false,
-        SolicitudDeMaterial: false,
-        ReporteMaterialFerretero: false,
-        InventarioMaterial: false,
-        EstadoProyectosR4: false,
-        Activos: false,
-        ReporteSicte: false,
-    });
-
-    const handleLogisticaChange = () => {
-        const newState = !logistica;
-        setLogistica(newState);
-        setSubChecksLogistica((prevState) =>
-            Object.fromEntries(Object.keys(prevState).map(key => [key, newState]))
-        );
-    };
-
-    const handleSubCheckChangeLogistica = (name) => {
-        setSubChecksLogistica(prevState => ({
-            ...prevState,
-            [name]: !prevState[name]
-        }));
-    };
-
-    const [direccion, setDireccion] = useState(false);
-    const [subChecksDireccion, setSubChecksDireccion] = useState({
-        Penalizaciones: false,
-        CentroDeCostos: false,
-        ComposicionMoviles: false,
-        Compras: false,
-        Capacidades: false,
-    });
-
-    const handleDireccionChange = () => {
-        const newState = !direccion;
-        setDireccion(newState);
-        setSubChecksDireccion((prevState) =>
-            Object.fromEntries(Object.keys(prevState).map(key => [key, newState]))
-        );
-    };
-
-    const handleSubCheckChangeDireccion = (name) => {
-        setSubChecksDireccion(prevState => ({
-            ...prevState,
-            [name]: !prevState[name]
-        }));
-    };
-
-    const [ssta, setSsta] = useState(false);
-    const [subChecksSsta, setSubChecksSsta] = useState({
-        Ssta: false,
-        CursoDeAlturas: false,
-        EntregasPendientesDotacion: false,
-        UbicacionDeActividades: false,
-    });
-
-    const handleSstaChange = () => {
-        const newState = !ssta;
-        setSsta(newState);
-        setSubChecksSsta((prevState) =>
-            Object.fromEntries(Object.keys(prevState).map(key => [key, newState]))
-        );
-    };
-
-    const handleSubCheckChangeSsta = (name) => {
-        setSubChecksSsta(prevState => ({
-            ...prevState,
-            [name]: !prevState[name]
-        }));
-    };
-
-    const [parqueAutomotor, setParqueAutomotor] = useState(false);
-    const [subChecksParqueAutomotor, setSubChecksParqueAutomotor] = useState({
-        Moviles: false
-    });
-
-    const handleParqueAutomotorChange = () => {
-        const newState = !parqueAutomotor;
-        setParqueAutomotor(newState);
-        setSubChecksParqueAutomotor((prevState) =>
-            Object.fromEntries(Object.keys(prevState).map(key => [key, newState]))
-        );
-    };
-
-    const handleSubCheckChangeParqueAutomotor = (name) => {
-        setSubChecksParqueAutomotor(prevState => ({
-            ...prevState,
-            [name]: !prevState[name]
-        }));
-    };
 
     const handleUsuarioEditadoChange = (e) => {
         setUsuarioEditado({
@@ -379,217 +228,80 @@ function ControlUsuarios() {
         }
     };
 
+    const toggleGrupo = (grupo) => {
+        setGrupos(prev => {
+            const nuevoEstado = !prev[grupo].activo;
+            const nuevosSubChecks = Object.fromEntries(
+                Object.keys(prev[grupo].subChecks).map(key => [key, nuevoEstado])
+            );
+
+            return {
+                ...prev,
+                [grupo]: {
+                    activo: nuevoEstado,
+                    subChecks: nuevosSubChecks
+                }
+            };
+        });
+    };
+
+    const toggleSubCheck = (grupo, key) => {
+        setGrupos(prev => {
+            const nuevosSubChecks = {
+                ...prev[grupo].subChecks,
+                [key]: !prev[grupo].subChecks[key]
+            };
+
+            const todosActivos = Object.values(nuevosSubChecks).every(val => val === true);
+
+            return {
+                ...prev,
+                [grupo]: {
+                    activo: todosActivos,
+                    subChecks: nuevosSubChecks
+                }
+            };
+        });
+    };
+
+    const mapearGrupoDesdeUsuario = (usuario, prefijo) => {
+        const subChecks = Object.entries(usuario)
+            .filter(([key]) => key.startsWith(prefijo))
+            .reduce((acc, [key, value]) => {
+                const nombre = key.replace(prefijo, "");
+                acc[nombre] = value === "1";
+                return acc;
+            }, {});
+
+        const activo = Object.values(subChecks).every(Boolean);
+        return { activo, subChecks };
+    };
+
     const cargarDatosPagesUser = async (usuario) => {
         try {
             setLoading(true);
-            
+
             const responsePagesUser = await axios.get(`${process.env.REACT_APP_API_URL}/usuarios/pagesUser`);
             const data = responsePagesUser.data;
             const usuarioEncontrado = data.find(user => user.cedula === usuario.cedula);
             setPageUsuarioSeleccionado(usuarioEncontrado);
 
             if (usuarioEncontrado) {
-
-                const mappedChecksReportes = {
-                    Capacidades: usuarioEncontrado.reportesCapacidades === "1",
-                    Supervision: usuarioEncontrado.reportesSupervision === "1"
-                }
-
-                setSubChecksReportes(mappedChecksReportes);
-
-                const todosHabilitadosReportes = Object.values(mappedChecksReportes).every(valor => valor === true);
-
-                if (todosHabilitadosReportes) {
-                    setReportes(true);
-                } else {
-                    setReportes(false);
-                }
-
-                const mappedChecksFacturacion = {
-                    ConsolidadoNacional: usuarioEncontrado.facturacionConsolidadoNacional === "1",
-                    Proyectos: usuarioEncontrado.facturacionProyectos === "1",
-                    Corporativo: usuarioEncontrado.facturacionCorporativo === "1",
-                    Mantenimiento: usuarioEncontrado.facturacionMantenimiento === "1",
-                    Operaciones: usuarioEncontrado.facturacionOperaciones === "1",
-                    Mintic: usuarioEncontrado.facturacionMintic === "1",
-                    Smu: usuarioEncontrado.facturacionSmu === "1",
-                    ImplementacionMovil: usuarioEncontrado.facturacionImplementacionMovil === "1",
-                    MedicionesMovil: usuarioEncontrado.facturacionMedicionesMovil === "1",
-                    ObraCivilMovil: usuarioEncontrado.facturacionObraCivilMovil === "1"
+                const nuevoGrupos = {
+                    reportes: mapearGrupoDesdeUsuario(usuarioEncontrado, "reportes"),
+                    facturacion: mapearGrupoDesdeUsuario(usuarioEncontrado, "facturacion"),
+                    produccion: mapearGrupoDesdeUsuario(usuarioEncontrado, "produccion"),
+                    indicadores: mapearGrupoDesdeUsuario(usuarioEncontrado, "indicadores"),
+                    ssta: mapearGrupoDesdeUsuario(usuarioEncontrado, "ssta"),
+                    puntuacion: mapearGrupoDesdeUsuario(usuarioEncontrado, "puntuacion"),
+                    operacion: mapearGrupoDesdeUsuario(usuarioEncontrado, "operacion"),
+                    logistica: mapearGrupoDesdeUsuario(usuarioEncontrado, "logistica"),
+                    direccion: mapearGrupoDesdeUsuario(usuarioEncontrado, "direccion"),
+                    parqueAutomotor: mapearGrupoDesdeUsuario(usuarioEncontrado, "parqueAutomotor"),
+                    gestionHumana: mapearGrupoDesdeUsuario(usuarioEncontrado, "gestionHumana"),
                 };
 
-                setSubChecksFacturacion(mappedChecksFacturacion);
-
-                const todosHabilitadosFacturacion = Object.values(mappedChecksFacturacion).every(valor => valor === true);
-
-                if (todosHabilitadosFacturacion) {
-                    setFacturacion(true);
-                } else {
-                    setFacturacion(false);
-                }
-
-                const mappedChecksProduccion = {
-                    ProducionNacional: usuarioEncontrado.producionNacional === "1",
-                    Proyectos: usuarioEncontrado.producionProyectos === "1",
-                    Corporativo: usuarioEncontrado.producionCorporativo === "1",
-                    Mantenimiento: usuarioEncontrado.producionMantenimiento === "1",
-                    Reingenierias: usuarioEncontrado.producionReingenierias === "1",
-                    Operaciones: usuarioEncontrado.producionOperaciones === "1"
-                };
-
-                setSubChecksProduccion(mappedChecksProduccion);
-
-                const todosHabilitadosProduccion = Object.values(mappedChecksProduccion).every(valor => valor === true);
-
-                if (todosHabilitadosProduccion) {
-                    setProduccion(true);
-                } else {
-                    setProduccion(false);
-                }
-
-                const mappedChecksIndicadores = {
-                    HistoricoKpi: usuarioEncontrado.indicadoresHistoricoKpi === "1",
-                    G1Mantenimiento: usuarioEncontrado.indicadoresG1Mantenimiento === "1",
-                    Nps: usuarioEncontrado.indicadoresNps === "1",
-                    G2G8MasivoCentro: usuarioEncontrado.indicadoresG2G8MasivoCentro === "1"
-                };
-
-                setSubChecksIndicadores(mappedChecksIndicadores);
-
-                const todosHabilitadosIndicadores = Object.values(mappedChecksIndicadores).every(valor => valor === true);
-
-                if (todosHabilitadosIndicadores) {
-                    setIndicadores(true);
-                } else {
-                    setIndicadores(false);
-                }
-
-                const mappedChecksSsta = {
-                    Ssta: usuarioEncontrado.sstaSsta === "1",
-                    CursoDeAlturas: usuarioEncontrado.sstaCursoDeAlturas === "1",
-                    EntregasPendientesDotacion: usuarioEncontrado.sstaEntregasPendientesDotacion === "1",
-                    UbicacionDeActividades: usuarioEncontrado.sstaUbicacionDeActividades === "1",
-                };
-
-                setSubChecksSsta(mappedChecksSsta);
-
-                const todosHabilitadosSsta = Object.values(mappedChecksSsta).every(valor => valor === true);
-
-                if (todosHabilitadosSsta) {
-                    setSsta(true);
-                } else {
-                    setSsta(false);
-                }
-
-                const mappedChecksPuntuacion = {
-                    Proyectos: usuarioEncontrado.puntuacionProyectos === "1",
-                    Corporativo: usuarioEncontrado.puntuacionCorporativo === "1",
-                    Mantenimiento: usuarioEncontrado.puntuacionMantenimiento === "1",
-                    Reingenierias: usuarioEncontrado.puntuacionReingenierias === "1"
-                };
-
-                setSubChecksPuntuacion(mappedChecksPuntuacion);
-
-                const todosHabilitadosPuntuacion = Object.values(mappedChecksPuntuacion).every(valor => valor === true);
-
-                if (todosHabilitadosPuntuacion) {
-                    setPuntuacion(true);
-                } else {
-                    setPuntuacion(false);
-                }
-
-                const mappedChecksOperacion = {
-                    CumplimientoSlaFo: usuarioEncontrado.operacionCumplimientoSlaFo === "1",
-                    CumplimientoSlaHfc: usuarioEncontrado.operacionCumplimientoSlaHfc === "1",
-                    CorrectivoPreventivo: usuarioEncontrado.operacionCorrectivoPreventivo === "1",
-                    RecursoOperaciones: usuarioEncontrado.operacionRecursoOperaciones === "1",
-                    SeguimientoMttoCentro: usuarioEncontrado.operacionSeguimientoMttoCentro === "1",
-                    SeguimientoOperacionesCentro: usuarioEncontrado.operacionSeguimientoOperacionesCentro === "1",
-                    SeguimientoOperacionesNorte: usuarioEncontrado.operacionSeguimientoOperacionesNorte === "1",
-                    SeguimientoSmu: usuarioEncontrado.operacionSeguimientoSmu === "1",
-                    TecnicoSmu: usuarioEncontrado.operacionTecnicoSmu === "1",
-                    TorreDeControl: usuarioEncontrado.operacionTorreDeControl === "1",
-                    EnelCronograma: usuarioEncontrado.operacionEnelCronograma === "1",
-                };
-
-                setSubChecksOperacion(mappedChecksOperacion);
-
-                const todosHabilitadosOperacion = Object.values(mappedChecksOperacion).every(valor => valor === true);
-
-                if (todosHabilitadosOperacion) {
-                    setOperacion(true);
-                } else {
-                    setOperacion(false);
-                }
-
-                const mappedChecksLogistica = {
-                    EquiposEnMoviles: usuarioEncontrado.logisticaEquiposEnMoviles === "1",
-                    ConsumosOperaciones: usuarioEncontrado.logisticaConsumosOperaciones === "1",
-                    DesmonteMantenimiento: usuarioEncontrado.logisticaDesmonteMantenimiento === "1",
-                    SolicitudDeMaterial: usuarioEncontrado.logisticaSolicitudDeMaterial === "1",
-                    ReporteMaterialFerretero: usuarioEncontrado.logisticaReporteMaterialFerretero === "1",
-                    InventarioMaterial: usuarioEncontrado.logisticaInventarioMaterial === "1",
-                    EstadoProyectosR4: usuarioEncontrado.logisticaEstadoProyectosR4 === "1",
-                    Activos: usuarioEncontrado.logisticaActivos === "1",
-                    ReporteSicte: usuarioEncontrado.logisticaReporteSicte === "1",
-                };
-
-                setSubChecksLogistica(mappedChecksLogistica);
-
-                const todosHabilitadosLogistica = Object.values(mappedChecksLogistica).every(valor => valor === true);
-
-                if (todosHabilitadosLogistica) {
-                    setLogistica(true);
-                } else {
-                    setLogistica(false);
-                }
-
-                const mappedChecksDireccion = {
-                    Penalizaciones: usuarioEncontrado.direccionPenalizaciones === "1",
-                    CentroDeCostos: usuarioEncontrado.direccionCentroDeCostos === "1",
-                    ComposicionMoviles: usuarioEncontrado.direccionComposicionMoviles === "1",
-                    Compras: usuarioEncontrado.direccionCompras === "1",
-                    Capacidades: usuarioEncontrado.direccionCapacidades === "1",
-                };
-
-                setSubChecksDireccion(mappedChecksDireccion);
-
-                const todosHabilitadosDireccion = Object.values(mappedChecksDireccion).every(valor => valor === true);
-
-                if (todosHabilitadosDireccion) {
-                    setDireccion(true);
-                } else {
-                    setDireccion(false);
-                }
-
-                const mappedChecksParqueAutomotor = {
-                    Moviles: usuarioEncontrado.parqueAutomotorMoviles === "1",
-                };
-
-                setSubChecksParqueAutomotor(mappedChecksParqueAutomotor);
-
-                const todosHabilitadosParqueAutomotor = Object.values(mappedChecksParqueAutomotor).every(valor => valor === true);
-
-                if (todosHabilitadosParqueAutomotor) {
-                    setParqueAutomotor(true);
-                } else {
-                    setParqueAutomotor(false);
-                }
-
-                const mappedChecksGestionHumana = {
-                    ChatBot: usuarioEncontrado.gestionHumanaChatbot === "1",
-                    Carnetizacion: usuarioEncontrado.gestionHumanaCarnetizacion === "1",
-                };
-
-                setSubChecksGestionHumana(mappedChecksGestionHumana);
-
-                const todosHabilitadosGestionHumana = Object.values(mappedChecksGestionHumana).every(valor => valor === true);
-
-                if (todosHabilitadosGestionHumana) {
-                    setGestionHumana(true);
-                } else {
-                    setGestionHumana(false);
-                }
+                setGrupos(nuevoGrupos);
 
             } else {
                 console.log("Usuario no encontrado");
@@ -608,66 +320,15 @@ function ControlUsuarios() {
 
             const body = {
                 cedula: pageUsuarioSeleccionado.cedula,
-                reportesCapacidades: subChecksReportes.Capacidades ? 1 : 0,
-                reportesSupervision: subChecksReportes.Supervision ? 1 : 0,
-                facturacionConsolidadoNacional: subChecksFacturacion.ConsolidadoNacional ? 1 : 0,
-                facturacionProyectos: subChecksFacturacion.Proyectos ? 1 : 0,
-                facturacionCorporativo: subChecksFacturacion.Corporativo ? 1 : 0,
-                facturacionMantenimiento: subChecksFacturacion.Mantenimiento ? 1 : 0,
-                facturacionOperaciones: subChecksFacturacion.Operaciones ? 1 : 0,
-                facturacionMintic: subChecksFacturacion.Mintic ? 1 : 0,
-                facturacionSmu: subChecksFacturacion.Smu ? 1 : 0,
-                facturacionImplementacionMovil: subChecksFacturacion.ImplementacionMovil ? 1 : 0,
-                facturacionMedicionesMovil: subChecksFacturacion.MedicionesMovil ? 1 : 0,
-                facturacionObraCivilMovil: subChecksFacturacion.ObraCivilMovil ? 1 : 0,
-                producionNacional: subChecksProduccion.ProducionNacional ? 1 : 0,
-                producionProyectos: subChecksProduccion.Proyectos ? 1 : 0,
-                producionCorporativo: subChecksProduccion.Corporativo ? 1 : 0,
-                producionMantenimiento: subChecksProduccion.Mantenimiento ? 1 : 0,
-                producionReingenierias: subChecksProduccion.Reingenierias ? 1 : 0,
-                producionOperaciones: subChecksProduccion.Operaciones ? 1 : 0,
-                indicadoresHistoricoKpi: subChecksIndicadores.HistoricoKpi ? 1 : 0,
-                indicadoresG1Mantenimiento: subChecksIndicadores.G1Mantenimiento ? 1 : 0,
-                indicadoresNps: subChecksIndicadores.Nps ? 1 : 0,
-                indicadoresG2G8MasivoCentro: subChecksIndicadores.G2G8MasivoCentro ? 1 : 0,
-                sstaSsta: subChecksSsta.Ssta ? 1 : 0,
-                sstaCursoDeAlturas: subChecksSsta.CursoDeAlturas ? 1 : 0,
-                sstaEntregasPendientesDotacion: subChecksSsta.EntregasPendientesDotacion ? 1 : 0,
-                sstaUbicacionDeActividades: subChecksSsta.UbicacionDeActividades ? 1 : 0,
-                puntuacionProyectos: subChecksPuntuacion.Proyectos ? 1 : 0,
-                puntuacionCorporativo: subChecksPuntuacion.Corporativo ? 1 : 0,
-                puntuacionMantenimiento: subChecksPuntuacion.Mantenimiento ? 1 : 0,
-                puntuacionReingenierias: subChecksPuntuacion.Reingenierias ? 1 : 0,
-                operacionCumplimientoSlaFo: subChecksOperacion.CumplimientoSlaFo ? 1 : 0,
-                operacionCumplimientoSlaHfc: subChecksOperacion.CumplimientoSlaHfc ? 1 : 0,
-                operacionCorrectivoPreventivo: subChecksOperacion.CorrectivoPreventivo ? 1 : 0,
-                operacionRecursoOperaciones: subChecksOperacion.RecursoOperaciones ? 1 : 0,
-                operacionSeguimientoMttoCentro: subChecksOperacion.SeguimientoMttoCentro ? 1 : 0,
-                operacionSeguimientoOperacionesCentro: subChecksOperacion.SeguimientoOperacionesCentro ? 1 : 0,
-                operacionSeguimientoOperacionesNorte: subChecksOperacion.SeguimientoOperacionesNorte ? 1 : 0,
-                operacionSeguimientoSmu: subChecksOperacion.SeguimientoSmu ? 1 : 0,
-                operacionTecnicoSmu: subChecksOperacion.TecnicoSmu ? 1 : 0,
-                operacionTorreDeControl: subChecksOperacion.TorreDeControl ? 1 : 0,
-                operacionEnelCronograma: subChecksOperacion.EnelCronograma ? 1 : 0,
-                logisticaEquiposEnMoviles: subChecksLogistica.EquiposEnMoviles ? 1 : 0,
-                logisticaConsumosOperaciones: subChecksLogistica.ConsumosOperaciones ? 1 : 0,
-                logisticaDesmonteMantenimiento: subChecksLogistica.DesmonteMantenimiento ? 1 : 0,
-                logisticaSolicitudDeMaterial: subChecksLogistica.SolicitudDeMaterial ? 1 : 0,
-                logisticaReporteMaterialFerretero: subChecksLogistica.ReporteMaterialFerretero ? 1 : 0,
-                logisticaInventarioMaterial: subChecksLogistica.InventarioMaterial ? 1 : 0,
-                logisticaEstadoProyectosR4: subChecksLogistica.EstadoProyectosR4 ? 1 : 0,
-                logisticaActivos: subChecksLogistica.Activos ? 1 : 0,
-                logisticaReporteSicte: subChecksLogistica.ReporteSicte ? 1 : 0,
-                direccionPenalizaciones: subChecksDireccion.Penalizaciones ? 1 : 0,
-                direccionCentroDeCostos: subChecksDireccion.CentroDeCostos ? 1 : 0,
-                direccionComposicionMoviles: subChecksDireccion.ComposicionMoviles ? 1 : 0,
-                direccionCompras: subChecksDireccion.Compras ? 1 : 0,
-                direccionCapacidades: subChecksDireccion.Capacidades ? 1 : 0,
-                parqueAutomotorMoviles: subChecksParqueAutomotor.Moviles ? 1 : 0,
-                gestionHumanaChatbot: subChecksGestionHumana.ChatBot ? 1 : 0,
-                gestionHumanaCarnetizacion: subChecksGestionHumana.Carnetizacion ? 1 : 0,
             };
-            
+
+            Object.entries(grupos).forEach(([grupo, data]) => {
+                Object.entries(data.subChecks).forEach(([subKey, isChecked]) => {
+                    const keyName = `${grupo}${subKey}`;
+                    body[keyName] = isChecked ? 1 : 0;
+                });
+            });
+
             const response = await axios.put(
                 `${process.env.REACT_APP_API_URL}/usuarios/pagesUser/${pageUsuarioSeleccionado.id}`,
                 body,
@@ -763,20 +424,20 @@ function ControlUsuarios() {
                                                 <label className='subTitulo'>
                                                     <input
                                                         type="checkbox"
-                                                        checked={reportes}
-                                                        onChange={handleReportesChange}
+                                                        checked={grupos.reportes.activo}
+                                                        onChange={() => toggleGrupo("reportes")}
                                                     />
                                                     <span>Reportes</span>
                                                 </label>
 
                                                 <div className='lista'>
-                                                    {Object.keys(subChecksReportes).map((key) => (
+                                                    {Object.keys(grupos.reportes.subChecks).map((key) => (
                                                         <label key={key} style={{ display: "block" }}>
                                                             <input
                                                                 type="checkbox"
-                                                                checked={subChecksReportes[key]}
-                                                                onChange={() => handleSubCheckChangeReportes(key)}
-                                                                disabled={reportes}
+                                                                checked={grupos.reportes.subChecks[key]}
+                                                                onChange={() => toggleSubCheck("reportes", key)}
+                                                                disabled={grupos.reportes.activo}
                                                             />
                                                             <span>{key.replace(/([A-Z])/g, ' $1').trim()}</span>
                                                         </label>
@@ -786,20 +447,20 @@ function ControlUsuarios() {
                                                 <label className='subTitulo'>
                                                     <input
                                                         type="checkbox"
-                                                        checked={facturacion}
-                                                        onChange={handleFacturacionChange}
+                                                        checked={grupos.facturacion.activo}
+                                                        onChange={() => toggleGrupo("facturacion")}
                                                     />
                                                     <span>Facturación</span>
                                                 </label>
 
                                                 <div className='lista'>
-                                                    {Object.keys(subChecksFacturacion).map((key) => (
+                                                    {Object.keys(grupos.facturacion.subChecks).map((key) => (
                                                         <label key={key} style={{ display: "block" }}>
                                                             <input
                                                                 type="checkbox"
-                                                                checked={subChecksFacturacion[key]}
-                                                                onChange={() => handleSubCheckChangeFacturacion(key)}
-                                                                disabled={facturacion}
+                                                                checked={grupos.facturacion.subChecks[key]}
+                                                                onChange={() => toggleSubCheck("facturacion", key)}
+                                                                disabled={grupos.facturacion.activo}
                                                             />
                                                             <span>{key.replace(/([A-Z])/g, ' $1').trim()}</span>
                                                         </label>
@@ -809,20 +470,20 @@ function ControlUsuarios() {
                                                 <label className='subTitulo'>
                                                     <input
                                                         type="checkbox"
-                                                        checked={gestionHumana}
-                                                        onChange={handleGestionHumanaChange}
+                                                        checked={grupos.gestionHumana.activo}
+                                                        onChange={() => toggleGrupo("gestionHumana")}
                                                     />
                                                     <span>Gestion Humana</span>
                                                 </label>
 
                                                 <div className='lista'>
-                                                    {Object.keys(subChecksGestionHumana).map((key) => (
+                                                    {Object.keys(grupos.gestionHumana.subChecks).map((key) => (
                                                         <label key={key} style={{ display: "block" }}>
                                                             <input
                                                                 type="checkbox"
-                                                                checked={subChecksGestionHumana[key]}
-                                                                onChange={() => handleSubCheckChangeGestionHumana(key)}
-                                                                disabled={gestionHumana}
+                                                                checked={grupos.gestionHumana.subChecks[key]}
+                                                                onChange={() => toggleSubCheck("gestionHumana", key)}
+                                                                disabled={grupos.gestionHumana.activo}
                                                             />
                                                             <span>{key.replace(/([A-Z])/g, ' $1').trim()}</span>
                                                         </label>
@@ -836,20 +497,20 @@ function ControlUsuarios() {
                                                 <label className='subTitulo'>
                                                     <input
                                                         type="checkbox"
-                                                        checked={produccion}
-                                                        onChange={handleProduccionChange}
+                                                        checked={grupos.produccion.activo}
+                                                        onChange={() => toggleGrupo("produccion")}
                                                     />
                                                     <span>Produccion</span>
                                                 </label>
 
                                                 <div className='lista'>
-                                                    {Object.keys(subChecksProduccion).map((key) => (
+                                                    {Object.keys(grupos.produccion.subChecks).map((key) => (
                                                         <label key={key} style={{ display: "block" }}>
                                                             <input
                                                                 type="checkbox"
-                                                                checked={subChecksProduccion[key]}
-                                                                onChange={() => handleSubCheckChangeProduccion(key)}
-                                                                disabled={produccion}
+                                                                checked={grupos.produccion.subChecks[key]}
+                                                                onChange={() => toggleSubCheck("produccion", key)}
+                                                                disabled={grupos.produccion.activo}
                                                             />
                                                             <span>{key.replace(/([A-Z])/g, ' $1').trim()}</span>
                                                         </label>
@@ -859,20 +520,20 @@ function ControlUsuarios() {
                                                 <label className='subTitulo'>
                                                     <input
                                                         type="checkbox"
-                                                        checked={indicadores}
-                                                        onChange={handleIndicadoresChange}
+                                                        checked={grupos.indicadores.activo}
+                                                        onChange={() => toggleGrupo("indicadores")}
                                                     />
                                                     <span>Indicadores</span>
                                                 </label>
 
                                                 <div className='lista'>
-                                                    {Object.keys(subChecksIndicadores).map((key) => (
+                                                    {Object.keys(grupos.indicadores.subChecks).map((key) => (
                                                         <label key={key} style={{ display: "block" }}>
                                                             <input
                                                                 type="checkbox"
-                                                                checked={subChecksIndicadores[key]}
-                                                                onChange={() => handleSubCheckChangeIndicadores(key)}
-                                                                disabled={indicadores}
+                                                                checked={grupos.indicadores.subChecks[key]}
+                                                                onChange={() => toggleSubCheck("indicadores", key)}
+                                                                disabled={grupos.indicadores.activo}
                                                             />
                                                             <span>{key.replace(/([A-Z])/g, ' $1').trim()}</span>
                                                         </label>
@@ -882,20 +543,20 @@ function ControlUsuarios() {
                                                 <label className='subTitulo'>
                                                     <input
                                                         type="checkbox"
-                                                        checked={ssta}
-                                                        onChange={handleSstaChange}
+                                                        checked={grupos.ssta.activo}
+                                                        onChange={() => toggleGrupo("ssta")}
                                                     />
                                                     <span>Ssta</span>
                                                 </label>
 
                                                 <div className='lista'>
-                                                    {Object.keys(subChecksSsta).map((key) => (
+                                                    {Object.keys(grupos.ssta.subChecks).map((key) => (
                                                         <label key={key} style={{ display: "block" }}>
                                                             <input
                                                                 type="checkbox"
-                                                                checked={subChecksSsta[key]}
-                                                                onChange={() => handleSubCheckChangeSsta(key)}
-                                                                disabled={ssta}
+                                                                checked={grupos.ssta.subChecks[key]}
+                                                                onChange={() => toggleSubCheck("ssta", key)}
+                                                                disabled={grupos.ssta.activo}
                                                             />
                                                             <span>{key.replace(/([A-Z])/g, ' $1').trim()}</span>
                                                         </label>
@@ -909,20 +570,20 @@ function ControlUsuarios() {
                                                 <label className='subTitulo'>
                                                     <input
                                                         type="checkbox"
-                                                        checked={puntuacion}
-                                                        onChange={handlePuntuacionChange}
+                                                        checked={grupos.puntuacion.activo}
+                                                        onChange={() => toggleGrupo("puntuacion")}
                                                     />
                                                     <span>Puntuacion</span>
                                                 </label>
 
                                                 <div className='lista'>
-                                                    {Object.keys(subChecksPuntuacion).map((key) => (
+                                                    {Object.keys(grupos.puntuacion.subChecks).map((key) => (
                                                         <label key={key} style={{ display: "block" }}>
                                                             <input
                                                                 type="checkbox"
-                                                                checked={subChecksPuntuacion[key]}
-                                                                onChange={() => handleSubCheckChangePuntuacion(key)}
-                                                                disabled={puntuacion}
+                                                                checked={grupos.puntuacion.subChecks[key]}
+                                                                onChange={() => toggleSubCheck("puntuacion", key)}
+                                                                disabled={grupos.puntuacion.activo}
                                                             />
                                                             <span>{key.replace(/([A-Z])/g, ' $1').trim()}</span>
                                                         </label>
@@ -932,20 +593,20 @@ function ControlUsuarios() {
                                                 <label className='subTitulo'>
                                                     <input
                                                         type="checkbox"
-                                                        checked={operacion}
-                                                        onChange={handleOperacionChange}
+                                                        checked={grupos.operacion.activo}
+                                                        onChange={() => toggleGrupo("operacion")}
                                                     />
                                                     <span>Operacion</span>
                                                 </label>
 
                                                 <div className='lista'>
-                                                    {Object.keys(subChecksOperacion).map((key) => (
+                                                    {Object.keys(grupos.operacion.subChecks).map((key) => (
                                                         <label key={key} style={{ display: "block" }}>
                                                             <input
                                                                 type="checkbox"
-                                                                checked={subChecksOperacion[key]}
-                                                                onChange={() => handleSubCheckChangeOperacion(key)}
-                                                                disabled={operacion}
+                                                                checked={grupos.operacion.subChecks[key]}
+                                                                onChange={() => toggleSubCheck("operacion", key)}
+                                                                disabled={grupos.operacion.activo}
                                                             />
                                                             <span>{key.replace(/([A-Z])/g, ' $1').trim()}</span>
                                                         </label>
@@ -959,20 +620,20 @@ function ControlUsuarios() {
                                                 <label className='subTitulo'>
                                                     <input
                                                         type="checkbox"
-                                                        checked={logistica}
-                                                        onChange={handleLogisticaChange}
+                                                        checked={grupos.logistica.activo}
+                                                        onChange={() => toggleGrupo("logistica")}
                                                     />
                                                     <span>Logistica</span>
                                                 </label>
 
                                                 <div className='lista'>
-                                                    {Object.keys(subChecksLogistica).map((key) => (
+                                                    {Object.keys(grupos.logistica.subChecks).map((key) => (
                                                         <label key={key} style={{ display: "block" }}>
                                                             <input
                                                                 type="checkbox"
-                                                                checked={subChecksLogistica[key]}
-                                                                onChange={() => handleSubCheckChangeLogistica(key)}
-                                                                disabled={logistica}
+                                                                checked={grupos.logistica.subChecks[key]}
+                                                                onChange={() => toggleSubCheck("logistica", key)}
+                                                                disabled={grupos.logistica.activo}
                                                             />
                                                             <span>{key.replace(/([A-Z])/g, ' $1').trim()}</span>
                                                         </label>
@@ -982,20 +643,20 @@ function ControlUsuarios() {
                                                 <label className='subTitulo'>
                                                     <input
                                                         type="checkbox"
-                                                        checked={direccion}
-                                                        onChange={handleDireccionChange}
+                                                        checked={grupos.direccion.activo}
+                                                        onChange={() => toggleGrupo("direccion")}
                                                     />
                                                     <span>Direccion</span>
                                                 </label>
 
                                                 <div className='lista'>
-                                                    {Object.keys(subChecksDireccion).map((key) => (
+                                                    {Object.keys(grupos.direccion.subChecks).map((key) => (
                                                         <label key={key} style={{ display: "block" }}>
                                                             <input
                                                                 type="checkbox"
-                                                                checked={subChecksDireccion[key]}
-                                                                onChange={() => handleSubCheckChangeDireccion(key)}
-                                                                disabled={direccion}
+                                                                checked={grupos.direccion.subChecks[key]}
+                                                                onChange={() => toggleSubCheck("direccion", key)}
+                                                                disabled={grupos.direccion.activo}
                                                             />
                                                             <span>{key.replace(/([A-Z])/g, ' $1').trim()}</span>
                                                         </label>
@@ -1005,20 +666,20 @@ function ControlUsuarios() {
                                                 <label className='subTitulo'>
                                                     <input
                                                         type="checkbox"
-                                                        checked={parqueAutomotor}
-                                                        onChange={handleParqueAutomotorChange}
+                                                        checked={grupos.parqueAutomotor.activo}
+                                                        onChange={() => toggleGrupo("parqueAutomotor")}
                                                     />
                                                     <span>Parque Automotor</span>
                                                 </label>
 
                                                 <div className='lista'>
-                                                    {Object.keys(subChecksParqueAutomotor).map((key) => (
+                                                    {Object.keys(grupos.parqueAutomotor.subChecks).map((key) => (
                                                         <label key={key} style={{ display: "block" }}>
                                                             <input
                                                                 type="checkbox"
-                                                                checked={subChecksParqueAutomotor[key]}
-                                                                onChange={() => handleSubCheckChangeParqueAutomotor(key)}
-                                                                disabled={parqueAutomotor}
+                                                                checked={grupos.parqueAutomotor.subChecks[key]}
+                                                                onChange={() => toggleSubCheck("parqueAutomotor", key)}
+                                                                disabled={grupos.parqueAutomotor.activo}
                                                             />
                                                             <span>{key.replace(/([A-Z])/g, ' $1').trim()}</span>
                                                         </label>

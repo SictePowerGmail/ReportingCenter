@@ -224,6 +224,19 @@ function Navbar() {
         Carnetizacion: false,
     });
 
+    const mapearGrupoDesdeUsuario = (usuario, prefijo) => {
+        const subChecks = Object.entries(usuario)
+            .filter(([key]) => key.startsWith(prefijo))
+            .reduce((acc, [key, value]) => {
+                const nombre = key.replace(prefijo, "");
+                acc[nombre] = value === "1";
+                return acc;
+            }, {});
+
+        const algunoActivo = Object.values(subChecks).some(val => val);
+        return { subChecks, algunoActivo };
+    };
+
     const cargarDatosPagesUser = async (usuario) => {
         try {
             setLoading(true);
@@ -235,206 +248,49 @@ function Navbar() {
 
             if (usuarioEncontrado) {
 
-                const mappedChecksReportes = {
-                    Capacidades: usuarioEncontrado.reportesCapacidades === "1",
-                    Supervision: usuarioEncontrado.reportesSupervision === "1"
-                }
+                const { subChecks: checksReportes, algunoActivo: activoReportes } = mapearGrupoDesdeUsuario(usuarioEncontrado, "reportes");
+                setSubChecksReportes(checksReportes);
+                setReportes(activoReportes);
 
-                setSubChecksReportes(mappedChecksReportes);
+                const { subChecks: checksFacturacion, algunoActivo: activoFacturacion } = mapearGrupoDesdeUsuario(usuarioEncontrado, "facturacion");
+                setSubChecksFacturacion(checksFacturacion);
+                setFacturacion(activoFacturacion);
 
-                const algunHabilitadoReporte = Object.values(mappedChecksReportes).some(valor => valor === true);
+                const { subChecks: checksProduccion, algunoActivo: activoProduccion } = mapearGrupoDesdeUsuario(usuarioEncontrado, "producion");
+                setSubChecksProduccion(checksProduccion);
+                setProduccion(activoProduccion);
 
-                if (algunHabilitadoReporte) {
-                    setReportes(true);
-                } else {
-                    setReportes(false);
-                }
+                const { subChecks: checksIndicadores, algunoActivo: activoIndicadores } = mapearGrupoDesdeUsuario(usuarioEncontrado, "indicadores");
+                setSubChecksIndicadores(checksIndicadores);
+                setIndicadores(activoIndicadores);
 
-                const mappedChecksFacturacion = {
-                    ConsolidadoNacional: usuarioEncontrado.facturacionConsolidadoNacional === "1",
-                    Proyectos: usuarioEncontrado.facturacionProyectos === "1",
-                    Corporativo: usuarioEncontrado.facturacionCorporativo === "1",
-                    Mantenimiento: usuarioEncontrado.facturacionMantenimiento === "1",
-                    Operaciones: usuarioEncontrado.facturacionOperaciones === "1",
-                    Mintic: usuarioEncontrado.facturacionMintic === "1",
-                    Smu: usuarioEncontrado.facturacionSmu === "1",
-                    ImplementacionMovil: usuarioEncontrado.facturacionImplementacionMovil === "1",
-                    MedicionesMovil: usuarioEncontrado.facturacionMedicionesMovil === "1",
-                    ObraCivilMovil: usuarioEncontrado.facturacionObraCivilMovil === "1"
-                };
+                const { subChecks: checksSsta, algunoActivo: activoSsta } = mapearGrupoDesdeUsuario(usuarioEncontrado, "ssta");
+                setSubChecksSsta(checksSsta);
+                setSsta(activoSsta);
 
-                setSubChecksFacturacion(mappedChecksFacturacion);
+                const { subChecks: checksPuntuacion, algunoActivo: activoPuntuacion } = mapearGrupoDesdeUsuario(usuarioEncontrado, "puntuacion");
+                setSubChecksPuntuacion(checksPuntuacion);
+                setPuntuacion(activoPuntuacion);
 
-                const algunHabilitadosFacturacion = Object.values(mappedChecksFacturacion).some(valor => valor === true);
+                const { subChecks: checksOperacion, algunoActivo: activoOperacion } = mapearGrupoDesdeUsuario(usuarioEncontrado, "operacion");
+                setSubChecksOperacion(checksOperacion);
+                setOperacion(activoOperacion);
 
-                if (algunHabilitadosFacturacion) {
-                    setFacturacion(true);
-                } else {
-                    setFacturacion(false);
-                }
+                const { subChecks: checksLogistica, algunoActivo: activoLogistica } = mapearGrupoDesdeUsuario(usuarioEncontrado, "logistica");
+                setSubChecksLogistica(checksLogistica);
+                setLogistica(activoLogistica);
 
-                const mappedChecksProduccion = {
-                    ProducionNacional: usuarioEncontrado.producionNacional === "1",
-                    Proyectos: usuarioEncontrado.producionProyectos === "1",
-                    Corporativo: usuarioEncontrado.producionCorporativo === "1",
-                    Mantenimiento: usuarioEncontrado.producionMantenimiento === "1",
-                    Reingenierias: usuarioEncontrado.producionReingenierias === "1",
-                    Operaciones: usuarioEncontrado.producionOperaciones === "1"
-                };
+                const { subChecks: checksDireccion, algunoActivo: activoDireccion } = mapearGrupoDesdeUsuario(usuarioEncontrado, "direccion");
+                setSubChecksDireccion(checksDireccion);
+                setDireccion(activoDireccion);
 
-                setSubChecksProduccion(mappedChecksProduccion);
+                const { subChecks: checksParqueAutomotor, algunoActivo: activoParqueAutomotor } = mapearGrupoDesdeUsuario(usuarioEncontrado, "parqueAutomotor");
+                setSubChecksParqueAutomotor(checksParqueAutomotor);
+                setParqueAutomotor(activoParqueAutomotor);
 
-                const algunHabilitadosProduccion = Object.values(mappedChecksProduccion).some(valor => valor === true);
-
-                if (algunHabilitadosProduccion) {
-                    setProduccion(true);
-                } else {
-                    setProduccion(false);
-                }
-
-                const mappedChecksIndicadores = {
-                    HistoricoKpi: usuarioEncontrado.indicadoresHistoricoKpi === "1",
-                    G1Mantenimiento: usuarioEncontrado.indicadoresG1Mantenimiento === "1",
-                    Nps: usuarioEncontrado.indicadoresNps === "1",
-                    G2G8MasivoCentro: usuarioEncontrado.indicadoresG2G8MasivoCentro === "1",
-                };
-
-                setSubChecksIndicadores(mappedChecksIndicadores);
-
-                const algunHabilitadosIndicadores = Object.values(mappedChecksIndicadores).some(valor => valor === true);
-
-                if (algunHabilitadosIndicadores) {
-                    setIndicadores(true);
-                } else {
-                    setIndicadores(false);
-                }
-
-                const mappedChecksSsta = {
-                    Ssta: usuarioEncontrado.sstaSsta === "1",
-                    CursoDeAlturas: usuarioEncontrado.sstaCursoDeAlturas === "1",
-                    EntregasPendientesDotacion: usuarioEncontrado.sstaEntregasPendientesDotacion === "1",
-                    UbicacionDeActividades: usuarioEncontrado.sstaUbicacionDeActividades === "1",
-                };
-
-                setSubChecksSsta(mappedChecksSsta);
-
-                const algunHabilitadosSsta = Object.values(mappedChecksSsta).some(valor => valor === true);
-
-                if (algunHabilitadosSsta) {
-                    setSsta(true);
-                } else {
-                    setSsta(false);
-                }
-
-                const mappedChecksPuntuacion = {
-                    Proyectos: usuarioEncontrado.puntuacionProyectos === "1",
-                    Corporativo: usuarioEncontrado.puntuacionCorporativo === "1",
-                    Mantenimiento: usuarioEncontrado.puntuacionMantenimiento === "1",
-                    Reingenierias: usuarioEncontrado.puntuacionReingenierias === "1"
-                };
-
-                setSubChecksPuntuacion(mappedChecksPuntuacion);
-
-                const algunHabilitadosPuntuacion = Object.values(mappedChecksPuntuacion).some(valor => valor === true);
-
-                if (algunHabilitadosPuntuacion) {
-                    setPuntuacion(true);
-                } else {
-                    setPuntuacion(false);
-                }
-
-                const mappedChecksOperacion = {
-                    CumplimientoSlaFo: usuarioEncontrado.operacionCumplimientoSlaFo === "1",
-                    CumplimientoSlaHfc: usuarioEncontrado.operacionCumplimientoSlaHfc === "1",
-                    CorrectivoPreventivo: usuarioEncontrado.operacionCorrectivoPreventivo === "1",
-                    RecursoOperaciones: usuarioEncontrado.operacionRecursoOperaciones === "1",
-                    SeguimientoMttoCentro: usuarioEncontrado.operacionSeguimientoMttoCentro === "1",
-                    SeguimientoOperacionesCentro: usuarioEncontrado.operacionSeguimientoOperacionesCentro === "1",
-                    SeguimientoOperacionesNorte: usuarioEncontrado.operacionSeguimientoOperacionesNorte === "1",
-                    SeguimientoSmu: usuarioEncontrado.operacionSeguimientoSmu === "1",
-                    TecnicoSmu: usuarioEncontrado.operacionTecnicoSmu === "1",
-                    TorreDeControl: usuarioEncontrado.operacionTorreDeControl === "1",
-                    EnelCronograma: usuarioEncontrado.operacionEnelCronograma === "1",
-                };
-
-                setSubChecksOperacion(mappedChecksOperacion);
-
-                const algunHabilitadosOperacion = Object.values(mappedChecksOperacion).some(valor => valor === true);
-
-                if (algunHabilitadosOperacion) {
-                    setOperacion(true);
-                } else {
-                    setOperacion(false);
-                }
-
-                const mappedChecksLogistica = {
-                    EquiposEnMoviles: usuarioEncontrado.logisticaEquiposEnMoviles === "1",
-                    ConsumosOperaciones: usuarioEncontrado.logisticaConsumosOperaciones === "1",
-                    DesmonteMantenimiento: usuarioEncontrado.logisticaDesmonteMantenimiento === "1",
-                    SolicitudDeMaterial: usuarioEncontrado.logisticaSolicitudDeMaterial === "1",
-                    ReporteMaterialFerretero: usuarioEncontrado.logisticaReporteMaterialFerretero === "1",
-                    InventarioMaterial: usuarioEncontrado.logisticaInventarioMaterial === "1",
-                    EstadoProyectosR4: usuarioEncontrado.logisticaEstadoProyectosR4 === "1",
-                    Activos: usuarioEncontrado.logisticaActivos === "1",
-                    ReporteSicte: usuarioEncontrado.logisticaReporteSicte === "1",
-                };
-
-                setSubChecksLogistica(mappedChecksLogistica);
-
-                const algunHabilitadosLogistica = Object.values(mappedChecksLogistica).some(valor => valor === true);
-
-                if (algunHabilitadosLogistica) {
-                    setLogistica(true);
-                } else {
-                    setLogistica(false);
-                }
-
-                const mappedChecksDireccion = {
-                    Penalizaciones: usuarioEncontrado.direccionPenalizaciones === "1",
-                    CentroDeCostos: usuarioEncontrado.direccionCentroDeCostos === "1",
-                    ComposicionMoviles: usuarioEncontrado.direccionComposicionMoviles === "1",
-                    Compras: usuarioEncontrado.direccionCompras === "1",
-                    Capacidades: usuarioEncontrado.direccionCapacidades === "1",
-                };
-
-                setSubChecksDireccion(mappedChecksDireccion);
-
-                const algunHabilitadosDireccion = Object.values(mappedChecksDireccion).some(valor => valor === true);
-
-                if (algunHabilitadosDireccion) {
-                    setDireccion(true);
-                } else {
-                    setDireccion(false);
-                }
-
-                const mappedChecksParqueAutomotor = {
-                    Moviles: usuarioEncontrado.parqueAutomotorMoviles === "1",
-                };
-
-                setSubChecksParqueAutomotor(mappedChecksParqueAutomotor);
-
-                const algunHabilitadosParqueAutomotor = Object.values(mappedChecksParqueAutomotor).some(valor => valor === true);
-
-                if (algunHabilitadosParqueAutomotor) {
-                    setParqueAutomotor(true);
-                } else {
-                    setParqueAutomotor(false);
-                }
-
-                const mappedChecksGestionHumana = {
-                    Chatbot: usuarioEncontrado.gestionHumanaChatbot === "1",
-                    Carnetizacion: usuarioEncontrado.gestionHumanaCarnetizacion === "1",
-                };
-
-                setSubChecksGestionHumana(mappedChecksGestionHumana);
-
-                const algunHabilitadosGestionHumana = Object.values(mappedChecksGestionHumana).some(valor => valor === true);
-
-                if (algunHabilitadosGestionHumana) {
-                    setGestionHumana(true);
-                } else {
-                    setGestionHumana(false);
-                }
+                const { subChecks: checksGestionHumana, algunoActivo: activoGestionHumana } = mapearGrupoDesdeUsuario(usuarioEncontrado, "gestionHumana");
+                setSubChecksGestionHumana(checksGestionHumana);
+                setGestionHumana(activoGestionHumana);
 
             } else {
                 console.log("Usuario no encontrado");
