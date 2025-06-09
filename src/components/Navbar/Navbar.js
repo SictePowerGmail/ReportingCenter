@@ -150,7 +150,7 @@ function Navbar() {
 
     const [productividad, setProductividad] = useState(false);
     const [subChecksProductividad, setSubChecksProductividad] = useState({
-        ProducionNacional: false,
+        Nacional: false,
         Proyectos: false,
         Corporativo: false,
         Mantenimiento: false,
@@ -562,7 +562,7 @@ function Navbar() {
                                 </div>
                                 <div className={`SubMenu-Contenido ${showMobileMenu && showDropdownProductividad ? 'visible' : 'oculto'}`}>
                                     <ul>
-                                        {subChecksProductividad.ProducionNacional === true && (<Link className='SubMenu-Contenido-Titulo' to="/ProductividadNacional" ><li>Productividad nacional</li></Link>)}
+                                        {subChecksProductividad.Nacional === true && (<Link className='SubMenu-Contenido-Titulo' to="/ProductividadNacional" ><li>Productividad nacional</li></Link>)}
                                         {subChecksProductividad.Proyectos === true && (<Link className='SubMenu-Contenido-Titulo' to="/PlaneacionFinanciero" ><li>Proyectos</li></Link>)}
                                         {subChecksProductividad.Corporativo === true && (<Link className='SubMenu-Contenido-Titulo' to="/CorporativoFinanciero" ><li>Corporativo</li></Link>)}
                                         {subChecksProductividad.Mantenimiento === true && (<Link className='SubMenu-Contenido-Titulo' to="/MantenimientoFinanciero" ><li>Mantenimiento</li></Link>)}
