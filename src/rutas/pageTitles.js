@@ -103,8 +103,6 @@ export const getPageTitle = (pathname) => {
             return 'SMU Tecnico';
         case '/EnelCronograma':
             return 'Enel Cronograma';
-        case '/InspeccionesEnel':
-            return 'Inspecciones Enel';
         /* Logistica */
         case '/EquiposMoviles':
             return 'Equipos Moviles';
@@ -142,6 +140,8 @@ export const getPageTitle = (pathname) => {
             return 'Entregas Pendientes Dotacion'
         case '/UbicacionDeActividades':
             return 'Ubicacion de Actividades'
+        case '/InspeccionesEnel':
+            return 'Inspecciones Enel';
         /* Parque Automotor */
         case '/Moviles':
             return 'Moviles'

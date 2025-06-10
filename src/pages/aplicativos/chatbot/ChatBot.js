@@ -8,7 +8,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
-import { cargarRelacionPersonal, ObtenerRelacionCiudadAuxiliar } from '../../funciones';
+import { cargarRelacionPersonal, ObtenerRelacionCiudadAuxiliar } from '../../../funciones';
 import { FaBriefcase } from "react-icons/fa";
 
 function ChatBot() {

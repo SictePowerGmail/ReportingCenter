@@ -185,7 +185,6 @@ function Navbar() {
         SeguimientoSmu: false,
         TecnicoSmu: false,
         EnelCronograma: false,
-        InspeccionesEnel: false,
     });
 
     const [logistica, setLogistica] = useState(false);
@@ -214,6 +213,7 @@ function Navbar() {
         CursoDeAlturas: false,
         EntregasPendientesDotacion: false,
         UbicacionDeActividades: false,
+        InspeccionesEnel: false,
     });
 
     const [parqueAutomotor, setParqueAutomotor] = useState(false);
@@ -226,7 +226,7 @@ function Navbar() {
             .filter(([key]) => key.startsWith(prefijo))
             .reduce((acc, [key, value]) => {
                 const nombre = key.replace(prefijo, "");
-                acc[nombre] = value === "1";
+                acc[nombre] = value === "1" || value === 1;
                 return acc;
             }, {});
 
@@ -634,7 +634,6 @@ function Navbar() {
                                         {subChecksOperacion.SeguimientoSmu === true && (<Link className='SubMenu-Contenido-Titulo' to="/SeguimientoSMU" ><li>Seguimiento SMU</li></Link>)}
                                         {subChecksOperacion.TecnicoSmu === true && (<Link className='SubMenu-Contenido-Titulo' to="/SMU_Tecnico" ><li>Técnico SMU</li></Link>)}
                                         {subChecksOperacion.EnelCronograma === true && (<Link className='SubMenu-Contenido-Titulo' to="/EnelCronograma" ><li>Enel Cronograma</li></Link>)}
-                                        {subChecksOperacion.InspeccionesEnel === true && (<Link className='SubMenu-Contenido-Titulo' to="/InspeccionesEnel" ><li>Inspecciones Enel</li></Link>)}
                                     </ul>
                                 </div>
                             </li>
@@ -788,6 +787,7 @@ function Navbar() {
                                         {subChecksHseq.CursoDeAlturas === true && (<Link className='SubMenu-Contenido-Titulo' to="/CursosDeAlturas" ><li>Indicadores Capacitación</li></Link>)}
                                         {subChecksHseq.EntregasPendientesDotacion === true && (<Link className='SubMenu-Contenido-Titulo' to="/EntregasPendientesDotacion" ><li>Entregas Pendientes Dotación</li></Link>)}
                                         {subChecksHseq.UbicacionDeActividades === true && (<Link className='SubMenu-Contenido-Titulo' to="/UbicacionDeActividades" ><li>Ubicacion de Actividades</li></Link>)}
+                                        {subChecksHseq.InspeccionesEnel === true && (<Link className='SubMenu-Contenido-Titulo' to="/InspeccionesEnel" ><li>Inspecciones Enel</li></Link>)}
                                     </ul>
                                 </div>
                             </li>

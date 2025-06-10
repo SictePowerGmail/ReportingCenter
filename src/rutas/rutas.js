@@ -10,15 +10,15 @@ import Inicio from '../pages/inicio/Inicio';
 /* Login */
 import Login from "../pages/loginAplicativos/login";
 /* Aplicativos */
-import Capacidades from "../pages/reportes/capacidades/Capacidades";
-import SupervisionPrincipal from "../pages/reportes/supervision/supervisionPrincipal";
-import SupervisionAgregar from "../pages/reportes/supervision/supervisionAgregar";
-import MaterialPrincipal from "../pages/logistica/solicitudMaterial/materialPrincipal";
-import MaterialAgregar from "../pages/logistica/solicitudMaterial/materialAgregar";
-import ReporteMaterialPrincipal from "../pages/logistica/reporteMaterialFerretero/reporteMaterialPrincipal";
-import ReporteMaterialAgregar from "../pages/logistica/reporteMaterialFerretero/reporteMaterialAgregar";
-import ChatBot from "../pages/gestionHumana/ChatBot";
-import Carnetizacion from "../pages/gestionHumana/Carnetizacion";
+import Capacidades from "../pages/aplicativos/capacidades/Capacidades";
+import SupervisionPrincipal from "../pages/aplicativos/supervision/supervisionPrincipal";
+import SupervisionAgregar from "../pages/aplicativos/supervision/supervisionAgregar";
+import MaterialPrincipal from "../pages/aplicativos/solicitudMaterial/materialPrincipal";
+import MaterialAgregar from "../pages/aplicativos/solicitudMaterial/materialAgregar";
+import ReporteMaterialPrincipal from "../pages/aplicativos/reporteMaterialFerretero/reporteMaterialPrincipal";
+import ReporteMaterialAgregar from "../pages/aplicativos/reporteMaterialFerretero/reporteMaterialAgregar";
+import ChatBot from "../pages/aplicativos/chatbot/ChatBot";
+import Carnetizacion from "../pages/aplicativos/carnetizacion/Carnetizacion";
 /* Facturacion */
 import FacturacionConsolidado from '../pages/facturacion/FacturacionConsolidado';
 import ProyectosFacturacion from "../pages/facturacion/ProyectosFacturacion";
@@ -57,7 +57,6 @@ import SeguimientoOperacionesNorte from "../pages/operacion/SeguimientoOperacion
 import SeguimientoSMU from '../pages/operacion/SeguimientoSMU';
 import SMU_Tecnico from '../pages/operacion/SMU_Tecnico';
 import EnelCronograma from "../pages/operacion/EnelCronograma";
-import InspeccionesEnel from "../pages/operacion/InspeccionesEnel";
 /* Logistica */
 import EquiposMoviles from "../pages/logistica/EquiposMoviles";
 import DesmonteMantenimiento from "../pages/logistica/DesmonteMantenimiento";
@@ -74,10 +73,11 @@ import ComposicionMoviles from '../pages/direccion/ComposicionMoviles';
 import Compras from '../pages/direccion/Compras';
 import CapacidadesTablero from "../pages/direccion/CapacidadesTablero";
 /* HSEQ */
-import SSTA from '../pages/ssta/SSTA';
-import CursosDeAlturas from "../pages/ssta/CursosDeAlturas";
-import EntregasPendientesDotacion from "../pages/ssta/EntregasPendientesDotacion";
-import UbicacionDeActividades from "../pages/ssta/UbicacionDeActividades";
+import SSTA from '../pages/hseq/SSTA';
+import CursosDeAlturas from "../pages/hseq/CursosDeAlturas";
+import EntregasPendientesDotacion from "../pages/hseq/EntregasPendientesDotacion";
+import UbicacionDeActividades from "../pages/hseq/UbicacionDeActividades";
+import InspeccionesEnel from "../pages/hseq/InspeccionesEnel";
 /* Parque Automotor */
 import Moviles from "../pages/parqueAutomotor/Moviles";
 /* Recuperar Contraseña */
@@ -158,7 +158,6 @@ function RutasApp() {
                     <Route path='/SeguimientoSMU' exacte element={<SeguimientoSMU />} />
                     <Route path='/SMU_Tecnico' exacte element={<SMU_Tecnico />} />
                     <Route path='/EnelCronograma' exacte element={<EnelCronograma />} />
-                    <Route path='/InspeccionesEnel' exacte element={<InspeccionesEnel />} />
                     {/* Logistica */}
                     <Route path='/EquiposMoviles' exacte element={<EquiposMoviles />} />
                     <Route path='/DesmonteMantenimiento' exacte element={<DesmonteMantenimiento />} />
@@ -179,6 +178,7 @@ function RutasApp() {
                     <Route path='/CursosDeAlturas' exacte element={<CursosDeAlturas />} />
                     <Route path='/EntregasPendientesDotacion' exacte element={<EntregasPendientesDotacion />} />
                     <Route path='/UbicacionDeActividades' exacte element={<UbicacionDeActividades />} />
+                    <Route path='/InspeccionesEnel' exacte element={<InspeccionesEnel />} />
                     {/* Parque Automotor */}
                     <Route path='/Moviles' exacte element={<Moviles />} />
                     {/* Recuperar Contraseña */}

@@ -133,7 +133,6 @@ function ControlUsuarios() {
                 SeguimientoSmu: false,
                 TecnicoSmu: false,
                 EnelCronograma: false,
-                InspeccionesEnel: false,
             }
         },
         logistica: {
@@ -165,6 +164,7 @@ function ControlUsuarios() {
                 CursoDeAlturas: false,
                 EntregasPendientesDotacion: false,
                 UbicacionDeActividades: false,
+                InspeccionesEnel: false,
             }
         },
         parqueAutomotor: {
@@ -263,7 +263,7 @@ function ControlUsuarios() {
             .filter(([key]) => key.startsWith(prefijo))
             .reduce((acc, [key, value]) => {
                 const nombre = key.replace(prefijo, "");
-                acc[nombre] = value === "1";
+                acc[nombre] = value === "1" || value === 1;
                 return acc;
             }, {});
 
