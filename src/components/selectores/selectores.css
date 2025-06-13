@@ -1,0 +1,16 @@
+.selector {
+    display: flex;
+    background-color: #f0f0f0;
+    cursor: pointer;
+    border-radius: 6px;
+    padding: 8px;
+    color: black;
+    height: 100%;
+    width: 100%;
+    border: 1px solid #ccc;
+
+    &.primary {
+        background-color: #f0f8ff;
+        border-color: #007bff;
+    }
+}

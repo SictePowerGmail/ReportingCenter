@@ -58,7 +58,7 @@ const SupervisionPrincipal = () => {
     const Agregar = async (event) => {
         navigate('/SupervisionAgregar', { state: { role: role, nombre: nombre, estadoNotificacion: false } });
     };
-    
+
     const cargarRegistrosSupervision = async (event) => {
         axios.get(`${process.env.REACT_APP_API_URL}/supervision/registros`)
             .then(response => {
@@ -550,7 +550,7 @@ const SupervisionPrincipal = () => {
             }
         });
     };
-    
+
     const fetchImage = async (imageName) => {
         try {
             const response = await fetch(`${process.env.REACT_APP_API_URL}/supervision/obtenerImagen?imageName=${encodeURIComponent(imageName)}`);
@@ -576,11 +576,10 @@ const SupervisionPrincipal = () => {
 
     useEffect(() => {
         const yaRecargado = localStorage.getItem('yaRecargado');
-        const cedulaUsuario = Cookies.get('userCedula');
         const nombreUsuario = Cookies.get('userNombre');
 
-        if (cedulaUsuario === undefined && nombreUsuario === undefined) {
-            navigate('/SupervisionLogin', { state: { estadoNotificacion: false } });
+        if (nombreUsuario === undefined) {
+            window.location.href = '/ReportingCenter#/Login?tipo=supervision';
         } else if (!yaRecargado) {
             localStorage.setItem('yaRecargado', 'true');
             window.location.reload();
@@ -700,26 +699,28 @@ const SupervisionPrincipal = () => {
                                         <i className="fas fa-chart-bar"></i>
                                         <span>Acompañamientos por placa</span>
                                     </div>
-                                    <BarChart
-                                        width={310}
-                                        height={510}
-                                        data={graficaRegistrosOrdenadosPorPlaca}
-                                        layout="vertical"
-                                    >
-                                        <YAxis dataKey="placa" type="category" width={100} />
-                                        <XAxis
-                                            type="number" // Cambiado a tipo number para ajustar dinámicamente
-                                            domain={[dataMin => dataMin - 1, dataMax => dataMax + 5]}
-                                            tick={false} // Oculta los ticks del eje X
-                                            axisLine={false} // Oculta la línea del eje X
-                                            tickLine={false} // Oculta las líneas de los ticks
-                                            interval={0} // Muestra todos los ticks
-                                        />
-                                        <Tooltip />
-                                        <Bar dataKey="cantidad" fill="#8884d8">
-                                            <LabelList dataKey="cantidad" position="right" />
-                                        </Bar>
-                                    </BarChart>
+                                    <div className='Grafica'>
+                                        <ResponsiveContainer width="100%" height="100%">
+                                            <BarChart
+                                                data={graficaRegistrosOrdenadosPorPlaca}
+                                                layout="vertical"
+                                            >
+                                                <YAxis dataKey="placa" type="category" width={100} />
+                                                <XAxis
+                                                    type="number"
+                                                    domain={[dataMin => dataMin - 1, dataMax => dataMax + 5]}
+                                                    tick={false} 
+                                                    axisLine={false}
+                                                    tickLine={false}
+                                                    interval={0}
+                                                />
+                                                <Tooltip />
+                                                <Bar dataKey="cantidad" fill="#8884d8">
+                                                    <LabelList dataKey="cantidad" position="right" />
+                                                </Bar>
+                                            </BarChart>
+                                        </ResponsiveContainer>
+                                    </div>
                                 </div>
                             </div>
 
@@ -729,26 +730,29 @@ const SupervisionPrincipal = () => {
                                         <i className="fas fa-chart-bar"></i>
                                         <span>Acompañamientos por supervisor</span>
                                     </div>
-                                    <BarChart
-                                        width={310}
-                                        height={300}
-                                        data={graficaRegistrosSupervisionCadaUno}
-                                        layout="vertical"
-                                    >
-                                        <YAxis dataKey="name" type="category" width={100} />
-                                        <XAxis
-                                            type="number" // Cambiado a tipo number para ajustar dinámicamente
-                                            domain={[dataMin => dataMin - 1, dataMax => dataMax + 5]}
-                                            tick={false} // Oculta los ticks del eje X
-                                            axisLine={false} // Oculta la línea del eje X
-                                            tickLine={false} // Oculta las líneas de los ticks
-                                            interval={0} // Muestra todos los ticks
-                                        />
-                                        <Tooltip />
-                                        <Bar dataKey="registros" fill="#8884d8">
-                                            <LabelList dataKey="registros" position="right" />
-                                        </Bar>
-                                    </BarChart>
+                                    <div className='Grafica'>
+                                        <ResponsiveContainer width="100%" height="100%">
+                                            <BarChart
+                                                margin={0}
+                                                data={graficaRegistrosSupervisionCadaUno}
+                                                layout="vertical"
+                                            >
+                                                <YAxis dataKey="name" type="category" width={100} />
+                                                <XAxis
+                                                    type="number" // Cambiado a tipo number para ajustar dinámicamente
+                                                    domain={[dataMin => dataMin - 1, dataMax => dataMax + 5]}
+                                                    tick={false} // Oculta los ticks del eje X
+                                                    axisLine={false} // Oculta la línea del eje X
+                                                    tickLine={false} // Oculta las líneas de los ticks
+                                                    interval={0} // Muestra todos los ticks
+                                                />
+                                                <Tooltip />
+                                                <Bar dataKey="registros" fill="#8884d8">
+                                                    <LabelList dataKey="registros" position="right" />
+                                                </Bar>
+                                            </BarChart>
+                                        </ResponsiveContainer>
+                                    </div>
                                 </div>
                                 <div className='BarraFecha'>
                                     <div className='TituloBarraFecha'>

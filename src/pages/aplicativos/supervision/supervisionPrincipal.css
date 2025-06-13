@@ -69,7 +69,7 @@
             padding-top: 20px;
 
             @media screen and (max-width: 600px) {
-                flex-direction: column;
+                flex-direction: column !important;
                 width: 100%;
                 padding-left: 20px;
             }
@@ -121,7 +121,7 @@
             width: 100%;
 
             @media screen and (max-width: 600px) {
-                flex-direction: column;
+                flex-direction: column !important;
             }
 
             .RenderizarMapa {
@@ -133,7 +133,7 @@
                 padding: 20px;
 
                 @media screen and (max-width: 600px) {
-                    flex-direction: column;
+                    flex-direction: column !important;
                     /* Usa el modelo de caja flexible */
                 }
 
@@ -175,7 +175,7 @@
                     align-items: baseline;
 
                     @media screen and (max-width: 600px) {
-                        flex-direction: column;
+                        flex-direction: column !important;
                     }
                 }
 
@@ -207,7 +207,7 @@
 
                     .Placa {
                         @media screen and (max-width: 600px) {
-                            width: 100%;
+                            width: 100% !important;
                             padding-left: 20px;
                         }
 
@@ -215,6 +215,11 @@
                             @media screen and (max-width: 600px) {
                                 width: 100% !important;
                             }
+                        }
+
+                        .Grafica {
+                            width: 100%;
+                            height: 500px;
                         }
                     }
                 }
@@ -227,6 +232,11 @@
 
                         @media screen and (max-width: 600px) {
                             width: 100%;
+                        }
+
+                        .Grafica {
+                            width: 100%;
+                            height: 300px;
                         }
                     }
 

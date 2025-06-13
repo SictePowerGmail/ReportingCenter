@@ -1,283 +1,157 @@
-.Supervision-Agregar {
-    width: calc(100%);
-    height: 100%;
-    display: flex;
-    /* Usa el modelo de caja flexible */
-    justify-content: center;
-    /* Centra horizontalmente */
-    align-items: center;
-    /* Centra verticalmente */
-}
-
-.Supervision-Agregar .Contenido {
-    display: flex;
-    /* Usa el modelo de caja flexible */
-    justify-content: center;
-    /* Centra horizontalmente */
-    align-items: center;
-    /* Centra verticalmente */
-    width: 100%;
-    /* Ancho fijo */
-    height: 100%;
-    background-color: white;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    /* Sombra */
-    position: relative;
-    overflow-y: auto;
-}
-
-.Supervision-Agregar .Contenido::-webkit-scrollbar {
-    width: 10px;
-}
-
-.Supervision-Agregar .Contenido::-webkit-scrollbar-track {
-    background: rgb(230, 230, 230);
-    /* Color de fondo de la pista de la scrollbar */
-    border-radius: 10px;
-    /* Bordes redondeados para el track */
-}
-
-.Supervision-Agregar .Contenido::-webkit-scrollbar-thumb {
-    background-color: #ff8800;
-    /* Color de la barra de desplazamiento */
-    border-radius: 10px;
-    /* Bordes redondeados para la barra de desplazamiento */
-    border: 3px solid rgb(230, 230, 230);
-    /* Espacio alrededor del thumb (efecto de margen) */
-}
-
-.Supervision-Agregar .Contenido::-webkit-scrollbar-thumb:hover {
-    background: #bd6a0c;
-    /* Color de la barra de desplazamiento al pasar el mouse por encima */
-}
-
-.Supervision-Agregar .Contenido .Formulario {
+.supervision-agregar {
     width: 100%;
     height: 100%;
-}
-
-.Supervision-Agregar .Contenido .Titulo {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin-top: 20px;
-}
-
-.Supervision-Agregar .Contenido .Titulo h3 {
-    margin: 10px;
-}
-
-.Supervision-Agregar .Contenido .Fecha,
-.Supervision-Agregar .Contenido .Supervisor,
-.Supervision-Agregar .Contenido .Placa,
-.Supervision-Agregar .Contenido .LiderCuadrilla,
-.Supervision-Agregar .Contenido .OT,
-.Supervision-Agregar .Contenido .EPP,
-.Supervision-Agregar .Contenido .Alturas,
-.Supervision-Agregar .Contenido .ATS,
-.Supervision-Agregar .Contenido .Empalmes,
-.Supervision-Agregar .Contenido .Preoperacional,
-.Supervision-Agregar .Contenido .Vehiculo,
-.Supervision-Agregar .Contenido .Equipos,
-.Supervision-Agregar .Contenido .Observacion,
-.Supervision-Agregar .Contenido .Foto {
-    display: flex;
-    align-items: baseline;
     justify-content: baseline;
-    margin: 13px 10px;
-}
-
-.Supervision-Agregar .Contenido .Fecha i,
-.Supervision-Agregar .Contenido .Supervisor i,
-.Supervision-Agregar .Contenido .Placa i,
-.Supervision-Agregar .Contenido .LiderCuadrilla i,
-.Supervision-Agregar .Contenido .OT i,
-.Supervision-Agregar .Contenido .EPP i,
-.Supervision-Agregar .Contenido .Alturas i,
-.Supervision-Agregar .Contenido .ATS i,
-.Supervision-Agregar .Contenido .Observacion i,
-.Supervision-Agregar .Contenido .Empalmes i,
-.Supervision-Agregar .Contenido .Preoperacional i,
-.Supervision-Agregar .Contenido .Vehiculo i,
-.Supervision-Agregar .Contenido .Equipos i,
-.Supervision-Agregar .Contenido .Ubicacion .Contenedor i,
-.Supervision-Agregar .Contenido .Foto i {
-    padding-right: 10px;
-}
-
-.Supervision-Agregar .Contenido .Fecha span,
-.Supervision-Agregar .Contenido .Supervisor input,
-.Supervision-Agregar .Contenido .Placa input,
-.Supervision-Agregar .Contenido .LiderCuadrilla input,
-.Supervision-Agregar .Contenido .OT input,
-.Supervision-Agregar .Contenido .EPP input,
-.Supervision-Agregar .Contenido .Alturas input,
-.Supervision-Agregar .Contenido .ATS input,
-.Supervision-Agregar .Contenido .Empalmes input,
-.Supervision-Agregar .Contenido .Preoperacional input,
-.Supervision-Agregar .Contenido .Vehiculo input,
-.Supervision-Agregar .Contenido .Observacion textarea,
-.Supervision-Agregar .Contenido .Ubicacion .Contenedor span {
-    width: 100%;
-}
-
-.Supervision-Agregar .Contenido .Fecha .Entrada,
-.Supervision-Agregar .Contenido .Supervisor .Entrada,
-.Supervision-Agregar .Contenido .Placa .Entrada,
-.Supervision-Agregar .Contenido .LiderCuadrilla .Entrada,
-.Supervision-Agregar .Contenido .OT .Entrada,
-.Supervision-Agregar .Contenido .EPP .Entrada,
-.Supervision-Agregar .Contenido .Alturas .Entrada,
-.Supervision-Agregar .Contenido .ATS .Entrada,
-.Supervision-Agregar .Contenido .Empalmes .Entrada,
-.Supervision-Agregar .Contenido .Preoperacional .Entrada,
-.Supervision-Agregar .Contenido .Vehiculo .Entrada,
-.Supervision-Agregar .Contenido .Equipos .Entrada {
-    display: flex;
-    flex-direction: column;
-    align-items: baseline;
-    justify-content: center;
-    width: 100%;
-}
-
-.Supervision-Agregar .Contenido .Fecha .Entrada h5,
-.Supervision-Agregar .Contenido .Supervisor .Entrada h5,
-.Supervision-Agregar .Contenido .Placa .Entrada h5,
-.Supervision-Agregar .Contenido .LiderCuadrilla .Entrada h5,
-.Supervision-Agregar .Contenido .OT .Entrada h5,
-.Supervision-Agregar .Contenido .EPP .Entrada h5,
-.Supervision-Agregar .Contenido .Alturas .Entrada h5,
-.Supervision-Agregar .Contenido .ATS .Entrada h5,
-.Supervision-Agregar .Contenido .Empalmes .Entrada h5,
-.Supervision-Agregar .Contenido .Preoperacional .Entrada h5,
-.Supervision-Agregar .Contenido .Vehiculo .Entrada h5,
-.Supervision-Agregar .Contenido .Equipos .Entrada h5 {
-    margin: 0;
-    margin-bottom: 3px;
-}
-
-.Supervision-Agregar .Contenido .EPP .Entrada .Botones,
-.Supervision-Agregar .Contenido .Alturas .Entrada .Botones,
-.Supervision-Agregar .Contenido .ATS .Entrada .Botones,
-.Supervision-Agregar .Contenido .Empalmes .Entrada .Botones,
-.Supervision-Agregar .Contenido .Preoperacional .Entrada .Botones,
-.Supervision-Agregar .Contenido .Vehiculo .Entrada .Botones,
-.Supervision-Agregar .Contenido .Equipos .Entrada .Botones {
-    display: flex;
-    justify-content: center;
     align-items: center;
-}
+    padding: 20px;
+    overflow-y: auto;
 
-.Supervision-Agregar .Contenido .EPP .Entrada .Botones button,
-.Supervision-Agregar .Contenido .Alturas .Entrada .Botones button,
-.Supervision-Agregar .Contenido .ATS .Entrada .Botones button,
-.Supervision-Agregar .Contenido .Empalmes .Entrada .Botones button,
-.Supervision-Agregar .Contenido .Preoperacional .Entrada .Botones button {
-    background-color: #f0f0f0;
-    /* Color de fondo predeterminado */
-    border: none;
-    padding: 8px 20px;
-    cursor: pointer;
-    margin-right: 10px;
-    border-radius: 10px;
-}
+    .titulo2 {
+        display: none;
 
-.Supervision-Agregar .Contenido .EPP .Entrada .Botones button.selected,
-.Supervision-Agregar .Contenido .Alturas .Entrada .Botones button.selected,
-.Supervision-Agregar .Contenido .ATS .Entrada .Botones button.selected,
-.Supervision-Agregar .Contenido .Empalmes .Entrada .Botones button.selected,
-.Supervision-Agregar .Contenido .Preoperacional .Entrada .Botones button.selected {
-    background-color: #1229ad;
-    /* Color de fondo cuando el botón está seleccionado */
-    color: white;
-}
+        &.visible {
+            display: flex;
+        }
+    }
 
-.Supervision-Agregar .Contenido .Vehiculo .Entrada .Botones button,
-.Supervision-Agregar .Contenido .Equipos .Entrada .Botones button {
-    background-color: #f0f0f0;
-    /* Color de fondo predeterminado */
-    border: none;
-    padding: 8px 16px;
-    cursor: pointer;
-    border-radius: 10px;
-    margin: 0px 5px 5px 0px;
-}
+    .selectores {
+        display: none;
 
-.Supervision-Agregar .Contenido .Vehiculo .Entrada .Botones button.selected,
-.Supervision-Agregar .Contenido .Equipos .Entrada .Botones button.selected {
-    background-color: #1229ad;
-    /* Color de fondo cuando el botón está seleccionado */
-    color: white;
-}
+        &.visible {
+            display: flex;
+        }
 
-.Supervision-Agregar .Contenido .Fecha .Entrada {
-    padding-left: 5px;
-}
+        height: 35px;
+        width: 330px;
+        margin: 5px;
 
-.Supervision-Agregar .Contenido .Vehiculo .Entrada .Comentario {
-    width: 100%;
-}
+        @media screen and (max-width: 400px) {
+            width: 100%;
+        }
+    }
 
-.Supervision-Agregar .Contenido .Equipos .Entrada .Botones {
-    padding-left: 20px;
-}
+    .form {
+        display: none;
+        height: 100%;
+        width: 100%;
 
-.Supervision-Agregar .Contenido .Equipos .Entrada .Botones .Titulo {
-    width: 100px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    margin: 0;
-}
+        &.visible {
+            display: flex;
+        }
 
-.Supervision-Agregar .Contenido .Equipos .Entrada .Botones .Titulo h5 {
-    margin: 0;
-    padding-right: 10px;
-}
+        .cargandoPagina {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+        }
 
-.Supervision-Agregar .Contenido .Observacion textarea {
-    height: 10vh;
-}
+        .formulario {
+            flex-direction: column;
+            height: 100%;
+            width: 100%;
 
-.Supervision-Agregar .Contenido .Ubicacion {
-    margin: 13px 10px;
-}
+            .titulo3 {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-bottom: 20px;
+            }
 
-.Supervision-Agregar .Contenido .Ubicacion .Contenedor {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 10px;
-}
+            .campo {
+                display: flex;
+                align-items: baseline;
+                justify-content: baseline;
+                margin: 10px 0px;
+                width: 100%;
 
-.Supervision-Agregar .Contenido .Foto label {
-    width: 90%;
-    margin: 0;
-    font-size: 18px;
-}
+                i {
+                    padding: 5px 10px 5px 5px;
+                }
 
-.Supervision-Agregar .Contenido .Enviar {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding-bottom: 10px;
-}
+                .entradas {
+                    display: flex;
+                    flex-direction: column;
+                    width: 100%;
 
-.Toastify__toast {
-    margin-top: 40px;
-    /* Elimina el margen */
-    width: 250px;
-    /* Ajusta el ancho */
-    padding: 10px;
-    /* Ajusta el padding */
-}
+                    .texto {
+                        padding-bottom: 5px;
+                    }
 
-#CargandoPagina {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+                    .foto-label {
+                        border: 1px solid rgb(151, 151, 151);
+                        border-radius: 6px;
+                        padding: 5px 10px;
+                        text-align: center;
+                        color: black;
+                    }
+
+                    .botones {
+                        display: flex;
+                        align-items: baseline;
+                        justify-content: center;
+                        flex-direction: column;
+                        padding-bottom: 5px;
+
+                        .subtitulos {
+                            margin: 5px 0px 3px 0px;
+                        }
+
+                        .opciones {
+                            display: flex;
+                            align-items: center;
+                            justify-content: baseline;
+                            margin-bottom: 5px;
+                        }
+
+                        button {
+                            width: 60px;
+                            margin-right: 10px;
+                        }
+
+                        .comentario {
+                            width: 100%;
+                        }
+
+                    }
+                }
+
+                .contenedor {
+                    display: flex;
+                    flex-direction: row;
+                    height: auto;
+                    width: 100%;
+
+                    .texto {
+                        padding-bottom: 3px;
+                    }
+                }
+
+                &.vehiculo button {
+                    @media screen and (max-width: 600px) {
+                        width: 45px !important;
+                        padding: 8px 10px;
+                    }
+                }
+
+                &.ubicacion {
+                    flex-direction: column;
+                    align-items: baseline;
+                }
+            }
+
+            .enviar {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+                padding-top: 10px;
+                padding-bottom: 20px;
+            }
+        }
+    }
 }

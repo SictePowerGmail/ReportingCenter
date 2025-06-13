@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { HashRouter as Router, Route, Routes, useLocation } from "react-router-dom";
 import { initGA, logPageView } from "../analytics";
-import Navbar from "../components/Navbar/Navbar"
+import Navbar from "../components/navbar/navbar";
 /* Menu Usuario */
 import BasesDeDatos from "../pages/menuUsuario/BasesDeDatos";
 import ControlUsuarios from "../pages/menuUsuario/ControlUsuarios";

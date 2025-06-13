@@ -5,7 +5,7 @@ import { HiClipboardList, HiChartBar, HiOfficeBuilding } from "react-icons/hi";
 import { MdInventory2 } from "react-icons/md";
 import { GiToolbox } from "react-icons/gi";
 import { ThreeDots } from 'react-loader-spinner';
-import './Navbar.css'
+import './navbar.css'
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import Logo from '../../images/Logo Original.png'

@@ -1,0 +1,14 @@
+.texto {
+  
+    &.titulo {
+        font-size: 24px;
+    }
+
+    &.subtitulo {
+        font-size: 16px;
+    }
+
+    &.parrafo {
+        font-size: 14px;
+    }
+}
