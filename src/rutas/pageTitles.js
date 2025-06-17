@@ -120,6 +120,8 @@ export const getPageTitle = (pathname) => {
             return 'Reporte Sicte'
         case '/CriticidadEquipos':
             return 'Criticidad Equipos'
+        case '/EnelControlMateriales':
+            return 'Enel Control Materiales'
         /* Direccion */
         case '/Penalizaciones':
             return 'Penalizaciones';

@@ -66,6 +66,7 @@ import EstadoProyectosR4 from "../pages/logistica/EstadoProyectosR4";
 import Activos from "../pages/logistica/Activos";
 import ReporteSicte from "../pages/logistica/ReporteSicte";
 import CriticidadEquipos from "../pages/logistica/CriticidadEquipos";
+import EnelControlMateriales from "../pages/logistica/EnelControlMateriales";
 /* Direccion */
 import Penalizaciones from '../pages/direccion/Penalizaciones';
 import CentrosDeCostos from '../pages/direccion/CentrosDeCostos';
@@ -167,6 +168,7 @@ function RutasApp() {
                     <Route path='/Activos' exacte element={<Activos />} />
                     <Route path='/ReporteSicte' exacte element={<ReporteSicte />} />
                     <Route path='/CriticidadEquipos' exacte element={<CriticidadEquipos />} />
+                    <Route path='/EnelControlMateriales' exacte element={<EnelControlMateriales />} />
                     {/* Direccion */}
                     <Route path='/Penalizaciones' exacte element={<Penalizaciones />} />
                     <Route path='/Centro_de_costos' exacte element={<CentrosDeCostos />} />

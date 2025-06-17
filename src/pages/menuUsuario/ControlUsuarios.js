@@ -145,6 +145,7 @@ function ControlUsuarios() {
                 Activos: false,
                 ReporteSicte: false,
                 CriticidadEquipos: false,
+                EnelControlMateriales: false,
             }
         },
         administracion: {

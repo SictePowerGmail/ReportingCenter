@@ -196,6 +196,7 @@ function Navbar() {
         Activos: false,
         ReporteSicte: false,
         CriticidadEquipos: false,
+        EnelControlMateriales: false,
     });
 
     const [administracion, setAdministracion] = useState(false);
@@ -729,6 +730,7 @@ function Navbar() {
                                         {subChecksLogistica.Activos === true && (<Link className='SubMenu-Contenido-Titulo' to="/Activos" ><li>Activos</li></Link>)}
                                         {subChecksLogistica.ReporteSicte === true && (<Link className='SubMenu-Contenido-Titulo' to="/ReporteSicte" ><li>Reporte Sicte</li></Link>)}
                                         {subChecksLogistica.CriticidadEquipos === true && (<Link className='SubMenu-Contenido-Titulo' to="/CriticidadEquipos" ><li>Criticidad Equipos</li></Link>)}
+                                        {subChecksLogistica.EnelControlMateriales === true && (<Link className='SubMenu-Contenido-Titulo' to="/EnelControlMateriales" ><li>Enel Control Materiales</li></Link>)}
                                     </ul>
                                 </div>
                             </li>
