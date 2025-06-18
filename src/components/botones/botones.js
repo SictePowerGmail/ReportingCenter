@@ -5,11 +5,13 @@ const Botones = ({
   onClick,
   children,
   className = '',
+  ...rest
 }) => {
   return (
     <button
       onClick={onClick}
       className={`boton ${className}`}
+      {...rest}
     >
       {children}
     </button>

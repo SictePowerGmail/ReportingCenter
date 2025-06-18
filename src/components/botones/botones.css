@@ -1,15 +1,45 @@
 .boton {
-    background-color: #f0f0f0;
+    background-color: #dadada;
     border: none;
     padding: 8px 20px;
     cursor: pointer;
-    border-radius: 10px;
+    border-radius: 8px;
     color: black;
     height: 100%;
     width: 100%;
 
+    &:hover {
+        background-color: #1229ad;
+        color: white;
+    }
+
+    &:disabled {
+        background-color: #c7c7c7;
+        color: black;
+        opacity: 0.7;
+        cursor: not-allowed;
+    }
+
     &.formulario.selected {
         background-color: #1229ad;
         color: white;
+    }
+
+    &.agregar {
+        background-color: #1934ac;
+        color: white;
+
+        &:hover {
+            background-color: #14246e;
+        }
+    }
+
+    &.guardar {
+        background-color: #19ac34;
+        color: white;
+
+        &:hover {
+            background-color: #106e22;
+        }
     }
 }

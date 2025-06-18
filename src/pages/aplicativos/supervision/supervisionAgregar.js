@@ -15,12 +15,14 @@ import Selectores from '../../../components/selectores/selectores';
 import Textos from '../../../components/textos/textos';
 import Entradas from '../../../components/entradas/entradas';
 import AreaTextos from '../../../components/areaTextos/areaTextos';
+import Tablas from '../../../components/tablas/tablas';
 import Cookies from 'js-cookie';
 
 const SupervisionAgregar = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
     const [datosPlanta, setDatosPlanta] = useState('');
+    const [datosCiudades, setDatosCiudades] = useState('');
     const [selectedOption, setSelectedOption] = useState('');
     const [fecha, setFecha] = useState('');
     const role = useState(Cookies.get('userRole'));
@@ -120,6 +122,20 @@ const SupervisionAgregar = () => {
                 console.error('Error fetching data:', error);
             });
     }
+
+    const cargarDatosCiudades = () => {
+        fetch(`${process.env.REACT_APP_API_URL}/supervision/ciudades`)
+            .then(response => response.json())
+            .then(data => {
+                const dataConLlave = data.map(ciudad => ({
+                    ...ciudad,
+                    key: `${ciudad.nombre} - Departamento: ${ciudad.departamento} - Codigo: ${ciudad.codigo_municipio}`
+                }));
+                setDatosCiudades(dataConLlave)
+                setLoading(false);
+            })
+            .catch(error => console.log('Error al cargar los datos: ' + error.message));
+    };
 
     const cargarDatosPlanta = () => {
         fetch(`${process.env.REACT_APP_API_URL}/supervision/plantaEnLineaCedulaNombre`)
@@ -448,7 +464,9 @@ const SupervisionAgregar = () => {
         setEnviando(true)
 
         try {
+            console.log("Fecha Inicial: " + fecha.toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' }))
             console.log(formularioEnelInspeccionIntegralHSE)
+            console.log("Fecha Final: " + new Date().toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' }));
             console.log(ubicacion)
 
             setEnviando(false)
@@ -475,16 +493,17 @@ const SupervisionAgregar = () => {
             placa: "",
             zona: "",
             trabajo: "",
+            cuadrilla: []
         };
     });
 
     const actualizarCampoEnelInspeccionIntegralHSE = (campo, valor) => {
-        setFormularioEnelInspeccionIntegralHSE(prev => ({ ...prev, [campo]: valor }));
+        setFormularioEnelInspeccionIntegralHSE(prev => {
+            const actualizado = { ...prev, [campo]: valor };
+            Cookies.set('formularioEnelInspeccionIntegralHSE', JSON.stringify(actualizado));
+            return actualizado;
+        });
     };
-
-    useEffect(() => {
-        Cookies.set('formularioEnelInspeccionIntegralHSE', JSON.stringify(formularioEnelInspeccionIntegralHSE));
-    }, [formularioEnelInspeccionIntegralHSE]);
 
     useEffect(() => {
         setFecha(new Date());
@@ -494,18 +513,64 @@ const SupervisionAgregar = () => {
         }
 
         cargarRegistrosSupervision();
+        cargarDatosCiudades();
         cargarDatosPlanta();
-
-        const datosGuardadosClaroSupervisionOperativa = Cookies.get('formularioClaroSupervisionOperativa');
-        if (datosGuardadosClaroSupervisionOperativa) {
-            setFormularioClaroSupervisionOperativa(JSON.parse(datosGuardadosClaroSupervisionOperativa));
-        }
-
-        const datosGuardadosEnelInspeccionIntegralHSE = Cookies.get('formularioEnelInspeccionIntegralHSE');
-        if (datosGuardadosEnelInspeccionIntegralHSE) {
-            setFormularioEnelInspeccionIntegralHSE(JSON.parse(datosGuardadosEnelInspeccionIntegralHSE));
-        }
     }, []);
+
+    const [ciudadesFiltradas, setCiudadesFiltradas] = useState([]);
+
+    const columnas = [
+        { header: 'No. ID', key: 'cedula' },
+        { header: 'Nombres y Apellidos', key: 'nombre' },
+        { header: 'Cargo', key: 'cargo' },
+    ];
+
+    const [mostrarModal, setMostrarModal] = useState(false);
+
+    const agregarMiembroACuadrillaEnelInspeccionIntegralHSE = (miembro) => {
+        const existe = (formularioEnelInspeccionIntegralHSE.cuadrilla || []).some(m => m.cedula === miembro.cedula);
+        if (existe) {
+            toast.warning('La cédula ya está en la cuadrilla.');
+            return
+        }
+
+        setFormularioEnelInspeccionIntegralHSE(prev => {
+            const actualizado = { ...prev, cuadrilla: [...(prev.cuadrilla || []), miembro] };
+            Cookies.set('formularioEnelInspeccionIntegralHSE', JSON.stringify(actualizado));
+            return actualizado;
+        });
+
+        Cookies.remove('miembroEnProceso');
+        setMostrarModal(false);
+        setMiembroEnProceso({})
+    };
+
+    const [miembroEnProceso, setMiembroEnProceso] = useState(() => {
+        const guardado = Cookies.get('miembroEnProceso');
+        return guardado ? JSON.parse(guardado) : {
+            cedula: "",
+            nombre: "",
+            cargo: "",
+            arl: "",
+            tarjetaDeVida: "",
+            carneCliente: "",
+            carneSicte: "",
+            eppCasco: "",
+            eppGuantes: "",
+            eppGuantesDielectricos: "",
+            eppProteccionFacialAntiArco: "",
+            eppEquiposContraCaidas: "",
+            eppOverolObraCivil: "",
+            eppOverolIgnifugo: "",
+            eppGafasDeSeguridad: "",
+            eppTapabocas: "",
+            eppBotas: "",
+        };
+    });
+
+    useEffect(() => {
+        Cookies.set('miembroEnProceso', JSON.stringify(miembroEnProceso));
+    }, [miembroEnProceso]);
 
     return (
         <div className="supervision-agregar">
@@ -551,7 +616,7 @@ const SupervisionAgregar = () => {
                             <i className="fas fa-calendar-alt"></i>
                             <div className='entradas'>
                                 <Textos className='subtitulo'>Fecha:</Textos>
-                                <Textos className='parrafo'>{fecha.toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</Textos>
+                                <Textos className='parrafo'>{fecha.toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' })}</Textos>
                             </div>
                         </div>
 
@@ -873,7 +938,7 @@ const SupervisionAgregar = () => {
                             <i className="fas fa-calendar-alt"></i>
                             <div className='entradas'>
                                 <Textos className='subtitulo'>Fecha inspeccion, hora inicio:</Textos>
-                                <Textos className='parrafo'>{fecha.toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</Textos>
+                                <Textos className='parrafo'>{fecha.toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' })}</Textos>
                             </div>
                         </div>
 
@@ -889,7 +954,12 @@ const SupervisionAgregar = () => {
                             <i className="fas fa-tools"></i>
                             <div className='entradas'>
                                 <Textos className='subtitulo'>No. de contrato:</Textos>
-                                <Entradas type="text" placeholder="Ingrese el contrato" value={formularioEnelInspeccionIntegralHSE.noContrato} onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('noContrato', e.target.value)} />
+                                <Selectores value={formularioEnelInspeccionIntegralHSE.noContrato} onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('noContrato', e.target.value)}
+                                    options={[
+                                        { value: 'JA10123037/JA10123045', label: 'JA10123037 / JA10123045' },
+                                        { value: 'JA10123400', label: 'JA10123400' },
+                                    ]} className="primary">
+                                </Selectores>
                             </div>
                         </div>
 
@@ -898,14 +968,15 @@ const SupervisionAgregar = () => {
                                 <i className="fas fa-map-marker-alt"></i>
                                 <Textos className='subtitulo'>Ubicación:</Textos>
                             </div>
-                            <div id="map2" style={{ width: '100%', height: '270px' }}></div>
+                            <div id="map2"></div>
                         </div>
 
                         <div className='campo direccion'>
                             <i className="fas fa-tools"></i>
                             <div className='entradas'>
                                 <Textos className='subtitulo'>Direccion:</Textos>
-                                <Entradas type="text" placeholder="Ingrese la direccion" value={formularioEnelInspeccionIntegralHSE.direccion} onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('direccion', e.target.value)} />
+                                <Entradas type="text" placeholder="Ingrese la direccion" value={formularioEnelInspeccionIntegralHSE.direccion}
+                                    onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('direccion', e.target.value)} />
                             </div>
                         </div>
 
@@ -913,8 +984,32 @@ const SupervisionAgregar = () => {
                             <i className="fas fa-tools"></i>
                             <div className='entradas'>
                                 <Textos className='subtitulo'>Ciudad:</Textos>
-                                <Entradas type="text" placeholder="Ingrese la ciudad" value={formularioEnelInspeccionIntegralHSE.ciudad} onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('ciudad', e.target.value)} />
+                                <Entradas type="text" placeholder="Ingrese la ciudad" value={formularioEnelInspeccionIntegralHSE.ciudad} onChange={(e) => {
+                                    const valor = e.target.value;
+                                    actualizarCampoEnelInspeccionIntegralHSE('ciudad', valor);
+
+                                    const coincidencias = datosCiudades.filter(ciudad =>
+                                        ciudad.key.toLowerCase().includes(valor.toLowerCase())
+                                    );
+                                    setCiudadesFiltradas(coincidencias);
+                                }} />
                             </div>
+
+                            {formularioEnelInspeccionIntegralHSE.ciudad && ciudadesFiltradas.length > 0 && (
+                                <ul className="sugerencias-ciudad">
+                                    {ciudadesFiltradas.slice(0, 10).map((ciudad, index) => (
+                                        <li
+                                            key={ciudad.key}
+                                            onClick={() => {
+                                                actualizarCampoEnelInspeccionIntegralHSE('ciudad', ciudad.key);
+                                                setCiudadesFiltradas([]);
+                                            }}
+                                        >
+                                            {ciudad.key}
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
                         </div>
 
                         <div className='campo opOt'>
@@ -929,7 +1024,7 @@ const SupervisionAgregar = () => {
                             <i className="fas fa-users-cog"></i>
                             <div className='entradas'>
                                 <Textos className='subtitulo'>Supervisor técnico encargado:</Textos>
-                                <Entradas type="text" placeholder="Ingrese el supervisor tecnico" value={formularioEnelInspeccionIntegralHSE.cedulaSupervisorTecnico} onChange={(e) => {
+                                <Entradas type="text" placeholder="Ingrese la cedula del supervisor tecnico" value={formularioEnelInspeccionIntegralHSE.cedulaSupervisorTecnico} onChange={(e) => {
                                     const valor = e.target.value;
                                     actualizarCampoEnelInspeccionIntegralHSE('cedulaSupervisorTecnico', valor);
                                     const registroEncontrado = datosPlanta.find(item => item.nit === valor);
@@ -947,7 +1042,7 @@ const SupervisionAgregar = () => {
                             <i className="fas fa-users-cog"></i>
                             <div className='entradas'>
                                 <Textos className='subtitulo'>Líder/Encargado de cuadrilla:</Textos>
-                                <Entradas type="text" placeholder="Ingrese el lider de cuadrilla" value={formularioEnelInspeccionIntegralHSE.cedulaLiderEncargado} onChange={(e) => {
+                                <Entradas type="text" placeholder="Ingrese la cedula del lider de cuadrilla" value={formularioEnelInspeccionIntegralHSE.cedulaLiderEncargado} onChange={(e) => {
                                     const valor = e.target.value;
                                     actualizarCampoEnelInspeccionIntegralHSE('cedulaLiderEncargado', valor);
                                     const registroEncontrado = datosPlanta.find(item => item.nit === valor);
@@ -1009,13 +1104,176 @@ const SupervisionAgregar = () => {
                             </div>
                         </div>
 
-                        <div className='campo zona'>
+                        <div className='campo trabajo'>
                             <i className="fas fa-tools"></i>
                             <div className='entradas'>
                                 <Textos className='subtitulo'>Trabajo a realizar:</Textos>
                                 <Entradas type="text" placeholder="Ingrese el trabajo a realizar" value={formularioEnelInspeccionIntegralHSE.trabajo} onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('trabajo', e.target.value)} />
                             </div>
                         </div>
+
+                        <div className='campo cuadrilla'>
+                            <i className="fas fa-tools"></i>
+                            <div className='entradas'>
+                                <Textos className='subtitulo'>Datos Cuadrilla:</Textos>
+                                <div className='botonAgregar'>
+                                    <Botones className='agregar' onClick={() => setMostrarModal(true)}>Agregar</Botones>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className='Tabla'>
+                            <Tablas columnas={columnas} datos={formularioEnelInspeccionIntegralHSE.cuadrilla} filasPorPagina={5} />
+                        </div>
+
+                        {mostrarModal && (
+                            <>
+                                <div className="modal-overlay" onClick={() => setMostrarModal(false)}></div>
+                                <div className="modal-cuadrilla">
+                                    <div className="modal-contenido">
+                                        <Textos className='titulo'>Agregar Integrante</Textos>
+                                        <Textos className='subtitulo encabezado'>Datos Personales:</Textos>
+                                        <div className='entradas'>
+                                            <Textos className='subtitulo'>Cedula:</Textos>
+                                            <Entradas type="text" placeholder="Cédula" value={miembroEnProceso.cedula || ""} onChange={(e) => {
+                                                const valor = e.target.value;
+                                                const registroEncontrado = datosPlanta.find(item => item.nit === valor);
+                                                setMiembroEnProceso(prev => ({
+                                                    ...prev,
+                                                    cedula: valor,
+                                                    nombre: registroEncontrado ? registroEncontrado.nombre : 'Usuario no encontrado',
+                                                    cargo: registroEncontrado ? registroEncontrado.cargo : 'Cargo no encontrado',
+                                                }));
+                                            }} />
+                                        </div>
+                                        <div className='entradas'>
+                                            <Textos className='subtitulo'>Nombre:</Textos>
+                                            <Entradas type="text" placeholder="Nombre" value={miembroEnProceso.nombre} disabled={true} />
+                                        </div>
+                                        <div className='entradas'>
+                                            <Textos className='subtitulo'>Cargo:</Textos>
+                                            <Entradas type="text" placeholder="Cargo" value={miembroEnProceso.cargo} disabled={true} />
+                                        </div>
+                                        <Textos className='subtitulo encabezado'>Documentos:</Textos>
+                                        <div className='entradas'>
+                                            <Textos className='subtitulo'>ARL:</Textos>
+                                            <div className='opciones'>
+                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, arl: 'C' }))} className={miembroEnProceso.arl === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, arl: 'NC' }))} className={miembroEnProceso.arl === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                            </div>
+                                        </div>
+                                        <div className='entradas'>
+                                            <Textos className='subtitulo'>Tarjeta de vida:</Textos>
+                                            <div className='opciones'>
+                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, tarjetaDeVida: 'C' }))} className={miembroEnProceso.tarjetaDeVida === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, tarjetaDeVida: 'NC' }))} className={miembroEnProceso.tarjetaDeVida === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                            </div>
+                                        </div>
+                                        <div className='entradas'>
+                                            <Textos className='subtitulo'>Carné Cliente:</Textos>
+                                            <div className='opciones'>
+                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, carneCliente: 'C' }))} className={miembroEnProceso.carneCliente === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, carneCliente: 'NC' }))} className={miembroEnProceso.carneCliente === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                            </div>
+                                        </div>
+                                        <div className='entradas'>
+                                            <Textos className='subtitulo'>Carné Sicte:</Textos>
+                                            <div className='opciones'>
+                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, carneSicte: 'C' }))} className={miembroEnProceso.carneSicte === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, carneSicte: 'NC' }))} className={miembroEnProceso.carneSicte === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                            </div>
+                                        </div>
+                                        <Textos className='subtitulo encabezado'>Dotacion EPP y EPCC:</Textos>
+                                        <div className='entradas vertical'>
+                                            <Textos className='subtitulo' title="Utiliza casco de seguridad TIPO II con barbuquejo en buen estado.">Casco:</Textos>
+                                            <div className='opciones'>
+                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppCasco: 'C' }))} className={miembroEnProceso.eppCasco === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppCasco: 'NC' }))} className={miembroEnProceso.eppCasco === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppCasco: 'NA' }))} className={miembroEnProceso.eppCasco === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                            </div>
+                                        </div>
+                                        <div className='entradas vertical'>
+                                            <Textos className='subtitulo' title="Utiliza guantes de seguridad  de acuerdo a la labor ejecutada según corresponda y están en buen estado.">Guantes:</Textos>
+                                            <div className='opciones'>
+                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppGuantes: 'C' }))} className={miembroEnProceso.eppGuantes === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppGuantes: 'NC' }))} className={miembroEnProceso.eppGuantes === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppGuantes: 'NA' }))} className={miembroEnProceso.eppGuantes === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                            </div>
+                                        </div>
+                                        <div className='entradas vertical'>
+                                            <Textos className='subtitulo' title="Utiliza  guantes  de  seguridad  dieléctricos,  clase 0, 2 o 4 según  corresponda,  en  buen estado y osee las pruebas de rigidez vigentes.">Guantes Dielectricos:</Textos>
+                                            <div className='opciones'>
+                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppGuantesDielectricos: 'C' }))} className={miembroEnProceso.eppGuantesDielectricos === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppGuantesDielectricos: 'NC' }))} className={miembroEnProceso.eppGuantesDielectricos === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppGuantesDielectricos: 'NA' }))} className={miembroEnProceso.eppGuantesDielectricos === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                            </div>
+                                        </div>
+                                        <div className='entradas vertical'>
+                                            <Textos className='subtitulo' title="Utiliza protección facial anti-arco y está en buen estado (visor Arc Flash - Balaclava ignifuga)">Proteccion Facil Anti Arco:</Textos>
+                                            <div className='opciones'>
+                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppProteccionFacialAntiArco: 'C' }))} className={miembroEnProceso.eppProteccionFacialAntiArco === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppProteccionFacialAntiArco: 'NC' }))} className={miembroEnProceso.eppProteccionFacialAntiArco === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppProteccionFacialAntiArco: 'NA' }))} className={miembroEnProceso.eppProteccionFacialAntiArco === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                            </div>
+                                        </div>
+                                        <div className='entradas vertical'>
+                                            <Textos className='subtitulo' title="Utiliza sistema contra caídas de altura completo, en buen estado.">Equipos Contra Caidas:</Textos>
+                                            <div className='opciones'>
+                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppEquiposContraCaidas: 'C' }))} className={miembroEnProceso.eppEquiposContraCaidas === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppEquiposContraCaidas: 'NC' }))} className={miembroEnProceso.eppEquiposContraCaidas === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppEquiposContraCaidas: 'NA' }))} className={miembroEnProceso.eppEquiposContraCaidas === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                            </div>
+                                        </div>
+                                        <div className='entradas vertical'>
+                                            <Textos className='subtitulo' title="Utiliza ropa de trabajo adecuada para la tarea, en buen estado y normalizada">Overol Obra Civil:</Textos>
+                                            <div className='opciones'>
+                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppOverolObraCivil: 'C' }))} className={miembroEnProceso.eppOverolObraCivil === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppOverolObraCivil: 'NC' }))} className={miembroEnProceso.eppOverolObraCivil === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppOverolObraCivil: 'NA' }))} className={miembroEnProceso.eppOverolObraCivil === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                            </div>
+                                        </div>
+                                        <div className='entradas vertical'>
+                                            <Textos className='subtitulo' title="Utiliza  overol ignífugo está en buen estado.">Overol Ignifugo:</Textos>
+                                            <div className='opciones'>
+                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppOverolIgnifugo: 'C' }))} className={miembroEnProceso.eppOverolIgnifugo === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppOverolIgnifugo: 'NC' }))} className={miembroEnProceso.eppOverolIgnifugo === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppOverolIgnifugo: 'NA' }))} className={miembroEnProceso.eppOverolIgnifugo === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                            </div>
+                                        </div>
+                                        <div className='entradas vertical'>
+                                            <Textos className='subtitulo' title="Utiliza protector ocular (gafas) según la actividad y está en buen estado.">Gafas de Seguridad:</Textos>
+                                            <div className='opciones'>
+                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppGafasDeSeguridad: 'C' }))} className={miembroEnProceso.eppGafasDeSeguridad === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppGafasDeSeguridad: 'NC' }))} className={miembroEnProceso.eppGafasDeSeguridad === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppGafasDeSeguridad: 'NA' }))} className={miembroEnProceso.eppGafasDeSeguridad === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                            </div>
+                                        </div>
+                                        <div className='entradas vertical'>
+                                            <Textos className='subtitulo' title="Utiliza protección respiratoria en buen estado.">Tapabocas:</Textos>
+                                            <div className='opciones'>
+                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppTapabocas: 'C' }))} className={miembroEnProceso.eppTapabocas === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppTapabocas: 'NC' }))} className={miembroEnProceso.eppTapabocas === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppTapabocas: 'NA' }))} className={miembroEnProceso.eppTapabocas === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                            </div>
+                                        </div>
+                                        <div className='entradas vertical'>
+                                            <Textos className='subtitulo' title="Utiliza calzado de seguridad según corresponda y está en buen estado.">Botas:</Textos>
+                                            <div className='opciones'>
+                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppBotas: 'C' }))} className={miembroEnProceso.eppBotas === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppBotas: 'NC' }))} className={miembroEnProceso.eppBotas === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppBotas: 'NA' }))} className={miembroEnProceso.eppBotas === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                            </div>
+                                        </div>
+                                        <div className="modal-acciones">
+                                            <Botones className='guardar' onClick={() => {
+                                                agregarMiembroACuadrillaEnelInspeccionIntegralHSE(miembroEnProceso);
+                                            }}>Guardar</Botones>
+                                            <Botones onClick={() => setMostrarModal(false)}>Cancelar</Botones>
+                                        </div>
+                                    </div>
+                                </div>
+                            </>
+                        )}
 
                         <div className='enviar' onClick={enviarFormularioEnelInspeccionIntegralHSE}>
                             <button type="submit" id='Enviar' className="btn btn-primary">Enviar</button>
