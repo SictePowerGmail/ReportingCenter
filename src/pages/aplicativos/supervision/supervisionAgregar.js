@@ -510,6 +510,32 @@ const SupervisionAgregar = () => {
         fotoRiesgos8: "",
         riesgos9: "",
         fotoRiesgos9: "",
+        senaYDemar1: "",
+        fotoSenaYDemar1: "",
+        senaYDemar2: "",
+        fotoSenaYDemar2: "",
+        senaYDemar3: "",
+        fotoSenaYDemar3: "",
+        reglasOro1: "",
+        fotoReglasOro1: "",
+        reglasOro2: "",
+        fotoReglasOro2: "",
+        reglasOro3: "",
+        fotoReglasOro3: "",
+        reglasOro4: "",
+        fotoReglasOro4: "",
+        reglasOro5: "",
+        fotoReglasOro5: "",
+        trabajoAlturas1: "",
+        fotoTrabajoAlturas1: "",
+        trabajoAlturas2: "",
+        fotoTrabajoAlturas2: "",
+        trabajoAlturas3: "",
+        fotoTrabajoAlturas3: "",
+        trabajoAlturas4: "",
+        fotoTrabajoAlturas4: "",
+        trabajoAlturas5: "",
+        fotoTrabajoAlturas5: "",
     };
 
     const [formularioEnelInspeccionIntegralHSE, setFormularioEnelInspeccionIntegralHSE] = useState(() => {
@@ -1549,6 +1575,59 @@ const SupervisionAgregar = () => {
                                         accept="image/*"
                                         disabled={formularioEnelInspeccionIntegralHSE.riesgos9 !== 'NC'}
                                         onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoRiesgos9', e.target.files[0])}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className='campo'>
+                            <Textos className='subtitulo'>2.</Textos>
+                            <div className='entradaDatos'>
+                                <Textos className='subtitulo prin'>Señalizacion y demarcacion:</Textos>
+                                <Textos className='subtitulo sub'>Protección completa de la zona de trabajo (conos, cintas, corrales).</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('senaYDemar1', 'C')} className={formularioEnelInspeccionIntegralHSE.senaYDemar1 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('senaYDemar1', 'NC')} className={formularioEnelInspeccionIntegralHSE.senaYDemar1 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('senaYDemar1', 'NA')} className={formularioEnelInspeccionIntegralHSE.senaYDemar1 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoSenaYDemar1', e.target.files[0])}
+                                    />
+                                </div>
+
+                                <Textos className='subtitulo sub'>Utiliza el PMT correspondiente.</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('senaYDemar2', 'C')} className={formularioEnelInspeccionIntegralHSE.senaYDemar2 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('senaYDemar2', 'NC')} className={formularioEnelInspeccionIntegralHSE.senaYDemar2 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('senaYDemar2', 'NA')} className={formularioEnelInspeccionIntegralHSE.senaYDemar2 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        disabled={formularioEnelInspeccionIntegralHSE.senaYDemar2 !== 'NC'}
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoSenaYDemar2', e.target.files[0])}
+                                    />
+                                </div>
+
+                                <Textos className='subtitulo sub'>Se encuentran delimitadas zonas de peligro (huecos zanjas, desniveles, barreno).</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('senaYDemar3', 'C')} className={formularioEnelInspeccionIntegralHSE.senaYDemar3 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('senaYDemar3', 'NC')} className={formularioEnelInspeccionIntegralHSE.senaYDemar3 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('senaYDemar3', 'NA')} className={formularioEnelInspeccionIntegralHSE.senaYDemar3 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        disabled={formularioEnelInspeccionIntegralHSE.senaYDemar3 !== 'NC'}
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoSenaYDemar3', e.target.files[0])}
                                     />
                                 </div>
                             </div>

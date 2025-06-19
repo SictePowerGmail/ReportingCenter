@@ -130,7 +130,7 @@
                     }
 
                     .botonAgregar {
-                        display: flex;
+                        display: flex !important;
                         justify-content: end;
                         width: 100%;
 
@@ -246,8 +246,8 @@
 
                 .modal-contenido {
                     display: flex;
-                    flex-direction: column;
-                    height: 100%;
+                    flex-direction: column !important;
+                    height: 100% !important;
                     overflow-y: auto;
                     padding: 0px 20px;
 
