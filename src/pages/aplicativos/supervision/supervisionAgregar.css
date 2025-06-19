@@ -74,10 +74,10 @@
                     padding: 5px 10px 5px 5px;
                 }
 
-                .entradas {
+                .entradaDatos {
                     width: 100% !important;
-                    display: flex;
-                    flex-direction: column;
+                    display: flex !important;
+                    flex-direction: column !important;
 
                     .subtitulo {
                         padding-bottom: 5px;
@@ -176,8 +176,8 @@
                 }
 
                 &.ubicacion {
-                    flex-direction: column;
-                    align-items: initial;
+                    flex-direction: column !important;
+                    align-items: initial !important;
                 }
 
                 &.ciudad {
@@ -260,7 +260,7 @@
                         color: #636363;
                     }
 
-                    .entradas {
+                    .entradaDatos {
                         display: flex;
                         align-items: center;
                         width: calc(100% - 10px);

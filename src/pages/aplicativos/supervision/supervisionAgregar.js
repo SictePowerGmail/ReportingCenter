@@ -645,7 +645,7 @@ const SupervisionAgregar = () => {
                         </div>
                         <div className='campo fecha'>
                             <i className="fas fa-calendar-alt"></i>
-                            <div className='entradas'>
+                            <div className='entradaDatos'>
                                 <Textos className='subtitulo'>Fecha:</Textos>
                                 <Textos className='parrafo'>{fecha.toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' })}</Textos>
                             </div>
@@ -653,7 +653,7 @@ const SupervisionAgregar = () => {
 
                         <div className='campo supervisor'>
                             <i className="fas fa-user-cog"></i>
-                            <div className="entradas">
+                            <div className="entradaDatos">
                                 <Textos className='subtitulo'>Supervisor:</Textos>
                                 <Entradas type="text" placeholder={!nombreUsuario ? "Nombre" : nombreUsuario} disabled={true} />
                             </div>
@@ -661,7 +661,7 @@ const SupervisionAgregar = () => {
 
                         <div className='campo placa'>
                             <i className="fas fa-id-card"></i>
-                            <div className='entradas'>
+                            <div className='entradaDatos'>
                                 <Textos className='subtitulo'>Ingrese la placa de la movil:</Textos>
                                 <Entradas
                                     type="text"
@@ -682,7 +682,7 @@ const SupervisionAgregar = () => {
 
                         <div className='campo liderCuadrilla'>
                             <i className="fas fa-users-cog"></i>
-                            <div className='entradas'>
+                            <div className='entradaDatos'>
                                 <Textos className='subtitulo'>Ingrese el lider de la cuadrilla:</Textos>
                                 <Entradas type="text" placeholder="Cedula" value={formularioClaroSupervisionOperativa.cedulaCuadrilla} onChange={(e) => {
                                     const valor = e.target.value;
@@ -700,7 +700,7 @@ const SupervisionAgregar = () => {
 
                         <div className='campo ot'>
                             <i className="fas fa-tools"></i>
-                            <div className='entradas'>
+                            <div className='entradaDatos'>
                                 <Textos className='subtitulo'>Ingrese la OT / UUID:</Textos>
                                 <Entradas type="text" placeholder="OT / UUID" value={formularioClaroSupervisionOperativa.ot} onChange={(e) => actualizarCampoClaroSupervisionOperativa('ot', e.target.value)} />
                             </div>
@@ -708,7 +708,7 @@ const SupervisionAgregar = () => {
 
                         <div className='campo epp'>
                             <i className="fas fa-bullhorn"></i>
-                            <div className='entradas'>
+                            <div className='entradaDatos'>
                                 <Textos className='subtitulo'>1. ¿Tienen todos los EPP?</Textos>
                                 <div className='botones'>
                                     <div className='opciones'>
@@ -725,7 +725,7 @@ const SupervisionAgregar = () => {
 
                         <div className='campo alturas'>
                             <i className="fas fa-bullhorn"></i>
-                            <div className='entradas'>
+                            <div className='entradaDatos'>
                                 <Textos className='subtitulo'>2. ¿Todos estan certificados en alturas?</Textos>
                                 <div className='botones'>
                                     <div className='opciones'>
@@ -742,7 +742,7 @@ const SupervisionAgregar = () => {
 
                         <div className='campo ats'>
                             <i className="fas fa-bullhorn"></i>
-                            <div className='entradas'>
+                            <div className='entradaDatos'>
                                 <Textos className='subtitulo'>3. ¿Se diligencio el ATS?</Textos>
                                 <div className='botones'>
                                     <div className='opciones'>
@@ -759,7 +759,7 @@ const SupervisionAgregar = () => {
 
                         <div className='campo empalmes'>
                             <i className="fas fa-bullhorn"></i>
-                            <div className='entradas'>
+                            <div className='entradaDatos'>
                                 <Textos className='subtitulo'>4. ¿Se realizo reporte de empalmes en WFM?</Textos>
                                 <div className='botones'>
                                     <div className='opciones'>
@@ -776,7 +776,7 @@ const SupervisionAgregar = () => {
 
                         <div className='campo preoperacional'>
                             <i className="fas fa-bullhorn"></i>
-                            <div className='entradas'>
+                            <div className='entradaDatos'>
                                 <Textos className='subtitulo'>5. ¿Se realizo preoperacional?</Textos>
                                 <div className='botones'>
                                     <div className='opciones'>
@@ -793,7 +793,7 @@ const SupervisionAgregar = () => {
 
                         <div className='campo vehiculo'>
                             <i className="fas fa-bullhorn"></i>
-                            <div className='entradas'>
+                            <div className='entradaDatos'>
                                 <Textos className='subtitulo'>6. Estado del vehiculo:</Textos>
                                 <div className='botones'>
                                     <div className='opciones'>
@@ -813,7 +813,7 @@ const SupervisionAgregar = () => {
 
                         <div className='campo equipos'>
                             <i className="fas fa-bullhorn"></i>
-                            <div className='entradas'>
+                            <div className='entradaDatos'>
                                 <Textos className='subtitulo'>7. Equipos especializados:</Textos>
                                 <div className='botones'>
                                     <div className='subtitulos'>
@@ -900,7 +900,7 @@ const SupervisionAgregar = () => {
 
                         <div className='campo observacion'>
                             <i className="fas fa-comment"></i>
-                            <div className='entradas'>
+                            <div className='entradaDatos'>
                                 <Textos className='subtitulo'>8. Observaciones:</Textos>
                                 <AreaTextos type="text" placeholder="Agregue las observacion pertinentes" value={formularioClaroSupervisionOperativa.observacion} onChange={(e) => actualizarCampoClaroSupervisionOperativa('observacion', e.target.value)} rows={4} />
                             </div>
@@ -908,7 +908,7 @@ const SupervisionAgregar = () => {
 
                         <div className='campo foto'>
                             <i className="fas fa-camera"></i>
-                            <div className='entradas'>
+                            <div className='entradaDatos'>
                                 <Textos className='subtitulo'>9. Tomar foto de la cuadrilla:</Textos>
                                 <Entradas
                                     type="file"
@@ -967,7 +967,7 @@ const SupervisionAgregar = () => {
                         </div>
                         <div className='campo fecha'>
                             <i className="fas fa-calendar-alt"></i>
-                            <div className='entradas'>
+                            <div className='entradaDatos'>
                                 <Textos className='subtitulo'>Fecha inspeccion, hora inicio:</Textos>
                                 <Textos className='parrafo'>{fecha.toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' })}</Textos>
                             </div>
@@ -975,7 +975,7 @@ const SupervisionAgregar = () => {
 
                         <div className='campo nombreProyecto'>
                             <i className="fas fa-tools"></i>
-                            <div className='entradas'>
+                            <div className='entradaDatos'>
                                 <Textos className='subtitulo'>Nombre del proyecto:</Textos>
                                 <Entradas type="text" placeholder="Ingrese el nombre del Proyecto" value={formularioEnelInspeccionIntegralHSE.nombreProyecto} onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('nombreProyecto', e.target.value)} />
                             </div>
@@ -983,7 +983,7 @@ const SupervisionAgregar = () => {
 
                         <div className='campo contrato'>
                             <i className="fas fa-tools"></i>
-                            <div className='entradas'>
+                            <div className='entradaDatos'>
                                 <Textos className='subtitulo'>No. de contrato:</Textos>
                                 <Selectores value={formularioEnelInspeccionIntegralHSE.noContrato} onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('noContrato', e.target.value)}
                                     options={[
@@ -1004,7 +1004,7 @@ const SupervisionAgregar = () => {
 
                         <div className='campo direccion'>
                             <i className="fas fa-tools"></i>
-                            <div className='entradas'>
+                            <div className='entradaDatos'>
                                 <Textos className='subtitulo'>Direccion:</Textos>
                                 <Entradas type="text" placeholder="Ingrese la direccion" value={formularioEnelInspeccionIntegralHSE.direccion}
                                     onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('direccion', e.target.value)} />
@@ -1013,7 +1013,7 @@ const SupervisionAgregar = () => {
 
                         <div className='campo ciudad'>
                             <i className="fas fa-tools"></i>
-                            <div className='entradas'>
+                            <div className='entradaDatos'>
                                 <Textos className='subtitulo'>Ciudad:</Textos>
                                 <Entradas type="text" placeholder="Ingrese la ciudad" value={formularioEnelInspeccionIntegralHSE.ciudad} onChange={(e) => {
                                     const valor = e.target.value;
@@ -1045,7 +1045,7 @@ const SupervisionAgregar = () => {
 
                         <div className='campo opOt'>
                             <i className="fas fa-tools"></i>
-                            <div className='entradas'>
+                            <div className='entradaDatos'>
                                 <Textos className='subtitulo'>OP/OT:</Textos>
                                 <Entradas type="text" placeholder="Ingrese el nombre del Proyecto" value={formularioEnelInspeccionIntegralHSE.opOt} onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('opOt', e.target.value)} />
                             </div>
@@ -1053,7 +1053,7 @@ const SupervisionAgregar = () => {
 
                         <div className='campo supervisor'>
                             <i className="fas fa-users-cog"></i>
-                            <div className='entradas'>
+                            <div className='entradaDatos'>
                                 <Textos className='subtitulo'>Supervisor técnico encargado:</Textos>
                                 <Entradas type="text" placeholder="Ingrese la cedula del supervisor tecnico" value={formularioEnelInspeccionIntegralHSE.cedulaSupervisorTecnico} onChange={(e) => {
                                     const valor = e.target.value;
@@ -1071,7 +1071,7 @@ const SupervisionAgregar = () => {
 
                         <div className='campo lider'>
                             <i className="fas fa-users-cog"></i>
-                            <div className='entradas'>
+                            <div className='entradaDatos'>
                                 <Textos className='subtitulo'>Líder/Encargado de cuadrilla:</Textos>
                                 <Entradas type="text" placeholder="Ingrese la cedula del lider de cuadrilla" value={formularioEnelInspeccionIntegralHSE.cedulaLiderEncargado} onChange={(e) => {
                                     const valor = e.target.value;
@@ -1089,7 +1089,7 @@ const SupervisionAgregar = () => {
 
                         <div className='campo proceso'>
                             <i className="fas fa-tools"></i>
-                            <div className='entradas'>
+                            <div className='entradaDatos'>
                                 <Textos className='subtitulo'>Proceso:</Textos>
                                 <Selectores value={formularioEnelInspeccionIntegralHSE.proceso} onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('proceso', e.target.value)}
                                     options={[
@@ -1103,7 +1103,7 @@ const SupervisionAgregar = () => {
 
                         <div className='campo placa'>
                             <i className="fas fa-id-card"></i>
-                            <div className='entradas'>
+                            <div className='entradaDatos'>
                                 <Textos className='subtitulo'>Placa vehículo:</Textos>
                                 <Entradas
                                     type="text"
@@ -1124,7 +1124,7 @@ const SupervisionAgregar = () => {
 
                         <div className='campo zona'>
                             <i className="fas fa-tools"></i>
-                            <div className='entradas'>
+                            <div className='entradaDatos'>
                                 <Textos className='subtitulo'>Zona:</Textos>
                                 <Selectores value={formularioEnelInspeccionIntegralHSE.zona} onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('zona', e.target.value)}
                                     options={[
@@ -1137,7 +1137,7 @@ const SupervisionAgregar = () => {
 
                         <div className='campo trabajo'>
                             <i className="fas fa-tools"></i>
-                            <div className='entradas'>
+                            <div className='entradaDatos'>
                                 <Textos className='subtitulo'>Trabajo a realizar:</Textos>
                                 <Entradas type="text" placeholder="Ingrese el trabajo a realizar" value={formularioEnelInspeccionIntegralHSE.trabajo} onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('trabajo', e.target.value)} />
                             </div>
@@ -1145,7 +1145,7 @@ const SupervisionAgregar = () => {
 
                         <div className='campo cuadrilla'>
                             <i className="fas fa-tools"></i>
-                            <div className='entradas'>
+                            <div className='entradaDatos'>
                                 <Textos className='subtitulo'>Datos Cuadrilla:</Textos>
                                 <div className='botonAgregar'>
                                     <Botones className='agregar' onClick={() => setMostrarModal(true)}>Agregar</Botones>
@@ -1164,7 +1164,7 @@ const SupervisionAgregar = () => {
                                     <div className="modal-contenido">
                                         <Textos className='titulo'>Agregar Integrante</Textos>
                                         <Textos className='subtitulo encabezado'>1. Datos Personales:</Textos>
-                                        <div className='entradas'>
+                                        <div className='entradaDatos'>
                                             <Textos className='subtitulo'>Cedula:</Textos>
                                             <Entradas type="text" placeholder="Cédula" value={miembroEnProceso.cedula || ""} onChange={(e) => {
                                                 const valor = e.target.value;
@@ -1177,44 +1177,44 @@ const SupervisionAgregar = () => {
                                                 }));
                                             }} />
                                         </div>
-                                        <div className='entradas'>
+                                        <div className='entradaDatos'>
                                             <Textos className='subtitulo'>Nombre:</Textos>
                                             <Entradas type="text" placeholder="Nombre" value={miembroEnProceso.nombre} disabled={true} />
                                         </div>
-                                        <div className='entradas'>
+                                        <div className='entradaDatos'>
                                             <Textos className='subtitulo'>Cargo:</Textos>
                                             <Entradas type="text" placeholder="Cargo" value={miembroEnProceso.cargo} disabled={true} />
                                         </div>
                                         <Textos className='subtitulo encabezado'>2. Documentos:</Textos>
-                                        <div className='entradas'>
+                                        <div className='entradaDatos'>
                                             <Textos className='subtitulo'>ARL:</Textos>
                                             <div className='opciones'>
                                                 <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, arl: 'C' }))} className={miembroEnProceso.arl === 'C' ? 'formulario selected' : ''}>C</Botones>
                                                 <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, arl: 'NC' }))} className={miembroEnProceso.arl === 'NC' ? 'formulario selected' : ''}>NC</Botones>
                                             </div>
                                         </div>
-                                        <div className='entradas'>
+                                        <div className='entradaDatos'>
                                             <Textos className='subtitulo'>Tarjeta de vida:</Textos>
                                             <div className='opciones'>
                                                 <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, tarjetaDeVida: 'C' }))} className={miembroEnProceso.tarjetaDeVida === 'C' ? 'formulario selected' : ''}>C</Botones>
                                                 <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, tarjetaDeVida: 'NC' }))} className={miembroEnProceso.tarjetaDeVida === 'NC' ? 'formulario selected' : ''}>NC</Botones>
                                             </div>
                                         </div>
-                                        <div className='entradas'>
+                                        <div className='entradaDatos'>
                                             <Textos className='subtitulo'>Carné Cliente:</Textos>
                                             <div className='opciones'>
                                                 <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, carneCliente: 'C' }))} className={miembroEnProceso.carneCliente === 'C' ? 'formulario selected' : ''}>C</Botones>
                                                 <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, carneCliente: 'NC' }))} className={miembroEnProceso.carneCliente === 'NC' ? 'formulario selected' : ''}>NC</Botones>
                                             </div>
                                         </div>
-                                        <div className='entradas'>
+                                        <div className='entradaDatos'>
                                             <Textos className='subtitulo'>Carné Sicte:</Textos>
                                             <div className='opciones'>
                                                 <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, carneSicte: 'C' }))} className={miembroEnProceso.carneSicte === 'C' ? 'formulario selected' : ''}>C</Botones>
                                                 <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, carneSicte: 'NC' }))} className={miembroEnProceso.carneSicte === 'NC' ? 'formulario selected' : ''}>NC</Botones>
                                             </div>
                                         </div>
-                                        <div className='entradas vertical'>
+                                        <div className='entradaDatos vertical'>
                                             <Textos className='subtitulo'>Ingrese la foto de los documentos:</Textos>
                                             <div className='opciones'>
                                                 <Entradas
@@ -1226,7 +1226,7 @@ const SupervisionAgregar = () => {
                                             </div>
                                         </div>
                                         <Textos className='subtitulo encabezado'>3. Dotacion EPP y EPCC:</Textos>
-                                        <div className='entradas vertical'>
+                                        <div className='entradaDatos vertical'>
                                             <Textos className='subtitulo' title="Utiliza casco de seguridad TIPO II con barbuquejo en buen estado.">Casco:</Textos>
                                             <div className='opciones'>
                                                 <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppCasco: 'C' }))} className={miembroEnProceso.eppCasco === 'C' ? 'formulario selected' : ''}>C</Botones>
@@ -1243,7 +1243,7 @@ const SupervisionAgregar = () => {
                                                 />
                                             </div>
                                         </div>
-                                        <div className='entradas vertical'>
+                                        <div className='entradaDatos vertical'>
                                             <Textos className='subtitulo' title="Utiliza guantes de seguridad  de acuerdo a la labor ejecutada según corresponda y están en buen estado.">Guantes:</Textos>
                                             <div className='opciones'>
                                                 <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppGuantes: 'C' }))} className={miembroEnProceso.eppGuantes === 'C' ? 'formulario selected' : ''}>C</Botones>
@@ -1260,7 +1260,7 @@ const SupervisionAgregar = () => {
                                                 />
                                             </div>
                                         </div>
-                                        <div className='entradas vertical'>
+                                        <div className='entradaDatos vertical'>
                                             <Textos className='subtitulo' title="Utiliza  guantes  de  seguridad  dieléctricos,  clase 0, 2 o 4 según  corresponda,  en  buen estado y osee las pruebas de rigidez vigentes.">Guantes Dielectricos:</Textos>
                                             <div className='opciones'>
                                                 <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppGuantesDielectricos: 'C' }))} className={miembroEnProceso.eppGuantesDielectricos === 'C' ? 'formulario selected' : ''}>C</Botones>
@@ -1277,7 +1277,7 @@ const SupervisionAgregar = () => {
                                                 />
                                             </div>
                                         </div>
-                                        <div className='entradas vertical'>
+                                        <div className='entradaDatos vertical'>
                                             <Textos className='subtitulo' title="Utiliza protección facial anti-arco y está en buen estado (visor Arc Flash - Balaclava ignifuga)">Proteccion Facil Anti Arco:</Textos>
                                             <div className='opciones'>
                                                 <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppProteccionFacialAntiArco: 'C' }))} className={miembroEnProceso.eppProteccionFacialAntiArco === 'C' ? 'formulario selected' : ''}>C</Botones>
@@ -1294,7 +1294,7 @@ const SupervisionAgregar = () => {
                                                 />
                                             </div>
                                         </div>
-                                        <div className='entradas vertical'>
+                                        <div className='entradaDatos vertical'>
                                             <Textos className='subtitulo' title="Utiliza sistema contra caídas de altura completo, en buen estado.">Equipos Contra Caidas:</Textos>
                                             <div className='opciones'>
                                                 <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppEquiposContraCaidas: 'C' }))} className={miembroEnProceso.eppEquiposContraCaidas === 'C' ? 'formulario selected' : ''}>C</Botones>
@@ -1311,7 +1311,7 @@ const SupervisionAgregar = () => {
                                                 />
                                             </div>
                                         </div>
-                                        <div className='entradas vertical'>
+                                        <div className='entradaDatos vertical'>
                                             <Textos className='subtitulo' title="Utiliza ropa de trabajo adecuada para la tarea, en buen estado y normalizada">Overol Obra Civil:</Textos>
                                             <div className='opciones'>
                                                 <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppOverolObraCivil: 'C' }))} className={miembroEnProceso.eppOverolObraCivil === 'C' ? 'formulario selected' : ''}>C</Botones>
@@ -1328,7 +1328,7 @@ const SupervisionAgregar = () => {
                                                 />
                                             </div>
                                         </div>
-                                        <div className='entradas vertical'>
+                                        <div className='entradaDatos vertical'>
                                             <Textos className='subtitulo' title="Utiliza  overol ignífugo está en buen estado.">Overol Ignifugo:</Textos>
                                             <div className='opciones'>
                                                 <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppOverolIgnifugo: 'C' }))} className={miembroEnProceso.eppOverolIgnifugo === 'C' ? 'formulario selected' : ''}>C</Botones>
@@ -1345,7 +1345,7 @@ const SupervisionAgregar = () => {
                                                 />
                                             </div>
                                         </div>
-                                        <div className='entradas vertical'>
+                                        <div className='entradaDatos vertical'>
                                             <Textos className='subtitulo' title="Utiliza protector ocular (gafas) según la actividad y está en buen estado.">Gafas de Seguridad:</Textos>
                                             <div className='opciones'>
                                                 <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppGafasDeSeguridad: 'C' }))} className={miembroEnProceso.eppGafasDeSeguridad === 'C' ? 'formulario selected' : ''}>C</Botones>
@@ -1362,7 +1362,7 @@ const SupervisionAgregar = () => {
                                                 />
                                             </div>
                                         </div>
-                                        <div className='entradas vertical'>
+                                        <div className='entradaDatos vertical'>
                                             <Textos className='subtitulo' title="Utiliza protección respiratoria en buen estado.">Tapabocas:</Textos>
                                             <div className='opciones'>
                                                 <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppTapabocas: 'C' }))} className={miembroEnProceso.eppTapabocas === 'C' ? 'formulario selected' : ''}>C</Botones>
@@ -1379,7 +1379,7 @@ const SupervisionAgregar = () => {
                                                 />
                                             </div>
                                         </div>
-                                        <div className='entradas vertical'>
+                                        <div className='entradaDatos vertical'>
                                             <Textos className='subtitulo' title="Utiliza calzado de seguridad según corresponda y está en buen estado.">Botas:</Textos>
                                             <div className='opciones'>
                                                 <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppBotas: 'C' }))} className={miembroEnProceso.eppBotas === 'C' ? 'formulario selected' : ''}>C</Botones>
@@ -1409,7 +1409,7 @@ const SupervisionAgregar = () => {
 
                         <div className='campo'>
                             <Textos className='subtitulo'>1.</Textos>
-                            <div className='entradas'>
+                            <div className='entradaDatos'>
                                 <Textos className='subtitulo prin'>Identificacion de riesgos (Actividades previas al trabajo):</Textos>
                                 <Textos className='subtitulo sub'>Se identifica todos los riesgos específicos de la actividad en el ARO, está debidamente firmado por todos los integrantes de la cuadrilla.</Textos>
                                 <div className='opciones'>
