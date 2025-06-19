@@ -477,24 +477,44 @@ const SupervisionAgregar = () => {
         }
     };
 
+    const estadoInicialFormularioEnelInspeccionIntegralHSE = {
+        nombreProyecto: "",
+        noContrato: "",
+        direccion: "",
+        ciudad: "",
+        opOt: "",
+        cedulaSupervisorTecnico: "",
+        nombreSupervisorTecnico: "",
+        cedulaLiderEncargado: "",
+        nombreLiderEncargado: "",
+        proceso: "",
+        placa: "",
+        zona: "",
+        trabajo: "",
+        cuadrilla: [],
+        riesgos1: "",
+        fotoRiesgos1: "",
+        riesgos2: "",
+        fotoRiesgos2: "",
+        riesgos3: "",
+        fotoRiesgos3: "",
+        riesgos4: "",
+        fotoRiesgos4: "",
+        riesgos5: "",
+        fotoRiesgos5: "",
+        riesgos6: "",
+        fotoRiesgos6: "",
+        riesgos7: "",
+        fotoRiesgos7: "",
+        riesgos8: "",
+        fotoRiesgos8: "",
+        riesgos9: "",
+        fotoRiesgos9: "",
+    };
+
     const [formularioEnelInspeccionIntegralHSE, setFormularioEnelInspeccionIntegralHSE] = useState(() => {
         const datosGuardados = Cookies.get('formularioEnelInspeccionIntegralHSE');
-        return datosGuardados ? JSON.parse(datosGuardados) : {
-            nombreProyecto: "",
-            noContrato: "",
-            direccion: "",
-            ciudad: "",
-            opOt: "",
-            cedulaSupervisorTecnico: "",
-            nombreSupervisorTecnico: "",
-            cedulaLiderEncargado: "",
-            nombreLiderEncargado: "",
-            proceso: "",
-            placa: "",
-            zona: "",
-            trabajo: "",
-            cuadrilla: []
-        };
+        return datosGuardados ? JSON.parse(datosGuardados) : estadoInicialFormularioEnelInspeccionIntegralHSE;
     });
 
     const actualizarCampoEnelInspeccionIntegralHSE = (campo, valor) => {
@@ -555,16 +575,27 @@ const SupervisionAgregar = () => {
             tarjetaDeVida: "",
             carneCliente: "",
             carneSicte: "",
+            fotoDocumentos: "",
             eppCasco: "",
+            fotoEppCasco: "",
             eppGuantes: "",
+            fotoEppGuantes: "",
             eppGuantesDielectricos: "",
+            fotoEppGuantesDielectricos: "",
             eppProteccionFacialAntiArco: "",
+            fotoEppProteccionFacialAntiArco: "",
             eppEquiposContraCaidas: "",
+            fotoEppEquiposContraCaidas: "",
             eppOverolObraCivil: "",
+            fotoEppOverolObraCivil: "",
             eppOverolIgnifugo: "",
+            fotoEppOverolIgnifugo: "",
             eppGafasDeSeguridad: "",
+            fotoEppGafasDeSeguridad: "",
             eppTapabocas: "",
+            fotoEppTapabocas: "",
             eppBotas: "",
+            fotoEppBotas: "",
         };
     });
 
@@ -1132,7 +1163,7 @@ const SupervisionAgregar = () => {
                                 <div className="modal-cuadrilla">
                                     <div className="modal-contenido">
                                         <Textos className='titulo'>Agregar Integrante</Textos>
-                                        <Textos className='subtitulo encabezado'>Datos Personales:</Textos>
+                                        <Textos className='subtitulo encabezado'>1. Datos Personales:</Textos>
                                         <div className='entradas'>
                                             <Textos className='subtitulo'>Cedula:</Textos>
                                             <Entradas type="text" placeholder="Cédula" value={miembroEnProceso.cedula || ""} onChange={(e) => {
@@ -1154,7 +1185,7 @@ const SupervisionAgregar = () => {
                                             <Textos className='subtitulo'>Cargo:</Textos>
                                             <Entradas type="text" placeholder="Cargo" value={miembroEnProceso.cargo} disabled={true} />
                                         </div>
-                                        <Textos className='subtitulo encabezado'>Documentos:</Textos>
+                                        <Textos className='subtitulo encabezado'>2. Documentos:</Textos>
                                         <div className='entradas'>
                                             <Textos className='subtitulo'>ARL:</Textos>
                                             <div className='opciones'>
@@ -1183,13 +1214,33 @@ const SupervisionAgregar = () => {
                                                 <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, carneSicte: 'NC' }))} className={miembroEnProceso.carneSicte === 'NC' ? 'formulario selected' : ''}>NC</Botones>
                                             </div>
                                         </div>
-                                        <Textos className='subtitulo encabezado'>Dotacion EPP y EPCC:</Textos>
+                                        <div className='entradas vertical'>
+                                            <Textos className='subtitulo'>Ingrese la foto de los documentos:</Textos>
+                                            <div className='opciones'>
+                                                <Entradas
+                                                    type="file"
+                                                    className="form-control image"
+                                                    accept="image/*"
+                                                    onChange={(e) => setMiembroEnProceso(prev => ({ ...prev, fotoDocumentos: e.target.files[0] }))}
+                                                />
+                                            </div>
+                                        </div>
+                                        <Textos className='subtitulo encabezado'>3. Dotacion EPP y EPCC:</Textos>
                                         <div className='entradas vertical'>
                                             <Textos className='subtitulo' title="Utiliza casco de seguridad TIPO II con barbuquejo en buen estado.">Casco:</Textos>
                                             <div className='opciones'>
                                                 <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppCasco: 'C' }))} className={miembroEnProceso.eppCasco === 'C' ? 'formulario selected' : ''}>C</Botones>
                                                 <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppCasco: 'NC' }))} className={miembroEnProceso.eppCasco === 'NC' ? 'formulario selected' : ''}>NC</Botones>
                                                 <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppCasco: 'NA' }))} className={miembroEnProceso.eppCasco === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                            </div>
+                                            <div className='opciones'>
+                                                <Entradas
+                                                    type="file"
+                                                    className="form-control image"
+                                                    accept="image/*"
+                                                    disabled={miembroEnProceso.eppCasco !== 'NC'}
+                                                    onChange={(e) => setMiembroEnProceso(prev => ({ ...prev, fotoEppCasco: e.target.files[0] }))}
+                                                />
                                             </div>
                                         </div>
                                         <div className='entradas vertical'>
@@ -1199,6 +1250,15 @@ const SupervisionAgregar = () => {
                                                 <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppGuantes: 'NC' }))} className={miembroEnProceso.eppGuantes === 'NC' ? 'formulario selected' : ''}>NC</Botones>
                                                 <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppGuantes: 'NA' }))} className={miembroEnProceso.eppGuantes === 'NA' ? 'formulario selected' : ''}>NA</Botones>
                                             </div>
+                                            <div className='opciones'>
+                                                <Entradas
+                                                    type="file"
+                                                    className="form-control image"
+                                                    accept="image/*"
+                                                    disabled={miembroEnProceso.eppGuantes !== 'NC'}
+                                                    onChange={(e) => setMiembroEnProceso(prev => ({ ...prev, fotoEppGuantes: e.target.files[0] }))}
+                                                />
+                                            </div>
                                         </div>
                                         <div className='entradas vertical'>
                                             <Textos className='subtitulo' title="Utiliza  guantes  de  seguridad  dieléctricos,  clase 0, 2 o 4 según  corresponda,  en  buen estado y osee las pruebas de rigidez vigentes.">Guantes Dielectricos:</Textos>
@@ -1206,6 +1266,15 @@ const SupervisionAgregar = () => {
                                                 <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppGuantesDielectricos: 'C' }))} className={miembroEnProceso.eppGuantesDielectricos === 'C' ? 'formulario selected' : ''}>C</Botones>
                                                 <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppGuantesDielectricos: 'NC' }))} className={miembroEnProceso.eppGuantesDielectricos === 'NC' ? 'formulario selected' : ''}>NC</Botones>
                                                 <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppGuantesDielectricos: 'NA' }))} className={miembroEnProceso.eppGuantesDielectricos === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                            </div>
+                                            <div className='opciones'>
+                                                <Entradas
+                                                    type="file"
+                                                    className="form-control image"
+                                                    accept="image/*"
+                                                    disabled={miembroEnProceso.eppGuantesDielectricos !== 'NC'}
+                                                    onChange={(e) => setMiembroEnProceso(prev => ({ ...prev, fotoEppGuantesDielectricos: e.target.files[0] }))}
+                                                />
                                             </div>
                                         </div>
                                         <div className='entradas vertical'>
@@ -1215,6 +1284,15 @@ const SupervisionAgregar = () => {
                                                 <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppProteccionFacialAntiArco: 'NC' }))} className={miembroEnProceso.eppProteccionFacialAntiArco === 'NC' ? 'formulario selected' : ''}>NC</Botones>
                                                 <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppProteccionFacialAntiArco: 'NA' }))} className={miembroEnProceso.eppProteccionFacialAntiArco === 'NA' ? 'formulario selected' : ''}>NA</Botones>
                                             </div>
+                                            <div className='opciones'>
+                                                <Entradas
+                                                    type="file"
+                                                    className="form-control image"
+                                                    accept="image/*"
+                                                    disabled={miembroEnProceso.eppProteccionFacialAntiArco !== 'NC'}
+                                                    onChange={(e) => setMiembroEnProceso(prev => ({ ...prev, fotoEppProteccionFacialAntiArco: e.target.files[0] }))}
+                                                />
+                                            </div>
                                         </div>
                                         <div className='entradas vertical'>
                                             <Textos className='subtitulo' title="Utiliza sistema contra caídas de altura completo, en buen estado.">Equipos Contra Caidas:</Textos>
@@ -1222,6 +1300,15 @@ const SupervisionAgregar = () => {
                                                 <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppEquiposContraCaidas: 'C' }))} className={miembroEnProceso.eppEquiposContraCaidas === 'C' ? 'formulario selected' : ''}>C</Botones>
                                                 <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppEquiposContraCaidas: 'NC' }))} className={miembroEnProceso.eppEquiposContraCaidas === 'NC' ? 'formulario selected' : ''}>NC</Botones>
                                                 <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppEquiposContraCaidas: 'NA' }))} className={miembroEnProceso.eppEquiposContraCaidas === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                            </div>
+                                            <div className='opciones'>
+                                                <Entradas
+                                                    type="file"
+                                                    className="form-control image"
+                                                    accept="image/*"
+                                                    disabled={miembroEnProceso.eppEquiposContraCaidas !== 'NC'}
+                                                    onChange={(e) => setMiembroEnProceso(prev => ({ ...prev, fotoEppEquiposContraCaidas: e.target.files[0] }))}
+                                                />
                                             </div>
                                         </div>
                                         <div className='entradas vertical'>
@@ -1231,6 +1318,15 @@ const SupervisionAgregar = () => {
                                                 <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppOverolObraCivil: 'NC' }))} className={miembroEnProceso.eppOverolObraCivil === 'NC' ? 'formulario selected' : ''}>NC</Botones>
                                                 <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppOverolObraCivil: 'NA' }))} className={miembroEnProceso.eppOverolObraCivil === 'NA' ? 'formulario selected' : ''}>NA</Botones>
                                             </div>
+                                            <div className='opciones'>
+                                                <Entradas
+                                                    type="file"
+                                                    className="form-control image"
+                                                    accept="image/*"
+                                                    disabled={miembroEnProceso.eppOverolObraCivil !== 'NC'}
+                                                    onChange={(e) => setMiembroEnProceso(prev => ({ ...prev, fotoEppOverolObraCivil: e.target.files[0] }))}
+                                                />
+                                            </div>
                                         </div>
                                         <div className='entradas vertical'>
                                             <Textos className='subtitulo' title="Utiliza  overol ignífugo está en buen estado.">Overol Ignifugo:</Textos>
@@ -1238,6 +1334,15 @@ const SupervisionAgregar = () => {
                                                 <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppOverolIgnifugo: 'C' }))} className={miembroEnProceso.eppOverolIgnifugo === 'C' ? 'formulario selected' : ''}>C</Botones>
                                                 <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppOverolIgnifugo: 'NC' }))} className={miembroEnProceso.eppOverolIgnifugo === 'NC' ? 'formulario selected' : ''}>NC</Botones>
                                                 <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppOverolIgnifugo: 'NA' }))} className={miembroEnProceso.eppOverolIgnifugo === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                            </div>
+                                            <div className='opciones'>
+                                                <Entradas
+                                                    type="file"
+                                                    className="form-control image"
+                                                    accept="image/*"
+                                                    disabled={miembroEnProceso.eppOverolIgnifugo !== 'NC'}
+                                                    onChange={(e) => setMiembroEnProceso(prev => ({ ...prev, fotoEppOverolIgnifugo: e.target.files[0] }))}
+                                                />
                                             </div>
                                         </div>
                                         <div className='entradas vertical'>
@@ -1247,6 +1352,15 @@ const SupervisionAgregar = () => {
                                                 <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppGafasDeSeguridad: 'NC' }))} className={miembroEnProceso.eppGafasDeSeguridad === 'NC' ? 'formulario selected' : ''}>NC</Botones>
                                                 <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppGafasDeSeguridad: 'NA' }))} className={miembroEnProceso.eppGafasDeSeguridad === 'NA' ? 'formulario selected' : ''}>NA</Botones>
                                             </div>
+                                            <div className='opciones'>
+                                                <Entradas
+                                                    type="file"
+                                                    className="form-control image"
+                                                    accept="image/*"
+                                                    disabled={miembroEnProceso.eppGafasDeSeguridad !== 'NC'}
+                                                    onChange={(e) => setMiembroEnProceso(prev => ({ ...prev, fotoEppGafasDeSeguridad: e.target.files[0] }))}
+                                                />
+                                            </div>
                                         </div>
                                         <div className='entradas vertical'>
                                             <Textos className='subtitulo' title="Utiliza protección respiratoria en buen estado.">Tapabocas:</Textos>
@@ -1255,6 +1369,15 @@ const SupervisionAgregar = () => {
                                                 <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppTapabocas: 'NC' }))} className={miembroEnProceso.eppTapabocas === 'NC' ? 'formulario selected' : ''}>NC</Botones>
                                                 <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppTapabocas: 'NA' }))} className={miembroEnProceso.eppTapabocas === 'NA' ? 'formulario selected' : ''}>NA</Botones>
                                             </div>
+                                            <div className='opciones'>
+                                                <Entradas
+                                                    type="file"
+                                                    className="form-control image"
+                                                    accept="image/*"
+                                                    disabled={miembroEnProceso.eppTapabocas !== 'NC'}
+                                                    onChange={(e) => setMiembroEnProceso(prev => ({ ...prev, fotoEppTapabocas: e.target.files[0] }))}
+                                                />
+                                            </div>
                                         </div>
                                         <div className='entradas vertical'>
                                             <Textos className='subtitulo' title="Utiliza calzado de seguridad según corresponda y está en buen estado.">Botas:</Textos>
@@ -1262,6 +1385,15 @@ const SupervisionAgregar = () => {
                                                 <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppBotas: 'C' }))} className={miembroEnProceso.eppBotas === 'C' ? 'formulario selected' : ''}>C</Botones>
                                                 <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppBotas: 'NC' }))} className={miembroEnProceso.eppBotas === 'NC' ? 'formulario selected' : ''}>NC</Botones>
                                                 <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppBotas: 'NA' }))} className={miembroEnProceso.eppBotas === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                            </div>
+                                            <div className='opciones'>
+                                                <Entradas
+                                                    type="file"
+                                                    className="form-control image"
+                                                    accept="image/*"
+                                                    disabled={miembroEnProceso.eppBotas !== 'NC'}
+                                                    onChange={(e) => setMiembroEnProceso(prev => ({ ...prev, fotoEppBotas: e.target.files[0] }))}
+                                                />
                                             </div>
                                         </div>
                                         <div className="modal-acciones">
@@ -1275,8 +1407,160 @@ const SupervisionAgregar = () => {
                             </>
                         )}
 
-                        <div className='enviar' onClick={enviarFormularioEnelInspeccionIntegralHSE}>
-                            <button type="submit" id='Enviar' className="btn btn-primary">Enviar</button>
+                        <div className='campo'>
+                            <Textos className='subtitulo'>1.</Textos>
+                            <div className='entradas'>
+                                <Textos className='subtitulo prin'>Identificacion de riesgos (Actividades previas al trabajo):</Textos>
+                                <Textos className='subtitulo sub'>Se identifica todos los riesgos específicos de la actividad en el ARO, está debidamente firmado por todos los integrantes de la cuadrilla.</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('riesgos1', 'C')} className={formularioEnelInspeccionIntegralHSE.riesgos1 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('riesgos1', 'NC')} className={formularioEnelInspeccionIntegralHSE.riesgos1 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('riesgos1', 'NA')} className={formularioEnelInspeccionIntegralHSE.riesgos1 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoRiesgos1', e.target.files[0])}
+                                    />
+                                </div>
+
+                                <Textos className='subtitulo sub'>Permiso de trabajo aplicable a la actividad, debidamente firmado por todos los integrantes de la cuadrilla, definiendo roles y está autorizado.</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('riesgos2', 'C')} className={formularioEnelInspeccionIntegralHSE.riesgos2 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('riesgos2', 'NC')} className={formularioEnelInspeccionIntegralHSE.riesgos2 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('riesgos2', 'NA')} className={formularioEnelInspeccionIntegralHSE.riesgos2 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoRiesgos2', e.target.files[0])}
+                                    />
+                                </div>
+
+                                <Textos className='subtitulo sub'>Se identifican y aplican los procedimientos de trabajo acordes a la (s) actividad (es) a realizar.</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('riesgos3', 'C')} className={formularioEnelInspeccionIntegralHSE.riesgos3 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('riesgos3', 'NC')} className={formularioEnelInspeccionIntegralHSE.riesgos3 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('riesgos3', 'NA')} className={formularioEnelInspeccionIntegralHSE.riesgos3 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        disabled={formularioEnelInspeccionIntegralHSE.riesgos3 !== 'NC'}
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoRiesgos3', e.target.files[0])}
+                                    />
+                                </div>
+
+                                <Textos className='subtitulo sub'>Se diligencia el tablero operativo de manera correcta y se instala la respectiva valla de contrato.</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('riesgos4', 'C')} className={formularioEnelInspeccionIntegralHSE.riesgos4 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('riesgos4', 'NC')} className={formularioEnelInspeccionIntegralHSE.riesgos4 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('riesgos4', 'NA')} className={formularioEnelInspeccionIntegralHSE.riesgos4 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoRiesgos4', e.target.files[0])}
+                                    />
+                                </div>
+
+                                <Textos className='subtitulo sub'>Dispone de los planos o guías de las instalaciones subterráneas, cables, tuberías y otros artículos que interfieran y hay informes disponibles.</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('riesgos5', 'C')} className={formularioEnelInspeccionIntegralHSE.riesgos5 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('riesgos5', 'NC')} className={formularioEnelInspeccionIntegralHSE.riesgos5 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('riesgos5', 'NA')} className={formularioEnelInspeccionIntegralHSE.riesgos5 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        disabled={formularioEnelInspeccionIntegralHSE.riesgos5 !== 'NC'}
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoRiesgos5', e.target.files[0])}
+                                    />
+                                </div>
+
+                                <Textos className='subtitulo sub'>Los cables eléctricos subterráneos y aéreos están protegidos y las distancias de seguridad se respetan de acuerdo con el nivel de voltaje de la red.</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('riesgos6', 'C')} className={formularioEnelInspeccionIntegralHSE.riesgos6 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('riesgos6', 'NC')} className={formularioEnelInspeccionIntegralHSE.riesgos6 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('riesgos6', 'NA')} className={formularioEnelInspeccionIntegralHSE.riesgos6 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        disabled={formularioEnelInspeccionIntegralHSE.riesgos6 !== 'NC'}
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoRiesgos6', e.target.files[0])}
+                                    />
+                                </div>
+
+                                <Textos className='subtitulo sub'>Las condiciones climáticas son adecuadas para realizar las actividades planificadas.</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('riesgos7', 'C')} className={formularioEnelInspeccionIntegralHSE.riesgos7 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('riesgos7', 'NC')} className={formularioEnelInspeccionIntegralHSE.riesgos7 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('riesgos7', 'NA')} className={formularioEnelInspeccionIntegralHSE.riesgos7 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        disabled={formularioEnelInspeccionIntegralHSE.riesgos7 !== 'NC'}
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoRiesgos7', e.target.files[0])}
+                                    />
+                                </div>
+
+                                <Textos className='subtitulo sub'>La dotación, EPP, EPCC se utilizan de forma correcta.</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('riesgos8', 'C')} className={formularioEnelInspeccionIntegralHSE.riesgos8 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('riesgos8', 'NC')} className={formularioEnelInspeccionIntegralHSE.riesgos8 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('riesgos8', 'NA')} className={formularioEnelInspeccionIntegralHSE.riesgos8 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        disabled={formularioEnelInspeccionIntegralHSE.riesgos8 !== 'NC'}
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoRiesgos8', e.target.files[0])}
+                                    />
+                                </div>
+
+                                <Textos className='subtitulo sub'>Cuenta con tapete dieléctrico en buen estado y posee las pruebas de rigidez vigentes.</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('riesgos9', 'C')} className={formularioEnelInspeccionIntegralHSE.riesgos9 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('riesgos9', 'NC')} className={formularioEnelInspeccionIntegralHSE.riesgos9 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('riesgos9', 'NA')} className={formularioEnelInspeccionIntegralHSE.riesgos9 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        disabled={formularioEnelInspeccionIntegralHSE.riesgos9 !== 'NC'}
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoRiesgos9', e.target.files[0])}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className='enviar'>
+                            <Botones className="eliminar" onClick={() => {
+                                Cookies.remove('formularioEnelInspeccionIntegralHSE');
+                                setMiembroEnProceso({})
+                                setFormularioEnelInspeccionIntegralHSE(estadoInicialFormularioEnelInspeccionIntegralHSE);
+                            }}>Borrar formulario</Botones>
+                            <Botones type="submit" id='Enviar' className="guardar" onClick={enviarFormularioEnelInspeccionIntegralHSE}>Enviar</Botones>
                         </div>
                     </form>
                 )}

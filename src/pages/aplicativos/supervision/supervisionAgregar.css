@@ -1,7 +1,7 @@
 .supervision-agregar {
-    width: 100%;
+    width: 100% !important;
     height: 100%;
-    display: flex;
+    display: flex !important;
     flex-direction: column;
     justify-content: baseline;
     align-items: center;
@@ -12,7 +12,7 @@
         display: none;
 
         &.visible {
-            display: flex;
+            display: flex !important;
         }
     }
 
@@ -20,7 +20,7 @@
         display: none;
 
         &.visible {
-            display: flex;
+            display: flex !important;
         }
 
         height: 35px;
@@ -28,25 +28,25 @@
         margin: 5px;
 
         @media screen and (max-width: 400px) {
-            width: 100%;
+            width: 100% !important;
         }
     }
 
     .form {
         display: none;
         height: 100%;
-        width: 100%;
+        width: 100% !important;
 
         &.visible {
-            display: flex;
+            display: flex !important;
         }
 
         .cargandoPagina {
-            display: flex;
+            display: flex !important;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            width: 100%;
+            width: 100% !important;
             height: 100%;
         }
 
@@ -54,21 +54,21 @@
             flex-direction: column;
             position: relative;
             height: 100%;
-            width: 100%;
+            width: 100% !important;
 
             .titulo3 {
-                display: flex;
+                display: flex !important;
                 align-items: center;
                 justify-content: center;
                 margin-bottom: 20px;
             }
 
             .campo {
-                display: flex;
+                display: flex !important;
                 align-items: baseline;
                 justify-content: baseline;
                 margin: 10px 0px;
-                width: 100%;
+                width: 100% !important;
 
                 i {
                     padding: 5px 10px 5px 5px;
@@ -81,6 +81,15 @@
 
                     .subtitulo {
                         padding-bottom: 5px;
+
+                        &.prin {
+                            margin-top: 20px;
+                        }
+
+                        &.sub {
+                            padding-left: 10px;
+                            margin-top: 10px;
+                        }
                     }
 
                     .foto-label {
@@ -92,7 +101,7 @@
                     }
 
                     .botones {
-                        display: flex;
+                        display: flex !important;
                         align-items: baseline;
                         justify-content: center;
                         flex-direction: column;
@@ -103,7 +112,7 @@
                         }
 
                         .opciones {
-                            display: flex;
+                            display: flex !important;
                             align-items: center;
                             justify-content: baseline;
                             margin-bottom: 5px;
@@ -115,18 +124,35 @@
                         }
 
                         .comentario {
-                            width: 100%;
+                            width: 100% !important;
                         }
 
                     }
 
                     .botonAgregar {
-                        display: flex;
+                        display: flex !important;
                         justify-content: end;
-                        width: 100%;
+                        width: 100% !important;
 
                         .agregar {
                             max-width: 100px;
+                        }
+                    }
+
+                    .opciones {
+                        display: flex !important;
+                        align-items: center;
+                        justify-content: baseline;
+                        padding-left: 20px;
+                        margin: 5px 0px;
+
+                        button {
+                            width: 60px !important;
+
+                            &:nth-child(3),
+                            &:nth-child(2) {
+                                margin-left: 10px;
+                            }
                         }
                     }
                 }
@@ -193,7 +219,7 @@
             }
 
             .Tabla {
-                width: 100%;
+                width: 100% !important;
             }
 
             .modal-overlay {
@@ -212,16 +238,18 @@
                 left: 50%;
                 transform: translate(-50%, -50%);
                 background-color: white;
-                padding: 20px;
+                padding: 20px 0px;
                 z-index: 1000;
                 border-radius: 8px;
                 box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
                 height: 100%;
-                overflow-y: auto;
 
                 .modal-contenido {
-                    display: flex;
+                    display: flex !important;
                     flex-direction: column;
+                    height: 100%;
+                    overflow-y: auto;
+                    padding: 0px 20px;
 
                     .titulo {
                         margin-bottom: 10px;
@@ -233,25 +261,30 @@
                     }
 
                     .entradas {
-                        display: flex;
+                        display: flex !important;
                         align-items: center;
-                        width: 100%;
+                        width: calc(100% - 10px);
                         margin: 5px 0px 5px 10px;
 
                         &.vertical {
                             flex-direction: column;
                             align-items: baseline;
-                            margin: 0px 0px 5px 10px;
+                            margin: 0px 0px 10px 10px;
 
-                            .opciones,
                             span {
-                                width: 100%;
+                                width: 100% !important;
                             }
 
                             .opciones {
-                                display: flex;
+                                display: flex !important;
                                 align-items: center;
                                 justify-content: center;
+                                padding-left: 15px;
+                                margin: 5px 0px;
+
+                                .image {
+                                    width: 100%;
+                                }
                             }
                         }
 
@@ -264,12 +297,12 @@
                         }
 
                         .opciones {
-                            display: flex;
+                            display: flex !important;
                             align-items: center;
                             justify-content: baseline;
 
                             button {
-                                width: 60px;
+                                width: 60px !important;
 
                                 &:nth-child(3),
                                 &:nth-child(2) {
@@ -280,10 +313,10 @@
                     }
 
                     .modal-acciones {
-                        display: flex;
+                        display: flex !important;
                         justify-content: space-between;
                         padding: 10px 10px 0px 10px;
-                        width: 100%;
+                        width: 100% !important;
 
                         button {
                             max-width: 100px;
@@ -294,12 +327,18 @@
             }
 
             .enviar {
-                display: flex;
+                display: flex !important;
                 align-items: center;
-                justify-content: center;
-                width: 100%;
+                justify-content: space-between;
+                width: 100% !important;
                 padding-top: 10px;
                 padding-bottom: 20px;
+
+                button {
+                    width: auto;
+                    max-width: 200px;
+                    margin: 0px 10px
+                }
             }
         }
     }

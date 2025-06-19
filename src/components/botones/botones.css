@@ -42,4 +42,13 @@
             background-color: #106e22;
         }
     }
+
+    &.eliminar {
+        background-color: #df2626;
+        color: white;
+
+        &:hover {
+            background-color: #6e1010;
+        }
+    }
 }
