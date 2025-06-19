@@ -536,6 +536,12 @@ const SupervisionAgregar = () => {
         fotoTrabajoAlturas4: "",
         trabajoAlturas5: "",
         fotoTrabajoAlturas5: "",
+        espacioConfinado1: "",
+        fotoEspacioConfinado1: "",
+        espacioConfinado2: "",
+        fotoEspacioConfinado2: "",
+        espacioConfinado3: "",
+        fotoEspacioConfinado3: "",
     };
 
     const [formularioEnelInspeccionIntegralHSE, setFormularioEnelInspeccionIntegralHSE] = useState(() => {
@@ -736,15 +742,13 @@ const SupervisionAgregar = () => {
                             <i className="fas fa-bullhorn"></i>
                             <div className='entradaDatos'>
                                 <Textos className='subtitulo'>1. ¿Tienen todos los EPP?</Textos>
-                                <div className='botones'>
-                                    <div className='opciones'>
-                                        <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaEPP', 'si')} className={formularioClaroSupervisionOperativa.respuestaEPP === 'si' ? 'formulario selected' : ''}>Sí</Botones>
-                                        <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaEPP', 'no')} className={formularioClaroSupervisionOperativa.respuestaEPP === 'no' ? 'formulario selected' : ''}>No</Botones>
-                                    </div>
-                                    <div className="comentario">
-                                        <Entradas type="text" placeholder={formularioClaroSupervisionOperativa.respuestaEPP === 'si' ? "" : "¿Por qué?"} value={formularioClaroSupervisionOperativa.comentarioEPP}
-                                            onChange={(e) => actualizarCampoClaroSupervisionOperativa('comentarioEPP', e.target.value)} disabled={formularioClaroSupervisionOperativa.respuestaEPP !== 'no'} />
-                                    </div>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaEPP', 'si')} className={formularioClaroSupervisionOperativa.respuestaEPP === 'si' ? 'formulario selected' : ''}>Sí</Botones>
+                                    <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaEPP', 'no')} className={formularioClaroSupervisionOperativa.respuestaEPP === 'no' ? 'formulario selected' : ''}>No</Botones>
+                                </div>
+                                <div className="opciones">
+                                    <Entradas type="text" placeholder={formularioClaroSupervisionOperativa.respuestaEPP === 'si' ? "" : "¿Por qué?"} value={formularioClaroSupervisionOperativa.comentarioEPP}
+                                        onChange={(e) => actualizarCampoClaroSupervisionOperativa('comentarioEPP', e.target.value)} disabled={formularioClaroSupervisionOperativa.respuestaEPP !== 'no'} />
                                 </div>
                             </div>
                         </div>
@@ -753,15 +757,13 @@ const SupervisionAgregar = () => {
                             <i className="fas fa-bullhorn"></i>
                             <div className='entradaDatos'>
                                 <Textos className='subtitulo'>2. ¿Todos estan certificados en alturas?</Textos>
-                                <div className='botones'>
-                                    <div className='opciones'>
-                                        <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaAlturas', 'si')} className={formularioClaroSupervisionOperativa.respuestaAlturas === 'si' ? 'formulario selected' : ''}>Sí</Botones>
-                                        <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaAlturas', 'no')} className={formularioClaroSupervisionOperativa.respuestaAlturas === 'no' ? 'formulario selected' : ''}>No</Botones>
-                                    </div>
-                                    <div className="comentario">
-                                        <Entradas type="text" placeholder={formularioClaroSupervisionOperativa.respuestaAlturas === 'si' ? "" : "¿Por qué?"} value={formularioClaroSupervisionOperativa.comentarioAlturas}
-                                            onChange={(e) => actualizarCampoClaroSupervisionOperativa('comentarioAlturas', e.target.value)} disabled={formularioClaroSupervisionOperativa.respuestaAlturas !== 'no'} />
-                                    </div>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaAlturas', 'si')} className={formularioClaroSupervisionOperativa.respuestaAlturas === 'si' ? 'formulario selected' : ''}>Sí</Botones>
+                                    <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaAlturas', 'no')} className={formularioClaroSupervisionOperativa.respuestaAlturas === 'no' ? 'formulario selected' : ''}>No</Botones>
+                                </div>
+                                <div className="opciones">
+                                    <Entradas type="text" placeholder={formularioClaroSupervisionOperativa.respuestaAlturas === 'si' ? "" : "¿Por qué?"} value={formularioClaroSupervisionOperativa.comentarioAlturas}
+                                        onChange={(e) => actualizarCampoClaroSupervisionOperativa('comentarioAlturas', e.target.value)} disabled={formularioClaroSupervisionOperativa.respuestaAlturas !== 'no'} />
                                 </div>
                             </div>
                         </div>
@@ -770,15 +772,13 @@ const SupervisionAgregar = () => {
                             <i className="fas fa-bullhorn"></i>
                             <div className='entradaDatos'>
                                 <Textos className='subtitulo'>3. ¿Se diligencio el ATS?</Textos>
-                                <div className='botones'>
-                                    <div className='opciones'>
-                                        <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaATS', 'si')} className={formularioClaroSupervisionOperativa.respuestaATS === 'si' ? 'formulario selected' : ''}>Sí</Botones>
-                                        <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaATS', 'no')} className={formularioClaroSupervisionOperativa.respuestaATS === 'no' ? 'formulario selected' : ''}>No</Botones>
-                                    </div>
-                                    <div className="comentario">
-                                        <Entradas type="text" placeholder={formularioClaroSupervisionOperativa.respuestaATS === 'si' ? "" : "¿Por qué?"} value={formularioClaroSupervisionOperativa.comentarioATS}
-                                            onChange={(e) => actualizarCampoClaroSupervisionOperativa('comentarioATS', e.target.value)} disabled={formularioClaroSupervisionOperativa.respuestaATS !== 'no'} />
-                                    </div>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaATS', 'si')} className={formularioClaroSupervisionOperativa.respuestaATS === 'si' ? 'formulario selected' : ''}>Sí</Botones>
+                                    <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaATS', 'no')} className={formularioClaroSupervisionOperativa.respuestaATS === 'no' ? 'formulario selected' : ''}>No</Botones>
+                                </div>
+                                <div className="opciones">
+                                    <Entradas type="text" placeholder={formularioClaroSupervisionOperativa.respuestaATS === 'si' ? "" : "¿Por qué?"} value={formularioClaroSupervisionOperativa.comentarioATS}
+                                        onChange={(e) => actualizarCampoClaroSupervisionOperativa('comentarioATS', e.target.value)} disabled={formularioClaroSupervisionOperativa.respuestaATS !== 'no'} />
                                 </div>
                             </div>
                         </div>
@@ -787,15 +787,13 @@ const SupervisionAgregar = () => {
                             <i className="fas fa-bullhorn"></i>
                             <div className='entradaDatos'>
                                 <Textos className='subtitulo'>4. ¿Se realizo reporte de empalmes en WFM?</Textos>
-                                <div className='botones'>
-                                    <div className='opciones'>
-                                        <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaEmpalmes', 'si')} className={formularioClaroSupervisionOperativa.respuestaEmpalmes === 'si' ? 'formulario selected' : ''}>Sí</Botones>
-                                        <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaEmpalmes', 'no')} className={formularioClaroSupervisionOperativa.respuestaEmpalmes === 'no' ? 'formulario selected' : ''}>No</Botones>
-                                    </div>
-                                    <div className="comentario">
-                                        <Entradas type="text" placeholder={formularioClaroSupervisionOperativa.respuestaEmpalmes === 'si' ? "¿Cuantos?" : "¿Por qué?"} value={formularioClaroSupervisionOperativa.comentarioEmpalmes}
-                                            onChange={(e) => actualizarCampoClaroSupervisionOperativa('comentarioEmpalmes', e.target.value)} />
-                                    </div>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaEmpalmes', 'si')} className={formularioClaroSupervisionOperativa.respuestaEmpalmes === 'si' ? 'formulario selected' : ''}>Sí</Botones>
+                                    <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaEmpalmes', 'no')} className={formularioClaroSupervisionOperativa.respuestaEmpalmes === 'no' ? 'formulario selected' : ''}>No</Botones>
+                                </div>
+                                <div className="opciones">
+                                    <Entradas type="text" placeholder={formularioClaroSupervisionOperativa.respuestaEmpalmes === 'si' ? "¿Cuantos?" : "¿Por qué?"} value={formularioClaroSupervisionOperativa.comentarioEmpalmes}
+                                        onChange={(e) => actualizarCampoClaroSupervisionOperativa('comentarioEmpalmes', e.target.value)} />
                                 </div>
                             </div>
                         </div>
@@ -804,15 +802,13 @@ const SupervisionAgregar = () => {
                             <i className="fas fa-bullhorn"></i>
                             <div className='entradaDatos'>
                                 <Textos className='subtitulo'>5. ¿Se realizo preoperacional?</Textos>
-                                <div className='botones'>
-                                    <div className='opciones'>
-                                        <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaPreoperacional', 'si')} className={formularioClaroSupervisionOperativa.respuestaPreoperacional === 'si' ? 'formulario selected' : ''}>Sí</Botones>
-                                        <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaPreoperacional', 'no')} className={formularioClaroSupervisionOperativa.respuestaPreoperacional === 'no' ? 'formulario selected' : ''}>No</Botones>
-                                    </div>
-                                    <div className="comentario">
-                                        <Entradas type="text" placeholder={formularioClaroSupervisionOperativa.respuestaPreoperacional === 'si' ? "" : "¿Por qué?"} value={formularioClaroSupervisionOperativa.comentarioPreoperacional}
-                                            onChange={(e) => actualizarCampoClaroSupervisionOperativa('comentarioPreoperacional', e.target.value)} disabled={formularioClaroSupervisionOperativa.respuestaPreoperacional !== 'no'} />
-                                    </div>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaPreoperacional', 'si')} className={formularioClaroSupervisionOperativa.respuestaPreoperacional === 'si' ? 'formulario selected' : ''}>Sí</Botones>
+                                    <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaPreoperacional', 'no')} className={formularioClaroSupervisionOperativa.respuestaPreoperacional === 'no' ? 'formulario selected' : ''}>No</Botones>
+                                </div>
+                                <div className="opciones">
+                                    <Entradas type="text" placeholder={formularioClaroSupervisionOperativa.respuestaPreoperacional === 'si' ? "" : "¿Por qué?"} value={formularioClaroSupervisionOperativa.comentarioPreoperacional}
+                                        onChange={(e) => actualizarCampoClaroSupervisionOperativa('comentarioPreoperacional', e.target.value)} disabled={formularioClaroSupervisionOperativa.respuestaPreoperacional !== 'no'} />
                                 </div>
                             </div>
                         </div>
@@ -821,16 +817,14 @@ const SupervisionAgregar = () => {
                             <i className="fas fa-bullhorn"></i>
                             <div className='entradaDatos'>
                                 <Textos className='subtitulo'>6. Estado del vehiculo:</Textos>
-                                <div className='botones'>
-                                    <div className='opciones'>
-                                        <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaVehiculo', '1')} className={formularioClaroSupervisionOperativa.respuestaVehiculo === '1' ? 'formulario selected' : ''}>1</Botones>
-                                        <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaVehiculo', '2')} className={formularioClaroSupervisionOperativa.respuestaVehiculo === '2' ? 'formulario selected' : ''}>2</Botones>
-                                        <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaVehiculo', '3')} className={formularioClaroSupervisionOperativa.respuestaVehiculo === '3' ? 'formulario selected' : ''}>3</Botones>
-                                        <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaVehiculo', '4')} className={formularioClaroSupervisionOperativa.respuestaVehiculo === '4' ? 'formulario selected' : ''}>4</Botones>
-                                        <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaVehiculo', '5')} className={formularioClaroSupervisionOperativa.respuestaVehiculo === '5' ? 'formulario selected' : ''}>5</Botones>
-                                    </div>
+                                <div className='opciones vehiculo'>
+                                    <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaVehiculo', '1')} className={formularioClaroSupervisionOperativa.respuestaVehiculo === '1' ? 'formulario selected' : ''}>1</Botones>
+                                    <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaVehiculo', '2')} className={formularioClaroSupervisionOperativa.respuestaVehiculo === '2' ? 'formulario selected' : ''}>2</Botones>
+                                    <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaVehiculo', '3')} className={formularioClaroSupervisionOperativa.respuestaVehiculo === '3' ? 'formulario selected' : ''}>3</Botones>
+                                    <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaVehiculo', '4')} className={formularioClaroSupervisionOperativa.respuestaVehiculo === '4' ? 'formulario selected' : ''}>4</Botones>
+                                    <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaVehiculo', '5')} className={formularioClaroSupervisionOperativa.respuestaVehiculo === '5' ? 'formulario selected' : ''}>5</Botones>
                                 </div>
-                                <div className="comentario">
+                                <div className="opciones vehiculo">
                                     <Entradas type="text" placeholder={formularioClaroSupervisionOperativa.respuestaVehiculo === '5' ? "" : "¿Por qué?"} value={formularioClaroSupervisionOperativa.comentarioVehiculo}
                                         onChange={(e) => actualizarCampoClaroSupervisionOperativa('comentarioVehiculo', e.target.value)} disabled={formularioClaroSupervisionOperativa.respuestaVehiculo === '5'} />
                                 </div>
@@ -840,86 +834,54 @@ const SupervisionAgregar = () => {
                         <div className='campo equipos'>
                             <i className="fas fa-bullhorn"></i>
                             <div className='entradaDatos'>
-                                <Textos className='subtitulo'>7. Equipos especializados:</Textos>
-                                <div className='botones'>
-                                    <div className='subtitulos'>
-                                        <Textos className='subtitulo'>Empalmadora</Textos>
-                                    </div>
-                                    <div className='opciones'>
-                                        <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaEmpalmadora', 'Si')} className={formularioClaroSupervisionOperativa.respuestaEmpalmadora === 'Si' ? 'formulario selected' : ''}>Si</Botones>
-                                        <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaEmpalmadora', 'No')} className={formularioClaroSupervisionOperativa.respuestaEmpalmadora === 'No' ? 'formulario selected' : ''}>No</Botones>
-                                        <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaEmpalmadora', 'N/A')} className={formularioClaroSupervisionOperativa.respuestaEmpalmadora === 'N/A' ? 'formulario selected' : ''}>N/A</Botones>
-                                    </div>
+                                <Textos className='subtitulo prin'>7. Equipos especializados:</Textos>
+                                <Textos className='subtitulo sub'>Empalmadora</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaEmpalmadora', 'Si')} className={formularioClaroSupervisionOperativa.respuestaEmpalmadora === 'Si' ? 'formulario selected' : ''}>Si</Botones>
+                                    <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaEmpalmadora', 'No')} className={formularioClaroSupervisionOperativa.respuestaEmpalmadora === 'No' ? 'formulario selected' : ''}>No</Botones>
+                                    <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaEmpalmadora', 'N/A')} className={formularioClaroSupervisionOperativa.respuestaEmpalmadora === 'N/A' ? 'formulario selected' : ''}>N/A</Botones>
                                 </div>
-                                <div className='botones'>
-                                    <div className='subtitulos'>
-                                        <Textos className='subtitulo'>OTDR</Textos>
-                                    </div>
-                                    <div className='opciones'>
-                                        <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaOTDR', 'Si')} className={formularioClaroSupervisionOperativa.respuestaOTDR === 'Si' ? 'formulario selected' : ''}>Si</Botones>
-                                        <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaOTDR', 'No')} className={formularioClaroSupervisionOperativa.respuestaOTDR === 'No' ? 'formulario selected' : ''}>No</Botones>
-                                        <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaOTDR', 'N/A')} className={formularioClaroSupervisionOperativa.respuestaOTDR === 'N/A' ? 'formulario selected' : ''}>N/A</Botones>
-                                    </div>
+                                <Textos className='subtitulo sub'>OTDR</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaOTDR', 'Si')} className={formularioClaroSupervisionOperativa.respuestaOTDR === 'Si' ? 'formulario selected' : ''}>Si</Botones>
+                                    <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaOTDR', 'No')} className={formularioClaroSupervisionOperativa.respuestaOTDR === 'No' ? 'formulario selected' : ''}>No</Botones>
+                                    <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaOTDR', 'N/A')} className={formularioClaroSupervisionOperativa.respuestaOTDR === 'N/A' ? 'formulario selected' : ''}>N/A</Botones>
                                 </div>
-                                <div className='botones'>
-                                    <div className='subtitulos'>
-                                        <Textos className='subtitulo'>Cortadora</Textos>
-                                    </div>
-                                    <div className='opciones'>
-                                        <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaCortadora', 'Si')} className={formularioClaroSupervisionOperativa.respuestaCortadora === 'Si' ? 'formulario selected' : ''}>Si</Botones>
-                                        <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaCortadora', 'No')} className={formularioClaroSupervisionOperativa.respuestaCortadora === 'No' ? 'formulario selected' : ''}>No</Botones>
-                                        <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaCortadora', 'N/A')} className={formularioClaroSupervisionOperativa.respuestaCortadora === 'N/A' ? 'formulario selected' : ''}>N/A</Botones>
-                                    </div>
+                                <Textos className='subtitulo sub'>Cortadora</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaCortadora', 'Si')} className={formularioClaroSupervisionOperativa.respuestaCortadora === 'Si' ? 'formulario selected' : ''}>Si</Botones>
+                                    <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaCortadora', 'No')} className={formularioClaroSupervisionOperativa.respuestaCortadora === 'No' ? 'formulario selected' : ''}>No</Botones>
+                                    <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaCortadora', 'N/A')} className={formularioClaroSupervisionOperativa.respuestaCortadora === 'N/A' ? 'formulario selected' : ''}>N/A</Botones>
                                 </div>
-                                <div className='botones'>
-                                    <div className='subtitulos'>
-                                        <Textos className='subtitulo'>Pinza de Trafico</Textos>
-                                    </div>
-                                    <div className='opciones'>
-                                        <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaPinza', 'Si')} className={formularioClaroSupervisionOperativa.respuestaPinza === 'Si' ? 'formulario selected' : ''}>Si</Botones>
-                                        <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaPinza', 'No')} className={formularioClaroSupervisionOperativa.respuestaPinza === 'No' ? 'formulario selected' : ''}>No</Botones>
-                                        <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaPinza', 'N/A')} className={formularioClaroSupervisionOperativa.respuestaPinza === 'N/A' ? 'formulario selected' : ''}>N/A</Botones>
-                                    </div>
+                                <Textos className='subtitulo sub'>Pinza de Trafico</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaPinza', 'Si')} className={formularioClaroSupervisionOperativa.respuestaPinza === 'Si' ? 'formulario selected' : ''}>Si</Botones>
+                                    <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaPinza', 'No')} className={formularioClaroSupervisionOperativa.respuestaPinza === 'No' ? 'formulario selected' : ''}>No</Botones>
+                                    <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaPinza', 'N/A')} className={formularioClaroSupervisionOperativa.respuestaPinza === 'N/A' ? 'formulario selected' : ''}>N/A</Botones>
                                 </div>
-                                <div className='botones'>
-                                    <div className='subtitulos'>
-                                        <Textos className='subtitulo'>OPM</Textos>
-                                    </div>
-                                    <div className='opciones'>
-                                        <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaOPM', 'Si')} className={formularioClaroSupervisionOperativa.respuestaOPM === 'Si' ? 'formulario selected' : ''}>Si</Botones>
-                                        <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaOPM', 'No')} className={formularioClaroSupervisionOperativa.respuestaOPM === 'No' ? 'formulario selected' : ''}>No</Botones>
-                                        <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaOPM', 'N/A')} className={formularioClaroSupervisionOperativa.respuestaOPM === 'N/A' ? 'formulario selected' : ''}>N/A</Botones>
-                                    </div>
+                                <Textos className='subtitulo sub'>OPM</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaOPM', 'Si')} className={formularioClaroSupervisionOperativa.respuestaOPM === 'Si' ? 'formulario selected' : ''}>Si</Botones>
+                                    <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaOPM', 'No')} className={formularioClaroSupervisionOperativa.respuestaOPM === 'No' ? 'formulario selected' : ''}>No</Botones>
+                                    <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaOPM', 'N/A')} className={formularioClaroSupervisionOperativa.respuestaOPM === 'N/A' ? 'formulario selected' : ''}>N/A</Botones>
                                 </div>
-                                <div className='botones'>
-                                    <div className='subtitulos'>
-                                        <Textos className='subtitulo'>ONEXPERT</Textos>
-                                    </div>
-                                    <div className='opciones'>
-                                        <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaONEXPERT', 'Si')} className={formularioClaroSupervisionOperativa.respuestaONEXPERT === 'Si' ? 'formulario selected' : ''}>Si</Botones>
-                                        <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaONEXPERT', 'No')} className={formularioClaroSupervisionOperativa.respuestaONEXPERT === 'No' ? 'formulario selected' : ''}>No</Botones>
-                                        <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaONEXPERT', 'N/A')} className={formularioClaroSupervisionOperativa.respuestaONEXPERT === 'N/A' ? 'formulario selected' : ''}>N/A</Botones>
-                                    </div>
+                                <Textos className='subtitulo sub'>ONEXPERT</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaONEXPERT', 'Si')} className={formularioClaroSupervisionOperativa.respuestaONEXPERT === 'Si' ? 'formulario selected' : ''}>Si</Botones>
+                                    <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaONEXPERT', 'No')} className={formularioClaroSupervisionOperativa.respuestaONEXPERT === 'No' ? 'formulario selected' : ''}>No</Botones>
+                                    <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaONEXPERT', 'N/A')} className={formularioClaroSupervisionOperativa.respuestaONEXPERT === 'N/A' ? 'formulario selected' : ''}>N/A</Botones>
                                 </div>
-                                <div className='botones'>
-                                    <div className='subtitulos'>
-                                        <Textos className='subtitulo'>Medidor de Conductancia</Textos>
-                                    </div>
-                                    <div className='opciones'>
-                                        <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaMedidorConductancia', 'Si')} className={formularioClaroSupervisionOperativa.respuestaMedidorConductancia === 'Si' ? 'formulario selected' : ''}>Si</Botones>
-                                        <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaMedidorConductancia', 'No')} className={formularioClaroSupervisionOperativa.respuestaMedidorConductancia === 'No' ? 'formulario selected' : ''}>No</Botones>
-                                        <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaMedidorConductancia', 'N/A')} className={formularioClaroSupervisionOperativa.respuestaMedidorConductancia === 'N/A' ? 'formulario selected' : ''}>N/A</Botones>
-                                    </div>
+                                <Textos className='subtitulo sub'>Medidor de Conductancia</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaMedidorConductancia', 'Si')} className={formularioClaroSupervisionOperativa.respuestaMedidorConductancia === 'Si' ? 'formulario selected' : ''}>Si</Botones>
+                                    <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaMedidorConductancia', 'No')} className={formularioClaroSupervisionOperativa.respuestaMedidorConductancia === 'No' ? 'formulario selected' : ''}>No</Botones>
+                                    <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaMedidorConductancia', 'N/A')} className={formularioClaroSupervisionOperativa.respuestaMedidorConductancia === 'N/A' ? 'formulario selected' : ''}>N/A</Botones>
                                 </div>
-                                <div className='botones'>
-                                    <div className='subtitulos'>
-                                        <Textos className='subtitulo'>Medidor de Fugas</Textos>
-                                    </div>
-                                    <div className='opciones'>
-                                        <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaMedidorFugas', 'Si')} className={formularioClaroSupervisionOperativa.respuestaMedidorFugas === 'Si' ? 'formulario selected' : ''}>Si</Botones>
-                                        <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaMedidorFugas', 'No')} className={formularioClaroSupervisionOperativa.respuestaMedidorFugas === 'No' ? 'formulario selected' : ''}>No</Botones>
-                                        <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaMedidorFugas', 'N/A')} className={formularioClaroSupervisionOperativa.respuestaMedidorFugas === 'N/A' ? 'formulario selected' : ''}>N/A</Botones>
-                                    </div>
+                                <Textos className='subtitulo sub'>Medidor de Fugas</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaMedidorFugas', 'Si')} className={formularioClaroSupervisionOperativa.respuestaMedidorFugas === 'Si' ? 'formulario selected' : ''}>Si</Botones>
+                                    <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaMedidorFugas', 'No')} className={formularioClaroSupervisionOperativa.respuestaMedidorFugas === 'No' ? 'formulario selected' : ''}>No</Botones>
+                                    <Botones onClick={() => actualizarCampoClaroSupervisionOperativa('respuestaMedidorFugas', 'N/A')} className={formularioClaroSupervisionOperativa.respuestaMedidorFugas === 'N/A' ? 'formulario selected' : ''}>N/A</Botones>
                                 </div>
                             </div>
                         </div>
@@ -1628,6 +1590,264 @@ const SupervisionAgregar = () => {
                                         accept="image/*"
                                         disabled={formularioEnelInspeccionIntegralHSE.senaYDemar3 !== 'NC'}
                                         onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoSenaYDemar3', e.target.files[0])}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className='campo'>
+                            <Textos className='subtitulo'>3.</Textos>
+                            <div className='entradaDatos'>
+                                <Textos className='subtitulo prin'>Las 5 Reglas de oro (Zona segura y zona de trabajo):</Textos>
+                                <Textos className='subtitulo sub'>Desconexión de la fuente de alimentación y corte efectivo.</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('reglasOro1', 'C')} className={formularioEnelInspeccionIntegralHSE.reglasOro1 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('reglasOro1', 'NC')} className={formularioEnelInspeccionIntegralHSE.reglasOro1 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('reglasOro1', 'NA')} className={formularioEnelInspeccionIntegralHSE.reglasOro1 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        disabled={formularioEnelInspeccionIntegralHSE.reglasOro1 !== 'NC'}
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoReglasOro1', e.target.files[0])}
+                                    />
+                                </div>
+
+                                <Textos className='subtitulo sub'>Bloqueo o condenación y señalización para evitar reconexiones.</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('reglasOro2', 'C')} className={formularioEnelInspeccionIntegralHSE.reglasOro2 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('reglasOro2', 'NC')} className={formularioEnelInspeccionIntegralHSE.reglasOro2 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('reglasOro2', 'NA')} className={formularioEnelInspeccionIntegralHSE.reglasOro2 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        disabled={formularioEnelInspeccionIntegralHSE.reglasOro2 !== 'NC'}
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoReglasOro2', e.target.files[0])}
+                                    />
+                                </div>
+
+                                <Textos className='subtitulo sub'>Verificación de ausencia de tensión.</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('reglasOro3', 'C')} className={formularioEnelInspeccionIntegralHSE.reglasOro3 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('reglasOro3', 'NC')} className={formularioEnelInspeccionIntegralHSE.reglasOro3 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('reglasOro3', 'NA')} className={formularioEnelInspeccionIntegralHSE.reglasOro3 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        disabled={formularioEnelInspeccionIntegralHSE.reglasOro3 !== 'NC'}
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoReglasOro3', e.target.files[0])}
+                                    />
+                                </div>
+
+                                <Textos className='subtitulo sub'>Cortocircuito y llevar a tierra (Puesta a tierra).</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('reglasOro4', 'C')} className={formularioEnelInspeccionIntegralHSE.reglasOro4 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('reglasOro4', 'NC')} className={formularioEnelInspeccionIntegralHSE.reglasOro4 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('reglasOro4', 'NA')} className={formularioEnelInspeccionIntegralHSE.reglasOro4 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        disabled={formularioEnelInspeccionIntegralHSE.reglasOro4 !== 'NC'}
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoReglasOro4', e.target.files[0])}
+                                    />
+                                </div>
+
+                                <Textos className='subtitulo sub'>Protección y señalización de la zona de trabajo (y del electrodo de puesta a tierra).</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('reglasOro5', 'C')} className={formularioEnelInspeccionIntegralHSE.reglasOro5 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('reglasOro5', 'NC')} className={formularioEnelInspeccionIntegralHSE.reglasOro5 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('reglasOro5', 'NA')} className={formularioEnelInspeccionIntegralHSE.reglasOro5 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        disabled={formularioEnelInspeccionIntegralHSE.reglasOro5 !== 'NC'}
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoReglasOro5', e.target.files[0])}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className='campo'>
+                            <Textos className='subtitulo'>4.</Textos>
+                            <div className='entradaDatos'>
+                                <Textos className='subtitulo prin'>Trabajo en alturas:</Textos>
+                                <Textos className='subtitulo sub'>Los sistemas de acceso (escaleras, andamios) disponibles en el sitio son adecuados (completos, marcados, certificados).</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('trabajoAlturas1', 'C')} className={formularioEnelInspeccionIntegralHSE.trabajoAlturas1 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('trabajoAlturas1', 'NC')} className={formularioEnelInspeccionIntegralHSE.trabajoAlturas1 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('trabajoAlturas1', 'NA')} className={formularioEnelInspeccionIntegralHSE.trabajoAlturas1 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        disabled={formularioEnelInspeccionIntegralHSE.trabajoAlturas1 !== 'NC'}
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoTrabajoAlturas1', e.target.files[0])}
+                                    />
+                                </div>
+
+                                <Textos className='subtitulo sub'>Los sistemas de acceso (escaleras, andamios) están instalados correctamente y se utilizan adecuadamente.</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('trabajoAlturas2', 'C')} className={formularioEnelInspeccionIntegralHSE.trabajoAlturas2 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('trabajoAlturas2', 'NC')} className={formularioEnelInspeccionIntegralHSE.trabajoAlturas2 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('trabajoAlturas2', 'NA')} className={formularioEnelInspeccionIntegralHSE.trabajoAlturas2 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        disabled={formularioEnelInspeccionIntegralHSE.trabajoAlturas2 !== 'NC'}
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoTrabajoAlturas2', e.target.files[0])}
+                                    />
+                                </div>
+
+                                <Textos className='subtitulo sub'>Se utilizan sistemas de rescate para ascenso y descenso en escalera.</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('trabajoAlturas3', 'C')} className={formularioEnelInspeccionIntegralHSE.trabajoAlturas3 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('trabajoAlturas3', 'NC')} className={formularioEnelInspeccionIntegralHSE.trabajoAlturas3 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('trabajoAlturas3', 'NA')} className={formularioEnelInspeccionIntegralHSE.trabajoAlturas3 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        disabled={formularioEnelInspeccionIntegralHSE.trabajoAlturas3 !== 'NC'}
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoTrabajoAlturas3', e.target.files[0])}
+                                    />
+                                </div>
+
+                                <Textos className='subtitulo sub'>Las operaciones en altura y de bajada y subida de equipos/materiales se realizan con métodos seguros de protección contra caída de objetos (por ejemplo,cuerdas, polipastos, contenedores especiales, etc.).</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('trabajoAlturas4', 'C')} className={formularioEnelInspeccionIntegralHSE.trabajoAlturas4 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('trabajoAlturas4', 'NC')} className={formularioEnelInspeccionIntegralHSE.trabajoAlturas4 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('trabajoAlturas4', 'NA')} className={formularioEnelInspeccionIntegralHSE.trabajoAlturas4 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        disabled={formularioEnelInspeccionIntegralHSE.trabajoAlturas4 !== 'NC'}
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoTrabajoAlturas4', e.target.files[0])}
+                                    />
+                                </div>
+
+                                <Textos className='subtitulo sub'>El andamio está correctamente armado, está nivelado y se utiliza adecuadamente.</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('trabajoAlturas5', 'C')} className={formularioEnelInspeccionIntegralHSE.trabajoAlturas5 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('trabajoAlturas5', 'NC')} className={formularioEnelInspeccionIntegralHSE.trabajoAlturas5 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('trabajoAlturas5', 'NA')} className={formularioEnelInspeccionIntegralHSE.trabajoAlturas5 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        disabled={formularioEnelInspeccionIntegralHSE.trabajoAlturas5 !== 'NC'}
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoTrabajoAlturas5', e.target.files[0])}
+                                    />
+                                </div>
+
+                                <Textos className='subtitulo sub'>El andamio cuenta con las tarjetas de identificación VERDE, AMARILLO O ROJO según corresponda.</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('trabajoAlturas6', 'C')} className={formularioEnelInspeccionIntegralHSE.trabajoAlturas6 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('trabajoAlturas6', 'NC')} className={formularioEnelInspeccionIntegralHSE.trabajoAlturas6 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('trabajoAlturas6', 'NA')} className={formularioEnelInspeccionIntegralHSE.trabajoAlturas6 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        disabled={formularioEnelInspeccionIntegralHSE.trabajoAlturas6 !== 'NC'}
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoTrabajoAlturas6', e.target.files[0])}
+                                    />
+                                </div>
+
+                                <Textos className='subtitulo sub'>El análisis de la resistencia de la estructura y el sistema de anclaje (en caso de poste, techo, fachada, etc.) que soportan las escaleras o sobre los que se puede pasar se ha realizado positivamente de acuerdo con los procedimientos internos.</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('trabajoAlturas7', 'C')} className={formularioEnelInspeccionIntegralHSE.trabajoAlturas7 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('trabajoAlturas7', 'NC')} className={formularioEnelInspeccionIntegralHSE.trabajoAlturas7 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('trabajoAlturas7', 'NA')} className={formularioEnelInspeccionIntegralHSE.trabajoAlturas7 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        disabled={formularioEnelInspeccionIntegralHSE.trabajoAlturas7 !== 'NC'}
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoTrabajoAlturas7', e.target.files[0])}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className='campo'>
+                            <Textos className='subtitulo'>5.</Textos>
+                            <div className='entradaDatos'>
+                                <Textos className='subtitulo prin'>Espacio confinado (EC):</Textos>
+                                <Textos className='subtitulo sub'>Se realiza la mediciones atmosféricas necesarias y están debidamente registradas.</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('espacioConfinado1', 'C')} className={formularioEnelInspeccionIntegralHSE.espacioConfinado1 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('espacioConfinado1', 'NC')} className={formularioEnelInspeccionIntegralHSE.espacioConfinado1 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('espacioConfinado1', 'NA')} className={formularioEnelInspeccionIntegralHSE.espacioConfinado1 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        disabled={formularioEnelInspeccionIntegralHSE.espacioConfinado1 !== 'NC'}
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoEspacioConfinado1', e.target.files[0])}
+                                    />
+                                </div>
+
+                                <Textos className='subtitulo sub'>Existe ventilación natural o se cuenta con un sistema de ventilación forzada (en caso de sitios con una  renovación del aire inadecuado).</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('espacioConfinado2', 'C')} className={formularioEnelInspeccionIntegralHSE.espacioConfinado2 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('espacioConfinado2', 'NC')} className={formularioEnelInspeccionIntegralHSE.espacioConfinado2 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('espacioConfinado2', 'NA')} className={formularioEnelInspeccionIntegralHSE.espacioConfinado2 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        disabled={formularioEnelInspeccionIntegralHSE.espacioConfinado2 !== 'NC'}
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoEspacioConfinado2', e.target.files[0])}
+                                    />
+                                </div>
+
+                                <Textos className='subtitulo sub'>La comunicación correcta (es decir, se cuenta con un vigia al exterior del EC).</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('espacioConfinado3', 'C')} className={formularioEnelInspeccionIntegralHSE.espacioConfinado3 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('espacioConfinado3', 'NC')} className={formularioEnelInspeccionIntegralHSE.espacioConfinado3 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('espacioConfinado3', 'NA')} className={formularioEnelInspeccionIntegralHSE.espacioConfinado3 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        disabled={formularioEnelInspeccionIntegralHSE.espacioConfinado3 !== 'NC'}
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoEspacioConfinado3', e.target.files[0])}
                                     />
                                 </div>
                             </div>
