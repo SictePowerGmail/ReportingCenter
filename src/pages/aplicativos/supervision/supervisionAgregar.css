@@ -259,12 +259,12 @@
                         margin: 5px 0px 5px 10px;
 
                         &.vertical {
-                            flex-direction: column;
+                            flex-direction: column !important;
                             align-items: baseline;
                             margin: 0px 0px 10px 10px;
 
                             span {
-                                width: 100%;
+                                width: 100% !important;
                             }
 
                             .opciones {
@@ -275,7 +275,7 @@
                                 margin: 5px 0px;
 
                                 .image {
-                                    width: 100%;
+                                    width: 100% !important;
                                 }
                             }
                         }

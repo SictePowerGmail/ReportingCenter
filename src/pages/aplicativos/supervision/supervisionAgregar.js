@@ -542,6 +542,40 @@ const SupervisionAgregar = () => {
         fotoEspacioConfinado2: "",
         espacioConfinado3: "",
         fotoEspacioConfinado3: "",
+        vehiculos1: "",
+        fotoVehiculos1: "",
+        vehiculos2: "",
+        fotoVehiculos2: "",
+        vehiculos3: "",
+        fotoVehiculos3: "",
+        vehiculos4: "",
+        fotoVehiculos4: "",
+        vehiculos5: "",
+        fotoVehiculos5: "",
+        vehiculos6: "",
+        fotoVehiculos6: "",
+        vehiculos7: "",
+        fotoVehiculos7: "",
+        vehiculos8: "",
+        fotoVehiculos8: "",
+        vehiculos9: "",
+        fotoVehiculos9: "",
+        vehiculos10: "",
+        fotoVehiculos10: "",
+        trabajo1: "",
+        fotoTrabajo1: "",
+        trabajo2: "",
+        fotoTrabajo2: "",
+        trabajo3: "",
+        fotoTrabajo3: "",
+        trabajo4: "",
+        fotoTrabajo4: "",
+        materiales1: "",
+        fotoMateriales1: "",
+        materiales2: "",
+        fotoMateriales2: "",
+        materiales3: "",
+        fotoMateriales3: "",
     };
 
     const [formularioEnelInspeccionIntegralHSE, setFormularioEnelInspeccionIntegralHSE] = useState(() => {
@@ -1848,6 +1882,172 @@ const SupervisionAgregar = () => {
                                         accept="image/*"
                                         disabled={formularioEnelInspeccionIntegralHSE.espacioConfinado3 !== 'NC'}
                                         onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoEspacioConfinado3', e.target.files[0])}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className='campo'>
+                            <Textos className='subtitulo'>6.</Textos>
+                            <div className='entradaDatos'>
+                                <Textos className='subtitulo prin'>Condición de vehiculos (Pesado, Livianos):</Textos>
+                                <Textos className='subtitulo sub'>Traslado del personal en vehículos en sitios autorizados y cumpliendo con las normas de transito local.</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('vehiculos1', 'C')} className={formularioEnelInspeccionIntegralHSE.vehiculos1 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('vehiculos1', 'NC')} className={formularioEnelInspeccionIntegralHSE.vehiculos1 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('vehiculos1', 'NA')} className={formularioEnelInspeccionIntegralHSE.vehiculos1 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        disabled={formularioEnelInspeccionIntegralHSE.vehiculos1 !== 'NC'}
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoVehiculos1', e.target.files[0])}
+                                    />
+                                </div>
+
+                                <Textos className='subtitulo sub'>Tiene   documentación   actualizada   (SOAT,  LICENCIA DE TRÁNSITO, LICENCIA DE CONDUCCIÓN, TECNOMECÁNICA Y SEGUROS CONTRACTUALES).</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('vehiculos2', 'C')} className={formularioEnelInspeccionIntegralHSE.vehiculos2 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('vehiculos2', 'NC')} className={formularioEnelInspeccionIntegralHSE.vehiculos2 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('vehiculos2', 'NA')} className={formularioEnelInspeccionIntegralHSE.vehiculos2 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        disabled={formularioEnelInspeccionIntegralHSE.vehiculos2 !== 'NC'}
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoVehiculos2', e.target.files[0])}
+                                    />
+                                </div>
+
+                                <Textos className='subtitulo sub'>El vehículo cuenta con equipo de carretera (Botiquín, Extintor, Tacos, Gato, Cruceta, triángulo y herramientas).</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('vehiculos3', 'C')} className={formularioEnelInspeccionIntegralHSE.vehiculos3 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('vehiculos3', 'NC')} className={formularioEnelInspeccionIntegralHSE.vehiculos3 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('vehiculos3', 'NA')} className={formularioEnelInspeccionIntegralHSE.vehiculos3 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        disabled={formularioEnelInspeccionIntegralHSE.vehiculos3 !== 'NC'}
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoVehiculos3', e.target.files[0])}
+                                    />
+                                </div>
+
+                                <Textos className='subtitulo sub'>El  vehículo con el cual se moviliza la cuadrilla evaluada, se encuentra en buen estado.</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('vehiculos4', 'C')} className={formularioEnelInspeccionIntegralHSE.vehiculos4 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('vehiculos4', 'NC')} className={formularioEnelInspeccionIntegralHSE.vehiculos4 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('vehiculos4', 'NA')} className={formularioEnelInspeccionIntegralHSE.vehiculos4 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        disabled={formularioEnelInspeccionIntegralHSE.vehiculos4 !== 'NC'}
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoVehiculos4', e.target.files[0])}
+                                    />
+                                </div>
+
+                                <Textos className='subtitulo sub'>El vehículo cuenta con inspección preoperacional.</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('vehiculos5', 'C')} className={formularioEnelInspeccionIntegralHSE.vehiculos5 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('vehiculos5', 'NC')} className={formularioEnelInspeccionIntegralHSE.vehiculos5 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('vehiculos5', 'NA')} className={formularioEnelInspeccionIntegralHSE.vehiculos5 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        disabled={formularioEnelInspeccionIntegralHSE.vehiculos5 !== 'NC'}
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoVehiculos5', e.target.files[0])}
+                                    />
+                                </div>
+
+                                <Textos className='subtitulo sub'>El vehículo utilizado para el izaje de cargas cuenta con pruebas vigentes (Izaje- Rigidez dieléctrica).</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('vehiculos6', 'C')} className={formularioEnelInspeccionIntegralHSE.vehiculos6 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('vehiculos6', 'NC')} className={formularioEnelInspeccionIntegralHSE.vehiculos6 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('vehiculos6', 'NA')} className={formularioEnelInspeccionIntegralHSE.vehiculos6 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        disabled={formularioEnelInspeccionIntegralHSE.vehiculos6 !== 'NC'}
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoVehiculos6', e.target.files[0])}
+                                    />
+                                </div>
+
+                                <Textos className='subtitulo sub'>El vehículo de izaje  utilizado  para la tarea  cuenta con aparejos en buen estado y certificados.</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('vehiculos7', 'C')} className={formularioEnelInspeccionIntegralHSE.vehiculos7 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('vehiculos7', 'NC')} className={formularioEnelInspeccionIntegralHSE.vehiculos7 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('vehiculos7', 'NA')} className={formularioEnelInspeccionIntegralHSE.vehiculos7 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        disabled={formularioEnelInspeccionIntegralHSE.vehiculos7 !== 'NC'}
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoVehiculos7', e.target.files[0])}
+                                    />
+                                </div>
+
+                                <Textos className='subtitulo sub'>Se realiza y documenta el plan de izaje  según la carga a levantar.</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('vehiculos8', 'C')} className={formularioEnelInspeccionIntegralHSE.vehiculos8 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('vehiculos8', 'NC')} className={formularioEnelInspeccionIntegralHSE.vehiculos8 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('vehiculos8', 'NA')} className={formularioEnelInspeccionIntegralHSE.vehiculos8 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        disabled={formularioEnelInspeccionIntegralHSE.vehiculos8 !== 'NC'}
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoVehiculos8', e.target.files[0])}
+                                    />
+                                </div>
+
+                                <Textos className='subtitulo sub'>Se evita el desplazamiento de cargas sobre personas o personas sobre la carga.</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('vehiculos9', 'C')} className={formularioEnelInspeccionIntegralHSE.vehiculos9 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('vehiculos9', 'NC')} className={formularioEnelInspeccionIntegralHSE.vehiculos9 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('vehiculos9', 'NA')} className={formularioEnelInspeccionIntegralHSE.vehiculos9 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        disabled={formularioEnelInspeccionIntegralHSE.vehiculos9 !== 'NC'}
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoVehiculos9', e.target.files[0])}
+                                    />
+                                </div>
+                                
+                                <Textos className='subtitulo sub'>Los estabilizadores de la máquina se utilizan correctamente y se respetan los diagramas de  carga.</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('vehiculos10', 'C')} className={formularioEnelInspeccionIntegralHSE.vehiculos10 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('vehiculos10', 'NC')} className={formularioEnelInspeccionIntegralHSE.vehiculos10 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('vehiculos10', 'NA')} className={formularioEnelInspeccionIntegralHSE.vehiculos10 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        disabled={formularioEnelInspeccionIntegralHSE.vehiculos10 !== 'NC'}
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoVehiculos10', e.target.files[0])}
                                     />
                                 </div>
                             </div>
