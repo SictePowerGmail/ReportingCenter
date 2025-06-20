@@ -69,6 +69,7 @@
                 justify-content: baseline;
                 margin: 10px 0px;
                 width: 100%;
+                position: relative;
 
                 span,
                 i {
@@ -84,7 +85,33 @@
                         padding-bottom: 5px;
 
                         &.prin {
-                            margin-top: 20px;
+                            position: sticky;
+                            top: 0px;
+                            background: #fff;
+                            z-index: 1000;
+                            padding: 10px 0;
+                            font-weight: bold;
+                            border: 1px solid rgb(156, 156, 156);
+                            text-align: center;
+                            border-radius: 8px;
+                            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+
+                            &::before {
+                                content: '';
+                                position: absolute;
+                                top: -21px;
+                                left: 0;
+                                right: 0;
+                                height: 20px;
+                                background: #fff;
+                                z-index: -1;
+
+                                display: none;
+                            }
+
+                            &.is-sticky::before {
+                                display: block;
+                            }
                         }
 
                         &.sub {
@@ -143,6 +170,18 @@
                                 margin-left: 10px;
                             }
                         }
+
+                        .areaTexto,
+                        .image {
+                            &:disabled {
+                                display: none;
+                            }
+                        }
+                    }
+
+                    .opciones:has(.image:disabled),
+                    .opciones:has(textarea:disabled) {
+                        margin: 0;
                     }
 
                     .comentario {
@@ -203,12 +242,11 @@
                         }
                     }
                 }
+            }
 
-                #map2 {
-                    width: calc(100% - 30px);
-                    height: 270px;
-                    margin-left: 30px;
-                }
+            #map2 {
+                width: calc(100%);
+                height: 270px;
             }
 
             .Tabla {
@@ -235,7 +273,7 @@
                 z-index: 1000;
                 border-radius: 8px;
                 box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-                height: 100% !important;
+                height: 90% !important;
 
                 .modal-contenido {
                     display: flex;
@@ -271,14 +309,23 @@
                             .opciones {
                                 display: flex;
                                 align-items: center;
-                                justify-content: center;
+                                justify-content: left;
                                 padding-left: 15px;
                                 margin: 5px 0px;
+                                width: 100%;
 
                                 .image {
                                     width: 100% !important;
+
+                                    &:disabled {
+                                        display: none;
+                                    }
                                 }
                             }
+                        }
+
+                        &.ocultar {
+                            display: none;
                         }
 
                         span {

@@ -406,7 +406,7 @@ const SupervisionAgregar = () => {
                 longitud: ubicacion.longitude
             });
 
-            Cookies.remove('formularioClaroSupervisionOperativa');
+            localStorage.removeItem('formularioClaroSupervisionOperativa');
 
             setEnviando(false)
             console.log('Datos enviados exitosamente');
@@ -419,7 +419,7 @@ const SupervisionAgregar = () => {
     };
 
     const [formularioClaroSupervisionOperativa, setFormularioClaroSupervisionOperativa] = useState(() => {
-        const datosGuardados = Cookies.get('formularioClaroSupervisionOperativa');
+        const datosGuardados = localStorage.getItem('formularioClaroSupervisionOperativa');
         return datosGuardados ? JSON.parse(datosGuardados) : {
             placa: "",
             cedulaCuadrilla: "",
@@ -454,7 +454,7 @@ const SupervisionAgregar = () => {
     };
 
     useEffect(() => {
-        Cookies.set('formularioClaroSupervisionOperativa', JSON.stringify(formularioClaroSupervisionOperativa));
+        localStorage.setItem('formularioClaroSupervisionOperativa', JSON.stringify(formularioClaroSupervisionOperativa));
     }, [formularioClaroSupervisionOperativa]);
 
     const enviarFormularioEnelInspeccionIntegralHSE = async (event) => {
@@ -494,140 +494,202 @@ const SupervisionAgregar = () => {
         cuadrilla: [],
         riesgos1: "",
         fotoRiesgos1: "",
+        observacionRiesgos1: "",
         riesgos2: "",
         fotoRiesgos2: "",
+        observacionRiesgos2: "",
         riesgos3: "",
         fotoRiesgos3: "",
+        observacionRiesgos3: "",
         riesgos4: "",
         fotoRiesgos4: "",
+        observacionRiesgos4: "",
         riesgos5: "",
         fotoRiesgos5: "",
+        observacionRiesgos5: "",
         riesgos6: "",
         fotoRiesgos6: "",
+        observacionRiesgos6: "",
         riesgos7: "",
         fotoRiesgos7: "",
+        observacionRiesgos7: "",
         riesgos8: "",
         fotoRiesgos8: "",
+        observacionRiesgos8: "",
         riesgos9: "",
         fotoRiesgos9: "",
+        observacionRiesgos9: "",
         senaYDemar1: "",
         fotoSenaYDemar1: "",
+        observacionSenaYDemar1: "",
         senaYDemar2: "",
         fotoSenaYDemar2: "",
+        observacionSenaYDemar2: "",
         senaYDemar3: "",
         fotoSenaYDemar3: "",
+        observacionSenaYDemar3: "",
         reglasOro1: "",
         fotoReglasOro1: "",
+        observacionReglasOro1: "",
         reglasOro2: "",
         fotoReglasOro2: "",
+        observacionReglasOro2: "",
         reglasOro3: "",
         fotoReglasOro3: "",
+        observacionReglasOro3: "",
         reglasOro4: "",
         fotoReglasOro4: "",
+        observacionReglasOro4: "",
         reglasOro5: "",
         fotoReglasOro5: "",
+        observacionReglasOro5: "",
         trabajoAlturas1: "",
         fotoTrabajoAlturas1: "",
+        observacionTrabajoAlturas1: "",
         trabajoAlturas2: "",
         fotoTrabajoAlturas2: "",
+        observacionTrabajoAlturas2: "",
         trabajoAlturas3: "",
         fotoTrabajoAlturas3: "",
+        observacionTrabajoAlturas3: "",
         trabajoAlturas4: "",
         fotoTrabajoAlturas4: "",
+        observacionTrabajoAlturas4: "",
         trabajoAlturas5: "",
         fotoTrabajoAlturas5: "",
+        observacionTrabajoAlturas5: "",
         espacioConfinado1: "",
         fotoEspacioConfinado1: "",
+        observacionEspacioConfinado1: "",
         espacioConfinado2: "",
         fotoEspacioConfinado2: "",
+        observacionEspacioConfinado2: "",
         espacioConfinado3: "",
         fotoEspacioConfinado3: "",
+        observacionEspacioConfinado3: "",
         vehiculos1: "",
         fotoVehiculos1: "",
+        observacionVehiculos1: "",
         vehiculos2: "",
         fotoVehiculos2: "",
+        observacionVehiculos2: "",
         vehiculos3: "",
         fotoVehiculos3: "",
+        observacionVehiculos3: "",
         vehiculos4: "",
         fotoVehiculos4: "",
+        observacionVehiculos4: "",
         vehiculos5: "",
         fotoVehiculos5: "",
+        observacionVehiculos5: "",
         vehiculos6: "",
         fotoVehiculos6: "",
+        observacionVehiculos6: "",
         vehiculos7: "",
         fotoVehiculos7: "",
+        observacionVehiculos7: "",
         vehiculos8: "",
         fotoVehiculos8: "",
+        observacionVehiculos8: "",
         vehiculos9: "",
         fotoVehiculos9: "",
+        observacionVehiculos9: "",
         vehiculos10: "",
         fotoVehiculos10: "",
+        observacionVehiculos10: "",
         trabajo1: "",
         fotoTrabajo1: "",
+        observacionTrabajo1: "",
         trabajo2: "",
         fotoTrabajo2: "",
+        observacionTrabajo2: "",
         trabajo3: "",
         fotoTrabajo3: "",
+        observacionTrabajo3: "",
         trabajo4: "",
         fotoTrabajo4: "",
+        observacionTrabajo4: "",
         materiales1: "",
         fotoMateriales1: "",
+        observacionMateriales1: "",
         materiales2: "",
         fotoMateriales2: "",
+        observacionMateriales2: "",
         materiales3: "",
         fotoMateriales3: "",
+        observacionMateriales3: "",
         primerosAuxilios1: "",
         fotoPrimerosAuxilios1: "",
+        observacionPrimerosAuxilios1: "",
         primerosAuxilios2: "",
         fotoPrimerosAuxilios2: "",
+        observacionPrimerosAuxilios2: "",
         primerosAuxilios3: "",
         fotoPrimerosAuxilios3: "",
+        observacionPrimerosAuxilios3: "",
         primerosAuxilios4: "",
         fotoPrimerosAuxilios4: "",
+        observacionPrimerosAuxilios4: "",
         primerosAuxilios5: "",
         fotoPrimerosAuxilios5: "",
+        observacionPrimerosAuxilios5: "",
         biomecanicos1: "",
         fotoBiomecanicos1: "",
+        observacionBiomecanicos1: "",
         biomecanicos2: "",
         fotoBiomecanicos2: "",
+        observacionBiomecanicos2: "",
         biomecanicos3: "",
         fotoBiomecanicos3: "",
+        observacionBiomecanicos3: "",
         quimicos1: "",
         fotoQuimicos1: "",
+        observacionQuimicos1: "",
         quimicos2: "",
         fotoQuimicos2: "",
+        observacionQuimicos2: "",
         quimicos3: "",
         fotoQuimicos3: "",
+        observacionQuimicos3: "",
         quimicos4: "",
         fotoQuimicos4: "",
+        observacionQuimicos4: "",
         quimicos5: "",
         fotoQuimicos5: "",
+        observacionQuimicos5: "",
         residuosNoPeligrosos1: "",
         fotoResiduosNoPeligrosos1: "",
+        observacionResiduosNoPeligrosos1: "",
         residuosNoPeligrosos2: "",
         fotoResiduosNoPeligrosos2: "",
+        observacionResiduosNoPeligrosos2: "",
         residuosNoPeligrosos3: "",
         fotoResiduosNoPeligrosos3: "",
+        observacionResiduosNoPeligrosos3: "",
         residuosConstruccion1: "",
         fotoResiduosConstruccion1: "",
+        observacionResiduosConstruccion1: "",
         residuosConstruccion2: "",
         fotoResiduosConstruccion2: "",
+        observacionResiduosConstruccion2: "",
         residuosConstruccion3: "",
         fotoResiduosConstruccion3: "",
+        observacionResiduosConstruccion3: "",
         residuosConstruccion4: "",
         fotoResiduosConstruccion4: "",
+        observacionResiduosConstruccion4: "",
         observacion: "",
     };
 
     const [formularioEnelInspeccionIntegralHSE, setFormularioEnelInspeccionIntegralHSE] = useState(() => {
-        const datosGuardados = Cookies.get('formularioEnelInspeccionIntegralHSE');
+        const datosGuardados = localStorage.getItem('formularioEnelInspeccionIntegralHSE');
         return datosGuardados ? JSON.parse(datosGuardados) : estadoInicialFormularioEnelInspeccionIntegralHSE;
     });
 
     const actualizarCampoEnelInspeccionIntegralHSE = (campo, valor) => {
         setFormularioEnelInspeccionIntegralHSE(prev => {
             const actualizado = { ...prev, [campo]: valor };
-            Cookies.set('formularioEnelInspeccionIntegralHSE', JSON.stringify(actualizado));
+            localStorage.setItem('formularioEnelInspeccionIntegralHSE', JSON.stringify(actualizado));
             return actualizado;
         });
     };
@@ -663,17 +725,17 @@ const SupervisionAgregar = () => {
 
         setFormularioEnelInspeccionIntegralHSE(prev => {
             const actualizado = { ...prev, cuadrilla: [...(prev.cuadrilla || []), miembro] };
-            Cookies.set('formularioEnelInspeccionIntegralHSE', JSON.stringify(actualizado));
+            localStorage.setItem('formularioEnelInspeccionIntegralHSE', JSON.stringify(actualizado));
             return actualizado;
         });
 
-        Cookies.remove('miembroEnProceso');
+        localStorage.removeItem('miembroEnProceso');
         setMostrarModal(false);
         setMiembroEnProceso({})
     };
 
     const [miembroEnProceso, setMiembroEnProceso] = useState(() => {
-        const guardado = Cookies.get('miembroEnProceso');
+        const guardado = localStorage.getItem('miembroEnProceso');
         return guardado ? JSON.parse(guardado) : {
             cedula: "",
             nombre: "",
@@ -683,6 +745,7 @@ const SupervisionAgregar = () => {
             carneCliente: "",
             carneSicte: "",
             fotoDocumentos: "",
+            observacionDocumentos: "",
             eppCasco: "",
             fotoEppCasco: "",
             eppGuantes: "",
@@ -707,8 +770,25 @@ const SupervisionAgregar = () => {
     });
 
     useEffect(() => {
-        Cookies.set('miembroEnProceso', JSON.stringify(miembroEnProceso));
+        localStorage.setItem('miembroEnProceso', JSON.stringify(miembroEnProceso));
     }, [miembroEnProceso]);
+
+    const elementos = document.querySelectorAll('.prin');
+
+    elementos.forEach(el => {
+        const sentinel = document.createElement('div');
+        el.parentNode.insertBefore(sentinel, el);
+
+        const observer = new IntersectionObserver(([entry]) => {
+            if (!entry.isIntersecting) {
+                el.classList.add('is-sticky');
+            } else {
+                el.classList.remove('is-sticky');
+            }
+        }, { rootMargin: '-1px 0px 0px 0px' });
+
+        observer.observe(sentinel);
+    });
 
     return (
         <div className="supervision-agregar">
@@ -1062,8 +1142,9 @@ const SupervisionAgregar = () => {
                                 <i className="fas fa-map-marker-alt"></i>
                                 <Textos className='subtitulo'>Ubicación:</Textos>
                             </div>
-                            <div id="map2"></div>
                         </div>
+
+                        <div id="map2"></div>
 
                         <div className='campo direccion'>
                             <i className="fas fa-tools"></i>
@@ -1288,6 +1369,12 @@ const SupervisionAgregar = () => {
                                                 />
                                             </div>
                                         </div>
+                                        <div className={`entradaDatos vertical observacion' ${miembroEnProceso.arl !== 'NC' && miembroEnProceso.tarjetaDeVida !== 'NC' && miembroEnProceso.carneCliente !== 'NC' && miembroEnProceso.carneSicte !== 'NC' ? 'ocultar' : ''}`}>
+                                            <Textos className='subtitulo'>Observaciones:</Textos>
+                                            <div className='opciones'>
+                                                <AreaTextos type="text" placeholder="Agregue las observacion pertinentes" value={miembroEnProceso.observacionDocumentos} onChange={(e) => setMiembroEnProceso(prev => ({ ...prev, observacionDocumentos: e.target.value }))} rows={4} />
+                                            </div>
+                                        </div>
                                         <Textos className='subtitulo encabezado'>3. Dotacion EPP y EPCC:</Textos>
                                         <div className='entradaDatos vertical'>
                                             <Textos className='subtitulo' title="Utiliza casco de seguridad TIPO II con barbuquejo en buen estado.">Casco:</Textos>
@@ -1471,9 +1558,8 @@ const SupervisionAgregar = () => {
                         )}
 
                         <div className='campo'>
-                            <Textos className='subtitulo'>1.</Textos>
                             <div className='entradaDatos'>
-                                <Textos className='subtitulo prin'>Identificacion de riesgos (Actividades previas al trabajo):</Textos>
+                                <Textos className='subtitulo prin'>1. Identificacion de riesgos (Actividades previas al trabajo):</Textos>
                                 <Textos className='subtitulo sub'>Se identifica todos los riesgos específicos de la actividad en el ARO, está debidamente firmado por todos los integrantes de la cuadrilla.</Textos>
                                 <div className='opciones'>
                                     <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('riesgos1', 'C')} className={formularioEnelInspeccionIntegralHSE.riesgos1 === 'C' ? 'formulario selected' : ''}>C</Botones>
@@ -1487,6 +1573,10 @@ const SupervisionAgregar = () => {
                                         accept="image/*"
                                         onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoRiesgos1', e.target.files[0])}
                                     />
+                                </div>
+                                <div className='opciones'>
+                                    <AreaTextos type="text" placeholder="Agregue las observacion pertinentes" value={formularioEnelInspeccionIntegralHSE.observacionRiesgos1} onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('observacionRiesgos1', e.target.value)} rows={4}
+                                        disabled={formularioEnelInspeccionIntegralHSE.riesgos1 !== 'NC'} />
                                 </div>
 
                                 <Textos className='subtitulo sub'>Permiso de trabajo aplicable a la actividad, debidamente firmado por todos los integrantes de la cuadrilla, definiendo roles y está autorizado.</Textos>
@@ -1502,6 +1592,10 @@ const SupervisionAgregar = () => {
                                         accept="image/*"
                                         onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoRiesgos2', e.target.files[0])}
                                     />
+                                </div>
+                                <div className='opciones'>
+                                    <AreaTextos type="text" placeholder="Agregue las observacion pertinentes" value={formularioEnelInspeccionIntegralHSE.observacionRiesgos2} onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('observacionRiesgos2', e.target.value)} rows={4}
+                                        disabled={formularioEnelInspeccionIntegralHSE.riesgos2 !== 'NC'} />
                                 </div>
 
                                 <Textos className='subtitulo sub'>Se identifican y aplican los procedimientos de trabajo acordes a la (s) actividad (es) a realizar.</Textos>
@@ -1519,6 +1613,10 @@ const SupervisionAgregar = () => {
                                         onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoRiesgos3', e.target.files[0])}
                                     />
                                 </div>
+                                <div className='opciones'>
+                                    <AreaTextos type="text" placeholder="Agregue las observacion pertinentes" value={formularioEnelInspeccionIntegralHSE.observacionRiesgos3} onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('observacionRiesgos3', e.target.value)} rows={4}
+                                        disabled={formularioEnelInspeccionIntegralHSE.riesgos3 !== 'NC'} />
+                                </div>
 
                                 <Textos className='subtitulo sub'>Se diligencia el tablero operativo de manera correcta y se instala la respectiva valla de contrato.</Textos>
                                 <div className='opciones'>
@@ -1533,6 +1631,10 @@ const SupervisionAgregar = () => {
                                         accept="image/*"
                                         onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoRiesgos4', e.target.files[0])}
                                     />
+                                </div>
+                                <div className='opciones'>
+                                    <AreaTextos type="text" placeholder="Agregue las observacion pertinentes" value={formularioEnelInspeccionIntegralHSE.observacionRiesgos4} onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('observacionRiesgos4', e.target.value)} rows={4}
+                                        disabled={formularioEnelInspeccionIntegralHSE.riesgos4 !== 'NC'} />
                                 </div>
 
                                 <Textos className='subtitulo sub'>Dispone de los planos o guías de las instalaciones subterráneas, cables, tuberías y otros artículos que interfieran y hay informes disponibles.</Textos>
@@ -1550,6 +1652,10 @@ const SupervisionAgregar = () => {
                                         onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoRiesgos5', e.target.files[0])}
                                     />
                                 </div>
+                                <div className='opciones'>
+                                    <AreaTextos type="text" placeholder="Agregue las observacion pertinentes" value={formularioEnelInspeccionIntegralHSE.observacionRiesgos5} onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('observacionRiesgos5', e.target.value)} rows={4}
+                                        disabled={formularioEnelInspeccionIntegralHSE.riesgos5 !== 'NC'} />
+                                </div>
 
                                 <Textos className='subtitulo sub'>Los cables eléctricos subterráneos y aéreos están protegidos y las distancias de seguridad se respetan de acuerdo con el nivel de voltaje de la red.</Textos>
                                 <div className='opciones'>
@@ -1565,6 +1671,10 @@ const SupervisionAgregar = () => {
                                         disabled={formularioEnelInspeccionIntegralHSE.riesgos6 !== 'NC'}
                                         onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoRiesgos6', e.target.files[0])}
                                     />
+                                </div>
+                                <div className='opciones'>
+                                    <AreaTextos type="text" placeholder="Agregue las observacion pertinentes" value={formularioEnelInspeccionIntegralHSE.observacionRiesgos6} onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('observacionRiesgos6', e.target.value)} rows={4}
+                                        disabled={formularioEnelInspeccionIntegralHSE.riesgos6 !== 'NC'} />
                                 </div>
 
                                 <Textos className='subtitulo sub'>Las condiciones climáticas son adecuadas para realizar las actividades planificadas.</Textos>
@@ -1582,6 +1692,10 @@ const SupervisionAgregar = () => {
                                         onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoRiesgos7', e.target.files[0])}
                                     />
                                 </div>
+                                <div className='opciones'>
+                                    <AreaTextos type="text" placeholder="Agregue las observacion pertinentes" value={formularioEnelInspeccionIntegralHSE.observacionRiesgos7} onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('observacionRiesgos7', e.target.value)} rows={4}
+                                        disabled={formularioEnelInspeccionIntegralHSE.riesgos7 !== 'NC'} />
+                                </div>
 
                                 <Textos className='subtitulo sub'>La dotación, EPP, EPCC se utilizan de forma correcta.</Textos>
                                 <div className='opciones'>
@@ -1597,6 +1711,10 @@ const SupervisionAgregar = () => {
                                         disabled={formularioEnelInspeccionIntegralHSE.riesgos8 !== 'NC'}
                                         onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoRiesgos8', e.target.files[0])}
                                     />
+                                </div>
+                                <div className='opciones'>
+                                    <AreaTextos type="text" placeholder="Agregue las observacion pertinentes" value={formularioEnelInspeccionIntegralHSE.observacionRiesgos8} onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('observacionRiesgos8', e.target.value)} rows={4}
+                                        disabled={formularioEnelInspeccionIntegralHSE.riesgos8 !== 'NC'} />
                                 </div>
 
                                 <Textos className='subtitulo sub'>Cuenta con tapete dieléctrico en buen estado y posee las pruebas de rigidez vigentes.</Textos>
@@ -1614,13 +1732,16 @@ const SupervisionAgregar = () => {
                                         onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoRiesgos9', e.target.files[0])}
                                     />
                                 </div>
+                                <div className='opciones'>
+                                    <AreaTextos type="text" placeholder="Agregue las observacion pertinentes" value={formularioEnelInspeccionIntegralHSE.observacionRiesgos9} onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('observacionRiesgos9', e.target.value)} rows={4}
+                                        disabled={formularioEnelInspeccionIntegralHSE.riesgos9 !== 'NC'} />
+                                </div>
                             </div>
                         </div>
 
                         <div className='campo'>
-                            <Textos className='subtitulo'>2.</Textos>
                             <div className='entradaDatos'>
-                                <Textos className='subtitulo prin'>Señalizacion y demarcacion:</Textos>
+                                <Textos className='subtitulo prin'>2. Señalizacion y demarcacion:</Textos>
                                 <Textos className='subtitulo sub'>Protección completa de la zona de trabajo (conos, cintas, corrales).</Textos>
                                 <div className='opciones'>
                                     <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('senaYDemar1', 'C')} className={formularioEnelInspeccionIntegralHSE.senaYDemar1 === 'C' ? 'formulario selected' : ''}>C</Botones>
@@ -1634,6 +1755,10 @@ const SupervisionAgregar = () => {
                                         accept="image/*"
                                         onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoSenaYDemar1', e.target.files[0])}
                                     />
+                                </div>
+                                <div className='opciones'>
+                                    <AreaTextos type="text" placeholder="Agregue las observacion pertinentes" value={formularioEnelInspeccionIntegralHSE.observacionSenaYDemar1} onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('observacionSenaYDemar1', e.target.value)} rows={4}
+                                        disabled={formularioEnelInspeccionIntegralHSE.senaYDemar1 !== 'NC'} />
                                 </div>
 
                                 <Textos className='subtitulo sub'>Utiliza el PMT correspondiente.</Textos>
@@ -1651,6 +1776,10 @@ const SupervisionAgregar = () => {
                                         onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoSenaYDemar2', e.target.files[0])}
                                     />
                                 </div>
+                                <div className='opciones'>
+                                    <AreaTextos type="text" placeholder="Agregue las observacion pertinentes" value={formularioEnelInspeccionIntegralHSE.observacionSenaYDemar2} onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('observacionSenaYDemar2', e.target.value)} rows={4}
+                                        disabled={formularioEnelInspeccionIntegralHSE.senaYDemar2 !== 'NC'} />
+                                </div>
 
                                 <Textos className='subtitulo sub'>Se encuentran delimitadas zonas de peligro (huecos zanjas, desniveles, barreno).</Textos>
                                 <div className='opciones'>
@@ -1667,13 +1796,16 @@ const SupervisionAgregar = () => {
                                         onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoSenaYDemar3', e.target.files[0])}
                                     />
                                 </div>
+                                <div className='opciones'>
+                                    <AreaTextos type="text" placeholder="Agregue las observacion pertinentes" value={formularioEnelInspeccionIntegralHSE.observacionSenaYDemar3} onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('observacionSenaYDemar3', e.target.value)} rows={4}
+                                        disabled={formularioEnelInspeccionIntegralHSE.senaYDemar3 !== 'NC'} />
+                                </div>
                             </div>
                         </div>
 
                         <div className='campo'>
-                            <Textos className='subtitulo'>3.</Textos>
                             <div className='entradaDatos'>
-                                <Textos className='subtitulo prin'>Las 5 Reglas de oro (Zona segura y zona de trabajo):</Textos>
+                                <Textos className='subtitulo prin'>3. Las 5 Reglas de oro (Zona segura y zona de trabajo):</Textos>
                                 <Textos className='subtitulo sub'>Desconexión de la fuente de alimentación y corte efectivo.</Textos>
                                 <div className='opciones'>
                                     <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('reglasOro1', 'C')} className={formularioEnelInspeccionIntegralHSE.reglasOro1 === 'C' ? 'formulario selected' : ''}>C</Botones>
@@ -1688,6 +1820,10 @@ const SupervisionAgregar = () => {
                                         disabled={formularioEnelInspeccionIntegralHSE.reglasOro1 !== 'NC'}
                                         onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoReglasOro1', e.target.files[0])}
                                     />
+                                </div>
+                                <div className='opciones'>
+                                    <AreaTextos type="text" placeholder="Agregue las observacion pertinentes" value={formularioEnelInspeccionIntegralHSE.observacionReglasOro1} onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('observacionReglasOro1', e.target.value)} rows={4}
+                                        disabled={formularioEnelInspeccionIntegralHSE.reglasOro1 !== 'NC'} />
                                 </div>
 
                                 <Textos className='subtitulo sub'>Bloqueo o condenación y señalización para evitar reconexiones.</Textos>
@@ -1705,6 +1841,10 @@ const SupervisionAgregar = () => {
                                         onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoReglasOro2', e.target.files[0])}
                                     />
                                 </div>
+                                <div className='opciones'>
+                                    <AreaTextos type="text" placeholder="Agregue las observacion pertinentes" value={formularioEnelInspeccionIntegralHSE.observacionReglasOro2} onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('observacionReglasOro2', e.target.value)} rows={4}
+                                        disabled={formularioEnelInspeccionIntegralHSE.reglasOro2 !== 'NC'} />
+                                </div>
 
                                 <Textos className='subtitulo sub'>Verificación de ausencia de tensión.</Textos>
                                 <div className='opciones'>
@@ -1720,6 +1860,10 @@ const SupervisionAgregar = () => {
                                         disabled={formularioEnelInspeccionIntegralHSE.reglasOro3 !== 'NC'}
                                         onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoReglasOro3', e.target.files[0])}
                                     />
+                                </div>
+                                <div className='opciones'>
+                                    <AreaTextos type="text" placeholder="Agregue las observacion pertinentes" value={formularioEnelInspeccionIntegralHSE.observacionReglasOro3} onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('observacionReglasOro3', e.target.value)} rows={4}
+                                        disabled={formularioEnelInspeccionIntegralHSE.reglasOro3 !== 'NC'} />
                                 </div>
 
                                 <Textos className='subtitulo sub'>Cortocircuito y llevar a tierra (Puesta a tierra).</Textos>
@@ -1737,6 +1881,10 @@ const SupervisionAgregar = () => {
                                         onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoReglasOro4', e.target.files[0])}
                                     />
                                 </div>
+                                <div className='opciones'>
+                                    <AreaTextos type="text" placeholder="Agregue las observacion pertinentes" value={formularioEnelInspeccionIntegralHSE.observacionReglasOro4} onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('observacionReglasOro4', e.target.value)} rows={4}
+                                        disabled={formularioEnelInspeccionIntegralHSE.reglasOro4 !== 'NC'} />
+                                </div>
 
                                 <Textos className='subtitulo sub'>Protección y señalización de la zona de trabajo (y del electrodo de puesta a tierra).</Textos>
                                 <div className='opciones'>
@@ -1753,13 +1901,16 @@ const SupervisionAgregar = () => {
                                         onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoReglasOro5', e.target.files[0])}
                                     />
                                 </div>
+                                <div className='opciones'>
+                                    <AreaTextos type="text" placeholder="Agregue las observacion pertinentes" value={formularioEnelInspeccionIntegralHSE.observacionReglasOro5} onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('observacionReglasOro5', e.target.value)} rows={4}
+                                        disabled={formularioEnelInspeccionIntegralHSE.reglasOro5 !== 'NC'} />
+                                </div>
                             </div>
                         </div>
 
                         <div className='campo'>
-                            <Textos className='subtitulo'>4.</Textos>
                             <div className='entradaDatos'>
-                                <Textos className='subtitulo prin'>Trabajo en alturas:</Textos>
+                                <Textos className='subtitulo prin'>4. Trabajo en alturas:</Textos>
                                 <Textos className='subtitulo sub'>Los sistemas de acceso (escaleras, andamios) disponibles en el sitio son adecuados (completos, marcados, certificados).</Textos>
                                 <div className='opciones'>
                                     <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('trabajoAlturas1', 'C')} className={formularioEnelInspeccionIntegralHSE.trabajoAlturas1 === 'C' ? 'formulario selected' : ''}>C</Botones>
@@ -1875,9 +2026,8 @@ const SupervisionAgregar = () => {
                         </div>
 
                         <div className='campo'>
-                            <Textos className='subtitulo'>5.</Textos>
                             <div className='entradaDatos'>
-                                <Textos className='subtitulo prin'>Espacio confinado (EC):</Textos>
+                                <Textos className='subtitulo prin'>5. Espacio confinado (EC):</Textos>
                                 <Textos className='subtitulo sub'>Se realiza la mediciones atmosféricas necesarias y están debidamente registradas.</Textos>
                                 <div className='opciones'>
                                     <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('espacioConfinado1', 'C')} className={formularioEnelInspeccionIntegralHSE.espacioConfinado1 === 'C' ? 'formulario selected' : ''}>C</Botones>
@@ -1929,9 +2079,8 @@ const SupervisionAgregar = () => {
                         </div>
 
                         <div className='campo'>
-                            <Textos className='subtitulo'>6.</Textos>
                             <div className='entradaDatos'>
-                                <Textos className='subtitulo prin'>Condición de vehiculos (Pesado, Livianos):</Textos>
+                                <Textos className='subtitulo prin'>6. Condición de vehiculos (Pesado, Livianos):</Textos>
                                 <Textos className='subtitulo sub'>Traslado del personal en vehículos en sitios autorizados y cumpliendo con las normas de transito local.</Textos>
                                 <div className='opciones'>
                                     <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('vehiculos1', 'C')} className={formularioEnelInspeccionIntegralHSE.vehiculos1 === 'C' ? 'formulario selected' : ''}>C</Botones>
@@ -2095,9 +2244,8 @@ const SupervisionAgregar = () => {
                         </div>
 
                         <div className='campo'>
-                            <Textos className='subtitulo'>7.</Textos>
                             <div className='entradaDatos'>
-                                <Textos className='subtitulo prin'>Condiciones de trabajo:</Textos>
+                                <Textos className='subtitulo prin'>7. Condiciones de trabajo:</Textos>
                                 <Textos className='subtitulo sub'>Durante las etapas de la actividad se mantiene ordenado y aseado el lugar de trabajo.</Textos>
                                 <div className='opciones'>
                                     <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('trabajo1', 'C')} className={formularioEnelInspeccionIntegralHSE.trabajo1 === 'C' ? 'formulario selected' : ''}>C</Botones>
@@ -2165,9 +2313,8 @@ const SupervisionAgregar = () => {
                         </div>
 
                         <div className='campo'>
-                            <Textos className='subtitulo'>8.</Textos>
                             <div className='entradaDatos'>
-                                <Textos className='subtitulo prin'>Materiales, equipos y herramientas:</Textos>
+                                <Textos className='subtitulo prin'>8. Materiales, equipos y herramientas:</Textos>
                                 <Textos className='subtitulo sub'>Utiliza los materiales indicados.</Textos>
                                 <div className='opciones'>
                                     <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('materiales1', 'C')} className={formularioEnelInspeccionIntegralHSE.materiales1 === 'C' ? 'formulario selected' : ''}>C</Botones>
@@ -2219,9 +2366,8 @@ const SupervisionAgregar = () => {
                         </div>
 
                         <div className='campo'>
-                            <Textos className='subtitulo'>9.</Textos>
                             <div className='entradaDatos'>
-                                <Textos className='subtitulo prin'>Primeros auxilios y plan de emergencias:</Textos>
+                                <Textos className='subtitulo prin'>9. Primeros auxilios y plan de emergencias:</Textos>
                                 <Textos className='subtitulo sub'>En  el  lugar  de  trabajo  existe  extintor  adecuado  a  la  clase  de  fuego,  está presurizado, con etiquetas vigentes y legibles.</Textos>
                                 <div className='opciones'>
                                     <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('primerosAuxilios1', 'C')} className={formularioEnelInspeccionIntegralHSE.primerosAuxilios1 === 'C' ? 'formulario selected' : ''}>C</Botones>
@@ -2305,9 +2451,8 @@ const SupervisionAgregar = () => {
                         </div>
 
                         <div className='campo'>
-                            <Textos className='subtitulo'>10.</Textos>
                             <div className='entradaDatos'>
-                                <Textos className='subtitulo prin'>Aspectos biomecánicos:</Textos>
+                                <Textos className='subtitulo prin'>10. Aspectos biomecánicos:</Textos>
                                 <Textos className='subtitulo sub'>Cumple   con   los    lineamientos     de   manejo,   manipulación    de   cargas   y  posturas   adecuadas.  (Calistenia-pausas activas).</Textos>
                                 <div className='opciones'>
                                     <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('biomecanicos1', 'C')} className={formularioEnelInspeccionIntegralHSE.biomecanicos1 === 'C' ? 'formulario selected' : ''}>C</Botones>
@@ -2359,9 +2504,8 @@ const SupervisionAgregar = () => {
                         </div>
 
                         <div className='campo'>
-                            <Textos className='subtitulo'>11.</Textos>
                             <div className='entradaDatos'>
-                                <Textos className='subtitulo prin'>Manejo de productos químicos y derivados:</Textos>
+                                <Textos className='subtitulo prin'>11. Manejo de productos químicos y derivados:</Textos>
                                 <Textos className='subtitulo sub'>Se cuenta con las Fichas de Datos de Seguridad de los productos químicos.</Textos>
                                 <div className='opciones'>
                                     <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('quimicos1', 'C')} className={formularioEnelInspeccionIntegralHSE.quimicos1 === 'C' ? 'formulario selected' : ''}>C</Botones>
@@ -2445,9 +2589,8 @@ const SupervisionAgregar = () => {
                         </div>
 
                         <div className='campo'>
-                            <Textos className='subtitulo'>12.</Textos>
                             <div className='entradaDatos'>
-                                <Textos className='subtitulo prin'>Manejo de residuos no peligrosos:</Textos>
+                                <Textos className='subtitulo prin'>12. Manejo de residuos no peligrosos:</Textos>
                                 <Textos className='subtitulo sub'>Separación o clasificación adecuada de los residuos, según código de colores establecido.</Textos>
                                 <div className='opciones'>
                                     <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('residuosNoPeligrosos1', 'C')} className={formularioEnelInspeccionIntegralHSE.residuosNoPeligrosos1 === 'C' ? 'formulario selected' : ''}>C</Botones>
@@ -2499,9 +2642,8 @@ const SupervisionAgregar = () => {
                         </div>
 
                         <div className='campo'>
-                            <Textos className='subtitulo'>13.</Textos>
                             <div className='entradaDatos'>
-                                <Textos className='subtitulo prin'>Residuos de construcción y demolición - cobertura vegetal:</Textos>
+                                <Textos className='subtitulo prin'>13. Residuos de construcción y demolición - cobertura vegetal:</Textos>
                                 <Textos className='subtitulo sub'>Las actividades se llevan a cabo de conformidad con las autorizaciones obtenidas según la legislación local y en relación con los límites/requisitos ambientales específicos del sitio/obra (por ejemplo, PIN de RCD, licencias de intervención, emisiones, descargas de agua, ruido, etc.).</Textos>
                                 <div className='opciones'>
                                     <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('residuosConstruccion1', 'C')} className={formularioEnelInspeccionIntegralHSE.residuosConstruccion1 === 'C' ? 'formulario selected' : ''}>C</Botones>
@@ -2571,14 +2713,14 @@ const SupervisionAgregar = () => {
                         <div className='campo observacion'>
                             <i className="fas fa-comment"></i>
                             <div className='entradaDatos'>
-                                <Textos className='subtitulo'>8. Observaciones:</Textos>
+                                <Textos className='subtitulo'>Observaciones:</Textos>
                                 <AreaTextos type="text" placeholder="Agregue las observacion pertinentes" value={formularioEnelInspeccionIntegralHSE.observacion} onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('observacion', e.target.value)} rows={4} />
                             </div>
                         </div>
 
                         <div className='enviar'>
                             <Botones className="eliminar" onClick={() => {
-                                Cookies.remove('formularioEnelInspeccionIntegralHSE');
+                                localStorage.removeItem('formularioEnelInspeccionIntegralHSE');
                                 setMiembroEnProceso({})
                                 setFormularioEnelInspeccionIntegralHSE(estadoInicialFormularioEnelInspeccionIntegralHSE);
                             }}>Borrar formulario</Botones>
