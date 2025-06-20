@@ -576,6 +576,47 @@ const SupervisionAgregar = () => {
         fotoMateriales2: "",
         materiales3: "",
         fotoMateriales3: "",
+        primerosAuxilios1: "",
+        fotoPrimerosAuxilios1: "",
+        primerosAuxilios2: "",
+        fotoPrimerosAuxilios2: "",
+        primerosAuxilios3: "",
+        fotoPrimerosAuxilios3: "",
+        primerosAuxilios4: "",
+        fotoPrimerosAuxilios4: "",
+        primerosAuxilios5: "",
+        fotoPrimerosAuxilios5: "",
+        biomecanicos1: "",
+        fotoBiomecanicos1: "",
+        biomecanicos2: "",
+        fotoBiomecanicos2: "",
+        biomecanicos3: "",
+        fotoBiomecanicos3: "",
+        quimicos1: "",
+        fotoQuimicos1: "",
+        quimicos2: "",
+        fotoQuimicos2: "",
+        quimicos3: "",
+        fotoQuimicos3: "",
+        quimicos4: "",
+        fotoQuimicos4: "",
+        quimicos5: "",
+        fotoQuimicos5: "",
+        residuosNoPeligrosos1: "",
+        fotoResiduosNoPeligrosos1: "",
+        residuosNoPeligrosos2: "",
+        fotoResiduosNoPeligrosos2: "",
+        residuosNoPeligrosos3: "",
+        fotoResiduosNoPeligrosos3: "",
+        residuosConstruccion1: "",
+        fotoResiduosConstruccion1: "",
+        residuosConstruccion2: "",
+        fotoResiduosConstruccion2: "",
+        residuosConstruccion3: "",
+        fotoResiduosConstruccion3: "",
+        residuosConstruccion4: "",
+        fotoResiduosConstruccion4: "",
+        observacion: "",
     };
 
     const [formularioEnelInspeccionIntegralHSE, setFormularioEnelInspeccionIntegralHSE] = useState(() => {
@@ -2034,7 +2075,7 @@ const SupervisionAgregar = () => {
                                         onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoVehiculos9', e.target.files[0])}
                                     />
                                 </div>
-                                
+
                                 <Textos className='subtitulo sub'>Los estabilizadores de la máquina se utilizan correctamente y se respetan los diagramas de  carga.</Textos>
                                 <div className='opciones'>
                                     <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('vehiculos10', 'C')} className={formularioEnelInspeccionIntegralHSE.vehiculos10 === 'C' ? 'formulario selected' : ''}>C</Botones>
@@ -2050,6 +2091,488 @@ const SupervisionAgregar = () => {
                                         onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoVehiculos10', e.target.files[0])}
                                     />
                                 </div>
+                            </div>
+                        </div>
+
+                        <div className='campo'>
+                            <Textos className='subtitulo'>7.</Textos>
+                            <div className='entradaDatos'>
+                                <Textos className='subtitulo prin'>Condiciones de trabajo:</Textos>
+                                <Textos className='subtitulo sub'>Durante las etapas de la actividad se mantiene ordenado y aseado el lugar de trabajo.</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('trabajo1', 'C')} className={formularioEnelInspeccionIntegralHSE.trabajo1 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('trabajo1', 'NC')} className={formularioEnelInspeccionIntegralHSE.trabajo1 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('trabajo1', 'NA')} className={formularioEnelInspeccionIntegralHSE.trabajo1 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        disabled={formularioEnelInspeccionIntegralHSE.trabajo1 !== 'NC'}
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoTrabajo1', e.target.files[0])}
+                                    />
+                                </div>
+
+                                <Textos className='subtitulo sub'>Medios de comunicación existentes.</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('trabajo2', 'C')} className={formularioEnelInspeccionIntegralHSE.trabajo2 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('trabajo2', 'NC')} className={formularioEnelInspeccionIntegralHSE.trabajo2 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('trabajo2', 'NA')} className={formularioEnelInspeccionIntegralHSE.trabajo2 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        disabled={formularioEnelInspeccionIntegralHSE.trabajo2 !== 'NC'}
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoTrabajo2', e.target.files[0])}
+                                    />
+                                </div>
+
+                                <Textos className='subtitulo sub'>Colaboradores en condiciones físicas adecuadas. En caso de horas de trabajo prolongadas, los trabajadores toman descansos cortos a intervalos regulares.</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('trabajo3', 'C')} className={formularioEnelInspeccionIntegralHSE.trabajo3 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('trabajo3', 'NC')} className={formularioEnelInspeccionIntegralHSE.trabajo3 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('trabajo3', 'NA')} className={formularioEnelInspeccionIntegralHSE.trabajo3 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        disabled={formularioEnelInspeccionIntegralHSE.trabajo3 !== 'NC'}
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoTrabajo3', e.target.files[0])}
+                                    />
+                                </div>
+
+                                <Textos className='subtitulo sub'>El área cuenta con fuentes de iluminación adecuadas para las actividades que se realizan.</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('trabajo4', 'C')} className={formularioEnelInspeccionIntegralHSE.trabajo4 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('trabajo4', 'NC')} className={formularioEnelInspeccionIntegralHSE.trabajo4 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('trabajo4', 'NA')} className={formularioEnelInspeccionIntegralHSE.trabajo4 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        disabled={formularioEnelInspeccionIntegralHSE.trabajo4 !== 'NC'}
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoTrabajo4', e.target.files[0])}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className='campo'>
+                            <Textos className='subtitulo'>8.</Textos>
+                            <div className='entradaDatos'>
+                                <Textos className='subtitulo prin'>Materiales, equipos y herramientas:</Textos>
+                                <Textos className='subtitulo sub'>Utiliza los materiales indicados.</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('materiales1', 'C')} className={formularioEnelInspeccionIntegralHSE.materiales1 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('materiales1', 'NC')} className={formularioEnelInspeccionIntegralHSE.materiales1 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('materiales1', 'NA')} className={formularioEnelInspeccionIntegralHSE.materiales1 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        disabled={formularioEnelInspeccionIntegralHSE.materiales1 !== 'NC'}
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoMateriales1', e.target.files[0])}
+                                    />
+                                </div>
+
+                                <Textos className='subtitulo sub'>Utiliza  los  equipos  indicados  en  buen  estado  y  normalizados  (pértigas,  probador  ausencia  de tensión,  puesta a tierra BT-MT, Pinza voltiamperimétrica).</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('materiales2', 'C')} className={formularioEnelInspeccionIntegralHSE.materiales2 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('materiales2', 'NC')} className={formularioEnelInspeccionIntegralHSE.materiales2 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('materiales2', 'NA')} className={formularioEnelInspeccionIntegralHSE.materiales2 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        disabled={formularioEnelInspeccionIntegralHSE.materiales2 !== 'NC'}
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoMateriales2', e.target.files[0])}
+                                    />
+                                </div>
+
+                                <Textos className='subtitulo sub'>Utiliza las herramientas indicadas según su diseño y están en buen estado.</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('materiales3', 'C')} className={formularioEnelInspeccionIntegralHSE.materiales3 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('materiales3', 'NC')} className={formularioEnelInspeccionIntegralHSE.materiales3 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('materiales3', 'NA')} className={formularioEnelInspeccionIntegralHSE.materiales3 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        disabled={formularioEnelInspeccionIntegralHSE.materiales3 !== 'NC'}
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoMateriales3', e.target.files[0])}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className='campo'>
+                            <Textos className='subtitulo'>9.</Textos>
+                            <div className='entradaDatos'>
+                                <Textos className='subtitulo prin'>Primeros auxilios y plan de emergencias:</Textos>
+                                <Textos className='subtitulo sub'>En  el  lugar  de  trabajo  existe  extintor  adecuado  a  la  clase  de  fuego,  está presurizado, con etiquetas vigentes y legibles.</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('primerosAuxilios1', 'C')} className={formularioEnelInspeccionIntegralHSE.primerosAuxilios1 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('primerosAuxilios1', 'NC')} className={formularioEnelInspeccionIntegralHSE.primerosAuxilios1 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('primerosAuxilios1', 'NA')} className={formularioEnelInspeccionIntegralHSE.primerosAuxilios1 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        disabled={formularioEnelInspeccionIntegralHSE.primerosAuxilios1 !== 'NC'}
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoPrimerosAuxilios1', e.target.files[0])}
+                                    />
+                                </div>
+
+                                <Textos className='subtitulo sub'>Posee botiquín de primeros auxilios en buen estado completo y vigente.</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('primerosAuxilios2', 'C')} className={formularioEnelInspeccionIntegralHSE.primerosAuxilios2 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('primerosAuxilios2', 'NC')} className={formularioEnelInspeccionIntegralHSE.primerosAuxilios2 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('primerosAuxilios2', 'NA')} className={formularioEnelInspeccionIntegralHSE.primerosAuxilios2 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        disabled={formularioEnelInspeccionIntegralHSE.primerosAuxilios2 !== 'NC'}
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoPrimerosAuxilios2', e.target.files[0])}
+                                    />
+                                </div>
+
+                                <Textos className='subtitulo sub'>Los botiquines son de fácil acceso y cuentan con elementos necesarios para aplicar un primer auxilio.</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('primerosAuxilios3', 'C')} className={formularioEnelInspeccionIntegralHSE.primerosAuxilios3 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('primerosAuxilios3', 'NC')} className={formularioEnelInspeccionIntegralHSE.primerosAuxilios3 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('primerosAuxilios3', 'NA')} className={formularioEnelInspeccionIntegralHSE.primerosAuxilios3 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        disabled={formularioEnelInspeccionIntegralHSE.primerosAuxilios3 !== 'NC'}
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoPrimerosAuxilios3', e.target.files[0])}
+                                    />
+                                </div>
+
+                                <Textos className='subtitulo sub'>Sabe o conoce como actuar en caso de emergencias, accidentes o incidentes de trabajo o emergencia ambiental.</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('primerosAuxilios4', 'C')} className={formularioEnelInspeccionIntegralHSE.primerosAuxilios4 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('primerosAuxilios4', 'NC')} className={formularioEnelInspeccionIntegralHSE.primerosAuxilios4 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('primerosAuxilios4', 'NA')} className={formularioEnelInspeccionIntegralHSE.primerosAuxilios4 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        disabled={formularioEnelInspeccionIntegralHSE.primerosAuxilios4 !== 'NC'}
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoPrimerosAuxilios4', e.target.files[0])}
+                                    />
+                                </div>
+
+                                <Textos className='subtitulo sub'>Se pueden encontrar fácilmente áreas seguras en caso de emergencia.</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('primerosAuxilios5', 'C')} className={formularioEnelInspeccionIntegralHSE.primerosAuxilios5 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('primerosAuxilios5', 'NC')} className={formularioEnelInspeccionIntegralHSE.primerosAuxilios5 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('primerosAuxilios5', 'NA')} className={formularioEnelInspeccionIntegralHSE.primerosAuxilios5 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        disabled={formularioEnelInspeccionIntegralHSE.primerosAuxilios5 !== 'NC'}
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoPrimerosAuxilios5', e.target.files[0])}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className='campo'>
+                            <Textos className='subtitulo'>10.</Textos>
+                            <div className='entradaDatos'>
+                                <Textos className='subtitulo prin'>Aspectos biomecánicos:</Textos>
+                                <Textos className='subtitulo sub'>Cumple   con   los    lineamientos     de   manejo,   manipulación    de   cargas   y  posturas   adecuadas.  (Calistenia-pausas activas).</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('biomecanicos1', 'C')} className={formularioEnelInspeccionIntegralHSE.biomecanicos1 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('biomecanicos1', 'NC')} className={formularioEnelInspeccionIntegralHSE.biomecanicos1 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('biomecanicos1', 'NA')} className={formularioEnelInspeccionIntegralHSE.biomecanicos1 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        disabled={formularioEnelInspeccionIntegralHSE.biomecanicos1 !== 'NC'}
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoBiomecanicos1', e.target.files[0])}
+                                    />
+                                </div>
+
+                                <Textos className='subtitulo sub'>Se cuenta con los elementos adecuados para el levantamiento de tapas y se realiza con mínimo 3 personas.</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('biomecanicos2', 'C')} className={formularioEnelInspeccionIntegralHSE.biomecanicos2 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('biomecanicos2', 'NC')} className={formularioEnelInspeccionIntegralHSE.biomecanicos2 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('biomecanicos2', 'NA')} className={formularioEnelInspeccionIntegralHSE.biomecanicos2 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        disabled={formularioEnelInspeccionIntegralHSE.biomecanicos2 !== 'NC'}
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoBiomecanicos2', e.target.files[0])}
+                                    />
+                                </div>
+
+                                <Textos className='subtitulo sub'>Uso ayudas mecánicas para la manipulación manual de cargas (por ejemplo, carretillas, estibadores, polipastos, etc.)</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('biomecanicos3', 'C')} className={formularioEnelInspeccionIntegralHSE.biomecanicos3 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('biomecanicos3', 'NC')} className={formularioEnelInspeccionIntegralHSE.biomecanicos3 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('biomecanicos3', 'NA')} className={formularioEnelInspeccionIntegralHSE.biomecanicos3 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        disabled={formularioEnelInspeccionIntegralHSE.biomecanicos3 !== 'NC'}
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoBiomecanicos3', e.target.files[0])}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className='campo'>
+                            <Textos className='subtitulo'>11.</Textos>
+                            <div className='entradaDatos'>
+                                <Textos className='subtitulo prin'>Manejo de productos químicos y derivados:</Textos>
+                                <Textos className='subtitulo sub'>Se cuenta con las Fichas de Datos de Seguridad de los productos químicos.</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('quimicos1', 'C')} className={formularioEnelInspeccionIntegralHSE.quimicos1 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('quimicos1', 'NC')} className={formularioEnelInspeccionIntegralHSE.quimicos1 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('quimicos1', 'NA')} className={formularioEnelInspeccionIntegralHSE.quimicos1 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        disabled={formularioEnelInspeccionIntegralHSE.quimicos1 !== 'NC'}
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoQuimicos1', e.target.files[0])}
+                                    />
+                                </div>
+
+                                <Textos className='subtitulo sub'>Se cuenta con el kit completo para manejo de derrames de productos químicos.</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('quimicos2', 'C')} className={formularioEnelInspeccionIntegralHSE.quimicos2 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('quimicos2', 'NC')} className={formularioEnelInspeccionIntegralHSE.quimicos2 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('quimicos2', 'NA')} className={formularioEnelInspeccionIntegralHSE.quimicos2 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        disabled={formularioEnelInspeccionIntegralHSE.quimicos2 !== 'NC'}
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoQuimicos2', e.target.files[0])}
+                                    />
+                                </div>
+
+                                <Textos className='subtitulo sub'>Cuenta con rotulación (SGA) para los productos químicos.</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('quimicos3', 'C')} className={formularioEnelInspeccionIntegralHSE.quimicos3 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('quimicos3', 'NC')} className={formularioEnelInspeccionIntegralHSE.quimicos3 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('quimicos3', 'NA')} className={formularioEnelInspeccionIntegralHSE.quimicos3 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        disabled={formularioEnelInspeccionIntegralHSE.quimicos3 !== 'NC'}
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoQuimicos3', e.target.files[0])}
+                                    />
+                                </div>
+
+                                <Textos className='subtitulo sub'>Vehículos, maquinaria y equipos sin fuga de aceites, combustibles u otros fluidos hidráulicos.</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('quimicos4', 'C')} className={formularioEnelInspeccionIntegralHSE.quimicos4 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('quimicos4', 'NC')} className={formularioEnelInspeccionIntegralHSE.quimicos4 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('quimicos4', 'NA')} className={formularioEnelInspeccionIntegralHSE.quimicos4 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        disabled={formularioEnelInspeccionIntegralHSE.quimicos4 !== 'NC'}
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoQuimicos4', e.target.files[0])}
+                                    />
+                                </div>
+
+                                <Textos className='subtitulo sub'>Se recolectan, almacenan, rotulan y se transportan de forma segura los residuos peligrosos (envases químicos, residuos aceitosos, entre otros).</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('quimicos5', 'C')} className={formularioEnelInspeccionIntegralHSE.quimicos5 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('quimicos5', 'NC')} className={formularioEnelInspeccionIntegralHSE.quimicos5 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('quimicos5', 'NA')} className={formularioEnelInspeccionIntegralHSE.quimicos5 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        disabled={formularioEnelInspeccionIntegralHSE.quimicos5 !== 'NC'}
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoQuimicos5', e.target.files[0])}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className='campo'>
+                            <Textos className='subtitulo'>12.</Textos>
+                            <div className='entradaDatos'>
+                                <Textos className='subtitulo prin'>Manejo de residuos no peligrosos:</Textos>
+                                <Textos className='subtitulo sub'>Separación o clasificación adecuada de los residuos, según código de colores establecido.</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('residuosNoPeligrosos1', 'C')} className={formularioEnelInspeccionIntegralHSE.residuosNoPeligrosos1 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('residuosNoPeligrosos1', 'NC')} className={formularioEnelInspeccionIntegralHSE.residuosNoPeligrosos1 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('residuosNoPeligrosos1', 'NA')} className={formularioEnelInspeccionIntegralHSE.residuosNoPeligrosos1 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        disabled={formularioEnelInspeccionIntegralHSE.residuosNoPeligrosos1 !== 'NC'}
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoResiduosNoPeligrosos1', e.target.files[0])}
+                                    />
+                                </div>
+
+                                <Textos className='subtitulo sub'>Se encuentra el vehículo en condiciones optimas de orden y aseo (limpio y ordenado).</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('residuosNoPeligrosos2', 'C')} className={formularioEnelInspeccionIntegralHSE.residuosNoPeligrosos2 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('residuosNoPeligrosos2', 'NC')} className={formularioEnelInspeccionIntegralHSE.residuosNoPeligrosos2 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('residuosNoPeligrosos2', 'NA')} className={formularioEnelInspeccionIntegralHSE.residuosNoPeligrosos2 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        disabled={formularioEnelInspeccionIntegralHSE.residuosNoPeligrosos2 !== 'NC'}
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoResiduosNoPeligrosos2', e.target.files[0])}
+                                    />
+                                </div>
+
+                                <Textos className='subtitulo sub'>Se garantiza la limpieza de la zona de trabajo luego de la ejecución de la labor y la disposición final adecuada de los residuos.</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('residuosNoPeligrosos3', 'C')} className={formularioEnelInspeccionIntegralHSE.residuosNoPeligrosos3 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('residuosNoPeligrosos3', 'NC')} className={formularioEnelInspeccionIntegralHSE.residuosNoPeligrosos3 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('residuosNoPeligrosos3', 'NA')} className={formularioEnelInspeccionIntegralHSE.residuosNoPeligrosos3 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        disabled={formularioEnelInspeccionIntegralHSE.residuosNoPeligrosos3 !== 'NC'}
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoResiduosNoPeligrosos3', e.target.files[0])}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className='campo'>
+                            <Textos className='subtitulo'>13.</Textos>
+                            <div className='entradaDatos'>
+                                <Textos className='subtitulo prin'>Residuos de construcción y demolición - cobertura vegetal:</Textos>
+                                <Textos className='subtitulo sub'>Las actividades se llevan a cabo de conformidad con las autorizaciones obtenidas según la legislación local y en relación con los límites/requisitos ambientales específicos del sitio/obra (por ejemplo, PIN de RCD, licencias de intervención, emisiones, descargas de agua, ruido, etc.).</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('residuosConstruccion1', 'C')} className={formularioEnelInspeccionIntegralHSE.residuosConstruccion1 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('residuosConstruccion1', 'NC')} className={formularioEnelInspeccionIntegralHSE.residuosConstruccion1 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('residuosConstruccion1', 'NA')} className={formularioEnelInspeccionIntegralHSE.residuosConstruccion1 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        disabled={formularioEnelInspeccionIntegralHSE.residuosConstruccion1 !== 'NC'}
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoResiduosConstruccion1', e.target.files[0])}
+                                    />
+                                </div>
+
+                                <Textos className='subtitulo sub'>El almacenamiento temporal es adecuado, ubicado dentro de la zona de trabajo, no se obstruyen los senderos peatonales y/o vías.</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('residuosConstruccion2', 'C')} className={formularioEnelInspeccionIntegralHSE.residuosConstruccion2 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('residuosConstruccion2', 'NC')} className={formularioEnelInspeccionIntegralHSE.residuosConstruccion2 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('residuosConstruccion2', 'NA')} className={formularioEnelInspeccionIntegralHSE.residuosConstruccion2 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        disabled={formularioEnelInspeccionIntegralHSE.residuosConstruccion2 !== 'NC'}
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoResiduosConstruccion2', e.target.files[0])}
+                                    />
+                                </div>
+
+                                <Textos className='subtitulo sub'>Se  protegen las zonas verdes, sumideros y se controla el material particulado.</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('residuosConstruccion3', 'C')} className={formularioEnelInspeccionIntegralHSE.residuosConstruccion3 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('residuosConstruccion3', 'NC')} className={formularioEnelInspeccionIntegralHSE.residuosConstruccion3 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('residuosConstruccion3', 'NA')} className={formularioEnelInspeccionIntegralHSE.residuosConstruccion3 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        disabled={formularioEnelInspeccionIntegralHSE.residuosConstruccion3 !== 'NC'}
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoResiduosConstruccion3', e.target.files[0])}
+                                    />
+                                </div>
+
+                                <Textos className='subtitulo sub'>Las actividades se realizan de una forma que evite el riesgo de colapso o fallo de las estructuras/terrenos (por ejemplo, entibado).</Textos>
+                                <div className='opciones'>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('residuosConstruccion4', 'C')} className={formularioEnelInspeccionIntegralHSE.residuosConstruccion4 === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('residuosConstruccion4', 'NC')} className={formularioEnelInspeccionIntegralHSE.residuosConstruccion4 === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                    <Botones onClick={() => actualizarCampoEnelInspeccionIntegralHSE('residuosConstruccion4', 'NA')} className={formularioEnelInspeccionIntegralHSE.residuosConstruccion4 === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                </div>
+                                <div className='opciones'>
+                                    <Entradas
+                                        type="file"
+                                        className="form-control image"
+                                        accept="image/*"
+                                        disabled={formularioEnelInspeccionIntegralHSE.residuosConstruccion4 !== 'NC'}
+                                        onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('fotoResiduosConstruccion4', e.target.files[0])}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className='campo observacion'>
+                            <i className="fas fa-comment"></i>
+                            <div className='entradaDatos'>
+                                <Textos className='subtitulo'>8. Observaciones:</Textos>
+                                <AreaTextos type="text" placeholder="Agregue las observacion pertinentes" value={formularioEnelInspeccionIntegralHSE.observacion} onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('observacion', e.target.value)} rows={4} />
                             </div>
                         </div>
 
