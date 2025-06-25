@@ -88,7 +88,7 @@
                             position: sticky;
                             top: 0px;
                             background: #fff;
-                            z-index: 1000;
+                            z-index: 1;
                             padding: 10px 0;
                             font-weight: bold;
                             border: 1px solid rgb(156, 156, 156);
@@ -99,10 +99,10 @@
                             &::before {
                                 content: '';
                                 position: absolute;
-                                top: -21px;
+                                top: -22px;
                                 left: 0;
                                 right: 0;
-                                height: 20px;
+                                height: 21px;
                                 background: #fff;
                                 z-index: -1;
 
@@ -312,7 +312,7 @@
                                 justify-content: left;
                                 padding-left: 15px;
                                 margin: 5px 0px;
-                                width: 100%;
+                                width: 100% !important;
 
                                 .image {
                                     width: 100% !important;

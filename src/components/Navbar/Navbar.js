@@ -803,6 +803,11 @@ function Navbar() {
 
                 <div className='lineaVertical'></div>
 
+                <div
+                    className={`overlay ${showMobileMenu ? 'visible' : ''}`}
+                    onClick={closeAllDropdowns}
+                ></div>
+
                 <div className={`contenido ${showMobileMenu ? 'visible' : 'oculto'}`}>
                     <Outlet />
                 </div>

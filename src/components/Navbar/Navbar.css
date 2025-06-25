@@ -303,7 +303,7 @@
                 border-radius: 10px;
                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
                 padding: 10px 0px;
-                z-index: 999;
+                z-index: 3000;
                 min-width: 200px;
 
                 &::before {
@@ -448,6 +448,7 @@
         display: flex;
         width: 100%;
         height: calc(100% - 70px - 2px);
+        position: relative;
 
         .menuLateral {
             height: 100%;
@@ -462,6 +463,7 @@
             &.abierto {
                 max-width: 250px;
                 opacity: 1;
+                z-index: 2000;
             }
 
             &.cerrado {
@@ -750,6 +752,24 @@
             height: 100%;
             width: 2px;
             background-color: var(--background-lineas);
+        }
+
+        .overlay {
+            position: fixed;
+            top: 72;
+            left: 250px;
+            right: 0;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.3);
+            z-index: 2000;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+
+            &.visible {
+                pointer-events: auto;
+                opacity: 1;
+            }
         }
 
         .contenido {
