@@ -805,7 +805,7 @@ function Navbar() {
 
                 <div
                     className={`overlay ${showMobileMenu ? 'visible' : ''}`}
-                    onClick={closeAllDropdowns}
+                    onClick={() => {setShowMobileMenu(!showMobileMenu)}}
                 ></div>
 
                 <div className={`contenido ${showMobileMenu ? 'visible' : 'oculto'}`}>

@@ -766,6 +766,7 @@ const SupervisionAgregar = () => {
             fotoEppTapabocas: "",
             eppBotas: "",
             fotoEppBotas: "",
+            observacionEpp: "",
         };
     });
 
@@ -1544,6 +1545,13 @@ const SupervisionAgregar = () => {
                                                     disabled={miembroEnProceso.eppBotas !== 'NC'}
                                                     onChange={(e) => setMiembroEnProceso(prev => ({ ...prev, fotoEppBotas: e.target.files[0] }))}
                                                 />
+                                            </div>
+                                        </div>
+                                        <div className={`entradaDatos vertical observacion' ${miembroEnProceso.eppCasco !== 'NC' && miembroEnProceso.eppGuantes !== 'NC' && miembroEnProceso.eppGuantesDielectricos !== 'NC' && miembroEnProceso.eppProteccionFacialAntiArco !== 'NC'
+                                            && miembroEnProceso.eppEquiposContraCaidas !== 'NC' && miembroEnProceso.eppOverolObraCivil !== 'NC' && miembroEnProceso.eppOverolIgnifugo !== 'NC' && miembroEnProceso.eppGafasDeSeguridad !== 'NC' && miembroEnProceso.eppTapabocas !== 'NC' && miembroEnProceso.eppBotas !== 'NC' ? 'ocultar' : ''}`}>
+                                            <Textos className='subtitulo'>Observaciones:</Textos>
+                                            <div className='opciones'>
+                                                <AreaTextos type="text" placeholder="Agregue las observacion pertinentes" value={miembroEnProceso.observacionEpp} onChange={(e) => setMiembroEnProceso(prev => ({ ...prev, observacionEpp: e.target.value }))} rows={4} />
                                             </div>
                                         </div>
                                         <div className="modal-acciones">

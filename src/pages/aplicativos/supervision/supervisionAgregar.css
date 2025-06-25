@@ -100,12 +100,11 @@
                                 content: '';
                                 position: absolute;
                                 top: -22px;
-                                left: 0;
-                                right: 0;
+                                left: -2px;
+                                right: -2px;
                                 height: 21px;
                                 background: #fff;
                                 z-index: -1;
-
                                 display: none;
                             }
 
