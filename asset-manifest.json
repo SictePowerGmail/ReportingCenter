@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/ReportingCenter/static/css/main.7e2c5e87.css",
-    "main.js": "/ReportingCenter/static/js/main.e6b5ac22.js",
+    "main.css": "/ReportingCenter/static/css/main.03d3e8e5.css",
+    "main.js": "/ReportingCenter/static/js/main.fc0255a9.js",
     "static/js/213.3acf702f.chunk.js": "/ReportingCenter/static/js/213.3acf702f.chunk.js",
     "static/js/732.7a8fa0dd.chunk.js": "/ReportingCenter/static/js/732.7a8fa0dd.chunk.js",
     "static/media/Electr 1.jpg": "/ReportingCenter/static/media/Electr 1.388a5c0dc5e5ea8b4891.jpg",
@@ -37,13 +37,13 @@
     "static/media/slick.ttf": "/ReportingCenter/static/media/slick.c94f7671dcc99dce43e2.ttf",
     "static/media/slick.woff": "/ReportingCenter/static/media/slick.295183786cd8a1389865.woff",
     "index.html": "/ReportingCenter/index.html",
-    "main.7e2c5e87.css.map": "/ReportingCenter/static/css/main.7e2c5e87.css.map",
-    "main.e6b5ac22.js.map": "/ReportingCenter/static/js/main.e6b5ac22.js.map",
+    "main.03d3e8e5.css.map": "/ReportingCenter/static/css/main.03d3e8e5.css.map",
+    "main.fc0255a9.js.map": "/ReportingCenter/static/js/main.fc0255a9.js.map",
     "213.3acf702f.chunk.js.map": "/ReportingCenter/static/js/213.3acf702f.chunk.js.map",
     "732.7a8fa0dd.chunk.js.map": "/ReportingCenter/static/js/732.7a8fa0dd.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.7e2c5e87.css",
-    "static/js/main.e6b5ac22.js"
+    "static/css/main.03d3e8e5.css",
+    "static/js/main.fc0255a9.js"
   ]
 }
