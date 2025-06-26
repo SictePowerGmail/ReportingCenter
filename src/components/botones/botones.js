@@ -9,6 +9,7 @@ const Botones = ({
 }) => {
   return (
     <button
+      type="button"
       onClick={onClick}
       className={`boton ${className}`}
       {...rest}

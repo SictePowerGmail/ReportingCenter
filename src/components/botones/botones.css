@@ -51,4 +51,13 @@
             background-color: #6e1010;
         }
     }
+
+    &.imagenes {
+        background-color: #a4b823;
+        color: white;
+
+        &:hover {
+            background-color: #646f1e;
+        }
+    }
 }
