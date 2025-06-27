@@ -24,7 +24,7 @@ export const OpcionesFotoObservaciones = ({ texto, keyBase, fotoKey, observacion
                     type="file"
                     className="image"
                     accept="image/*"
-                    capture={data.tipoInpseccion !== 'Virtual' ? "environment" : ''}
+                    capture={data.tipoInpseccion !== 'Virtual' ? "environment" : undefined}
                     onChange={(e) => onChange(fotoKey, e.target.files[0])}
                 />
                 <Textos className='parrafo'>{data[fotoKey]?.name || 'Ningún archivo ingresado'}</Textos>
