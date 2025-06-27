@@ -50,6 +50,35 @@
                 background-color: #e6e6e6 !important;
             }
 
+            tbody {
+                tr {
+                    cursor: pointer;
+
+                    td {
+                        text-align: center;
+
+                        &.acciones {
+                            min-width: 95px;
+                        }
+
+                        .editar {
+                            border: none;
+                            background-color: transparent;
+                            margin-right: 8px;
+                            color: blue;
+                            font-size: 18px;
+                        }
+
+                        .eliminar {
+                            border: none;
+                            background-color: transparent;
+                            color: red;
+                            font-size: 18px;
+                        }
+                    }
+                }
+            }
+
             tbody tr:nth-child(odd) {
                 background-color: #ffffff;
             }

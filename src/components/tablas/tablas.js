@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { FaPencilAlt, FaTrash } from 'react-icons/fa';
 import './tablas.css';
 import Entradas from '../entradas/entradas';
 import Botones from '../botones/botones';
@@ -9,6 +10,12 @@ const Tablas = ({
     datos = [],          // [{ nombre: 'Juan', edad: 30 }, ...]
     className = '',
     filasPorPagina = 10,
+    leer = false,
+    editar = false,
+    eliminar = false,
+    onLeer = () => { },
+    onEditar = () => { },
+    onEliminar = () => { },
 }) => {
     const [paginaActual, setPaginaActual] = useState(1);
     const [filtro, setFiltro] = useState('');
@@ -54,9 +61,12 @@ const Tablas = ({
                     <thead>
                         <tr>
                             {columnas.length > 0 ? (
-                                columnas.map((col) => (
-                                    <th key={col.key}>{col.header}</th>
-                                ))
+                                <>
+                                    {columnas.map((col) => (
+                                        <th key={col.key}>{col.header}</th>
+                                    ))}
+                                    <th key={'acciones'}>Acciones</th>
+                                </>
                             ) : (
                                 <th>No hay columnas definidas</th>
                             )}
@@ -64,16 +74,36 @@ const Tablas = ({
                     </thead>
                     <tbody>
                         {datosPagina.length > 0 ? (
-                            datosPagina.map((fila, index) => (
-                                <tr key={index}>
-                                    {columnas.map((col) => (
-                                        <td key={col.key}>{fila[col.key]}</td>
-                                    ))}
-                                </tr>
-                            ))
+                            <>
+                                {datosPagina.map((fila, index) => (
+                                    <tr key={index}
+                                        onClick={(e) => {
+                                            if (e.target.closest('button') === null && leer === true) {
+                                                onLeer(fila);
+                                            }
+                                        }}
+                                    >
+                                        {columnas.map((col) => (
+                                            <td key={col.key}>{fila[col.key]}</td>
+                                        ))}
+                                        <td className='acciones' key={'acciones'}>
+                                            {editar && (
+                                                <button className='editar' onClick={() => onEditar(fila)}>
+                                                    <FaPencilAlt />
+                                                </button>
+                                            )}
+                                            {eliminar && (
+                                                <button className='eliminar' onClick={() => onEliminar(fila)}>
+                                                    <FaTrash />
+                                                </button>
+                                            )}
+                                        </td>
+                                    </tr>
+                                ))}
+                            </>
                         ) : (
                             <tr>
-                                <td colSpan={columnas.length || 1} style={{ textAlign: 'center' }}>
+                                <td colSpan={columnas.length + 1 || 1}>
                                     No hay datos disponibles
                                 </td>
                             </tr>

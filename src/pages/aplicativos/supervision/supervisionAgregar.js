@@ -16,6 +16,7 @@ import Textos from '../../../components/textos/textos';
 import Entradas from '../../../components/entradas/entradas';
 import AreaTextos from '../../../components/areaTextos/areaTextos';
 import Tablas from '../../../components/tablas/tablas';
+import Imagenes from '../../../components/imagenes/imagenes';
 import { OpcionesFotoObservaciones } from './OpcionesFotoObservaciones';
 import Cookies from 'js-cookie';
 
@@ -36,6 +37,7 @@ const SupervisionAgregar = () => {
     const [enviando, setEnviando] = useState(false);
     const [listaPlacasRegistradas, setListaPlacasRegistradas] = useState([]);
     const [imagenAmpliada, setImagenAmpliada] = useState(null);
+    const [accionModalTabla, setAccionModalTabla] = useState('crear');
 
     const cargarGeolocalizacion = () => {
         if (navigator.geolocation) {
@@ -784,24 +786,6 @@ const SupervisionAgregar = () => {
 
     const [mostrarModal, setMostrarModal] = useState(false);
 
-    const agregarMiembroACuadrillaEnelInspeccionIntegralHSE = (miembro) => {
-        const existe = (formularioEnelInspeccionIntegralHSE.cuadrilla || []).some(m => m.cedula === miembro.cedula);
-        if (existe) {
-            toast.warning('La cédula ya está en la cuadrilla.');
-            return
-        }
-
-        setFormularioEnelInspeccionIntegralHSE(prev => {
-            const actualizado = { ...prev, cuadrilla: [...(prev.cuadrilla || []), miembro] };
-            localStorage.setItem('formularioEnelInspeccionIntegralHSE', JSON.stringify(actualizado));
-            return actualizado;
-        });
-
-        localStorage.removeItem('miembroEnProceso');
-        setMostrarModal(false);
-        setMiembroEnProceso({})
-    };
-
     const [miembroEnProceso, setMiembroEnProceso] = useState(() => {
         const guardado = localStorage.getItem('miembroEnProceso');
         return guardado ? JSON.parse(guardado) : {
@@ -837,6 +821,53 @@ const SupervisionAgregar = () => {
             observacionEpp: "",
         };
     });
+
+    const actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE = async (campo, valor) => {
+
+        if (['C', 'NC', 'NA'].includes(valor)) {
+            setMiembroEnProceso(prev => {
+                const actualizado = { ...prev, [campo]: valor };
+
+                if (valor !== 'NC') {
+                    const base = campo.charAt(0).toUpperCase() + campo.slice(1);
+                    const fotoKey = `foto${base}`;
+
+                    if (fotoKey in actualizado) actualizado[fotoKey] = '';
+                }
+
+                localStorage.setItem('miembroEnProceso', JSON.stringify(actualizado));
+                return actualizado;
+            });
+            return;
+        }
+
+        if (typeof valor === 'string') {
+            setMiembroEnProceso(prev => {
+                const actualizado = { ...prev, [campo]: valor };
+                localStorage.setItem('miembroEnProceso', JSON.stringify(actualizado));
+                return actualizado;
+            });
+            return;
+        }
+
+        if (valor instanceof File) {
+            const base64Resized = await procesarImagen(valor);
+
+            setMiembroEnProceso((prev) => {
+                const actualizado = { ...prev };
+                actualizado[campo] = {
+                    name: valor.name,
+                    data: base64Resized,
+                };
+                localStorage.setItem(
+                    "miembroEnProceso",
+                    JSON.stringify(actualizado)
+                );
+                return actualizado;
+            });
+            return;
+        }
+    };
 
     useEffect(() => {
         localStorage.setItem('miembroEnProceso', JSON.stringify(miembroEnProceso));
@@ -985,7 +1016,7 @@ const SupervisionAgregar = () => {
             observacionKey: "observacionReglasOro5",
             activarinput: false,
         },
-        
+
 
 
         {
@@ -1344,6 +1375,39 @@ const SupervisionAgregar = () => {
             activarinput: false,
         },
     ];
+
+    const validarMiembroEnProceso = (miembro) => {
+        if (!miembro.cedula) { toast.error('Por favor diligencie la cedula.'); return false }
+        if (!miembro.nombre || miembro.nombre === 'Usuario no encontrado') { toast.error('Por favor ingrese un usuario valido.'); return false }
+        if (!miembro.cargo || miembro.cargo === 'Cargo no encontrado') { toast.error('Por favor ingrese un usuario valido.'); return false }
+        if (!miembro.arl) { toast.error('Por favor diligencie la arl.'); return false }
+        if (!miembro.tarjetaDeVida) { toast.error('Por favor diligencie la tarjeta de vida.'); return false }
+        if (!miembro.carneCliente) { toast.error('Por favor diligencie el carne cliente.'); return false }
+        if (!miembro.carneSicte) { toast.error('Por favor diligencie el carne sicte.'); return false }
+        if (!miembro.fotoDocumentos) { toast.error('Por favor ingrese la foto de los documentos.'); return false }
+        if (!miembro.observacionDocumentos && (miembro.arl === 'NC' || miembro.tarjetaDeVida === 'NC' || miembro.carneCliente === 'NC' || miembro.carneSicte === 'NC')) { toast.error('Por favor diligencie la observacion de los documentos.'); return false }
+        if (!miembro.eppCasco) { toast.error('Por favor diligencie el EPP - Casco.'); return false }
+        if (!miembro.fotoEppCasco && miembro.eppCasco === 'NC') { toast.error('Por favor ingrese la foto del EPP - Casco.'); return false }
+        if (!miembro.eppGuantes) { toast.error('Por favor diligencie el EPP - Guantes.'); return false }
+        if (!miembro.fotoEppGuantes && miembro.eppGuantes === 'NC') { toast.error('Por favor ingrese la foto del EPP - Guantes.'); return false }
+        if (!miembro.eppGuantesDielectricos) { toast.error('Por favor diligencie el EPP - Guantes Dielectricos.'); return false }
+        if (!miembro.fotoEppGuantesDielectricos && miembro.eppGuantesDielectricos === 'NC') { toast.error('Por favor ingrese la foto del EPP - Guantes Dielectricos.'); return false }
+        if (!miembro.eppProteccionFacialAntiArco) { toast.error('Por favor diligencie el EPP - Proteccion Facial Anti Arco.'); return false }
+        if (!miembro.fotoEppProteccionFacialAntiArco && miembro.eppProteccionFacialAntiArco === 'NC') { toast.error('Por favor ingrese la foto del EPP - Proteccion Facial Anti Arco.'); return false }
+        if (!miembro.eppEquiposContraCaidas) { toast.error('Por favor diligencie el EPP - Equipos Contra Caidas.'); return false }
+        if (!miembro.fotoEppEquiposContraCaidas && miembro.eppEquiposContraCaidas === 'NC') { toast.error('Por favor ingrese la foto del EPP - Equipos Contra Caidas.'); return false }
+        if (!miembro.eppOverolObraCivil) { toast.error('Por favor diligencie el EPP - Overol Obra Civil.'); return false }
+        if (!miembro.fotoEppOverolObraCivil && miembro.eppOverolObraCivil === 'NC') { toast.error('Por favor ingrese la foto del EPP - Overol Obra Civil.'); return false }
+        if (!miembro.eppOverolIgnifugo) { toast.error('Por favor diligencie el EPP - Overol Ignifugo.'); return false }
+        if (!miembro.fotoEppOverolIgnifugo && miembro.eppOverolIgnifugo === 'NC') { toast.error('Por favor ingrese la foto del EPP - Overol Ignifugo.'); return false }
+        if (!miembro.eppGafasDeSeguridad) { toast.error('Por favor diligencie el EPP - Gafas De Seguridad.'); return false }
+        if (!miembro.fotoEppGafasDeSeguridad && miembro.eppGafasDeSeguridad === 'NC') { toast.error('Por favor ingrese la foto del EPP - Gafas De Seguridad.'); return false }
+        if (!miembro.eppTapabocas) { toast.error('Por favor diligencie el EPP - Tapabocas.'); return false }
+        if (!miembro.fotoEppTapabocas && miembro.eppTapabocas === 'NC') { toast.error('Por favor ingrese la foto del EPP - Tapabocas.'); return false }
+        if (!miembro.eppBotas) { toast.error('Por favor diligencie el EPP - Botas.'); return false }
+        if (!miembro.fotoEppBotas && miembro.eppBotas === 'NC') { toast.error('Por favor ingrese la foto del EPP - Botas.'); return false }
+        if (!miembro.observacionEpp) { toast.error('Por favor diligencie la observacion de los epps.'); return false }
+    }
 
     return (
         <div className="supervision-agregar">
@@ -1860,13 +1924,34 @@ const SupervisionAgregar = () => {
                             <div className='entradaDatos'>
                                 <Textos className='subtitulo'>Datos Cuadrilla:</Textos>
                                 <div className='botonAgregar'>
-                                    <Botones className='agregar' onClick={() => setMostrarModal(true)}>Agregar</Botones>
+                                    <Botones className='agregar' onClick={() => {
+                                        setAccionModalTabla("crear");
+                                        setMiembroEnProceso({})
+                                        setMostrarModal(true);
+                                    }}>Agregar</Botones>
                                 </div>
                             </div>
                         </div>
 
                         <div className='Tabla'>
-                            <Tablas columnas={columnas} datos={formularioEnelInspeccionIntegralHSE.cuadrilla} filasPorPagina={5} />
+                            <Tablas columnas={columnas} datos={formularioEnelInspeccionIntegralHSE.cuadrilla} filasPorPagina={5}
+                                leer={true} editar={true} eliminar={true}
+                                onLeer={(fila) => {
+                                    setAccionModalTabla("leer");
+                                    setMostrarModal(true);
+                                    setMiembroEnProceso(fila);
+                                }}
+                                onEditar={(fila) => {
+                                    setAccionModalTabla("editar");
+                                    setMostrarModal(true);
+                                    setMiembroEnProceso(fila);
+                                }}
+                                onEliminar={(fila) => {
+                                    setAccionModalTabla("eliminar");
+                                    setMostrarModal(true);
+                                    setMiembroEnProceso(fila);
+                                    console.log(fila)
+                                }} />
                         </div>
 
                         {mostrarModal && (
@@ -1874,20 +1959,20 @@ const SupervisionAgregar = () => {
                                 <div className="modal-overlay" onClick={() => setMostrarModal(false)}></div>
                                 <div className="modal-cuadrilla">
                                     <div className="modal-contenido">
-                                        <Textos className='titulo'>Agregar Integrante</Textos>
+                                        <Textos className='titulo'>{accionModalTabla === 'crear' ? 'Agregar' : accionModalTabla === 'editar' ? 'Editar' : accionModalTabla === 'leer' ? 'Leer' : accionModalTabla === 'eliminar' ? 'Eliminar' : ''} Integrante</Textos>
                                         <Textos className='subtitulo encabezado'>1. Datos Personales:</Textos>
                                         <div className='entradaDatos'>
                                             <Textos className='subtitulo'>Cedula:</Textos>
-                                            <Entradas type="text" placeholder="Cédula" value={miembroEnProceso.cedula || ""} onChange={(e) => {
-                                                const valor = e.target.value;
-                                                const registroEncontrado = datosPlanta.find(item => item.nit === valor);
-                                                setMiembroEnProceso(prev => ({
-                                                    ...prev,
-                                                    cedula: valor,
-                                                    nombre: registroEncontrado ? registroEncontrado.nombre : 'Usuario no encontrado',
-                                                    cargo: registroEncontrado ? registroEncontrado.cargo : 'Cargo no encontrado',
-                                                }));
-                                            }} />
+                                            <Entradas type="text" placeholder="Cédula" value={miembroEnProceso.cedula || ""}
+                                                onChange={(e) => {
+                                                    const valor = e.target.value;
+                                                    const registroEncontrado = datosPlanta.find(item => item.nit === valor);
+                                                    actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('cedula', valor);
+                                                    actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('nombre', registroEncontrado ? registroEncontrado.nombre : 'Usuario no encontrado');
+                                                    actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('cargo', registroEncontrado ? registroEncontrado.cargo : 'Cargo no encontrado');
+                                                }}
+                                                disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"}
+                                            />
                                         </div>
                                         <div className='entradaDatos'>
                                             <Textos className='subtitulo'>Nombre:</Textos>
@@ -1901,230 +1986,211 @@ const SupervisionAgregar = () => {
                                         <div className='entradaDatos'>
                                             <Textos className='subtitulo'>ARL:</Textos>
                                             <div className='opciones'>
-                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, arl: 'C' }))} className={miembroEnProceso.arl === 'C' ? 'formulario selected' : ''}>C</Botones>
-                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, arl: 'NC' }))} className={miembroEnProceso.arl === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                                <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('arl', 'C')} className={miembroEnProceso.arl === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                                <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('arl', 'NC')} className={miembroEnProceso.arl === 'NC' ? 'formulario selected' : ''}>NC</Botones>
                                             </div>
                                         </div>
                                         <div className='entradaDatos'>
                                             <Textos className='subtitulo'>Tarjeta de vida:</Textos>
                                             <div className='opciones'>
-                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, tarjetaDeVida: 'C' }))} className={miembroEnProceso.tarjetaDeVida === 'C' ? 'formulario selected' : ''}>C</Botones>
-                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, tarjetaDeVida: 'NC' }))} className={miembroEnProceso.tarjetaDeVida === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                                <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('tarjetaDeVida', 'C')} className={miembroEnProceso.tarjetaDeVida === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                                <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('tarjetaDeVida', 'NC')} className={miembroEnProceso.tarjetaDeVida === 'NC' ? 'formulario selected' : ''}>NC</Botones>
                                             </div>
                                         </div>
                                         <div className='entradaDatos'>
                                             <Textos className='subtitulo'>Carné Cliente:</Textos>
                                             <div className='opciones'>
-                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, carneCliente: 'C' }))} className={miembroEnProceso.carneCliente === 'C' ? 'formulario selected' : ''}>C</Botones>
-                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, carneCliente: 'NC' }))} className={miembroEnProceso.carneCliente === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                                <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('carneCliente', 'C')} className={miembroEnProceso.carneCliente === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                                <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('carneCliente', 'NC')} className={miembroEnProceso.carneCliente === 'NC' ? 'formulario selected' : ''}>NC</Botones>
                                             </div>
                                         </div>
                                         <div className='entradaDatos'>
                                             <Textos className='subtitulo'>Carné Sicte:</Textos>
                                             <div className='opciones'>
-                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, carneSicte: 'C' }))} className={miembroEnProceso.carneSicte === 'C' ? 'formulario selected' : ''}>C</Botones>
-                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, carneSicte: 'NC' }))} className={miembroEnProceso.carneSicte === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                                <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('carneSicte', 'C')} className={miembroEnProceso.carneSicte === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                                <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('carneSicte', 'NC')} className={miembroEnProceso.carneSicte === 'NC' ? 'formulario selected' : ''}>NC</Botones>
                                             </div>
                                         </div>
                                         <div className='entradaDatos vertical'>
                                             <Textos className='subtitulo'>Ingrese la foto de los documentos:</Textos>
                                             <div className='opciones'>
-                                                <Entradas
-                                                    type="file"
-                                                    className="image"
-                                                    accept="image/*"
-                                                    onChange={(e) => setMiembroEnProceso(prev => ({ ...prev, fotoDocumentos: e.target.files[0] }))}
-                                                />
+                                                <Imagenes disableInput={accionModalTabla === "eliminar" || accionModalTabla === "leer"} fotoKey={'fotoDocumentos'} foto={miembroEnProceso.fotoDocumentos} onChange={(fotoKey, data) => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE(fotoKey, data)} capture={formularioEnelInspeccionIntegralHSE.tipoInpseccion !== 'Virtual' ? true : false} setImagen={(data) => setImagenAmpliada(data)} />
                                             </div>
                                         </div>
                                         <div className={`entradaDatos vertical observacion' ${miembroEnProceso.arl !== 'NC' && miembroEnProceso.tarjetaDeVida !== 'NC' && miembroEnProceso.carneCliente !== 'NC' && miembroEnProceso.carneSicte !== 'NC' ? 'ocultar' : ''}`}>
                                             <Textos className='subtitulo'>Observaciones:</Textos>
                                             <div className='opciones'>
-                                                <AreaTextos type="text" placeholder="Agregue las observacion pertinentes" value={miembroEnProceso.observacionDocumentos} onChange={(e) => setMiembroEnProceso(prev => ({ ...prev, observacionDocumentos: e.target.value }))} rows={4} />
+                                                <AreaTextos disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} type="text" placeholder="Agregue las observacion pertinentes" value={miembroEnProceso.observacionDocumentos} onChange={(e) => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('observacionDocumentos', e.target.value)} rows={4} />
                                             </div>
                                         </div>
                                         <Textos className='subtitulo encabezado'>3. Dotacion EPP y EPCC:</Textos>
                                         <div className='entradaDatos vertical'>
                                             <Textos className='subtitulo' title="Utiliza casco de seguridad TIPO II con barbuquejo en buen estado.">Casco:</Textos>
                                             <div className='opciones'>
-                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppCasco: 'C' }))} className={miembroEnProceso.eppCasco === 'C' ? 'formulario selected' : ''}>C</Botones>
-                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppCasco: 'NC' }))} className={miembroEnProceso.eppCasco === 'NC' ? 'formulario selected' : ''}>NC</Botones>
-                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppCasco: 'NA' }))} className={miembroEnProceso.eppCasco === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                                <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppCasco', 'C')} className={miembroEnProceso.eppCasco === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                                <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppCasco', 'NC')} className={miembroEnProceso.eppCasco === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                                <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppCasco', 'NA')} className={miembroEnProceso.eppCasco === 'NA' ? 'formulario selected' : ''}>NA</Botones>
                                             </div>
                                             <div className='opciones'>
-                                                <Entradas
-                                                    type="file"
-                                                    className="image"
-                                                    accept="image/*"
-                                                    disabled={miembroEnProceso.eppCasco !== 'NC'}
-                                                    onChange={(e) => setMiembroEnProceso(prev => ({ ...prev, fotoEppCasco: e.target.files[0] }))}
-                                                />
+                                                <Imagenes disableInput={accionModalTabla === "eliminar" || accionModalTabla === "leer"} ocultarDiv={miembroEnProceso.eppCasco !== 'NC'} fotoKey={'fotoEppCasco'} foto={miembroEnProceso.fotoEppCasco} onChange={(fotoKey, data) => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE(fotoKey, data)} capture={formularioEnelInspeccionIntegralHSE.tipoInpseccion !== 'Virtual' ? true : false} setImagen={(data) => setImagenAmpliada(data)} />
                                             </div>
                                         </div>
                                         <div className='entradaDatos vertical'>
                                             <Textos className='subtitulo' title="Utiliza guantes de seguridad  de acuerdo a la labor ejecutada según corresponda y están en buen estado.">Guantes:</Textos>
                                             <div className='opciones'>
-                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppGuantes: 'C' }))} className={miembroEnProceso.eppGuantes === 'C' ? 'formulario selected' : ''}>C</Botones>
-                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppGuantes: 'NC' }))} className={miembroEnProceso.eppGuantes === 'NC' ? 'formulario selected' : ''}>NC</Botones>
-                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppGuantes: 'NA' }))} className={miembroEnProceso.eppGuantes === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                                <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppGuantes', 'C')} className={miembroEnProceso.eppGuantes === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                                <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppGuantes', 'NC')} className={miembroEnProceso.eppGuantes === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                                <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppGuantes', 'NA')} className={miembroEnProceso.eppGuantes === 'NA' ? 'formulario selected' : ''}>NA</Botones>
                                             </div>
                                             <div className='opciones'>
-                                                <Entradas
-                                                    type="file"
-                                                    className="image"
-                                                    accept="image/*"
-                                                    disabled={miembroEnProceso.eppGuantes !== 'NC'}
-                                                    onChange={(e) => setMiembroEnProceso(prev => ({ ...prev, fotoEppGuantes: e.target.files[0] }))}
-                                                />
+                                                <Imagenes disableInput={accionModalTabla === "eliminar" || accionModalTabla === "leer"} ocultarDiv={miembroEnProceso.eppGuantes !== 'NC'} fotoKey={'fotoEppGuantes'} foto={miembroEnProceso.fotoEppGuantes} onChange={(fotoKey, data) => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE(fotoKey, data)} capture={formularioEnelInspeccionIntegralHSE.tipoInpseccion !== 'Virtual' ? true : false} setImagen={(data) => setImagenAmpliada(data)} />
                                             </div>
                                         </div>
                                         <div className='entradaDatos vertical'>
                                             <Textos className='subtitulo' title="Utiliza  guantes  de  seguridad  dieléctricos,  clase 0, 2 o 4 según  corresponda,  en  buen estado y osee las pruebas de rigidez vigentes.">Guantes Dielectricos:</Textos>
                                             <div className='opciones'>
-                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppGuantesDielectricos: 'C' }))} className={miembroEnProceso.eppGuantesDielectricos === 'C' ? 'formulario selected' : ''}>C</Botones>
-                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppGuantesDielectricos: 'NC' }))} className={miembroEnProceso.eppGuantesDielectricos === 'NC' ? 'formulario selected' : ''}>NC</Botones>
-                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppGuantesDielectricos: 'NA' }))} className={miembroEnProceso.eppGuantesDielectricos === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                                <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppGuantesDielectricos', 'C')} className={miembroEnProceso.eppGuantesDielectricos === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                                <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppGuantesDielectricos', 'NC')} className={miembroEnProceso.eppGuantesDielectricos === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                                <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppGuantesDielectricos', 'NA')} className={miembroEnProceso.eppGuantesDielectricos === 'NA' ? 'formulario selected' : ''}>NA</Botones>
                                             </div>
                                             <div className='opciones'>
-                                                <Entradas
-                                                    type="file"
-                                                    className="image"
-                                                    accept="image/*"
-                                                    disabled={miembroEnProceso.eppGuantesDielectricos !== 'NC'}
-                                                    onChange={(e) => setMiembroEnProceso(prev => ({ ...prev, fotoEppGuantesDielectricos: e.target.files[0] }))}
-                                                />
+                                                <Imagenes disableInput={accionModalTabla === "eliminar" || accionModalTabla === "leer"} ocultarDiv={miembroEnProceso.eppGuantesDielectricos !== 'NC'} fotoKey={'fotoEppGuantesDielectricos'} foto={miembroEnProceso.fotoEppGuantesDielectricos} onChange={(fotoKey, data) => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE(fotoKey, data)} capture={formularioEnelInspeccionIntegralHSE.tipoInpseccion !== 'Virtual' ? true : false} setImagen={(data) => setImagenAmpliada(data)} />
                                             </div>
                                         </div>
                                         <div className='entradaDatos vertical'>
                                             <Textos className='subtitulo' title="Utiliza protección facial anti-arco y está en buen estado (visor Arc Flash - Balaclava ignifuga)">Proteccion Facil Anti Arco:</Textos>
                                             <div className='opciones'>
-                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppProteccionFacialAntiArco: 'C' }))} className={miembroEnProceso.eppProteccionFacialAntiArco === 'C' ? 'formulario selected' : ''}>C</Botones>
-                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppProteccionFacialAntiArco: 'NC' }))} className={miembroEnProceso.eppProteccionFacialAntiArco === 'NC' ? 'formulario selected' : ''}>NC</Botones>
-                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppProteccionFacialAntiArco: 'NA' }))} className={miembroEnProceso.eppProteccionFacialAntiArco === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                                <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppProteccionFacialAntiArco', 'C')} className={miembroEnProceso.eppProteccionFacialAntiArco === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                                <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppProteccionFacialAntiArco', 'NC')} className={miembroEnProceso.eppProteccionFacialAntiArco === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                                <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppProteccionFacialAntiArco', 'NA')} className={miembroEnProceso.eppProteccionFacialAntiArco === 'NA' ? 'formulario selected' : ''}>NA</Botones>
                                             </div>
                                             <div className='opciones'>
-                                                <Entradas
-                                                    type="file"
-                                                    className="image"
-                                                    accept="image/*"
-                                                    disabled={miembroEnProceso.eppProteccionFacialAntiArco !== 'NC'}
-                                                    onChange={(e) => setMiembroEnProceso(prev => ({ ...prev, fotoEppProteccionFacialAntiArco: e.target.files[0] }))}
-                                                />
+                                                <Imagenes disableInput={accionModalTabla === "eliminar" || accionModalTabla === "leer"} ocultarDiv={miembroEnProceso.eppProteccionFacialAntiArco !== 'NC'} fotoKey={'fotoEppProteccionFacialAntiArco'} foto={miembroEnProceso.fotoEppProteccionFacialAntiArco} onChange={(fotoKey, data) => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE(fotoKey, data)} capture={formularioEnelInspeccionIntegralHSE.tipoInpseccion !== 'Virtual' ? true : false} setImagen={(data) => setImagenAmpliada(data)} />
                                             </div>
                                         </div>
                                         <div className='entradaDatos vertical'>
                                             <Textos className='subtitulo' title="Utiliza sistema contra caídas de altura completo, en buen estado.">Equipos Contra Caidas:</Textos>
                                             <div className='opciones'>
-                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppEquiposContraCaidas: 'C' }))} className={miembroEnProceso.eppEquiposContraCaidas === 'C' ? 'formulario selected' : ''}>C</Botones>
-                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppEquiposContraCaidas: 'NC' }))} className={miembroEnProceso.eppEquiposContraCaidas === 'NC' ? 'formulario selected' : ''}>NC</Botones>
-                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppEquiposContraCaidas: 'NA' }))} className={miembroEnProceso.eppEquiposContraCaidas === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                                <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppEquiposContraCaidas', 'C')} className={miembroEnProceso.eppEquiposContraCaidas === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                                <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppEquiposContraCaidas', 'NC')} className={miembroEnProceso.eppEquiposContraCaidas === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                                <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppEquiposContraCaidas', 'NA')} className={miembroEnProceso.eppEquiposContraCaidas === 'NA' ? 'formulario selected' : ''}>NA</Botones>
                                             </div>
                                             <div className='opciones'>
-                                                <Entradas
-                                                    type="file"
-                                                    className="image"
-                                                    accept="image/*"
-                                                    disabled={miembroEnProceso.eppEquiposContraCaidas !== 'NC'}
-                                                    onChange={(e) => setMiembroEnProceso(prev => ({ ...prev, fotoEppEquiposContraCaidas: e.target.files[0] }))}
-                                                />
+                                                <Imagenes disableInput={accionModalTabla === "eliminar" || accionModalTabla === "leer"} ocultarDiv={miembroEnProceso.eppEquiposContraCaidas !== 'NC'} fotoKey={'fotoEppEquiposContraCaidas'} foto={miembroEnProceso.fotoEppEquiposContraCaidas} onChange={(fotoKey, data) => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE(fotoKey, data)} capture={formularioEnelInspeccionIntegralHSE.tipoInpseccion !== 'Virtual' ? true : false} setImagen={(data) => setImagenAmpliada(data)} />
                                             </div>
                                         </div>
                                         <div className='entradaDatos vertical'>
                                             <Textos className='subtitulo' title="Utiliza ropa de trabajo adecuada para la tarea, en buen estado y normalizada">Overol Obra Civil:</Textos>
                                             <div className='opciones'>
-                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppOverolObraCivil: 'C' }))} className={miembroEnProceso.eppOverolObraCivil === 'C' ? 'formulario selected' : ''}>C</Botones>
-                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppOverolObraCivil: 'NC' }))} className={miembroEnProceso.eppOverolObraCivil === 'NC' ? 'formulario selected' : ''}>NC</Botones>
-                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppOverolObraCivil: 'NA' }))} className={miembroEnProceso.eppOverolObraCivil === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                                <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppOverolObraCivil', 'C')} className={miembroEnProceso.eppOverolObraCivil === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                                <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppOverolObraCivil', 'NC')} className={miembroEnProceso.eppOverolObraCivil === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                                <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppOverolObraCivil', 'NA')} className={miembroEnProceso.eppOverolObraCivil === 'NA' ? 'formulario selected' : ''}>NA</Botones>
                                             </div>
                                             <div className='opciones'>
-                                                <Entradas
-                                                    type="file"
-                                                    className="image"
-                                                    accept="image/*"
-                                                    disabled={miembroEnProceso.eppOverolObraCivil !== 'NC'}
-                                                    onChange={(e) => setMiembroEnProceso(prev => ({ ...prev, fotoEppOverolObraCivil: e.target.files[0] }))}
-                                                />
+                                                <Imagenes disableInput={accionModalTabla === "eliminar" || accionModalTabla === "leer"} ocultarDiv={miembroEnProceso.eppOverolObraCivil !== 'NC'} fotoKey={'fotoEppOverolObraCivil'} foto={miembroEnProceso.fotoEppOverolObraCivil} onChange={(fotoKey, data) => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE(fotoKey, data)} capture={formularioEnelInspeccionIntegralHSE.tipoInpseccion !== 'Virtual' ? true : false} setImagen={(data) => setImagenAmpliada(data)} />
                                             </div>
                                         </div>
                                         <div className='entradaDatos vertical'>
                                             <Textos className='subtitulo' title="Utiliza  overol ignífugo está en buen estado.">Overol Ignifugo:</Textos>
                                             <div className='opciones'>
-                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppOverolIgnifugo: 'C' }))} className={miembroEnProceso.eppOverolIgnifugo === 'C' ? 'formulario selected' : ''}>C</Botones>
-                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppOverolIgnifugo: 'NC' }))} className={miembroEnProceso.eppOverolIgnifugo === 'NC' ? 'formulario selected' : ''}>NC</Botones>
-                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppOverolIgnifugo: 'NA' }))} className={miembroEnProceso.eppOverolIgnifugo === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                                <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppOverolIgnifugo', 'C')} className={miembroEnProceso.eppOverolIgnifugo === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                                <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppOverolIgnifugo', 'NC')} className={miembroEnProceso.eppOverolIgnifugo === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                                <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppOverolIgnifugo', 'NA')} className={miembroEnProceso.eppOverolIgnifugo === 'NA' ? 'formulario selected' : ''}>NA</Botones>
                                             </div>
                                             <div className='opciones'>
-                                                <Entradas
-                                                    type="file"
-                                                    className="image"
-                                                    accept="image/*"
-                                                    disabled={miembroEnProceso.eppOverolIgnifugo !== 'NC'}
-                                                    onChange={(e) => setMiembroEnProceso(prev => ({ ...prev, fotoEppOverolIgnifugo: e.target.files[0] }))}
-                                                />
+                                                <Imagenes disableInput={accionModalTabla === "eliminar" || accionModalTabla === "leer"} ocultarDiv={miembroEnProceso.eppOverolIgnifugo !== 'NC'} fotoKey={'fotoEppOverolIgnifugo'} foto={miembroEnProceso.fotoEppOverolIgnifugo} onChange={(fotoKey, data) => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE(fotoKey, data)} capture={formularioEnelInspeccionIntegralHSE.tipoInpseccion !== 'Virtual' ? true : false} setImagen={(data) => setImagenAmpliada(data)} />
                                             </div>
                                         </div>
                                         <div className='entradaDatos vertical'>
                                             <Textos className='subtitulo' title="Utiliza protector ocular (gafas) según la actividad y está en buen estado.">Gafas de Seguridad:</Textos>
                                             <div className='opciones'>
-                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppGafasDeSeguridad: 'C' }))} className={miembroEnProceso.eppGafasDeSeguridad === 'C' ? 'formulario selected' : ''}>C</Botones>
-                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppGafasDeSeguridad: 'NC' }))} className={miembroEnProceso.eppGafasDeSeguridad === 'NC' ? 'formulario selected' : ''}>NC</Botones>
-                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppGafasDeSeguridad: 'NA' }))} className={miembroEnProceso.eppGafasDeSeguridad === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                                <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppGafasDeSeguridad', 'C')} className={miembroEnProceso.eppGafasDeSeguridad === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                                <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppGafasDeSeguridad', 'NC')} className={miembroEnProceso.eppGafasDeSeguridad === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                                <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppGafasDeSeguridad', 'NA')} className={miembroEnProceso.eppGafasDeSeguridad === 'NA' ? 'formulario selected' : ''}>NA</Botones>
                                             </div>
                                             <div className='opciones'>
-                                                <Entradas
-                                                    type="file"
-                                                    className="image"
-                                                    accept="image/*"
-                                                    disabled={miembroEnProceso.eppGafasDeSeguridad !== 'NC'}
-                                                    onChange={(e) => setMiembroEnProceso(prev => ({ ...prev, fotoEppGafasDeSeguridad: e.target.files[0] }))}
-                                                />
+                                                <Imagenes disableInput={accionModalTabla === "eliminar" || accionModalTabla === "leer"} ocultarDiv={miembroEnProceso.eppGafasDeSeguridad !== 'NC'} fotoKey={'fotoEppGafasDeSeguridad'} foto={miembroEnProceso.fotoEppGafasDeSeguridad} onChange={(fotoKey, data) => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE(fotoKey, data)} capture={formularioEnelInspeccionIntegralHSE.tipoInpseccion !== 'Virtual' ? true : false} setImagen={(data) => setImagenAmpliada(data)} />
                                             </div>
                                         </div>
                                         <div className='entradaDatos vertical'>
                                             <Textos className='subtitulo' title="Utiliza protección respiratoria en buen estado.">Tapabocas:</Textos>
                                             <div className='opciones'>
-                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppTapabocas: 'C' }))} className={miembroEnProceso.eppTapabocas === 'C' ? 'formulario selected' : ''}>C</Botones>
-                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppTapabocas: 'NC' }))} className={miembroEnProceso.eppTapabocas === 'NC' ? 'formulario selected' : ''}>NC</Botones>
-                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppTapabocas: 'NA' }))} className={miembroEnProceso.eppTapabocas === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                                <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppTapabocas', 'C')} className={miembroEnProceso.eppTapabocas === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                                <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppTapabocas', 'NC')} className={miembroEnProceso.eppTapabocas === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                                <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppTapabocas', 'NA')} className={miembroEnProceso.eppTapabocas === 'NA' ? 'formulario selected' : ''}>NA</Botones>
                                             </div>
                                             <div className='opciones'>
-                                                <Entradas
-                                                    type="file"
-                                                    className="image"
-                                                    accept="image/*"
-                                                    disabled={miembroEnProceso.eppTapabocas !== 'NC'}
-                                                    onChange={(e) => setMiembroEnProceso(prev => ({ ...prev, fotoEppTapabocas: e.target.files[0] }))}
-                                                />
+                                                <Imagenes disableInput={accionModalTabla === "eliminar" || accionModalTabla === "leer"} ocultarDiv={miembroEnProceso.eppTapabocas !== 'NC'} fotoKey={'fotoEppTapabocas'} foto={miembroEnProceso.fotoEppTapabocas} onChange={(fotoKey, data) => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE(fotoKey, data)} capture={formularioEnelInspeccionIntegralHSE.tipoInpseccion !== 'Virtual' ? true : false} setImagen={(data) => setImagenAmpliada(data)} />
                                             </div>
                                         </div>
                                         <div className='entradaDatos vertical'>
                                             <Textos className='subtitulo' title="Utiliza calzado de seguridad según corresponda y está en buen estado.">Botas:</Textos>
                                             <div className='opciones'>
-                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppBotas: 'C' }))} className={miembroEnProceso.eppBotas === 'C' ? 'formulario selected' : ''}>C</Botones>
-                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppBotas: 'NC' }))} className={miembroEnProceso.eppBotas === 'NC' ? 'formulario selected' : ''}>NC</Botones>
-                                                <Botones onClick={() => setMiembroEnProceso(prev => ({ ...prev, eppBotas: 'NA' }))} className={miembroEnProceso.eppBotas === 'NA' ? 'formulario selected' : ''}>NA</Botones>
+                                                <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppBotas', 'C')} className={miembroEnProceso.eppBotas === 'C' ? 'formulario selected' : ''}>C</Botones>
+                                                <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppBotas', 'NC')} className={miembroEnProceso.eppBotas === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                                <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppBotas', 'NA')} className={miembroEnProceso.eppBotas === 'NA' ? 'formulario selected' : ''}>NA</Botones>
                                             </div>
                                             <div className='opciones'>
-                                                <Entradas
-                                                    type="file"
-                                                    className="image"
-                                                    accept="image/*"
-                                                    disabled={miembroEnProceso.eppBotas !== 'NC'}
-                                                    onChange={(e) => setMiembroEnProceso(prev => ({ ...prev, fotoEppBotas: e.target.files[0] }))}
-                                                />
+                                                <Imagenes disableInput={accionModalTabla === "eliminar" || accionModalTabla === "leer"} ocultarDiv={miembroEnProceso.eppBotas !== 'NC'} fotoKey={'fotoEppBotas'} foto={miembroEnProceso.fotoEppBotas} onChange={(fotoKey, data) => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE(fotoKey, data)} capture={formularioEnelInspeccionIntegralHSE.tipoInpseccion !== 'Virtual' ? true : false} setImagen={(data) => setImagenAmpliada(data)} />
                                             </div>
                                         </div>
                                         <div className={`entradaDatos vertical observacion' ${miembroEnProceso.eppCasco !== 'NC' && miembroEnProceso.eppGuantes !== 'NC' && miembroEnProceso.eppGuantesDielectricos !== 'NC' && miembroEnProceso.eppProteccionFacialAntiArco !== 'NC'
                                             && miembroEnProceso.eppEquiposContraCaidas !== 'NC' && miembroEnProceso.eppOverolObraCivil !== 'NC' && miembroEnProceso.eppOverolIgnifugo !== 'NC' && miembroEnProceso.eppGafasDeSeguridad !== 'NC' && miembroEnProceso.eppTapabocas !== 'NC' && miembroEnProceso.eppBotas !== 'NC' ? 'ocultar' : ''}`}>
                                             <Textos className='subtitulo'>Observaciones:</Textos>
                                             <div className='opciones'>
-                                                <AreaTextos type="text" placeholder="Agregue las observacion pertinentes" value={miembroEnProceso.observacionEpp} onChange={(e) => setMiembroEnProceso(prev => ({ ...prev, observacionEpp: e.target.value }))} rows={4} />
+                                                <AreaTextos disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} type="text" placeholder="Agregue las observacion pertinentes" value={miembroEnProceso.observacionEpp} onChange={(e) => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('observacionEpp', e.target.value)} rows={4} />
                                             </div>
                                         </div>
-                                        <div className="modal-acciones">
-                                            <Botones className='guardar' onClick={() => {
-                                                agregarMiembroACuadrillaEnelInspeccionIntegralHSE(miembroEnProceso);
-                                            }}>Guardar</Botones>
+                                        <div className={`modal-acciones ${accionModalTabla !== "leer" ? 'visible' : 'oculto'}`}>
+                                            <Botones className={`guardar ${accionModalTabla === "crear" ? 'visible' : 'oculto'}`} onClick={() => {
+                                                const existe = (formularioEnelInspeccionIntegralHSE.cuadrilla || []).some(m => m.cedula === miembroEnProceso.cedula);
+                                                if (existe) {
+                                                    toast.error('La cédula ya está en la cuadrilla.');
+                                                    return
+                                                }
+
+                                                const resultadoValidador = validarMiembroEnProceso(miembroEnProceso);
+                                                
+                                                if (resultadoValidador === false) {
+                                                    return
+                                                }
+
+                                                setFormularioEnelInspeccionIntegralHSE(prev => {
+                                                    const actualizado = { ...prev, cuadrilla: [...(prev.cuadrilla || []), miembroEnProceso] };
+                                                    localStorage.setItem('formularioEnelInspeccionIntegralHSE', JSON.stringify(actualizado));
+                                                    return actualizado;
+                                                });
+                                                toast.success('Integrante creado exitosamente.');
+                                                localStorage.removeItem('miembroEnProceso');
+                                                setMostrarModal(false);
+                                                setMiembroEnProceso({})
+                                            }}>Crear</Botones>
+                                            <Botones className={`guardar ${accionModalTabla === "editar" ? 'visible' : 'oculto'}`} onClick={() => {
+                                                const existe = (formularioEnelInspeccionIntegralHSE.cuadrilla || []).map(m => m.cedula === miembroEnProceso.cedula ? miembroEnProceso : m);
+
+                                                setFormularioEnelInspeccionIntegralHSE(prev => {
+                                                    const actualizado = { ...prev, cuadrilla: existe };
+                                                    localStorage.setItem('formularioEnelInspeccionIntegralHSE', JSON.stringify(actualizado));
+                                                    return actualizado;
+                                                });
+                                                toast.success('Integrante editado exitosamente.');
+                                                localStorage.removeItem('miembroEnProceso');
+                                                setMostrarModal(false);
+                                                setMiembroEnProceso({})
+                                            }}>Editar</Botones>
+                                            <Botones className={`eliminar ${accionModalTabla === "eliminar" ? 'visible' : 'oculto'}`} onClick={() => {
+                                                const nuevaCuadrilla = (formularioEnelInspeccionIntegralHSE.cuadrilla || []).filter(m => m.cedula !== miembroEnProceso.cedula);
+
+                                                setFormularioEnelInspeccionIntegralHSE(prev => {
+                                                    const actualizado = { ...prev, cuadrilla: nuevaCuadrilla };
+                                                    localStorage.setItem('formularioEnelInspeccionIntegralHSE', JSON.stringify(actualizado));
+                                                    return actualizado;
+                                                });
+                                                toast.success('Integrante eliminado exitosamente.');
+                                                localStorage.removeItem('miembroEnProceso');
+                                                setMostrarModal(false);
+                                                setMiembroEnProceso({})
+                                            }}>Eliminar</Botones>
                                             <Botones onClick={() => setMostrarModal(false)}>Cancelar</Botones>
                                         </div>
                                     </div>

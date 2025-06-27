@@ -2,6 +2,7 @@ import Entradas from "../../../components/entradas/entradas";
 import Botones from "../../../components/botones/botones";
 import Textos from "../../../components/textos/textos";
 import AreaTextos from "../../../components/areaTextos/areaTextos";
+import Imagenes from "../../../components/imagenes/imagenes";
 
 export const OpcionesFotoObservaciones = ({ texto, keyBase, fotoKey, observacionKey, activarinput, onChange, data, setImagen }) => {
 
@@ -20,15 +21,7 @@ export const OpcionesFotoObservaciones = ({ texto, keyBase, fotoKey, observacion
                 ))}
             </div>
             <div className={`opciones ${data[keyBase] !== 'NC' ? activarinput !== true ? 'oculto' : '' : ''}`} >
-                <Entradas
-                    type="file"
-                    className="image"
-                    accept="image/*"
-                    capture={data.tipoInpseccion !== 'Virtual' ? "environment" : undefined}
-                    onChange={(e) => onChange(fotoKey, e.target.files[0])}
-                />
-                <Textos className='parrafo'>{data[fotoKey]?.name || 'Ningún archivo ingresado'}</Textos>
-                <Botones className={`imagenes ${data[fotoKey]?.data ? '' : 'oculto'}`} onClick={() => setImagen(data[fotoKey].data)}>Ver imagen</Botones>
+                <Imagenes fotoKey={fotoKey} foto={data[fotoKey]} onChange={(fotoKey, data) => onChange(fotoKey, data)} capture={data.tipoInpseccion !== 'Virtual' ? true : false} setImagen={(data) => setImagen(data)}/>
             </div>
             <div className={`opciones ${data[keyBase] !== 'NC' ? 'oculto' : ''}`} >
                 <AreaTextos
