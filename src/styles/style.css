@@ -2,6 +2,7 @@
     --background-menu-laterial: #ffffff;
     --background-menu-superior: #ffffff;
     --background-menu-cuerpo: #ffffff;
+    --background-menu-cuerpo-hover: #f7f7f7;
     --background-menu-cuerpo-aplicativos: #E6E6E6;
     --background-text-hover: #444444;
     --background-lineas: #d6d6d6;
@@ -13,6 +14,7 @@
     --text: #454545;
     --text-sub-titulo: #9d9d9d;
     --text-hover: #fff;
+    --text-placeholder: #767676;
 
     --border-radius: 5px;
     --font-size-text: 15px;
@@ -23,6 +25,7 @@ body.dark-mode {
     --background-menu-laterial: #1f2937;
     --background-menu-superior: #1f2937;
     --background-menu-cuerpo: #111827;
+    --background-menu-cuerpo-hover: #1f2937;
     --background-text-hover: #f3f4f6;
     --background-lineas: #9199a4;
 
@@ -33,4 +36,5 @@ body.dark-mode {
     --text: #f1f5f9;
     --text-sub-titulo: #cbd5e1;
     --text-hover: #000;
+    --text-placeholder: #9f9e9e;
 }

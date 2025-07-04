@@ -32,6 +32,8 @@ export const getPageTitle = (pathname) => {
             return 'ChatBot'
         case '/Carnetizacion':
             return 'Carnetizacion'
+        case '/AlumbradoPublico':
+            return 'Alumbrado Publico'
         /* Facturacion */
         case '/ConsolidadoNacionalFacturacion':
             return 'Consolidado Nacional Facturacion';

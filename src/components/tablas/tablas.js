@@ -26,7 +26,7 @@ const Tablas = ({
         )
     );
 
-    const totalPaginas = Math.ceil(datosFiltrados.length / filasPorPagina);
+    const totalPaginas = Math.max(1, Math.ceil(datosFiltrados.length / filasPorPagina));
     const inicio = (paginaActual - 1) * filasPorPagina;
     const datosPagina = datosFiltrados.slice(inicio, inicio + filasPorPagina);
 

@@ -1,5 +1,7 @@
+@import '../../styles/style.css';
+
 .entrada {
-    background-color: #ffffff;
+    background-color: var(--background-menu-cuerpo);
     padding: 8px;
     cursor: pointer;
     border: 1px solid rgb(151, 151, 151);
@@ -7,9 +9,14 @@
     color: black;
     height: 100%;
     width: 100%;
+    color: var(--text);
 
     &:disabled {
         background-color: #f0f0f0;
         cursor: not-allowed;
+    }
+
+    &::placeholder {
+        color: var(--text-placeholder);
     }
 }

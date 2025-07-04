@@ -19,6 +19,7 @@ import ReporteMaterialPrincipal from "../pages/aplicativos/reporteMaterialFerret
 import ReporteMaterialAgregar from "../pages/aplicativos/reporteMaterialFerretero/reporteMaterialAgregar";
 import ChatBot from "../pages/aplicativos/chatbot/ChatBot";
 import Carnetizacion from "../pages/aplicativos/carnetizacion/Carnetizacion";
+import AlumbradoPublico from "../pages/aplicativos/alumbradoPublico/AlumbradoPublico";
 /* Facturacion */
 import FacturacionConsolidado from '../pages/facturacion/FacturacionConsolidado';
 import ProyectosFacturacion from "../pages/facturacion/ProyectosFacturacion";
@@ -125,6 +126,7 @@ function RutasApp() {
                     <Route path='/ReporteMaterialAgregar' exacte element={<ReporteMaterialAgregar />} />
                     <Route path='/ChatBot' exacte element={<ChatBot />} />
                     <Route path='/Carnetizacion' exacte element={<Carnetizacion />} />
+                    <Route path='/AlumbradoPublico' exacte element={<AlumbradoPublico />} />
                     {/* Facturacion */}
                     <Route path='/ConsolidadoNacionalFacturacion' exacte element={<FacturacionConsolidado />} />
                     <Route path='/Proyectos' exacte element={<ProyectosFacturacion />} />

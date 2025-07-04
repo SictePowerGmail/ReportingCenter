@@ -3,7 +3,7 @@ import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { FaHardHat, FaTruck, FaBars, FaDatabase, FaUsersCog, FaSignOutAlt, FaChartLine, FaStar, FaTools, FaSearch, FaChevronLeft, FaUser, FaBoxes, FaSun, FaMoon, FaUserCog, FaChartBar, FaUserTie, FaRobot, FaIdBadge } from 'react-icons/fa';
 import { HiClipboardList, HiChartBar, HiOfficeBuilding } from "react-icons/hi";
 import { MdInventory2 } from "react-icons/md";
-import { GiToolbox } from "react-icons/gi";
+import { GiToolbox, GiStreetLight } from "react-icons/gi";
 import { ThreeDots } from 'react-loader-spinner';
 import './navbar.css'
 import Cookies from 'js-cookie';
@@ -508,6 +508,17 @@ function Navbar() {
                                         <span className='SubMenu-Titulo-Icono'><FaIdBadge /></span>
                                         {showMobileMenu && (
                                             <span className="SubMenu-Titulo-Texto">Carnetizacion</span>
+                                        )}
+                                    </Link>)
+                                }
+                            </li>
+
+                            <li className={`SubMenu ${showMobileMenu ? 'abierto' : 'cerrado'}`}>
+                                {subChecksAplicativos.Carnetizacion === true &&
+                                    (<Link className={`SubMenu-Titulo-Solo ${showMobileMenu ? 'abierto' : 'cerrado'}`} to={{ pathname: "/Login", search: "?tipo=AlumbradoPublico" }} >
+                                        <span className='SubMenu-Titulo-Icono'><GiStreetLight /></span>
+                                        {showMobileMenu && (
+                                            <span className="SubMenu-Titulo-Texto">Alumbrado Publico</span>
                                         )}
                                     </Link>)
                                 }

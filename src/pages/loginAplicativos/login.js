@@ -66,6 +66,28 @@ const Login = () => {
         setShowModal(false);
     };
 
+    const enrutar = (tipo) => {
+        if (tipo === 'supervision') {
+            navigate('/SupervisionPrincipal', { state: { estadoNotificacion: false } });
+        } else if (tipo === 'solicitudMaterial') {
+            navigate('/MaterialPrincipal', { state: { estadoNotificacion: false } });
+        } else if (tipo === 'reporteMaterialFerretero') {
+            navigate('/ReporteMaterialPrincipal', { state: { estadoNotificacion: false } });
+        } else if (tipo === 'inventarioMaterial') {
+            navigate('/InventariosMaterialPrincipal', { state: { estadoNotificacion: false } });
+        } else if (tipo === 'ChatBot') {
+            navigate('/ChatBot');
+        } else if (tipo === 'Carnetizacion') {
+            navigate('/Carnetizacion');
+        } else if (tipo === 'Inicio') {
+            navigate('/');
+        } else if (tipo === 'Capacidades') {
+            navigate('/Capacidades');
+        } else if (tipo === 'AlumbradoPublico') {
+            navigate('/AlumbradoPublico');
+        }
+    }
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         setError('');
@@ -97,23 +119,7 @@ const Login = () => {
                 Cookies.set('solMatNombreProyecto', "", { expires: 7 });
                 Cookies.set('solMatEntregaProyectada', "", { expires: 7 });
                 localStorage.removeItem('yaRecargado');
-                if (tipo === 'supervision') {
-                    navigate('/SupervisionPrincipal', { state: { estadoNotificacion: false } });
-                } else if (tipo === 'solicitudMaterial') {
-                    navigate('/MaterialPrincipal', { state: { estadoNotificacion: false } });
-                } else if (tipo === 'reporteMaterialFerretero') {
-                    navigate('/ReporteMaterialPrincipal', { state: { estadoNotificacion: false } });
-                } else if (tipo === 'inventarioMaterial') {
-                    navigate('/InventariosMaterialPrincipal', { state: { estadoNotificacion: false } });
-                } else if (tipo === 'ChatBot') {
-                    navigate('/ChatBot');
-                } else if (tipo === 'Carnetizacion') {
-                    navigate('/Carnetizacion');
-                } else if  (tipo === 'Inicio') {
-                    navigate('/');
-                } else if (tipo === 'Capacidades') {
-                    navigate('/Capacidades');
-                }
+                enrutar(tipo);
             } else {
                 const errorText = await response.text();
                 if (response.status === 404) {
@@ -136,23 +142,7 @@ const Login = () => {
         const nombreUsuario = Cookies.get('userNombre');
 
         if (cedulaUsuario !== undefined && nombreUsuario !== undefined) {
-            if (tipo === 'supervision') {
-                navigate('/SupervisionPrincipal', { state: { estadoNotificacion: false } });
-            } else if (tipo === 'solicitudMaterial') {
-                navigate('/MaterialPrincipal', { state: { estadoNotificacion: false } });
-            } else if (tipo === 'reporteMaterialFerretero') {
-                navigate('/ReporteMaterialPrincipal', { state: { estadoNotificacion: false } });
-            } else if (tipo === 'inventarioMaterial') {
-                navigate('/InventariosMaterialPrincipal', { state: { estadoNotificacion: false } });
-            } else if (tipo === 'ChatBot') {
-                navigate('/ChatBot');
-            } else if (tipo === 'Carnetizacion') {
-                navigate('/Carnetizacion');
-            } else if  (tipo === 'Inicio') {
-                navigate('/');
-            } else if (tipo === 'Capacidades') {
-                navigate('/Capacidades');
-            }
+            enrutar(tipo);
         }
     }, []);
 
