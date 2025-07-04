@@ -144,9 +144,16 @@ export const getPageTitle = (pathname) => {
             return 'Ubicacion de Actividades'
         case '/InspeccionesEnel':
             return 'Inspecciones Enel';
+        case '/COPASST':
+            return 'COPASST'
         /* Parque Automotor */
         case '/Moviles':
             return 'Moviles'
+        case '/GestionMantenimientos':
+            return 'Gestion Mantenimientos'
+        /* Gestion Humana */
+        case '/IndicadoresChatbot':
+            return 'Indicadores Chatbot'
         /* Recuperar Contrasena */
         case '/RecuperarContrasena':
             return 'Recuperar Contrasena';

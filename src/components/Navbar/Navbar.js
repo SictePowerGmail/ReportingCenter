@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
-import { FaHardHat, FaTruck, FaBars, FaDatabase, FaUsersCog, FaSignOutAlt, FaChartLine, FaStar, FaTools, FaSearch, FaChevronLeft, FaUser, FaBoxes, FaSun, FaMoon, FaUserCog, FaChartBar, FaClipboardList, FaRobot, FaIdBadge } from 'react-icons/fa';
+import { FaHardHat, FaTruck, FaBars, FaDatabase, FaUsersCog, FaSignOutAlt, FaChartLine, FaStar, FaTools, FaSearch, FaChevronLeft, FaUser, FaBoxes, FaSun, FaMoon, FaUserCog, FaChartBar, FaUserTie, FaRobot, FaIdBadge } from 'react-icons/fa';
 import { HiClipboardList, HiChartBar, HiOfficeBuilding } from "react-icons/hi";
 import { MdInventory2 } from "react-icons/md";
 import { GiToolbox } from "react-icons/gi";
@@ -20,7 +20,6 @@ import { getPageTitle } from '../../rutas/pageTitles';
 function Navbar() {
     const [showMobileMenu, setShowMobileMenu] = useState(false);
     const [showDropdownUser, setShowDropdownUser] = useState(false);
-    const [showDropdownReportes, setShowDropdownReportes] = useState(false);
     const [showDropdownFacturacion, setShowDropdownFacturacion] = useState(false);
     const [showDropdownProductividad, setShowDropdownProductividad] = useState(false);
     const [showDropdownIndicadores, setShowDropdownIndicadores] = useState(false);
@@ -52,7 +51,6 @@ function Navbar() {
     const tituloActual = getPageTitle(location.pathname) || 'Inicio';
 
     const closeAllDropdowns = () => {
-        setShowDropdownReportes(false);
         setShowDropdownFacturacion(false);
         setShowDropdownProductividad(false);
         setShowDropdownIndicadores(false);
@@ -215,11 +213,18 @@ function Navbar() {
         EntregasPendientesDotacion: false,
         UbicacionDeActividades: false,
         InspeccionesEnel: false,
+        Copasst: false,
     });
 
     const [parqueAutomotor, setParqueAutomotor] = useState(false);
     const [subChecksParqueAutomotor, setSubChecksParqueAutomotor] = useState({
         Moviles: false,
+        GestionMantenimientos: false,
+    });
+
+    const [gestionHumana, setGestionHumana] = useState(false);
+    const [subChecksGestionHumana, setSubChecksGestionHumana] = useState({
+        IndicadoresChatbot: false,
     });
 
     const mapearGrupoDesdeUsuario = (usuario, prefijo) => {
@@ -285,6 +290,10 @@ function Navbar() {
                 const { subChecks: checksParqueAutomotor, algunoActivo: activoParqueAutomotor } = mapearGrupoDesdeUsuario(usuarioEncontrado, "parqueAutomotor");
                 setSubChecksParqueAutomotor(checksParqueAutomotor);
                 setParqueAutomotor(activoParqueAutomotor);
+
+                const { subChecks: checksGestionHumana, algunoActivo: activoGestionHumana } = mapearGrupoDesdeUsuario(usuarioEncontrado, "gestionHumana");
+                setSubChecksGestionHumana(checksGestionHumana);
+                setGestionHumana(activoGestionHumana);
 
             } else {
                 console.log("Usuario no encontrado");
@@ -758,6 +767,7 @@ function Navbar() {
                                 <div className={`SubMenu-Contenido ${showMobileMenu && showDropdownParqueAutomotor ? 'visible' : 'oculto'}`}>
                                     <ul>
                                         {subChecksParqueAutomotor.Moviles === true && (<Link className='SubMenu-Contenido-Titulo' to="/Moviles" ><li>Moviles</li></Link>)}
+                                        {subChecksParqueAutomotor.GestionMantenimientos === true && (<Link className='SubMenu-Contenido-Titulo' to="/GestionMantenimientos" ><li>Gestion Mantenimientos</li></Link>)}
                                     </ul>
                                 </div>
                             </li>
@@ -790,9 +800,39 @@ function Navbar() {
                                         {subChecksHseq.EntregasPendientesDotacion === true && (<Link className='SubMenu-Contenido-Titulo' to="/EntregasPendientesDotacion" ><li>Entregas Pendientes Dotación</li></Link>)}
                                         {subChecksHseq.UbicacionDeActividades === true && (<Link className='SubMenu-Contenido-Titulo' to="/UbicacionDeActividades" ><li>Ubicacion de Actividades</li></Link>)}
                                         {subChecksHseq.InspeccionesEnel === true && (<Link className='SubMenu-Contenido-Titulo' to="/InspeccionesEnel" ><li>Inspecciones Enel</li></Link>)}
+                                        {subChecksHseq.Copasst === true && (<Link className='SubMenu-Contenido-Titulo' to="/COPASST" ><li>COPASST</li></Link>)}
                                     </ul>
                                 </div>
                             </li>
+
+                            <li className={`SubMenu ${gestionHumana ? 'visible' : 'oculto'}`}>
+                                <div className='SubMenu-Titulo' onClick={() => {
+                                    closeAllDropdowns();
+                                    if (showMobileMenu === false) {
+                                        setShowMobileMenu(true);
+                                    }
+                                    setShowDropdownGestionHumana(!showDropdownGestionHumana)
+                                }}>
+                                    <span className={`SubMenu-Titulo-Contenedor ${showMobileMenu ? 'abierto' : 'cerrado'}`}>
+                                        <span className='SubMenu-Titulo-Icono'><FaUserTie /></span>
+                                        {showMobileMenu && (
+                                            <div>
+                                                <span className="SubMenu-Titulo-Texto">Gestion humana</span>
+                                                <span className="SubMenu-Titulo-Icono2">
+                                                    <FaChevronLeft className={`icono-flecha ${showDropdownGestionHumana ? 'rotado' : ''}`} />
+                                                </span>
+                                            </div>
+                                        )}
+                                    </span>
+                                </div>
+                                <div className={`SubMenu-Contenido ${showMobileMenu && showDropdownGestionHumana ? 'visible' : 'oculto'}`}>
+                                    <ul>
+                                        {subChecksGestionHumana.IndicadoresChatbot === true && (<Link className='SubMenu-Contenido-Titulo' to="/IndicadoresChatbot" ><li>Indicadores Chatbot</li></Link>)}
+                                    </ul>
+                                </div>
+                            </li>
+
+                            <span className={`sub-titulo ${showMobileMenu ? 'abierto' : 'cerrado'}`}>Version 2.0</span>
                         </ul>
 
                         {/* <div className='Logo2'>
@@ -805,7 +845,7 @@ function Navbar() {
 
                 <div
                     className={`overlay ${showMobileMenu ? 'visible' : ''}`}
-                    onClick={() => {setShowMobileMenu(!showMobileMenu)}}
+                    onClick={() => { setShowMobileMenu(!showMobileMenu) }}
                 ></div>
 
                 <div className={`contenido ${showMobileMenu ? 'visible' : 'oculto'}`}>

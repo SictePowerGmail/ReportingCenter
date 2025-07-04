@@ -79,11 +79,15 @@ import CursosDeAlturas from "../pages/hseq/CursosDeAlturas";
 import EntregasPendientesDotacion from "../pages/hseq/EntregasPendientesDotacion";
 import UbicacionDeActividades from "../pages/hseq/UbicacionDeActividades";
 import InspeccionesEnel from "../pages/hseq/InspeccionesEnel";
+import COPASST from "../pages/hseq/COPASST";
 /* Parque Automotor */
 import Moviles from "../pages/parqueAutomotor/Moviles";
+import GestionMantenimientos from "../pages/parqueAutomotor/GestionMantenimientos";
 /* Recuperar Contraseña */
 import RecuperarContraseña from "../pages/recuperarContraseña/recuperarContraseña";
 import { getPageTitle } from "./pageTitles";
+/* Gestion Humana */
+import IndicadoresChatbot from "../pages/gestionHumana/IndicadoresChatbot";
 
 function RutasApp() {
     const location = useLocation();
@@ -181,8 +185,12 @@ function RutasApp() {
                     <Route path='/EntregasPendientesDotacion' exacte element={<EntregasPendientesDotacion />} />
                     <Route path='/UbicacionDeActividades' exacte element={<UbicacionDeActividades />} />
                     <Route path='/InspeccionesEnel' exacte element={<InspeccionesEnel />} />
+                    <Route path='/COPASST' exacte element={<COPASST />} />
                     {/* Parque Automotor */}
                     <Route path='/Moviles' exacte element={<Moviles />} />
+                    <Route path='/GestionMantenimientos' exacte element={<GestionMantenimientos />} />
+                    {/* Gestion Humana */}
+                    <Route path='/IndicadoresChatbot' exacte element={<IndicadoresChatbot />} />
                     {/* Recuperar Contraseña */}
                     <Route path='/RecuperarContrasena' exacte element={<RecuperarContraseña />} />
                 </Route>
