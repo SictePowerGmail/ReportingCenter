@@ -371,13 +371,13 @@ const SupervisionAgregar = () => {
         formData.append("filename", fotoNombre);
 
         try {
-            await axios.post(`${process.env.REACT_APP_API_URL}/supervision/cargarImagen`, formData, {
+            const response1 = await axios.post(`${process.env.REACT_APP_API_URL}/supervision/cargarImagen`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
             });
 
-            await axios.post(`${process.env.REACT_APP_API_URL}/supervision/crearRegistro`, {
+            const response2 = await axios.post(`${process.env.REACT_APP_API_URL}/supervision/crearRegistro`, {
                 fecha: formattedDate2,
                 nombre: nombreUsuario,
                 placa: formularioClaroSupervisionOperativa.placa,
@@ -410,13 +410,18 @@ const SupervisionAgregar = () => {
                 longitud: ubicacion.longitude
             });
 
-            localStorage.removeItem('formularioClaroSupervisionOperativa');
-
-            setEnviando(false)
-            console.log('Datos enviados exitosamente');
-            navigate('/SupervisionPrincipal', { state: { estadoNotificacion: true } });
+            if (response1.status >= 200 && response1.status < 300 && response2.status >= 200 && response2.status < 300) {
+                localStorage.removeItem('formularioClaroSupervisionOperativa');
+                setEnviando(false)
+                console.log('Datos enviados exitosamente');
+                navigate('/SupervisionPrincipal', { state: { estadoNotificacion: true } });
+            } else {
+                setEnviando(false)
+                toast.error('Error al subir el archivo o enviar los datos', { className: 'toast-error' });
+            }
 
         } catch (error) {
+            setEnviando(false)
             console.error('Error al subir el archivo o enviar los datos:', error);
             toast.error('Error al subir el archivo o enviar los datos', { className: 'toast-error' });
         }
@@ -461,6 +466,173 @@ const SupervisionAgregar = () => {
         localStorage.setItem('formularioClaroSupervisionOperativa', JSON.stringify(formularioClaroSupervisionOperativa));
     }, [formularioClaroSupervisionOperativa]);
 
+    function encapsulamiento(obj) {
+        const nuevo = { ...obj };
+
+        const riesgos = {};
+        for (const key in obj) {
+            if (/riesgos\d+/i.test(key)) {
+                riesgos[key] = obj[key];
+                delete nuevo[key];
+            }
+        }
+        nuevo.riesgos = riesgos;
+
+        const senaYDemar = {};
+        for (const key in obj) {
+            if (/senaYDemar\d+/i.test(key)) {
+                senaYDemar[key] = obj[key];
+                delete nuevo[key];
+            }
+        }
+        nuevo.senaYDemar = senaYDemar;
+
+        const reglasOro = {};
+        for (const key in obj) {
+            if (/reglasOro\d+/i.test(key)) {
+                reglasOro[key] = obj[key];
+                delete nuevo[key];
+            }
+        }
+        nuevo.reglasOro = reglasOro;
+
+        const trabajoAlturas = {};
+        for (const key in obj) {
+            if (/trabajoAlturas\d+/i.test(key)) {
+                trabajoAlturas[key] = obj[key];
+                delete nuevo[key];
+            }
+        }
+        nuevo.trabajoAlturas = trabajoAlturas;
+
+        const espacioConfinado = {};
+        for (const key in obj) {
+            if (/espacioConfinado\d+/i.test(key)) {
+                espacioConfinado[key] = obj[key];
+                delete nuevo[key];
+            }
+        }
+        nuevo.espacioConfinado = espacioConfinado;
+
+        const vehiculos = {};
+        for (const key in obj) {
+            if (/vehiculos\d+/i.test(key)) {
+                vehiculos[key] = obj[key];
+                delete nuevo[key];
+            }
+        }
+        nuevo.vehiculos = vehiculos;
+
+        const condicionesTrabajo = {};
+        for (const key in obj) {
+            if (/trabajo\d+/i.test(key)) {
+                condicionesTrabajo[key] = obj[key];
+                delete nuevo[key];
+            }
+        }
+        nuevo.condicionesTrabajo = condicionesTrabajo;
+
+        const materiales = {};
+        for (const key in obj) {
+            if (/materiales\d+/i.test(key)) {
+                materiales[key] = obj[key];
+                delete nuevo[key];
+            }
+        }
+        nuevo.materiales = materiales;
+
+        const primerosAuxilios = {};
+        for (const key in obj) {
+            if (/primerosAuxilios\d+/i.test(key)) {
+                primerosAuxilios[key] = obj[key];
+                delete nuevo[key];
+            }
+        }
+        nuevo.primerosAuxilios = primerosAuxilios;
+
+        const biomecanicos = {};
+        for (const key in obj) {
+            if (/biomecanicos\d+/i.test(key)) {
+                biomecanicos[key] = obj[key];
+                delete nuevo[key];
+            }
+        }
+        nuevo.biomecanicos = biomecanicos;
+
+        const quimicos = {};
+        for (const key in obj) {
+            if (/quimicos\d+/i.test(key)) {
+                quimicos[key] = obj[key];
+                delete nuevo[key];
+            }
+        }
+        nuevo.quimicos = quimicos;
+
+        const residuosNoPeligrosos = {};
+        for (const key in obj) {
+            if (/residuosNoPeligrosos\d+/i.test(key)) {
+                residuosNoPeligrosos[key] = obj[key];
+                delete nuevo[key];
+            }
+        }
+        nuevo.residuosNoPeligrosos = residuosNoPeligrosos;
+
+        const residuosConstruccion = {};
+        for (const key in obj) {
+            if (/residuosConstruccion\d+/i.test(key)) {
+                residuosConstruccion[key] = obj[key];
+                delete nuevo[key];
+            }
+        }
+        nuevo.residuosConstruccion = residuosConstruccion;
+
+        return nuevo;
+    }
+
+    function eliminarDataEnFotos(obj) {
+        for (const key in obj) {
+            if (typeof obj[key] === 'object' && obj[key] !== null) {
+                if (key.startsWith('foto') && 'data' in obj[key]) {
+                    delete obj[key].data;
+                } else {
+                    eliminarDataEnFotos(obj[key]);
+                }
+            }
+        }
+
+        return obj;
+    }
+
+    function serializarCamposComplejos(data) {
+        const resultado = {};
+
+        for (const key in data) {
+            const valor = data[key];
+
+            if (valor && typeof valor === 'object') {
+                resultado[key] = JSON.stringify(valor);
+            } else {
+                resultado[key] = valor;
+            }
+        }
+
+        return resultado;
+    }
+
+    function base64ToFile(base64String, filename) {
+        const arr = base64String.split(',');
+        const mime = arr[0].match(/:(.*?);/)[1];
+        const bstr = atob(arr[1]);
+        let n = bstr.length;
+        const u8arr = new Uint8Array(n);
+
+        while (n--) {
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+
+        return new File([u8arr], filename, { type: mime });
+    }
+
     const enviarFormularioEnelInspeccionIntegralHSE = async (event) => {
 
         event.preventDefault();
@@ -472,16 +644,65 @@ const SupervisionAgregar = () => {
         setEnviando(true)
 
         try {
-            console.log("Fecha Inicial: " + fecha.toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' }))
-            console.log(formularioEnelInspeccionIntegralHSE)
-            console.log("Fecha Final: " + new Date().toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' }));
-            console.log(ubicacion)
+            const fechaInicial = fecha.toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            const fechaFinal = new Date().toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
-            setEnviando(false)
+            const formattedDate = formatDate(fecha);
+            for (const key in formularioEnelInspeccionIntegralHSE) {
+                if (key.startsWith("foto")) {
+                    const valor = formularioEnelInspeccionIntegralHSE[key];
+
+                    if (valor && typeof valor === "object" && valor.data) {
+                        const file = base64ToFile(valor.data, `${formattedDate}_${valor.name}`);
+
+                        const formData = new FormData();
+                        formData.append('file', file);
+                        formData.append('filename', `${formattedDate}_${valor.name}`);
+
+                        try {
+                            const res = await axios.post(
+                                `${process.env.REACT_APP_API_URL}/supervision/cargarImagen`,
+                                formData,
+                                { headers: { 'Content-Type': 'multipart/form-data' } }
+                            );
+
+                            formularioEnelInspeccionIntegralHSE[key] = res.data.filename || `${formattedDate}_${valor.name}`;
+                        } catch (error) {
+                            console.error(`Error subiendo ${key}`, error);
+                        }
+                    }
+                }
+            }
+
+            const formularioConTiempos = {
+                ...formularioEnelInspeccionIntegralHSE,
+                fechaInicial,
+                fechaFinal,
+                ubicacion
+            };
+
+            const formularioNuevo = encapsulamiento(formularioConTiempos)
+            const formularioNuevoSinFotos = eliminarDataEnFotos(formularioNuevo)
+            const formularioNuevoSerializado = serializarCamposComplejos(formularioNuevoSinFotos)
+
+            const response2 = await axios.post(`${process.env.REACT_APP_API_URL}/supervision/crearRegistroEnelInspeccionIntegralHse`, formularioNuevoSerializado);
+
+            if (response2.status >= 200 && response2.status < 300) {
+                setEnviando(false)
+                console.log('Datos enviados exitosamente');
+                localStorage.removeItem('formularioEnelInspeccionIntegralHSE');
+                setMiembroEnProceso({});
+                setFormularioEnelInspeccionIntegralHSE(estadoInicialFormularioEnelInspeccionIntegralHSE);
+                navigate('/SupervisionPrincipal', { state: { estadoNotificacion: true } });
+            } else {
+                toast.error('Error al subir el archivo o enviar los datos', { className: 'toast-error' });
+                setEnviando(false)
+            }
 
         } catch (error) {
             console.error('Error al subir el archivo o enviar los datos:', error);
             toast.error('Error al subir el archivo o enviar los datos', { className: 'toast-error' });
+            setEnviando(false)
         }
     };
 
@@ -1436,9 +1657,9 @@ const SupervisionAgregar = () => {
         if (!formulario.trabajo) { toast.error('Por favor diligencie el trabajo a realizar.'); return false }
         if (!Array.isArray(formulario.cuadrilla)) { toast.error('Por favor diligencie al menos dos personas en la cuadrilla.'); return false }
         const personasConCedula = formulario.cuadrilla.filter(persona => persona.cedula && persona.cedula.trim() !== '');
-        if (personasConCedula.length < 2) {toast.error('Debe haber al menos dos personas en la cuadrilla.'); return false }
-        if (!formulario.riesgos1 || !formulario.riesgos2 || !formulario.riesgos3 || !formulario.riesgos4 || !formulario.riesgos5 || !formulario.riesgos6  || !formulario.riesgos7 || !formulario.riesgos8 || !formulario.riesgos9) { toast.error('Por favor diligencie el capitulo 1 completo.'); return false }
-        if (!formulario.fotoRiesgos1Obligatoria || !formulario.fotoRiesgos2Obligatoria || !formulario.fotoRiesgos4Obligatoria ) { toast.error('Por favor ingrese las fotos obligatorias en el capitulo 1.'); return false }
+        if (personasConCedula.length < 2) { toast.error('Debe haber al menos dos personas en la cuadrilla.'); return false }
+        if (!formulario.riesgos1 || !formulario.riesgos2 || !formulario.riesgos3 || !formulario.riesgos4 || !formulario.riesgos5 || !formulario.riesgos6 || !formulario.riesgos7 || !formulario.riesgos8 || !formulario.riesgos9) { toast.error('Por favor diligencie el capitulo 1 completo.'); return false }
+        if (!formulario.fotoRiesgos1Obligatoria || !formulario.fotoRiesgos2Obligatoria || !formulario.fotoRiesgos4Obligatoria) { toast.error('Por favor ingrese las fotos obligatorias en el capitulo 1.'); return false }
         if (!formulario.observacionRiesgos1 && formulario.riesgos1 === 'NC') { toast.error('Por favor ingrese la observacion correspondiente en el capitulo 1 cuando su respuesta es No Cumple en la pregunta 1.'); return false }
         if (!formulario.observacionRiesgos2 && formulario.riesgos2 === 'NC') { toast.error('Por favor ingrese la observacion correspondiente en el capitulo 1 cuando su respuesta es No Cumple en la pregunta 2.'); return false }
         if ((!formulario.observacionRiesgos3 || !formulario.fotoRiesgos3) && formulario.riesgos3 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 1 cuando su respuesta es No Cumple en la pregunta 3.'); return false }
@@ -2060,7 +2281,6 @@ const SupervisionAgregar = () => {
                                     setAccionModalTabla("eliminar");
                                     setMostrarModal(true);
                                     setMiembroEnProceso(fila);
-                                    console.log(fila)
                                 }} />
                         </div>
 
