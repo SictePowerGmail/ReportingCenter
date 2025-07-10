@@ -57,63 +57,65 @@ const Tablas = ({
             </div>
 
             <div className='tabla-encapsula'>
-                <table className="tabla">
-                    <thead>
-                        <tr>
-                            {columnas.length > 0 ? (
-                                <>
-                                    {columnas.map((col) => (
-                                        <th key={col.key}>{col.header}</th>
-                                    ))}
-                                    {(editar || eliminar) && (
-                                        <th key={'acciones'}>Acciones</th>
-                                    )}
-                                </>
-                            ) : (
-                                <th>No hay columnas definidas</th>
-                            )}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {datosPagina.length > 0 ? (
-                            <>
-                                {datosPagina.map((fila, index) => (
-                                    <tr key={index}
-                                        onClick={(e) => {
-                                            if (e.target.closest('button') === null && leer === true) {
-                                                onLeer(fila);
-                                            }
-                                        }}
-                                    >
+                <div class="scroll-wrapper">
+                    <table className="tabla">
+                        <thead>
+                            <tr>
+                                {columnas.length > 0 ? (
+                                    <>
                                         {columnas.map((col) => (
-                                            <td key={col.key}>{fila[col.key]}</td>
+                                            <th key={col.key}>{col.header}</th>
                                         ))}
                                         {(editar || eliminar) && (
-                                            <td className='acciones' key={'acciones'}>
-                                                {editar && (
-                                                    <button className='editar' onClick={() => onEditar(fila)}>
-                                                        <FaPencilAlt />
-                                                    </button>
-                                                )}
-                                                {eliminar && (
-                                                    <button className='eliminar' onClick={() => onEliminar(fila)}>
-                                                        <FaTrash />
-                                                    </button>
-                                                )}
-                                            </td>
+                                            <th key={'acciones'}>Acciones</th>
                                         )}
-                                    </tr>
-                                ))}
-                            </>
-                        ) : (
-                            <tr>
-                                <td colSpan={columnas.length + 1 || 1}>
-                                    No hay datos disponibles
-                                </td>
+                                    </>
+                                ) : (
+                                    <th>No hay columnas definidas</th>
+                                )}
                             </tr>
-                        )}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {datosPagina.length > 0 ? (
+                                <>
+                                    {datosPagina.map((fila, index) => (
+                                        <tr key={index}
+                                            onClick={(e) => {
+                                                if (e.target.closest('button') === null && leer === true) {
+                                                    onLeer(fila);
+                                                }
+                                            }}
+                                        >
+                                            {columnas.map((col) => (
+                                                <td key={col.key}>{fila[col.key]}</td>
+                                            ))}
+                                            {(editar || eliminar) && (
+                                                <td className='acciones' key={'acciones'}>
+                                                    {editar && (
+                                                        <button className='editar' onClick={() => onEditar(fila)}>
+                                                            <FaPencilAlt />
+                                                        </button>
+                                                    )}
+                                                    {eliminar && (
+                                                        <button className='eliminar' onClick={() => onEliminar(fila)}>
+                                                            <FaTrash />
+                                                        </button>
+                                                    )}
+                                                </td>
+                                            )}
+                                        </tr>
+                                    ))}
+                                </>
+                            ) : (
+                                <tr>
+                                    <td colSpan={columnas.length + 1 || 1}>
+                                        No hay datos disponibles
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             <div className="tabla-footer">

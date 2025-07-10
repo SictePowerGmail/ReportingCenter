@@ -214,9 +214,9 @@ const SupervisionPrincipal = () => {
                     if (b === "Todo") return 1;
                     return a.localeCompare(b); // Comparar de forma ascendente
                 });
+                setLoading(false);
                 setListaPlaca(listaPlacaOrdenada);
                 setDataClaro(dataFiltrada);
-                setLoading(false);
             })
             .catch(error => {
                 console.error('Error fetching data:', error);
@@ -225,59 +225,53 @@ const SupervisionPrincipal = () => {
     }
 
     const generarMapa = async (data) => {
-        if (mapRef.current === null) {
-            const firstLocation = data[0];
-            const { latitud, longitud } = firstLocation;
-            mapRef.current = L.map('map').setView([latitud, longitud], 16);
 
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            }).addTo(mapRef.current);
-
-            const locationButton = L.control({ position: 'bottomright' });
-
-            locationButton.onAdd = function () {
-                const div = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
-                div.style.backgroundColor = 'white';
-                div.style.width = '40px';
-                div.style.height = '40px';
-                div.style.borderRadius = '50%';
-                div.style.boxShadow = '0 0 5px rgba(0,0,0,0.3)';
-                div.style.cursor = 'pointer';
-                div.style.textAlign = 'center';
-                div.style.lineHeight = '45px';
-                div.innerHTML = '<i class="fa fa-location-arrow" style="font-size: 20px; color: black;"></i>';
-
-                div.onclick = function () {
-                    if (data.length > 0) {
-                        const bounds = L.latLngBounds(data.map(item => [item.latitud, item.longitud]));
-                        mapRef.current.fitBounds(bounds, { padding: [50, 50] });
-                    }
-                };
-
-                return div;
-            };
-            locationButton.addTo(mapRef.current);
-
-        } else {
-
-            if (mapRef.current) {
-                mapRef.current.eachLayer(layer => {
-                    if (layer instanceof L.Marker) {
-                        mapRef.current.removeLayer(layer);
-                    }
-                });
-            }
-
-            data.forEach(item => {
-                addMarkerToMap(item);
-            });
-
-            if (data.length > 0) {
-                const bounds = L.latLngBounds(data.map(item => [item.latitud, item.longitud]));
-                mapRef.current.fitBounds(bounds, { padding: [50, 50] });
-            }
+        if (mapRef.current) {
+            mapRef.current.remove();
+            mapRef.current = null;
         }
+
+        const firstLocation = data[0];
+        const { latitud, longitud } = firstLocation;
+        mapRef.current = L.map('map').setView([latitud, longitud], 16);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(mapRef.current);
+
+        data.forEach(item => {
+            addMarkerToMap(item);
+        });
+
+        if (data.length > 1) {
+            const bounds = L.latLngBounds(data.map(item => [item.latitud, item.longitud]));
+            mapRef.current.fitBounds(bounds, { padding: [50, 50] });
+        }
+
+        const locationButton = L.control({ position: 'bottomright' });
+
+        locationButton.onAdd = function () {
+            const div = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
+            div.style.backgroundColor = 'white';
+            div.style.width = '40px';
+            div.style.height = '40px';
+            div.style.borderRadius = '50%';
+            div.style.boxShadow = '0 0 5px rgba(0,0,0,0.3)';
+            div.style.cursor = 'pointer';
+            div.style.textAlign = 'center';
+            div.style.lineHeight = '45px';
+            div.innerHTML = '<i class="fa fa-location-arrow" style="font-size: 20px; color: black;"></i>';
+
+            div.onclick = function () {
+                if (data.length > 0) {
+                    const bounds = L.latLngBounds(data.map(item => [item.latitud, item.longitud]));
+                    mapRef.current.fitBounds(bounds, { padding: [50, 50] });
+                }
+            };
+
+            return div;
+        };
+        locationButton.addTo(mapRef.current);
     };
 
     const addMarkerToMap = (item) => {
@@ -311,7 +305,12 @@ const SupervisionPrincipal = () => {
         // Definir el contenido del popup (inicialmente sin imagen)
         const popupContent = `
             <div>
-                <h6><strong>Fecha: </strong>${fecha}<br><strong>Supervisor: </strong>${nombre}<br><strong>Placa: </strong>${placa}<br><strong>Nombre Tecnico: </strong>${nombreCapitalizado}<br><strong>OT: </strong>${ot}<br><strong>Observación: </strong>${observacion}</h6>
+                <h6><strong>Fecha: </strong>${fecha}<br>
+                <strong>Supervisor: </strong>${nombre}<br>
+                <strong>Placa: </strong>${placa}<br>
+                <strong>Nombre Tecnico: </strong>${nombreCapitalizado}<br>
+                <strong>OT: </strong>${ot}<br>
+                <strong>Observación: </strong>${observacion}</h6>
                 <div id="image-container-${foto_nombre}" style="width: 100px; height: auto; text-align: center;"></div>
             </div>
         `;
@@ -388,7 +387,6 @@ const SupervisionPrincipal = () => {
             try {
                 await cargarRegistrosEnel();
                 await cargarRegistrosSupervision();
-                await generarMapa(dataClaro);
             } catch (error) {
                 console.error('Error al ejecutar funciones secuenciales:', error);
             }
@@ -396,6 +394,15 @@ const SupervisionPrincipal = () => {
 
         ejecutarSecuencia();
     }, []);
+
+    useEffect(() => {
+        if (dataClaro && dataClaro.length > 0) {
+            const mapElement = document.getElementById('map');
+            if (mapElement) {
+                generarMapa(dataClaro);
+            }
+        }
+    }, [dataClaro, carpeta]);
 
     useEffect(() => {
         cargarRegistrosSupervision();
@@ -424,7 +431,6 @@ const SupervisionPrincipal = () => {
                 if (key.startsWith('foto') && 'name' in valor && typeof valor.name === 'string') {
                     try {
                         const response = await fetch(`${process.env.REACT_APP_API_URL}/supervision/obtenerImagen?imageName=${encodeURIComponent(valor.name)}`);
-                        console.log(response)
                         const blob = await response.blob();
                         const base64 = await blobToBase64(blob);
 

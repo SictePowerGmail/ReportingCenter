@@ -34,66 +34,72 @@
         border-left: 1px solid #ccc;
         border-right: 1px solid #ccc;
 
-        .tabla {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 14px;
-            margin: 0;
-            overflow: auto;
+        .scroll-wrapper {
+            overflow-x: auto;
+            border-left: 1px solid #ccc;
+            border-right: 1px solid #ccc;
 
-            th,
-            td {
-                border: 1px solid #ccc;
-                padding: 8px 12px;
-                text-align: center;
-            }
+            .tabla {
+                width: 100%;
+                border-collapse: collapse;
+                font-size: 14px;
+                margin: 0;
 
-            th {
-                background-color: #dfdfdf;
-                font-weight: bold;
-            }
+                th,
+                td {
+                    border-top: 1px solid #ccc;
+                    border-bottom: 1px solid #ccc;
+                    padding: 8px 12px;
+                    text-align: center;
+                }
 
-            tr:hover {
-                background-color: #e6e6e6 !important;
-            }
+                th {
+                    background-color: #dfdfdf;
+                    font-weight: bold;
+                }
 
-            tbody {
-                color: var(--text);
+                tr:hover {
+                    background-color: #e6e6e6 !important;
+                }
 
-                tr {
-                    cursor: pointer;
+                tbody {
+                    color: var(--text);
 
-                    td {
-                        text-align: center;
+                    tr {
+                        cursor: pointer;
 
-                        &.acciones {
-                            min-width: 95px;
-                        }
+                        td {
+                            text-align: center;
 
-                        .editar {
-                            border: none;
-                            background-color: transparent;
-                            margin-right: 8px;
-                            color: blue;
-                            font-size: 18px;
-                        }
+                            &.acciones {
+                                min-width: 95px;
+                            }
 
-                        .eliminar {
-                            border: none;
-                            background-color: transparent;
-                            color: red;
-                            font-size: 18px;
+                            .editar {
+                                border: none;
+                                background-color: transparent;
+                                margin-right: 8px;
+                                color: blue;
+                                font-size: 18px;
+                            }
+
+                            .eliminar {
+                                border: none;
+                                background-color: transparent;
+                                color: red;
+                                font-size: 18px;
+                            }
                         }
                     }
                 }
-            }
 
-            tbody tr:nth-child(odd) {
-                background-color: var(--background-menu-cuerpo);
-            }
+                tbody tr:nth-child(odd) {
+                    background-color: var(--background-menu-cuerpo);
+                }
 
-            tbody tr:nth-child(even) {
-                background-color: var(--background-menu-cuerpo-hover);
+                tbody tr:nth-child(even) {
+                    background-color: var(--background-menu-cuerpo-hover);
+                }
             }
         }
     }
