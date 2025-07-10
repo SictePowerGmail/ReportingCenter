@@ -12,6 +12,7 @@ import Tablas from '../../../components/tablas/tablas';
 
 function AlumbradoPublico() {
     const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
 
     return (
         <div className='AlumbradoPublico'>
@@ -23,7 +24,7 @@ function AlumbradoPublico() {
                 ) : (
                     <>
                         <div className='Botones'>
-                            <Botones className='agregar'>Agrega OT</Botones>
+                            <Botones onClick={() => navigate('/AlumbradoPublicoDetalle')} className='agregar'>Agrega OT</Botones>
                         </div>
 
                         <div className='Tabla'>

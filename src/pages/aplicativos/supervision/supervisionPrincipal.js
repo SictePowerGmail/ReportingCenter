@@ -8,6 +8,10 @@ import { Legend, PieChart, Pie, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tool
 import L from 'leaflet';
 import { ThreeDots } from 'react-loader-spinner';
 import Cookies from 'js-cookie';
+import Tablas from '../../../components/tablas/tablas';
+import Botones from '../../../components/botones/botones';
+import Textos from '../../../components/textos/textos';
+import Selectores from '../../../components/selectores/selectores';
 
 const SupervisionPrincipal = () => {
     const navigate = useNavigate();
@@ -16,24 +20,9 @@ const SupervisionPrincipal = () => {
     const role = Cookies.get('userRole');
     const nombre = Cookies.get('userNombre');
     const mapRef = useRef(null);
-    const [registrosSupervision, setRegistrosSupervision] = useState({});
     const [graficaRegistrosSupervisionDia, setGraficaRegistrosSupervisionDia] = useState({});
     const [graficaRegistrosSupervisionCadaUno, setGraficaRegistrosSupervisionCadaUno] = useState({});
     const [graficaRegistrosOrdenadosPorPlaca, setGraficaRegistrosOrdenadosPorPlaca] = useState({});
-    const [graficaRegistrosOrdenadosPorEpp, setGraficaRegistrosOrdenadosPorEPP] = useState({});
-    const [registrosOrdenadosPorEppNo, setRegistrosOrdenadosPorEppNo] = useState({});
-    const [graficaRegistrosOrdenadosPorAlturas, setGraficaRegistrosOrdenadosPorAlturas] = useState({});
-    const [registrosOrdenadosPorAlturasNo, setRegistrosOrdenadosPorAlturasNo] = useState({});
-    const [graficaRegistrosOrdenadosPorATS, setGraficaRegistrosOrdenadosPorATS] = useState({});
-    const [registrosOrdenadosPorATSNo, setRegistrosOrdenadosPorATSNo] = useState({});
-    const [graficaRegistrosOrdenadosPorEmpalmes, setGraficaRegistrosOrdenadosPorEmpalmes] = useState({});
-    const [registrosOrdenadosPorEmpalmesNo, setRegistrosOrdenadosPorEmpalmesNo] = useState({});
-    const [registrosOrdenadosPorEmpalmesSi, setRegistrosOrdenadosPorEmpalmesSi] = useState({});
-    const [graficaRegistrosOrdenadosPorPreoperacional, setGraficaRegistrosOrdenadosPorPreoperacional] = useState({});
-    const [registrosOrdenadosPorPreoperacionalNo, setRegistrosOrdenadosPorPreoperacionalNo] = useState({});
-    const [graficaRegistrosOrdenadosPorVehiculo, setGraficaRegistrosOrdenadosPorVehiculo] = useState({});
-    const [registrosOrdenadosPorVehiculoNo, setRegistrosOrdenadosPorVehiculoNo] = useState({});
-    const [graficaRegistrosOrdenadosPorEquipos, setGraficaRegistrosOrdenadosPorEquipos] = useState({});
     const [fechaSeleccionada, setFechaSeleccionada] = useState('Todo');
     const [añoSeleccionada, setAñoSeleccionada] = useState(() => {
         const añoActual = new Date().getFullYear();
@@ -47,17 +36,14 @@ const SupervisionPrincipal = () => {
     const [supervisorSeleccionado, setSupervisorSeleccionado] = useState('Todo');
     const [placaSeleccionada, setPlacaSeleccionada] = useState('Todo');
     const [cantidadAcompañamientos, setCantidadAcompañamientos] = useState('0');
-    const [listaFecha, setListaFecha] = useState([]);
     const [listaAño, setListaAño] = useState([]);
     const [listaMes, setListaMes] = useState([]);
     const [listaDia, setListaDia] = useState([]);
     const [listaSupervisor, setListaSupervisor] = useState([]);
     const [listaPlaca, setListaPlaca] = useState([]);
     const [loading, setLoading] = useState(false);
-
-    const Agregar = async (event) => {
-        navigate('/SupervisionAgregar', { state: { role: role, nombre: nombre, estadoNotificacion: false } });
-    };
+    const [carpeta, setCarpeta] = useState('Claro');
+    const [dataEnelInspeccionIntegralHSE, setDataEnelInspeccionIntegralHSE] = useState('');
 
     const cargarRegistrosSupervision = async (event) => {
         axios.get(`${process.env.REACT_APP_API_URL}/supervision/registros`)
@@ -102,8 +88,6 @@ const SupervisionPrincipal = () => {
                 if (placaSeleccionada !== 'Todo') {
                     dataFiltrada = dataFiltrada.filter(item => item.placa === placaSeleccionada);
                 }
-
-                setRegistrosSupervision(dataFiltrada);
 
                 const registrosPorDia = dataFiltrada.reduce((acc, item) => {
                     // Formatear la fecha en formato YYYY-MM-DD
@@ -167,209 +151,6 @@ const SupervisionPrincipal = () => {
                 setCantidadAcompañamientos(registrosTotal)
                 setLoading(false);
 
-                const registrosPorEPP = dataFiltrada.reduce((acc, item) => {
-                    // Formatear la fecha en formato YYYY-MM-DD
-                    const epp = item.epp;
-
-                    if (!acc[epp]) {
-                        acc[epp] = 0;
-                    }
-                    acc[epp]++;
-                    return acc;
-                }, {});
-
-                const registrosOrdenadosPorEPP = Object.entries(registrosPorEPP).map(([key, value]) => ({
-                    name: key.charAt(0).toUpperCase() + key.slice(1),  // Capitaliza 'si' y 'no'
-                    value: value
-                }));
-
-                setGraficaRegistrosOrdenadosPorEPP(registrosOrdenadosPorEPP)
-
-                const datosFiltradosPorEppNo = dataFiltrada.filter(item => item.epp === 'no');
-
-                setRegistrosOrdenadosPorEppNo(datosFiltradosPorEppNo);
-
-                const registrosPorAlturas = dataFiltrada.reduce((acc, item) => {
-                    // Formatear la fecha en formato YYYY-MM-DD
-                    const alturas = item.alturas;
-
-                    if (!acc[alturas]) {
-                        acc[alturas] = 0;
-                    }
-                    acc[alturas]++;
-                    return acc;
-                }, {});
-
-                const registrosOrdenadosPorAlturas = Object.entries(registrosPorAlturas).map(([key, value]) => ({
-                    name: key.charAt(0).toUpperCase() + key.slice(1),  // Capitaliza 'si' y 'no'
-                    value: value
-                }));
-
-                setGraficaRegistrosOrdenadosPorAlturas(registrosOrdenadosPorAlturas)
-
-                const datosFiltradosPorAlturasNo = dataFiltrada.filter(item => item.alturas === 'no');
-
-                setRegistrosOrdenadosPorAlturasNo(datosFiltradosPorAlturasNo);
-
-                const registrosPorATS = dataFiltrada.reduce((acc, item) => {
-                    // Formatear la fecha en formato YYYY-MM-DD
-                    const ats = item.ats;
-
-                    if (!acc[ats]) {
-                        acc[ats] = 0;
-                    }
-                    acc[ats]++;
-                    return acc;
-                }, {});
-
-                const registrosOrdenadosPorATS = Object.entries(registrosPorATS).map(([key, value]) => ({
-                    name: key.charAt(0).toUpperCase() + key.slice(1),  // Capitaliza 'si' y 'no'
-                    value: value
-                }));
-
-                setGraficaRegistrosOrdenadosPorATS(registrosOrdenadosPorATS)
-
-                const datosFiltradosPorATSNo = dataFiltrada.filter(item => item.ats === 'no');
-
-                setRegistrosOrdenadosPorATSNo(datosFiltradosPorATSNo);
-
-                const registrosPorEmpalmes = dataFiltrada.reduce((acc, item) => {
-                    // Formatear la fecha en formato YYYY-MM-DD
-                    const empalmes = item.empalmes;
-
-                    if (!acc[empalmes]) {
-                        acc[empalmes] = 0;
-                    }
-                    acc[empalmes]++;
-                    return acc;
-                }, {});
-
-                const registrosOrdenadosPorEmpalmes = Object.entries(registrosPorEmpalmes).map(([key, value]) => ({
-                    name: key.charAt(0).toUpperCase() + key.slice(1),  // Capitaliza 'si' y 'no'
-                    value: value
-                }));
-
-                setGraficaRegistrosOrdenadosPorEmpalmes(registrosOrdenadosPorEmpalmes)
-
-                const datosFiltradosPorEmpalmesNo = dataFiltrada.filter(item => item.empalmes === 'no');
-
-                setRegistrosOrdenadosPorEmpalmesNo(datosFiltradosPorEmpalmesNo);
-
-                const datosFiltradosPorEmpalmesSi = dataFiltrada.filter(item => item.empalmes === 'si');
-
-                setRegistrosOrdenadosPorEmpalmesSi(datosFiltradosPorEmpalmesSi);
-
-                const registrosPorPreoperacional = dataFiltrada.reduce((acc, item) => {
-                    // Formatear la fecha en formato YYYY-MM-DD
-                    const preoperacional = item.preoperacional;
-
-                    if (!acc[preoperacional]) {
-                        acc[preoperacional] = 0;
-                    }
-                    acc[preoperacional]++;
-                    return acc;
-                }, {});
-
-                const registrosOrdenadosPorPreoperacional = Object.entries(registrosPorPreoperacional).map(([key, value]) => ({
-                    name: key.charAt(0).toUpperCase() + key.slice(1),  // Capitaliza 'si' y 'no'
-                    value: value
-                }));
-
-                setGraficaRegistrosOrdenadosPorPreoperacional(registrosOrdenadosPorPreoperacional)
-
-                const datosFiltradosPorPreoperacionalNo = dataFiltrada.filter(item => item.preoperacional === 'no');
-
-                setRegistrosOrdenadosPorPreoperacionalNo(datosFiltradosPorPreoperacionalNo);
-
-                const registrosPorVehiculo = dataFiltrada.reduce((acc, item) => {
-                    // Formatear la fecha en formato YYYY-MM-DD
-                    const vehiculo = item.vehiculo;
-
-                    if (!acc[vehiculo]) {
-                        acc[vehiculo] = 0;
-                    }
-                    acc[vehiculo]++;
-                    return acc;
-                }, {});
-
-                const registrosOrdenadosPorVehiculo = Object.entries(registrosPorVehiculo).map(([key, value]) => ({
-                    name: key.charAt(0).toUpperCase() + key.slice(1),  // Capitaliza 'si' y 'no'
-                    value: value
-                }));
-
-                setGraficaRegistrosOrdenadosPorVehiculo(registrosOrdenadosPorVehiculo)
-
-                const datosFiltradosPorVehiculoNo = dataFiltrada.filter(item => item.vehiculo !== '5');
-
-                setRegistrosOrdenadosPorVehiculoNo(datosFiltradosPorVehiculoNo);
-
-                const equipos = dataFiltrada.map(item => ({
-                    empalmadora: item.empalmadora,
-                    otdr: item.otdr,
-                    cortadora: item.cortadora,
-                    pinza: item.pinza,
-                    opm: item.opm,
-                    onexpert: item.onexpert,
-                    medidorConductancia: item.medidorConductancia,
-                    medidorFugas: item.medidorFugas
-                }));
-
-                const respuestasAgrupadasEquipos = [
-                    {
-                        name: 'Empalmadora',
-                        si: equipos.filter(item => item.empalmadora === 'Si').length,
-                        no: equipos.filter(item => item.empalmadora === 'No').length,
-                        na: equipos.filter(item => item.empalmadora === 'N/A').length,
-                    },
-                    {
-                        name: 'OTDR',
-                        si: equipos.filter(item => item.otdr === 'Si').length,
-                        no: equipos.filter(item => item.otdr === 'No').length,
-                        na: equipos.filter(item => item.otdr === 'N/A').length,
-                    },
-                    {
-                        name: 'Cortadora',
-                        si: equipos.filter(item => item.cortadora === 'Si').length,
-                        no: equipos.filter(item => item.cortadora === 'No').length,
-                        na: equipos.filter(item => item.cortadora === 'N/A').length,
-                    },
-                    {
-                        name: 'Pinza',
-                        si: equipos.filter(item => item.pinza === 'Si').length,
-                        no: equipos.filter(item => item.pinza === 'No').length,
-                        na: equipos.filter(item => item.pinza === 'N/A').length,
-                    },
-                    {
-                        name: 'OPM',
-                        si: equipos.filter(item => item.opm === 'Si').length,
-                        no: equipos.filter(item => item.opm === 'No').length,
-                        na: equipos.filter(item => item.opm === 'N/A').length,
-                    },
-                    {
-                        name: 'Onexpert',
-                        si: equipos.filter(item => item.onexpert === 'Si').length,
-                        no: equipos.filter(item => item.onexpert === 'No').length,
-                        na: equipos.filter(item => item.onexpert === 'N/A').length,
-                    },
-                    {
-                        name: 'Medidor de Conductancia',
-                        si: equipos.filter(item => item.medidorConductancia === 'Si').length,
-                        no: equipos.filter(item => item.medidorConductancia === 'No').length,
-                        na: equipos.filter(item => item.medidorConductancia === 'N/A').length,
-                    },
-                    {
-                        name: 'Medidor de Fugas',
-                        si: equipos.filter(item => item.medidorFugas === 'Si').length,
-                        no: equipos.filter(item => item.medidorFugas === 'No').length,
-                        na: equipos.filter(item => item.medidorFugas === 'N/A').length,
-                    }
-                ];
-
-                setGraficaRegistrosOrdenadosPorEquipos(respuestasAgrupadasEquipos);
-
-
-
-
                 const uniqueFecha = new Set();
                 const uniqueDia = new Set();
                 const uniqueMes = new Set();
@@ -389,11 +170,6 @@ const SupervisionPrincipal = () => {
                     uniqueMes.add(mes);
                     uniqueAño.add(año);
                 });
-                const listaFechaOrdenada = Array.from(uniqueFecha).sort((a, b) => {
-                    if (a === "Todo") return -1; // Mantener "Todo" en el primer lugar
-                    if (b === "Todo") return 1;
-                    return new Date(b) - new Date(a);
-                });
                 const listaAñoOrdenada = Array.from(uniqueAño).sort((a, b) => {
                     if (a === "Todo") return -1; // Mantener "Todo" en el primer lugar
                     if (b === "Todo") return 1;
@@ -409,7 +185,6 @@ const SupervisionPrincipal = () => {
                     if (b === "Todo") return 1;
                     return a - b;
                 });
-                setListaFecha(listaFechaOrdenada);
                 setListaAño(listaAñoOrdenada);
                 setListaMes(listaMesOrdenada);
                 setListaDia(listaDiaOrdenada);
@@ -574,6 +349,19 @@ const SupervisionPrincipal = () => {
         }
     };
 
+    const cargarRegistrosEnel = async () => {
+        try {
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/supervision/registrosEnelInspeccionIntegralHse`);
+            const registrosOrdenados = response.data.sort((a, b) => {
+                return new Date(b.fechaInicial) - new Date(a.fechaInicial);
+            });
+            setDataEnelInspeccionIntegralHSE(registrosOrdenados);
+
+        } catch (error) {
+            console.error("Error al obtener datos:", error);
+        }
+    };
+
     useEffect(() => {
         const yaRecargado = localStorage.getItem('yaRecargado');
         const nombreUsuario = Cookies.get('userNombre');
@@ -590,12 +378,62 @@ const SupervisionPrincipal = () => {
             toast.success('Datos enviados exitosamente', { className: 'toast-success' });
         }
 
+        cargarRegistrosEnel();
         cargarRegistrosSupervision();
     }, []);
 
     useEffect(() => {
         cargarRegistrosSupervision();
     }, [fechaSeleccionada, añoSeleccionada, mesSeleccionada, diaSeleccionada, supervisorSeleccionado, placaSeleccionada]);
+
+    const columnasEnel = [
+        { header: 'Consecutivo', key: 'id' },
+        { header: 'Fecha', key: 'fechaInicial' },
+        { header: 'OP/OT', key: 'opOt' },
+        { header: 'Nombre Proyecto', key: 'nombreProyecto' },
+        { header: 'Nombre Supervisor Tecnico', key: 'nombreSupervisorTecnico' },
+        { header: 'Nombre Lider Encargado', key: 'nombreLiderEncargado' },
+        { header: 'Inspeccion', key: 'inspeccion' },
+    ];
+
+    const [mostrarModal, setMostrarModal] = useState(false);
+    const [selectedOption, setSelectedOption] = useState('');
+
+    const cargarFotosEnBase64 = async (obj) => {
+        for (const key in obj) {
+            if (!obj.hasOwnProperty(key)) continue;
+
+            const valor = obj[key];
+
+            if (typeof valor === 'object' && valor !== null) {
+                if (key.startsWith('foto') && 'name' in valor && typeof valor.name === 'string') {
+                    try {
+                        const response = await fetch(`${process.env.REACT_APP_API_URL}/supervision/obtenerImagen?imageName=${encodeURIComponent(valor.name)}`);
+                        console.log(response)
+                        const blob = await response.blob();
+                        const base64 = await blobToBase64(blob);
+
+                        valor.data = base64;
+                    } catch (error) {
+                        console.error(`Error cargando imagen ${valor.name}:`, error);
+                    }
+                }
+
+                await cargarFotosEnBase64(valor);
+            }
+        }
+
+        return obj;
+    };
+
+    const blobToBase64 = (blob) => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onloadend = () => resolve(reader.result);
+            reader.onerror = reject;
+            reader.readAsDataURL(blob);
+        });
+    };
 
     return (
         <div className="Supervision-Principal">
@@ -610,182 +448,264 @@ const SupervisionPrincipal = () => {
                     <p>... Cargando Datos ...</p>
                 </div>
             ) : (
-                <div className='Contenido'>
-                    <div className='RenderizarFiltros'>
-                        <div className='SeleccionFecha'>
-                            <div className='TituloFecha'>
-                                <i className="fas fa-calendar"></i>
-                                <span>Año</span>
-                            </div>
-                            <select id='Fecha-Reporte-Boton' value={añoSeleccionada} onChange={(e) => setAñoSeleccionada(e.target.value)} className="select-box">
-                                {listaAño.map((fecha, index) => (
-                                    <option key={index} value={fecha}>
-                                        {fecha}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-                        <div className='SeleccionFecha'>
-                            <div className='TituloFecha'>
-                                <i className="fas fa-calendar-alt"></i>
-                                <span>Mes</span>
-                            </div>
-                            <select id='Fecha-Reporte-Boton' value={mesSeleccionada} onChange={(e) => setMesSeleccionada(e.target.value)} className="select-box">
-                                {listaMes.map((fecha, index) => (
-                                    <option key={index} value={fecha}>
-                                        {fecha}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-                        <div className='SeleccionFecha'>
-                            <div className='TituloFecha'>
-                                <i className="fas fa-calendar-day"></i>
-                                <span>Dia</span>
-                            </div>
-                            <select id='Fecha-Reporte-Boton' value={diaSeleccionada} onChange={(e) => setDiaSeleccionada(e.target.value)} className="select-box">
-                                {listaDia.map((fecha, index) => (
-                                    <option key={index} value={fecha}>
-                                        {fecha}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-                        <div className='SeleccionSupervision'>
-                            <div className='TituloSupervision'>
-                                <i className="fas fa-user-tie"></i>
-                                <span>Supervisor</span>
-                            </div>
-                            <select id='Fecha-Reporte-Boton' value={supervisorSeleccionado} onChange={(e) => setSupervisorSeleccionado(e.target.value)} className="select-box">
-                                {listaSupervisor.map((nombres, index) => (
-                                    <option key={index} value={nombres}>
-                                        {nombres}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-                        <div className='SeleccionPlaca'>
-                            <div className='TituloPlaca'>
-                                <i className="fas fa-id-card"></i>
-                                <span>Placa</span>
-                            </div>
-                            <select id='Fecha-Reporte-Boton' value={placaSeleccionada} onChange={(e) => setPlacaSeleccionada(e.target.value)} className="select-box">
-                                {listaPlaca.map((placa, index) => (
-                                    <option key={index} value={placa}>
-                                        {placa}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
+                <>
+                    <div className='menuNavegacion'>
+                        <ul className="nav nav-tabs">
+                            <li className="nav-item">
+                                <a
+                                    className={`nav-link ${carpeta === 'Claro' ? 'active' : ''}`}
+                                    onClick={() => {
+                                        setCarpeta('Claro');
+                                    }}
+                                >
+                                    Claro
+                                </a>
+                            </li>
+                            <li className="nav-item">
+                                <a
+                                    className={`nav-link ${carpeta === 'Enel' ? 'active' : ''}`}
+                                    onClick={() => {
+                                        setCarpeta('Enel');
+                                    }}
+                                >
+                                    Enel
+                                </a>
+                            </li>
+                        </ul>
                     </div>
-                    <div className='RenderizarMapaYGraficos'>
-                        <div className='RenderizarMapa'>
 
-                            <div className='Total'>
-                                <i className="fas fa-calculator"></i>
-                                <span>Total acompañamientos: {cantidadAcompañamientos}</span>
+                    {carpeta === "Claro" && (
+                        <div className='ContenidoClaro'>
+                            <div className='RenderizarFiltros'>
+                                <div className='SeleccionFecha'>
+                                    <div className='TituloFecha'>
+                                        <i className="fas fa-calendar"></i>
+                                        <span>Año</span>
+                                    </div>
+                                    <select id='Fecha-Reporte-Boton' value={añoSeleccionada} onChange={(e) => setAñoSeleccionada(e.target.value)} className="select-box">
+                                        {listaAño.map((fecha, index) => (
+                                            <option key={index} value={fecha}>
+                                                {fecha}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div className='SeleccionFecha'>
+                                    <div className='TituloFecha'>
+                                        <i className="fas fa-calendar-alt"></i>
+                                        <span>Mes</span>
+                                    </div>
+                                    <select id='Fecha-Reporte-Boton' value={mesSeleccionada} onChange={(e) => setMesSeleccionada(e.target.value)} className="select-box">
+                                        {listaMes.map((fecha, index) => (
+                                            <option key={index} value={fecha}>
+                                                {fecha}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div className='SeleccionFecha'>
+                                    <div className='TituloFecha'>
+                                        <i className="fas fa-calendar-day"></i>
+                                        <span>Dia</span>
+                                    </div>
+                                    <select id='Fecha-Reporte-Boton' value={diaSeleccionada} onChange={(e) => setDiaSeleccionada(e.target.value)} className="select-box">
+                                        {listaDia.map((fecha, index) => (
+                                            <option key={index} value={fecha}>
+                                                {fecha}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div className='SeleccionSupervision'>
+                                    <div className='TituloSupervision'>
+                                        <i className="fas fa-user-tie"></i>
+                                        <span>Supervisor</span>
+                                    </div>
+                                    <select id='Fecha-Reporte-Boton' value={supervisorSeleccionado} onChange={(e) => setSupervisorSeleccionado(e.target.value)} className="select-box">
+                                        {listaSupervisor.map((nombres, index) => (
+                                            <option key={index} value={nombres}>
+                                                {nombres}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div className='SeleccionPlaca'>
+                                    <div className='TituloPlaca'>
+                                        <i className="fas fa-id-card"></i>
+                                        <span>Placa</span>
+                                    </div>
+                                    <select id='Fecha-Reporte-Boton' value={placaSeleccionada} onChange={(e) => setPlacaSeleccionada(e.target.value)} className="select-box">
+                                        {listaPlaca.map((placa, index) => (
+                                            <option key={index} value={placa}>
+                                                {placa}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
                             </div>
+                            <div className='RenderizarMapaYGraficos'>
+                                <div className='RenderizarMapa'>
 
-                            <div className='UbicacionYPlaca'>
-                                <div className='Ubicacion'>
-                                    <div className='Contenedor'>
-                                        <i className="fas fa-map-marker-alt"></i>
-                                        <span>Ubicaciónes registradas</span>
+                                    <div className='Total'>
+                                        <i className="fas fa-calculator"></i>
+                                        <span>Total acompañamientos: {cantidadAcompañamientos}</span>
                                     </div>
-                                    <div id="map" className='Mapa'></div>
-                                </div>
-                                <div className='Placa'>
-                                    <div className='TituloBarraSupervision'>
-                                        <i className="fas fa-chart-bar"></i>
-                                        <span>Acompañamientos por placa</span>
+
+                                    <div className='UbicacionYPlaca'>
+                                        <div className='Ubicacion'>
+                                            <div className='Contenedor'>
+                                                <i className="fas fa-map-marker-alt"></i>
+                                                <span>Ubicaciónes registradas</span>
+                                            </div>
+                                            <div id="map" className='Mapa'></div>
+                                        </div>
+                                        <div className='Placa'>
+                                            <div className='TituloBarraSupervision'>
+                                                <i className="fas fa-chart-bar"></i>
+                                                <span>Acompañamientos por placa</span>
+                                            </div>
+                                            <div className='Grafica'>
+                                                <ResponsiveContainer width="100%" height="100%">
+                                                    <BarChart
+                                                        data={graficaRegistrosOrdenadosPorPlaca}
+                                                        layout="vertical"
+                                                    >
+                                                        <YAxis dataKey="placa" type="category" width={100} />
+                                                        <XAxis
+                                                            type="number"
+                                                            domain={[dataMin => dataMin - 1, dataMax => dataMax + 5]}
+                                                            tick={false}
+                                                            axisLine={false}
+                                                            tickLine={false}
+                                                            interval={0}
+                                                        />
+                                                        <Tooltip />
+                                                        <Bar dataKey="cantidad" fill="#8884d8">
+                                                            <LabelList dataKey="cantidad" position="right" />
+                                                        </Bar>
+                                                    </BarChart>
+                                                </ResponsiveContainer>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div className='Grafica'>
-                                        <ResponsiveContainer width="100%" height="100%">
-                                            <BarChart
-                                                data={graficaRegistrosOrdenadosPorPlaca}
-                                                layout="vertical"
-                                            >
-                                                <YAxis dataKey="placa" type="category" width={100} />
-                                                <XAxis
-                                                    type="number"
-                                                    domain={[dataMin => dataMin - 1, dataMax => dataMax + 5]}
-                                                    tick={false} 
-                                                    axisLine={false}
-                                                    tickLine={false}
-                                                    interval={0}
-                                                />
-                                                <Tooltip />
-                                                <Bar dataKey="cantidad" fill="#8884d8">
-                                                    <LabelList dataKey="cantidad" position="right" />
-                                                </Bar>
-                                            </BarChart>
-                                        </ResponsiveContainer>
+
+                                    <div className='SupervisoresYDia'>
+                                        <div className='BarraSupervision'>
+                                            <div className='TituloBarraSupervision'>
+                                                <i className="fas fa-chart-bar"></i>
+                                                <span>Acompañamientos por supervisor</span>
+                                            </div>
+                                            <div className='Grafica'>
+                                                <ResponsiveContainer width="100%" height="100%">
+                                                    <BarChart
+                                                        margin={0}
+                                                        data={graficaRegistrosSupervisionCadaUno}
+                                                        layout="vertical"
+                                                    >
+                                                        <YAxis dataKey="name" type="category" width={100} />
+                                                        <XAxis
+                                                            type="number"
+                                                            domain={[dataMin => dataMin - 1, dataMax => dataMax + 5]}
+                                                            tick={false}
+                                                            axisLine={false}
+                                                            tickLine={false}
+                                                            interval={0}
+                                                        />
+                                                        <Tooltip />
+                                                        <Bar dataKey="registros" fill="#8884d8">
+                                                            <LabelList dataKey="registros" position="right" />
+                                                        </Bar>
+                                                    </BarChart>
+                                                </ResponsiveContainer>
+                                            </div>
+                                        </div>
+                                        <div className='BarraFecha'>
+                                            <div className='TituloBarraFecha'>
+                                                <i className="fas fa-chart-bar"></i>
+                                                <span>Acompañamientos por dia</span>
+                                            </div>
+                                            <div className='GraficaFecha'>
+                                                <ResponsiveContainer width="100%" height="100%">
+                                                    <BarChart
+                                                        margin={0}
+                                                        data={graficaRegistrosSupervisionDia}
+                                                    >
+                                                        <CartesianGrid strokeDasharray="3 3" />
+                                                        <XAxis dataKey="name" />
+                                                        <YAxis domain={[dataMin => dataMin - 1, dataMax => dataMax + 5]} />
+                                                        <Tooltip />
+                                                        <Bar dataKey="registros" fill="#8884d8">
+                                                            <LabelList dataKey="registros" position="top" />
+                                                        </Bar>
+                                                    </BarChart>
+                                                </ResponsiveContainer>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-
-                            <div className='SupervisoresYDia'>
-                                <div className='BarraSupervision'>
-                                    <div className='TituloBarraSupervision'>
-                                        <i className="fas fa-chart-bar"></i>
-                                        <span>Acompañamientos por supervisor</span>
-                                    </div>
-                                    <div className='Grafica'>
-                                        <ResponsiveContainer width="100%" height="100%">
-                                            <BarChart
-                                                margin={0}
-                                                data={graficaRegistrosSupervisionCadaUno}
-                                                layout="vertical"
-                                            >
-                                                <YAxis dataKey="name" type="category" width={100} />
-                                                <XAxis
-                                                    type="number" // Cambiado a tipo number para ajustar dinámicamente
-                                                    domain={[dataMin => dataMin - 1, dataMax => dataMax + 5]}
-                                                    tick={false} // Oculta los ticks del eje X
-                                                    axisLine={false} // Oculta la línea del eje X
-                                                    tickLine={false} // Oculta las líneas de los ticks
-                                                    interval={0} // Muestra todos los ticks
-                                                />
-                                                <Tooltip />
-                                                <Bar dataKey="registros" fill="#8884d8">
-                                                    <LabelList dataKey="registros" position="right" />
-                                                </Bar>
-                                            </BarChart>
-                                        </ResponsiveContainer>
-                                    </div>
-                                </div>
-                                <div className='BarraFecha'>
-                                    <div className='TituloBarraFecha'>
-                                        <i className="fas fa-chart-bar"></i>
-                                        <span>Acompañamientos por dia</span>
-                                    </div>
-                                    <div className='GraficaFecha'>
-                                        <ResponsiveContainer width="100%" height="100%">
-                                            <BarChart
-                                                margin={0}
-                                                data={graficaRegistrosSupervisionDia}
-                                            >
-                                                <CartesianGrid strokeDasharray="3 3" />
-                                                <XAxis dataKey="name" />
-                                                <YAxis domain={[dataMin => dataMin - 1, dataMax => dataMax + 5]} />
-                                                <Tooltip />
-                                                <Bar dataKey="registros" fill="#8884d8">
-                                                    <LabelList dataKey="registros" position="top" />
-                                                </Bar>
-                                            </BarChart>
-                                        </ResponsiveContainer>
-                                    </div>
-                                </div>
+                            <div>
+                                <button onClick={() => navigate('/supervisionFormularioClaro')} className="btn-flotante">+</button>
                             </div>
                         </div>
-                    </div>
-                    <div>
-                        <button onClick={Agregar} className="btn-flotante">+</button>
-                    </div>
+                    )}
+
+                    {carpeta === "Enel" && (
+                        <div className='ContenidoEnel'>
+                            <div className='botonAgregar'>
+                                <Botones onClick={() => setMostrarModal(true)} className='agregar'>Agregar OP/OT</Botones>
+                            </div>
+                            <div className='Datos'>
+                                <Tablas columnas={columnasEnel} datos={dataEnelInspeccionIntegralHSE} editar={true} filasPorPagina={7}
+                                    onEditar={async (fila) => {
+                                        console.log(fila);
+                                        if (fila.formulario === "Enel Inspeccion Integral HSE") {
+                                            const datosConFotos = await cargarFotosEnBase64(fila);
+
+                                            localStorage.removeItem('formularioEnelInspeccionIntegralHSE');
+                                            localStorage.setItem('formularioEnelInspeccionIntegralHSE', JSON.stringify(fila));
+                                            navigate('/supervisionFormularioEnelIntegral', { state: { modo: 'editar' } });
+                                        }
+                                    }}
+                                />
+                            </div>
+                        </div>
+                    )}
+
+                    {mostrarModal && (
+                        <>
+                            <div className="modal-overlay" onClick={() => setMostrarModal(false)}></div>
+                            <div className="modal-cuadrilla">
+                                <div className="modal-contenido">
+                                    <div className={`titulo`}>
+                                        <Textos className='subtitulo'>Por favor elija el tipo de formulario a diligenciar</Textos>
+                                    </div>
+                                    <div className={`selectores`}>
+                                        <Selectores value={selectedOption} onChange={(e) => { setSelectedOption(e.target.value) }}
+                                            options={[
+                                                { value: 'ENEL - Inspeccion Integral HSE', label: 'ENEL - Inspeccion Integral HSE' },
+                                            ]} className="primary">
+                                        </Selectores>
+                                    </div>
+                                    <div className={`acciones`}>
+                                        <Botones onClick={() => setMostrarModal(false)}>Cancelar</Botones>
+                                        <Botones className='agregar' onClick={() => {
+                                            if (selectedOption === 'ENEL - Inspeccion Integral HSE') {
+                                                navigate('/supervisionFormularioEnelIntegral', { state: { modo: 'crear' } });
+                                            } else {
+                                                toast.error('Por favor seleccione una opcion valida');
+                                            }
+                                        }}>Aceptar</Botones>
+                                    </div>
+                                </div>
+                            </div>
+                        </>
+                    )}
+
                     <div className='Notificaciones'>
                         <ToastContainer />
                     </div>
-                </div>
+                </>
             )}
         </div>
     );

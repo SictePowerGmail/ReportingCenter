@@ -65,7 +65,9 @@ const Tablas = ({
                                     {columnas.map((col) => (
                                         <th key={col.key}>{col.header}</th>
                                     ))}
-                                    <th key={'acciones'}>Acciones</th>
+                                    {(editar || eliminar) && (
+                                        <th key={'acciones'}>Acciones</th>
+                                    )}
                                 </>
                             ) : (
                                 <th>No hay columnas definidas</th>
@@ -86,18 +88,20 @@ const Tablas = ({
                                         {columnas.map((col) => (
                                             <td key={col.key}>{fila[col.key]}</td>
                                         ))}
-                                        <td className='acciones' key={'acciones'}>
-                                            {editar && (
-                                                <button className='editar' onClick={() => onEditar(fila)}>
-                                                    <FaPencilAlt />
-                                                </button>
-                                            )}
-                                            {eliminar && (
-                                                <button className='eliminar' onClick={() => onEliminar(fila)}>
-                                                    <FaTrash />
-                                                </button>
-                                            )}
-                                        </td>
+                                        {(editar || eliminar) && (
+                                            <td className='acciones' key={'acciones'}>
+                                                {editar && (
+                                                    <button className='editar' onClick={() => onEditar(fila)}>
+                                                        <FaPencilAlt />
+                                                    </button>
+                                                )}
+                                                {eliminar && (
+                                                    <button className='eliminar' onClick={() => onEliminar(fila)}>
+                                                        <FaTrash />
+                                                    </button>
+                                                )}
+                                            </td>
+                                        )}
                                     </tr>
                                 ))}
                             </>

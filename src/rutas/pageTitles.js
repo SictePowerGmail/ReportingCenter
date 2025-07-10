@@ -20,6 +20,10 @@ export const getPageTitle = (pathname) => {
             return 'Supervisión';
         case '/SupervisionAgregar':
             return 'Supervisión';
+        case '/supervisionFormularioClaro':
+            return 'Supervisión Claro';
+        case '/supervisionFormularioEnelIntegral':
+            return 'Supervisión Enel';
         case '/MaterialPrincipal':
             return 'Solicitud Materiales';
         case '/MaterialAgregar':
@@ -33,6 +37,8 @@ export const getPageTitle = (pathname) => {
         case '/Carnetizacion':
             return 'Carnetizacion'
         case '/AlumbradoPublico':
+            return 'Alumbrado Publico'
+        case '/AlumbradoPublicoDetalle':
             return 'Alumbrado Publico'
         /* Facturacion */
         case '/ConsolidadoNacionalFacturacion':

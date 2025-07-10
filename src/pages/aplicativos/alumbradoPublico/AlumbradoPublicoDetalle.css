@@ -1,0 +1,63 @@
+@import '../../../styles/style.css';
+
+.AlumbradoPublicoDetalle {
+    width: 100%;
+    height: 100%;
+
+    @media screen and (max-width: 600px) {
+        padding-left: 0;
+    }
+
+    .contenedor {
+        display: flex;
+        width: 100%;
+        background-color: var(--background-menu-cuerpo);
+        height: 100%;
+        overflow-y: auto;
+        padding: 20px;
+        position: relative;
+
+        .CargandoPagina {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+
+        .PaginaVolver {
+            max-width: 100px;
+            margin-bottom: 20px;
+
+            .texto {
+                margin-left: 5px;
+            }
+        }
+
+        .Formulario {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+
+            .Preguntas {
+                display: flex;
+                align-items: center;
+                margin: 5px 0px;
+
+                .texto {
+                    display: flex;
+                    width: 100px;
+                    margin-right: 20px;
+                }
+
+                .entrada {
+                    max-width: 200px;
+                }
+            }
+        }
+
+        .Accion {
+            max-width: 100px;
+        }
+    }
+}

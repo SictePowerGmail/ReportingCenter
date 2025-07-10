@@ -13,4 +13,9 @@
         background-color: #f0f8ff;
         border-color: #007bff;
     }
+
+    &:disabled {
+        background-color: #f0f0f0;
+        cursor: not-allowed;
+    }
 }

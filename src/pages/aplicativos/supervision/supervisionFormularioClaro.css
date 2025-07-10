@@ -1,0 +1,153 @@
+.supervisionFormularioClaro {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: baseline;
+    align-items: center;
+    padding: 20px;
+    overflow-y: auto;
+
+    .cargandoPagina {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+    }
+
+    .formulario {
+        flex-direction: column;
+        position: relative;
+        height: 100%;
+        width: 100%;
+
+        .titulo3 {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .campo {
+            display: flex;
+            align-items: baseline;
+            justify-content: baseline;
+            margin: 10px 0px;
+            width: 100%;
+
+            span,
+            i {
+                padding: 5px 10px 5px 5px;
+            }
+
+            .entradaDatos {
+                width: 100% !important;
+                display: flex !important;
+                flex-direction: column !important;
+
+                .subtitulo {
+                    padding-bottom: 5px;
+
+                    &.prin {
+                        
+                    }
+
+                    &.sub {
+                        padding-left: 10px;
+                        margin-top: 10px;
+                    }
+                }
+
+                .foto-label {
+                    border: 1px solid rgb(151, 151, 151);
+                    border-radius: 6px;
+                    padding: 5px 10px;
+                    text-align: center;
+                    color: black;
+                }
+
+                .opciones {
+                    display: flex;
+                    align-items: center;
+                    justify-content: baseline;
+                    padding-left: 20px;
+                    margin: 5px 0px;
+
+                    &.vehiculo {
+                        padding-left: 0px;
+
+                        button {
+                            width: 50px;
+
+                            &:nth-child(5),
+                            &:nth-child(4),
+                            &:nth-child(3),
+                            &:nth-child(2) {
+                                margin-left: 5px;
+                            }
+                        }
+                    }
+
+                    button {
+                        width: 60px;
+
+                        &:nth-child(5),
+                        &:nth-child(4),
+                        &:nth-child(3),
+                        &:nth-child(2) {
+                            margin-left: 10px;
+                        }
+                    }
+
+                    &.oculto {
+                        display: none;
+                    }
+                }
+
+                .comentario {
+                    padding-left: 20px;
+                }
+            }
+
+            .contenedor {
+                display: flex;
+                flex-direction: row;
+                height: auto;
+                width: 100%;
+
+                .texto {
+                    padding-bottom: 3px;
+                }
+            }
+
+            &.vehiculo button {
+                @media screen and (max-width: 600px) {
+                    width: 45px;
+                    padding: 8px 10px;
+                }
+            }
+
+            &.ubicacion {
+                flex-direction: column !important;
+                align-items: initial !important;
+            }
+        }
+
+        .enviar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding-top: 10px;
+            padding-bottom: 20px;
+
+            button {
+                width: auto;
+                max-width: 200px;
+                margin: 0px 10px
+            }
+        }
+    }
+}

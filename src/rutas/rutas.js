@@ -12,7 +12,8 @@ import Login from "../pages/loginAplicativos/login";
 /* Aplicativos */
 import Capacidades from "../pages/aplicativos/capacidades/Capacidades";
 import SupervisionPrincipal from "../pages/aplicativos/supervision/supervisionPrincipal";
-import SupervisionAgregar from "../pages/aplicativos/supervision/supervisionAgregar";
+import SupervisionFormularioClaro from "../pages/aplicativos/supervision/supervisionFormularioClaro";
+import SupervisionFormularioEnelIntegral from "../pages/aplicativos/supervision/supervisionFormularioEnelIntegral";
 import MaterialPrincipal from "../pages/aplicativos/solicitudMaterial/materialPrincipal";
 import MaterialAgregar from "../pages/aplicativos/solicitudMaterial/materialAgregar";
 import ReporteMaterialPrincipal from "../pages/aplicativos/reporteMaterialFerretero/reporteMaterialPrincipal";
@@ -20,6 +21,7 @@ import ReporteMaterialAgregar from "../pages/aplicativos/reporteMaterialFerreter
 import ChatBot from "../pages/aplicativos/chatbot/ChatBot";
 import Carnetizacion from "../pages/aplicativos/carnetizacion/Carnetizacion";
 import AlumbradoPublico from "../pages/aplicativos/alumbradoPublico/AlumbradoPublico";
+import AlumbradoPublicoDetalle from "../pages/aplicativos/alumbradoPublico/AlumbradoPublicoDetalle";
 /* Facturacion */
 import FacturacionConsolidado from '../pages/facturacion/FacturacionConsolidado';
 import ProyectosFacturacion from "../pages/facturacion/ProyectosFacturacion";
@@ -119,7 +121,8 @@ function RutasApp() {
                     {/* Aplicativos */}
                     <Route path='/Capacidades' exacte element={<Capacidades />} />
                     <Route path='/SupervisionPrincipal' exacte element={<SupervisionPrincipal />} />
-                    <Route path='/SupervisionAgregar' exacte element={<SupervisionAgregar />} />
+                    <Route path='/supervisionFormularioEnelIntegral' exacte element={<SupervisionFormularioEnelIntegral />} />
+                    <Route path='/supervisionFormularioClaro' exacte element={<SupervisionFormularioClaro />} />
                     <Route path='/MaterialPrincipal' exacte element={<MaterialPrincipal />} />
                     <Route path='/MaterialAgregar' exacte element={<MaterialAgregar />} />
                     <Route path='/ReporteMaterialPrincipal' exacte element={<ReporteMaterialPrincipal />} />
@@ -127,6 +130,7 @@ function RutasApp() {
                     <Route path='/ChatBot' exacte element={<ChatBot />} />
                     <Route path='/Carnetizacion' exacte element={<Carnetizacion />} />
                     <Route path='/AlumbradoPublico' exacte element={<AlumbradoPublico />} />
+                    <Route path='/AlumbradoPublicoDetalle' exacte element={<AlumbradoPublicoDetalle />} />
                     {/* Facturacion */}
                     <Route path='/ConsolidadoNacionalFacturacion' exacte element={<FacturacionConsolidado />} />
                     <Route path='/Proyectos' exacte element={<ProyectosFacturacion />} />

@@ -8,6 +8,7 @@ const Selectores = ({
     className = '',
     name = '',
     defaultOption = 'Seleccione una opción ...',
+    ...rest
 }) => {
     return (
         <select
@@ -15,6 +16,7 @@ const Selectores = ({
             value={value}
             onChange={onChange}
             className={`selector ${className}`}
+            {...rest}
         >
             <option value="">{defaultOption}</option>
             {options.map((option) => (

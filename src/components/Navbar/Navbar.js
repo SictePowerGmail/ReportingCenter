@@ -513,7 +513,7 @@ function Navbar() {
                                 }
                             </li>
 
-                            <li className={`SubMenu ${showMobileMenu ? 'abierto' : 'cerrado'}`}>
+                            {/* <li className={`SubMenu ${showMobileMenu ? 'abierto' : 'cerrado'}`}>
                                 {subChecksAplicativos.Carnetizacion === true &&
                                     (<Link className={`SubMenu-Titulo-Solo ${showMobileMenu ? 'abierto' : 'cerrado'}`} to={{ pathname: "/Login", search: "?tipo=AlumbradoPublico" }} >
                                         <span className='SubMenu-Titulo-Icono'><GiStreetLight /></span>
@@ -522,7 +522,7 @@ function Navbar() {
                                         )}
                                     </Link>)
                                 }
-                            </li>
+                            </li> */}
 
                             <span className={`sub-titulo ${showMobileMenu ? 'abierto' : 'cerrado'}`}>Desempeño Financiero</span>
                             <li className={`SubMenu ${facturacion ? 'visible' : 'oculto'}`}>
