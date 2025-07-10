@@ -16,7 +16,6 @@ export const OpcionesFotoObservaciones = ({
     setImagen,
     disabled = false,
 }) => {
-
     return (
         <>
             <Textos className='subtitulo sub'>{texto}</Textos>
@@ -33,7 +32,7 @@ export const OpcionesFotoObservaciones = ({
                 ))}
             </div>
             <div className={`opciones ${data[keyPrin][keyBase] !== 'NC' ? activarinput !== true ? 'oculto' : '' : ''}`} >
-                <Imagenes disableInput={disabled} fotoKey={fotoKey} foto={data[keyPrin][fotoKey]} onChange={(fotoKey, data) => onChange(`${keyPrin}.${fotoKey}`, data)} capture={data[keyPrin].tipoInpseccion !== 'Virtual' ? true : false} setImagen={(data) => setImagen(data)}/>
+                <Imagenes disableInput={disabled} fotoKey={fotoKey} foto={data[keyPrin][fotoKey]} onChange={(fotoKey, data) => onChange(`${keyPrin}.${fotoKey}`, data)} capture={data.tipoInpseccion !== 'Virtual' ? true : false} setImagen={(data) => setImagen(data)}/>
             </div>
             <div className={`opciones ${data[keyPrin][keyBase] !== 'NC' ? 'oculto' : ''}`} >
                 <AreaTextos
