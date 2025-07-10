@@ -9,6 +9,7 @@ import axios from 'axios';
 import moment from 'moment';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { FaArrowLeft } from 'react-icons/fa'
 import { ThreeDots } from 'react-loader-spinner';
 import Botones from '../../../components/botones/botones';
 import Selectores from '../../../components/selectores/selectores';
@@ -501,6 +502,10 @@ const SupervisionFormularioClaro = () => {
                 </div>
             ) : (
                 <form className='formulario'>
+                    <div className='PaginaVolver'>
+                        <Botones className='agregar' onClick={() => navigate('/SupervisionPrincipal')}><FaArrowLeft /><Textos className='parrafo'>Volver</Textos></Botones>
+                    </div>
+
                     <div className='titulo3'>
                         <Textos className='titulo'>{selectedOption}</Textos>
                     </div>

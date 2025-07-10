@@ -41,11 +41,14 @@ const SupervisionPrincipal = () => {
     const [listaDia, setListaDia] = useState([]);
     const [listaSupervisor, setListaSupervisor] = useState([]);
     const [listaPlaca, setListaPlaca] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [carpeta, setCarpeta] = useState('Claro');
+    const [loading, setLoading] = useState(true);
+    const [carpeta, setCarpeta] = useState(Cookies.get('SupervisionCarpeta') || 'Claro');
+    const [dataClaro, setDataClaro] = useState('');
     const [dataEnelInspeccionIntegralHSE, setDataEnelInspeccionIntegralHSE] = useState('');
 
     const cargarRegistrosSupervision = async (event) => {
+        setLoading(true);
+
         axios.get(`${process.env.REACT_APP_API_URL}/supervision/registros`)
             .then(response => {
                 let dataFiltrada;
@@ -212,8 +215,8 @@ const SupervisionPrincipal = () => {
                     return a.localeCompare(b); // Comparar de forma ascendente
                 });
                 setListaPlaca(listaPlacaOrdenada);
-
-                generarMapa(dataFiltrada);
+                setDataClaro(dataFiltrada);
+                setLoading(false);
             })
             .catch(error => {
                 console.error('Error fetching data:', error);
@@ -351,6 +354,7 @@ const SupervisionPrincipal = () => {
 
     const cargarRegistrosEnel = async () => {
         try {
+            setLoading(true);
             const response = await axios.get(`${process.env.REACT_APP_API_URL}/supervision/registrosEnelInspeccionIntegralHse`);
             const registrosOrdenados = response.data.sort((a, b) => {
                 return new Date(b.fechaInicial) - new Date(a.fechaInicial);
@@ -359,6 +363,8 @@ const SupervisionPrincipal = () => {
 
         } catch (error) {
             console.error("Error al obtener datos:", error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -378,8 +384,17 @@ const SupervisionPrincipal = () => {
             toast.success('Datos enviados exitosamente', { className: 'toast-success' });
         }
 
-        cargarRegistrosEnel();
-        cargarRegistrosSupervision();
+        const ejecutarSecuencia = async () => {
+            try {
+                await cargarRegistrosEnel();          
+                await cargarRegistrosSupervision();   
+                await generarMapa(dataClaro);         
+            } catch (error) {
+                console.error('Error al ejecutar funciones secuenciales:', error);
+            }
+        };
+
+        ejecutarSecuencia();
     }, []);
 
     useEffect(() => {
@@ -456,6 +471,7 @@ const SupervisionPrincipal = () => {
                                     className={`nav-link ${carpeta === 'Claro' ? 'active' : ''}`}
                                     onClick={() => {
                                         setCarpeta('Claro');
+                                        Cookies.set('SupervisionCarpeta', "Claro");
                                     }}
                                 >
                                     Claro
@@ -466,6 +482,7 @@ const SupervisionPrincipal = () => {
                                     className={`nav-link ${carpeta === 'Enel' ? 'active' : ''}`}
                                     onClick={() => {
                                         setCarpeta('Enel');
+                                        Cookies.set('SupervisionCarpeta', "Enel");
                                     }}
                                 >
                                     Enel
@@ -660,8 +677,8 @@ const SupervisionPrincipal = () => {
                                     onEditar={async (fila) => {
                                         console.log(fila);
                                         if (fila.formulario === "Enel Inspeccion Integral HSE") {
+                                            setLoading(true);
                                             const datosConFotos = await cargarFotosEnBase64(fila);
-
                                             localStorage.removeItem('formularioEnelInspeccionIntegralHSE');
                                             localStorage.setItem('formularioEnelInspeccionIntegralHSE', JSON.stringify(fila));
                                             navigate('/supervisionFormularioEnelIntegral', { state: { modo: 'editar' } });
@@ -691,7 +708,10 @@ const SupervisionPrincipal = () => {
                                         <Botones onClick={() => setMostrarModal(false)}>Cancelar</Botones>
                                         <Botones className='agregar' onClick={() => {
                                             if (selectedOption === 'ENEL - Inspeccion Integral HSE') {
-                                                localStorage.removeItem('formularioEnelInspeccionIntegralHSE');
+                                                const dataLocal = JSON.parse(localStorage.getItem('formularioEnelInspeccionIntegralHSE'));
+                                                if (dataLocal.id) {
+                                                    localStorage.removeItem('formularioEnelInspeccionIntegralHSE');
+                                                }
                                                 navigate('/supervisionFormularioEnelIntegral', { state: { modo: 'crear' } });
                                             } else {
                                                 toast.error('Por favor seleccione una opcion valida');

@@ -10,6 +10,7 @@ import moment from 'moment';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ThreeDots } from 'react-loader-spinner';
+import { FaArrowLeft } from 'react-icons/fa'
 import Botones from '../../../components/botones/botones';
 import Selectores from '../../../components/selectores/selectores';
 import Textos from '../../../components/textos/textos';
@@ -1329,7 +1330,7 @@ const SupervisionFormularioEnel = () => {
         const personasConCedula = formulario.cuadrilla.filter(persona => persona.cedula && persona.cedula.trim() !== '');
         if (personasConCedula.length < 2) { toast.error('Debe haber al menos dos personas en la cuadrilla.'); return false }
         if (!formulario.riesgos.riesgos1 || !formulario.riesgos.riesgos2 || !formulario.riesgos.riesgos3 || !formulario.riesgos.riesgos4 || !formulario.riesgos.riesgos5 || !formulario.riesgos.riesgos6 || !formulario.riesgos.riesgos7 || !formulario.riesgos.riesgos8 || !formulario.riesgos.riesgos9) { toast.error('Por favor diligencie el capitulo 1 completo.'); return false }
-        if (!formulario.riesgos.fotoRiesgos1Obligatoria || !formulario.riesgos.fotoRiesgos2Obligatoria || !formulario.riesgos.fotoRiesgos4Obligatoria) { toast.error('Por favor ingrese las fotos obligatorias en el capitulo 1.'); return false }
+        if ((!formulario.riesgos.fotoRiesgos1Obligatoria && formulario.riesgos.riesgos1 !== 'NA') || (!formulario.riesgos.fotoRiesgos2Obligatoria && formulario.riesgos.riesgos2 !== 'NA') || (!formulario.riesgos.fotoRiesgos4Obligatoria && formulario.riesgos.riesgos4 !== 'NA')) { toast.error('Por favor ingrese las fotos obligatorias en el capitulo 1.'); return false }
         if (!formulario.riesgos.observacionRiesgos1 && formulario.riesgos.riesgos1 === 'NC') { toast.error('Por favor ingrese la observacion correspondiente en el capitulo 1 cuando su respuesta es No Cumple en la pregunta 1.'); return false }
         if (!formulario.riesgos.observacionRiesgos2 && formulario.riesgos.riesgos2 === 'NC') { toast.error('Por favor ingrese la observacion correspondiente en el capitulo 1 cuando su respuesta es No Cumple en la pregunta 2.'); return false }
         if ((!formulario.riesgos.observacionRiesgos3 || !formulario.riesgos.fotoRiesgos3) && formulario.riesgos.riesgos3 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 1 cuando su respuesta es No Cumple en la pregunta 3.'); return false }
@@ -1340,7 +1341,7 @@ const SupervisionFormularioEnel = () => {
         if ((!formulario.riesgos.observacionRiesgos8 || !formulario.riesgos.fotoRiesgos8) && formulario.riesgos.riesgos8 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 1 cuando su respuesta es No Cumple en la pregunta 8.'); return false }
         if ((!formulario.riesgos.observacionRiesgos9 || !formulario.riesgos.fotoRiesgos9) && formulario.riesgos.riesgos9 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 1 cuando su respuesta es No Cumple en la pregunta 9.'); return false }
         if (!formulario.senaYDemar.senaYDemar1 || !formulario.senaYDemar.senaYDemar2 || !formulario.senaYDemar.senaYDemar3) { toast.error('Por favor diligencie el capitulo 2 completo.'); return false }
-        if (!formulario.senaYDemar.fotoSenaYDemar1Obligatoria) { toast.error('Por favor ingrese las fotos obligatorias en el capitulo 2.'); return false }
+        if (!formulario.senaYDemar.fotoSenaYDemar1Obligatoria && formulario.riesgos.senaYDemar1 !== 'NA') { toast.error('Por favor ingrese las fotos obligatorias en el capitulo 2.'); return false }
         if (!formulario.senaYDemar.observacionSenaYDemar1 && formulario.senaYDemar.senaYDemar1 === 'NC') { toast.error('Por favor ingrese la observacion correspondiente en el capitulo 2 cuando su respuesta es No Cumple en la pregunta 1.'); return false }
         if ((!formulario.senaYDemar.observacionSenaYDemar2 || !formulario.senaYDemar.fotoSenaYDemar2) && formulario.senaYDemar.senaYDemar2 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 2 cuando su respuesta es No Cumple en la pregunta 2.'); return false }
         if ((!formulario.senaYDemar.observacionSenaYDemar3 || !formulario.senaYDemar.fotoSenaYDemar3) && formulario.senaYDemar.senaYDemar3 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 2 cuando su respuesta es No Cumple en la pregunta 3.'); return false }
@@ -1434,6 +1435,10 @@ const SupervisionFormularioEnel = () => {
                 </div>
             ) : (
                 <form className='formulario'>
+                    <div className='PaginaVolver'>
+                        <Botones className='agregar' onClick={() => navigate('/SupervisionPrincipal')}><FaArrowLeft /><Textos className='parrafo'>Volver</Textos></Botones>
+                    </div>
+
                     <div className='titulo3'>
                         <Textos className='titulo'>Enel - Inspeccion Integral HSE</Textos>
                     </div>
