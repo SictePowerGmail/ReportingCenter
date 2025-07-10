@@ -386,9 +386,9 @@ const SupervisionPrincipal = () => {
 
         const ejecutarSecuencia = async () => {
             try {
-                await cargarRegistrosEnel();          
-                await cargarRegistrosSupervision();   
-                await generarMapa(dataClaro);         
+                await cargarRegistrosEnel();
+                await cargarRegistrosSupervision();
+                await generarMapa(dataClaro);
             } catch (error) {
                 console.error('Error al ejecutar funciones secuenciales:', error);
             }
@@ -708,9 +708,12 @@ const SupervisionPrincipal = () => {
                                         <Botones onClick={() => setMostrarModal(false)}>Cancelar</Botones>
                                         <Botones className='agregar' onClick={() => {
                                             if (selectedOption === 'ENEL - Inspeccion Integral HSE') {
-                                                const dataLocal = JSON.parse(localStorage.getItem('formularioEnelInspeccionIntegralHSE'));
-                                                if (dataLocal.id) {
-                                                    localStorage.removeItem('formularioEnelInspeccionIntegralHSE');
+                                                const dataStr = localStorage.getItem('formularioEnelInspeccionIntegralHSE');
+                                                if (dataStr) {
+                                                    const dataLocal = JSON.parse(dataStr);
+                                                    if (dataLocal.id) {
+                                                        localStorage.removeItem('formularioEnelInspeccionIntegralHSE');
+                                                    }
                                                 }
                                                 navigate('/supervisionFormularioEnelIntegral', { state: { modo: 'crear' } });
                                             } else {
