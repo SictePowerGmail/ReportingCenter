@@ -691,6 +691,7 @@ const SupervisionPrincipal = () => {
                                         <Botones onClick={() => setMostrarModal(false)}>Cancelar</Botones>
                                         <Botones className='agregar' onClick={() => {
                                             if (selectedOption === 'ENEL - Inspeccion Integral HSE') {
+                                                localStorage.removeItem('formularioEnelInspeccionIntegralHSE');
                                                 navigate('/supervisionFormularioEnelIntegral', { state: { modo: 'crear' } });
                                             } else {
                                                 toast.error('Por favor seleccione una opcion valida');
