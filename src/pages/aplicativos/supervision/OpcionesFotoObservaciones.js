@@ -31,7 +31,7 @@ export const OpcionesFotoObservaciones = ({
                     </Botones>
                 ))}
             </div>
-            <div className={`opciones ${data[keyPrin][keyBase] !== 'NC' ? activarinput !== true ? 'oculto' : '' : ''}`} >
+            <div className={`opciones fotos ${data[keyPrin][keyBase] !== 'NC' ? activarinput !== true ? 'oculto' : '' : ''}`} >
                 <Imagenes disableInput={disabled} fotoKey={fotoKey} foto={data[keyPrin][fotoKey]} onChange={(fotoKey, data) => onChange(`${keyPrin}.${fotoKey}`, data)} capture={data.tipoInpseccion !== 'Virtual' ? true : false} setImagen={(data) => setImagen(data)}/>
             </div>
             <div className={`opciones ${data[keyPrin][keyBase] !== 'NC' ? 'oculto' : ''}`} >

@@ -426,20 +426,26 @@ const SupervisionPrincipal = () => {
             if (!obj.hasOwnProperty(key)) continue;
 
             const valor = obj[key];
-
-            if (typeof valor === 'object' && valor !== null) {
-                if (key.startsWith('foto') && 'name' in valor && typeof valor.name === 'string') {
-                    try {
-                        const response = await fetch(`${process.env.REACT_APP_API_URL}/supervision/obtenerImagen?imageName=${encodeURIComponent(valor.name)}`);
-                        const blob = await response.blob();
-                        const base64 = await blobToBase64(blob);
-
-                        valor.data = base64;
-                    } catch (error) {
-                        console.error(`Error cargando imagen ${valor.name}:`, error);
+            if (Array.isArray(valor) && key.startsWith('foto')) {
+                for (let i = 0; i < valor.length; i++) {
+                    const imagen = valor[i];
+                    if (imagen && typeof imagen.name === 'string') {
+                        try {
+                            const response = await fetch(
+                                `${process.env.REACT_APP_API_URL}/supervision/obtenerImagen?imageName=${encodeURIComponent(imagen.name)}`
+                            );
+                            const blob = await response.blob();
+                            const base64 = await blobToBase64(blob);
+                            imagen.data = base64;
+                        } catch (error) {
+                            console.error(`Error cargando imagen ${imagen.name}:`, error);
+                        }
                     }
                 }
+                continue;
+            }
 
+            if (typeof valor === 'object' && valor !== null) {
                 await cargarFotosEnBase64(valor);
             }
         }
@@ -681,7 +687,6 @@ const SupervisionPrincipal = () => {
                             <div className='Datos'>
                                 <Tablas columnas={columnasEnel} datos={dataEnelInspeccionIntegralHSE} editar={true} filasPorPagina={7}
                                     onEditar={async (fila) => {
-                                        console.log(fila);
                                         if (fila.formulario === "Enel Inspeccion Integral HSE") {
                                             setLoading(true);
                                             const datosConFotos = await cargarFotosEnBase64(fila);

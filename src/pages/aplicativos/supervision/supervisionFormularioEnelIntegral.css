@@ -120,6 +120,12 @@
                     padding-left: 20px;
                     margin: 5px 0px;
 
+                    @media screen and (max-width: 600px) {
+                        &.fotos {
+                            padding: 0;
+                        }
+                    }
+
                     &.vehiculo {
                         padding-left: 0px;
 

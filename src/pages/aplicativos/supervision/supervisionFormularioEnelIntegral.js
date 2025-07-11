@@ -161,15 +161,21 @@ const SupervisionFormularioEnel = () => {
 
     function eliminarDataEnFotos(obj) {
         for (const key in obj) {
-            if (typeof obj[key] === 'object' && obj[key] !== null) {
-                if (key.startsWith('foto') && 'data' in obj[key]) {
-                    delete obj[key].data;
-                } else {
-                    eliminarDataEnFotos(obj[key]);
+            if (!obj.hasOwnProperty(key)) continue;
+
+            const valor = obj[key];
+            if (key.startsWith('foto') && Array.isArray(valor)) {
+                for (let i = 0; i < valor.length; i++) {
+                    if (valor[i] && typeof valor[i] === 'object' && 'data' in valor[i]) {
+                        delete valor[i].data;
+                    }
                 }
             }
-        }
 
+            else if (typeof valor === 'object' && valor !== null) {
+                eliminarDataEnFotos(valor);
+            }
+        }
         return obj;
     }
 
@@ -231,49 +237,42 @@ const SupervisionFormularioEnel = () => {
 
         for (const key in obj) {
             if (!obj.hasOwnProperty(key)) continue;
-            const valor = obj[key];
 
+            const valor = obj[key];
             const path = [...ruta, key];
+
+            if (Array.isArray(valor) && key.startsWith("foto")) {
+                for (let i = 0; i < valor.length; i++) {
+                    const imagen = valor[i];
+                    if (imagen && imagen.data && imagen.name) {
+                        const nombreFinal = `${formattedDate}_${imagen.name}`;
+                        const file = base64ToFile(imagen.data, nombreFinal);
+
+                        const formData = new FormData();
+                        formData.append('file', file);
+                        formData.append('filename', nombreFinal);
+
+                        try {
+                            await axios.post(
+                                `${process.env.REACT_APP_API_URL}/supervision/cargarImagen`,
+                                formData,
+                                { headers: { 'Content-Type': 'multipart/form-data' } }
+                            );
+
+                            imagen.name = nombreFinal;
+                            valor[i] = imagen;
+
+                        } catch (error) {
+                            console.error(`Error subiendo ${key}[${i}]`, error);
+                        }
+                    }
+                }
+
+                continue;
+            }
 
             if (typeof valor === 'object' && valor !== null) {
                 await subirTodasLasFotos(valor, fecha, path);
-            }
-
-            if (typeof key === 'string' && key.startsWith("foto") && valor && valor.data) {
-                const nombreFinal = `${formattedDate}_${valor.name}`;
-                const file = base64ToFile(valor.data, nombreFinal);
-
-                const formData = new FormData();
-                formData.append('file', file);
-                formData.append('filename', nombreFinal);
-
-                try {
-                    await axios.post(
-                        `${process.env.REACT_APP_API_URL}/supervision/cargarImagen`,
-                        formData,
-                        { headers: { 'Content-Type': 'multipart/form-data' } }
-                    );
-
-                    let ref = obj;
-                    for (let i = 0; i < path.length - 1; i++) {
-                        const key = path[i];
-                        if (!(key in ref)) {
-                            ref[key] = {};
-                        } else if (typeof ref[key] !== 'object' || Array.isArray(ref[key])) {
-                            return;
-                        }
-                        ref = ref[key];
-                    }
-
-                    ref[path[path.length - 1]] = nombreFinal;
-
-                    if (typeof valor === 'object' && 'name' in valor) {
-                        valor.name = nombreFinal;
-                    }
-
-                } catch (error) {
-                    console.error(`Error subiendo ${key}`, error);
-                }
             }
         }
 
@@ -299,7 +298,6 @@ const SupervisionFormularioEnel = () => {
     const enviarFormularioEnelInspeccionIntegralHSE = async (event) => {
 
         event.preventDefault();
-
         const resultadoValidador = validarFormularioEnelInspeccionIntegralHSE(formularioEnelInspeccionIntegralHSE);
         if (resultadoValidador === false) { return }
         if (!ubicacion) { toast.error('Por favor dar permisos de ubicacion.'); return false }
@@ -591,32 +589,34 @@ const SupervisionFormularioEnel = () => {
         return datosGuardados ? JSON.parse(datosGuardados) : estadoInicialFormularioEnelInspeccionIntegralHSE;
     });
 
-    const procesarImagen = (file) =>
-        new Promise((resolve) => {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const img = new Image();
-                img.src = e.target.result;
-
-                img.onload = () => {
-                    const MAX_WIDTH = 800;
-                    const scaleSize = MAX_WIDTH / img.width;
-
-                    const canvas = document.createElement("canvas");
-                    const ctx = canvas.getContext("2d");
-                    canvas.width = MAX_WIDTH;
-                    canvas.height = img.height * scaleSize;
-
-                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                    const base64Resized = canvas.toDataURL(file.type);
-                    resolve(base64Resized);
-                };
-            };
-            reader.readAsDataURL(file);
-        });
-
     const actualizarCampoEnelInspeccionIntegralHSE = async (campo, valor) => {
         const [nivel1, nivel2] = campo.split('.');
+
+        if (Array.isArray(valor) && valor.length === 0) {
+            setFormularioEnelInspeccionIntegralHSE((prev) => {
+                const actualizado = { ...prev };
+                actualizado[nivel1][nivel2] = "";
+                localStorage.setItem(
+                    "formularioEnelInspeccionIntegralHSE",
+                    JSON.stringify(actualizado)
+                );
+                return actualizado;
+            });
+            return;
+        }
+
+        if (valor[0].name && valor[0].data) {
+            setFormularioEnelInspeccionIntegralHSE((prev) => {
+                const actualizado = { ...prev };
+                actualizado[nivel1][nivel2] = valor;
+                localStorage.setItem(
+                    "formularioEnelInspeccionIntegralHSE",
+                    JSON.stringify(actualizado)
+                );
+                return actualizado;
+            });
+            return;
+        }
 
         if (['C', 'NC', 'NA'].includes(valor) && nivel2) {
             setFormularioEnelInspeccionIntegralHSE(prev => {
@@ -643,24 +643,6 @@ const SupervisionFormularioEnel = () => {
                 const actualizado = { ...prev };
                 if (nivel2) { actualizado[nivel1][nivel2] = valor; } else { actualizado[nivel1] = valor; }
                 localStorage.setItem('formularioEnelInspeccionIntegralHSE', JSON.stringify(actualizado));
-                return actualizado;
-            });
-            return;
-        }
-
-        if (valor instanceof File) {
-            const base64Resized = await procesarImagen(valor);
-
-            setFormularioEnelInspeccionIntegralHSE((prev) => {
-                const actualizado = { ...prev };
-                actualizado[nivel1][nivel2] = {
-                    name: valor.name,
-                    data: base64Resized,
-                };
-                localStorage.setItem(
-                    "formularioEnelInspeccionIntegralHSE",
-                    JSON.stringify(actualizado)
-                );
                 return actualizado;
             });
             return;
@@ -726,6 +708,32 @@ const SupervisionFormularioEnel = () => {
 
     const actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE = async (campo, valor) => {
 
+        if (Array.isArray(valor) && valor.length === 0) {
+            setMiembroEnProceso((prev) => {
+                const actualizado = { ...prev };
+                actualizado[campo] = "";
+                localStorage.setItem(
+                    "miembroEnProceso",
+                    JSON.stringify(actualizado)
+                );
+                return actualizado;
+            });
+            return;
+        }
+
+        if (valor[0].name && valor[0].data) {
+            setMiembroEnProceso((prev) => {
+                const actualizado = { ...prev };
+                actualizado[campo] = valor;
+                localStorage.setItem(
+                    "miembroEnProceso",
+                    JSON.stringify(actualizado)
+                );
+                return actualizado;
+            });
+            return;
+        }
+
         if (['C', 'NC', 'NA'].includes(valor)) {
             setMiembroEnProceso(prev => {
                 const actualizado = { ...prev, [campo]: valor };
@@ -747,24 +755,6 @@ const SupervisionFormularioEnel = () => {
             setMiembroEnProceso(prev => {
                 const actualizado = { ...prev, [campo]: valor };
                 localStorage.setItem('miembroEnProceso', JSON.stringify(actualizado));
-                return actualizado;
-            });
-            return;
-        }
-
-        if (valor instanceof File) {
-            const base64Resized = await procesarImagen(valor);
-
-            setMiembroEnProceso((prev) => {
-                const actualizado = { ...prev };
-                actualizado[campo] = {
-                    name: valor.name,
-                    data: base64Resized,
-                };
-                localStorage.setItem(
-                    "miembroEnProceso",
-                    JSON.stringify(actualizado)
-                );
                 return actualizado;
             });
             return;
@@ -1341,7 +1331,7 @@ const SupervisionFormularioEnel = () => {
         if ((!formulario.riesgos.observacionRiesgos8 || !formulario.riesgos.fotoRiesgos8) && formulario.riesgos.riesgos8 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 1 cuando su respuesta es No Cumple en la pregunta 8.'); return false }
         if ((!formulario.riesgos.observacionRiesgos9 || !formulario.riesgos.fotoRiesgos9) && formulario.riesgos.riesgos9 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 1 cuando su respuesta es No Cumple en la pregunta 9.'); return false }
         if (!formulario.senaYDemar.senaYDemar1 || !formulario.senaYDemar.senaYDemar2 || !formulario.senaYDemar.senaYDemar3) { toast.error('Por favor diligencie el capitulo 2 completo.'); return false }
-        if (!formulario.senaYDemar.fotoSenaYDemar1Obligatoria && formulario.riesgos.senaYDemar1 !== 'NA') { toast.error('Por favor ingrese las fotos obligatorias en el capitulo 2.'); return false }
+        if (!formulario.senaYDemar.fotoSenaYDemar1Obligatoria && formulario.senaYDemar.senaYDemar1 !== 'NA') { toast.error('Por favor ingrese las fotos obligatorias en el capitulo 2.'); return false }
         if (!formulario.senaYDemar.observacionSenaYDemar1 && formulario.senaYDemar.senaYDemar1 === 'NC') { toast.error('Por favor ingrese la observacion correspondiente en el capitulo 2 cuando su respuesta es No Cumple en la pregunta 1.'); return false }
         if ((!formulario.senaYDemar.observacionSenaYDemar2 || !formulario.senaYDemar.fotoSenaYDemar2) && formulario.senaYDemar.senaYDemar2 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 2 cuando su respuesta es No Cumple en la pregunta 2.'); return false }
         if ((!formulario.senaYDemar.observacionSenaYDemar3 || !formulario.senaYDemar.fotoSenaYDemar3) && formulario.senaYDemar.senaYDemar3 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 2 cuando su respuesta es No Cumple en la pregunta 3.'); return false }

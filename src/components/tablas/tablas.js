@@ -57,7 +57,7 @@ const Tablas = ({
             </div>
 
             <div className='tabla-encapsula'>
-                <div class="scroll-wrapper">
+                <div className="scroll-wrapper">
                     <table className="tabla">
                         <thead>
                             <tr>
