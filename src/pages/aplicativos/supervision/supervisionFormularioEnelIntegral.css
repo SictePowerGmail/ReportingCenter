@@ -241,7 +241,7 @@
             width: 100vw;
             height: 100vh;
             background: rgba(0, 0, 0, 0.5);
-            z-index: 999;
+            z-index: 2000;
         }
 
         .modal-cuadrilla {
@@ -251,7 +251,7 @@
             transform: translate(-50%, -50%);
             background-color: white;
             padding: 20px 0px;
-            z-index: 1000;
+            z-index: 3000;
             border-radius: 8px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
             height: 90% !important;
@@ -368,7 +368,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 1000;
+            z-index: 2000;
             cursor: zoom-out;
 
             img {
