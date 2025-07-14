@@ -12,6 +12,8 @@ import Tablas from '../../../components/tablas/tablas';
 import Botones from '../../../components/botones/botones';
 import Textos from '../../../components/textos/textos';
 import Selectores from '../../../components/selectores/selectores';
+import SemiPieChart from '../../../components/graficas/semiPieChart ';
+import NightingaleChart from '../../../components/graficas/nightingaleChart';
 
 const SupervisionPrincipal = () => {
     const navigate = useNavigate();
@@ -45,6 +47,8 @@ const SupervisionPrincipal = () => {
     const [carpeta, setCarpeta] = useState(Cookies.get('SupervisionCarpeta') || 'Claro');
     const [dataClaro, setDataClaro] = useState('');
     const [dataEnelInspeccionIntegralHSE, setDataEnelInspeccionIntegralHSE] = useState('');
+    const [datosParaGrafico1, setDatosParaGrafico1] = useState('');
+    const [datosParaGrafico2, setDatosParaGrafico2] = useState('');
 
     const cargarRegistrosSupervision = async (event) => {
         setLoading(true);
@@ -359,6 +363,51 @@ const SupervisionPrincipal = () => {
                 return new Date(b.fechaInicial) - new Date(a.fechaInicial);
             });
             setDataEnelInspeccionIntegralHSE(registrosOrdenados);
+
+            const conteoInspecciones = {};
+            registrosOrdenados.forEach((item) => {
+                const name = item.inspeccion?.trim() || 'Desconocido';
+                if (conteoInspecciones[name]) {
+                    conteoInspecciones[name]++;
+                } else {
+                    conteoInspecciones[name] = 1;
+                }
+            });
+            const dataParaGraficoInspecciones = Object.entries(conteoInspecciones).map(
+                ([nombre, cantidad]) => ({
+                    name: nombre,
+                    value: cantidad
+                })
+            );
+            setDatosParaGrafico1(dataParaGraficoInspecciones);
+
+            const formatearNombre = (nombre) => {
+                return nombre
+                    .trim()
+                    .split(/\s+/)
+                    .slice(0, 2)
+                    .map(palabra =>
+                        palabra.charAt(0).toUpperCase() + palabra.slice(1).toLowerCase()
+                    )
+                    .join(' ');
+            };
+            const conteoSupervisores = {};
+            registrosOrdenados.forEach((item) => {
+                const name = item.nombreSupervisorTecnico?.trim() || 'Desconocido';
+                const nombreFormateado = formatearNombre(name);
+                if (conteoSupervisores[nombreFormateado]) {
+                    conteoSupervisores[nombreFormateado]++;
+                } else {
+                    conteoSupervisores[nombreFormateado] = 1;
+                }
+            });
+            const dataParaGraficoSupervisores = Object.entries(conteoSupervisores).map(
+                ([nombre, cantidad]) => ({
+                    name: nombre,
+                    value: cantidad
+                })
+            );
+            setDatosParaGrafico2(dataParaGraficoSupervisores);
 
         } catch (error) {
             console.error("Error al obtener datos:", error);
@@ -683,6 +732,14 @@ const SupervisionPrincipal = () => {
                         <div className='ContenidoEnel'>
                             <div className='botonAgregar'>
                                 <Botones onClick={() => setMostrarModal(true)} className='agregar'>Agregar OP/OT</Botones>
+                            </div>
+                            <div className='Graficas'>
+                                <div className='Grafica1'>
+                                    <SemiPieChart data={datosParaGrafico1} title={'Inspecciones'} />
+                                </div>
+                                <div className='Grafica2'>
+                                    <NightingaleChart data={datosParaGrafico2} title={'Supervisor Tecnico'} />
+                                </div>
                             </div>
                             <div className='Datos'>
                                 <Tablas columnas={columnasEnel} datos={dataEnelInspeccionIntegralHSE} editar={true} filasPorPagina={7}
