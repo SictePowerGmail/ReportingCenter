@@ -843,7 +843,7 @@ function Navbar() {
                                 </div>
                             </li>
 
-                            <span className={`sub-titulo ${showMobileMenu ? 'abierto' : 'cerrado'}`}>Version 2.0.7</span>
+                            <span className={`sub-titulo ${showMobileMenu ? 'abierto' : 'cerrado'}`}>Version 2.0.8</span>
                         </ul>
 
                         {/* <div className='Logo2'>

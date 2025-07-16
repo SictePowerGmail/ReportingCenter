@@ -460,7 +460,7 @@
             }
 
             @media (max-width: 800px) {
-                flex-direction: column;
+                flex-direction: column !important;
                 height: 430px;
 
                 .Grafica1 {
