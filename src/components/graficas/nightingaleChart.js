@@ -1,16 +1,44 @@
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import ReactECharts from 'echarts-for-react';
 
 const NightingaleChart = ({ data, title }) => {
-    const option = {
+    const [textColor, setTextColor] = useState('');
+    const [tooltipBackground, setTooltipBackground] = useState('');
+    const [themeVersion, setThemeVersion] = useState(0);
+
+    useEffect(() => {
+        const getVariable = (name) =>
+            getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+
+        const updateColors = () => {
+            setTextColor(getVariable('--text'));
+            setTooltipBackground(getVariable('--background-menu-cuerpo-hover'));
+            setThemeVersion(prev => prev + 1);
+        };
+
+        updateColors();
+
+        const observer = new MutationObserver(updateColors);
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['class'],
+        });
+
+        return () => observer.disconnect();
+    }, []);
+
+    const option = useMemo(() => ({
         tooltip: {
-            trigger: 'item'
+            trigger: 'item',
+            textStyle: { color: textColor },
+            backgroundColor: tooltipBackground
         },
         legend: {
             top: 'top',
             left: 'center',
             textStyle: {
-                fontSize: 12
+                fontSize: 12,
+                color: textColor
             }
         },
         series: [
@@ -28,13 +56,21 @@ const NightingaleChart = ({ data, title }) => {
                     position: 'outside',
                     formatter: '{b}: {d}%',
                     fontSize: 12,
+                    color: textColor
                 },
-                data: data,
+                data: data
             }
         ]
-    };
+    }), [textColor, data, title]);
 
-    return <ReactECharts option={option} style={{ height: '100%', width: '100%' }} />;
+    return (
+        <ReactECharts
+            key={themeVersion}
+            option={option}
+            notMerge={true}
+            style={{ height: '100%', width: '100%' }}
+        />
+    );
 };
 
 export default NightingaleChart;

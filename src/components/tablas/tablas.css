@@ -59,7 +59,8 @@
                 }
 
                 tr:hover {
-                    background-color: #e6e6e6 !important;
+                    color: var(--text);
+                    background-color: var(--background-lineas) !important;
                 }
 
                 tbody {

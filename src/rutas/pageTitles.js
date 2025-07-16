@@ -24,6 +24,8 @@ export const getPageTitle = (pathname) => {
             return 'Supervisión Claro';
         case '/supervisionFormularioEnelIntegral':
             return 'Supervisión Enel';
+        case '/supervisionFormularioEnelAmbiental':
+            return 'Supervisión Enel';
         case '/MaterialPrincipal':
             return 'Solicitud Materiales';
         case '/MaterialAgregar':

@@ -1,0 +1,33 @@
+.navegacion {
+    width: 100%;
+
+    .nav-tabs {
+        border-bottom: 1px solid var(--background-lineas);
+        
+        .nav-item {
+            background-color: var(--background-menu-cuerpo);
+            border-bottom: 1px solid var(--background-lineas);
+
+            &:has(.nav-link.active) {
+                border-bottom: none;
+            }
+
+            .nav-link {
+                color: var(--text-sub-titulo);
+
+                &:hover {
+                    background-color: var(--background-lineas);
+                    color: var(--text);
+                }
+
+                &.active {
+                    background-color: var(--background-menu-cuerpo);
+                    border: 1px solid var(--background-lineas);
+                    border-bottom: 0;
+                    margin: 0;
+                    color: var(--text);
+                }
+            }
+        }
+    }
+}

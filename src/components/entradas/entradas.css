@@ -1,5 +1,3 @@
-@import '../../styles/style.css';
-
 .entrada {
     background-color: var(--background-menu-cuerpo);
     padding: 8px;
@@ -12,8 +10,9 @@
     color: var(--text);
 
     &:disabled {
-        background-color: #f0f0f0;
+        background-color: var(--background-menu-cuerpo-hover);
         cursor: not-allowed;
+        color: var(--text-placeholder);
     }
 
     &::placeholder {

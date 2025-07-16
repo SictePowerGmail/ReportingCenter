@@ -2,6 +2,7 @@
     --background-menu-laterial: #ffffff;
     --background-menu-superior: #ffffff;
     --background-menu-cuerpo: #ffffff;
+    --background-menu-cuerpo-contrario: #111827;
     --background-menu-cuerpo-hover: #f7f7f7;
     --background-menu-cuerpo-aplicativos: #E6E6E6;
     --background-text-hover: #444444;
@@ -21,10 +22,11 @@
     --font-family-text: sans-serif;
 }
 
-body.dark-mode {
+:root.dark-mode {
     --background-menu-laterial: #1f2937;
     --background-menu-superior: #1f2937;
     --background-menu-cuerpo: #111827;
+    --background-menu-cuerpo-contrario: #ffffff;
     --background-menu-cuerpo-hover: #1f2937;
     --background-text-hover: #f3f4f6;
     --background-lineas: #9199a4;

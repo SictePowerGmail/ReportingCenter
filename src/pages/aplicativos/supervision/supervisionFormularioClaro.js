@@ -20,6 +20,7 @@ import Tablas from '../../../components/tablas/tablas';
 import Imagenes from '../../../components/imagenes/imagenes';
 import { OpcionesFotoObservaciones } from './OpcionesFotoObservaciones';
 import Cookies from 'js-cookie';
+import CargandoDatos from '../../../components/cargandoDatos/cargandoDatos';
 
 const SupervisionFormularioClaro = () => {
     const navigate = useNavigate();
@@ -481,25 +482,9 @@ const SupervisionFormularioClaro = () => {
     return (
         <div className="supervisionFormularioClaro">
             {loading ? (
-                <div className="cargandoPagina">
-                    <ThreeDots
-                        type="ThreeDots"
-                        color="#0B1A46"
-                        height={200}
-                        width={200}
-                    />
-                    <p>... Cargando Datos ...</p>
-                </div>
+                <CargandoDatos text={'Cargando Datos'} />
             ) : enviando ? (
-                <div className="cargandoPagina">
-                    <ThreeDots
-                        type="ThreeDots"
-                        color="#0B1A46"
-                        height={200}
-                        width={200}
-                    />
-                    <p>... Enviando Datos ...</p>
-                </div>
+                <CargandoDatos text={'Enviando Datos'} />
             ) : (
                 <form className='formulario'>
                     <div className='PaginaVolver'>
@@ -754,8 +739,8 @@ const SupervisionFormularioClaro = () => {
                         <div id="map1" style={{ width: '100%', height: '270px' }}></div>
                     </div>
 
-                    <div className='enviar' onClick={enviarFormularioClaroSupervisionOperativa}>
-                        <button type="submit" id='Enviar' className="btn btn-primary">Enviar</button>
+                    <div className='enviar'>
+                        <Botones id='Enviar' className='agregar' onClick={enviarFormularioClaroSupervisionOperativa}>Enviar</Botones>
                     </div>
                 </form>
             )}

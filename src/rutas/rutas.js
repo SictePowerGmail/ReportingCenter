@@ -14,6 +14,7 @@ import Capacidades from "../pages/aplicativos/capacidades/Capacidades";
 import SupervisionPrincipal from "../pages/aplicativos/supervision/supervisionPrincipal";
 import SupervisionFormularioClaro from "../pages/aplicativos/supervision/supervisionFormularioClaro";
 import SupervisionFormularioEnelIntegral from "../pages/aplicativos/supervision/supervisionFormularioEnelIntegral";
+import SupervisionFormularioEnelAmbiental from "../pages/aplicativos/supervision/supervisionFormularioEnelAmbiental";
 import MaterialPrincipal from "../pages/aplicativos/solicitudMaterial/materialPrincipal";
 import MaterialAgregar from "../pages/aplicativos/solicitudMaterial/materialAgregar";
 import ReporteMaterialPrincipal from "../pages/aplicativos/reporteMaterialFerretero/reporteMaterialPrincipal";
@@ -122,6 +123,7 @@ function RutasApp() {
                     <Route path='/Capacidades' exacte element={<Capacidades />} />
                     <Route path='/SupervisionPrincipal' exacte element={<SupervisionPrincipal />} />
                     <Route path='/supervisionFormularioEnelIntegral' exacte element={<SupervisionFormularioEnelIntegral />} />
+                    <Route path='/supervisionFormularioEnelAmbiental' exacte element={<SupervisionFormularioEnelAmbiental />} />
                     <Route path='/supervisionFormularioClaro' exacte element={<SupervisionFormularioClaro />} />
                     <Route path='/MaterialPrincipal' exacte element={<MaterialPrincipal />} />
                     <Route path='/MaterialAgregar' exacte element={<MaterialAgregar />} />

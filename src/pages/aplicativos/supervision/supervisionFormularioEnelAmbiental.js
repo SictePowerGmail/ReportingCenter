@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import './supervisionFormularioEnelIntegral.css'
+import './supervisionFormularioEnelAmbiental.css'
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet.awesome-markers/dist/leaflet.awesome-markers.css';
@@ -21,7 +21,7 @@ import Imagenes from '../../../components/imagenes/imagenes';
 import { OpcionesFotoObservaciones } from './OpcionesFotoObservaciones';
 import Cookies from 'js-cookie';
 
-const SupervisionFormularioEnelIntegral = () => {
+const SupervisionFormularioEnelAmbiental = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
     const [datosPlanta, setDatosPlanta] = useState('');
@@ -1430,7 +1430,7 @@ const SupervisionFormularioEnelIntegral = () => {
                     </div>
 
                     <div className='titulo3'>
-                        <Textos className='titulo'>Enel - Inspeccion Integral HSE</Textos>
+                        <Textos className='titulo'>Enel - Inspección de Gestión Ambiental para Áreas Operativas</Textos>
                     </div>
 
                     <div className='campo fecha'>
@@ -1530,7 +1530,7 @@ const SupervisionFormularioEnelIntegral = () => {
                     <div className='campo opOt'>
                         <i className="fas fa-tools"></i>
                         <div className='entradaDatos'>
-                            <Textos className='subtitulo'>OP/OT:</Textos>
+                            <Textos className='subtitulo'>No. de OP/OT:</Textos>
                             <Entradas disabled={modo === "editar"} type="text" placeholder="Ingrese el nombre del Proyecto" value={formularioEnelInspeccionIntegralHSE.opOt} onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('opOt', e.target.value)} />
                         </div>
                     </div>
@@ -1538,7 +1538,7 @@ const SupervisionFormularioEnelIntegral = () => {
                     <div className='campo supervisor'>
                         <i className="fas fa-users-cog"></i>
                         <div className='entradaDatos'>
-                            <Textos className='subtitulo'>Supervisor técnico encargado:</Textos>
+                            <Textos className='subtitulo'>Supervisor:</Textos>
                             <Entradas disabled={modo === "editar"} type="text" placeholder="Ingrese la cedula del supervisor tecnico" value={formularioEnelInspeccionIntegralHSE.cedulaSupervisorTecnico} onChange={(e) => {
                                 const valor = e.target.value;
                                 actualizarCampoEnelInspeccionIntegralHSE('cedulaSupervisorTecnico', valor);
@@ -1556,7 +1556,7 @@ const SupervisionFormularioEnelIntegral = () => {
                     <div className='campo lider'>
                         <i className="fas fa-users-cog"></i>
                         <div className='entradaDatos'>
-                            <Textos className='subtitulo'>Líder/Encargado de cuadrilla:</Textos>
+                            <Textos className='subtitulo'>Líder de cuadrilla:</Textos>
                             <Entradas disabled={modo === "editar"} type="text" placeholder="Ingrese la cedula del lider de cuadrilla" value={formularioEnelInspeccionIntegralHSE.cedulaLiderEncargado} onChange={(e) => {
                                 const valor = e.target.value;
                                 actualizarCampoEnelInspeccionIntegralHSE('cedulaLiderEncargado', valor);
@@ -1577,9 +1577,9 @@ const SupervisionFormularioEnelIntegral = () => {
                             <Textos className='subtitulo'>Proceso:</Textos>
                             <Selectores disabled={modo === "editar"} value={formularioEnelInspeccionIntegralHSE.proceso} onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('proceso', e.target.value)}
                                 options={[
-                                    { value: 'Obra civil', label: 'Obra civil' },
-                                    { value: 'Obra electrica', label: 'Obra electrica' },
-                                    { value: 'B2C', label: 'B2C' },
+                                    { value: 'Civil', label: 'Civil' },
+                                    { value: 'Electrico', label: 'Electrico' },
+                                    { value: 'Electrico - Civil', label: 'Electrico - Civil' },
                                 ]} className="primary">
                             </Selectores>
                         </div>
@@ -1604,27 +1604,6 @@ const SupervisionFormularioEnelIntegral = () => {
                                 title="Debe ser en formato de 3 letras seguidas de 3 números (Ejemplo: ABC123)"
                                 disabled={modo === "editar"}
                             />
-                        </div>
-                    </div>
-
-                    <div className='campo zona'>
-                        <i className="fas fa-tools"></i>
-                        <div className='entradaDatos'>
-                            <Textos className='subtitulo'>Zona:</Textos>
-                            <Selectores disabled={modo === "editar"} value={formularioEnelInspeccionIntegralHSE.zona} onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('zona', e.target.value)}
-                                options={[
-                                    { value: 'Urbana', label: 'Urbana' },
-                                    { value: 'Rural', label: 'Rural' },
-                                ]} className="primary">
-                            </Selectores>
-                        </div>
-                    </div>
-
-                    <div className='campo trabajo'>
-                        <i className="fas fa-tools"></i>
-                        <div className='entradaDatos'>
-                            <Textos className='subtitulo'>Trabajo a realizar:</Textos>
-                            <Entradas disabled={modo === "editar"} type="text" placeholder="Ingrese el trabajo a realizar" value={formularioEnelInspeccionIntegralHSE.trabajo} onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('trabajo', e.target.value)} />
                         </div>
                     </div>
 
@@ -2214,4 +2193,4 @@ const SupervisionFormularioEnelIntegral = () => {
     );
 };
 
-export default SupervisionFormularioEnelIntegral;
+export default SupervisionFormularioEnelAmbiental;

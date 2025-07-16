@@ -8,15 +8,6 @@
     padding: 20px;
     overflow-y: auto;
 
-    .cargandoPagina {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-        height: 100%;
-    }
-
     .formulario {
         flex-direction: column;
         position: relative;
@@ -28,6 +19,7 @@
 
             .texto {
                 margin-left: 5px;
+                color: white;
             }
         }
 
@@ -49,6 +41,7 @@
             span,
             i {
                 padding: 5px 10px 5px 5px;
+                color: var(--text);
             }
 
             .entradaDatos {
@@ -74,7 +67,7 @@
                     border-radius: 6px;
                     padding: 5px 10px;
                     text-align: center;
-                    color: black;
+                    color: var(--text);
                 }
 
                 .opciones {

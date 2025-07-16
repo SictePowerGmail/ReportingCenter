@@ -14,6 +14,8 @@ import Textos from '../../../components/textos/textos';
 import Selectores from '../../../components/selectores/selectores';
 import SemiPieChart from '../../../components/graficas/semiPieChart ';
 import NightingaleChart from '../../../components/graficas/nightingaleChart';
+import Navegacion from '../../../components/navegacion/navegacion';
+import CargandoDatos from '../../../components/cargandoDatos/cargandoDatos';
 
 const SupervisionPrincipal = () => {
     const navigate = useNavigate();
@@ -373,12 +375,12 @@ const SupervisionPrincipal = () => {
                     conteoInspecciones[name] = 1;
                 }
             });
-            const dataParaGraficoInspecciones = Object.entries(conteoInspecciones).map(
-                ([nombre, cantidad]) => ({
+            const dataParaGraficoInspecciones = Object.entries(conteoInspecciones)
+                .map(([nombre, cantidad]) => ({
                     name: nombre,
                     value: cantidad
-                })
-            );
+                }))
+                .sort((a, b) => a.name.localeCompare(b.name));
             setDatosParaGrafico1(dataParaGraficoInspecciones);
 
             const formatearNombre = (nombre) => {
@@ -401,12 +403,12 @@ const SupervisionPrincipal = () => {
                     conteoSupervisores[nombreFormateado] = 1;
                 }
             });
-            const dataParaGraficoSupervisores = Object.entries(conteoSupervisores).map(
-                ([nombre, cantidad]) => ({
+            const dataParaGraficoSupervisores = Object.entries(conteoSupervisores)
+                .map(([nombre, cantidad]) => ({
                     name: nombre,
                     value: cantidad
-                })
-            );
+                }))
+                .sort((a, b) => a.name.localeCompare(b.name));
             setDatosParaGrafico2(dataParaGraficoSupervisores);
 
         } catch (error) {
@@ -514,42 +516,18 @@ const SupervisionPrincipal = () => {
     return (
         <div className="Supervision-Principal">
             {loading ? (
-                <div id="CargandoPagina">
-                    <ThreeDots
-                        type="ThreeDots"
-                        color="#0B1A46"
-                        height={200}
-                        width={200}
-                    />
-                    <p>... Cargando Datos ...</p>
-                </div>
+                <CargandoDatos text={'Cargando Datos'} />
             ) : (
                 <>
                     <div className='menuNavegacion'>
-                        <ul className="nav nav-tabs">
-                            <li className="nav-item">
-                                <a
-                                    className={`nav-link ${carpeta === 'Claro' ? 'active' : ''}`}
-                                    onClick={() => {
-                                        setCarpeta('Claro');
-                                        Cookies.set('SupervisionCarpeta', "Claro");
-                                    }}
-                                >
-                                    Claro
-                                </a>
-                            </li>
-                            <li className="nav-item">
-                                <a
-                                    className={`nav-link ${carpeta === 'Enel' ? 'active' : ''}`}
-                                    onClick={() => {
-                                        setCarpeta('Enel');
-                                        Cookies.set('SupervisionCarpeta', "Enel");
-                                    }}
-                                >
-                                    Enel
-                                </a>
-                            </li>
-                        </ul>
+                        <Navegacion
+                            items={['Claro', 'Enel']}
+                            value={carpeta}
+                            onChange={(nuevoValor) => {
+                                setCarpeta(nuevoValor);
+                                Cookies.set('SupervisionCarpeta', nuevoValor);
+                            }}
+                        />
                     </div>
 
                     {carpeta === "Claro" && (
@@ -560,65 +538,80 @@ const SupervisionPrincipal = () => {
                                         <i className="fas fa-calendar"></i>
                                         <span>Año</span>
                                     </div>
-                                    <select id='Fecha-Reporte-Boton' value={añoSeleccionada} onChange={(e) => setAñoSeleccionada(e.target.value)} className="select-box">
-                                        {listaAño.map((fecha, index) => (
-                                            <option key={index} value={fecha}>
-                                                {fecha}
-                                            </option>
-                                        ))}
-                                    </select>
+                                    <Selectores
+                                        id='Fecha-Reporte-Boton'
+                                        value={añoSeleccionada}
+                                        onChange={(e) => setAñoSeleccionada(e.target.value)}
+                                        className="select-box"
+                                        options={listaAño.map((item) => ({
+                                            value: item,
+                                            label: item.toString()
+                                        }))}
+                                    />
                                 </div>
                                 <div className='SeleccionFecha'>
                                     <div className='TituloFecha'>
                                         <i className="fas fa-calendar-alt"></i>
                                         <span>Mes</span>
                                     </div>
-                                    <select id='Fecha-Reporte-Boton' value={mesSeleccionada} onChange={(e) => setMesSeleccionada(e.target.value)} className="select-box">
-                                        {listaMes.map((fecha, index) => (
-                                            <option key={index} value={fecha}>
-                                                {fecha}
-                                            </option>
-                                        ))}
-                                    </select>
+                                    <Selectores
+                                        id='Fecha-Reporte-Boton'
+                                        value={mesSeleccionada}
+                                        onChange={(e) => setMesSeleccionada(e.target.value)}
+                                        className="select-box"
+                                        options={listaMes.map((item) => ({
+                                            value: item,
+                                            label: item.toString()
+                                        }))}
+                                    />
                                 </div>
                                 <div className='SeleccionFecha'>
                                     <div className='TituloFecha'>
                                         <i className="fas fa-calendar-day"></i>
                                         <span>Dia</span>
                                     </div>
-                                    <select id='Fecha-Reporte-Boton' value={diaSeleccionada} onChange={(e) => setDiaSeleccionada(e.target.value)} className="select-box">
-                                        {listaDia.map((fecha, index) => (
-                                            <option key={index} value={fecha}>
-                                                {fecha}
-                                            </option>
-                                        ))}
-                                    </select>
+                                    <Selectores
+                                        id='Fecha-Reporte-Boton'
+                                        value={diaSeleccionada}
+                                        onChange={(e) => setDiaSeleccionada(e.target.value)}
+                                        className="select-box"
+                                        options={listaDia.map((item) => ({
+                                            value: item,
+                                            label: item.toString()
+                                        }))}
+                                    />
                                 </div>
                                 <div className='SeleccionSupervision'>
                                     <div className='TituloSupervision'>
                                         <i className="fas fa-user-tie"></i>
                                         <span>Supervisor</span>
                                     </div>
-                                    <select id='Fecha-Reporte-Boton' value={supervisorSeleccionado} onChange={(e) => setSupervisorSeleccionado(e.target.value)} className="select-box">
-                                        {listaSupervisor.map((nombres, index) => (
-                                            <option key={index} value={nombres}>
-                                                {nombres}
-                                            </option>
-                                        ))}
-                                    </select>
+                                    <Selectores
+                                        id='Fecha-Reporte-Boton'
+                                        value={supervisorSeleccionado}
+                                        onChange={(e) => setSupervisorSeleccionado(e.target.value)}
+                                        className="select-box"
+                                        options={listaSupervisor.map((item) => ({
+                                            value: item,
+                                            label: item.toString()
+                                        }))}
+                                    />
                                 </div>
                                 <div className='SeleccionPlaca'>
                                     <div className='TituloPlaca'>
                                         <i className="fas fa-id-card"></i>
                                         <span>Placa</span>
                                     </div>
-                                    <select id='Fecha-Reporte-Boton' value={placaSeleccionada} onChange={(e) => setPlacaSeleccionada(e.target.value)} className="select-box">
-                                        {listaPlaca.map((placa, index) => (
-                                            <option key={index} value={placa}>
-                                                {placa}
-                                            </option>
-                                        ))}
-                                    </select>
+                                    <Selectores
+                                        id='Fecha-Reporte-Boton'
+                                        value={placaSeleccionada}
+                                        onChange={(e) => setPlacaSeleccionada(e.target.value)}
+                                        className="select-box"
+                                        options={listaPlaca.map((item) => ({
+                                            value: item,
+                                            label: item.toString()
+                                        }))}
+                                    />
                                 </div>
                             </div>
                             <div className='RenderizarMapaYGraficos'>
@@ -751,6 +744,10 @@ const SupervisionPrincipal = () => {
                                             localStorage.setItem('formularioEnelInspeccionIntegralHSE', JSON.stringify(fila));
                                             navigate('/supervisionFormularioEnelIntegral', { state: { modo: 'editar' } });
                                         }
+                                        if (fila.formulario === "Enel Inspeccion de Gestion Ambiental para Areas Operativas") {
+                                            setLoading(true);
+                                            navigate('/supervisionFormularioEnelAmbiental', { state: { modo: 'editar' } });
+                                        }
                                     }}
                                 />
                             </div>
@@ -769,6 +766,7 @@ const SupervisionPrincipal = () => {
                                         <Selectores value={selectedOption} onChange={(e) => { setSelectedOption(e.target.value) }}
                                             options={[
                                                 { value: 'ENEL - Inspeccion Integral HSE', label: 'ENEL - Inspeccion Integral HSE' },
+                                                { value: 'ENEL - Inspección de Gestión Ambiental para Áreas Operativas', label: 'ENEL - Inspección de Gestión Ambiental para Áreas Operativas' },
                                             ]} className="primary">
                                         </Selectores>
                                     </div>
@@ -784,6 +782,15 @@ const SupervisionPrincipal = () => {
                                                     }
                                                 }
                                                 navigate('/supervisionFormularioEnelIntegral', { state: { modo: 'crear' } });
+                                            } else if (selectedOption === 'ENEL - Inspección de Gestión Ambiental para Áreas Operativas') {
+                                                const dataStr = localStorage.getItem('formularioEnelInspeccionDeGestionAmbientalParaAreasOperativas');
+                                                if (dataStr) {
+                                                    const dataLocal = JSON.parse(dataStr);
+                                                    if (dataLocal.id) {
+                                                        localStorage.removeItem('formularioEnelInspeccionDeGestionAmbientalParaAreasOperativas');
+                                                    }
+                                                }
+                                                navigate('/supervisionFormularioEnelAmbiental', { state: { modo: 'crear' } });
                                             } else {
                                                 toast.error('Por favor seleccione una opcion valida');
                                             }

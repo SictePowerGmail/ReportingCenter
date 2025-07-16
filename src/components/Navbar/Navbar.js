@@ -16,6 +16,7 @@ import Colombia from '../../images/Flag_Colombia.png'
 import EEUU from '../../images/Flag_United_States.png'
 import { useTranslation } from 'react-i18next';
 import { getPageTitle } from '../../rutas/pageTitles';
+import Entradas from '../entradas/entradas';
 
 function Navbar() {
     const [showMobileMenu, setShowMobileMenu] = useState(false);
@@ -319,10 +320,11 @@ function Navbar() {
     };
 
     useEffect(() => {
+        const root = document.documentElement;
         if (esModoClaro) {
-            document.body.classList.remove('dark-mode');
+            root.classList.remove('dark-mode');
         } else {
-            document.body.classList.add('dark-mode');
+            root.classList.add('dark-mode');
         }
     }, [esModoClaro]);
 
@@ -353,10 +355,9 @@ function Navbar() {
                 </div>
 
                 <div className="buscador">
-                    <input
+                    <Entradas
                         type="text"
                         placeholder="Buscar..."
-                        className="form-control"
                     />
                     <span className="icono-lupa"><FaSearch /></span>
                 </div>
@@ -843,7 +844,7 @@ function Navbar() {
                                 </div>
                             </li>
 
-                            <span className={`sub-titulo ${showMobileMenu ? 'abierto' : 'cerrado'}`}>Version 2.0.8</span>
+                            <span className={`sub-titulo ${showMobileMenu ? 'abierto' : 'cerrado'}`}>Version 2.0.9</span>
                         </ul>
 
                         {/* <div className='Logo2'>
