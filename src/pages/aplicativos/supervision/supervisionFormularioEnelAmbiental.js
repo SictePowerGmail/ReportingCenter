@@ -86,7 +86,7 @@ const SupervisionFormularioEnelAmbiental = () => {
 
 
     const cargarGeolocalizacion = () => {
-        const dataLocal = localStorage.getItem('formularioEnelInspeccionIntegralHSE');
+        const dataLocal = localStorage.getItem('formularioEnelAmbiental');
         let coordenadasGuardadas = null;
 
         if (dataLocal) {
@@ -295,10 +295,10 @@ const SupervisionFormularioEnelAmbiental = () => {
         return obj;
     };
 
-    const enviarFormularioEnelInspeccionIntegralHSE = async (event) => {
+    const enviarFormularioEnelAmbiental = async (event) => {
 
         event.preventDefault();
-        const resultadoValidador = validarFormularioEnelInspeccionIntegralHSE(formularioEnelInspeccionIntegralHSE);
+        const resultadoValidador = validarFormularioEnelAmbiental(formularioEnelAmbiental);
         if (resultadoValidador === false) { return }
         if (!ubicacion) { toast.error('Por favor dar permisos de ubicacion.'); return false }
 
@@ -308,11 +308,11 @@ const SupervisionFormularioEnelAmbiental = () => {
             const fechaInicial = fecha.toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' });
             const fechaFinal = new Date().toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
-            const formularioEnelInspeccionIntegralHSEModificado = await subirTodasLasFotos(formularioEnelInspeccionIntegralHSE, fecha);
+            const formularioEnelAmbientalModificado = await subirTodasLasFotos(formularioEnelAmbiental, fecha);
 
-            const ncvalido = hayNCValido(formularioEnelInspeccionIntegralHSEModificado) === true ? "No Conforme" : "Conforme"
+            const ncvalido = hayNCValido(formularioEnelAmbientalModificado) === true ? "No Conforme" : "Conforme"
 
-            const { id, ...formularioSinId } = formularioEnelInspeccionIntegralHSEModificado;
+            const { id, ...formularioSinId } = formularioEnelAmbientalModificado;
             const formularioConTiempos = {
                 ...formularioSinId,
                 fechaInicial,
@@ -325,14 +325,14 @@ const SupervisionFormularioEnelAmbiental = () => {
             const formularioNuevoSinFotos = eliminarDataEnFotos(formularioConTiempos)
             const formularioNuevoSerializado = serializarCamposComplejos(formularioNuevoSinFotos)
 
-            const response2 = await axios.post(`${process.env.REACT_APP_API_URL}/supervision/crearRegistroEnelInspeccionIntegralHse`, formularioNuevoSerializado);
+            const response2 = await axios.post(`${process.env.REACT_APP_API_URL}/supervision/crearRegistroEnelAmbiental`, formularioNuevoSerializado);
 
             if (response2.status >= 200 && response2.status < 300) {
                 setEnviando(false)
                 console.log('Datos enviados exitosamente');
-                localStorage.removeItem('formularioEnelInspeccionIntegralHSE');
+                localStorage.removeItem('formularioEnelAmbiental');
                 setMiembroEnProceso({});
-                setFormularioEnelInspeccionIntegralHSE(estadoInicialFormularioEnelInspeccionIntegralHSE);
+                setFormularioEnelAmbiental(estadoInicialFormularioEnelAmbiental);
                 navigate('/SupervisionPrincipal', { state: { estadoNotificacion: true } });
             } else {
                 toast.error('Error al subir el archivo o enviar los datos', { className: 'toast-error' });
@@ -346,8 +346,9 @@ const SupervisionFormularioEnelAmbiental = () => {
         }
     };
 
-    const estadoInicialFormularioEnelInspeccionIntegralHSE = {
+    const estadoInicialFormularioEnelAmbiental = {
         tipoInpseccion: "",
+        nombreQuienInspecciona: "",
         nombreProyecto: "",
         noContrato: "",
         direccion: "",
@@ -359,245 +360,161 @@ const SupervisionFormularioEnelAmbiental = () => {
         nombreLiderEncargado: "",
         proceso: "",
         placa: "",
-        zona: "",
-        trabajo: "",
         cuadrilla: [],
-        riesgos: {
-            riesgos1: "",
-            fotoRiesgos1Obligatoria: "",
-            observacionRiesgos1: "",
-            riesgos2: "",
-            fotoRiesgos2Obligatoria: "",
-            observacionRiesgos2: "",
-            riesgos3: "",
-            fotoRiesgos3: "",
-            observacionRiesgos3: "",
-            riesgos4: "",
-            fotoRiesgos4Obligatoria: "",
-            observacionRiesgos4: "",
-            riesgos5: "",
-            fotoRiesgos5: "",
-            observacionRiesgos5: "",
-            riesgos6: "",
-            fotoRiesgos6: "",
-            observacionRiesgos6: "",
-            riesgos7: "",
-            fotoRiesgos7: "",
-            observacionRiesgos7: "",
-            riesgos8: "",
-            fotoRiesgos8: "",
-            observacionRiesgos8: "",
-            riesgos9: "",
-            fotoRiesgos9: "",
-            observacionRiesgos9: "",
+        socioAmbiental: {
+            socioAmbiental1: "",
+            fotoSocioAmbiental1: "",
+            observacionSocioAmbiental1: "",
         },
-        senaYDemar: {
-            senaYDemar1: "",
-            fotoSenaYDemar1Obligatoria: "",
-            observacionSenaYDemar1: "",
-            senaYDemar2: "",
-            fotoSenaYDemar2: "",
-            observacionSenaYDemar2: "",
-            senaYDemar3: "",
-            fotoSenaYDemar3: "",
-            observacionSenaYDemar3: "",
+        materialesConstruccion : {
+            materialesConstruccion1: "",
+            fotoMaterialesConstruccion1: "",
+            observacionMaterialesConstruccion1: "",
+            materialesConstruccion2: "",
+            fotoMaterialesConstruccion2: "",
+            observacionMaterialesConstruccion2: "",
+            materialesConstruccion3: "",
+            fotoMaterialesConstruccion3: "",
+            observacionMaterialesConstruccion3: "",
+            materialesConstruccion4: "",
+            fotoMaterialesConstruccion4: "",
+            observacionMaterialesConstruccion4: "",
         },
-        reglasOro: {
-            reglasOro1: "",
-            fotoReglasOro1: "",
-            observacionReglasOro1: "",
-            reglasOro2: "",
-            fotoReglasOro2: "",
-            observacionReglasOro2: "",
-            reglasOro3: "",
-            fotoReglasOro3: "",
-            observacionReglasOro3: "",
-            reglasOro4: "",
-            fotoReglasOro4: "",
-            observacionReglasOro4: "",
-            reglasOro5: "",
-            fotoReglasOro5: "",
-            observacionReglasOro5: "",
+        rcd: {
+            rcd1: "",
+            fotoRcd1: "",
+            observacionRcd1: "",
+            rcd2: "",
+            fotoRcd2: "",
+            observacionRcd2: "",
+            rcd3: "",
+            fotoRcd3: "",
+            observacionRcd3: "",
+            rcd4: "",
+            fotoRcd4: "",
+            observacionRcd4: "",
+            rcd5: "",
+            fotoRcd5: "",
+            observacionRcd5: "",
+            rcd6: "",
+            fotoRcd6: "",
+            observacionRcd6: "",
+            rcd7: "",
+            fotoRcd7: "",
+            observacionRcd7: "",
         },
-        trabajoAlturas: {
-            trabajoAlturas1: "",
-            fotoTrabajoAlturas1: "",
-            observacionTrabajoAlturas1: "",
-            trabajoAlturas2: "",
-            fotoTrabajoAlturas2: "",
-            observacionTrabajoAlturas2: "",
-            trabajoAlturas3: "",
-            fotoTrabajoAlturas3: "",
-            observacionTrabajoAlturas3: "",
-            trabajoAlturas4: "",
-            fotoTrabajoAlturas4: "",
-            observacionTrabajoAlturas4: "",
-            trabajoAlturas5: "",
-            fotoTrabajoAlturas5: "",
-            observacionTrabajoAlturas5: "",
-            trabajoAlturas6: "",
-            fotoTrabajoAlturas6: "",
-            observacionTrabajoAlturas6: "",
-            trabajoAlturas7: "",
-            fotoTrabajoAlturas7: "",
-            observacionTrabajoAlturas7: "",
+        residuosSolidos: {
+            residuosSolidos1: "",
+            fotoResiduosSolidos1: "",
+            observacionResiduosSolidos1: "",
+            residuosSolidos2: "",
+            fotoResiduosSolidos2: "",
+            observacionResiduosSolidos2: "",
+            residuosSolidos3: "",
+            fotoResiduosSolidos3: "",
+            observacionResiduosSolidos3: "",
+            residuosSolidos4: "",
+            fotoResiduosSolidos4: "",
+            observacionResiduosSolidos4: "",
+            residuosSolidos5: "",
+            fotoResiduosSolidos5: "",
+            observacionResiduosSolidos5: "",
+            residuosSolidos6: "",
+            fotoResiduosSolidos6: "",
+            observacionResiduosSolidos6: "",
+            residuosSolidos7: "",
+            fotoResiduosSolidos7: "",
+            observacionResiduosSolidos7: "",
+            residuosSolidos8: "",
+            fotoResiduosSolidos8: "",
+            observacionResiduosSolidos8: "",
+            residuosSolidos9: "",
+            fotoResiduosSolidos9: "",
+            observacionResiduosSolidos9: "",
+            residuosSolidos10: "",
+            fotoResiduosSolidos10: "",
+            observacionResiduosSolidos10: "",
+            residuosSolidos11: "",
+            fotoResiduosSolidos11: "",
+            observacionResiduosSolidos11: "",
+            residuosSolidos12: "",
+            fotoResiduosSolidos12: "",
+            observacionResiduosSolidos12: "",
         },
-        espacioConfinado: {
-            espacioConfinado1: "",
-            fotoEspacioConfinado1: "",
-            observacionEspacioConfinado1: "",
-            espacioConfinado2: "",
-            fotoEspacioConfinado2: "",
-            observacionEspacioConfinado2: "",
-            espacioConfinado3: "",
-            fotoEspacioConfinado3: "",
-            observacionEspacioConfinado3: "",
+        aceites: {
+            aceites1: "",
+            fotoAceites1: "",
+            observacionAceites1: "",
+            aceites2: "",
+            fotoAceites2: "",
+            observacionAceites2: "",
+            aceites3: "",
+            fotoAceites3: "",
+            observacionAceites3: "",
+            aceites4: "",
+            fotoAceites4: "",
+            observacionAceites4: "",
+            aceites5: "",
+            fotoAceites5: "",
+            observacionAceites5: "",
         },
-        vehiculos: {
-            vehiculos1: "",
-            fotoVehiculos1: "",
-            observacionVehiculos1: "",
-            vehiculos2: "",
-            fotoVehiculos2: "",
-            observacionVehiculos2: "",
-            vehiculos3: "",
-            fotoVehiculos3: "",
-            observacionVehiculos3: "",
-            vehiculos4: "",
-            fotoVehiculos4: "",
-            observacionVehiculos4: "",
-            vehiculos5: "",
-            fotoVehiculos5: "",
-            observacionVehiculos5: "",
-            vehiculos6: "",
-            fotoVehiculos6: "",
-            observacionVehiculos6: "",
-            vehiculos7: "",
-            fotoVehiculos7: "",
-            observacionVehiculos7: "",
-            vehiculos8: "",
-            fotoVehiculos8: "",
-            observacionVehiculos8: "",
-            vehiculos9: "",
-            fotoVehiculos9: "",
-            observacionVehiculos9: "",
-            vehiculos10: "",
-            fotoVehiculos10: "",
-            observacionVehiculos10: "",
+        vertimientos: {
+            vertimientos1: "",
+            fotoVertimientos1: "",
+            observacionVertimientos1: "",
+            vertimientos2: "",
+            fotoVertimientos2: "",
+            observacionVertimientos2: "",
+            vertimientos3: "",
+            fotoVertimientos3: "",
+            observacionVertimientos3: "",
         },
-        condicionesTrabajo: {
-            trabajo1: "",
-            fotoTrabajo1: "",
-            observacionTrabajo1: "",
-            trabajo2: "",
-            fotoTrabajo2: "",
-            observacionTrabajo2: "",
-            trabajo3: "",
-            fotoTrabajo3: "",
-            observacionTrabajo3: "",
-            trabajo4: "",
-            fotoTrabajo4: "",
-            observacionTrabajo4: "",
+        atmosfericas: {
+            atmosfericas1: "",
+            fotoAtmosfericas1: "",
+            observacionAtmosfericas1: "",
+            atmosfericas2: "",
+            fotoAtmosfericas2: "",
+            observacionAtmosfericas2: "",
         },
-        materiales: {
-            materiales1: "",
-            fotoMateriales1: "",
-            observacionMateriales1: "",
-            materiales2: "",
-            fotoMateriales2: "",
-            observacionMateriales2: "",
-            materiales3: "",
-            fotoMateriales3: "",
-            observacionMateriales3: "",
-        },
-        primerosAuxilios: {
-            primerosAuxilios1: "",
-            fotoPrimerosAuxilios1: "",
-            observacionPrimerosAuxilios1: "",
-            primerosAuxilios2: "",
-            fotoPrimerosAuxilios2: "",
-            observacionPrimerosAuxilios2: "",
-            primerosAuxilios3: "",
-            fotoPrimerosAuxilios3: "",
-            observacionPrimerosAuxilios3: "",
-            primerosAuxilios4: "",
-            fotoPrimerosAuxilios4: "",
-            observacionPrimerosAuxilios4: "",
-            primerosAuxilios5: "",
-            fotoPrimerosAuxilios5: "",
-            observacionPrimerosAuxilios5: "",
-        },
-        biomecanicos: {
-            biomecanicos1: "",
-            fotoBiomecanicos1: "",
-            observacionBiomecanicos1: "",
-            biomecanicos2: "",
-            fotoBiomecanicos2: "",
-            observacionBiomecanicos2: "",
-            biomecanicos3: "",
-            fotoBiomecanicos3: "",
-            observacionBiomecanicos3: "",
-        },
-        quimicos: {
-            quimicos1: "",
-            fotoQuimicos1: "",
-            observacionQuimicos1: "",
-            quimicos2: "",
-            fotoQuimicos2: "",
-            observacionQuimicos2: "",
-            quimicos3: "",
-            fotoQuimicos3: "",
-            observacionQuimicos3: "",
-            quimicos4: "",
-            fotoQuimicos4: "",
-            observacionQuimicos4: "",
-            quimicos5: "",
-            fotoQuimicos5: "",
-            observacionQuimicos5: "",
-        },
-        residuosNoPeligrosos: {
-            residuosNoPeligrosos1: "",
-            fotoResiduosNoPeligrosos1: "",
-            observacionResiduosNoPeligrosos1: "",
-            residuosNoPeligrosos2: "",
-            fotoResiduosNoPeligrosos2: "",
-            observacionResiduosNoPeligrosos2: "",
-            residuosNoPeligrosos3: "",
-            fotoResiduosNoPeligrosos3: "",
-            observacionResiduosNoPeligrosos3: "",
-        },
-        residuosConstruccion: {
-            residuosConstruccion1: "",
-            fotoResiduosConstruccion1: "",
-            observacionResiduosConstruccion1: "",
-            residuosConstruccion2: "",
-            fotoResiduosConstruccion2: "",
-            observacionResiduosConstruccion2: "",
-            residuosConstruccion3: "",
-            fotoResiduosConstruccion3: "",
-            observacionResiduosConstruccion3: "",
-            residuosConstruccion4: "",
-            fotoResiduosConstruccion4: "",
-            observacionResiduosConstruccion4: "",
+        seguridadIndustrial: {
+            seguridadIndustrial1: "",
+            fotoSeguridadIndustrial1: "",
+            observacionSeguridadIndustrial1: "",
+            seguridadIndustrial2: "",
+            fotoSeguridadIndustrial2: "",
+            observacionSeguridadIndustrial2: "",
+            seguridadIndustrial3: "",
+            fotoSeguridadIndustrial3: "",
+            observacionSeguridadIndustrial3: "",
+            seguridadIndustrial4: "",
+            fotoSeguridadIndustrial4: "",
+            observacionSeguridadIndustrial4: "",
+            seguridadIndustrial5: "",
+            fotoSeguridadIndustrial5: "",
+            observacionSeguridadIndustrial5: "",
+            seguridadIndustrial6: "",
+            fotoSeguridadIndustrial6: "",
+            observacionSeguridadIndustrial6: "",
         },
         observacion: "",
         inspeccion: "",
     };
 
-    const [formularioEnelInspeccionIntegralHSE, setFormularioEnelInspeccionIntegralHSE] = useState(() => {
-        const datosGuardados = localStorage.getItem('formularioEnelInspeccionIntegralHSE');
-        return datosGuardados ? JSON.parse(datosGuardados) : estadoInicialFormularioEnelInspeccionIntegralHSE;
+    const [formularioEnelAmbiental, setFormularioEnelAmbiental] = useState(() => {
+        const datosGuardados = localStorage.getItem('formularioEnelAmbiental');
+        return datosGuardados ? JSON.parse(datosGuardados) : estadoInicialFormularioEnelAmbiental;
     });
 
-    const actualizarCampoEnelInspeccionIntegralHSE = async (campo, valor) => {
+    const actualizarCampoEnelAmbiental = async (campo, valor) => {
         const [nivel1, nivel2] = campo.split('.');
 
         if (Array.isArray(valor) && valor.length === 0) {
-            setFormularioEnelInspeccionIntegralHSE((prev) => {
+            setFormularioEnelAmbiental((prev) => {
                 const actualizado = { ...prev };
                 actualizado[nivel1][nivel2] = "";
                 localStorage.setItem(
-                    "formularioEnelInspeccionIntegralHSE",
+                    "formularioEnelAmbiental",
                     JSON.stringify(actualizado)
                 );
                 return actualizado;
@@ -606,11 +523,11 @@ const SupervisionFormularioEnelAmbiental = () => {
         }
 
         if (valor[0].name && valor[0].data) {
-            setFormularioEnelInspeccionIntegralHSE((prev) => {
+            setFormularioEnelAmbiental((prev) => {
                 const actualizado = { ...prev };
                 actualizado[nivel1][nivel2] = valor;
                 localStorage.setItem(
-                    "formularioEnelInspeccionIntegralHSE",
+                    "formularioEnelAmbiental",
                     JSON.stringify(actualizado)
                 );
                 return actualizado;
@@ -619,7 +536,7 @@ const SupervisionFormularioEnelAmbiental = () => {
         }
 
         if (['C', 'NC', 'NA'].includes(valor) && nivel2) {
-            setFormularioEnelInspeccionIntegralHSE(prev => {
+            setFormularioEnelAmbiental(prev => {
                 const actualizado = { ...prev };
                 if (nivel2) { actualizado[nivel1][nivel2] = valor; } else { actualizado[nivel1] = valor; }
 
@@ -632,17 +549,17 @@ const SupervisionFormularioEnelAmbiental = () => {
                     if (observacionKey in actualizado[nivel1]) actualizado[nivel1][observacionKey] = '';
                 }
 
-                localStorage.setItem('formularioEnelInspeccionIntegralHSE', JSON.stringify(actualizado));
+                localStorage.setItem('formularioEnelAmbiental', JSON.stringify(actualizado));
                 return actualizado;
             });
             return;
         }
 
         if (typeof valor === 'string') {
-            setFormularioEnelInspeccionIntegralHSE(prev => {
+            setFormularioEnelAmbiental(prev => {
                 const actualizado = { ...prev };
                 if (nivel2) { actualizado[nivel1][nivel2] = valor; } else { actualizado[nivel1] = valor; }
-                localStorage.setItem('formularioEnelInspeccionIntegralHSE', JSON.stringify(actualizado));
+                localStorage.setItem('formularioEnelAmbiental', JSON.stringify(actualizado));
                 return actualizado;
             });
             return;
@@ -676,37 +593,10 @@ const SupervisionFormularioEnelAmbiental = () => {
             cedula: "",
             nombre: "",
             cargo: "",
-            arl: "",
-            tarjetaDeVida: "",
-            carneCliente: "",
-            carneSicte: "",
-            fotoDocumentos: "",
-            observacionDocumentos: "",
-            eppCasco: "",
-            fotoEppCasco: "",
-            eppGuantes: "",
-            fotoEppGuantes: "",
-            eppGuantesDielectricos: "",
-            fotoEppGuantesDielectricos: "",
-            eppProteccionFacialAntiArco: "",
-            fotoEppProteccionFacialAntiArco: "",
-            eppEquiposContraCaidas: "",
-            fotoEppEquiposContraCaidas: "",
-            eppOverolObraCivil: "",
-            fotoEppOverolObraCivil: "",
-            eppOverolIgnifugo: "",
-            fotoEppOverolIgnifugo: "",
-            eppGafasDeSeguridad: "",
-            fotoEppGafasDeSeguridad: "",
-            eppTapabocas: "",
-            fotoEppTapabocas: "",
-            eppBotas: "",
-            fotoEppBotas: "",
-            observacionEpp: "",
         };
     });
 
-    const actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE = async (campo, valor) => {
+    const actualizarCampoMiembroACuadrillaEnelAmbiental = async (campo, valor) => {
 
         if (Array.isArray(valor) && valor.length === 0) {
             setMiembroEnProceso((prev) => {
@@ -784,486 +674,290 @@ const SupervisionFormularioEnelAmbiental = () => {
 
     const preguntas = [
         {
-            key: "riesgos1",
-            texto: "Se identifica todos los riesgos específicos de la actividad en el ARO, está debidamente firmado por todos los integrantes de la cuadrilla.",
-            fotoKey: "fotoRiesgos1Obligatoria",
-            observacionKey: "observacionRiesgos1",
+            key: "socioAmbiental1",
+            texto: "¿Se realizó socialización del alcance, duración y actividades a realizar con las partes interesadas previo al inicio de la obra?",
+            fotoKey: "fotoSocioAmbiental1",
+            observacionKey: "observacionSocioAmbiental1",
+            activarinput: false,
+        },
+
+        {
+            key: "materialesConstruccion1",
+            texto: "¿Si es necesario dejarlos por mas tiempo, se encuentran cubiertos apropiadamente?",
+            fotoKey: "fotoMaterialesConstruccion1",
+            observacionKey: "observacionMaterialesConstruccion1",
             activarinput: true,
         },
         {
-            key: "riesgos2",
-            texto: "Permiso de trabajo aplicable a la actividad, debidamente firmado por todos los integrantes de la cuadrilla, definiendo roles y está autorizado.",
-            fotoKey: "fotoRiesgos2Obligatoria",
-            observacionKey: "observacionRiesgos2",
+            key: "materialesConstruccion2",
+            texto: "¿Están alejados de alcantarillas, sumideros, canales?",
+            fotoKey: "fotoMaterialesConstruccion2",
+            observacionKey: "observacionMaterialesConstruccion2",
+            activarinput: false,
+        },
+        {
+            key: "materialesConstruccion3",
+            texto: "¿Las zonas verdes  se encuentran libres de almacenamiento de materiales de construcción o están protegidas?",
+            fotoKey: "fotoMaterialesConstruccion3",
+            observacionKey: "observacionMaterialesConstruccion3",
+            activarinput: false,
+        },
+        {
+            key: "materialesConstruccion4",
+            texto: "¿De ser necesario almacenar cerca a alcantarillas, sumideros y/o canales, estos están protegidos para evitar arrastre de material a la red de alcantarillado?",
+            fotoKey: "fotoMaterialesConstruccion4",
+            observacionKey: "observacionMaterialesConstruccion4",
+            activarinput: false,
+        },
+
+        {
+            key: "rcd1",
+            texto: "¿En volúmenes pequeños (menor o igual a 6 m3) son entregados a la empresa de aseo de la localidad o se llevan a un almacenamiento temporal?",
+            fotoKey: "fotoRcd1",
+            observacionKey: "observacionRcd1",
             activarinput: true,
         },
         {
-            key: "riesgos3",
-            texto: "Se identifican y aplican los procedimientos de trabajo acordes a la (s) actividad (es) a realizar.",
-            fotoKey: "fotoRiesgos3",
-            observacionKey: "observacionRiesgos3",
+            key: "rcd2",
+            texto: "¿En volúmenes grandes (mayor a 7 m3)  son entregados a un gestor a avalado por la autoridad ambiental competente?",
+            fotoKey: "fotoRcd2",
+            observacionKey: "observacionRcd2",
             activarinput: false,
         },
         {
-            key: "riesgos4",
-            texto: "Se diligencia el tablero operativo de manera correcta y se instala la respectiva valla de contrato.",
-            fotoKey: "fotoRiesgos4Obligatoria",
-            observacionKey: "observacionRiesgos4",
+            key: "rcd3",
+            texto: "¿Se conservan las remisiones del transporte donde se indiquen los datos del transportador y el gestor?",
+            fotoKey: "fotoRcd3",
+            observacionKey: "observacionRcd3",
+            activarinput: false,
+        },
+        {
+            key: "rcd4",
+            texto: "¿Se dejan en la vía pública por menos de 24 horas?",
+            fotoKey: "fotoRcd4",
+            observacionKey: "observacionRcd4",
+            activarinput: false,
+        },
+        {
+            key: "rcd5",
+            texto: "¿Si es necesario dejarlos por mas tiempo, se encuentran cubiertos apropiadamente?",
+            fotoKey: "fotoRcd5",
+            observacionKey: "observacionRcd5",
+            activarinput: false,
+        },
+        {
+            key: "rcd6",
+            texto: "¿La ronda hidráulica de cuerpos de agua, alcantarillas y/o sumideros se encuentran libres de almacenamiento temporal de RCD?",
+            fotoKey: "fotoRcd6",
+            observacionKey: "observacionRcd6",
             activarinput: true,
         },
         {
-            key: "riesgos5",
-            texto: "Dispone de los planos o guías de las instalaciones subterráneas, cables, tuberías y otros artículos que interfieran y hay informes disponibles.",
-            fotoKey: "fotoRiesgos5",
-            observacionKey: "observacionRiesgos5",
-            activarinput: false,
-        },
-        {
-            key: "riesgos6",
-            texto: "Los cables eléctricos subterráneos y aéreos están protegidos y las distancias de seguridad se respetan de acuerdo con el nivel de voltaje de la red.",
-            fotoKey: "fotoRiesgos6",
-            observacionKey: "observacionRiesgos6",
-            activarinput: false,
-        },
-        {
-            key: "riesgos7",
-            texto: "Las condiciones climáticas son adecuadas para realizar las actividades planificadas.",
-            fotoKey: "fotoRiesgos7",
-            observacionKey: "observacionRiesgos7",
-            activarinput: false,
-        },
-        {
-            key: "riesgos8",
-            texto: "La dotación, EPP, EPCC se utilizan de forma correcta.",
-            fotoKey: "fotoRiesgos8",
-            observacionKey: "observacionRiesgos8",
-            activarinput: false,
-        },
-        {
-            key: "riesgos9",
-            texto: "Cuenta con tapete dieléctrico en buen estado y posee las pruebas de rigidez vigentes.",
-            fotoKey: "fotoRiesgos9",
-            observacionKey: "observacionRiesgos9",
-            activarinput: false,
+            key: "rcd7",
+            texto: "¿Los andenes y senderos peatonales se encuentran libres de almacenamiento temporal de RCD?",
+            fotoKey: "fotoRcd7",
+            observacionKey: "observacionRcd7",
+            activarinput: true,
         },
 
-
-
         {
-            key: "senaYDemar1",
-            texto: "Protección completa de la zona de trabajo (conos, cintas, corrales).",
-            fotoKey: "fotoSenaYDemar1Obligatoria",
-            observacionKey: "observacionSenaYDemar1",
+            key: "residuosSolidos1",
+            texto: "¿Se realiza limpieza general del frente de obra una vez termina la jornada diaria?",
+            fotoKey: "fotoResiduosSolidos1",
+            observacionKey: "observacionResiduosSolidos1",
+            activarinput: false,
+        },
+        {
+            key: "residuosSolidos2",
+            texto: "¿Existen recipientes adecuados para una debida separación en la fuente de residuos sólidos que se generan en la obra (puntos ecológicos)?",
+            fotoKey: "fotoResiduosSolidos2",
+            observacionKey: "observacionResiduosSolidos2",
             activarinput: true,
         },
         {
-            key: "senaYDemar2",
-            texto: "Utiliza el PMT correspondiente.",
-            fotoKey: "fotoSenaYDemar2",
-            observacionKey: "observacionSenaYDemar2",
+            key: "residuosSolidos3",
+            texto: "¿Son suficientes los recipientes para los residuos sólidos que se generan en la obra, están bien ubicados y señalizados?",
+            fotoKey: "fotoResiduosSolidos3",
+            observacionKey: "observacionResiduosSolidos3",
             activarinput: false,
         },
         {
-            key: "senaYDemar3",
-            texto: "Se encuentran delimitadas zonas de peligro (huecos zanjas, desniveles, barreno).",
-            fotoKey: "fotoSenaYDemar3",
-            observacionKey: "observacionSenaYDemar3",
-            activarinput: false,
-        },
-
-
-
-        {
-            key: "reglasOro1",
-            texto: "Desconexión de la fuente de alimentación y corte efectivo.",
-            fotoKey: "fotoReglasOro1",
-            observacionKey: "observacionReglasOro1",
+            key: "residuosSolidos4",
+            texto: "¿Se realiza separación en la fuente de los residuos sólidos que se generan en la obra de acuerdo al código de colores establecido en el PGIR?",
+            fotoKey: "fotoResiduosSolidos4",
+            observacionKey: "observacionResiduosSolidos4",
             activarinput: false,
         },
         {
-            key: "reglasOro2",
-            texto: "Bloqueo o condenación y señalización para evitar reconexiones.",
-            fotoKey: "fotoReglasOro2",
-            observacionKey: "observacionReglasOro2",
+            key: "residuosSolidos5",
+            texto: "¿El centro de acopio temporal de los residuos sólidos que se generan en la obra se encuentra señalizados y está organizado según el tipo de residuo?",
+            fotoKey: "fotoResiduosSolidos5",
+            observacionKey: "observacionResiduosSolidos5",
             activarinput: false,
         },
         {
-            key: "reglasOro3",
-            texto: "Verificación de ausencia de tensión.",
-            fotoKey: "fotoReglasOro3",
-            observacionKey: "observacionReglasOro3",
+            key: "residuosSolidos6",
+            texto: "¿El centro de acopio está ubicado en un sitio de fácil acceso para el transporte y para la atención de situaciones de emergencia?¿Está sobre un terreno estable y nivelado?",
+            fotoKey: "fotoResiduosSolidos6",
+            observacionKey: "observacionResiduosSolidos6",
             activarinput: false,
         },
         {
-            key: "reglasOro4",
-            texto: "Cortocircuito y llevar a tierra (Puesta a tierra).",
-            fotoKey: "fotoReglasOro4",
-            observacionKey: "observacionReglasOro4",
+            key: "residuosSolidos7",
+            texto: "¿El centro de acopio temporal está alejado de fuentes de acceso y salida de agua y de posibles fuentes externas de peligro, como subestaciones de energía y posibles fuentes de ignición?",
+            fotoKey: "fotoResiduosSolidos7",
+            observacionKey: "observacionResiduosSolidos7",
             activarinput: false,
         },
         {
-            key: "reglasOro5",
-            texto: "Protección y señalización de la zona de trabajo (y del electrodo de puesta a tierra).",
-            fotoKey: "fotoReglasOro5",
-            observacionKey: "observacionReglasOro5",
-            activarinput: false,
-        },
-
-
-
-        {
-            key: "trabajoAlturas1",
-            texto: "Los sistemas de acceso (escaleras, andamios) disponibles en el sitio son adecuados (completos, marcados, certificados).",
-            fotoKey: "fotoTrabajoAlturas1",
-            observacionKey: "observacionTrabajoAlturas1",
+            key: "residuosSolidos8",
+            texto: "¿El centro de acopio temporal cuenta con iluminación adecuada?",
+            fotoKey: "fotoResiduosSolidos8",
+            observacionKey: "observacionResiduosSolidos8",
             activarinput: false,
         },
         {
-            key: "trabajoAlturas2",
-            texto: "Los sistemas de acceso (escaleras, andamios) están instalados correctamente y se utilizan adecuadamente.",
-            fotoKey: "fotoTrabajoAlturas2",
-            observacionKey: "observacionTrabajoAlturas2",
+            key: "residuosSolidos9",
+            texto: "¿El centro de acopio temporal cuenta con ventilación natural o forzada que evite la acumulación de gases?",
+            fotoKey: "fotoResiduosSolidos9",
+            observacionKey: "observacionResiduosSolidos9",
             activarinput: false,
         },
         {
-            key: "trabajoAlturas3",
-            texto: "Se utilizan sistemas de rescate para ascenso y descenso en escalera.",
-            fotoKey: "fotoTrabajoAlturas3",
-            observacionKey: "observacionTrabajoAlturas3",
+            key: "residuosSolidos10",
+            texto: "¿Los Residuos Peligrosos (RESPEL) que se generan en la obra se almacenan conforme a la matriz de incompatibilidad, se encuentran etiquetados y se lleva un control de éstos?",
+            fotoKey: "fotoResiduosSolidos10",
+            observacionKey: "observacionResiduosSolidos10",
             activarinput: false,
         },
         {
-            key: "trabajoAlturas4",
-            texto: "Las operaciones en altura y de bajada y subida de equipos/materiales se realizan con métodos seguros de protección contra caída de objetos (por ejemplo,cuerdas, polipastos, contenedores especiales, etc.).",
-            fotoKey: "fotoTrabajoAlturas4",
-            observacionKey: "observacionTrabajoAlturas4",
+            key: "residuosSolidos11",
+            texto: "¿Se cuenta con un kit de control de derrames y un extintor con capacidad mínima de 20 lbs para atención de contigencias como derrames o incendios que se generan en la obra?",
+            fotoKey: "fotoResiduosSolidos11",
+            observacionKey: "observacionResiduosSolidos11",
             activarinput: false,
         },
         {
-            key: "trabajoAlturas5",
-            texto: "El andamio está correctamente armado, está nivelado y se utiliza adecuadamente.",
-            fotoKey: "fotoTrabajoAlturas5",
-            observacionKey: "observacionTrabajoAlturas5",
-            activarinput: false,
-        },
-        {
-            key: "trabajoAlturas6",
-            texto: "El andamio cuenta con las tarjetas de identificación VERDE, AMARILLO O ROJO según corresponda.",
-            fotoKey: "fotoTrabajoAlturas6",
-            observacionKey: "observacionTrabajoAlturas6",
-            activarinput: false,
-        },
-        {
-            key: "trabajoAlturas7",
-            texto: "El análisis de la resistencia de la estructura y el sistema de anclaje (en caso de poste, techo, fachada, etc.) que soportan las escaleras o sobre los que se puede pasar se ha realizado positivamente de acuerdo con los procedimientos internos.",
-            fotoKey: "fotoTrabajoAlturas7",
-            observacionKey: "observacionTrabajoAlturas7",
+            key: "residuosSolidos12",
+            texto: "¿Se han realizado capacitaciones, sensibilizaciones y/o comunicaciones frente a la temática de gestión integral de residuos?",
+            fotoKey: "fotoResiduosSolidos12",
+            observacionKey: "observacionResiduosSolidos12",
             activarinput: false,
         },
 
-
-
         {
-            key: "espacioConfinado1",
-            texto: "Se realiza la mediciones atmosféricas necesarias y están debidamente registradas.",
-            fotoKey: "fotoEspacioConfinado1",
-            observacionKey: "observacionEspacioConfinado1",
+            key: "aceites1",
+            texto: "¿Los aceites nuevos y usados que se generan en la obra se almacenan en recipientes apropiados?",
+            fotoKey: "fotoAceites1",
+            observacionKey: "observacionAceites1",
+            activarinput: true,
+        },
+        {
+            key: "aceites2",
+            texto: "¿Los aceites usados y residuos aceitosos que se generan en la obra se entregan a un gestor autorizado para el tratamiento de estos?",
+            fotoKey: "fotoAceites2",
+            observacionKey: "observacionAceites2",
             activarinput: false,
         },
         {
-            key: "espacioConfinado2",
-            texto: "Existe ventilación natural o se cuenta con un sistema de ventilación forzada (en caso de sitios con una  renovación del aire inadecuado).",
-            fotoKey: "fotoEspacioConfinado2",
-            observacionKey: "observacionEspacioConfinado2",
+            key: "aceites3",
+            texto: "¿Los residuos aceitosos que se generan en la obra, son almacenados separadamente de los demás residuos?",
+            fotoKey: "fotoAceites3",
+            observacionKey: "observacionAceites3",
             activarinput: false,
         },
         {
-            key: "espacioConfinado3",
-            texto: "La comunicación correcta (es decir, se cuenta con un vigia al exterior del EC).",
-            fotoKey: "fotoEspacioConfinado3",
-            observacionKey: "observacionEspacioConfinado3",
-            activarinput: false,
-        },
-
-
-
-        {
-            key: "vehiculos1",
-            texto: "Traslado del personal en vehículos en sitios autorizados y cumpliendo con las normas de transito local.",
-            fotoKey: "fotoVehiculos1",
-            observacionKey: "observacionVehiculos1",
+            key: "aceites4",
+            texto: "¿Los residuos aceitosos que se generan en la obra son entregados a un gestor autorizado?",
+            fotoKey: "fotoAceites4",
+            observacionKey: "observacionAceites4",
             activarinput: false,
         },
         {
-            key: "vehiculos2",
-            texto: "Tiene   documentación   actualizada   (SOAT,  LICENCIA DE TRÁNSITO, LICENCIA DE CONDUCCIÓN, TECNOMECÁNICA Y SEGUROS CONTRACTUALES).",
-            fotoKey: "fotoVehiculos2",
-            observacionKey: "observacionVehiculos2",
-            activarinput: false,
-        },
-        {
-            key: "vehiculos3",
-            texto: "El vehículo cuenta con equipo de carretera (Botiquín, Extintor, Tacos, Gato, Cruceta, triángulo y herramientas).",
-            fotoKey: "fotoVehiculos3",
-            observacionKey: "observacionVehiculos3",
-            activarinput: false,
-        },
-        {
-            key: "vehiculos4",
-            texto: "El  vehículo con el cual se moviliza la cuadrilla evaluada, se encuentra en buen estado.",
-            fotoKey: "fotoVehiculos4",
-            observacionKey: "observacionVehiculos4",
-            activarinput: false,
-        },
-        {
-            key: "vehiculos5",
-            texto: "El vehículo cuenta con inspección preoperacional.",
-            fotoKey: "fotoVehiculos5",
-            observacionKey: "observacionVehiculos5",
-            activarinput: false,
-        },
-        {
-            key: "vehiculos6",
-            texto: "El vehículo utilizado para el izaje de cargas cuenta con pruebas vigentes (Izaje- Rigidez dieléctrica).",
-            fotoKey: "fotoVehiculos6",
-            observacionKey: "observacionVehiculos6",
-            activarinput: false,
-        },
-        {
-            key: "vehiculos7",
-            texto: "El vehículo de izaje  utilizado  para la tarea  cuenta con aparejos en buen estado y certificados.",
-            fotoKey: "fotoVehiculos7",
-            observacionKey: "observacionVehiculos7",
-            activarinput: false,
-        },
-        {
-            key: "vehiculos8",
-            texto: "Se realiza y documenta el plan de izaje  según la carga a levantar.",
-            fotoKey: "fotoVehiculos8",
-            observacionKey: "observacionVehiculos8",
-            activarinput: false,
-        },
-        {
-            key: "vehiculos9",
-            texto: "Se evita el desplazamiento de cargas sobre personas o personas sobre la carga.",
-            fotoKey: "fotoVehiculos9",
-            observacionKey: "observacionVehiculos9",
-            activarinput: false,
-        },
-        {
-            key: "vehiculos10",
-            texto: "Los estabilizadores de la máquina se utilizan correctamente y se respetan los diagramas de  carga.",
-            fotoKey: "fotoVehiculos10",
-            observacionKey: "observacionVehiculos10",
+            key: "aceites5",
+            texto: "¿ Se cuentan con los elementos necesarios para atender un derrame accidental de combustible o aceite.?",
+            fotoKey: "fotoAceites5",
+            observacionKey: "observacionAceites5",
             activarinput: false,
         },
 
-
-
         {
-            key: "trabajo1",
-            texto: "Durante las etapas de la actividad se mantiene ordenado y aseado el lugar de trabajo.",
-            fotoKey: "fotoTrabajo1",
-            observacionKey: "observacionTrabajo1",
+            key: "vertimientos1",
+            texto: "¿Todo vertimiento generado por la obra se gestiona conforme a sus caracteristicas?",
+            fotoKey: "fotoVertimientos1",
+            observacionKey: "observacionVertimientos1",
             activarinput: false,
         },
         {
-            key: "trabajo2",
-            texto: "Medios de comunicación existentes.",
-            fotoKey: "fotoTrabajo2",
-            observacionKey: "observacionTrabajo2",
+            key: "vertimientos2",
+            texto: "En caso de contar con baños portátiles ¿se realizan la limpieza y desinfección de los mismos y se guardan las remisiones respectivas?",
+            fotoKey: "fotoVertimientos2",
+            observacionKey: "observacionVertimientos2",
             activarinput: false,
         },
         {
-            key: "trabajo3",
-            texto: "Colaboradores en condiciones físicas adecuadas. En caso de horas de trabajo prolongadas, los trabajadores toman descansos cortos a intervalos regulares.",
-            fotoKey: "fotoTrabajo3",
-            observacionKey: "observacionTrabajo3",
-            activarinput: false,
-        },
-        {
-            key: "trabajo4",
-            texto: "El área cuenta con fuentes de iluminación adecuadas para las actividades que se realizan.",
-            fotoKey: "fotoTrabajo4",
-            observacionKey: "observacionTrabajo4",
+            key: "vertimientos3",
+            texto: "¿Se evita el vertimiento de aguas residuales no domésticas, sustancias químicas y/o residuos líquidos  peligrosos  al alcantarillado, sumideros o cuerpos de agua?",
+            fotoKey: "fotoVertimientos3",
+            observacionKey: "observacionVertimientos3",
             activarinput: false,
         },
 
-
-
         {
-            key: "materiales1",
-            texto: "Utiliza los materiales indicados.",
-            fotoKey: "fotoMateriales1",
-            observacionKey: "observacionMateriales1",
+            key: "atmosfericas1",
+            texto: "¿En todo caso se evita la quema de residuos sólidos generados en la obra?",
+            fotoKey: "fotoAtmosfericas1",
+            observacionKey: "observacionAtmosfericas1",
             activarinput: false,
         },
         {
-            key: "materiales2",
-            texto: "Utiliza  los  equipos  indicados  en  buen  estado  y  normalizados  (pértigas,  probador  ausencia  de tensión,  puesta a tierra BT-MT, Pinza voltiamperimétrica).",
-            fotoKey: "fotoMateriales2",
-            observacionKey: "observacionMateriales2",
-            activarinput: false,
-        },
-        {
-            key: "materiales3",
-            texto: "Utiliza las herramientas indicadas según su diseño y están en buen estado.",
-            fotoKey: "fotoMateriales3",
-            observacionKey: "observacionMateriales3",
+            key: "atmosfericas2",
+            texto: "¿La maquinaria y vehículos utilizados en la obra se encuentran en condiciones óptimas de mantenimiento (Revisión técnico mecánica vigente y/o mantenimientos al día)?",
+            fotoKey: "fotoAtmosfericas2",
+            observacionKey: "observacionAtmosfericas2",
             activarinput: false,
         },
 
-
-
         {
-            key: "primerosAuxilios1",
-            texto: "En  el  lugar  de  trabajo  existe  extintor  adecuado  a  la  clase  de  fuego,  está presurizado, con etiquetas vigentes y legibles.",
-            fotoKey: "fotoPrimerosAuxilios1",
-            observacionKey: "observacionPrimerosAuxilios1",
+            key: "seguridadIndustrial1",
+            texto: "¿La obra cuenta con los avisos preventivos, reglamentarios e informativos requeridos.?",
+            fotoKey: "fotoSeguridadIndustrial1",
+            observacionKey: "observacionSeguridadIndustrial1",
+            activarinput: true,
+        },
+        {
+            key: "seguridadIndustrial2",
+            texto: "¿Las instalaciones temporales permanecen debidamente señalizadas?",
+            fotoKey: "fotoSeguridadIndustrial2",
+            observacionKey: "observacionSeguridadIndustrial2",
             activarinput: false,
         },
         {
-            key: "primerosAuxilios2",
-            texto: "Posee botiquín de primeros auxilios en buen estado completo y vigente.",
-            fotoKey: "fotoPrimerosAuxilios2",
-            observacionKey: "observacionPrimerosAuxilios2",
+            key: "seguridadIndustrial3",
+            texto: "¿Todas las sustancias químicas y residuos peligrosos manejados en la sitio de trabajo cuentan con su respectiva ficha de datos de seguridad y estas se mantienen en lugares visibles?",
+            fotoKey: "fotoSeguridadIndustrial3",
+            observacionKey: "observacionSeguridadIndustrial3",
             activarinput: false,
         },
         {
-            key: "primerosAuxilios3",
-            texto: "Los botiquines son de fácil acceso y cuentan con elementos necesarios para aplicar un primer auxilio.",
-            fotoKey: "fotoPrimerosAuxilios3",
-            observacionKey: "observacionPrimerosAuxilios3",
+            key: "seguridadIndustrial4",
+            texto: "¿Todos los trabajadores cuentan y portan los EPP (Elementos de Protección Personal) ?",
+            fotoKey: "fotoSeguridadIndustrial4",
+            observacionKey: "observacionSeguridadIndustrial4",
+            activarinput: true,
+        },
+        {
+            key: "seguridadIndustrial5",
+            texto: "¿Se cuenta con un botiquín de primeros auxilios en caso de presentarse un evento emergencia?",
+            fotoKey: "fotoSeguridadIndustrial5",
+            observacionKey: "observacionSeguridadIndustrial5",
             activarinput: false,
         },
         {
-            key: "primerosAuxilios4",
-            texto: "Sabe o conoce como actuar en caso de emergencias, accidentes o incidentes de trabajo o emergencia ambiental.",
-            fotoKey: "fotoPrimerosAuxilios4",
-            observacionKey: "observacionPrimerosAuxilios4",
-            activarinput: false,
-        },
-        {
-            key: "primerosAuxilios5",
-            texto: "Se pueden encontrar fácilmente áreas seguras en caso de emergencia.",
-            fotoKey: "fotoPrimerosAuxilios5",
-            observacionKey: "observacionPrimerosAuxilios5",
-            activarinput: false,
-        },
-
-
-
-        {
-            key: "biomecanicos1",
-            texto: "Cumple   con   los    lineamientos     de   manejo,   manipulación    de   cargas   y  posturas   adecuadas.  (Calistenia-pausas activas).",
-            fotoKey: "fotoBiomecanicos1",
-            observacionKey: "observacionBiomecanicos1",
-            activarinput: false,
-        },
-        {
-            key: "biomecanicos2",
-            texto: "Se cuenta con los elementos adecuados para el levantamiento de tapas y se realiza con mínimo 3 personas.",
-            fotoKey: "fotoBiomecanicos2",
-            observacionKey: "observacionBiomecanicos2",
-            activarinput: false,
-        },
-        {
-            key: "biomecanicos3",
-            texto: "Uso ayudas mecánicas para la manipulación manual de cargas (por ejemplo, carretillas, estibadores, polipastos, etc.)",
-            fotoKey: "fotoBiomecanicos3",
-            observacionKey: "observacionBiomecanicos3",
-            activarinput: false,
-        },
-
-
-
-        {
-            key: "quimicos1",
-            texto: "Se cuenta con las Fichas de Datos de Seguridad de los productos químicos.",
-            fotoKey: "fotoQuimicos1",
-            observacionKey: "observacionQuimicos1",
-            activarinput: false,
-        },
-        {
-            key: "quimicos2",
-            texto: "Se cuenta con el kit completo para manejo de derrames de productos químicos.",
-            fotoKey: "fotoQuimicos2",
-            observacionKey: "observacionQuimicos2",
-            activarinput: false,
-        },
-        {
-            key: "quimicos3",
-            texto: "Cuenta con rotulación (SGA) para los productos químicos.",
-            fotoKey: "fotoQuimicos3",
-            observacionKey: "observacionQuimicos3",
-            activarinput: false,
-        },
-        {
-            key: "quimicos4",
-            texto: "Vehículos, maquinaria y equipos sin fuga de aceites, combustibles u otros fluidos hidráulicos.",
-            fotoKey: "fotoQuimicos4",
-            observacionKey: "observacionQuimicos4",
-            activarinput: false,
-        },
-        {
-            key: "quimicos5",
-            texto: "Se recolectan, almacenan, rotulan y se transportan de forma segura los residuos peligrosos (envases químicos, residuos aceitosos, entre otros).",
-            fotoKey: "fotoQuimicos5",
-            observacionKey: "observacionQuimicos5",
-            activarinput: false,
-        },
-
-
-        {
-            key: "residuosNoPeligrosos1",
-            texto: "Separación o clasificación adecuada de los residuos, según código de colores establecido.",
-            fotoKey: "fotoResiduosNoPeligrosos1",
-            observacionKey: "observacionResiduosNoPeligrosos1",
-            activarinput: false,
-        },
-        {
-            key: "residuosNoPeligrosos2",
-            texto: "Se encuentra el vehículo en condiciones optimas de orden y aseo (limpio y ordenado).",
-            fotoKey: "fotoResiduosNoPeligrosos2",
-            observacionKey: "observacionResiduosNoPeligrosos2",
-            activarinput: false,
-        },
-        {
-            key: "residuosNoPeligrosos3",
-            texto: "Se garantiza la limpieza de la zona de trabajo luego de la ejecución de la labor y la disposición final adecuada de los residuos.",
-            fotoKey: "fotoResiduosNoPeligrosos3",
-            observacionKey: "observacionResiduosNoPeligrosos3",
-            activarinput: false,
-        },
-
-
-
-        {
-            key: "residuosConstruccion1",
-            texto: "Las actividades se llevan a cabo de conformidad con las autorizaciones obtenidas según la legislación local y en relación con los límites/requisitos ambientales específicos del sitio/obra (por ejemplo, PIN de RCD, licencias de intervención, emisiones, descargas de agua, ruido, etc.).",
-            fotoKey: "fotoResiduosConstruccion1",
-            observacionKey: "observacionResiduosConstruccion1",
-            activarinput: false,
-        },
-        {
-            key: "residuosConstruccion2",
-            texto: "El almacenamiento temporal es adecuado, ubicado dentro de la zona de trabajo, no se obstruyen los senderos peatonales y/o vías.",
-            fotoKey: "fotoResiduosConstruccion2",
-            observacionKey: "observacionResiduosConstruccion2",
-            activarinput: false,
-        },
-        {
-            key: "residuosConstruccion3",
-            texto: "Se  protegen las zonas verdes, sumideros y se controla el material particulado.",
-            fotoKey: "fotoResiduosConstruccion3",
-            observacionKey: "observacionResiduosConstruccion3",
-            activarinput: false,
-        },
-        {
-            key: "residuosConstruccion4",
-            texto: "Las actividades se realizan de una forma que evite el riesgo de colapso o fallo de las estructuras/terrenos (por ejemplo, entibado).",
-            fotoKey: "fotoResiduosConstruccion4",
-            observacionKey: "observacionResiduosConstruccion4",
+            key: "seguridadIndustrial6",
+            texto: "¿Se cuenta con una adecuada iluminación cuando se adelanten trabajos en horario nocturno?",
+            fotoKey: "fotoSeguridadIndustrial6",
+            observacionKey: "observacionSeguridadIndustrial6",
             activarinput: false,
         },
     ];
@@ -1272,36 +966,9 @@ const SupervisionFormularioEnelAmbiental = () => {
         if (!miembro.cedula) { toast.error('Por favor diligencie la cedula.'); return false }
         if (!miembro.nombre || miembro.nombre === 'Usuario no encontrado') { toast.error('Por favor ingrese un usuario valido.'); return false }
         if (!miembro.cargo || miembro.cargo === 'Cargo no encontrado') { toast.error('Por favor ingrese un usuario valido.'); return false }
-        if (!miembro.arl) { toast.error('Por favor diligencie la arl.'); return false }
-        if (!miembro.tarjetaDeVida) { toast.error('Por favor diligencie la tarjeta de vida.'); return false }
-        if (!miembro.carneCliente) { toast.error('Por favor diligencie el carne cliente.'); return false }
-        if (!miembro.carneSicte) { toast.error('Por favor diligencie el carne sicte.'); return false }
-        if (!miembro.fotoDocumentos) { toast.error('Por favor ingrese la foto de los documentos.'); return false }
-        if (!miembro.observacionDocumentos && (miembro.arl === 'NC' || miembro.tarjetaDeVida === 'NC' || miembro.carneCliente === 'NC' || miembro.carneSicte === 'NC')) { toast.error('Por favor diligencie la observacion de los documentos.'); return false }
-        if (!miembro.eppCasco) { toast.error('Por favor diligencie el EPP - Casco.'); return false }
-        if (!miembro.fotoEppCasco && miembro.eppCasco === 'NC') { toast.error('Por favor ingrese la foto del EPP - Casco.'); return false }
-        if (!miembro.eppGuantes) { toast.error('Por favor diligencie el EPP - Guantes.'); return false }
-        if (!miembro.fotoEppGuantes && miembro.eppGuantes === 'NC') { toast.error('Por favor ingrese la foto del EPP - Guantes.'); return false }
-        if (!miembro.eppGuantesDielectricos) { toast.error('Por favor diligencie el EPP - Guantes Dielectricos.'); return false }
-        if (!miembro.fotoEppGuantesDielectricos && miembro.eppGuantesDielectricos === 'NC') { toast.error('Por favor ingrese la foto del EPP - Guantes Dielectricos.'); return false }
-        if (!miembro.eppProteccionFacialAntiArco) { toast.error('Por favor diligencie el EPP - Proteccion Facial Anti Arco.'); return false }
-        if (!miembro.fotoEppProteccionFacialAntiArco && miembro.eppProteccionFacialAntiArco === 'NC') { toast.error('Por favor ingrese la foto del EPP - Proteccion Facial Anti Arco.'); return false }
-        if (!miembro.eppEquiposContraCaidas) { toast.error('Por favor diligencie el EPP - Equipos Contra Caidas.'); return false }
-        if (!miembro.fotoEppEquiposContraCaidas && miembro.eppEquiposContraCaidas === 'NC') { toast.error('Por favor ingrese la foto del EPP - Equipos Contra Caidas.'); return false }
-        if (!miembro.eppOverolObraCivil) { toast.error('Por favor diligencie el EPP - Overol Obra Civil.'); return false }
-        if (!miembro.fotoEppOverolObraCivil && miembro.eppOverolObraCivil === 'NC') { toast.error('Por favor ingrese la foto del EPP - Overol Obra Civil.'); return false }
-        if (!miembro.eppOverolIgnifugo) { toast.error('Por favor diligencie el EPP - Overol Ignifugo.'); return false }
-        if (!miembro.fotoEppOverolIgnifugo && miembro.eppOverolIgnifugo === 'NC') { toast.error('Por favor ingrese la foto del EPP - Overol Ignifugo.'); return false }
-        if (!miembro.eppGafasDeSeguridad) { toast.error('Por favor diligencie el EPP - Gafas De Seguridad.'); return false }
-        if (!miembro.fotoEppGafasDeSeguridad && miembro.eppGafasDeSeguridad === 'NC') { toast.error('Por favor ingrese la foto del EPP - Gafas De Seguridad.'); return false }
-        if (!miembro.eppTapabocas) { toast.error('Por favor diligencie el EPP - Tapabocas.'); return false }
-        if (!miembro.fotoEppTapabocas && miembro.eppTapabocas === 'NC') { toast.error('Por favor ingrese la foto del EPP - Tapabocas.'); return false }
-        if (!miembro.eppBotas) { toast.error('Por favor diligencie el EPP - Botas.'); return false }
-        if (!miembro.fotoEppBotas && miembro.eppBotas === 'NC') { toast.error('Por favor ingrese la foto del EPP - Botas.'); return false }
-        if (!miembro.observacionEpp && (miembro.eppCasco === 'NC' || miembro.eppGuantes === 'NC' || miembro.eppGuantesDielectricos === 'NC' || miembro.eppProteccionFacialAntiArco === 'NC' || miembro.eppEquiposContraCaidas === 'NC' || miembro.eppOverolObraCivil === 'NC' || miembro.eppOverolIgnifugo === 'NC' || miembro.eppGafasDeSeguridad === 'NC' || miembro.eppTapabocas === 'NC' || miembro.eppBotas === 'NC')) { toast.error('Por favor diligencie la observacion de los epps.'); return false }
     }
 
-    const validarFormularioEnelInspeccionIntegralHSE = (formulario) => {
+    const validarFormularioEnelAmbiental = (formulario) => {
         if (!formulario.tipoInpseccion) { toast.error('Por favor diligencie el tipo de inspeccion.'); return false }
         if (!formulario.nombreProyecto) { toast.error('Por favor diligencie el nombre del proyecto.'); return false }
         if (!formulario.noContrato) { toast.error('Por favor diligencie el numero de contrato.'); return false }
@@ -1445,7 +1112,7 @@ const SupervisionFormularioEnelAmbiental = () => {
                         <i className="fas fa-tools"></i>
                         <div className='entradaDatos'>
                             <Textos className='subtitulo'>Tipo de Inspeccion:</Textos>
-                            <Selectores value={formularioEnelInspeccionIntegralHSE.tipoInpseccion} onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('tipoInpseccion', e.target.value)}
+                            <Selectores value={formularioEnelAmbiental.tipoInpseccion} onChange={(e) => actualizarCampoEnelAmbiental('tipoInpseccion', e.target.value)}
                                 options={[
                                     { value: 'Presencial', label: 'Presencial' },
                                     { value: 'Virtual', label: 'Virtual' },
@@ -1455,11 +1122,29 @@ const SupervisionFormularioEnelAmbiental = () => {
                         </div>
                     </div>
 
+                    <div className='campo supervisor'>
+                        <i className="fas fa-users-cog"></i>
+                        <div className='entradaDatos'>
+                            <Textos className='subtitulo'>Nombre de quien inspecciona:</Textos>
+                            <Entradas disabled={modo === "editar"} type="text" placeholder="Ingrese la cedula de quien inspecciona" value={formularioEnelAmbiental.cedulaSupervisorTecnico} onChange={(e) => {
+                                const valor = e.target.value;
+                                actualizarCampoEnelAmbiental('cedulaSupervisorTecnico', valor);
+                                const registroEncontrado = datosPlanta.find(item => item.nit === valor);
+                                if (registroEncontrado) {
+                                    actualizarCampoEnelAmbiental('nombreSupervisorTecnico', registroEncontrado.nombre);
+                                } else {
+                                    actualizarCampoEnelAmbiental('nombreSupervisorTecnico', 'Usuario no encontrado');
+                                }
+                            }} />
+                            <Entradas type="text" placeholder="Nombre" value={formularioEnelAmbiental.nombreSupervisorTecnico} disabled={true} />
+                        </div>
+                    </div>
+
                     <div className='campo nombreProyecto'>
                         <i className="fas fa-tools"></i>
                         <div className='entradaDatos'>
                             <Textos className='subtitulo'>Nombre del proyecto:</Textos>
-                            <Entradas disabled={modo === "editar"} type="text" placeholder="Ingrese el nombre del Proyecto" value={formularioEnelInspeccionIntegralHSE.nombreProyecto} onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('nombreProyecto', e.target.value)} />
+                            <Entradas disabled={modo === "editar"} type="text" placeholder="Ingrese el nombre del Proyecto" value={formularioEnelAmbiental.nombreProyecto} onChange={(e) => actualizarCampoEnelAmbiental('nombreProyecto', e.target.value)} />
                         </div>
                     </div>
 
@@ -1467,7 +1152,7 @@ const SupervisionFormularioEnelAmbiental = () => {
                         <i className="fas fa-tools"></i>
                         <div className='entradaDatos'>
                             <Textos className='subtitulo'>No. de contrato:</Textos>
-                            <Selectores value={formularioEnelInspeccionIntegralHSE.noContrato} onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('noContrato', e.target.value)}
+                            <Selectores value={formularioEnelAmbiental.noContrato} onChange={(e) => actualizarCampoEnelAmbiental('noContrato', e.target.value)}
                                 options={[
                                     { value: 'JA10123037/JA10123045', label: 'JA10123037 / JA10123045' },
                                     { value: 'JA10123400', label: 'JA10123400' },
@@ -1490,8 +1175,8 @@ const SupervisionFormularioEnelAmbiental = () => {
                         <i className="fas fa-tools"></i>
                         <div className='entradaDatos'>
                             <Textos className='subtitulo'>Direccion:</Textos>
-                            <Entradas disabled={modo === "editar"} type="text" placeholder="Ingrese la direccion" value={formularioEnelInspeccionIntegralHSE.direccion}
-                                onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('direccion', e.target.value)} />
+                            <Entradas disabled={modo === "editar"} type="text" placeholder="Ingrese la direccion" value={formularioEnelAmbiental.direccion}
+                                onChange={(e) => actualizarCampoEnelAmbiental('direccion', e.target.value)} />
                         </div>
                     </div>
 
@@ -1499,9 +1184,9 @@ const SupervisionFormularioEnelAmbiental = () => {
                         <i className="fas fa-tools"></i>
                         <div className='entradaDatos'>
                             <Textos className='subtitulo'>Ciudad:</Textos>
-                            <Entradas disabled={modo === "editar"} type="text" placeholder="Ingrese la ciudad" value={formularioEnelInspeccionIntegralHSE.ciudad} onChange={(e) => {
+                            <Entradas disabled={modo === "editar"} type="text" placeholder="Ingrese la ciudad" value={formularioEnelAmbiental.ciudad} onChange={(e) => {
                                 const valor = e.target.value;
-                                actualizarCampoEnelInspeccionIntegralHSE('ciudad', valor);
+                                actualizarCampoEnelAmbiental('ciudad', valor);
 
                                 const coincidencias = datosCiudades.filter(ciudad =>
                                     ciudad.key.toLowerCase().includes(valor.toLowerCase())
@@ -1510,13 +1195,13 @@ const SupervisionFormularioEnelAmbiental = () => {
                             }} />
                         </div>
 
-                        {formularioEnelInspeccionIntegralHSE.ciudad && ciudadesFiltradas.length > 0 && (
+                        {formularioEnelAmbiental.ciudad && ciudadesFiltradas.length > 0 && (
                             <ul className="sugerencias-ciudad">
                                 {ciudadesFiltradas.slice(0, 10).map((ciudad, index) => (
                                     <li
                                         key={ciudad.key}
                                         onClick={() => {
-                                            actualizarCampoEnelInspeccionIntegralHSE('ciudad', ciudad.key);
+                                            actualizarCampoEnelAmbiental('ciudad', ciudad.key);
                                             setCiudadesFiltradas([]);
                                         }}
                                     >
@@ -1531,7 +1216,7 @@ const SupervisionFormularioEnelAmbiental = () => {
                         <i className="fas fa-tools"></i>
                         <div className='entradaDatos'>
                             <Textos className='subtitulo'>No. de OP/OT:</Textos>
-                            <Entradas disabled={modo === "editar"} type="text" placeholder="Ingrese el nombre del Proyecto" value={formularioEnelInspeccionIntegralHSE.opOt} onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('opOt', e.target.value)} />
+                            <Entradas disabled={modo === "editar"} type="text" placeholder="Ingrese el nombre del Proyecto" value={formularioEnelAmbiental.opOt} onChange={(e) => actualizarCampoEnelAmbiental('opOt', e.target.value)} />
                         </div>
                     </div>
 
@@ -1539,17 +1224,17 @@ const SupervisionFormularioEnelAmbiental = () => {
                         <i className="fas fa-users-cog"></i>
                         <div className='entradaDatos'>
                             <Textos className='subtitulo'>Supervisor:</Textos>
-                            <Entradas disabled={modo === "editar"} type="text" placeholder="Ingrese la cedula del supervisor tecnico" value={formularioEnelInspeccionIntegralHSE.cedulaSupervisorTecnico} onChange={(e) => {
+                            <Entradas disabled={modo === "editar"} type="text" placeholder="Ingrese la cedula del supervisor tecnico" value={formularioEnelAmbiental.cedulaSupervisorTecnico} onChange={(e) => {
                                 const valor = e.target.value;
-                                actualizarCampoEnelInspeccionIntegralHSE('cedulaSupervisorTecnico', valor);
+                                actualizarCampoEnelAmbiental('cedulaSupervisorTecnico', valor);
                                 const registroEncontrado = datosPlanta.find(item => item.nit === valor);
                                 if (registroEncontrado) {
-                                    actualizarCampoEnelInspeccionIntegralHSE('nombreSupervisorTecnico', registroEncontrado.nombre);
+                                    actualizarCampoEnelAmbiental('nombreSupervisorTecnico', registroEncontrado.nombre);
                                 } else {
-                                    actualizarCampoEnelInspeccionIntegralHSE('nombreSupervisorTecnico', 'Usuario no encontrado');
+                                    actualizarCampoEnelAmbiental('nombreSupervisorTecnico', 'Usuario no encontrado');
                                 }
                             }} />
-                            <Entradas type="text" placeholder="Nombre" value={formularioEnelInspeccionIntegralHSE.nombreSupervisorTecnico} disabled={true} />
+                            <Entradas type="text" placeholder="Nombre" value={formularioEnelAmbiental.nombreSupervisorTecnico} disabled={true} />
                         </div>
                     </div>
 
@@ -1557,17 +1242,17 @@ const SupervisionFormularioEnelAmbiental = () => {
                         <i className="fas fa-users-cog"></i>
                         <div className='entradaDatos'>
                             <Textos className='subtitulo'>Líder de cuadrilla:</Textos>
-                            <Entradas disabled={modo === "editar"} type="text" placeholder="Ingrese la cedula del lider de cuadrilla" value={formularioEnelInspeccionIntegralHSE.cedulaLiderEncargado} onChange={(e) => {
+                            <Entradas disabled={modo === "editar"} type="text" placeholder="Ingrese la cedula del lider de cuadrilla" value={formularioEnelAmbiental.cedulaLiderEncargado} onChange={(e) => {
                                 const valor = e.target.value;
-                                actualizarCampoEnelInspeccionIntegralHSE('cedulaLiderEncargado', valor);
+                                actualizarCampoEnelAmbiental('cedulaLiderEncargado', valor);
                                 const registroEncontrado = datosPlanta.find(item => item.nit === valor);
                                 if (registroEncontrado) {
-                                    actualizarCampoEnelInspeccionIntegralHSE('nombreLiderEncargado', registroEncontrado.nombre);
+                                    actualizarCampoEnelAmbiental('nombreLiderEncargado', registroEncontrado.nombre);
                                 } else {
-                                    actualizarCampoEnelInspeccionIntegralHSE('nombreLiderEncargado', 'Usuario no encontrado');
+                                    actualizarCampoEnelAmbiental('nombreLiderEncargado', 'Usuario no encontrado');
                                 }
                             }} />
-                            <Entradas type="text" placeholder="Nombre" value={formularioEnelInspeccionIntegralHSE.nombreLiderEncargado} disabled={true} />
+                            <Entradas type="text" placeholder="Nombre" value={formularioEnelAmbiental.nombreLiderEncargado} disabled={true} />
                         </div>
                     </div>
 
@@ -1575,7 +1260,7 @@ const SupervisionFormularioEnelAmbiental = () => {
                         <i className="fas fa-tools"></i>
                         <div className='entradaDatos'>
                             <Textos className='subtitulo'>Proceso:</Textos>
-                            <Selectores disabled={modo === "editar"} value={formularioEnelInspeccionIntegralHSE.proceso} onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('proceso', e.target.value)}
+                            <Selectores disabled={modo === "editar"} value={formularioEnelAmbiental.proceso} onChange={(e) => actualizarCampoEnelAmbiental('proceso', e.target.value)}
                                 options={[
                                     { value: 'Civil', label: 'Civil' },
                                     { value: 'Electrico', label: 'Electrico' },
@@ -1592,11 +1277,11 @@ const SupervisionFormularioEnelAmbiental = () => {
                             <Entradas
                                 type="text"
                                 placeholder="Placa movil (Ejemplo: ABC123, ABC12A)"
-                                value={formularioEnelInspeccionIntegralHSE.placa}
+                                value={formularioEnelAmbiental.placa}
                                 onChange={(e) => {
                                     const newValue = e.target.value.toUpperCase();
                                     if (/^[A-Z]{0,3}[0-9]{0,2}[0-9A-Z]{0,1}$/.test(newValue)) {
-                                        actualizarCampoEnelInspeccionIntegralHSE('placa', newValue);
+                                        actualizarCampoEnelAmbiental('placa', newValue);
                                     }
                                 }}
                                 pattern="[A-Za-z]{3}[0-9]{2}[0-9A-Za-z]{1}"
@@ -1622,7 +1307,7 @@ const SupervisionFormularioEnelAmbiental = () => {
                     </div>
 
                     <div className='Tabla'>
-                        <Tablas columnas={columnas} datos={formularioEnelInspeccionIntegralHSE.cuadrilla} filasPorPagina={5}
+                        <Tablas columnas={columnas} datos={formularioEnelAmbiental.cuadrilla} filasPorPagina={5}
                             leer={true} editar={modo === "editar" ? false : true} eliminar={modo === "editar" ? false : true}
                             onLeer={(fila) => {
                                 setAccionModalTabla("leer");
@@ -1647,16 +1332,16 @@ const SupervisionFormularioEnelAmbiental = () => {
                             <div className="modal-cuadrilla">
                                 <div className="modal-contenido">
                                     <Textos className='titulo'>{accionModalTabla === 'crear' ? 'Agregar' : accionModalTabla === 'editar' ? 'Editar' : accionModalTabla === 'leer' ? 'Leer' : accionModalTabla === 'eliminar' ? 'Eliminar' : ''} Integrante</Textos>
-                                    <Textos className='subtitulo encabezado'>1. Datos Personales:</Textos>
+                                    <Textos className='subtitulo encabezado'>Datos Personales:</Textos>
                                     <div className='entradaDatos'>
                                         <Textos className='subtitulo'>Cedula:</Textos>
                                         <Entradas type="text" placeholder="Cédula" value={miembroEnProceso.cedula || ""}
                                             onChange={(e) => {
                                                 const valor = e.target.value;
                                                 const registroEncontrado = datosPlanta.find(item => item.nit === valor);
-                                                actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('cedula', valor);
-                                                actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('nombre', registroEncontrado ? registroEncontrado.nombre : 'Usuario no encontrado');
-                                                actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('cargo', registroEncontrado ? registroEncontrado.cargo : 'Cargo no encontrado');
+                                                actualizarCampoMiembroACuadrillaEnelAmbiental('cedula', valor);
+                                                actualizarCampoMiembroACuadrillaEnelAmbiental('nombre', registroEncontrado ? registroEncontrado.nombre : 'Usuario no encontrado');
+                                                actualizarCampoMiembroACuadrillaEnelAmbiental('cargo', registroEncontrado ? registroEncontrado.cargo : 'Cargo no encontrado');
                                             }}
                                             disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"}
                                         />
@@ -1669,168 +1354,9 @@ const SupervisionFormularioEnelAmbiental = () => {
                                         <Textos className='subtitulo'>Cargo:</Textos>
                                         <Entradas type="text" placeholder="Cargo" value={miembroEnProceso.cargo} disabled={true} />
                                     </div>
-                                    <Textos className='subtitulo encabezado'>2. Documentos:</Textos>
-                                    <div className='entradaDatos'>
-                                        <Textos className='subtitulo'>ARL:</Textos>
-                                        <div className='opciones'>
-                                            <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('arl', 'C')} className={miembroEnProceso.arl === 'C' ? 'formulario selected' : ''}>C</Botones>
-                                            <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('arl', 'NC')} className={miembroEnProceso.arl === 'NC' ? 'formulario selected' : ''}>NC</Botones>
-                                        </div>
-                                    </div>
-                                    <div className='entradaDatos'>
-                                        <Textos className='subtitulo'>Tarjeta de vida:</Textos>
-                                        <div className='opciones'>
-                                            <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('tarjetaDeVida', 'C')} className={miembroEnProceso.tarjetaDeVida === 'C' ? 'formulario selected' : ''}>C</Botones>
-                                            <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('tarjetaDeVida', 'NC')} className={miembroEnProceso.tarjetaDeVida === 'NC' ? 'formulario selected' : ''}>NC</Botones>
-                                        </div>
-                                    </div>
-                                    <div className='entradaDatos'>
-                                        <Textos className='subtitulo'>Carné Cliente:</Textos>
-                                        <div className='opciones'>
-                                            <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('carneCliente', 'C')} className={miembroEnProceso.carneCliente === 'C' ? 'formulario selected' : ''}>C</Botones>
-                                            <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('carneCliente', 'NC')} className={miembroEnProceso.carneCliente === 'NC' ? 'formulario selected' : ''}>NC</Botones>
-                                        </div>
-                                    </div>
-                                    <div className='entradaDatos'>
-                                        <Textos className='subtitulo'>Carné Sicte:</Textos>
-                                        <div className='opciones'>
-                                            <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('carneSicte', 'C')} className={miembroEnProceso.carneSicte === 'C' ? 'formulario selected' : ''}>C</Botones>
-                                            <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('carneSicte', 'NC')} className={miembroEnProceso.carneSicte === 'NC' ? 'formulario selected' : ''}>NC</Botones>
-                                        </div>
-                                    </div>
-                                    <div className='entradaDatos vertical'>
-                                        <Textos className='subtitulo'>Ingrese la foto de los documentos:</Textos>
-                                        <div className='opciones'>
-                                            <Imagenes disableInput={accionModalTabla === "eliminar" || accionModalTabla === "leer"} fotoKey={'fotoDocumentos'} foto={miembroEnProceso.fotoDocumentos} onChange={(fotoKey, data) => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE(fotoKey, data)} capture={formularioEnelInspeccionIntegralHSE.tipoInpseccion !== 'Virtual' ? true : false} setImagen={(data) => setImagenAmpliada(data)} />
-                                        </div>
-                                    </div>
-                                    <div className={`entradaDatos vertical observacion' ${miembroEnProceso.arl !== 'NC' && miembroEnProceso.tarjetaDeVida !== 'NC' && miembroEnProceso.carneCliente !== 'NC' && miembroEnProceso.carneSicte !== 'NC' ? 'ocultar' : ''}`}>
-                                        <Textos className='subtitulo'>Observaciones:</Textos>
-                                        <div className='opciones'>
-                                            <AreaTextos disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} type="text" placeholder="Agregue las observacion pertinentes" value={miembroEnProceso.observacionDocumentos} onChange={(e) => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('observacionDocumentos', e.target.value)} rows={4} />
-                                        </div>
-                                    </div>
-                                    <Textos className='subtitulo encabezado'>3. Dotacion EPP y EPCC:</Textos>
-                                    <div className='entradaDatos vertical'>
-                                        <Textos className='subtitulo' title="Utiliza casco de seguridad TIPO II con barbuquejo en buen estado.">Casco:</Textos>
-                                        <div className='opciones'>
-                                            <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppCasco', 'C')} className={miembroEnProceso.eppCasco === 'C' ? 'formulario selected' : ''}>C</Botones>
-                                            <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppCasco', 'NC')} className={miembroEnProceso.eppCasco === 'NC' ? 'formulario selected' : ''}>NC</Botones>
-                                            <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppCasco', 'NA')} className={miembroEnProceso.eppCasco === 'NA' ? 'formulario selected' : ''}>NA</Botones>
-                                        </div>
-                                        <div className='opciones'>
-                                            <Imagenes disableInput={accionModalTabla === "eliminar" || accionModalTabla === "leer"} ocultarDiv={miembroEnProceso.eppCasco !== 'NC'} fotoKey={'fotoEppCasco'} foto={miembroEnProceso.fotoEppCasco} onChange={(fotoKey, data) => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE(fotoKey, data)} capture={formularioEnelInspeccionIntegralHSE.tipoInpseccion !== 'Virtual' ? true : false} setImagen={(data) => setImagenAmpliada(data)} />
-                                        </div>
-                                    </div>
-                                    <div className='entradaDatos vertical'>
-                                        <Textos className='subtitulo' title="Utiliza guantes de seguridad  de acuerdo a la labor ejecutada según corresponda y están en buen estado.">Guantes:</Textos>
-                                        <div className='opciones'>
-                                            <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppGuantes', 'C')} className={miembroEnProceso.eppGuantes === 'C' ? 'formulario selected' : ''}>C</Botones>
-                                            <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppGuantes', 'NC')} className={miembroEnProceso.eppGuantes === 'NC' ? 'formulario selected' : ''}>NC</Botones>
-                                            <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppGuantes', 'NA')} className={miembroEnProceso.eppGuantes === 'NA' ? 'formulario selected' : ''}>NA</Botones>
-                                        </div>
-                                        <div className='opciones'>
-                                            <Imagenes disableInput={accionModalTabla === "eliminar" || accionModalTabla === "leer"} ocultarDiv={miembroEnProceso.eppGuantes !== 'NC'} fotoKey={'fotoEppGuantes'} foto={miembroEnProceso.fotoEppGuantes} onChange={(fotoKey, data) => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE(fotoKey, data)} capture={formularioEnelInspeccionIntegralHSE.tipoInpseccion !== 'Virtual' ? true : false} setImagen={(data) => setImagenAmpliada(data)} />
-                                        </div>
-                                    </div>
-                                    <div className='entradaDatos vertical'>
-                                        <Textos className='subtitulo' title="Utiliza  guantes  de  seguridad  dieléctricos,  clase 0, 2 o 4 según  corresponda,  en  buen estado y osee las pruebas de rigidez vigentes.">Guantes Dielectricos:</Textos>
-                                        <div className='opciones'>
-                                            <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppGuantesDielectricos', 'C')} className={miembroEnProceso.eppGuantesDielectricos === 'C' ? 'formulario selected' : ''}>C</Botones>
-                                            <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppGuantesDielectricos', 'NC')} className={miembroEnProceso.eppGuantesDielectricos === 'NC' ? 'formulario selected' : ''}>NC</Botones>
-                                            <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppGuantesDielectricos', 'NA')} className={miembroEnProceso.eppGuantesDielectricos === 'NA' ? 'formulario selected' : ''}>NA</Botones>
-                                        </div>
-                                        <div className='opciones'>
-                                            <Imagenes disableInput={accionModalTabla === "eliminar" || accionModalTabla === "leer"} ocultarDiv={miembroEnProceso.eppGuantesDielectricos !== 'NC'} fotoKey={'fotoEppGuantesDielectricos'} foto={miembroEnProceso.fotoEppGuantesDielectricos} onChange={(fotoKey, data) => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE(fotoKey, data)} capture={formularioEnelInspeccionIntegralHSE.tipoInpseccion !== 'Virtual' ? true : false} setImagen={(data) => setImagenAmpliada(data)} />
-                                        </div>
-                                    </div>
-                                    <div className='entradaDatos vertical'>
-                                        <Textos className='subtitulo' title="Utiliza protección facial anti-arco y está en buen estado (visor Arc Flash - Balaclava ignifuga)">Proteccion Facil Anti Arco:</Textos>
-                                        <div className='opciones'>
-                                            <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppProteccionFacialAntiArco', 'C')} className={miembroEnProceso.eppProteccionFacialAntiArco === 'C' ? 'formulario selected' : ''}>C</Botones>
-                                            <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppProteccionFacialAntiArco', 'NC')} className={miembroEnProceso.eppProteccionFacialAntiArco === 'NC' ? 'formulario selected' : ''}>NC</Botones>
-                                            <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppProteccionFacialAntiArco', 'NA')} className={miembroEnProceso.eppProteccionFacialAntiArco === 'NA' ? 'formulario selected' : ''}>NA</Botones>
-                                        </div>
-                                        <div className='opciones'>
-                                            <Imagenes disableInput={accionModalTabla === "eliminar" || accionModalTabla === "leer"} ocultarDiv={miembroEnProceso.eppProteccionFacialAntiArco !== 'NC'} fotoKey={'fotoEppProteccionFacialAntiArco'} foto={miembroEnProceso.fotoEppProteccionFacialAntiArco} onChange={(fotoKey, data) => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE(fotoKey, data)} capture={formularioEnelInspeccionIntegralHSE.tipoInpseccion !== 'Virtual' ? true : false} setImagen={(data) => setImagenAmpliada(data)} />
-                                        </div>
-                                    </div>
-                                    <div className='entradaDatos vertical'>
-                                        <Textos className='subtitulo' title="Utiliza sistema contra caídas de altura completo, en buen estado.">Equipos Contra Caidas:</Textos>
-                                        <div className='opciones'>
-                                            <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppEquiposContraCaidas', 'C')} className={miembroEnProceso.eppEquiposContraCaidas === 'C' ? 'formulario selected' : ''}>C</Botones>
-                                            <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppEquiposContraCaidas', 'NC')} className={miembroEnProceso.eppEquiposContraCaidas === 'NC' ? 'formulario selected' : ''}>NC</Botones>
-                                            <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppEquiposContraCaidas', 'NA')} className={miembroEnProceso.eppEquiposContraCaidas === 'NA' ? 'formulario selected' : ''}>NA</Botones>
-                                        </div>
-                                        <div className='opciones'>
-                                            <Imagenes disableInput={accionModalTabla === "eliminar" || accionModalTabla === "leer"} ocultarDiv={miembroEnProceso.eppEquiposContraCaidas !== 'NC'} fotoKey={'fotoEppEquiposContraCaidas'} foto={miembroEnProceso.fotoEppEquiposContraCaidas} onChange={(fotoKey, data) => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE(fotoKey, data)} capture={formularioEnelInspeccionIntegralHSE.tipoInpseccion !== 'Virtual' ? true : false} setImagen={(data) => setImagenAmpliada(data)} />
-                                        </div>
-                                    </div>
-                                    <div className='entradaDatos vertical'>
-                                        <Textos className='subtitulo' title="Utiliza ropa de trabajo adecuada para la tarea, en buen estado y normalizada">Overol Obra Civil:</Textos>
-                                        <div className='opciones'>
-                                            <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppOverolObraCivil', 'C')} className={miembroEnProceso.eppOverolObraCivil === 'C' ? 'formulario selected' : ''}>C</Botones>
-                                            <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppOverolObraCivil', 'NC')} className={miembroEnProceso.eppOverolObraCivil === 'NC' ? 'formulario selected' : ''}>NC</Botones>
-                                            <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppOverolObraCivil', 'NA')} className={miembroEnProceso.eppOverolObraCivil === 'NA' ? 'formulario selected' : ''}>NA</Botones>
-                                        </div>
-                                        <div className='opciones'>
-                                            <Imagenes disableInput={accionModalTabla === "eliminar" || accionModalTabla === "leer"} ocultarDiv={miembroEnProceso.eppOverolObraCivil !== 'NC'} fotoKey={'fotoEppOverolObraCivil'} foto={miembroEnProceso.fotoEppOverolObraCivil} onChange={(fotoKey, data) => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE(fotoKey, data)} capture={formularioEnelInspeccionIntegralHSE.tipoInpseccion !== 'Virtual' ? true : false} setImagen={(data) => setImagenAmpliada(data)} />
-                                        </div>
-                                    </div>
-                                    <div className='entradaDatos vertical'>
-                                        <Textos className='subtitulo' title="Utiliza  overol ignífugo está en buen estado.">Overol Ignifugo:</Textos>
-                                        <div className='opciones'>
-                                            <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppOverolIgnifugo', 'C')} className={miembroEnProceso.eppOverolIgnifugo === 'C' ? 'formulario selected' : ''}>C</Botones>
-                                            <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppOverolIgnifugo', 'NC')} className={miembroEnProceso.eppOverolIgnifugo === 'NC' ? 'formulario selected' : ''}>NC</Botones>
-                                            <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppOverolIgnifugo', 'NA')} className={miembroEnProceso.eppOverolIgnifugo === 'NA' ? 'formulario selected' : ''}>NA</Botones>
-                                        </div>
-                                        <div className='opciones'>
-                                            <Imagenes disableInput={accionModalTabla === "eliminar" || accionModalTabla === "leer"} ocultarDiv={miembroEnProceso.eppOverolIgnifugo !== 'NC'} fotoKey={'fotoEppOverolIgnifugo'} foto={miembroEnProceso.fotoEppOverolIgnifugo} onChange={(fotoKey, data) => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE(fotoKey, data)} capture={formularioEnelInspeccionIntegralHSE.tipoInpseccion !== 'Virtual' ? true : false} setImagen={(data) => setImagenAmpliada(data)} />
-                                        </div>
-                                    </div>
-                                    <div className='entradaDatos vertical'>
-                                        <Textos className='subtitulo' title="Utiliza protector ocular (gafas) según la actividad y está en buen estado.">Gafas de Seguridad:</Textos>
-                                        <div className='opciones'>
-                                            <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppGafasDeSeguridad', 'C')} className={miembroEnProceso.eppGafasDeSeguridad === 'C' ? 'formulario selected' : ''}>C</Botones>
-                                            <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppGafasDeSeguridad', 'NC')} className={miembroEnProceso.eppGafasDeSeguridad === 'NC' ? 'formulario selected' : ''}>NC</Botones>
-                                            <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppGafasDeSeguridad', 'NA')} className={miembroEnProceso.eppGafasDeSeguridad === 'NA' ? 'formulario selected' : ''}>NA</Botones>
-                                        </div>
-                                        <div className='opciones'>
-                                            <Imagenes disableInput={accionModalTabla === "eliminar" || accionModalTabla === "leer"} ocultarDiv={miembroEnProceso.eppGafasDeSeguridad !== 'NC'} fotoKey={'fotoEppGafasDeSeguridad'} foto={miembroEnProceso.fotoEppGafasDeSeguridad} onChange={(fotoKey, data) => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE(fotoKey, data)} capture={formularioEnelInspeccionIntegralHSE.tipoInpseccion !== 'Virtual' ? true : false} setImagen={(data) => setImagenAmpliada(data)} />
-                                        </div>
-                                    </div>
-                                    <div className='entradaDatos vertical'>
-                                        <Textos className='subtitulo' title="Utiliza protección respiratoria en buen estado.">Tapabocas:</Textos>
-                                        <div className='opciones'>
-                                            <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppTapabocas', 'C')} className={miembroEnProceso.eppTapabocas === 'C' ? 'formulario selected' : ''}>C</Botones>
-                                            <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppTapabocas', 'NC')} className={miembroEnProceso.eppTapabocas === 'NC' ? 'formulario selected' : ''}>NC</Botones>
-                                            <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppTapabocas', 'NA')} className={miembroEnProceso.eppTapabocas === 'NA' ? 'formulario selected' : ''}>NA</Botones>
-                                        </div>
-                                        <div className='opciones'>
-                                            <Imagenes disableInput={accionModalTabla === "eliminar" || accionModalTabla === "leer"} ocultarDiv={miembroEnProceso.eppTapabocas !== 'NC'} fotoKey={'fotoEppTapabocas'} foto={miembroEnProceso.fotoEppTapabocas} onChange={(fotoKey, data) => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE(fotoKey, data)} capture={formularioEnelInspeccionIntegralHSE.tipoInpseccion !== 'Virtual' ? true : false} setImagen={(data) => setImagenAmpliada(data)} />
-                                        </div>
-                                    </div>
-                                    <div className='entradaDatos vertical'>
-                                        <Textos className='subtitulo' title="Utiliza calzado de seguridad según corresponda y está en buen estado.">Botas:</Textos>
-                                        <div className='opciones'>
-                                            <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppBotas', 'C')} className={miembroEnProceso.eppBotas === 'C' ? 'formulario selected' : ''}>C</Botones>
-                                            <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppBotas', 'NC')} className={miembroEnProceso.eppBotas === 'NC' ? 'formulario selected' : ''}>NC</Botones>
-                                            <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppBotas', 'NA')} className={miembroEnProceso.eppBotas === 'NA' ? 'formulario selected' : ''}>NA</Botones>
-                                        </div>
-                                        <div className='opciones'>
-                                            <Imagenes disableInput={accionModalTabla === "eliminar" || accionModalTabla === "leer"} ocultarDiv={miembroEnProceso.eppBotas !== 'NC'} fotoKey={'fotoEppBotas'} foto={miembroEnProceso.fotoEppBotas} onChange={(fotoKey, data) => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE(fotoKey, data)} capture={formularioEnelInspeccionIntegralHSE.tipoInpseccion !== 'Virtual' ? true : false} setImagen={(data) => setImagenAmpliada(data)} />
-                                        </div>
-                                    </div>
-                                    <div className={`entradaDatos vertical observacion' ${miembroEnProceso.eppCasco !== 'NC' && miembroEnProceso.eppGuantes !== 'NC' && miembroEnProceso.eppGuantesDielectricos !== 'NC' && miembroEnProceso.eppProteccionFacialAntiArco !== 'NC'
-                                        && miembroEnProceso.eppEquiposContraCaidas !== 'NC' && miembroEnProceso.eppOverolObraCivil !== 'NC' && miembroEnProceso.eppOverolIgnifugo !== 'NC' && miembroEnProceso.eppGafasDeSeguridad !== 'NC' && miembroEnProceso.eppTapabocas !== 'NC' && miembroEnProceso.eppBotas !== 'NC' ? 'ocultar' : ''}`}>
-                                        <Textos className='subtitulo'>Observaciones:</Textos>
-                                        <div className='opciones'>
-                                            <AreaTextos disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} type="text" placeholder="Agregue las observacion pertinentes" value={miembroEnProceso.observacionEpp} onChange={(e) => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('observacionEpp', e.target.value)} rows={4} />
-                                        </div>
-                                    </div>
                                     <div className={`modal-acciones ${accionModalTabla !== "leer" ? 'visible' : 'oculto'}`}>
                                         <Botones className={`guardar ${accionModalTabla === "crear" ? 'visible' : 'oculto'}`} onClick={() => {
-                                            const existe = (formularioEnelInspeccionIntegralHSE.cuadrilla || []).some(m => m.cedula === miembroEnProceso.cedula);
+                                            const existe = (formularioEnelAmbiental.cuadrilla || []).some(m => m.cedula === miembroEnProceso.cedula);
                                             if (existe) {
                                                 toast.error('La cédula ya está en la cuadrilla.');
                                                 return
@@ -1842,9 +1368,9 @@ const SupervisionFormularioEnelAmbiental = () => {
                                                 return
                                             }
 
-                                            setFormularioEnelInspeccionIntegralHSE(prev => {
+                                            setFormularioEnelAmbiental(prev => {
                                                 const actualizado = { ...prev, cuadrilla: [...(prev.cuadrilla || []), miembroEnProceso] };
-                                                localStorage.setItem('formularioEnelInspeccionIntegralHSE', JSON.stringify(actualizado));
+                                                localStorage.setItem('formularioEnelAmbiental', JSON.stringify(actualizado));
                                                 return actualizado;
                                             });
                                             toast.success('Integrante creado exitosamente.');
@@ -1853,11 +1379,11 @@ const SupervisionFormularioEnelAmbiental = () => {
                                             setMiembroEnProceso({})
                                         }}>Crear</Botones>
                                         <Botones className={`guardar ${accionModalTabla === "editar" ? 'visible' : 'oculto'}`} onClick={() => {
-                                            const existe = (formularioEnelInspeccionIntegralHSE.cuadrilla || []).map(m => m.cedula === miembroEnProceso.cedula ? miembroEnProceso : m);
+                                            const existe = (formularioEnelAmbiental.cuadrilla || []).map(m => m.cedula === miembroEnProceso.cedula ? miembroEnProceso : m);
 
-                                            setFormularioEnelInspeccionIntegralHSE(prev => {
+                                            setFormularioEnelAmbiental(prev => {
                                                 const actualizado = { ...prev, cuadrilla: existe };
-                                                localStorage.setItem('formularioEnelInspeccionIntegralHSE', JSON.stringify(actualizado));
+                                                localStorage.setItem('formularioEnelAmbiental', JSON.stringify(actualizado));
                                                 return actualizado;
                                             });
                                             toast.success('Integrante editado exitosamente.');
@@ -1866,11 +1392,11 @@ const SupervisionFormularioEnelAmbiental = () => {
                                             setMiembroEnProceso({})
                                         }}>Editar</Botones>
                                         <Botones className={`eliminar ${accionModalTabla === "eliminar" ? 'visible' : 'oculto'}`} onClick={() => {
-                                            const nuevaCuadrilla = (formularioEnelInspeccionIntegralHSE.cuadrilla || []).filter(m => m.cedula !== miembroEnProceso.cedula);
+                                            const nuevaCuadrilla = (formularioEnelAmbiental.cuadrilla || []).filter(m => m.cedula !== miembroEnProceso.cedula);
 
-                                            setFormularioEnelInspeccionIntegralHSE(prev => {
+                                            setFormularioEnelAmbiental(prev => {
                                                 const actualizado = { ...prev, cuadrilla: nuevaCuadrilla };
-                                                localStorage.setItem('formularioEnelInspeccionIntegralHSE', JSON.stringify(actualizado));
+                                                localStorage.setItem('formularioEnelAmbiental', JSON.stringify(actualizado));
                                                 return actualizado;
                                             });
                                             toast.success('Integrante eliminado exitosamente.');
@@ -1896,18 +1422,18 @@ const SupervisionFormularioEnelAmbiental = () => {
 
                     <div className='campo'>
                         <div className='entradaDatos'>
-                            <Textos className='subtitulo prin'>1. Identificacion de riesgos (Actividades previas al trabajo):</Textos>
-                            {preguntas.slice(0, 9).map((preg) => (
+                            <Textos className='subtitulo prin'>1. En relación con la gestión socio-ambiental</Textos>
+                            {preguntas.slice(0, 1).map((preg) => (
                                 <OpcionesFotoObservaciones
                                     key={preg.key}
                                     texto={preg.texto}
-                                    keyPrin="riesgos"
+                                    keyPrin="socioAmbiental"
                                     keyBase={preg.key}
                                     fotoKey={preg.fotoKey}
                                     observacionKey={preg.observacionKey}
                                     activarinput={preg.activarinput}
-                                    data={formularioEnelInspeccionIntegralHSE}
-                                    onChange={actualizarCampoEnelInspeccionIntegralHSE}
+                                    data={formularioEnelAmbiental}
+                                    onChange={actualizarCampoEnelAmbiental}
                                     setImagen={setImagenAmpliada}
                                     disabled={modo === "editar"}
                                 />
@@ -1917,18 +1443,18 @@ const SupervisionFormularioEnelAmbiental = () => {
 
                     <div className='campo'>
                         <div className='entradaDatos'>
-                            <Textos className='subtitulo prin'>2. Señalizacion y demarcacion:</Textos>
-                            {preguntas.slice(9, 12).map((preg) => (
+                            <Textos className='subtitulo prin'>2. En relación con los materiales de construcción (arena, gravilla, cemento)</Textos>
+                            {preguntas.slice(1, 5).map((preg) => (
                                 <OpcionesFotoObservaciones
                                     key={preg.key}
                                     texto={preg.texto}
-                                    keyPrin="senaYDemar"
+                                    keyPrin="materialesConstruccion"
                                     keyBase={preg.key}
                                     fotoKey={preg.fotoKey}
                                     observacionKey={preg.observacionKey}
                                     activarinput={preg.activarinput}
-                                    data={formularioEnelInspeccionIntegralHSE}
-                                    onChange={actualizarCampoEnelInspeccionIntegralHSE}
+                                    data={formularioEnelAmbiental}
+                                    onChange={actualizarCampoEnelAmbiental}
                                     setImagen={setImagenAmpliada}
                                     disabled={modo === "editar"}
                                 />
@@ -1938,18 +1464,18 @@ const SupervisionFormularioEnelAmbiental = () => {
 
                     <div className='campo'>
                         <div className='entradaDatos'>
-                            <Textos className='subtitulo prin'>3. Las 5 Reglas de oro (Zona segura y zona de trabajo):</Textos>
-                            {preguntas.slice(12, 17).map((preg) => (
+                            <Textos className='subtitulo prin'>3. En relación a los RCD (Residuos de Construcción y Demolición)</Textos>
+                            {preguntas.slice(5, 12).map((preg) => (
                                 <OpcionesFotoObservaciones
                                     key={preg.key}
                                     texto={preg.texto}
-                                    keyPrin="reglasOro"
+                                    keyPrin="rcd"
                                     keyBase={preg.key}
                                     fotoKey={preg.fotoKey}
                                     observacionKey={preg.observacionKey}
                                     activarinput={preg.activarinput}
-                                    data={formularioEnelInspeccionIntegralHSE}
-                                    onChange={actualizarCampoEnelInspeccionIntegralHSE}
+                                    data={formularioEnelAmbiental}
+                                    onChange={actualizarCampoEnelAmbiental}
                                     setImagen={setImagenAmpliada}
                                     disabled={modo === "editar"}
                                 />
@@ -1959,18 +1485,18 @@ const SupervisionFormularioEnelAmbiental = () => {
 
                     <div className='campo'>
                         <div className='entradaDatos'>
-                            <Textos className='subtitulo prin'>4. Trabajo en alturas:</Textos>
-                            {preguntas.slice(17, 24).map((preg) => (
+                            <Textos className='subtitulo prin'>4. En relación a los residuos sólidos</Textos>
+                            {preguntas.slice(12, 24).map((preg) => (
                                 <OpcionesFotoObservaciones
                                     key={preg.key}
                                     texto={preg.texto}
-                                    keyPrin="trabajoAlturas"
+                                    keyPrin="residuosSolidos"
                                     keyBase={preg.key}
                                     fotoKey={preg.fotoKey}
                                     observacionKey={preg.observacionKey}
                                     activarinput={preg.activarinput}
-                                    data={formularioEnelInspeccionIntegralHSE}
-                                    onChange={actualizarCampoEnelInspeccionIntegralHSE}
+                                    data={formularioEnelAmbiental}
+                                    onChange={actualizarCampoEnelAmbiental}
                                     setImagen={setImagenAmpliada}
                                     disabled={modo === "editar"}
                                 />
@@ -1980,18 +1506,18 @@ const SupervisionFormularioEnelAmbiental = () => {
 
                     <div className='campo'>
                         <div className='entradaDatos'>
-                            <Textos className='subtitulo prin'>5. Espacio confinado (EC):</Textos>
-                            {preguntas.slice(24, 27).map((preg) => (
+                            <Textos className='subtitulo prin'>5. En relación con los aceites y los residuos aceitosos</Textos>
+                            {preguntas.slice(24, 29).map((preg) => (
                                 <OpcionesFotoObservaciones
                                     key={preg.key}
                                     texto={preg.texto}
-                                    keyPrin="espacioConfinado"
+                                    keyPrin="aceites"
                                     keyBase={preg.key}
                                     fotoKey={preg.fotoKey}
                                     observacionKey={preg.observacionKey}
                                     activarinput={preg.activarinput}
-                                    data={formularioEnelInspeccionIntegralHSE}
-                                    onChange={actualizarCampoEnelInspeccionIntegralHSE}
+                                    data={formularioEnelAmbiental}
+                                    onChange={actualizarCampoEnelAmbiental}
                                     setImagen={setImagenAmpliada}
                                     disabled={modo === "editar"}
                                 />
@@ -2001,18 +1527,18 @@ const SupervisionFormularioEnelAmbiental = () => {
 
                     <div className='campo'>
                         <div className='entradaDatos'>
-                            <Textos className='subtitulo prin'>6. Condición de vehiculos (Pesado, Livianos):</Textos>
-                            {preguntas.slice(27, 37).map((preg) => (
+                            <Textos className='subtitulo prin'>6. En relación con los vertimientos</Textos>
+                            {preguntas.slice(29, 32).map((preg) => (
                                 <OpcionesFotoObservaciones
                                     key={preg.key}
                                     texto={preg.texto}
-                                    keyPrin="vehiculos"
+                                    keyPrin="vertimientos"
                                     keyBase={preg.key}
                                     fotoKey={preg.fotoKey}
                                     observacionKey={preg.observacionKey}
                                     activarinput={preg.activarinput}
-                                    data={formularioEnelInspeccionIntegralHSE}
-                                    onChange={actualizarCampoEnelInspeccionIntegralHSE}
+                                    data={formularioEnelAmbiental}
+                                    onChange={actualizarCampoEnelAmbiental}
                                     setImagen={setImagenAmpliada}
                                     disabled={modo === "editar"}
                                 />
@@ -2022,18 +1548,18 @@ const SupervisionFormularioEnelAmbiental = () => {
 
                     <div className='campo'>
                         <div className='entradaDatos'>
-                            <Textos className='subtitulo prin'>7. Condiciones de trabajo:</Textos>
-                            {preguntas.slice(37, 41).map((preg) => (
+                            <Textos className='subtitulo prin'>7. En relación con las emisiones atmosféricas</Textos>
+                            {preguntas.slice(32, 34).map((preg) => (
                                 <OpcionesFotoObservaciones
                                     key={preg.key}
                                     texto={preg.texto}
-                                    keyPrin="condicionesTrabajo"
+                                    keyPrin="atmosfericas"
                                     keyBase={preg.key}
                                     fotoKey={preg.fotoKey}
                                     observacionKey={preg.observacionKey}
                                     activarinput={preg.activarinput}
-                                    data={formularioEnelInspeccionIntegralHSE}
-                                    onChange={actualizarCampoEnelInspeccionIntegralHSE}
+                                    data={formularioEnelAmbiental}
+                                    onChange={actualizarCampoEnelAmbiental}
                                     setImagen={setImagenAmpliada}
                                     disabled={modo === "editar"}
                                 />
@@ -2043,123 +1569,18 @@ const SupervisionFormularioEnelAmbiental = () => {
 
                     <div className='campo'>
                         <div className='entradaDatos'>
-                            <Textos className='subtitulo prin'>8. Materiales, equipos y herramientas:</Textos>
-                            {preguntas.slice(41, 44).map((preg) => (
+                            <Textos className='subtitulo prin'>8. En relación al aislamiento de la obra, señalización y seguridad industrial</Textos>
+                            {preguntas.slice(34, 40).map((preg) => (
                                 <OpcionesFotoObservaciones
                                     key={preg.key}
                                     texto={preg.texto}
-                                    keyPrin="materiales"
+                                    keyPrin="seguridadIndustrial"
                                     keyBase={preg.key}
                                     fotoKey={preg.fotoKey}
                                     observacionKey={preg.observacionKey}
                                     activarinput={preg.activarinput}
-                                    data={formularioEnelInspeccionIntegralHSE}
-                                    onChange={actualizarCampoEnelInspeccionIntegralHSE}
-                                    setImagen={setImagenAmpliada}
-                                    disabled={modo === "editar"}
-                                />
-                            ))}
-                        </div>
-                    </div>
-
-                    <div className='campo'>
-                        <div className='entradaDatos'>
-                            <Textos className='subtitulo prin'>9. Primeros auxilios y plan de emergencias:</Textos>
-                            {preguntas.slice(44, 49).map((preg) => (
-                                <OpcionesFotoObservaciones
-                                    key={preg.key}
-                                    texto={preg.texto}
-                                    keyPrin="primerosAuxilios"
-                                    keyBase={preg.key}
-                                    fotoKey={preg.fotoKey}
-                                    observacionKey={preg.observacionKey}
-                                    activarinput={preg.activarinput}
-                                    data={formularioEnelInspeccionIntegralHSE}
-                                    onChange={actualizarCampoEnelInspeccionIntegralHSE}
-                                    setImagen={setImagenAmpliada}
-                                    disabled={modo === "editar"}
-                                />
-                            ))}
-                        </div>
-                    </div>
-
-                    <div className='campo'>
-                        <div className='entradaDatos'>
-                            <Textos className='subtitulo prin'>10. Aspectos biomecánicos:</Textos>
-                            {preguntas.slice(49, 52).map((preg) => (
-                                <OpcionesFotoObservaciones
-                                    key={preg.key}
-                                    texto={preg.texto}
-                                    keyPrin="biomecanicos"
-                                    keyBase={preg.key}
-                                    fotoKey={preg.fotoKey}
-                                    observacionKey={preg.observacionKey}
-                                    activarinput={preg.activarinput}
-                                    data={formularioEnelInspeccionIntegralHSE}
-                                    onChange={actualizarCampoEnelInspeccionIntegralHSE}
-                                    setImagen={setImagenAmpliada}
-                                    disabled={modo === "editar"}
-                                />
-                            ))}
-                        </div>
-                    </div>
-
-                    <div className='campo'>
-                        <div className='entradaDatos'>
-                            <Textos className='subtitulo prin'>11. Manejo de productos químicos y derivados:</Textos>
-                            {preguntas.slice(52, 57).map((preg) => (
-                                <OpcionesFotoObservaciones
-                                    key={preg.key}
-                                    texto={preg.texto}
-                                    keyPrin="quimicos"
-                                    keyBase={preg.key}
-                                    fotoKey={preg.fotoKey}
-                                    observacionKey={preg.observacionKey}
-                                    activarinput={preg.activarinput}
-                                    data={formularioEnelInspeccionIntegralHSE}
-                                    onChange={actualizarCampoEnelInspeccionIntegralHSE}
-                                    setImagen={setImagenAmpliada}
-                                    disabled={modo === "editar"}
-                                />
-                            ))}
-                        </div>
-                    </div>
-
-                    <div className='campo'>
-                        <div className='entradaDatos'>
-                            <Textos className='subtitulo prin'>12. Manejo de residuos no peligrosos:</Textos>
-                            {preguntas.slice(57, 60).map((preg) => (
-                                <OpcionesFotoObservaciones
-                                    key={preg.key}
-                                    texto={preg.texto}
-                                    keyPrin="residuosNoPeligrosos"
-                                    keyBase={preg.key}
-                                    fotoKey={preg.fotoKey}
-                                    observacionKey={preg.observacionKey}
-                                    activarinput={preg.activarinput}
-                                    data={formularioEnelInspeccionIntegralHSE}
-                                    onChange={actualizarCampoEnelInspeccionIntegralHSE}
-                                    setImagen={setImagenAmpliada}
-                                    disabled={modo === "editar"}
-                                />
-                            ))}
-                        </div>
-                    </div>
-
-                    <div className='campo'>
-                        <div className='entradaDatos'>
-                            <Textos className='subtitulo prin'>13. Residuos de construcción y demolición - cobertura vegetal:</Textos>
-                            {preguntas.slice(60, 64).map((preg) => (
-                                <OpcionesFotoObservaciones
-                                    key={preg.key}
-                                    texto={preg.texto}
-                                    keyPrin="residuosConstruccion"
-                                    keyBase={preg.key}
-                                    fotoKey={preg.fotoKey}
-                                    observacionKey={preg.observacionKey}
-                                    activarinput={preg.activarinput}
-                                    data={formularioEnelInspeccionIntegralHSE}
-                                    onChange={actualizarCampoEnelInspeccionIntegralHSE}
+                                    data={formularioEnelAmbiental}
+                                    onChange={actualizarCampoEnelAmbiental}
                                     setImagen={setImagenAmpliada}
                                     disabled={modo === "editar"}
                                 />
@@ -2171,17 +1592,17 @@ const SupervisionFormularioEnelAmbiental = () => {
                         <i className="fas fa-comment"></i>
                         <div className='entradaDatos'>
                             <Textos className='subtitulo'>Observaciones:</Textos>
-                            <AreaTextos disabled={modo === "editar"} type="text" placeholder="Agregue las observacion pertinentes" value={formularioEnelInspeccionIntegralHSE.observacion} onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('observacion', e.target.value)} rows={4} />
+                            <AreaTextos disabled={modo === "editar"} type="text" placeholder="Agregue las observacion pertinentes" value={formularioEnelAmbiental.observacion} onChange={(e) => actualizarCampoEnelAmbiental('observacion', e.target.value)} rows={4} />
                         </div>
                     </div>
 
                     <div className='enviar'>
                         <Botones disabled={modo === "editar"} className="eliminar" onClick={() => {
-                            localStorage.removeItem('formularioEnelInspeccionIntegralHSE');
+                            localStorage.removeItem('formularioEnelAmbiental');
                             setMiembroEnProceso({})
-                            setFormularioEnelInspeccionIntegralHSE(estadoInicialFormularioEnelInspeccionIntegralHSE);
+                            setFormularioEnelAmbiental(estadoInicialFormularioEnelAmbiental);
                         }}>Borrar formulario</Botones>
-                        <Botones disabled={modo === "editar"} type="submit" id='Enviar' className="guardar" onClick={enviarFormularioEnelInspeccionIntegralHSE}>Enviar</Botones>
+                        <Botones disabled={modo === "editar"} type="submit" id='Enviar' className="guardar" onClick={enviarFormularioEnelAmbiental}>Enviar</Botones>
                     </div>
                 </form>
             )}

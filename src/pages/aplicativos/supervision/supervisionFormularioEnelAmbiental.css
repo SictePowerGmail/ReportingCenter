@@ -256,7 +256,7 @@
             z-index: 3000;
             border-radius: 8px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-            height: 90% !important;
+            height: auto !important;
 
             .modal-contenido {
                 display: flex;
