@@ -395,7 +395,7 @@ const SupervisionPrincipal = () => {
             };
             const conteoSupervisores = {};
             registrosOrdenados.forEach((item) => {
-                const name = item.nombreSupervisorTecnico?.trim() || 'Desconocido';
+                const name = item.nombreQuienInspecciona?.trim() || 'Desconocido';
                 const nombreFormateado = formatearNombre(name);
                 if (conteoSupervisores[nombreFormateado]) {
                     conteoSupervisores[nombreFormateado]++;
@@ -464,8 +464,8 @@ const SupervisionPrincipal = () => {
         { header: 'Fecha', key: 'fechaInicial' },
         { header: 'OP/OT', key: 'opOt' },
         { header: 'Nombre Proyecto', key: 'nombreProyecto' },
+        { header: 'Nombre Quien Inspecciona', key: 'nombreQuienInspecciona' },
         { header: 'Nombre Supervisor Tecnico', key: 'nombreSupervisorTecnico' },
-        { header: 'Nombre Lider Encargado', key: 'nombreLiderEncargado' },
         { header: 'Inspeccion', key: 'inspeccion' },
     ];
 

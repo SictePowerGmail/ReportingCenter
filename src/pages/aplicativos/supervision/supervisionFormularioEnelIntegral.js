@@ -29,6 +29,7 @@ const SupervisionFormularioEnelIntegral = () => {
     const [selectedOption, setSelectedOption] = useState('');
     const [fecha, setFecha] = useState('');
     const nombreUsuario = Cookies.get('userNombre');
+    const cedulaUsuario = Cookies.get('userCedula');
     const [ubicacion, setUbicacion] = useState({ latitude: null, longitude: null });
     const mapRef = useRef(null);
     const locationRef = useRef(null);
@@ -319,7 +320,9 @@ const SupervisionFormularioEnelIntegral = () => {
                 fechaFinal,
                 ubicacion,
                 inspeccion: ncvalido,
-                formulario: "Enel Inspeccion Integral HSE"
+                formulario: "Enel Inspeccion Integral HSE",
+                cedulaQuienInspecciona: cedulaUsuario,
+                nombreQuienInspecciona: nombreUsuario,
             };
 
             const formularioNuevoSinFotos = eliminarDataEnFotos(formularioConTiempos)
@@ -1455,6 +1458,15 @@ const SupervisionFormularioEnelIntegral = () => {
                         </div>
                     </div>
 
+                    <div className='campo supervisor'>
+                        <i className="fas fa-users-cog"></i>
+                        <div className='entradaDatos'>
+                            <Textos disabled className='subtitulo'>Nombre de quien inspecciona:</Textos>
+                            <Entradas disabled type="text" placeholder="Ingrese la cedula de quien inspecciona" value={cedulaUsuario} />
+                            <Entradas type="text" placeholder="Nombre" value={nombreUsuario} disabled={true} />
+                        </div>
+                    </div>
+
                     <div className='campo nombreProyecto'>
                         <i className="fas fa-tools"></i>
                         <div className='entradaDatos'>
@@ -1917,7 +1929,7 @@ const SupervisionFormularioEnelIntegral = () => {
 
                     <div className='campo'>
                         <div className='entradaDatos'>
-                            <Textos className='subtitulo prin'>1. Identificacion de riesgos (Actividades previas al trabajo):</Textos>
+                            <Textos className='subtitulo prin'>1. Identificacion de riesgos (Actividades previas al trabajo)</Textos>
                             {preguntas.slice(0, 9).map((preg) => (
                                 <OpcionesFotoObservaciones
                                     key={preg.key}
@@ -1938,7 +1950,7 @@ const SupervisionFormularioEnelIntegral = () => {
 
                     <div className='campo'>
                         <div className='entradaDatos'>
-                            <Textos className='subtitulo prin'>2. Señalizacion y demarcacion:</Textos>
+                            <Textos className='subtitulo prin'>2. Señalizacion y demarcacion</Textos>
                             {preguntas.slice(9, 12).map((preg) => (
                                 <OpcionesFotoObservaciones
                                     key={preg.key}
@@ -1959,7 +1971,7 @@ const SupervisionFormularioEnelIntegral = () => {
 
                     <div className='campo'>
                         <div className='entradaDatos'>
-                            <Textos className='subtitulo prin'>3. Las 5 Reglas de oro (Zona segura y zona de trabajo):</Textos>
+                            <Textos className='subtitulo prin'>3. Las 5 Reglas de oro (Zona segura y zona de trabajo)</Textos>
                             {preguntas.slice(12, 17).map((preg) => (
                                 <OpcionesFotoObservaciones
                                     key={preg.key}
@@ -1980,7 +1992,7 @@ const SupervisionFormularioEnelIntegral = () => {
 
                     <div className='campo'>
                         <div className='entradaDatos'>
-                            <Textos className='subtitulo prin'>4. Trabajo en alturas:</Textos>
+                            <Textos className='subtitulo prin'>4. Trabajo en alturas</Textos>
                             {preguntas.slice(17, 24).map((preg) => (
                                 <OpcionesFotoObservaciones
                                     key={preg.key}
@@ -2001,7 +2013,7 @@ const SupervisionFormularioEnelIntegral = () => {
 
                     <div className='campo'>
                         <div className='entradaDatos'>
-                            <Textos className='subtitulo prin'>5. Espacio confinado (EC):</Textos>
+                            <Textos className='subtitulo prin'>5. Espacio confinado (EC)</Textos>
                             {preguntas.slice(24, 27).map((preg) => (
                                 <OpcionesFotoObservaciones
                                     key={preg.key}
@@ -2022,7 +2034,7 @@ const SupervisionFormularioEnelIntegral = () => {
 
                     <div className='campo'>
                         <div className='entradaDatos'>
-                            <Textos className='subtitulo prin'>6. Condición de vehiculos (Pesado, Livianos):</Textos>
+                            <Textos className='subtitulo prin'>6. Condición de vehiculos (Pesado, Livianos)</Textos>
                             {preguntas.slice(27, 37).map((preg) => (
                                 <OpcionesFotoObservaciones
                                     key={preg.key}
@@ -2043,7 +2055,7 @@ const SupervisionFormularioEnelIntegral = () => {
 
                     <div className='campo'>
                         <div className='entradaDatos'>
-                            <Textos className='subtitulo prin'>7. Condiciones de trabajo:</Textos>
+                            <Textos className='subtitulo prin'>7. Condiciones de trabajo</Textos>
                             {preguntas.slice(37, 41).map((preg) => (
                                 <OpcionesFotoObservaciones
                                     key={preg.key}
@@ -2064,7 +2076,7 @@ const SupervisionFormularioEnelIntegral = () => {
 
                     <div className='campo'>
                         <div className='entradaDatos'>
-                            <Textos className='subtitulo prin'>8. Materiales, equipos y herramientas:</Textos>
+                            <Textos className='subtitulo prin'>8. Materiales, equipos y herramientas</Textos>
                             {preguntas.slice(41, 44).map((preg) => (
                                 <OpcionesFotoObservaciones
                                     key={preg.key}
@@ -2085,7 +2097,7 @@ const SupervisionFormularioEnelIntegral = () => {
 
                     <div className='campo'>
                         <div className='entradaDatos'>
-                            <Textos className='subtitulo prin'>9. Primeros auxilios y plan de emergencias:</Textos>
+                            <Textos className='subtitulo prin'>9. Primeros auxilios y plan de emergencias</Textos>
                             {preguntas.slice(44, 49).map((preg) => (
                                 <OpcionesFotoObservaciones
                                     key={preg.key}
@@ -2106,7 +2118,7 @@ const SupervisionFormularioEnelIntegral = () => {
 
                     <div className='campo'>
                         <div className='entradaDatos'>
-                            <Textos className='subtitulo prin'>10. Aspectos biomecánicos:</Textos>
+                            <Textos className='subtitulo prin'>10. Aspectos biomecánicos</Textos>
                             {preguntas.slice(49, 52).map((preg) => (
                                 <OpcionesFotoObservaciones
                                     key={preg.key}
@@ -2127,7 +2139,7 @@ const SupervisionFormularioEnelIntegral = () => {
 
                     <div className='campo'>
                         <div className='entradaDatos'>
-                            <Textos className='subtitulo prin'>11. Manejo de productos químicos y derivados:</Textos>
+                            <Textos className='subtitulo prin'>11. Manejo de productos químicos y derivados</Textos>
                             {preguntas.slice(52, 57).map((preg) => (
                                 <OpcionesFotoObservaciones
                                     key={preg.key}
@@ -2148,7 +2160,7 @@ const SupervisionFormularioEnelIntegral = () => {
 
                     <div className='campo'>
                         <div className='entradaDatos'>
-                            <Textos className='subtitulo prin'>12. Manejo de residuos no peligrosos:</Textos>
+                            <Textos className='subtitulo prin'>12. Manejo de residuos no peligrosos</Textos>
                             {preguntas.slice(57, 60).map((preg) => (
                                 <OpcionesFotoObservaciones
                                     key={preg.key}
@@ -2169,7 +2181,7 @@ const SupervisionFormularioEnelIntegral = () => {
 
                     <div className='campo'>
                         <div className='entradaDatos'>
-                            <Textos className='subtitulo prin'>13. Residuos de construcción y demolición - cobertura vegetal:</Textos>
+                            <Textos className='subtitulo prin'>13. Residuos de construcción y demolición - cobertura vegetal</Textos>
                             {preguntas.slice(60, 64).map((preg) => (
                                 <OpcionesFotoObservaciones
                                     key={preg.key}

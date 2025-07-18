@@ -45,7 +45,7 @@ const NightingaleChart = ({ data, title }) => {
             {
                 name: title,
                 type: 'pie',
-                radius: [30, 70],
+                radius: [30, 60],
                 center: ['50%', '60%'],
                 roseType: 'area',
                 itemStyle: {

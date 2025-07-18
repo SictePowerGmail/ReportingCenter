@@ -29,6 +29,7 @@ const SupervisionFormularioEnelAmbiental = () => {
     const [selectedOption, setSelectedOption] = useState('');
     const [fecha, setFecha] = useState('');
     const nombreUsuario = Cookies.get('userNombre');
+    const cedulaUsuario = Cookies.get('userCedula');
     const [ubicacion, setUbicacion] = useState({ latitude: null, longitude: null });
     const mapRef = useRef(null);
     const locationRef = useRef(null);
@@ -319,7 +320,9 @@ const SupervisionFormularioEnelAmbiental = () => {
                 fechaFinal,
                 ubicacion,
                 inspeccion: ncvalido,
-                formulario: "Enel Inspeccion Integral HSE"
+                formulario: "Enel Inspeccion de Gestion Ambiental para Areas Operativas",
+                cedulaQuienInspecciona: cedulaUsuario,
+                nombreQuienInspecciona: nombreUsuario,
             };
 
             const formularioNuevoSinFotos = eliminarDataEnFotos(formularioConTiempos)
@@ -971,8 +974,6 @@ const SupervisionFormularioEnelAmbiental = () => {
 
     const validarFormularioEnelAmbiental = (formulario) => {
         if (!formulario.tipoInspeccion) { toast.error('Por favor diligencie el tipo de inspeccion.'); return false }
-        if (!formulario.cedulaQuienInspecciona) { toast.error('Por favor diligencie la cedula de quien inspecciona.'); return false }
-        if (!formulario.nombreQuienInspecciona || formulario.nombreQuienInspecciona === 'Usuario no encontrado') { toast.error('Por favor ingrese un usuario valido para el campo de quien inspecciona.'); return false }
         if (!formulario.nombreProyecto) { toast.error('Por favor diligencie el nombre del proyecto.'); return false }
         if (!formulario.noContrato) { toast.error('Por favor diligencie el numero de contrato.'); return false }
         if (!formulario.direccion) { toast.error('Por favor diligencie la direccion.'); return false }
@@ -1109,18 +1110,9 @@ const SupervisionFormularioEnelAmbiental = () => {
                     <div className='campo supervisor'>
                         <i className="fas fa-users-cog"></i>
                         <div className='entradaDatos'>
-                            <Textos className='subtitulo'>Nombre de quien inspecciona:</Textos>
-                            <Entradas disabled={modo === "editar"} type="text" placeholder="Ingrese la cedula de quien inspecciona" value={formularioEnelAmbiental.cedulaQuienInspecciona} onChange={(e) => {
-                                const valor = e.target.value;
-                                actualizarCampoEnelAmbiental('cedulaQuienInspecciona', valor);
-                                const registroEncontrado = datosPlanta.find(item => item.nit === valor);
-                                if (registroEncontrado) {
-                                    actualizarCampoEnelAmbiental('nombreQuienInspecciona', registroEncontrado.nombre);
-                                } else {
-                                    actualizarCampoEnelAmbiental('nombreQuienInspecciona', 'Usuario no encontrado');
-                                }
-                            }} />
-                            <Entradas type="text" placeholder="Nombre" value={formularioEnelAmbiental.nombreQuienInspecciona} disabled={true} />
+                            <Textos disabled className='subtitulo'>Nombre de quien inspecciona:</Textos>
+                            <Entradas disabled type="text" placeholder="Ingrese la cedula de quien inspecciona" value={cedulaUsuario} />
+                            <Entradas type="text" placeholder="Nombre" value={nombreUsuario} disabled={true} />
                         </div>
                     </div>
 

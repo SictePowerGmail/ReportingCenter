@@ -237,11 +237,11 @@
         }
 
         .modal-overlay {
-            position: fixed;
+            position: fixed !important;
             top: 0;
             left: 0;
-            width: 100vw;
-            height: 100vh;
+            width: 100% !important;
+            height: 100% !important;
             background: rgba(0, 0, 0, 0.5);
             z-index: 2000;
         }
@@ -249,7 +249,7 @@
         .modal-cuadrilla {
             position: fixed;
             top: 50%;
-            left: 50%;
+            left: 49%;
             transform: translate(-50%, -50%);
             background-color: white;
             padding: 20px 0px;
@@ -257,6 +257,10 @@
             border-radius: 8px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
             height: auto !important;
+
+            @media (max-width: 500px) {
+                width: 95%;
+            }
 
             .modal-contenido {
                 display: flex;
@@ -320,8 +324,7 @@
                     }
 
                     .entrada {
-                        min-width: 150px;
-                        width: calc(100% - 120px);
+                        width: calc(100% - 80px);
                     }
 
                     .opciones {
