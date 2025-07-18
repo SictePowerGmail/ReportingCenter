@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/ReportingCenter/static/css/main.cf7cb6ef.css",
-    "main.js": "/ReportingCenter/static/js/main.ea38a602.js",
+    "main.css": "/ReportingCenter/static/css/main.4d751294.css",
+    "main.js": "/ReportingCenter/static/js/main.c106a84e.js",
     "static/js/213.3acf702f.chunk.js": "/ReportingCenter/static/js/213.3acf702f.chunk.js",
     "static/js/455.0eb6187e.chunk.js": "/ReportingCenter/static/js/455.0eb6187e.chunk.js",
     "static/media/Electr 1.jpg": "/ReportingCenter/static/media/Electr 1.388a5c0dc5e5ea8b4891.jpg",
@@ -37,13 +37,13 @@
     "static/media/slick.ttf": "/ReportingCenter/static/media/slick.c94f7671dcc99dce43e2.ttf",
     "static/media/slick.woff": "/ReportingCenter/static/media/slick.295183786cd8a1389865.woff",
     "index.html": "/ReportingCenter/index.html",
-    "main.cf7cb6ef.css.map": "/ReportingCenter/static/css/main.cf7cb6ef.css.map",
-    "main.ea38a602.js.map": "/ReportingCenter/static/js/main.ea38a602.js.map",
+    "main.4d751294.css.map": "/ReportingCenter/static/css/main.4d751294.css.map",
+    "main.c106a84e.js.map": "/ReportingCenter/static/js/main.c106a84e.js.map",
     "213.3acf702f.chunk.js.map": "/ReportingCenter/static/js/213.3acf702f.chunk.js.map",
     "455.0eb6187e.chunk.js.map": "/ReportingCenter/static/js/455.0eb6187e.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.cf7cb6ef.css",
-    "static/js/main.ea38a602.js"
+    "static/css/main.4d751294.css",
+    "static/js/main.c106a84e.js"
   ]
 }
