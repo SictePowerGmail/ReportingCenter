@@ -367,7 +367,7 @@ const SupervisionFormularioEnelAmbiental = () => {
             fotoSocioAmbiental1: "",
             observacionSocioAmbiental1: "",
         },
-        materialesConstruccion : {
+        materialesConstruccion: {
             materialesConstruccion1: "",
             fotoMaterialesConstruccion1: "",
             observacionMaterialesConstruccion1: "",
@@ -523,19 +523,6 @@ const SupervisionFormularioEnelAmbiental = () => {
             return;
         }
 
-        if (valor[0].name && valor[0].data) {
-            setFormularioEnelAmbiental((prev) => {
-                const actualizado = { ...prev };
-                actualizado[nivel1][nivel2] = valor;
-                localStorage.setItem(
-                    "formularioEnelAmbiental",
-                    JSON.stringify(actualizado)
-                );
-                return actualizado;
-            });
-            return;
-        }
-
         if (['C', 'NC', 'NA'].includes(valor) && nivel2) {
             setFormularioEnelAmbiental(prev => {
                 const actualizado = { ...prev };
@@ -561,6 +548,19 @@ const SupervisionFormularioEnelAmbiental = () => {
                 const actualizado = { ...prev };
                 if (nivel2) { actualizado[nivel1][nivel2] = valor; } else { actualizado[nivel1] = valor; }
                 localStorage.setItem('formularioEnelAmbiental', JSON.stringify(actualizado));
+                return actualizado;
+            });
+            return;
+        }
+
+        if (valor[0].name && valor[0].data) {
+            setFormularioEnelAmbiental((prev) => {
+                const actualizado = { ...prev };
+                actualizado[nivel1][nivel2] = valor;
+                localStorage.setItem(
+                    "formularioEnelAmbiental",
+                    JSON.stringify(actualizado)
+                );
                 return actualizado;
             });
             return;
@@ -612,19 +612,6 @@ const SupervisionFormularioEnelAmbiental = () => {
             return;
         }
 
-        if (valor[0].name && valor[0].data) {
-            setMiembroEnProceso((prev) => {
-                const actualizado = { ...prev };
-                actualizado[campo] = valor;
-                localStorage.setItem(
-                    "miembroEnProceso",
-                    JSON.stringify(actualizado)
-                );
-                return actualizado;
-            });
-            return;
-        }
-
         if (['C', 'NC', 'NA'].includes(valor)) {
             setMiembroEnProceso(prev => {
                 const actualizado = { ...prev, [campo]: valor };
@@ -646,6 +633,19 @@ const SupervisionFormularioEnelAmbiental = () => {
             setMiembroEnProceso(prev => {
                 const actualizado = { ...prev, [campo]: valor };
                 localStorage.setItem('miembroEnProceso', JSON.stringify(actualizado));
+                return actualizado;
+            });
+            return;
+        }
+
+        if (valor[0].name && valor[0].data) {
+            setMiembroEnProceso((prev) => {
+                const actualizado = { ...prev };
+                actualizado[campo] = valor;
+                localStorage.setItem(
+                    "miembroEnProceso",
+                    JSON.stringify(actualizado)
+                );
                 return actualizado;
             });
             return;
@@ -990,7 +990,7 @@ const SupervisionFormularioEnelAmbiental = () => {
 
         if (!formulario.socioAmbiental.socioAmbiental1) { toast.error('Por favor diligencie el capitulo 1 completo.'); return false }
         if ((!formulario.socioAmbiental.observacionSocioAmbiental1 || !formulario.socioAmbiental.fotoSocioAmbiental1) && formulario.socioAmbiental.socioAmbiental1 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 1 cuando su respuesta es No Cumple en la pregunta 1.'); return false }
-        
+
         if (!formulario.materialesConstruccion.materialesConstruccion1 || !formulario.materialesConstruccion.materialesConstruccion2 || !formulario.materialesConstruccion.materialesConstruccion3 || !formulario.materialesConstruccion.materialesConstruccion4) { toast.error('Por favor diligencie el capitulo 2 completo.'); return false }
         if ((!formulario.materialesConstruccion.fotoMaterialesConstruccion1 && formulario.materialesConstruccion.materialesConstruccion1 !== 'NA')) { toast.error('Por favor ingrese las fotos obligatorias en el capitulo 2.'); return false }
         if (!formulario.materialesConstruccion.observacionMaterialesConstruccion1 && formulario.materialesConstruccion.materialesConstruccion1 === 'NC') { toast.error('Por favor ingrese la observacion correspondiente en el capitulo 2 cuando su respuesta es No Cumple en la pregunta 1.'); return false }
@@ -1053,7 +1053,7 @@ const SupervisionFormularioEnelAmbiental = () => {
     }
 
     return (
-        <div className="SupervisionFormularioEnel">
+        <div className="SupervisionFormularioEnelAmbiental">
             {loading ? (
                 <div className="cargandoPagina">
                     <ThreeDots

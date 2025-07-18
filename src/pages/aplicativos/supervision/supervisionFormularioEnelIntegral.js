@@ -605,19 +605,6 @@ const SupervisionFormularioEnelIntegral = () => {
             return;
         }
 
-        if (valor[0].name && valor[0].data) {
-            setFormularioEnelInspeccionIntegralHSE((prev) => {
-                const actualizado = { ...prev };
-                actualizado[nivel1][nivel2] = valor;
-                localStorage.setItem(
-                    "formularioEnelInspeccionIntegralHSE",
-                    JSON.stringify(actualizado)
-                );
-                return actualizado;
-            });
-            return;
-        }
-
         if (['C', 'NC', 'NA'].includes(valor) && nivel2) {
             setFormularioEnelInspeccionIntegralHSE(prev => {
                 const actualizado = { ...prev };
@@ -643,6 +630,19 @@ const SupervisionFormularioEnelIntegral = () => {
                 const actualizado = { ...prev };
                 if (nivel2) { actualizado[nivel1][nivel2] = valor; } else { actualizado[nivel1] = valor; }
                 localStorage.setItem('formularioEnelInspeccionIntegralHSE', JSON.stringify(actualizado));
+                return actualizado;
+            });
+            return;
+        }
+
+        if (valor[0].name && valor[0].data) {
+            setFormularioEnelInspeccionIntegralHSE((prev) => {
+                const actualizado = { ...prev };
+                actualizado[nivel1][nivel2] = valor;
+                localStorage.setItem(
+                    "formularioEnelInspeccionIntegralHSE",
+                    JSON.stringify(actualizado)
+                );
                 return actualizado;
             });
             return;
@@ -721,19 +721,6 @@ const SupervisionFormularioEnelIntegral = () => {
             return;
         }
 
-        if (valor[0].name && valor[0].data) {
-            setMiembroEnProceso((prev) => {
-                const actualizado = { ...prev };
-                actualizado[campo] = valor;
-                localStorage.setItem(
-                    "miembroEnProceso",
-                    JSON.stringify(actualizado)
-                );
-                return actualizado;
-            });
-            return;
-        }
-
         if (['C', 'NC', 'NA'].includes(valor)) {
             setMiembroEnProceso(prev => {
                 const actualizado = { ...prev, [campo]: valor };
@@ -755,6 +742,19 @@ const SupervisionFormularioEnelIntegral = () => {
             setMiembroEnProceso(prev => {
                 const actualizado = { ...prev, [campo]: valor };
                 localStorage.setItem('miembroEnProceso', JSON.stringify(actualizado));
+                return actualizado;
+            });
+            return;
+        }
+
+        if (valor[0].name && valor[0].data) {
+            setMiembroEnProceso((prev) => {
+                const actualizado = { ...prev };
+                actualizado[campo] = valor;
+                localStorage.setItem(
+                    "miembroEnProceso",
+                    JSON.stringify(actualizado)
+                );
                 return actualizado;
             });
             return;
@@ -1402,7 +1402,7 @@ const SupervisionFormularioEnelIntegral = () => {
     }
 
     return (
-        <div className="SupervisionFormularioEnel">
+        <div className="SupervisionFormularioEnelIntegral">
             {loading ? (
                 <div className="cargandoPagina">
                     <ThreeDots
