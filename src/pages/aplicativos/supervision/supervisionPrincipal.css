@@ -70,12 +70,12 @@
             display: flex !important;
             justify-content: center;
             align-items: baseline;
-            width: 100%;
+            width: 100% !important;
             padding-top: 20px;
 
             @media screen and (max-width: 600px) {
                 flex-direction: column !important;
-                width: 100%;
+                width: 100% !important;
                 padding-left: 10px;
             }
 
@@ -206,10 +206,10 @@
                     width: 100% !important;
 
                     .Ubicacion {
-                        width: 70%;
+                        width: 70% !important;
 
                         @media screen and (max-width: 600px) {
-                            width: 100%;
+                            width: 100% !important;
                         }
 
                         .Contenedor {
@@ -256,11 +256,11 @@
                         width: 30%;
 
                         @media screen and (max-width: 600px) {
-                            width: 100%;
+                            width: 100% !important;
                         }
 
                         .Grafica {
-                            width: 100%;
+                            width: 100% !important;
                             height: 300px;
                         }
                     }
@@ -269,7 +269,7 @@
                         width: 70%;
 
                         @media screen and (max-width: 600px) {
-                            width: 100%;
+                            width: 100% !important;
                         }
 
                         .TituloBarraFecha {
@@ -284,7 +284,7 @@
 
                         .GraficaFecha {
                             height: 300px;
-                            width: 100%;
+                            width: 100% !important;
                         }
                     }
                 }
