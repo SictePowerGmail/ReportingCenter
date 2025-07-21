@@ -31,22 +31,11 @@ const BarHorizontal = ({ xValues, yValues, title }) => {
         return {
             tooltip: {
                 trigger: 'item',
-                textStyle: { color: textColor },
-                backgroundColor: tooltipBackground,
-                formatter: function (params) {
-                    return `
-                        <div style="font-size: 12px">
-                            ${params.seriesName}<br />
-                            <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <div>
-                                    <span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:${params.color};"></span>
-                                    Día ${params.name}
-                                </div>
-                                <strong>${params.value}</strong>
-                            </div>
-                        </div>
-                    `;
+                textStyle: {
+                    color: textColor,
+                    fontSize: 12
                 },
+                backgroundColor: tooltipBackground,
             },
             grid: {
                 left: 120,

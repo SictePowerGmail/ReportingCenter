@@ -15,6 +15,8 @@ import SupervisionPrincipal from "../pages/aplicativos/supervision/supervisionPr
 import SupervisionFormularioClaro from "../pages/aplicativos/supervision/supervisionFormularioClaro";
 import SupervisionFormularioEnelIntegral from "../pages/aplicativos/supervision/supervisionFormularioEnelIntegral";
 import SupervisionFormularioEnelAmbiental from "../pages/aplicativos/supervision/supervisionFormularioEnelAmbiental";
+import SupervisionFormularioEnelBotiquin from "../pages/aplicativos/supervision/supervisionFormularioEnelBotiquin";
+import SupervisionFormularioEnelElementosEmergencia from "../pages/aplicativos/supervision/supervisionFormularioEnelElementosEmergencia";
 import MaterialPrincipal from "../pages/aplicativos/solicitudMaterial/materialPrincipal";
 import MaterialAgregar from "../pages/aplicativos/solicitudMaterial/materialAgregar";
 import ReporteMaterialPrincipal from "../pages/aplicativos/reporteMaterialFerretero/reporteMaterialPrincipal";
@@ -122,9 +124,11 @@ function RutasApp() {
                     {/* Aplicativos */}
                     <Route path='/Capacidades' exacte element={<Capacidades />} />
                     <Route path='/SupervisionPrincipal' exacte element={<SupervisionPrincipal />} />
-                    <Route path='/supervisionFormularioEnelIntegral' exacte element={<SupervisionFormularioEnelIntegral />} />
-                    <Route path='/supervisionFormularioEnelAmbiental' exacte element={<SupervisionFormularioEnelAmbiental />} />
-                    <Route path='/supervisionFormularioClaro' exacte element={<SupervisionFormularioClaro />} />
+                    <Route path='/SupervisionFormularioEnelIntegral' exacte element={<SupervisionFormularioEnelIntegral />} />
+                    <Route path='/SupervisionFormularioEnelAmbiental' exacte element={<SupervisionFormularioEnelAmbiental />} />
+                    <Route path='/SupervisionFormularioEnelBotiquin' exacte element={<SupervisionFormularioEnelBotiquin />} />
+                    <Route path='/SupervisionFormularioEnelElementosEmergencia' exacte element={<SupervisionFormularioEnelElementosEmergencia />} />
+                    <Route path='/SupervisionFormularioClaro' exacte element={<SupervisionFormularioClaro />} />
                     <Route path='/MaterialPrincipal' exacte element={<MaterialPrincipal />} />
                     <Route path='/MaterialAgregar' exacte element={<MaterialAgregar />} />
                     <Route path='/ReporteMaterialPrincipal' exacte element={<ReporteMaterialPrincipal />} />

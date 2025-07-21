@@ -20,11 +20,15 @@ export const getPageTitle = (pathname) => {
             return 'Supervisión';
         case '/SupervisionAgregar':
             return 'Supervisión';
-        case '/supervisionFormularioClaro':
+        case '/SupervisionFormularioClaro':
             return 'Supervisión Claro';
-        case '/supervisionFormularioEnelIntegral':
+        case '/SupervisionFormularioEnelIntegral':
             return 'Supervisión Enel';
-        case '/supervisionFormularioEnelAmbiental':
+        case '/SupervisionFormularioEnelAmbiental':
+            return 'Supervisión Enel';
+        case '/SupervisionFormularioEnelBotiquin':
+            return 'Supervisión Enel';
+        case '/SupervisionFormularioEnelElementosEmergencia':
             return 'Supervisión Enel';
         case '/MaterialPrincipal':
             return 'Solicitud Materiales';

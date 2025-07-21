@@ -515,9 +515,6 @@ const SupervisionPrincipal = () => {
         });
     };
 
-    console.log(graficaRegistrosOrdenadosPorPlaca)
-    console.log(graficaRegistrosSupervisionCadaUno)
-
     return (
         <div className="Supervision-Principal">
             {loading ? (
@@ -669,7 +666,7 @@ const SupervisionPrincipal = () => {
                                 </div>
                             </div>
                             <div>
-                                <button onClick={() => navigate('/supervisionFormularioClaro')} className="btn-flotante">+</button>
+                                <button onClick={() => navigate('/SupervisionFormularioClaro')} className="btn-flotante">+</button>
                             </div>
                         </div>
                     )}
@@ -695,11 +692,11 @@ const SupervisionPrincipal = () => {
                                             const datosConFotos = await cargarFotosEnBase64(fila);
                                             localStorage.removeItem('formularioEnelInspeccionIntegralHSE');
                                             localStorage.setItem('formularioEnelInspeccionIntegralHSE', JSON.stringify(fila));
-                                            navigate('/supervisionFormularioEnelIntegral', { state: { modo: 'editar' } });
+                                            navigate('/SupervisionFormularioEnelIntegral', { state: { modo: 'editar' } });
                                         }
                                         if (fila.formulario === "Enel Inspeccion de Gestion Ambiental para Areas Operativas") {
                                             setLoading(true);
-                                            navigate('/supervisionFormularioEnelAmbiental', { state: { modo: 'editar' } });
+                                            navigate('/SupervisionFormularioEnelAmbiental', { state: { modo: 'editar' } });
                                         }
                                     }}
                                 />
@@ -720,6 +717,8 @@ const SupervisionPrincipal = () => {
                                             options={[
                                                 { value: 'ENEL - Inspeccion Integral HSE', label: 'ENEL - Inspeccion Integral HSE' },
                                                 { value: 'ENEL - Inspección de Gestión Ambiental para Áreas Operativas', label: 'ENEL - Inspección de Gestión Ambiental para Áreas Operativas' },
+                                                { value: 'ENEL - Inspección de Botiquin', label: 'ENEL - Inspección de Botiquin' },
+                                                { value: 'ENEL - Inspección a Equipos y Elementos de Emergencia', label: 'ENEL - Inspección a Equipos y Elementos de Emergencia' },
                                             ]} className="primary">
                                         </Selectores>
                                     </div>
@@ -734,7 +733,7 @@ const SupervisionPrincipal = () => {
                                                         localStorage.removeItem('formularioEnelInspeccionIntegralHSE');
                                                     }
                                                 }
-                                                navigate('/supervisionFormularioEnelIntegral', { state: { modo: 'crear' } });
+                                                navigate('/SupervisionFormularioEnelIntegral', { state: { modo: 'crear' } });
                                             } else if (selectedOption === 'ENEL - Inspección de Gestión Ambiental para Áreas Operativas') {
                                                 const dataStr = localStorage.getItem('formularioEnelInspeccionDeGestionAmbientalParaAreasOperativas');
                                                 if (dataStr) {
@@ -743,7 +742,25 @@ const SupervisionPrincipal = () => {
                                                         localStorage.removeItem('formularioEnelInspeccionDeGestionAmbientalParaAreasOperativas');
                                                     }
                                                 }
-                                                navigate('/supervisionFormularioEnelAmbiental', { state: { modo: 'crear' } });
+                                                navigate('/SupervisionFormularioEnelAmbiental', { state: { modo: 'crear' } });
+                                            } else if (selectedOption === 'ENEL - Inspección de Botiquin') {
+                                                const dataStr = localStorage.getItem('formularioEnelInspeccionDeBotiquin');
+                                                if (dataStr) {
+                                                    const dataLocal = JSON.parse(dataStr);
+                                                    if (dataLocal.id) {
+                                                        localStorage.removeItem('formularioEnelInspeccionDeBotiquin');
+                                                    }
+                                                }
+                                                navigate('/SupervisionFormularioEnelBotiquin', { state: { modo: 'crear' } });
+                                            } else if (selectedOption === 'ENEL - Inspección a Equipos y Elementos de Emergencia') {
+                                                const dataStr = localStorage.getItem('formularioEnelInspeccionAEquiposYElementosDeEmergencia');
+                                                if (dataStr) {
+                                                    const dataLocal = JSON.parse(dataStr);
+                                                    if (dataLocal.id) {
+                                                        localStorage.removeItem('formularioEnelInspeccionAEquiposYElementosDeEmergencia');
+                                                    }
+                                                }
+                                                navigate('/SupervisionFormularioEnelElementosEmergencia', { state: { modo: 'crear' } });
                                             } else {
                                                 toast.error('Por favor seleccione una opcion valida');
                                             }

@@ -1,0 +1,403 @@
+.SupervisionFormularioEnelElementosEmergencia {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: baseline;
+    align-items: center;
+    padding: 20px;
+    overflow-y: auto;
+
+    .cargandoPagina {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+    }
+
+    .formulario {
+        flex-direction: column;
+        position: relative;
+        height: 100%;
+        width: 100%;
+
+        .PaginaVolver {
+            max-width: 100px;
+
+            .texto {
+                margin-left: 5px;
+                color: white;
+            }
+        }
+
+        .titulo3 {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .campo {
+            display: flex;
+            align-items: baseline;
+            justify-content: baseline;
+            margin: 10px 0px;
+            width: 100%;
+            position: relative;
+
+            span,
+            i {
+                padding: 5px 10px 5px 5px;
+                color: var(--text);
+            }
+
+            .entradaDatos {
+                width: 100% !important;
+                display: flex !important;
+                flex-direction: column !important;
+
+                .subtitulo {
+                    padding-bottom: 5px;
+
+                    &.prin {
+                        position: sticky;
+                        top: 0px;
+                        background: var(--background-menu-cuerpo-hover);
+                        z-index: 1;
+                        padding: 10px 0;
+                        font-weight: bold;
+                        border: 1px solid rgb(156, 156, 156);
+                        text-align: center;
+                        border-radius: 8px;
+                        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+
+                        &::before {
+                            content: '';
+                            position: absolute;
+                            top: -22px;
+                            left: -2px;
+                            right: -2px;
+                            height: 21px;
+                            background: var(--background-menu-cuerpo);
+                            z-index: -1;
+                            display: none;
+                        }
+
+                        &.is-sticky::before {
+                            display: block;
+                        }
+                    }
+
+                    &.sub {
+                        padding-left: 10px;
+                        margin-top: 10px;
+                    }
+                }
+
+                .foto-label {
+                    border: 1px solid rgb(151, 151, 151);
+                    border-radius: 6px;
+                    padding: 5px 10px;
+                    text-align: center;
+                    color: black;
+                }
+
+                .botonAgregar {
+                    display: flex !important;
+                    justify-content: end;
+                    width: 100%;
+
+                    .agregar {
+                        max-width: 100px;
+                    }
+                }
+
+                .opciones {
+                    display: flex;
+                    align-items: center;
+                    justify-content: baseline;
+                    padding-left: 20px;
+                    margin: 5px 0px;
+
+                    @media screen and (max-width: 600px) {
+                        &.fotos {
+                            padding: 0;
+                        }
+                    }
+
+                    &.vehiculo {
+                        padding-left: 0px;
+
+                        button {
+                            width: 50px;
+
+                            &:nth-child(5),
+                            &:nth-child(4),
+                            &:nth-child(3),
+                            &:nth-child(2) {
+                                margin-left: 5px;
+                            }
+                        }
+                    }
+
+                    .image {
+                        width: auto;
+
+                        &:disabled {
+                            display: none;
+                        }
+                    }
+
+                    button {
+                        width: 60px;
+
+                        &:nth-child(5),
+                        &:nth-child(4),
+                        &:nth-child(3),
+                        &:nth-child(2) {
+                            margin-left: 10px;
+                        }
+                    }
+
+                    &.oculto {
+                        display: none;
+                    }
+                }
+
+                .comentario {
+                    padding-left: 20px;
+                }
+            }
+
+            .contenedor {
+                display: flex;
+                flex-direction: row;
+                height: auto;
+                width: 100%;
+
+                .texto {
+                    padding-bottom: 3px;
+                }
+            }
+
+            &.vehiculo button {
+                @media screen and (max-width: 600px) {
+                    width: 45px;
+                    padding: 8px 10px;
+                }
+            }
+
+            &.ubicacion {
+                flex-direction: column !important;
+                align-items: initial !important;
+            }
+
+            &.ciudad {
+                position: relative;
+
+                .sugerencias-ciudad {
+                    position: absolute;
+                    z-index: 1000;
+                    top: 100%;
+                    left: 0;
+                    right: 0;
+
+                    background: white;
+                    border: 1px solid #ccc;
+                    max-height: 250px;
+                    overflow-y: auto;
+                    width: calc(100% - 30px);
+                    list-style: none;
+                    padding: 0;
+                    margin: 0;
+                    margin-left: 30px;
+
+                    li {
+                        padding: 8px;
+                        cursor: pointer;
+
+                        &:hover {
+                            background-color: #f0f0f0;
+                        }
+                    }
+                }
+            }
+        }
+
+        #map2 {
+            width: calc(100%);
+            height: 270px;
+        }
+
+        .Tabla {
+            width: 100%;
+        }
+
+        .modal-overlay {
+            position: fixed !important;
+            top: 0;
+            left: 0;
+            width: 100% !important;
+            height: 100% !important;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+        }
+
+        .modal-cuadrilla {
+            position: fixed;
+            top: 50%;
+            left: 49%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px 0px;
+            z-index: 3000;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+            height: auto !important;
+
+            @media (max-width: 500px) {
+                width: 95%;
+            }
+
+            .modal-contenido {
+                display: flex;
+                flex-direction: column !important;
+                height: 100% !important;
+                overflow-y: auto;
+                padding: 0px 20px;
+
+                .titulo {
+                    margin-bottom: 10px;
+                }
+
+                .encabezado {
+                    margin: 10px 0px 5px 0px;
+                    color: #636363;
+                }
+
+                .entradaDatos {
+                    display: flex;
+                    align-items: center;
+                    width: calc(100% - 10px);
+                    margin: 5px 0px 5px 10px;
+
+                    &.vertical {
+                        flex-direction: column !important;
+                        align-items: baseline;
+                        margin: 0px 0px 10px 10px;
+
+                        span {
+                            width: auto;
+                        }
+
+                        .opciones {
+                            display: flex;
+                            align-items: center;
+                            justify-content: left;
+                            padding-left: 15px;
+                            margin: 5px 0px;
+                            width: 100% !important;
+
+                            .image {
+                                width: auto;
+
+                                &:disabled {
+                                    display: none;
+                                }
+                            }
+
+                            &:has(.ocultar) {
+                                margin: 0;
+                            }
+                        }
+                    }
+
+                    &.ocultar {
+                        display: none;
+                    }
+
+                    span {
+                        width: 80px;
+                    }
+
+                    .entrada {
+                        width: calc(100% - 80px);
+                    }
+
+                    .opciones {
+                        display: flex;
+                        align-items: center;
+                        justify-content: baseline;
+
+                        button {
+                            width: 60px;
+
+                            &:nth-child(3),
+                            &:nth-child(2) {
+                                margin-left: 10px;
+                            }
+                        }
+                    }
+                }
+
+                .modal-acciones {
+                    display: flex;
+                    justify-content: space-between;
+                    padding: 10px 10px 0px 10px;
+                    width: 100%;
+
+                    button {
+                        max-width: 100px;
+
+                        &.oculto {
+                            display: none;
+                        }
+                    }
+
+                    &.oculto {
+                        display: none;
+                    }
+                }
+            }
+        }
+
+        .imagenAmpliada {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            cursor: zoom-out;
+
+            img {
+                max-width: 90%;
+                max-height: 90%;
+                border-radius: 8px;
+                box-shadow: 0px 0px 30px rgba(255, 255, 255, 0.2);
+            }
+        }
+
+        .enviar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding-top: 10px;
+            padding-bottom: 20px;
+
+            button {
+                width: auto;
+                max-width: 200px;
+                margin: 0px 10px
+            }
+        }
+    }
+}
