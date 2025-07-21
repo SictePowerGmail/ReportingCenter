@@ -1,9 +1,9 @@
 {
   "files": {
-    "main.css": "/ReportingCenter/static/css/main.b7766bd6.css",
-    "main.js": "/ReportingCenter/static/js/main.88368e21.js",
+    "main.css": "/ReportingCenter/static/css/main.48c36982.css",
+    "main.js": "/ReportingCenter/static/js/main.f38e40e3.js",
     "static/js/213.3acf702f.chunk.js": "/ReportingCenter/static/js/213.3acf702f.chunk.js",
-    "static/js/455.0eb6187e.chunk.js": "/ReportingCenter/static/js/455.0eb6187e.chunk.js",
+    "static/js/455.d9eae37d.chunk.js": "/ReportingCenter/static/js/455.d9eae37d.chunk.js",
     "static/media/Electr 1.jpg": "/ReportingCenter/static/media/Electr 1.388a5c0dc5e5ea8b4891.jpg",
     "static/media/Telec 4.jpg": "/ReportingCenter/static/media/Telec 4.af692b34b4749596e8e1.jpg",
     "static/media/Telec 2.jpg": "/ReportingCenter/static/media/Telec 2.e0c9f086a18869cda73e.jpg",
@@ -37,13 +37,13 @@
     "static/media/slick.ttf": "/ReportingCenter/static/media/slick.c94f7671dcc99dce43e2.ttf",
     "static/media/slick.woff": "/ReportingCenter/static/media/slick.295183786cd8a1389865.woff",
     "index.html": "/ReportingCenter/index.html",
-    "main.b7766bd6.css.map": "/ReportingCenter/static/css/main.b7766bd6.css.map",
-    "main.88368e21.js.map": "/ReportingCenter/static/js/main.88368e21.js.map",
+    "main.48c36982.css.map": "/ReportingCenter/static/css/main.48c36982.css.map",
+    "main.f38e40e3.js.map": "/ReportingCenter/static/js/main.f38e40e3.js.map",
     "213.3acf702f.chunk.js.map": "/ReportingCenter/static/js/213.3acf702f.chunk.js.map",
-    "455.0eb6187e.chunk.js.map": "/ReportingCenter/static/js/455.0eb6187e.chunk.js.map"
+    "455.d9eae37d.chunk.js.map": "/ReportingCenter/static/js/455.d9eae37d.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.b7766bd6.css",
-    "static/js/main.88368e21.js"
+    "static/css/main.48c36982.css",
+    "static/js/main.f38e40e3.js"
   ]
 }
