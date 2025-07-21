@@ -16,6 +16,8 @@ import SemiPieChart from '../../../components/graficas/semiPieChart ';
 import NightingaleChart from '../../../components/graficas/nightingaleChart';
 import Navegacion from '../../../components/navegacion/navegacion';
 import CargandoDatos from '../../../components/cargandoDatos/cargandoDatos';
+import BarWithBackground from '../../../components/graficas/barWithBackground';
+import BarHorizontal from '../../../components/graficas/barHorizontal';
 
 const SupervisionPrincipal = () => {
     const navigate = useNavigate();
@@ -513,6 +515,9 @@ const SupervisionPrincipal = () => {
         });
     };
 
+    console.log(graficaRegistrosOrdenadosPorPlaca)
+    console.log(graficaRegistrosSupervisionCadaUno)
+
     return (
         <div className="Supervision-Principal">
             {loading ? (
@@ -636,26 +641,7 @@ const SupervisionPrincipal = () => {
                                                 <span>Acompañamientos por placa</span>
                                             </div>
                                             <div className='Grafica'>
-                                                <ResponsiveContainer width="100%" height="100%">
-                                                    <BarChart
-                                                        data={graficaRegistrosOrdenadosPorPlaca}
-                                                        layout="vertical"
-                                                    >
-                                                        <YAxis dataKey="placa" type="category" width={100} />
-                                                        <XAxis
-                                                            type="number"
-                                                            domain={[dataMin => dataMin - 1, dataMax => dataMax + 5]}
-                                                            tick={false}
-                                                            axisLine={false}
-                                                            tickLine={false}
-                                                            interval={0}
-                                                        />
-                                                        <Tooltip />
-                                                        <Bar dataKey="cantidad" fill="#8884d8">
-                                                            <LabelList dataKey="cantidad" position="right" />
-                                                        </Bar>
-                                                    </BarChart>
-                                                </ResponsiveContainer>
+                                                <BarHorizontal xValues={graficaRegistrosOrdenadosPorPlaca.map(d => d.placa)} yValues={graficaRegistrosOrdenadosPorPlaca.map(d => d.cantidad)} title={'Acompañamientos por placa'} />
                                             </div>
                                         </div>
                                     </div>
@@ -667,27 +653,7 @@ const SupervisionPrincipal = () => {
                                                 <span>Acompañamientos por supervisor</span>
                                             </div>
                                             <div className='Grafica'>
-                                                <ResponsiveContainer width="100%" height="100%">
-                                                    <BarChart
-                                                        margin={0}
-                                                        data={graficaRegistrosSupervisionCadaUno}
-                                                        layout="vertical"
-                                                    >
-                                                        <YAxis dataKey="name" type="category" width={100} />
-                                                        <XAxis
-                                                            type="number"
-                                                            domain={[dataMin => dataMin - 1, dataMax => dataMax + 5]}
-                                                            tick={false}
-                                                            axisLine={false}
-                                                            tickLine={false}
-                                                            interval={0}
-                                                        />
-                                                        <Tooltip />
-                                                        <Bar dataKey="registros" fill="#8884d8">
-                                                            <LabelList dataKey="registros" position="right" />
-                                                        </Bar>
-                                                    </BarChart>
-                                                </ResponsiveContainer>
+                                                <BarHorizontal xValues={graficaRegistrosSupervisionCadaUno.map(d => d.name)} yValues={graficaRegistrosSupervisionCadaUno.map(d => d.registros)} title={'Acompañamientos por supervisor'} />
                                             </div>
                                         </div>
                                         <div className='BarraFecha'>
@@ -696,20 +662,7 @@ const SupervisionPrincipal = () => {
                                                 <span>Acompañamientos por dia</span>
                                             </div>
                                             <div className='GraficaFecha'>
-                                                <ResponsiveContainer width="100%" height="100%">
-                                                    <BarChart
-                                                        margin={0}
-                                                        data={graficaRegistrosSupervisionDia}
-                                                    >
-                                                        <CartesianGrid strokeDasharray="3 3" />
-                                                        <XAxis dataKey="name" />
-                                                        <YAxis domain={[dataMin => dataMin - 1, dataMax => dataMax + 5]} />
-                                                        <Tooltip />
-                                                        <Bar dataKey="registros" fill="#8884d8">
-                                                            <LabelList dataKey="registros" position="top" />
-                                                        </Bar>
-                                                    </BarChart>
-                                                </ResponsiveContainer>
+                                                <BarWithBackground xValues={graficaRegistrosSupervisionDia.map(d => d.name)} yValues={graficaRegistrosSupervisionDia.map(d => d.registros)} title={'Acompañamientos por dia'} />
                                             </div>
                                         </div>
                                     </div>

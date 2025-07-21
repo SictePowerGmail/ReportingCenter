@@ -53,7 +53,7 @@ const SemiPieChart = ({ data, title }) => {
         label: {
           show: true,
           position: 'outside',
-          formatter: '{b}: {d}%',
+          formatter: '{d}%',
           fontSize: 12,
           color: textColor
         },
