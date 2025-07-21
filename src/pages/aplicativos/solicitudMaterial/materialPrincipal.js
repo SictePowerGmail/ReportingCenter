@@ -62,10 +62,11 @@ const MaterialPrincipal = () => {
 
             const ciudades = {
                 "Manizales": ['KGPROD_MZL'],
-                "Pereira": ['KGPROD_PER'],
+                "Pereira Operaciones": ['KGPROD_PER'],
                 "Armenia": ['KGPROD_ARM'],
                 "Bogota San Cipriano Corporativo": ['KGPROD_CORP_BOG'],
-                "Bogota San Cipriano Red Externa": ['KGPROD_RED_BOG']
+                "Bogota San Cipriano Red Externa": ['KGPROD_RED_BOG'],
+                "Pereira Corporativo Red Externa": ['KGPROD_PER_FO-HFC'],
             };
 
             const responseRegistrosSolicitudMaterial = await axios.get(`${process.env.REACT_APP_API_URL}/solicitudMaterial/registros`);

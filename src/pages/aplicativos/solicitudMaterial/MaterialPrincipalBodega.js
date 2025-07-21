@@ -19,10 +19,11 @@ const MaterialPrincipalBodega = ({ dataKgprod }) => {
 
         const ciudades = [
             "Manizales",
-            "Pereira",
+            "Pereira Operaciones",
             "Armenia",
             "Bogota San Cipriano Corporativo",
-            "Bogota San Cipriano Red Externa"
+            "Bogota San Cipriano Red Externa",
+            "Pereira Corporativo Red Externa",
         ];
 
         const resultados = [];

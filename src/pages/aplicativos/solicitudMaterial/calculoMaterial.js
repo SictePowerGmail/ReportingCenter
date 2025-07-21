@@ -11,7 +11,7 @@ export const calculoMaterial = async (ciudadElgida, dataKgprod) => {
 
         if (ciudadElgida === "Manizales") {
             ciudad = ['KGPROD_MZL'];
-        } else if (ciudadElgida === "Pereira") {
+        } else if (ciudadElgida === "Pereira Operaciones") {
             ciudad = ['KGPROD_PER'];
         } else if (ciudadElgida === "Armenia") {
             ciudad = ['KGPROD_ARM'];
@@ -19,6 +19,8 @@ export const calculoMaterial = async (ciudadElgida, dataKgprod) => {
             ciudad = ['KGPROD_CORP_BOG'];
         } else if (ciudadElgida === "Bogota San Cipriano Red Externa") {
             ciudad = ['KGPROD_RED_BOG'];
+        } else if (ciudadElgida === "Pereira Corporativo Red Externa") {
+            ciudad = ['KGPROD_PER_FO-HFC'];
         } else {
             ciudad = []
         }

@@ -22,7 +22,7 @@ const MaterialAgregar = () => {
     const [registrosSolicitudMaterial, setRegistrosSolicitudMaterial] = useState([])
     const [ciudadesEntradaTexto, setCiudadesEntradaTexto] = useState(Cookies.get('solMatCiudad'));
     const [ciudadesSugerencias, setCiudadesSugerencias] = useState([]);
-    const Ciudades = ['Armenia', 'Bogota San Cipriano Corporativo', 'Bogota San Cipriano Red Externa', 'Manizales', 'Pereira'];
+    const Ciudades = ['Armenia', 'Bogota San Cipriano Corporativo', 'Bogota San Cipriano Red Externa', 'Manizales', 'Pereira Operaciones', 'Pereira Corporativo Red Externa'];
     const [ciudadElgida, setCiudadElgida] = useState(Cookies.get('solMatCiudad'));
     const [uuidEntradaTexto, setUuidEntradaTexto] = useState(Cookies.get('solMatUUID'));
     const [nombreProyetoEntradaTexto, setNombreProyetoEntradaTexto] = useState(Cookies.get('solMatNombreProyecto'));
