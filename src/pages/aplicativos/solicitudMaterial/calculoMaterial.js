@@ -91,7 +91,7 @@ export const calculoMaterial = async (ciudadElgida, dataKgprod) => {
 
             const fechaEntrega = new Date(item.fechaEntrega + ":00");
 
-            const ultimaFechaDescarga = new Date(Math.max(...datosFiltradosKgprod.map(d => new Date(d.fechaDescarga).getTime())));
+            const ultimaFechaDescarga = new Date(Math.max(...datosFiltradosKgprod.map(d => new Date(d['Fecha descarga']).getTime())));
 
             return fechaEntrega > ultimaFechaDescarga;
         });

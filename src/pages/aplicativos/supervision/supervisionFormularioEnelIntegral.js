@@ -85,7 +85,6 @@ const SupervisionFormularioEnelIntegral = () => {
         }
     };
 
-
     const cargarGeolocalizacion = () => {
         const dataLocal = localStorage.getItem('formularioEnelInspeccionIntegralHSE');
         let coordenadasGuardadas = null;

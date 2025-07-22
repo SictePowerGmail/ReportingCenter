@@ -351,19 +351,17 @@ const SupervisionFormularioEnelBotiquin = () => {
 
     const estadoInicialFormularioEnelAmbiental = {
         tipoInspeccion: "",
+        clasificacion: "",
         cedulaQuienInspecciona: "",
         nombreQuienInspecciona: "",
         nombreProyecto: "",
-        noContrato: "",
-        direccion: "",
-        ciudad: "",
-        opOt: "",
-        cedulaSupervisorTecnico: "",
-        nombreSupervisorTecnico: "",
-        cedulaLiderEncargado: "",
-        nombreLiderEncargado: "",
+        cedulaResponsableBotiquin: "",
+        nombreResponsableBotiquin: "",
         proceso: "",
+        zona: "",
         placa: "",
+        sede: "",
+
         cuadrilla: [],
         socioAmbiental: {
             socioAmbiental1: "",
@@ -1107,6 +1105,23 @@ const SupervisionFormularioEnelBotiquin = () => {
                         </div>
                     </div>
 
+                    <div className='campo'>
+                        <i className="fas fa-tools"></i>
+                        <div className='entradaDatos'>
+                            <Textos className='subtitulo'>Clasificacion:</Textos>
+                            <Selectores value={formularioEnelAmbiental.clasificacion} onChange={(e) => actualizarCampoEnelAmbiental('clasificacion', e.target.value)}
+                                options={[
+                                    { value: 'Fijo / Portatil', label: 'Fijo / Portatil' },
+                                    { value: 'Vehicular / Carros Tipo 1', label: 'Vehicular / Carros Tipo 1' },
+                                    { value: 'Vehicular / Cuadrillas Tipo 2', label: 'Vehicular / Cuadrillas Tipo 2' },
+                                    { value: 'Vehicular / Cuadrillas Tipo 3', label: 'Vehicular / Cuadrillas Tipo 3' },
+                                    { value: 'Moto Tipo 3', label: 'Moto Tipo 3' },
+                                ]} className="primary"
+                                disabled={modo === "editar"}
+                            ></Selectores>
+                        </div>
+                    </div>
+
                     <div className='campo supervisor'>
                         <i className="fas fa-users-cog"></i>
                         <div className='entradaDatos'>
@@ -1124,20 +1139,6 @@ const SupervisionFormularioEnelBotiquin = () => {
                         </div>
                     </div>
 
-                    <div className='campo contrato'>
-                        <i className="fas fa-tools"></i>
-                        <div className='entradaDatos'>
-                            <Textos className='subtitulo'>No. de contrato:</Textos>
-                            <Selectores value={formularioEnelAmbiental.noContrato} onChange={(e) => actualizarCampoEnelAmbiental('noContrato', e.target.value)}
-                                options={[
-                                    { value: 'JA10123037/JA10123045', label: 'JA10123037 / JA10123045' },
-                                    { value: 'JA10123400', label: 'JA10123400' },
-                                ]} className="primary"
-                                disabled={modo === "editar"}
-                            ></Selectores>
-                        </div>
-                    </div>
-
                     <div className='campo ubicacion'>
                         <div className='contenedor'>
                             <i className="fas fa-map-marker-alt"></i>
@@ -1147,88 +1148,21 @@ const SupervisionFormularioEnelBotiquin = () => {
 
                     <div id="map2"></div>
 
-                    <div className='campo direccion'>
-                        <i className="fas fa-tools"></i>
-                        <div className='entradaDatos'>
-                            <Textos className='subtitulo'>Direccion:</Textos>
-                            <Entradas disabled={modo === "editar"} type="text" placeholder="Ingrese la direccion" value={formularioEnelAmbiental.direccion}
-                                onChange={(e) => actualizarCampoEnelAmbiental('direccion', e.target.value)} />
-                        </div>
-                    </div>
-
-                    <div className='campo ciudad'>
-                        <i className="fas fa-tools"></i>
-                        <div className='entradaDatos'>
-                            <Textos className='subtitulo'>Ciudad:</Textos>
-                            <Entradas disabled={modo === "editar"} type="text" placeholder="Ingrese la ciudad" value={formularioEnelAmbiental.ciudad} onChange={(e) => {
-                                const valor = e.target.value;
-                                actualizarCampoEnelAmbiental('ciudad', valor);
-
-                                const coincidencias = datosCiudades.filter(ciudad =>
-                                    ciudad.key.toLowerCase().includes(valor.toLowerCase())
-                                );
-                                setCiudadesFiltradas(coincidencias);
-                            }} />
-                        </div>
-
-                        {formularioEnelAmbiental.ciudad && ciudadesFiltradas.length > 0 && (
-                            <ul className="sugerencias-ciudad">
-                                {ciudadesFiltradas.slice(0, 10).map((ciudad, index) => (
-                                    <li
-                                        key={ciudad.key}
-                                        onClick={() => {
-                                            actualizarCampoEnelAmbiental('ciudad', ciudad.key);
-                                            setCiudadesFiltradas([]);
-                                        }}
-                                    >
-                                        {ciudad.key}
-                                    </li>
-                                ))}
-                            </ul>
-                        )}
-                    </div>
-
-                    <div className='campo opOt'>
-                        <i className="fas fa-tools"></i>
-                        <div className='entradaDatos'>
-                            <Textos className='subtitulo'>No. de OP/OT:</Textos>
-                            <Entradas disabled={modo === "editar"} type="text" placeholder="Ingrese el nombre del Proyecto" value={formularioEnelAmbiental.opOt} onChange={(e) => actualizarCampoEnelAmbiental('opOt', e.target.value)} />
-                        </div>
-                    </div>
-
-                    <div className='campo supervisor'>
-                        <i className="fas fa-users-cog"></i>
-                        <div className='entradaDatos'>
-                            <Textos className='subtitulo'>Supervisor:</Textos>
-                            <Entradas disabled={modo === "editar"} type="text" placeholder="Ingrese la cedula del supervisor tecnico" value={formularioEnelAmbiental.cedulaSupervisorTecnico} onChange={(e) => {
-                                const valor = e.target.value;
-                                actualizarCampoEnelAmbiental('cedulaSupervisorTecnico', valor);
-                                const registroEncontrado = datosPlanta.find(item => item.nit === valor);
-                                if (registroEncontrado) {
-                                    actualizarCampoEnelAmbiental('nombreSupervisorTecnico', registroEncontrado.nombre);
-                                } else {
-                                    actualizarCampoEnelAmbiental('nombreSupervisorTecnico', 'Usuario no encontrado');
-                                }
-                            }} />
-                            <Entradas type="text" placeholder="Nombre" value={formularioEnelAmbiental.nombreSupervisorTecnico} disabled={true} />
-                        </div>
-                    </div>
-
                     <div className='campo lider'>
                         <i className="fas fa-users-cog"></i>
                         <div className='entradaDatos'>
-                            <Textos className='subtitulo'>Líder de cuadrilla:</Textos>
-                            <Entradas disabled={modo === "editar"} type="text" placeholder="Ingrese la cedula del lider de cuadrilla" value={formularioEnelAmbiental.cedulaLiderEncargado} onChange={(e) => {
+                            <Textos className='subtitulo'>Responsable del Botiquin:</Textos>
+                            <Entradas disabled={modo === "editar"} type="text" placeholder="Ingrese la cedula del lider de cuadrilla" value={formularioEnelAmbiental.cedulaResponsableBotiquin} onChange={(e) => {
                                 const valor = e.target.value;
-                                actualizarCampoEnelAmbiental('cedulaLiderEncargado', valor);
+                                actualizarCampoEnelAmbiental('cedulaResponsableBotiquin', valor);
                                 const registroEncontrado = datosPlanta.find(item => item.nit === valor);
                                 if (registroEncontrado) {
-                                    actualizarCampoEnelAmbiental('nombreLiderEncargado', registroEncontrado.nombre);
+                                    actualizarCampoEnelAmbiental('nombreResponsableBotiquin', registroEncontrado.nombre);
                                 } else {
-                                    actualizarCampoEnelAmbiental('nombreLiderEncargado', 'Usuario no encontrado');
+                                    actualizarCampoEnelAmbiental('nombreResponsableBotiquin', 'Usuario no encontrado');
                                 }
                             }} />
-                            <Entradas type="text" placeholder="Nombre" value={formularioEnelAmbiental.nombreLiderEncargado} disabled={true} />
+                            <Entradas type="text" placeholder="Nombre" value={formularioEnelAmbiental.nombreResponsableBotiquin} disabled={true} />
                         </div>
                     </div>
 
@@ -1246,146 +1180,66 @@ const SupervisionFormularioEnelBotiquin = () => {
                         </div>
                     </div>
 
-                    <div className='campo placa'>
-                        <i className="fas fa-id-card"></i>
-                        <div className='entradaDatos'>
-                            <Textos className='subtitulo'>Placa vehículo:</Textos>
-                            <Entradas
-                                type="text"
-                                placeholder="Placa movil (Ejemplo: ABC123, ABC12A)"
-                                value={formularioEnelAmbiental.placa}
-                                onChange={(e) => {
-                                    const newValue = e.target.value.toUpperCase();
-                                    if (/^[A-Z]{0,3}[0-9]{0,2}[0-9A-Z]{0,1}$/.test(newValue)) {
-                                        actualizarCampoEnelAmbiental('placa', newValue);
-                                    }
-                                }}
-                                pattern="[A-Za-z]{3}[0-9]{2}[0-9A-Za-z]{1}"
-                                maxLength={6}
-                                title="Debe ser en formato de 3 letras seguidas de 3 números (Ejemplo: ABC123)"
-                                disabled={modo === "editar"}
-                            />
-                        </div>
-                    </div>
-
-                    <div className='campo cuadrilla'>
+                    <div className='campo'>
                         <i className="fas fa-tools"></i>
                         <div className='entradaDatos'>
-                            <Textos className='subtitulo'>Datos Cuadrilla:</Textos>
-                            <div className='botonAgregar'>
-                                <Botones disabled={modo === "editar"} className='agregar' onClick={() => {
-                                    setAccionModalTabla("crear");
-                                    setMiembroEnProceso({})
-                                    setMostrarModal(true);
-                                }}>Agregar</Botones>
-                            </div>
+                            <Textos className='subtitulo'>Zona:</Textos>
+                            <Selectores disabled={modo === "editar"} value={formularioEnelAmbiental.zona} onChange={(e) => actualizarCampoEnelAmbiental('zona', e.target.value)}
+                                options={[
+                                    { value: 'Bodega', label: 'Bodega' },
+                                    { value: 'Movil', label: 'Movil' },
+                                ]} className="primary">
+                            </Selectores>
                         </div>
                     </div>
 
-                    <div className='Tabla'>
-                        <Tablas columnas={columnas} datos={formularioEnelAmbiental.cuadrilla} filasPorPagina={5}
-                            leer={true} editar={modo === "editar" ? false : true} eliminar={modo === "editar" ? false : true}
-                            onLeer={(fila) => {
-                                setAccionModalTabla("leer");
-                                setMostrarModal(true);
-                                setMiembroEnProceso(fila);
-                            }}
-                            onEditar={(fila) => {
-                                setAccionModalTabla("editar");
-                                setMostrarModal(true);
-                                setMiembroEnProceso(fila);
-                            }}
-                            onEliminar={(fila) => {
-                                setAccionModalTabla("eliminar");
-                                setMostrarModal(true);
-                                setMiembroEnProceso(fila);
-                            }} />
-                    </div>
-
-                    {mostrarModal && (
-                        <>
-                            <div className="modal-overlay" onClick={() => setMostrarModal(false)}></div>
-                            <div className="modal-cuadrilla">
-                                <div className="modal-contenido">
-                                    <Textos className='titulo'>{accionModalTabla === 'crear' ? 'Agregar' : accionModalTabla === 'editar' ? 'Editar' : accionModalTabla === 'leer' ? 'Leer' : accionModalTabla === 'eliminar' ? 'Eliminar' : ''} Integrante</Textos>
-                                    <Textos className='subtitulo encabezado'>Datos Personales:</Textos>
-                                    <div className='entradaDatos'>
-                                        <Textos className='subtitulo'>Cedula:</Textos>
-                                        <Entradas type="text" placeholder="Cédula" value={miembroEnProceso.cedula || ""}
-                                            onChange={(e) => {
-                                                const valor = e.target.value;
-                                                const registroEncontrado = datosPlanta.find(item => item.nit === valor);
-                                                actualizarCampoMiembroACuadrillaEnelAmbiental('cedula', valor);
-                                                actualizarCampoMiembroACuadrillaEnelAmbiental('nombre', registroEncontrado ? registroEncontrado.nombre : 'Usuario no encontrado');
-                                                actualizarCampoMiembroACuadrillaEnelAmbiental('cargo', registroEncontrado ? registroEncontrado.cargo : 'Cargo no encontrado');
-                                            }}
-                                            disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"}
-                                        />
-                                    </div>
-                                    <div className='entradaDatos'>
-                                        <Textos className='subtitulo'>Nombre:</Textos>
-                                        <Entradas type="text" placeholder="Nombre" value={miembroEnProceso.nombre} disabled={true} />
-                                    </div>
-                                    <div className='entradaDatos'>
-                                        <Textos className='subtitulo'>Cargo:</Textos>
-                                        <Entradas type="text" placeholder="Cargo" value={miembroEnProceso.cargo} disabled={true} />
-                                    </div>
-                                    <div className={`modal-acciones ${accionModalTabla !== "leer" ? 'visible' : 'oculto'}`}>
-                                        <Botones className={`guardar ${accionModalTabla === "crear" ? 'visible' : 'oculto'}`} onClick={() => {
-                                            const existe = (formularioEnelAmbiental.cuadrilla || []).some(m => m.cedula === miembroEnProceso.cedula);
-                                            if (existe) {
-                                                toast.error('La cédula ya está en la cuadrilla.');
-                                                return
-                                            }
-
-                                            const resultadoValidador = validarMiembroEnProceso(miembroEnProceso);
-
-                                            if (resultadoValidador === false) {
-                                                return
-                                            }
-
-                                            setFormularioEnelAmbiental(prev => {
-                                                const actualizado = { ...prev, cuadrilla: [...(prev.cuadrilla || []), miembroEnProceso] };
-                                                localStorage.setItem('formularioEnelAmbiental', JSON.stringify(actualizado));
-                                                return actualizado;
-                                            });
-                                            toast.success('Integrante creado exitosamente.');
-                                            localStorage.removeItem('miembroEnProceso');
-                                            setMostrarModal(false);
-                                            setMiembroEnProceso({})
-                                        }}>Crear</Botones>
-                                        <Botones className={`guardar ${accionModalTabla === "editar" ? 'visible' : 'oculto'}`} onClick={() => {
-                                            const existe = (formularioEnelAmbiental.cuadrilla || []).map(m => m.cedula === miembroEnProceso.cedula ? miembroEnProceso : m);
-
-                                            setFormularioEnelAmbiental(prev => {
-                                                const actualizado = { ...prev, cuadrilla: existe };
-                                                localStorage.setItem('formularioEnelAmbiental', JSON.stringify(actualizado));
-                                                return actualizado;
-                                            });
-                                            toast.success('Integrante editado exitosamente.');
-                                            localStorage.removeItem('miembroEnProceso');
-                                            setMostrarModal(false);
-                                            setMiembroEnProceso({})
-                                        }}>Editar</Botones>
-                                        <Botones className={`eliminar ${accionModalTabla === "eliminar" ? 'visible' : 'oculto'}`} onClick={() => {
-                                            const nuevaCuadrilla = (formularioEnelAmbiental.cuadrilla || []).filter(m => m.cedula !== miembroEnProceso.cedula);
-
-                                            setFormularioEnelAmbiental(prev => {
-                                                const actualizado = { ...prev, cuadrilla: nuevaCuadrilla };
-                                                localStorage.setItem('formularioEnelAmbiental', JSON.stringify(actualizado));
-                                                return actualizado;
-                                            });
-                                            toast.success('Integrante eliminado exitosamente.');
-                                            localStorage.removeItem('miembroEnProceso');
-                                            setMostrarModal(false);
-                                            setMiembroEnProceso({})
-                                        }}>Eliminar</Botones>
-                                        <Botones onClick={() => setMostrarModal(false)}>Cancelar</Botones>
-                                    </div>
-                                </div>
+                    {formularioEnelAmbiental.zona === 'Movil' && 
+                        <div className='campo placa'>
+                            <i className="fas fa-id-card"></i>
+                            <div className='entradaDatos'>
+                                <Textos className='subtitulo'>Placa vehículo:</Textos>
+                                <Entradas
+                                    type="text"
+                                    placeholder="Placa movil (Ejemplo: ABC123, ABC12A)"
+                                    value={formularioEnelAmbiental.placa}
+                                    onChange={(e) => {
+                                        const newValue = e.target.value.toUpperCase();
+                                        if (/^[A-Z]{0,3}[0-9]{0,2}[0-9A-Z]{0,1}$/.test(newValue)) {
+                                            actualizarCampoEnelAmbiental('placa', newValue);
+                                        }
+                                    }}
+                                    pattern="[A-Za-z]{3}[0-9]{2}[0-9A-Za-z]{1}"
+                                    maxLength={6}
+                                    title="Debe ser en formato de 3 letras seguidas de 3 números (Ejemplo: ABC123)"
+                                    disabled={modo === "editar"}
+                                />
                             </div>
-                        </>
-                    )}
+                        </div>
+                    }
+
+                    {formularioEnelAmbiental.zona === 'Bodega' && 
+                        <div className='campo placa'>
+                            <i className="fas fa-id-card"></i>
+                            <div className='entradaDatos'>
+                                <Textos className='subtitulo'>Sede:</Textos>
+                                <Entradas
+                                    type="text"
+                                    placeholder="Placa movil (Ejemplo: ABC123, ABC12A)"
+                                    value={formularioEnelAmbiental.placa}
+                                    onChange={(e) => {
+                                        const newValue = e.target.value.toUpperCase();
+                                        if (/^[A-Z]{0,3}[0-9]{0,2}[0-9A-Z]{0,1}$/.test(newValue)) {
+                                            actualizarCampoEnelAmbiental('placa', newValue);
+                                        }
+                                    }}
+                                    pattern="[A-Za-z]{3}[0-9]{2}[0-9A-Za-z]{1}"
+                                    maxLength={6}
+                                    title="Debe ser en formato de 3 letras seguidas de 3 números (Ejemplo: ABC123)"
+                                    disabled={modo === "editar"}
+                                />
+                            </div>
+                        </div>
+                    }
 
                     {imagenAmpliada && (
                         <div className='imagenAmpliada' onClick={() => setImagenAmpliada(null)}>

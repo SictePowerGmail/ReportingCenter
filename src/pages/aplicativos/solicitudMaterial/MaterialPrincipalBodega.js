@@ -36,7 +36,7 @@ const MaterialPrincipalBodega = ({ dataKgprod }) => {
         setResultadoMaterialDisponible(resultados);
 
         const datosMaterialDisponible = resultados
-            .map(({ Bodega, codigo, descrip, unimed, cantidadDisponible, cantidadSolicitada, cantidadPendienteDespacho, ind_comprado_2 }) => {
+            .map(({ Bodega, codigo, descrip, unimed, cantidadDisponible, cantidadSolicitada, cantidadPendienteDespacho, cantidadEntregada, ind_comprado_2, cantidadRestada }) => {
 
                 return {
                     Bodega: Bodega,
@@ -45,7 +45,8 @@ const MaterialPrincipalBodega = ({ dataKgprod }) => {
                     Unidad: unimed,
                     IndComprado: ind_comprado_2,
                     CantidadDisponible: cantidadDisponible,
-                    CantidadReservada: cantidadSolicitada + cantidadPendienteDespacho
+                    CantidadReservada: cantidadSolicitada + cantidadPendienteDespacho + cantidadEntregada,
+                    CantidadRestada: cantidadRestada
                 };
             })
             .filter((value, index, self) =>
