@@ -87,7 +87,7 @@ const SupervisionFormularioEnelBotiquin = () => {
 
 
     const cargarGeolocalizacion = () => {
-        const dataLocal = localStorage.getItem('formularioEnelAmbiental');
+        const dataLocal = localStorage.getItem('formularioEnelBotiquin');
         let coordenadasGuardadas = null;
 
         if (dataLocal) {
@@ -296,10 +296,10 @@ const SupervisionFormularioEnelBotiquin = () => {
         return obj;
     };
 
-    const enviarFormularioEnelAmbiental = async (event) => {
+    const enviarFormularioEnelBotiquin = async (event) => {
 
         event.preventDefault();
-        const resultadoValidador = validarFormularioEnelAmbiental(formularioEnelAmbiental);
+        const resultadoValidador = validarFormularioEnelBotiquin(formularioEnelBotiquin);
         if (resultadoValidador === false) { return }
         if (!ubicacion) { toast.error('Por favor dar permisos de ubicacion.'); return false }
 
@@ -309,18 +309,18 @@ const SupervisionFormularioEnelBotiquin = () => {
             const fechaInicial = fecha.toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' });
             const fechaFinal = new Date().toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
-            const formularioEnelAmbientalModificado = await subirTodasLasFotos(formularioEnelAmbiental, fecha);
+            const formularioEnelBotiquinModificado = await subirTodasLasFotos(formularioEnelBotiquin, fecha);
 
-            const ncvalido = hayNCValido(formularioEnelAmbientalModificado) === true ? "No Conforme" : "Conforme"
+            const ncvalido = hayNCValido(formularioEnelBotiquinModificado) === true ? "No Conforme" : "Conforme"
 
-            const { id, ...formularioSinId } = formularioEnelAmbientalModificado;
+            const { id, ...formularioSinId } = formularioEnelBotiquinModificado;
             const formularioConTiempos = {
                 ...formularioSinId,
                 fechaInicial,
                 fechaFinal,
                 ubicacion,
                 inspeccion: ncvalido,
-                formulario: "Enel Inspeccion de Gestion Ambiental para Areas Operativas",
+                formulario: "Enel Inspeccion de Gestion Botiquin para Areas Operativas",
                 cedulaQuienInspecciona: cedulaUsuario,
                 nombreQuienInspecciona: nombreUsuario,
             };
@@ -328,14 +328,14 @@ const SupervisionFormularioEnelBotiquin = () => {
             const formularioNuevoSinFotos = eliminarDataEnFotos(formularioConTiempos)
             const formularioNuevoSerializado = serializarCamposComplejos(formularioNuevoSinFotos)
 
-            const response2 = await axios.post(`${process.env.REACT_APP_API_URL}/supervision/crearRegistrosEnelInspeccionAmbiental`, formularioNuevoSerializado);
+            const response2 = await axios.post(`${process.env.REACT_APP_API_URL}/supervision/crearRegistrosEnelInspeccionBotiquin`, formularioNuevoSerializado);
 
             if (response2.status >= 200 && response2.status < 300) {
                 setEnviando(false)
                 console.log('Datos enviados exitosamente');
-                localStorage.removeItem('formularioEnelAmbiental');
+                localStorage.removeItem('formularioEnelBotiquin');
                 setMiembroEnProceso({});
-                setFormularioEnelAmbiental(estadoInicialFormularioEnelAmbiental);
+                setFormularioEnelBotiquin(estadoInicialFormularioEnelBotiquin);
                 navigate('/SupervisionPrincipal', { state: { estadoNotificacion: true } });
             } else {
                 toast.error('Error al subir el archivo o enviar los datos', { className: 'toast-error' });
@@ -349,7 +349,7 @@ const SupervisionFormularioEnelBotiquin = () => {
         }
     };
 
-    const estadoInicialFormularioEnelAmbiental = {
+    const estadoInicialFormularioEnelBotiquin = {
         tipoInspeccion: "",
         clasificacion: "",
         cedulaQuienInspecciona: "",
@@ -361,162 +361,32 @@ const SupervisionFormularioEnelBotiquin = () => {
         zona: "",
         placa: "",
         sede: "",
+        bioseguridad: {
+            bioseguridad1: "",
+            fechaBioseguridad1: "",
+            cantidadBioseguridad1: "",
+            fotoBioseguridad1: "",
+            observacionBioseguridad1: "",
+        },
 
-        cuadrilla: [],
-        socioAmbiental: {
-            socioAmbiental1: "",
-            fotoSocioAmbiental1: "",
-            observacionSocioAmbiental1: "",
-        },
-        materialesConstruccion: {
-            materialesConstruccion1: "",
-            fotoMaterialesConstruccion1: "",
-            observacionMaterialesConstruccion1: "",
-            materialesConstruccion2: "",
-            fotoMaterialesConstruccion2: "",
-            observacionMaterialesConstruccion2: "",
-            materialesConstruccion3: "",
-            fotoMaterialesConstruccion3: "",
-            observacionMaterialesConstruccion3: "",
-            materialesConstruccion4: "",
-            fotoMaterialesConstruccion4: "",
-            observacionMaterialesConstruccion4: "",
-        },
-        rcd: {
-            rcd1: "",
-            fotoRcd1: "",
-            observacionRcd1: "",
-            rcd2: "",
-            fotoRcd2: "",
-            observacionRcd2: "",
-            rcd3: "",
-            fotoRcd3: "",
-            observacionRcd3: "",
-            rcd4: "",
-            fotoRcd4: "",
-            observacionRcd4: "",
-            rcd5: "",
-            fotoRcd5: "",
-            observacionRcd5: "",
-            rcd6: "",
-            fotoRcd6: "",
-            observacionRcd6: "",
-            rcd7: "",
-            fotoRcd7: "",
-            observacionRcd7: "",
-        },
-        residuosSolidos: {
-            residuosSolidos1: "",
-            fotoResiduosSolidos1: "",
-            observacionResiduosSolidos1: "",
-            residuosSolidos2: "",
-            fotoResiduosSolidos2: "",
-            observacionResiduosSolidos2: "",
-            residuosSolidos3: "",
-            fotoResiduosSolidos3: "",
-            observacionResiduosSolidos3: "",
-            residuosSolidos4: "",
-            fotoResiduosSolidos4: "",
-            observacionResiduosSolidos4: "",
-            residuosSolidos5: "",
-            fotoResiduosSolidos5: "",
-            observacionResiduosSolidos5: "",
-            residuosSolidos6: "",
-            fotoResiduosSolidos6: "",
-            observacionResiduosSolidos6: "",
-            residuosSolidos7: "",
-            fotoResiduosSolidos7: "",
-            observacionResiduosSolidos7: "",
-            residuosSolidos8: "",
-            fotoResiduosSolidos8: "",
-            observacionResiduosSolidos8: "",
-            residuosSolidos9: "",
-            fotoResiduosSolidos9: "",
-            observacionResiduosSolidos9: "",
-            residuosSolidos10: "",
-            fotoResiduosSolidos10: "",
-            observacionResiduosSolidos10: "",
-            residuosSolidos11: "",
-            fotoResiduosSolidos11: "",
-            observacionResiduosSolidos11: "",
-            residuosSolidos12: "",
-            fotoResiduosSolidos12: "",
-            observacionResiduosSolidos12: "",
-        },
-        aceites: {
-            aceites1: "",
-            fotoAceites1: "",
-            observacionAceites1: "",
-            aceites2: "",
-            fotoAceites2: "",
-            observacionAceites2: "",
-            aceites3: "",
-            fotoAceites3: "",
-            observacionAceites3: "",
-            aceites4: "",
-            fotoAceites4: "",
-            observacionAceites4: "",
-            aceites5: "",
-            fotoAceites5: "",
-            observacionAceites5: "",
-        },
-        vertimientos: {
-            vertimientos1: "",
-            fotoVertimientos1: "",
-            observacionVertimientos1: "",
-            vertimientos2: "",
-            fotoVertimientos2: "",
-            observacionVertimientos2: "",
-            vertimientos3: "",
-            fotoVertimientos3: "",
-            observacionVertimientos3: "",
-        },
-        atmosfericas: {
-            atmosfericas1: "",
-            fotoAtmosfericas1: "",
-            observacionAtmosfericas1: "",
-            atmosfericas2: "",
-            fotoAtmosfericas2: "",
-            observacionAtmosfericas2: "",
-        },
-        seguridadIndustrial: {
-            seguridadIndustrial1: "",
-            fotoSeguridadIndustrial1: "",
-            observacionSeguridadIndustrial1: "",
-            seguridadIndustrial2: "",
-            fotoSeguridadIndustrial2: "",
-            observacionSeguridadIndustrial2: "",
-            seguridadIndustrial3: "",
-            fotoSeguridadIndustrial3: "",
-            observacionSeguridadIndustrial3: "",
-            seguridadIndustrial4: "",
-            fotoSeguridadIndustrial4: "",
-            observacionSeguridadIndustrial4: "",
-            seguridadIndustrial5: "",
-            fotoSeguridadIndustrial5: "",
-            observacionSeguridadIndustrial5: "",
-            seguridadIndustrial6: "",
-            fotoSeguridadIndustrial6: "",
-            observacionSeguridadIndustrial6: "",
-        },
         observacion: "",
         inspeccion: "",
     };
 
-    const [formularioEnelAmbiental, setFormularioEnelAmbiental] = useState(() => {
-        const datosGuardados = localStorage.getItem('formularioEnelAmbiental');
-        return datosGuardados ? JSON.parse(datosGuardados) : estadoInicialFormularioEnelAmbiental;
+    const [formularioEnelBotiquin, setFormularioEnelBotiquin] = useState(() => {
+        const datosGuardados = localStorage.getItem('formularioEnelBotiquin');
+        return datosGuardados ? JSON.parse(datosGuardados) : estadoInicialFormularioEnelBotiquin;
     });
 
-    const actualizarCampoEnelAmbiental = async (campo, valor) => {
+    const actualizarCampoEnelBotiquin = async (campo, valor) => {
         const [nivel1, nivel2] = campo.split('.');
 
         if (Array.isArray(valor) && valor.length === 0) {
-            setFormularioEnelAmbiental((prev) => {
+            setFormularioEnelBotiquin((prev) => {
                 const actualizado = { ...prev };
                 actualizado[nivel1][nivel2] = "";
                 localStorage.setItem(
-                    "formularioEnelAmbiental",
+                    "formularioEnelBotiquin",
                     JSON.stringify(actualizado)
                 );
                 return actualizado;
@@ -525,7 +395,7 @@ const SupervisionFormularioEnelBotiquin = () => {
         }
 
         if (['C', 'NC', 'NA'].includes(valor) && nivel2) {
-            setFormularioEnelAmbiental(prev => {
+            setFormularioEnelBotiquin(prev => {
                 const actualizado = { ...prev };
                 if (nivel2) { actualizado[nivel1][nivel2] = valor; } else { actualizado[nivel1] = valor; }
 
@@ -538,28 +408,28 @@ const SupervisionFormularioEnelBotiquin = () => {
                     if (observacionKey in actualizado[nivel1]) actualizado[nivel1][observacionKey] = '';
                 }
 
-                localStorage.setItem('formularioEnelAmbiental', JSON.stringify(actualizado));
+                localStorage.setItem('formularioEnelBotiquin', JSON.stringify(actualizado));
                 return actualizado;
             });
             return;
         }
 
         if (typeof valor === 'string') {
-            setFormularioEnelAmbiental(prev => {
+            setFormularioEnelBotiquin(prev => {
                 const actualizado = { ...prev };
                 if (nivel2) { actualizado[nivel1][nivel2] = valor; } else { actualizado[nivel1] = valor; }
-                localStorage.setItem('formularioEnelAmbiental', JSON.stringify(actualizado));
+                localStorage.setItem('formularioEnelBotiquin', JSON.stringify(actualizado));
                 return actualizado;
             });
             return;
         }
 
         if (valor[0].name && valor[0].data) {
-            setFormularioEnelAmbiental((prev) => {
+            setFormularioEnelBotiquin((prev) => {
                 const actualizado = { ...prev };
                 actualizado[nivel1][nivel2] = valor;
                 localStorage.setItem(
-                    "formularioEnelAmbiental",
+                    "formularioEnelBotiquin",
                     JSON.stringify(actualizado)
                 );
                 return actualizado;
@@ -598,7 +468,7 @@ const SupervisionFormularioEnelBotiquin = () => {
         };
     });
 
-    const actualizarCampoMiembroACuadrillaEnelAmbiental = async (campo, valor) => {
+    const actualizarCampoMiembroACuadrillaEnelBotiquin = async (campo, valor) => {
 
         if (Array.isArray(valor) && valor.length === 0) {
             setMiembroEnProceso((prev) => {
@@ -676,301 +546,54 @@ const SupervisionFormularioEnelBotiquin = () => {
 
     const preguntas = [
         {
-            key: "socioAmbiental1",
-            texto: "¿Se realizó socialización del alcance, duración y actividades a realizar con las partes interesadas previo al inicio de la obra?",
-            fotoKey: "fotoSocioAmbiental1",
-            observacionKey: "observacionSocioAmbiental1",
+            key: "bioseguridad1",
+            texto: "Guantes desechables ( látex o nitrilo)",
+            fechaVencimientoKey: "fechaBioseguridad1",
+            cantidadExistenteKey: "cantidadBioseguridad1",
+            fotoKey: "fotoBioseguridad1",
+            observacionKey: "observacionBioseguridad1",
+            activarinput: false,
+        },
+        {
+            key: "bioseguridad2",
+            texto: "Tapabocas",
+            fechaVencimientoKey: "fechaBioseguridad2",
+            cantidadExistenteKey: "cantidadBioseguridad2",
+            fotoKey: "fotoBioseguridad2",
+            observacionKey: "observacionBioseguridad2",
+            activarinput: false,
+        },
+        {
+            key: "bioseguridad3",
+            texto: "Monogafas",
+            fechaVencimientoKey: "fechaBioseguridad3",
+            cantidadExistenteKey: "cantidadBioseguridad3",
+            fotoKey: "fotoBioseguridad3",
+            observacionKey: "observacionBioseguridad3",
+            activarinput: false,
+        },
+        {
+            key: "bioseguridad4",
+            texto: "Mascarilla barrera para RCP",
+            fechaVencimientoKey: "fechaBioseguridad4",
+            cantidadExistenteKey: "cantidadBioseguridad4",
+            fotoKey: "fotoBioseguridad4",
+            observacionKey: "observacionBioseguridad4",
+            activarinput: false,
+        },
+        {
+            key: "bioseguridad5",
+            texto: "Bolsas para Desperdicios ( rojas )",
+            fechaVencimientoKey: "fechaBioseguridad5",
+            cantidadExistenteKey: "cantidadBioseguridad5",
+            fotoKey: "fotoBioseguridad5",
+            observacionKey: "observacionBioseguridad5",
             activarinput: false,
         },
 
-        {
-            key: "materialesConstruccion1",
-            texto: "¿Si es necesario dejarlos por mas tiempo, se encuentran cubiertos apropiadamente?",
-            fotoKey: "fotoMaterialesConstruccion1",
-            observacionKey: "observacionMaterialesConstruccion1",
-            activarinput: true,
-        },
-        {
-            key: "materialesConstruccion2",
-            texto: "¿Están alejados de alcantarillas, sumideros, canales?",
-            fotoKey: "fotoMaterialesConstruccion2",
-            observacionKey: "observacionMaterialesConstruccion2",
-            activarinput: false,
-        },
-        {
-            key: "materialesConstruccion3",
-            texto: "¿Las zonas verdes  se encuentran libres de almacenamiento de materiales de construcción o están protegidas?",
-            fotoKey: "fotoMaterialesConstruccion3",
-            observacionKey: "observacionMaterialesConstruccion3",
-            activarinput: false,
-        },
-        {
-            key: "materialesConstruccion4",
-            texto: "¿De ser necesario almacenar cerca a alcantarillas, sumideros y/o canales, estos están protegidos para evitar arrastre de material a la red de alcantarillado?",
-            fotoKey: "fotoMaterialesConstruccion4",
-            observacionKey: "observacionMaterialesConstruccion4",
-            activarinput: false,
-        },
-
-        {
-            key: "rcd1",
-            texto: "¿En volúmenes pequeños (menor o igual a 6 m3) son entregados a la empresa de aseo de la localidad o se llevan a un almacenamiento temporal?",
-            fotoKey: "fotoRcd1",
-            observacionKey: "observacionRcd1",
-            activarinput: true,
-        },
-        {
-            key: "rcd2",
-            texto: "¿En volúmenes grandes (mayor a 7 m3)  son entregados a un gestor a avalado por la autoridad ambiental competente?",
-            fotoKey: "fotoRcd2",
-            observacionKey: "observacionRcd2",
-            activarinput: false,
-        },
-        {
-            key: "rcd3",
-            texto: "¿Se conservan las remisiones del transporte donde se indiquen los datos del transportador y el gestor?",
-            fotoKey: "fotoRcd3",
-            observacionKey: "observacionRcd3",
-            activarinput: false,
-        },
-        {
-            key: "rcd4",
-            texto: "¿Se dejan en la vía pública por menos de 24 horas?",
-            fotoKey: "fotoRcd4",
-            observacionKey: "observacionRcd4",
-            activarinput: false,
-        },
-        {
-            key: "rcd5",
-            texto: "¿Si es necesario dejarlos por mas tiempo, se encuentran cubiertos apropiadamente?",
-            fotoKey: "fotoRcd5",
-            observacionKey: "observacionRcd5",
-            activarinput: false,
-        },
-        {
-            key: "rcd6",
-            texto: "¿La ronda hidráulica de cuerpos de agua, alcantarillas y/o sumideros se encuentran libres de almacenamiento temporal de RCD?",
-            fotoKey: "fotoRcd6",
-            observacionKey: "observacionRcd6",
-            activarinput: true,
-        },
-        {
-            key: "rcd7",
-            texto: "¿Los andenes y senderos peatonales se encuentran libres de almacenamiento temporal de RCD?",
-            fotoKey: "fotoRcd7",
-            observacionKey: "observacionRcd7",
-            activarinput: true,
-        },
-
-        {
-            key: "residuosSolidos1",
-            texto: "¿Se realiza limpieza general del frente de obra una vez termina la jornada diaria?",
-            fotoKey: "fotoResiduosSolidos1",
-            observacionKey: "observacionResiduosSolidos1",
-            activarinput: false,
-        },
-        {
-            key: "residuosSolidos2",
-            texto: "¿Existen recipientes adecuados para una debida separación en la fuente de residuos sólidos que se generan en la obra (puntos ecológicos)?",
-            fotoKey: "fotoResiduosSolidos2",
-            observacionKey: "observacionResiduosSolidos2",
-            activarinput: true,
-        },
-        {
-            key: "residuosSolidos3",
-            texto: "¿Son suficientes los recipientes para los residuos sólidos que se generan en la obra, están bien ubicados y señalizados?",
-            fotoKey: "fotoResiduosSolidos3",
-            observacionKey: "observacionResiduosSolidos3",
-            activarinput: false,
-        },
-        {
-            key: "residuosSolidos4",
-            texto: "¿Se realiza separación en la fuente de los residuos sólidos que se generan en la obra de acuerdo al código de colores establecido en el PGIR?",
-            fotoKey: "fotoResiduosSolidos4",
-            observacionKey: "observacionResiduosSolidos4",
-            activarinput: false,
-        },
-        {
-            key: "residuosSolidos5",
-            texto: "¿El centro de acopio temporal de los residuos sólidos que se generan en la obra se encuentra señalizados y está organizado según el tipo de residuo?",
-            fotoKey: "fotoResiduosSolidos5",
-            observacionKey: "observacionResiduosSolidos5",
-            activarinput: false,
-        },
-        {
-            key: "residuosSolidos6",
-            texto: "¿El centro de acopio está ubicado en un sitio de fácil acceso para el transporte y para la atención de situaciones de emergencia?¿Está sobre un terreno estable y nivelado?",
-            fotoKey: "fotoResiduosSolidos6",
-            observacionKey: "observacionResiduosSolidos6",
-            activarinput: false,
-        },
-        {
-            key: "residuosSolidos7",
-            texto: "¿El centro de acopio temporal está alejado de fuentes de acceso y salida de agua y de posibles fuentes externas de peligro, como subestaciones de energía y posibles fuentes de ignición?",
-            fotoKey: "fotoResiduosSolidos7",
-            observacionKey: "observacionResiduosSolidos7",
-            activarinput: false,
-        },
-        {
-            key: "residuosSolidos8",
-            texto: "¿El centro de acopio temporal cuenta con iluminación adecuada?",
-            fotoKey: "fotoResiduosSolidos8",
-            observacionKey: "observacionResiduosSolidos8",
-            activarinput: false,
-        },
-        {
-            key: "residuosSolidos9",
-            texto: "¿El centro de acopio temporal cuenta con ventilación natural o forzada que evite la acumulación de gases?",
-            fotoKey: "fotoResiduosSolidos9",
-            observacionKey: "observacionResiduosSolidos9",
-            activarinput: false,
-        },
-        {
-            key: "residuosSolidos10",
-            texto: "¿Los Residuos Peligrosos (RESPEL) que se generan en la obra se almacenan conforme a la matriz de incompatibilidad, se encuentran etiquetados y se lleva un control de éstos?",
-            fotoKey: "fotoResiduosSolidos10",
-            observacionKey: "observacionResiduosSolidos10",
-            activarinput: false,
-        },
-        {
-            key: "residuosSolidos11",
-            texto: "¿Se cuenta con un kit de control de derrames y un extintor con capacidad mínima de 20 lbs para atención de contigencias como derrames o incendios que se generan en la obra?",
-            fotoKey: "fotoResiduosSolidos11",
-            observacionKey: "observacionResiduosSolidos11",
-            activarinput: false,
-        },
-        {
-            key: "residuosSolidos12",
-            texto: "¿Se han realizado capacitaciones, sensibilizaciones y/o comunicaciones frente a la temática de gestión integral de residuos?",
-            fotoKey: "fotoResiduosSolidos12",
-            observacionKey: "observacionResiduosSolidos12",
-            activarinput: false,
-        },
-
-        {
-            key: "aceites1",
-            texto: "¿Los aceites nuevos y usados que se generan en la obra se almacenan en recipientes apropiados?",
-            fotoKey: "fotoAceites1",
-            observacionKey: "observacionAceites1",
-            activarinput: true,
-        },
-        {
-            key: "aceites2",
-            texto: "¿Los aceites usados y residuos aceitosos que se generan en la obra se entregan a un gestor autorizado para el tratamiento de estos?",
-            fotoKey: "fotoAceites2",
-            observacionKey: "observacionAceites2",
-            activarinput: false,
-        },
-        {
-            key: "aceites3",
-            texto: "¿Los residuos aceitosos que se generan en la obra, son almacenados separadamente de los demás residuos?",
-            fotoKey: "fotoAceites3",
-            observacionKey: "observacionAceites3",
-            activarinput: false,
-        },
-        {
-            key: "aceites4",
-            texto: "¿Los residuos aceitosos que se generan en la obra son entregados a un gestor autorizado?",
-            fotoKey: "fotoAceites4",
-            observacionKey: "observacionAceites4",
-            activarinput: false,
-        },
-        {
-            key: "aceites5",
-            texto: "¿ Se cuentan con los elementos necesarios para atender un derrame accidental de combustible o aceite.?",
-            fotoKey: "fotoAceites5",
-            observacionKey: "observacionAceites5",
-            activarinput: false,
-        },
-
-        {
-            key: "vertimientos1",
-            texto: "¿Todo vertimiento generado por la obra se gestiona conforme a sus caracteristicas?",
-            fotoKey: "fotoVertimientos1",
-            observacionKey: "observacionVertimientos1",
-            activarinput: false,
-        },
-        {
-            key: "vertimientos2",
-            texto: "En caso de contar con baños portátiles ¿se realizan la limpieza y desinfección de los mismos y se guardan las remisiones respectivas?",
-            fotoKey: "fotoVertimientos2",
-            observacionKey: "observacionVertimientos2",
-            activarinput: false,
-        },
-        {
-            key: "vertimientos3",
-            texto: "¿Se evita el vertimiento de aguas residuales no domésticas, sustancias químicas y/o residuos líquidos  peligrosos  al alcantarillado, sumideros o cuerpos de agua?",
-            fotoKey: "fotoVertimientos3",
-            observacionKey: "observacionVertimientos3",
-            activarinput: false,
-        },
-
-        {
-            key: "atmosfericas1",
-            texto: "¿En todo caso se evita la quema de residuos sólidos generados en la obra?",
-            fotoKey: "fotoAtmosfericas1",
-            observacionKey: "observacionAtmosfericas1",
-            activarinput: false,
-        },
-        {
-            key: "atmosfericas2",
-            texto: "¿La maquinaria y vehículos utilizados en la obra se encuentran en condiciones óptimas de mantenimiento (Revisión técnico mecánica vigente y/o mantenimientos al día)?",
-            fotoKey: "fotoAtmosfericas2",
-            observacionKey: "observacionAtmosfericas2",
-            activarinput: false,
-        },
-
-        {
-            key: "seguridadIndustrial1",
-            texto: "¿La obra cuenta con los avisos preventivos, reglamentarios e informativos requeridos.?",
-            fotoKey: "fotoSeguridadIndustrial1",
-            observacionKey: "observacionSeguridadIndustrial1",
-            activarinput: true,
-        },
-        {
-            key: "seguridadIndustrial2",
-            texto: "¿Las instalaciones temporales permanecen debidamente señalizadas?",
-            fotoKey: "fotoSeguridadIndustrial2",
-            observacionKey: "observacionSeguridadIndustrial2",
-            activarinput: false,
-        },
-        {
-            key: "seguridadIndustrial3",
-            texto: "¿Todas las sustancias químicas y residuos peligrosos manejados en la sitio de trabajo cuentan con su respectiva ficha de datos de seguridad y estas se mantienen en lugares visibles?",
-            fotoKey: "fotoSeguridadIndustrial3",
-            observacionKey: "observacionSeguridadIndustrial3",
-            activarinput: false,
-        },
-        {
-            key: "seguridadIndustrial4",
-            texto: "¿Todos los trabajadores cuentan y portan los EPP (Elementos de Protección Personal) ?",
-            fotoKey: "fotoSeguridadIndustrial4",
-            observacionKey: "observacionSeguridadIndustrial4",
-            activarinput: true,
-        },
-        {
-            key: "seguridadIndustrial5",
-            texto: "¿Se cuenta con un botiquín de primeros auxilios en caso de presentarse un evento emergencia?",
-            fotoKey: "fotoSeguridadIndustrial5",
-            observacionKey: "observacionSeguridadIndustrial5",
-            activarinput: false,
-        },
-        {
-            key: "seguridadIndustrial6",
-            texto: "¿Se cuenta con una adecuada iluminación cuando se adelanten trabajos en horario nocturno?",
-            fotoKey: "fotoSeguridadIndustrial6",
-            observacionKey: "observacionSeguridadIndustrial6",
-            activarinput: false,
-        },
     ];
 
-    const validarMiembroEnProceso = (miembro) => {
-        if (!miembro.cedula) { toast.error('Por favor diligencie la cedula.'); return false }
-        if (!miembro.nombre || miembro.nombre === 'Usuario no encontrado') { toast.error('Por favor ingrese un usuario valido.'); return false }
-        if (!miembro.cargo || miembro.cargo === 'Cargo no encontrado') { toast.error('Por favor ingrese un usuario valido.'); return false }
-    }
-
-    const validarFormularioEnelAmbiental = (formulario) => {
+    const validarFormularioEnelBotiquin = (formulario) => {
         if (!formulario.tipoInspeccion) { toast.error('Por favor diligencie el tipo de inspeccion.'); return false }
         if (!formulario.nombreProyecto) { toast.error('Por favor diligencie el nombre del proyecto.'); return false }
         if (!formulario.noContrato) { toast.error('Por favor diligencie el numero de contrato.'); return false }
@@ -987,8 +610,8 @@ const SupervisionFormularioEnelBotiquin = () => {
         const personasConCedula = formulario.cuadrilla.filter(persona => persona.cedula && persona.cedula.trim() !== '');
         if (personasConCedula.length < 2) { toast.error('Debe haber al menos dos personas en la cuadrilla.'); return false }
 
-        if (!formulario.socioAmbiental.socioAmbiental1) { toast.error('Por favor diligencie el capitulo 1 completo.'); return false }
-        if ((!formulario.socioAmbiental.observacionSocioAmbiental1 || !formulario.socioAmbiental.fotoSocioAmbiental1) && formulario.socioAmbiental.socioAmbiental1 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 1 cuando su respuesta es No Cumple en la pregunta 1.'); return false }
+        if (!formulario.socioBotiquin.socioBotiquin1) { toast.error('Por favor diligencie el capitulo 1 completo.'); return false }
+        if ((!formulario.socioBotiquin.observacionSocioBotiquin1 || !formulario.socioBotiquin.fotoSocioBotiquin1) && formulario.socioBotiquin.socioBotiquin1 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 1 cuando su respuesta es No Cumple en la pregunta 1.'); return false }
 
         if (!formulario.materialesConstruccion.materialesConstruccion1 || !formulario.materialesConstruccion.materialesConstruccion2 || !formulario.materialesConstruccion.materialesConstruccion3 || !formulario.materialesConstruccion.materialesConstruccion4) { toast.error('Por favor diligencie el capitulo 2 completo.'); return false }
         if ((!formulario.materialesConstruccion.fotoMaterialesConstruccion1 && formulario.materialesConstruccion.materialesConstruccion1 !== 'NA')) { toast.error('Por favor ingrese las fotos obligatorias en el capitulo 2.'); return false }
@@ -1095,7 +718,7 @@ const SupervisionFormularioEnelBotiquin = () => {
                         <i className="fas fa-tools"></i>
                         <div className='entradaDatos'>
                             <Textos className='subtitulo'>Tipo de Inspeccion:</Textos>
-                            <Selectores value={formularioEnelAmbiental.tipoInspeccion} onChange={(e) => actualizarCampoEnelAmbiental('tipoInspeccion', e.target.value)}
+                            <Selectores value={formularioEnelBotiquin.tipoInspeccion} onChange={(e) => actualizarCampoEnelBotiquin('tipoInspeccion', e.target.value)}
                                 options={[
                                     { value: 'Presencial', label: 'Presencial' },
                                     { value: 'Virtual', label: 'Virtual' },
@@ -1109,7 +732,7 @@ const SupervisionFormularioEnelBotiquin = () => {
                         <i className="fas fa-tools"></i>
                         <div className='entradaDatos'>
                             <Textos className='subtitulo'>Clasificacion:</Textos>
-                            <Selectores value={formularioEnelAmbiental.clasificacion} onChange={(e) => actualizarCampoEnelAmbiental('clasificacion', e.target.value)}
+                            <Selectores value={formularioEnelBotiquin.clasificacion} onChange={(e) => actualizarCampoEnelBotiquin('clasificacion', e.target.value)}
                                 options={[
                                     { value: 'Fijo / Portatil', label: 'Fijo / Portatil' },
                                     { value: 'Vehicular / Carros Tipo 1', label: 'Vehicular / Carros Tipo 1' },
@@ -1135,7 +758,7 @@ const SupervisionFormularioEnelBotiquin = () => {
                         <i className="fas fa-tools"></i>
                         <div className='entradaDatos'>
                             <Textos className='subtitulo'>Nombre del proyecto:</Textos>
-                            <Entradas disabled={modo === "editar"} type="text" placeholder="Ingrese el nombre del Proyecto" value={formularioEnelAmbiental.nombreProyecto} onChange={(e) => actualizarCampoEnelAmbiental('nombreProyecto', e.target.value)} />
+                            <Entradas disabled={modo === "editar"} type="text" placeholder="Ingrese el nombre del Proyecto" value={formularioEnelBotiquin.nombreProyecto} onChange={(e) => actualizarCampoEnelBotiquin('nombreProyecto', e.target.value)} />
                         </div>
                     </div>
 
@@ -1152,17 +775,17 @@ const SupervisionFormularioEnelBotiquin = () => {
                         <i className="fas fa-users-cog"></i>
                         <div className='entradaDatos'>
                             <Textos className='subtitulo'>Responsable del Botiquin:</Textos>
-                            <Entradas disabled={modo === "editar"} type="text" placeholder="Ingrese la cedula del lider de cuadrilla" value={formularioEnelAmbiental.cedulaResponsableBotiquin} onChange={(e) => {
+                            <Entradas disabled={modo === "editar"} type="text" placeholder="Ingrese la cedula del lider de cuadrilla" value={formularioEnelBotiquin.cedulaResponsableBotiquin} onChange={(e) => {
                                 const valor = e.target.value;
-                                actualizarCampoEnelAmbiental('cedulaResponsableBotiquin', valor);
+                                actualizarCampoEnelBotiquin('cedulaResponsableBotiquin', valor);
                                 const registroEncontrado = datosPlanta.find(item => item.nit === valor);
                                 if (registroEncontrado) {
-                                    actualizarCampoEnelAmbiental('nombreResponsableBotiquin', registroEncontrado.nombre);
+                                    actualizarCampoEnelBotiquin('nombreResponsableBotiquin', registroEncontrado.nombre);
                                 } else {
-                                    actualizarCampoEnelAmbiental('nombreResponsableBotiquin', 'Usuario no encontrado');
+                                    actualizarCampoEnelBotiquin('nombreResponsableBotiquin', 'Usuario no encontrado');
                                 }
                             }} />
-                            <Entradas type="text" placeholder="Nombre" value={formularioEnelAmbiental.nombreResponsableBotiquin} disabled={true} />
+                            <Entradas type="text" placeholder="Nombre" value={formularioEnelBotiquin.nombreResponsableBotiquin} disabled={true} />
                         </div>
                     </div>
 
@@ -1170,7 +793,7 @@ const SupervisionFormularioEnelBotiquin = () => {
                         <i className="fas fa-tools"></i>
                         <div className='entradaDatos'>
                             <Textos className='subtitulo'>Proceso:</Textos>
-                            <Selectores disabled={modo === "editar"} value={formularioEnelAmbiental.proceso} onChange={(e) => actualizarCampoEnelAmbiental('proceso', e.target.value)}
+                            <Selectores disabled={modo === "editar"} value={formularioEnelBotiquin.proceso} onChange={(e) => actualizarCampoEnelBotiquin('proceso', e.target.value)}
                                 options={[
                                     { value: 'Civil', label: 'Civil' },
                                     { value: 'Electrico', label: 'Electrico' },
@@ -1184,7 +807,7 @@ const SupervisionFormularioEnelBotiquin = () => {
                         <i className="fas fa-tools"></i>
                         <div className='entradaDatos'>
                             <Textos className='subtitulo'>Zona:</Textos>
-                            <Selectores disabled={modo === "editar"} value={formularioEnelAmbiental.zona} onChange={(e) => actualizarCampoEnelAmbiental('zona', e.target.value)}
+                            <Selectores disabled={modo === "editar"} value={formularioEnelBotiquin.zona} onChange={(e) => actualizarCampoEnelBotiquin('zona', e.target.value)}
                                 options={[
                                     { value: 'Bodega', label: 'Bodega' },
                                     { value: 'Movil', label: 'Movil' },
@@ -1193,7 +816,7 @@ const SupervisionFormularioEnelBotiquin = () => {
                         </div>
                     </div>
 
-                    {formularioEnelAmbiental.zona === 'Movil' && 
+                    {formularioEnelBotiquin.zona === 'Movil' && 
                         <div className='campo placa'>
                             <i className="fas fa-id-card"></i>
                             <div className='entradaDatos'>
@@ -1201,11 +824,11 @@ const SupervisionFormularioEnelBotiquin = () => {
                                 <Entradas
                                     type="text"
                                     placeholder="Placa movil (Ejemplo: ABC123, ABC12A)"
-                                    value={formularioEnelAmbiental.placa}
+                                    value={formularioEnelBotiquin.placa}
                                     onChange={(e) => {
                                         const newValue = e.target.value.toUpperCase();
                                         if (/^[A-Z]{0,3}[0-9]{0,2}[0-9A-Z]{0,1}$/.test(newValue)) {
-                                            actualizarCampoEnelAmbiental('placa', newValue);
+                                            actualizarCampoEnelBotiquin('placa', newValue);
                                         }
                                     }}
                                     pattern="[A-Za-z]{3}[0-9]{2}[0-9A-Za-z]{1}"
@@ -1217,7 +840,7 @@ const SupervisionFormularioEnelBotiquin = () => {
                         </div>
                     }
 
-                    {formularioEnelAmbiental.zona === 'Bodega' && 
+                    {formularioEnelBotiquin.zona === 'Bodega' && 
                         <div className='campo placa'>
                             <i className="fas fa-id-card"></i>
                             <div className='entradaDatos'>
@@ -1225,11 +848,11 @@ const SupervisionFormularioEnelBotiquin = () => {
                                 <Entradas
                                     type="text"
                                     placeholder="Placa movil (Ejemplo: ABC123, ABC12A)"
-                                    value={formularioEnelAmbiental.placa}
+                                    value={formularioEnelBotiquin.placa}
                                     onChange={(e) => {
                                         const newValue = e.target.value.toUpperCase();
                                         if (/^[A-Z]{0,3}[0-9]{0,2}[0-9A-Z]{0,1}$/.test(newValue)) {
-                                            actualizarCampoEnelAmbiental('placa', newValue);
+                                            actualizarCampoEnelBotiquin('placa', newValue);
                                         }
                                     }}
                                     pattern="[A-Za-z]{3}[0-9]{2}[0-9A-Za-z]{1}"
@@ -1252,167 +875,24 @@ const SupervisionFormularioEnelBotiquin = () => {
 
                     <div className='campo'>
                         <div className='entradaDatos'>
-                            <Textos className='subtitulo prin'>1. En relación con la gestión socio-ambiental</Textos>
-                            {preguntas.slice(0, 1).map((preg) => (
+                            <Textos className='subtitulo prin'>1. Elementos de Bioseguridad</Textos>
+                            {preguntas.slice(0, 5).map((preg) => (
                                 <OpcionesFotoObservaciones
                                     key={preg.key}
                                     texto={preg.texto}
-                                    keyPrin="socioAmbiental"
+                                    keyPrin="bioseguridad"
                                     keyBase={preg.key}
                                     fotoKey={preg.fotoKey}
                                     observacionKey={preg.observacionKey}
                                     activarinput={preg.activarinput}
-                                    data={formularioEnelAmbiental}
-                                    onChange={actualizarCampoEnelAmbiental}
+                                    data={formularioEnelBotiquin}
+                                    onChange={actualizarCampoEnelBotiquin}
                                     setImagen={setImagenAmpliada}
                                     disabled={modo === "editar"}
-                                />
-                            ))}
-                        </div>
-                    </div>
-
-                    <div className='campo'>
-                        <div className='entradaDatos'>
-                            <Textos className='subtitulo prin'>2. En relación con los materiales de construcción (arena, gravilla, cemento)</Textos>
-                            {preguntas.slice(1, 5).map((preg) => (
-                                <OpcionesFotoObservaciones
-                                    key={preg.key}
-                                    texto={preg.texto}
-                                    keyPrin="materialesConstruccion"
-                                    keyBase={preg.key}
-                                    fotoKey={preg.fotoKey}
-                                    observacionKey={preg.observacionKey}
-                                    activarinput={preg.activarinput}
-                                    data={formularioEnelAmbiental}
-                                    onChange={actualizarCampoEnelAmbiental}
-                                    setImagen={setImagenAmpliada}
-                                    disabled={modo === "editar"}
-                                />
-                            ))}
-                        </div>
-                    </div>
-
-                    <div className='campo'>
-                        <div className='entradaDatos'>
-                            <Textos className='subtitulo prin'>3. En relación a los RCD (Residuos de Construcción y Demolición)</Textos>
-                            {preguntas.slice(5, 12).map((preg) => (
-                                <OpcionesFotoObservaciones
-                                    key={preg.key}
-                                    texto={preg.texto}
-                                    keyPrin="rcd"
-                                    keyBase={preg.key}
-                                    fotoKey={preg.fotoKey}
-                                    observacionKey={preg.observacionKey}
-                                    activarinput={preg.activarinput}
-                                    data={formularioEnelAmbiental}
-                                    onChange={actualizarCampoEnelAmbiental}
-                                    setImagen={setImagenAmpliada}
-                                    disabled={modo === "editar"}
-                                />
-                            ))}
-                        </div>
-                    </div>
-
-                    <div className='campo'>
-                        <div className='entradaDatos'>
-                            <Textos className='subtitulo prin'>4. En relación a los residuos sólidos</Textos>
-                            {preguntas.slice(12, 24).map((preg) => (
-                                <OpcionesFotoObservaciones
-                                    key={preg.key}
-                                    texto={preg.texto}
-                                    keyPrin="residuosSolidos"
-                                    keyBase={preg.key}
-                                    fotoKey={preg.fotoKey}
-                                    observacionKey={preg.observacionKey}
-                                    activarinput={preg.activarinput}
-                                    data={formularioEnelAmbiental}
-                                    onChange={actualizarCampoEnelAmbiental}
-                                    setImagen={setImagenAmpliada}
-                                    disabled={modo === "editar"}
-                                />
-                            ))}
-                        </div>
-                    </div>
-
-                    <div className='campo'>
-                        <div className='entradaDatos'>
-                            <Textos className='subtitulo prin'>5. En relación con los aceites y los residuos aceitosos</Textos>
-                            {preguntas.slice(24, 29).map((preg) => (
-                                <OpcionesFotoObservaciones
-                                    key={preg.key}
-                                    texto={preg.texto}
-                                    keyPrin="aceites"
-                                    keyBase={preg.key}
-                                    fotoKey={preg.fotoKey}
-                                    observacionKey={preg.observacionKey}
-                                    activarinput={preg.activarinput}
-                                    data={formularioEnelAmbiental}
-                                    onChange={actualizarCampoEnelAmbiental}
-                                    setImagen={setImagenAmpliada}
-                                    disabled={modo === "editar"}
-                                />
-                            ))}
-                        </div>
-                    </div>
-
-                    <div className='campo'>
-                        <div className='entradaDatos'>
-                            <Textos className='subtitulo prin'>6. En relación con los vertimientos</Textos>
-                            {preguntas.slice(29, 32).map((preg) => (
-                                <OpcionesFotoObservaciones
-                                    key={preg.key}
-                                    texto={preg.texto}
-                                    keyPrin="vertimientos"
-                                    keyBase={preg.key}
-                                    fotoKey={preg.fotoKey}
-                                    observacionKey={preg.observacionKey}
-                                    activarinput={preg.activarinput}
-                                    data={formularioEnelAmbiental}
-                                    onChange={actualizarCampoEnelAmbiental}
-                                    setImagen={setImagenAmpliada}
-                                    disabled={modo === "editar"}
-                                />
-                            ))}
-                        </div>
-                    </div>
-
-                    <div className='campo'>
-                        <div className='entradaDatos'>
-                            <Textos className='subtitulo prin'>7. En relación con las emisiones atmosféricas</Textos>
-                            {preguntas.slice(32, 34).map((preg) => (
-                                <OpcionesFotoObservaciones
-                                    key={preg.key}
-                                    texto={preg.texto}
-                                    keyPrin="atmosfericas"
-                                    keyBase={preg.key}
-                                    fotoKey={preg.fotoKey}
-                                    observacionKey={preg.observacionKey}
-                                    activarinput={preg.activarinput}
-                                    data={formularioEnelAmbiental}
-                                    onChange={actualizarCampoEnelAmbiental}
-                                    setImagen={setImagenAmpliada}
-                                    disabled={modo === "editar"}
-                                />
-                            ))}
-                        </div>
-                    </div>
-
-                    <div className='campo'>
-                        <div className='entradaDatos'>
-                            <Textos className='subtitulo prin'>8. En relación al aislamiento de la obra, señalización y seguridad industrial</Textos>
-                            {preguntas.slice(34, 40).map((preg) => (
-                                <OpcionesFotoObservaciones
-                                    key={preg.key}
-                                    texto={preg.texto}
-                                    keyPrin="seguridadIndustrial"
-                                    keyBase={preg.key}
-                                    fotoKey={preg.fotoKey}
-                                    observacionKey={preg.observacionKey}
-                                    activarinput={preg.activarinput}
-                                    data={formularioEnelAmbiental}
-                                    onChange={actualizarCampoEnelAmbiental}
-                                    setImagen={setImagenAmpliada}
-                                    disabled={modo === "editar"}
+                                    fechaVencimientoBool={true}
+                                    fechaVencimientoKey={preg.fechaVencimientoKey}
+                                    cantidadExistenteBool={true}
+                                    cantidadExistenteKey={preg.cantidadExistenteKey}
                                 />
                             ))}
                         </div>
@@ -1422,17 +902,17 @@ const SupervisionFormularioEnelBotiquin = () => {
                         <i className="fas fa-comment"></i>
                         <div className='entradaDatos'>
                             <Textos className='subtitulo'>Observaciones:</Textos>
-                            <AreaTextos disabled={modo === "editar"} type="text" placeholder="Agregue las observacion pertinentes" value={formularioEnelAmbiental.observacion} onChange={(e) => actualizarCampoEnelAmbiental('observacion', e.target.value)} rows={4} />
+                            <AreaTextos disabled={modo === "editar"} type="text" placeholder="Agregue las observacion pertinentes" value={formularioEnelBotiquin.observacion} onChange={(e) => actualizarCampoEnelBotiquin('observacion', e.target.value)} rows={4} />
                         </div>
                     </div>
 
                     <div className='enviar'>
                         <Botones disabled={modo === "editar"} className="eliminar" onClick={() => {
-                            localStorage.removeItem('formularioEnelAmbiental');
+                            localStorage.removeItem('formularioEnelBotiquin');
                             setMiembroEnProceso({})
-                            setFormularioEnelAmbiental(estadoInicialFormularioEnelAmbiental);
+                            setFormularioEnelBotiquin(estadoInicialFormularioEnelBotiquin);
                         }}>Borrar formulario</Botones>
-                        <Botones disabled={modo === "editar"} type="submit" id='Enviar' className="guardar" onClick={enviarFormularioEnelAmbiental}>Enviar</Botones>
+                        <Botones disabled={modo === "editar"} type="submit" id='Enviar' className="guardar" onClick={enviarFormularioEnelBotiquin}>Enviar</Botones>
                     </div>
                 </form>
             )}

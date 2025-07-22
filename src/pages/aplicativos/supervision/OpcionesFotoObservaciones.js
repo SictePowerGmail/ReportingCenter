@@ -4,37 +4,71 @@ import Textos from "../../../components/textos/textos";
 import AreaTextos from "../../../components/areaTextos/areaTextos";
 import Imagenes from "../../../components/imagenes/imagenes";
 
-export const OpcionesFotoObservaciones = ({ 
-    texto, 
+export const OpcionesFotoObservaciones = ({
+    texto,
     keyPrin,
-    keyBase, 
-    fotoKey, 
-    observacionKey, 
-    activarinput, 
-    onChange, 
-    data, 
+    keyBase,
+    fotoKey,
+    observacionKey,
+    activarinput,
+    onChange,
+    data,
     setImagen,
     disabled = false,
+    fechaVencimientoBool = false,
+    fechaVencimientoKey,
+    cantidadExistenteBool = false,
+    cantidadExistenteKey,
 }) => {
     return (
         <>
             <Textos className='subtitulo sub'>{texto}</Textos>
+            
+            <div className={`opciones fecha ${fechaVencimientoBool === false ? 'oculto' : ''}`}>
+                <Textos className='parrafo'>Fecha de Vencimiento</Textos>
+                <Entradas
+                    type="date"
+                    placeholder="Seleccione una fecha"
+                    value={data[keyPrin][fechaVencimientoKey]}
+                    onChange={(e) => onChange(`${keyPrin}.${fechaVencimientoKey}`, e.target.value)}
+                />
+            </div>
+            <div className={`opciones cantidad ${cantidadExistenteBool === false ? 'oculto' : ''}`} >
+                <Textos className='parrafo'>Cantidad Existente</Textos>
+                <Entradas
+                    type="number"
+                    min="0"
+                    placeholder="Ingrese la cantidad existente"
+                    onKeyDown={(e) => {
+                        if (e.key === '-' || e.key === 'e' || e.key === '+') {
+                            e.preventDefault();
+                        }
+                    }}
+                    value={data[keyPrin][cantidadExistenteKey]}
+                    onChange={(e) => onChange(`${keyPrin}.${cantidadExistenteKey}`, e.target.value)}
+                />
+            </div>
             <div className='opciones'>
-                {["C", "NC", "NA"].map((opcion) => (
-                    <Botones
-                        key={opcion}
-                        onClick={() => onChange(`${keyPrin}.${keyBase}`, opcion)}
-                        className={data[keyPrin][keyBase] === opcion ? 'formulario selected' : ''}
-                        disabled={disabled}
-                    >
-                        {opcion}
-                    </Botones>
-                ))}
+                <Textos className='parrafo'>Inspeccion</Textos>
+                <div className="Botones">
+                    {["C", "NC", "NA"].map((opcion) => (
+                        <Botones
+                            key={opcion}
+                            onClick={() => onChange(`${keyPrin}.${keyBase}`, opcion)}
+                            className={data[keyPrin][keyBase] === opcion ? 'formulario selected' : ''}
+                            disabled={disabled}
+                        >
+                            {opcion}
+                        </Botones>
+                    ))}
+                </div>
             </div>
             <div className={`opciones fotos ${data[keyPrin][keyBase] !== 'NC' ? activarinput !== true ? 'oculto' : '' : ''}`} >
-                <Imagenes disableInput={disabled} fotoKey={fotoKey} foto={data[keyPrin][fotoKey]} onChange={(fotoKey, data) => onChange(`${keyPrin}.${fotoKey}`, data)} capture={data.tipoInpseccion !== 'Virtual' ? true : false} setImagen={(data) => setImagen(data)}/>
+                <Textos className='parrafo'>Imagen(es)</Textos>
+                <Imagenes disableInput={disabled} fotoKey={fotoKey} foto={data[keyPrin][fotoKey]} onChange={(fotoKey, data) => onChange(`${keyPrin}.${fotoKey}`, data)} capture={data.tipoInpseccion !== 'Virtual' ? true : false} setImagen={(data) => setImagen(data)} />
             </div>
             <div className={`opciones ${data[keyPrin][keyBase] !== 'NC' ? 'oculto' : ''}`} >
+                <Textos className='parrafo'>Observacion</Textos>
                 <AreaTextos
                     type="text"
                     placeholder="Agregue las observacion pertinentes"
