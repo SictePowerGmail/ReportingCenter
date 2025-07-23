@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Sicte from '../../images/Sicte 6.png'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
@@ -103,7 +102,7 @@ const RecuperarContraseña = () => {
     return (
         <div className="Supervision-Login-App">
             <div className='Login-Contenido_1'>
-                <img src={Sicte} alt="Logo Sicte" />
+                <img src={'https://res.cloudinary.com/dcozwbcpi/image/upload/v1753297344/Sicte_6_plcwjt.png'} alt="Logo Sicte" />
             </div>
             <div className='Login-Contenido_2'>
                 <div className='Login-Titulo'>
