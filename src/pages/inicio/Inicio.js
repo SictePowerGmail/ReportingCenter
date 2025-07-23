@@ -1,14 +1,4 @@
 import React, { useEffect } from 'react'
-import imagen1 from '../../images/Principal.jpg'
-import imagen2 from '../../images/Telec 2.jpg'
-import imagen3 from '../../images/Obr Civ 1.jpg'
-import imagen4 from '../../images/Electr 1.jpg'
-import imagen5 from '../../images/Telec 1.jpg'
-import imagen6 from '../../images/Obr Civ 2.jpg'
-import imagen7 from '../../images/Electr 2.jpg'
-import imagen8 from '../../images/Telec 3.jpg'
-import imagen9 from '../../images/Electr 3.jpg'
-import imagen10 from '../../images/Telec 4.jpg'
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 import Slider from 'react-slick';
@@ -41,7 +31,18 @@ function Inicio() {
     autoplaySpeed: 3000,
   };
 
-  const imagenes = [imagen1, imagen2, imagen3, imagen4, imagen5, imagen6, imagen7, imagen8, imagen9, imagen10];
+  const imagenes = [
+    'https://res.cloudinary.com/dcozwbcpi/image/upload/v1753297344/Principal_uionbk.jpg',
+    'https://res.cloudinary.com/dcozwbcpi/image/upload/v1753297345/Telec_2_wmowse.jpg',
+    'https://res.cloudinary.com/dcozwbcpi/image/upload/v1753297342/Obr_Civ_1_cjopsi.jpg',
+    'https://res.cloudinary.com/dcozwbcpi/image/upload/v1753297342/Electr_1_u8w2hw.jpg', 
+    'https://res.cloudinary.com/dcozwbcpi/image/upload/v1753297344/Telec_1_tow9ku.jpg', 
+    'https://res.cloudinary.com/dcozwbcpi/image/upload/v1753297343/Obr_Civ_2_cpxs6n.jpg', 
+    'https://res.cloudinary.com/dcozwbcpi/image/upload/v1753297344/Electr_2_wok2fp.jpg', 
+    'https://res.cloudinary.com/dcozwbcpi/image/upload/v1753297345/Telec_3_qdnbuw.jpg', 
+    'https://res.cloudinary.com/dcozwbcpi/image/upload/v1753297343/Electr_3_xdizwr.jpg', 
+    'https://res.cloudinary.com/dcozwbcpi/image/upload/v1753297347/Telec_4_pkfnpo.jpg'
+  ];
 
   return (
     <div className="div-Imagen">

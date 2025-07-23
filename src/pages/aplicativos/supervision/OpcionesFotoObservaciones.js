@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import Entradas from "../../../components/entradas/entradas";
 import Botones from "../../../components/botones/botones";
 import Textos from "../../../components/textos/textos";
@@ -17,15 +18,38 @@ export const OpcionesFotoObservaciones = ({
     disabled = false,
     fechaVencimientoBool = false,
     fechaVencimientoKey,
+    cantidadEstimadaBool = false,
+    cantidadEstimadaKey,
     cantidadExistenteBool = false,
     cantidadExistenteKey,
 }) => {
+    const fechaVencimientoStr = data[keyPrin]?.[fechaVencimientoKey];
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+    let vencido = false;
+
+    const parseFechaLocal = (fechaStr) => {
+        const [año, mes, dia] = fechaStr.split('-').map(Number);
+        return new Date(año, mes - 1, dia);
+    };
+
+    if (fechaVencimientoStr) {
+        const fechaVencimiento = parseFechaLocal(fechaVencimientoStr);
+        fechaVencimiento.setHours(0, 0, 0, 0);
+        vencido = !isNaN(fechaVencimiento) && fechaVencimiento < hoy;
+    }
+
+    useEffect(() => {
+        if (vencido && data[keyPrin][keyBase] !== "NC") {
+            onChange(`${keyPrin}.${keyBase}`, "NC");
+        }
+    }, [vencido, data, keyPrin, keyBase, onChange]);
+
     return (
-        <>
+        <div className={`cartas ${data[keyPrin][cantidadEstimadaKey] === "0" ? 'oculto' : ''}`}>
             <Textos className='subtitulo sub'>{texto}</Textos>
-            
             <div className={`opciones fecha ${fechaVencimientoBool === false ? 'oculto' : ''}`}>
-                <Textos className='parrafo'>Fecha de Vencimiento</Textos>
+                <Textos className='parrafo'>Fecha de vencimiento</Textos>
                 <Entradas
                     type="date"
                     placeholder="Seleccione una fecha"
@@ -33,8 +57,15 @@ export const OpcionesFotoObservaciones = ({
                     onChange={(e) => onChange(`${keyPrin}.${fechaVencimientoKey}`, e.target.value)}
                 />
             </div>
+            <div className={`opciones cantidad ${cantidadEstimadaBool === false ? 'oculto' : ''}`} >
+                <Textos className='parrafo'>Cantidad estimada</Textos>
+                <Entradas
+                    disabled
+                    value={data[keyPrin][cantidadEstimadaKey]}
+                />
+            </div>
             <div className={`opciones cantidad ${cantidadExistenteBool === false ? 'oculto' : ''}`} >
-                <Textos className='parrafo'>Cantidad Existente</Textos>
+                <Textos className='parrafo'>Cantidad existente</Textos>
                 <Entradas
                     type="number"
                     min="0"
@@ -56,7 +87,7 @@ export const OpcionesFotoObservaciones = ({
                             key={opcion}
                             onClick={() => onChange(`${keyPrin}.${keyBase}`, opcion)}
                             className={data[keyPrin][keyBase] === opcion ? 'formulario selected' : ''}
-                            disabled={disabled}
+                            disabled={disabled || vencido}
                         >
                             {opcion}
                         </Botones>
@@ -78,6 +109,6 @@ export const OpcionesFotoObservaciones = ({
                     disabled={disabled}
                 />
             </div>
-        </>
+        </div>
     );
 };

@@ -97,85 +97,95 @@
                     }
                 }
 
-                .foto-label {
-                    border: 1px solid rgb(151, 151, 151);
-                    border-radius: 6px;
-                    padding: 5px 10px;
-                    text-align: center;
-                    color: black;
-                }
-
-                .botonAgregar {
+                .cartas {
+                    width: 100% !important;
                     display: flex !important;
-                    justify-content: end;
-                    width: 100%;
+                    flex-direction: column !important;
 
-                    .agregar {
-                        max-width: 100px;
-                    }
-                }
-
-                .opciones {
-                    display: flex;
-                    align-items: center;
-                    justify-content: baseline;
-                    padding-left: 20px;
-                    margin: 5px 0px;
-
-                    .texto {
-                        min-width: max-content;
-
-                        @media screen and (min-width: 601px) {
-                            min-width: 160px;
-                        }    
+                    &.oculto {
+                        display: none;
                     }
 
-                    @media screen and (max-width: 600px) {
-                        flex-direction: column;
-                        align-items: start;
+                    .foto-label {
+                        border: 1px solid rgb(151, 151, 151);
+                        border-radius: 6px;
+                        padding: 5px 10px;
+                        text-align: center;
+                        color: black;
                     }
 
-                    &.vehiculo {
-                        padding-left: 0px;
+                    .botonAgregar {
+                        display: flex !important;
+                        justify-content: end;
+                        width: 100%;
+
+                        .agregar {
+                            max-width: 100px;
+                        }
+                    }
+
+                    .opciones {
+                        display: flex;
+                        align-items: center;
+                        justify-content: baseline;
+                        padding-left: 20px;
+                        margin: 5px 0px;
+
+                        .texto {
+                            min-width: max-content;
+
+                            @media screen and (min-width: 601px) {
+                                min-width: 160px;
+                            }
+                        }
+
+                        @media screen and (max-width: 600px) {
+                            flex-direction: column;
+                            align-items: start;
+                        }
+
+                        &.vehiculo {
+                            padding-left: 0px;
+
+                            button {
+                                width: 50px;
+
+                                &:nth-child(5),
+                                &:nth-child(4),
+                                &:nth-child(3),
+                                &:nth-child(2) {
+                                    margin-left: 5px;
+                                }
+                            }
+                        }
+
+                        .image {
+                            width: auto;
+
+                            &:disabled {
+                                display: none;
+                            }
+                        }
 
                         button {
-                            width: 50px;
+                            width: 60px !important;
 
                             &:nth-child(5),
                             &:nth-child(4),
                             &:nth-child(3),
                             &:nth-child(2) {
-                                margin-left: 5px;
+                                margin-left: 10px;
                             }
                         }
-                    }
 
-                    .image {
-                        width: auto;
-
-                        &:disabled {
+                        &.oculto {
                             display: none;
                         }
                     }
 
-                    button {
-                        width: 60px !important;
-
-                        &:nth-child(5),
-                        &:nth-child(4),
-                        &:nth-child(3),
-                        &:nth-child(2) {
-                            margin-left: 10px;
-                        }
+                    .comentario {
+                        padding-left: 20px;
                     }
-
-                    &.oculto {
-                        display: none;
-                    }
-                }
-
-                .comentario {
-                    padding-left: 20px;
                 }
             }
 
@@ -231,6 +241,10 @@
                         }
                     }
                 }
+            }
+
+            &.zona {
+                margin-bottom: 40px;
             }
         }
 

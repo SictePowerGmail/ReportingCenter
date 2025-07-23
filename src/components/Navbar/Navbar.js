@@ -12,8 +12,6 @@ import Logo from '../../images/Logo Original.png'
 import Logo2 from '../../images/Logo Original 2.png'
 import SGS from '../../images/SGS.png'
 import SGS2 from '../../images/SGS 2.png'
-import Colombia from '../../images/Flag_Colombia.png'
-import EEUU from '../../images/Flag_United_States.png'
 import { useTranslation } from 'react-i18next';
 import { getPageTitle } from '../../rutas/pageTitles';
 import Entradas from '../entradas/entradas';
@@ -50,6 +48,8 @@ function Navbar() {
     const [mostrarMenuIdioma, setMostrarMenuIdioma] = useState(false);
     const location = useLocation();
     const tituloActual = getPageTitle(location.pathname) || 'Inicio';
+    const Colombia = 'https://res.cloudinary.com/dcozwbcpi/image/upload/v1753297342/Flag_Colombia_cye2bn.png';
+    const EEUU = 'https://res.cloudinary.com/dcozwbcpi/image/upload/v1753297343/Flag_United_States_qq6luc.png';
 
     const closeAllDropdowns = () => {
         setShowDropdownFacturacion(false);
@@ -341,7 +341,7 @@ function Navbar() {
 
                     <Link to="/">
                         <div className={`logo ${showMobileMenu ? 'abierto' : 'cerrado'}`}>
-                            {esModoClaro ? <img src={Logo} alt="Logo" /> : <img src={Logo2} alt="Logo" />}
+                            {esModoClaro ? <img src={'https://res.cloudinary.com/dcozwbcpi/image/upload/v1753297342/Logo_Original_homvl9.png'} alt="Logo" /> : <img src={'https://res.cloudinary.com/dcozwbcpi/image/upload/v1753297343/Logo_Original_2_zelyfk.png'} alt="Logo" />}
                         </div>
                     </Link>
                 </div>

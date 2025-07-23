@@ -149,7 +149,7 @@ const Login = () => {
     return (
         <div className="Supervision-Login-App">
             <div className='Login-Contenido_1'>
-                <img src={Sicte} alt="Logo Sicte" />
+                <img src={'https://res.cloudinary.com/dcozwbcpi/image/upload/v1753297344/Sicte_6_plcwjt.png'} alt="Logo Sicte" />
             </div>
             <div className='Login-Contenido_2'>
                 <div className='Login-Titulo'>
