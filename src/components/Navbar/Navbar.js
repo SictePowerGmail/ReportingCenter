@@ -8,8 +8,6 @@ import { ThreeDots } from 'react-loader-spinner';
 import './navbar.css'
 import Cookies from 'js-cookie';
 import axios from 'axios';
-import Logo from '../../images/Logo Original.png'
-import Logo2 from '../../images/Logo Original 2.png'
 import SGS from '../../images/SGS.png'
 import SGS2 from '../../images/SGS 2.png'
 import { useTranslation } from 'react-i18next';
@@ -844,7 +842,7 @@ function Navbar() {
                                 </div>
                             </li>
 
-                            <span className={`sub-titulo ${showMobileMenu ? 'abierto' : 'cerrado'}`}>Version 2.0.18</span>
+                            <span className={`sub-titulo ${showMobileMenu ? 'abierto' : 'cerrado'}`}>Version 2.0.19</span>
                         </ul>
 
                         {/* <div className='Logo2'>
