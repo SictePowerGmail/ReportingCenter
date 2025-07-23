@@ -752,6 +752,7 @@ const SupervisionFormularioEnelBotiquin = () => {
         {
             key: "bioseguridad1",
             texto: "Guantes desechables ( látex o nitrilo)",
+            imagenKey: 'https://res.cloudinary.com/dcozwbcpi/image/upload/guantes_desechables_drddt1.jpg',
             fechaVencimientoKey: "fechaBioseguridad1",
             cantidadEstimadaKey: "cantidadEstimadaBioseguridad1",
             cantidadExistenteKey: "cantidadBioseguridad1",
@@ -762,6 +763,7 @@ const SupervisionFormularioEnelBotiquin = () => {
         {
             key: "bioseguridad2",
             texto: "Tapabocas",
+            imagenKey: 'https://res.cloudinary.com/dcozwbcpi/image/upload/tapabocas_l7cvun.png',
             fechaVencimientoKey: "fechaBioseguridad2",
             cantidadEstimadaKey: "cantidadEstimadaBioseguridad2",
             cantidadExistenteKey: "cantidadBioseguridad2",
@@ -772,6 +774,7 @@ const SupervisionFormularioEnelBotiquin = () => {
         {
             key: "bioseguridad3",
             texto: "Monogafas",
+            imagenKey: 'https://res.cloudinary.com/dcozwbcpi/image/upload/monogafas_bn2ewm.jpg',
             fechaVencimientoKey: "fechaBioseguridad3",
             cantidadEstimadaKey: "cantidadEstimadaBioseguridad3",
             cantidadExistenteKey: "cantidadBioseguridad3",
@@ -782,6 +785,7 @@ const SupervisionFormularioEnelBotiquin = () => {
         {
             key: "bioseguridad4",
             texto: "Mascarilla barrera para RCP",
+            imagenKey: 'https://res.cloudinary.com/dcozwbcpi/image/upload/mascarilla_barrera_rcp_n8lx9l.jpg',
             fechaVencimientoKey: "fechaBioseguridad4",
             cantidadEstimadaKey: "cantidadEstimadaBioseguridad4",
             cantidadExistenteKey: "cantidadBioseguridad4",
@@ -792,6 +796,7 @@ const SupervisionFormularioEnelBotiquin = () => {
         {
             key: "bioseguridad5",
             texto: "Bolsas para Desperdicios ( rojas )",
+            imagenKey: 'https://res.cloudinary.com/dcozwbcpi/image/upload/bolsas_para_desperdicios_b64ss7.jpg',
             fechaVencimientoKey: "fechaBioseguridad5",
             cantidadEstimadaKey: "cantidadEstimadaBioseguridad5",
             cantidadExistenteKey: "cantidadBioseguridad5",
@@ -1650,6 +1655,8 @@ const SupervisionFormularioEnelBotiquin = () => {
                                     onChange={actualizarCampoEnelBotiquin}
                                     setImagen={setImagenAmpliada}
                                     disabled={modo === "editar"}
+                                    imagenBool={true}
+                                    imagenKey={preg.imagenKey}
                                     fechaVencimientoBool={true}
                                     fechaVencimientoKey={preg.fechaVencimientoKey}
                                     cantidadEstimadaBool={true}
@@ -1677,6 +1684,8 @@ const SupervisionFormularioEnelBotiquin = () => {
                                     onChange={actualizarCampoEnelBotiquin}
                                     setImagen={setImagenAmpliada}
                                     disabled={modo === "editar"}
+                                    imagenBool={true}
+                                    imagenKey={preg.imagenKey}
                                     fechaVencimientoBool={true}
                                     fechaVencimientoKey={preg.fechaVencimientoKey}
                                     cantidadEstimadaBool={true}
@@ -1704,6 +1713,8 @@ const SupervisionFormularioEnelBotiquin = () => {
                                     onChange={actualizarCampoEnelBotiquin}
                                     setImagen={setImagenAmpliada}
                                     disabled={modo === "editar"}
+                                    imagenBool={true}
+                                    imagenKey={preg.imagenKey}
                                     fechaVencimientoBool={true}
                                     fechaVencimientoKey={preg.fechaVencimientoKey}
                                     cantidadEstimadaBool={true}
@@ -1731,6 +1742,8 @@ const SupervisionFormularioEnelBotiquin = () => {
                                     onChange={actualizarCampoEnelBotiquin}
                                     setImagen={setImagenAmpliada}
                                     disabled={modo === "editar"}
+                                    imagenBool={true}
+                                    imagenKey={preg.imagenKey}
                                     fechaVencimientoBool={true}
                                     fechaVencimientoKey={preg.fechaVencimientoKey}
                                     cantidadEstimadaBool={true}

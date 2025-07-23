@@ -16,6 +16,8 @@ export const OpcionesFotoObservaciones = ({
     data,
     setImagen,
     disabled = false,
+    imagenBool = false,
+    imagenKey,
     fechaVencimientoBool = false,
     fechaVencimientoKey,
     cantidadEstimadaBool = false,
@@ -48,6 +50,9 @@ export const OpcionesFotoObservaciones = ({
     return (
         <div className={`cartas ${data[keyPrin][cantidadEstimadaKey] === "0" ? 'oculto' : ''}`}>
             <Textos className='subtitulo sub'>{texto}</Textos>
+            <div className={`opciones imagenElemento ${imagenBool === false ? 'oculto' : ''}`}>
+                <img src={imagenKey} alt={imagenKey} />
+            </div>
             <div className={`opciones fecha ${fechaVencimientoBool === false ? 'oculto' : ''}`}>
                 <Textos className='parrafo'>Fecha de vencimiento</Textos>
                 <Entradas
