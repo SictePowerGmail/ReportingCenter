@@ -8,8 +8,6 @@ import { ThreeDots } from 'react-loader-spinner';
 import './navbar.css'
 import Cookies from 'js-cookie';
 import axios from 'axios';
-import SGS from '../../images/SGS.png'
-import SGS2 from '../../images/SGS 2.png'
 import { useTranslation } from 'react-i18next';
 import { getPageTitle } from '../../rutas/pageTitles';
 import Entradas from '../entradas/entradas';
