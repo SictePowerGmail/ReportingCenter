@@ -97,6 +97,16 @@
                     }
                 }
 
+                .botonAgregar {
+                    display: flex !important;
+                    justify-content: end;
+                    width: 100%;
+
+                    .agregar {
+                        max-width: 100px;
+                    }
+                }
+
                 .cartas {
                     width: 100% !important;
                     display: flex !important;
@@ -112,16 +122,6 @@
                         padding: 5px 10px;
                         text-align: center;
                         color: black;
-                    }
-
-                    .botonAgregar {
-                        display: flex !important;
-                        justify-content: end;
-                        width: 100%;
-
-                        .agregar {
-                            max-width: 100px;
-                        }
                     }
 
                     .opciones {
@@ -350,7 +350,7 @@
                         justify-content: baseline;
 
                         button {
-                            width: 60px;
+                            width: 60px !important;
 
                             &:nth-child(3),
                             &:nth-child(2) {
@@ -391,7 +391,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 2000;
+            z-index: 4000;
             cursor: zoom-out;
 
             img {

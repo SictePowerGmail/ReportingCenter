@@ -808,6 +808,7 @@ const SupervisionFormularioEnelBotiquin = () => {
         {
             key: "inmovilizacion1",
             texto: "Aplicadores",
+            imagenKey: 'https://res.cloudinary.com/dcozwbcpi/image/upload/aplicadores_xl7xhk.jpg',
             fechaVencimientoKey: "fechaInmovilizacion1",
             cantidadEstimadaKey: "cantidadEstimadaInmovilizacion1",
             cantidadExistenteKey: "cantidadInmovilizacion1",
@@ -818,6 +819,7 @@ const SupervisionFormularioEnelBotiquin = () => {
         {
             key: "inmovilizacion2",
             texto: "Apósito estéril",
+            imagenKey: 'https://res.cloudinary.com/dcozwbcpi/image/upload/aposito_esteril_rziwof.png',
             fechaVencimientoKey: "fechaInmovilizacion2",
             cantidadEstimadaKey: "cantidadEstimadaInmovilizacion2",
             cantidadExistenteKey: "cantidadInmovilizacion2",
@@ -828,6 +830,7 @@ const SupervisionFormularioEnelBotiquin = () => {
         {
             key: "inmovilizacion3",
             texto: "Compresas",
+            imagenKey: 'https://res.cloudinary.com/dcozwbcpi/image/upload/compresas_vzy16p.webp',
             fechaVencimientoKey: "fechaInmovilizacion3",
             cantidadEstimadaKey: "cantidadEstimadaInmovilizacion3",
             cantidadExistenteKey: "cantidadInmovilizacion3",
@@ -838,6 +841,7 @@ const SupervisionFormularioEnelBotiquin = () => {
         {
             key: "inmovilizacion4",
             texto: "Bajalenguas",
+            imagenKey: 'https://res.cloudinary.com/dcozwbcpi/image/upload/bajalenguas_koeizy.png',
             fechaVencimientoKey: "fechaInmovilizacion4",
             cantidadEstimadaKey: "cantidadEstimadaInmovilizacion4",
             cantidadExistenteKey: "cantidadInmovilizacion4",
@@ -848,6 +852,7 @@ const SupervisionFormularioEnelBotiquin = () => {
         {
             key: "inmovilizacion5",
             texto: "Curitas",
+            imagenKey: 'https://res.cloudinary.com/dcozwbcpi/image/upload/curitas_vvbpwy.jpg',
             fechaVencimientoKey: "fechaInmovilizacion5",
             cantidadEstimadaKey: "cantidadEstimadaInmovilizacion5",
             cantidadExistenteKey: "cantidadInmovilizacion5",
@@ -858,6 +863,7 @@ const SupervisionFormularioEnelBotiquin = () => {
         {
             key: "inmovilizacion6",
             texto: "Inmovilizador Cervical Graduable",
+            imagenKey: 'https://res.cloudinary.com/dcozwbcpi/image/upload/inmovilizador_cervical_lqxqsp.jpg',
             fechaVencimientoKey: "fechaInmovilizacion6",
             cantidadEstimadaKey: "cantidadEstimadaInmovilizacion6",
             cantidadExistenteKey: "cantidadInmovilizacion6",
@@ -868,6 +874,7 @@ const SupervisionFormularioEnelBotiquin = () => {
         {
             key: "inmovilizacion7",
             texto: "Esparadrapo",
+            imagenKey: 'https://res.cloudinary.com/dcozwbcpi/image/upload/esparadrapo_mwjjnb.webp',
             fechaVencimientoKey: "fechaInmovilizacion7",
             cantidadEstimadaKey: "cantidadEstimadaInmovilizacion7",
             cantidadExistenteKey: "cantidadInmovilizacion7",
@@ -878,6 +885,7 @@ const SupervisionFormularioEnelBotiquin = () => {
         {
             key: "inmovilizacion8",
             texto: "Gasas Estériles de 7,5x 7,5",
+            imagenKey: 'https://res.cloudinary.com/dcozwbcpi/image/upload/gasas_esteriles_czvd2y.jpg',
             fechaVencimientoKey: "fechaInmovilizacion8",
             cantidadEstimadaKey: "cantidadEstimadaInmovilizacion8",
             cantidadExistenteKey: "cantidadInmovilizacion8",
@@ -888,6 +896,7 @@ const SupervisionFormularioEnelBotiquin = () => {
         {
             key: "inmovilizacion9",
             texto: "Kit de inmovilizadores de extremidades superiores e inferiores",
+            imagenKey: 'https://res.cloudinary.com/dcozwbcpi/image/upload/kit_de_inmovilizadores_tzwep4.webp',
             fechaVencimientoKey: "fechaInmovilizacion9",
             cantidadEstimadaKey: "cantidadEstimadaInmovilizacion9",
             cantidadExistenteKey: "cantidadInmovilizacion9",
@@ -898,6 +907,7 @@ const SupervisionFormularioEnelBotiquin = () => {
         {
             key: "inmovilizacion10",
             texto: "Cinta adhesiva(microporo)",
+            imagenKey: 'https://res.cloudinary.com/dcozwbcpi/image/upload/cinta_adhesiva_ron9xo.webp',
             fechaVencimientoKey: "fechaInmovilizacion10",
             cantidadEstimadaKey: "cantidadEstimadaInmovilizacion10",
             cantidadExistenteKey: "cantidadInmovilizacion10",
@@ -908,6 +918,7 @@ const SupervisionFormularioEnelBotiquin = () => {
         {
             key: "inmovilizacion11",
             texto: "Agua estéril , suero fisiológico o solución salina normal ( 250 ML)",
+            imagenKey: 'https://res.cloudinary.com/dcozwbcpi/image/upload/agua_esteril_m5mw3j.webp',
             fechaVencimientoKey: "fechaInmovilizacion11",
             cantidadEstimadaKey: "cantidadEstimadaInmovilizacion11",
             cantidadExistenteKey: "cantidadInmovilizacion11",
@@ -918,6 +929,7 @@ const SupervisionFormularioEnelBotiquin = () => {
         {
             key: "inmovilizacion12",
             texto: "Vendaje triangular ",
+            imagenKey: 'https://res.cloudinary.com/dcozwbcpi/image/upload/vendaje_triangular_egikms.webp',
             fechaVencimientoKey: "fechaInmovilizacion12",
             cantidadEstimadaKey: "cantidadEstimadaInmovilizacion12",
             cantidadExistenteKey: "cantidadInmovilizacion12",
@@ -928,6 +940,7 @@ const SupervisionFormularioEnelBotiquin = () => {
         {
             key: "inmovilizacion13",
             texto: "Vendaje Elástico 2x5",
+            imagenKey: 'https://res.cloudinary.com/dcozwbcpi/image/upload/vendaje_elastico_2x5_bckkgn.webp',
             fechaVencimientoKey: "fechaInmovilizacion13",
             cantidadEstimadaKey: "cantidadEstimadaInmovilizacion13",
             cantidadExistenteKey: "cantidadInmovilizacion13",
@@ -938,6 +951,7 @@ const SupervisionFormularioEnelBotiquin = () => {
         {
             key: "inmovilizacion14",
             texto: "Vendaje Elástico 3x5",
+            imagenKey: 'https://res.cloudinary.com/dcozwbcpi/image/upload/vendaje_elastico_3x5_n1zi7p.webp',
             fechaVencimientoKey: "fechaInmovilizacion14",
             cantidadEstimadaKey: "cantidadEstimadaInmovilizacion14",
             cantidadExistenteKey: "cantidadInmovilizacion14",
@@ -948,6 +962,7 @@ const SupervisionFormularioEnelBotiquin = () => {
         {
             key: "inmovilizacion15",
             texto: "Vendaje Elástico 5x5",
+            imagenKey: 'https://res.cloudinary.com/dcozwbcpi/image/upload/vendaje_elastico_5x5_lqd7ph.webp',
             fechaVencimientoKey: "fechaInmovilizacion15",
             cantidadEstimadaKey: "cantidadEstimadaInmovilizacion15",
             cantidadExistenteKey: "cantidadInmovilizacion15",
@@ -958,6 +973,7 @@ const SupervisionFormularioEnelBotiquin = () => {
         {
             key: "inmovilizacion16",
             texto: "Oclusores Oculares",
+            imagenKey: 'https://res.cloudinary.com/dcozwbcpi/image/upload/oclusores_oculares_sf54xj.jpg',
             fechaVencimientoKey: "fechaInmovilizacion16",
             cantidadEstimadaKey: "cantidadEstimadaInmovilizacion16",
             cantidadExistenteKey: "cantidadInmovilizacion16",
@@ -969,6 +985,7 @@ const SupervisionFormularioEnelBotiquin = () => {
         {
             key: "antisepticos1",
             texto: "Jabón Antiséptico (Clorhexidina)",
+            imagenKey: 'https://res.cloudinary.com/dcozwbcpi/image/upload/jabon_antiseptico_p3xvfj.jpg',
             fechaVencimientoKey: "fechaAntisepticos1",
             cantidadEstimadaKey: "cantidadEstimadaAntisepticos1",
             cantidadExistenteKey: "cantidadAntisepticos1",
@@ -979,6 +996,7 @@ const SupervisionFormularioEnelBotiquin = () => {
         {
             key: "antisepticos2",
             texto: "Solución Antiséptica (Clorhexidina)",
+            imagenKey: 'https://res.cloudinary.com/dcozwbcpi/image/upload/solucion_antiseptico_ekmttm.jpg',
             fechaVencimientoKey: "fechaAntisepticos2",
             cantidadEstimadaKey: "cantidadEstimadaAntisepticos2",
             cantidadExistenteKey: "cantidadAntisepticos2",
@@ -990,6 +1008,7 @@ const SupervisionFormularioEnelBotiquin = () => {
         {
             key: "instrumental1",
             texto: "Termómetro",
+            imagenKey: 'https://res.cloudinary.com/dcozwbcpi/image/upload/termometro_hycjvl.png',
             fechaVencimientoKey: "fechaInstrumental1",
             cantidadEstimadaKey: "cantidadEstimadaInstrumental1",
             cantidadExistenteKey: "cantidadInstrumental1",
@@ -1000,6 +1019,7 @@ const SupervisionFormularioEnelBotiquin = () => {
         {
             key: "instrumental2",
             texto: "Tijeras para trauma",
+            imagenKey: 'https://res.cloudinary.com/dcozwbcpi/image/upload/tijeras_ugejh2.jpg',
             fechaVencimientoKey: "fechaInstrumental2",
             cantidadEstimadaKey: "cantidadEstimadaInstrumental2",
             cantidadExistenteKey: "cantidadInstrumental2",
@@ -1010,6 +1030,7 @@ const SupervisionFormularioEnelBotiquin = () => {
         {
             key: "instrumental3",
             texto: "Bolsa cierre hermetico",
+            imagenKey: 'https://res.cloudinary.com/dcozwbcpi/image/upload/bolsa_hermetica_yskglv.webp',
             fechaVencimientoKey: "fechaInstrumental3",
             cantidadEstimadaKey: "cantidadEstimadaInstrumental3",
             cantidadExistenteKey: "cantidadInstrumental3",
@@ -1020,6 +1041,7 @@ const SupervisionFormularioEnelBotiquin = () => {
         {
             key: "instrumental4",
             texto: "Linterna pequeña con pilas",
+            imagenKey: 'https://res.cloudinary.com/dcozwbcpi/image/upload/linterna_peque%C3%B1a_con_pilas_vxdo43.webp',
             fechaVencimientoKey: "fechaInstrumental4",
             cantidadEstimadaKey: "cantidadEstimadaInstrumental4",
             cantidadExistenteKey: "cantidadInstrumental4",
@@ -1030,6 +1052,7 @@ const SupervisionFormularioEnelBotiquin = () => {
         {
             key: "instrumental5",
             texto: "Pilas de repuesto",
+            imagenKey: 'https://res.cloudinary.com/dcozwbcpi/image/upload/pilas_de_repuesto_ssfveh.jpg',
             fechaVencimientoKey: "fechaInstrumental5",
             cantidadEstimadaKey: "cantidadEstimadaInstrumental5",
             cantidadExistenteKey: "cantidadInstrumental5",
@@ -1040,6 +1063,7 @@ const SupervisionFormularioEnelBotiquin = () => {
         {
             key: "instrumental6",
             texto: "Manual de Primeros auxilios",
+            imagenKey: 'https://res.cloudinary.com/dcozwbcpi/image/upload/manual_de_primeros_auxilios_j9vlgm.jpg',
             fechaVencimientoKey: "fechaInstrumental6",
             cantidadEstimadaKey: "cantidadEstimadaInstrumental6",
             cantidadExistenteKey: "cantidadInstrumental6",
@@ -1050,6 +1074,7 @@ const SupervisionFormularioEnelBotiquin = () => {
         {
             key: "instrumental7",
             texto: "Cuadernillo para Notas",
+            imagenKey: 'https://res.cloudinary.com/dcozwbcpi/image/upload/cuadernillo_para_notas_tsxa6f.jpg',
             fechaVencimientoKey: "fechaInstrumental7",
             cantidadEstimadaKey: "cantidadEstimadaInstrumental7",
             cantidadExistenteKey: "cantidadInstrumental7",
@@ -1060,6 +1085,7 @@ const SupervisionFormularioEnelBotiquin = () => {
         {
             key: "instrumental8",
             texto: "Esfero",
+            imagenKey: 'https://res.cloudinary.com/dcozwbcpi/image/upload/espero_xyxldk.jpg',
             fechaVencimientoKey: "fechaInstrumental8",
             cantidadEstimadaKey: "cantidadEstimadaInstrumental8",
             cantidadExistenteKey: "cantidadInstrumental8",
@@ -1070,6 +1096,7 @@ const SupervisionFormularioEnelBotiquin = () => {
         {
             key: "instrumental9",
             texto: "Pito",
+            imagenKey: 'https://res.cloudinary.com/dcozwbcpi/image/upload/pito_a1ejls.jpg',
             fechaVencimientoKey: "fechaInstrumental9",
             cantidadEstimadaKey: "cantidadEstimadaInstrumental9",
             cantidadExistenteKey: "cantidadInstrumental9",
@@ -1080,6 +1107,7 @@ const SupervisionFormularioEnelBotiquin = () => {
         {
             key: "instrumental10",
             texto: "Cepillo pequeño",
+            imagenKey: 'https://res.cloudinary.com/dcozwbcpi/image/upload/cepillo_peque%C3%B1o_rs3o6r.jpg',
             fechaVencimientoKey: "fechaInstrumental10",
             cantidadEstimadaKey: "cantidadEstimadaInstrumental10",
             cantidadExistenteKey: "cantidadInstrumental10",
@@ -1090,6 +1118,7 @@ const SupervisionFormularioEnelBotiquin = () => {
         {
             key: "instrumental11",
             texto: "Botiquín fijo, caja o Maletín",
+            imagenKey: 'https://res.cloudinary.com/dcozwbcpi/image/upload/botiquin_ajiu8f.jpg',
             fechaVencimientoKey: "fechaInstrumental11",
             cantidadEstimadaKey: "cantidadEstimadaInstrumental11",
             cantidadExistenteKey: "cantidadInstrumental11",

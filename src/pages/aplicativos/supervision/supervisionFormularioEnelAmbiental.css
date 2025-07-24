@@ -97,6 +97,16 @@
                     }
                 }
 
+                .botonAgregar {
+                    display: flex !important;
+                    justify-content: end;
+                    width: 100%;
+
+                    .agregar {
+                        max-width: 100px;
+                    }
+                }
+
                 .cartas {
                     width: 100% !important;
                     display: flex !important;
@@ -112,16 +122,6 @@
                         padding: 5px 10px;
                         text-align: center;
                         color: black;
-                    }
-
-                    .botonAgregar {
-                        display: flex !important;
-                        justify-content: end;
-                        width: 100%;
-
-                        .agregar {
-                            max-width: 100px;
-                        }
                     }
 
                     .opciones {

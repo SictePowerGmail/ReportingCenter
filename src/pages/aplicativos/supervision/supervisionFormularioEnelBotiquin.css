@@ -149,6 +149,7 @@
                             align-items: center !important;
                             justify-content: center;
                             height: 150px;
+                            text-align: center;
 
                             img {
                                 height: 100% !important;
