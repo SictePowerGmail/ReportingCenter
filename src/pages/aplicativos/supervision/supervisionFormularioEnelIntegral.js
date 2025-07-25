@@ -349,7 +349,7 @@ const SupervisionFormularioEnelIntegral = () => {
     };
 
     const estadoInicialFormularioEnelInspeccionIntegralHSE = {
-        tipoInpseccion: "",
+        tipoInspeccion: "",
         nombreProyecto: "",
         noContrato: "",
         direccion: "",
@@ -1304,7 +1304,7 @@ const SupervisionFormularioEnelIntegral = () => {
     }
 
     const validarFormularioEnelInspeccionIntegralHSE = (formulario) => {
-        if (!formulario.tipoInpseccion) { toast.error('Por favor diligencie el tipo de inspeccion.'); return false }
+        if (!formulario.tipoInspeccion) { toast.error('Por favor diligencie el tipo de inspeccion.'); return false }
         if (!formulario.nombreProyecto) { toast.error('Por favor diligencie el nombre del proyecto.'); return false }
         if (!formulario.noContrato) { toast.error('Por favor diligencie el numero de contrato.'); return false }
         if (!formulario.direccion) { toast.error('Por favor diligencie la direccion.'); return false }
@@ -1447,7 +1447,7 @@ const SupervisionFormularioEnelIntegral = () => {
                         <i className="fas fa-tools"></i>
                         <div className='entradaDatos'>
                             <Textos className='subtitulo'>Tipo de Inspeccion:</Textos>
-                            <Selectores value={formularioEnelInspeccionIntegralHSE.tipoInpseccion} onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('tipoInpseccion', e.target.value)}
+                            <Selectores value={formularioEnelInspeccionIntegralHSE.tipoInspeccion} onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE('tipoInspeccion', e.target.value)}
                                 options={[
                                     { value: 'Presencial', label: 'Presencial' },
                                     { value: 'Virtual', label: 'Virtual' },

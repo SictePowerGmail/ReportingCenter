@@ -51,6 +51,7 @@ const SupervisionPrincipal = () => {
     const [carpeta, setCarpeta] = useState(Cookies.get('SupervisionCarpeta') || 'Claro');
     const [dataClaro, setDataClaro] = useState('');
     const [dataEnelInspeccionIntegralHSE, setDataEnelInspeccionIntegralHSE] = useState('');
+    const [dataEnelInspeccionAmbiental, setDataEnelInspeccionAmbiental] = useState('');
     const [datosParaGrafico1, setDatosParaGrafico1] = useState('');
     const [datosParaGrafico2, setDatosParaGrafico2] = useState('');
 
@@ -359,17 +360,32 @@ const SupervisionPrincipal = () => {
         }
     };
 
+    const parseFecha = (fechaStr) => {
+        const [fecha, hora] = fechaStr.split(', ');
+        const [dia, mes, anio] = fecha.split('/');
+        return new Date(`${anio}-${mes}-${dia}T${hora}`);
+    };
+
     const cargarRegistrosEnel = async () => {
         try {
             setLoading(true);
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/supervision/registrosEnelInspeccionIntegralHse`);
-            const registrosOrdenados = response.data.sort((a, b) => {
-                return new Date(b.fechaInicial) - new Date(a.fechaInicial);
+            const responseIntegral = await axios.get(`${process.env.REACT_APP_API_URL}/supervision/registrosEnelInspeccionIntegralHse`);
+            const registrosIntegralOrdenados = responseIntegral.data
+                .sort((a, b) => parseFecha(b.fechaFinal) - parseFecha(a.fechaFinal))
+                .map((item) => ({
+                    ...item,
+                    id: `ENEL-${String(item.id).padStart(5, '0')}`
+                }));
+            setDataEnelInspeccionIntegralHSE(registrosIntegralOrdenados);
+
+            const responseAmbiental = await axios.get(`${process.env.REACT_APP_API_URL}/supervision/registrosEnelInspeccionIntegralHse`);
+            const registrosAmbientalOrdenados = responseAmbiental.data.sort((a, b) => {
+                return parseFecha(b.fechaFinal) - parseFecha(a.fechaFinal);
             });
-            setDataEnelInspeccionIntegralHSE(registrosOrdenados);
+            setDataEnelInspeccionAmbiental(registrosAmbientalOrdenados);
 
             const conteoInspecciones = {};
-            registrosOrdenados.forEach((item) => {
+            registrosIntegralOrdenados.forEach((item) => {
                 const name = item.inspeccion?.trim() || 'Desconocido';
                 if (conteoInspecciones[name]) {
                     conteoInspecciones[name]++;
@@ -396,7 +412,7 @@ const SupervisionPrincipal = () => {
                     .join(' ');
             };
             const conteoSupervisores = {};
-            registrosOrdenados.forEach((item) => {
+            registrosIntegralOrdenados.forEach((item) => {
                 const name = item.nombreQuienInspecciona?.trim() || 'Desconocido';
                 const nombreFormateado = formatearNombre(name);
                 if (conteoSupervisores[nombreFormateado]) {
@@ -463,7 +479,7 @@ const SupervisionPrincipal = () => {
 
     const columnasEnel = [
         { header: 'Consecutivo', key: 'id' },
-        { header: 'Fecha', key: 'fechaInicial' },
+        { header: 'Fecha Final', key: 'fechaFinal' },
         { header: 'OP/OT', key: 'opOt' },
         { header: 'Nombre Proyecto', key: 'nombreProyecto' },
         { header: 'Nombre Quien Inspecciona', key: 'nombreQuienInspecciona' },
