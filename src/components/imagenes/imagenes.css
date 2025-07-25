@@ -38,6 +38,12 @@
                 border-radius: 6px;
                 padding: 4px 10px;
             }
+
+            &.activarCamara {
+                min-width: 100px !important;
+                font-size: 12px;
+                margin: 8px 0px;
+            }
         }
 
         .parrafo {

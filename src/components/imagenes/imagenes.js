@@ -4,6 +4,7 @@ import Textos from '../textos/textos';
 import Botones from '../botones/botones';
 import './imagenes.css';
 import { isConstructorDeclaration } from 'typescript';
+import CamaraHD from '../camara/camaraHD';
 
 const Imagenes = ({
     onChange,
@@ -14,6 +15,7 @@ const Imagenes = ({
     disableInput = false,
     ocultarDiv = false,
 }) => {
+    const [usarCamara, setUsarCamara] = useState(false);
 
     const procesarImagen = (file) =>
         new Promise((resolve, reject) => {
@@ -33,7 +35,7 @@ const Imagenes = ({
                     canvas.height = img.height * scaleSize;
 
                     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                    const base64Resized = canvas.toDataURL(file.type);
+                    const base64Resized = canvas.toDataURL("image/jpeg", 0.5);
                     resolve(base64Resized);
                 };
             };
@@ -87,15 +89,35 @@ const Imagenes = ({
                 ))}
 
                 <div className={`grupo-imagen`}>
-                    <Entradas
-                        type="file"
-                        className="image"
-                        accept="image/*"
-                        capture={capture ? 'environment' : undefined}
-                        onChange={(e) => handleImagenChange(e, imagenes.length)}
-                        disabled={disableInput}
-                    />
-                    <Textos className={`parrafo`}>{disableInput ? imagenes.length > 0 ? '' : 'Sin imagen' : 'Cargar nueva imagen'}</Textos>
+                    {capture === true && (
+                        <Botones onClick={() => setUsarCamara(true)} className="image activarCamara">
+                            Activar cámara
+                        </Botones>
+                    )}
+                    {capture === true && usarCamara === true && (
+                        <CamaraHD
+                            onCapture={(base64) => {
+                                const nuevaImagen = { name: `foto_${Date.now()}.jpg`, data: base64 };
+                                const nuevasImagenes = [...(Array.isArray(foto) ? foto : [])];
+                                nuevasImagenes.push(nuevaImagen);
+                                onChange(fotoKey, nuevasImagenes);
+                                setUsarCamara(false);
+                            }}
+                            onClose={() => setUsarCamara(false)} 
+                        />
+                    )}
+                    {capture === false && usarCamara === false && (
+                        <Entradas
+                            type="file"
+                            className="image"
+                            accept="image/*"
+                            onChange={(e) => handleImagenChange(e, imagenes.length)}
+                            disabled={disableInput}
+                        />
+                    )}
+                    <Textos className={`parrafo`}>
+                        {disableInput ? (imagenes.length > 0 ? '' : 'Sin imagen') : 'Cargar nueva imagen'}
+                    </Textos>
                 </div>
             </div>
         </>
