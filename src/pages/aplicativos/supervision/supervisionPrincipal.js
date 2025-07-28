@@ -388,7 +388,6 @@ const SupervisionPrincipal = () => {
                 }));
             setDataEnelInspeccionAmbiental(registrosAmbientalOrdenados);
 
-            console.log(registrosAmbientalOrdenados)
             const registrosUnificados = [...registrosIntegralOrdenados, ...registrosAmbientalOrdenados]
                 .sort((a, b) => parseFecha(b.fechaFinal) - parseFecha(a.fechaFinal))
                 .map((item) => ({
@@ -726,18 +725,25 @@ const SupervisionPrincipal = () => {
                                         if (fila.formulario === "Enel Inspeccion Integral HSE") {
                                             setLoading(true);
                                             const registro = dataEnelInspeccionIntegralHSE.find(item => item.id === fila.id);
+                                            Object.keys(localStorage).forEach((key) => {
+                                                if (key.startsWith('formulario')) {
+                                                    localStorage.removeItem(key);
+                                                }
+                                            });
                                             const datosConFotos = await cargarFotosEnBase64(registro);
-                                            localStorage.removeItem('formularioEnelInspeccionIntegralHSE');
                                             localStorage.setItem('formularioEnelInspeccionIntegralHSE', JSON.stringify(registro));
                                             navigate('/SupervisionFormularioEnelIntegral', { state: { modo: 'editar' } });
                                         }
                                         if (fila.formulario === "Enel Inspeccion de Gestion Ambiental para Areas Operativas") {
                                             setLoading(true);
                                             const registro = dataEnelInspeccionAmbiental.find(item => item.id === fila.id);
+                                            Object.keys(localStorage).forEach((key) => {
+                                                if (key.startsWith('formulario')) {
+                                                    localStorage.removeItem(key);
+                                                }
+                                            });
                                             const datosConFotos = await cargarFotosEnBase64(registro);
-                                            localStorage.removeItem('formularioEnelAmbiental');
                                             localStorage.setItem('formularioEnelAmbiental', JSON.stringify(registro));
-
                                             navigate('/SupervisionFormularioEnelAmbiental', { state: { modo: 'editar' } });
                                         }
                                     }}
