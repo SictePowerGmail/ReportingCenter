@@ -327,14 +327,12 @@ const SupervisionFormularioEnelBotiquin = () => {
 
             const formularioNuevoSinFotos = eliminarDataEnFotos(formularioConTiempos)
             const formularioNuevoSerializado = serializarCamposComplejos(formularioNuevoSinFotos)
-
             const response2 = await axios.post(`${process.env.REACT_APP_API_URL}/supervision/crearRegistrosEnelInspeccionBotiquin`, formularioNuevoSerializado);
 
             if (response2.status >= 200 && response2.status < 300) {
                 setEnviando(false)
                 console.log('Datos enviados exitosamente');
                 localStorage.removeItem('formularioEnelBotiquin');
-                setMiembroEnProceso({});
                 setFormularioEnelBotiquin(estadoInicialFormularioEnelBotiquin);
                 navigate('/SupervisionPrincipal', { state: { estadoNotificacion: true } });
             } else {
@@ -574,6 +572,7 @@ const SupervisionFormularioEnelBotiquin = () => {
             observacionInstrumental11: "",
         },
         observacion: "",
+        fotoObservacion: "",
         inspeccion: "",
     };
 
@@ -631,7 +630,11 @@ const SupervisionFormularioEnelBotiquin = () => {
         if (valor[0].name && valor[0].data) {
             setFormularioEnelBotiquin((prev) => {
                 const actualizado = { ...prev };
-                actualizado[nivel1][nivel2] = valor;
+                if (nivel2 !== undefined) {
+                    actualizado[nivel1][nivel2] = valor;
+                } else {
+                    actualizado[nivel1] = valor;
+                }
                 localStorage.setItem(
                     "formularioEnelBotiquin",
                     JSON.stringify(actualizado)
@@ -652,84 +655,6 @@ const SupervisionFormularioEnelBotiquin = () => {
         cargarDatosCiudades();
         cargarDatosPlanta();
     }, []);
-
-    const [ciudadesFiltradas, setCiudadesFiltradas] = useState([]);
-
-    const columnas = [
-        { header: 'No. ID', key: 'cedula' },
-        { header: 'Nombres y Apellidos', key: 'nombre' },
-        { header: 'Cargo', key: 'cargo' },
-    ];
-
-    const [mostrarModal, setMostrarModal] = useState(false);
-
-    const [miembroEnProceso, setMiembroEnProceso] = useState(() => {
-        const guardado = localStorage.getItem('miembroEnProceso');
-        return guardado ? JSON.parse(guardado) : {
-            cedula: "",
-            nombre: "",
-            cargo: "",
-        };
-    });
-
-    const actualizarCampoMiembroACuadrillaEnelBotiquin = async (campo, valor) => {
-
-        if (Array.isArray(valor) && valor.length === 0) {
-            setMiembroEnProceso((prev) => {
-                const actualizado = { ...prev };
-                actualizado[campo] = "";
-                localStorage.setItem(
-                    "miembroEnProceso",
-                    JSON.stringify(actualizado)
-                );
-                return actualizado;
-            });
-            return;
-        }
-
-        if (['C', 'NC', 'NA'].includes(valor)) {
-            setMiembroEnProceso(prev => {
-                const actualizado = { ...prev, [campo]: valor };
-
-                if (valor !== 'NC') {
-                    const base = campo.charAt(0).toUpperCase() + campo.slice(1);
-                    const fotoKey = `foto${base}`;
-
-                    if (fotoKey in actualizado) actualizado[fotoKey] = '';
-                }
-
-                localStorage.setItem('miembroEnProceso', JSON.stringify(actualizado));
-                return actualizado;
-            });
-            return;
-        }
-
-        if (typeof valor === 'string') {
-            setMiembroEnProceso(prev => {
-                const actualizado = { ...prev, [campo]: valor };
-                localStorage.setItem('miembroEnProceso', JSON.stringify(actualizado));
-                return actualizado;
-            });
-            return;
-        }
-
-        if (valor[0].name && valor[0].data) {
-            setMiembroEnProceso((prev) => {
-                const actualizado = { ...prev };
-                actualizado[campo] = valor;
-                localStorage.setItem(
-                    "miembroEnProceso",
-                    JSON.stringify(actualizado)
-                );
-                return actualizado;
-            });
-            return;
-        }
-    };
-
-    useEffect(() => {
-        localStorage.setItem('miembroEnProceso', JSON.stringify(miembroEnProceso));
-    }, [miembroEnProceso]);
 
     const elementos = document.querySelectorAll('.prin');
 
@@ -1130,83 +1055,125 @@ const SupervisionFormularioEnelBotiquin = () => {
 
     const validarFormularioEnelBotiquin = (formulario) => {
         if (!formulario.tipoInspeccion) { toast.error('Por favor diligencie el tipo de inspeccion.'); return false }
+        if (!formulario.clasificacion) { toast.error('Por favor diligencie la clasificacion.'); return false }
+        if (!cedulaUsuario) { toast.error('Por favor diligencie inicie sesion ya que no existe usuario.'); return false }
+        if (!nombreUsuario) { toast.error('Por favor diligencie inicie sesion ya que no existe usuario.'); return false }
         if (!formulario.nombreProyecto) { toast.error('Por favor diligencie el nombre del proyecto.'); return false }
-        if (!formulario.noContrato) { toast.error('Por favor diligencie el numero de contrato.'); return false }
-        if (!formulario.direccion) { toast.error('Por favor diligencie la direccion.'); return false }
-        if (!formulario.ciudad) { toast.error('Por favor diligencie la ciudad.'); return false }
-        if (!formulario.opOt) { toast.error('Por favor diligencie la OP/OT.'); return false }
-        if (!formulario.cedulaSupervisorTecnico) { toast.error('Por favor diligencie la cedula del tecnico.'); return false }
-        if (!formulario.nombreSupervisorTecnico || formulario.nombreSupervisorTecnico === 'Usuario no encontrado') { toast.error('Por favor ingrese un usuario valido para el campo de tecnico.'); return false }
-        if (!formulario.cedulaLiderEncargado) { toast.error('Por favor diligencie la cedula del lider.'); return false }
-        if (!formulario.nombreLiderEncargado || formulario.nombreLiderEncargado === 'Usuario no encontrado') { toast.error('Por favor ingrese un usuario valido para el campo de lider.'); return false }
+        if (!formulario.cedulaResponsableBotiquin) { toast.error('Por favor diligencie la cedula del responsable del botiquin.'); return false }
+        if (!formulario.nombreResponsableBotiquin || formulario.nombreResponsableBotiquin === 'Usuario no encontrado') { toast.error('Por favor ingrese un usuario valido para el responsable del botiquin.'); return false }
         if (!formulario.proceso) { toast.error('Por favor diligencie el proceso.'); return false }
-        if (!formulario.placa) { toast.error('Por favor diligencie la placa del vehiculo.'); return false }
-        if (!Array.isArray(formulario.cuadrilla)) { toast.error('Por favor diligencie al menos dos personas en la cuadrilla.'); return false }
-        const personasConCedula = formulario.cuadrilla.filter(persona => persona.cedula && persona.cedula.trim() !== '');
-        if (personasConCedula.length < 2) { toast.error('Debe haber al menos dos personas en la cuadrilla.'); return false }
+        if (!formulario.zona) { toast.error('Por favor diligencie la zona.'); return false }
+        if (!formulario.placa && formulario.zona === 'Movil') { toast.error('Por favor diligencie la placa.'); return false }
+        if (!formulario.sede && formulario.zona === 'Bodega') { toast.error('Por favor diligencie la sede.'); return false }
 
-        if (!formulario.socioBotiquin.socioBotiquin1) { toast.error('Por favor diligencie el capitulo 1 completo.'); return false }
-        if ((!formulario.socioBotiquin.observacionSocioBotiquin1 || !formulario.socioBotiquin.fotoSocioBotiquin1) && formulario.socioBotiquin.socioBotiquin1 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 1 cuando su respuesta es No Cumple en la pregunta 1.'); return false }
+        if (!formulario.bioseguridad.fechaBioseguridad1 && formulario.bioseguridad.bioseguridad1 === 'C') { toast.error('Por favor diligencie la fecha de vencimiento de la pregunta 1 en el capitulo 1.'); return false }
+        if (!formulario.bioseguridad.cantidadBioseguridad1 && formulario.bioseguridad.bioseguridad1 === 'C') { toast.error('Por favor diligencie la cantidad de la pregunta 1 en el capitulo 1.'); return false }
+        if ((!formulario.bioseguridad.observacionBioseguridad1 || !formulario.bioseguridad.fotoBioseguridad1) && formulario.bioseguridad.bioseguridad1 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 1 cuando su respuesta es No Cumple en la pregunta 1.'); return false }
+        if (!formulario.bioseguridad.fechaBioseguridad2 && formulario.bioseguridad.bioseguridad2 === 'C') { toast.error('Por favor diligencie la fecha de vencimiento de la pregunta 2 en el capitulo 1.'); return false }
+        if (!formulario.bioseguridad.cantidadBioseguridad2 && formulario.bioseguridad.bioseguridad2 === 'C') { toast.error('Por favor diligencie la cantidad de la pregunta 2 en el capitulo 1.'); return false }
+        if ((!formulario.bioseguridad.observacionBioseguridad2 || !formulario.bioseguridad.fotoBioseguridad2) && formulario.bioseguridad.bioseguridad2 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 1 cuando su respuesta es No Cumple en la pregunta 2.'); return false }
+        if (!formulario.bioseguridad.fechaBioseguridad3 && formulario.bioseguridad.bioseguridad3 === 'C') { toast.error('Por favor diligencie la fecha de vencimiento de la pregunta 3 en el capitulo 1.'); return false }
+        if (!formulario.bioseguridad.cantidadBioseguridad3 && formulario.bioseguridad.bioseguridad3 === 'C') { toast.error('Por favor diligencie la cantidad de la pregunta 3 en el capitulo 1.'); return false }
+        if ((!formulario.bioseguridad.observacionBioseguridad3 || !formulario.bioseguridad.fotoBioseguridad3) && formulario.bioseguridad.bioseguridad3 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 1 cuando su respuesta es No Cumple en la pregunta 3.'); return false }
+        if (!formulario.bioseguridad.fechaBioseguridad4 && formulario.bioseguridad.bioseguridad4 === 'C') { toast.error('Por favor diligencie la fecha de vencimiento de la pregunta 4 en el capitulo 1.'); return false }
+        if (!formulario.bioseguridad.cantidadBioseguridad4 && formulario.bioseguridad.bioseguridad4 === 'C') { toast.error('Por favor diligencie la cantidad de la pregunta 4 en el capitulo 1.'); return false }
+        if ((!formulario.bioseguridad.observacionBioseguridad4 || !formulario.bioseguridad.fotoBioseguridad4) && formulario.bioseguridad.bioseguridad4 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 1 cuando su respuesta es No Cumple en la pregunta 4.'); return false }
+        if (!formulario.bioseguridad.fechaBioseguridad5 && formulario.bioseguridad.bioseguridad5 === 'C') { toast.error('Por favor diligencie la fecha de vencimiento de la pregunta 5 en el capitulo 1.'); return false }
+        if (!formulario.bioseguridad.cantidadBioseguridad5 && formulario.bioseguridad.bioseguridad5 === 'C') { toast.error('Por favor diligencie la cantidad de la pregunta 5 en el capitulo 1.'); return false }
+        if ((!formulario.bioseguridad.observacionBioseguridad5 || !formulario.bioseguridad.fotoBioseguridad5) && formulario.bioseguridad.bioseguridad5 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 1 cuando su respuesta es No Cumple en la pregunta 5.'); return false }
 
-        if (!formulario.materialesConstruccion.materialesConstruccion1 || !formulario.materialesConstruccion.materialesConstruccion2 || !formulario.materialesConstruccion.materialesConstruccion3 || !formulario.materialesConstruccion.materialesConstruccion4) { toast.error('Por favor diligencie el capitulo 2 completo.'); return false }
-        if ((!formulario.materialesConstruccion.fotoMaterialesConstruccion1 && formulario.materialesConstruccion.materialesConstruccion1 !== 'NA')) { toast.error('Por favor ingrese las fotos obligatorias en el capitulo 2.'); return false }
-        if (!formulario.materialesConstruccion.observacionMaterialesConstruccion1 && formulario.materialesConstruccion.materialesConstruccion1 === 'NC') { toast.error('Por favor ingrese la observacion correspondiente en el capitulo 2 cuando su respuesta es No Cumple en la pregunta 1.'); return false }
-        if ((!formulario.materialesConstruccion.observacionMaterialesConstruccion2 || !formulario.materialesConstruccion.fotoMaterialesConstruccion2) && formulario.materialesConstruccion.materialesConstruccion2 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 2 cuando su respuesta es No Cumple en la pregunta 2.'); return false }
-        if ((!formulario.materialesConstruccion.observacionmaterialesConstruccion3 || !formulario.materialesConstruccion.fotoMaterialesConstruccion3) && formulario.materialesConstruccion.materialesConstruccion3 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 2 cuando su respuesta es No Cumple en la pregunta 3.'); return false }
-        if ((!formulario.materialesConstruccion.observacionMaterialesConstruccion4 || !formulario.materialesConstruccion.fotoMaterialesConstruccion4) && formulario.materialesConstruccion.materialesConstruccion4 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 2 cuando su respuesta es No Cumple en la pregunta 4.'); return false }
+        if (!formulario.inmovilizacion.fechaInmovilizacion1 && formulario.inmovilizacion.inmovilizacion1 === 'C') { toast.error('Por favor diligencie la fecha de vencimiento de la pregunta 1 en el capitulo 2.'); return false }
+        if (!formulario.inmovilizacion.cantidadInmovilizacion1 && formulario.inmovilizacion.inmovilizacion1 === 'C') { toast.error('Por favor diligencie la cantidad de la pregunta 1 en el capitulo 2.'); return false }
+        if ((!formulario.inmovilizacion.observacionInmovilizacion1 || !formulario.inmovilizacion.fotoInmovilizacion1) && formulario.inmovilizacion.inmovilizacion1 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 2 cuando su respuesta es No Cumple en la pregunta 1.'); return false }
+        if (!formulario.inmovilizacion.fechaInmovilizacion2 && formulario.inmovilizacion.inmovilizacion2 === 'C') { toast.error('Por favor diligencie la fecha de vencimiento de la pregunta 2 en el capitulo 2.'); return false }
+        if (!formulario.inmovilizacion.cantidadInmovilizacion2 && formulario.inmovilizacion.inmovilizacion2 === 'C') { toast.error('Por favor diligencie la cantidad de la pregunta 2 en el capitulo 2.'); return false }
+        if ((!formulario.inmovilizacion.observacionInmovilizacion2 || !formulario.inmovilizacion.fotoInmovilizacion2) && formulario.inmovilizacion.inmovilizacion2 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 2 cuando su respuesta es No Cumple en la pregunta 2.'); return false }
+        if (!formulario.inmovilizacion.fechaInmovilizacion3 && formulario.inmovilizacion.inmovilizacion3 === 'C') { toast.error('Por favor diligencie la fecha de vencimiento de la pregunta 3 en el capitulo 2.'); return false }
+        if (!formulario.inmovilizacion.cantidadInmovilizacion3 && formulario.inmovilizacion.inmovilizacion3 === 'C') { toast.error('Por favor diligencie la cantidad de la pregunta 3 en el capitulo 2.'); return false }
+        if ((!formulario.inmovilizacion.observacionInmovilizacion3 || !formulario.inmovilizacion.fotoInmovilizacion3) && formulario.inmovilizacion.inmovilizacion3 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 2 cuando su respuesta es No Cumple en la pregunta 3.'); return false }
+        if (!formulario.inmovilizacion.fechaInmovilizacion4 && formulario.inmovilizacion.inmovilizacion4 === 'C') { toast.error('Por favor diligencie la fecha de vencimiento de la pregunta 4 en el capitulo 2.'); return false }
+        if (!formulario.inmovilizacion.cantidadInmovilizacion4 && formulario.inmovilizacion.inmovilizacion4 === 'C') { toast.error('Por favor diligencie la cantidad de la pregunta 4 en el capitulo 2.'); return false }
+        if ((!formulario.inmovilizacion.observacionInmovilizacion4 || !formulario.inmovilizacion.fotoInmovilizacion4) && formulario.inmovilizacion.inmovilizacion4 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 2 cuando su respuesta es No Cumple en la pregunta 4.'); return false }
+        if (!formulario.inmovilizacion.fechaInmovilizacion5 && formulario.inmovilizacion.inmovilizacion5 === 'C') { toast.error('Por favor diligencie la fecha de vencimiento de la pregunta 5 en el capitulo 2.'); return false }
+        if (!formulario.inmovilizacion.cantidadInmovilizacion5 && formulario.inmovilizacion.inmovilizacion5 === 'C') { toast.error('Por favor diligencie la cantidad de la pregunta 5 en el capitulo 2.'); return false }
+        if ((!formulario.inmovilizacion.observacionInmovilizacion5 || !formulario.inmovilizacion.fotoInmovilizacion5) && formulario.inmovilizacion.inmovilizacion5 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 2 cuando su respuesta es No Cumple en la pregunta 5.'); return false }
+        if (!formulario.inmovilizacion.fechaInmovilizacion6 && formulario.inmovilizacion.inmovilizacion6 === 'C') { toast.error('Por favor diligencie la fecha de vencimiento de la pregunta 6 en el capitulo 2.'); return false }
+        if (!formulario.inmovilizacion.cantidadInmovilizacion6 && formulario.inmovilizacion.inmovilizacion6 === 'C') { toast.error('Por favor diligencie la cantidad de la pregunta 6 en el capitulo 2.'); return false }
+        if ((!formulario.inmovilizacion.observacionInmovilizacion6 || !formulario.inmovilizacion.fotoInmovilizacion6) && formulario.inmovilizacion.inmovilizacion6 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 2 cuando su respuesta es No Cumple en la pregunta 6.'); return false }
+        if (!formulario.inmovilizacion.fechaInmovilizacion7 && formulario.inmovilizacion.inmovilizacion7 === 'C') { toast.error('Por favor diligencie la fecha de vencimiento de la pregunta 7 en el capitulo 2.'); return false }
+        if (!formulario.inmovilizacion.cantidadInmovilizacion7 && formulario.inmovilizacion.inmovilizacion7 === 'C') { toast.error('Por favor diligencie la cantidad de la pregunta 7 en el capitulo 2.'); return false }
+        if ((!formulario.inmovilizacion.observacionInmovilizacion7 || !formulario.inmovilizacion.fotoInmovilizacion7) && formulario.inmovilizacion.inmovilizacion7 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 2 cuando su respuesta es No Cumple en la pregunta 7.'); return false }
+        if (!formulario.inmovilizacion.fechaInmovilizacion8 && formulario.inmovilizacion.inmovilizacion8 === 'C') { toast.error('Por favor diligencie la fecha de vencimiento de la pregunta 8 en el capitulo 2.'); return false }
+        if (!formulario.inmovilizacion.cantidadInmovilizacion8 && formulario.inmovilizacion.inmovilizacion8 === 'C') { toast.error('Por favor diligencie la cantidad de la pregunta 8 en el capitulo 2.'); return false }
+        if ((!formulario.inmovilizacion.observacionInmovilizacion8 || !formulario.inmovilizacion.fotoInmovilizacion8) && formulario.inmovilizacion.inmovilizacion8 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 2 cuando su respuesta es No Cumple en la pregunta 8.'); return false }
+        if (!formulario.inmovilizacion.fechaInmovilizacion9 && formulario.inmovilizacion.inmovilizacion9 === 'C') { toast.error('Por favor diligencie la fecha de vencimiento de la pregunta 9 en el capitulo 2.'); return false }
+        if (!formulario.inmovilizacion.cantidadInmovilizacion9 && formulario.inmovilizacion.inmovilizacion9 === 'C') { toast.error('Por favor diligencie la cantidad de la pregunta 9 en el capitulo 2.'); return false }
+        if ((!formulario.inmovilizacion.observacionInmovilizacion9 || !formulario.inmovilizacion.fotoInmovilizacion9) && formulario.inmovilizacion.inmovilizacion9 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 2 cuando su respuesta es No Cumple en la pregunta 9.'); return false }
+        if (!formulario.inmovilizacion.fechaInmovilizacion10 && formulario.inmovilizacion.inmovilizacion10 === 'C') { toast.error('Por favor diligencie la fecha de vencimiento de la pregunta 10 en el capitulo 2.'); return false }
+        if (!formulario.inmovilizacion.cantidadInmovilizacion10 && formulario.inmovilizacion.inmovilizacion10 === 'C') { toast.error('Por favor diligencie la cantidad de la pregunta 10 en el capitulo 2.'); return false }
+        if ((!formulario.inmovilizacion.observacionInmovilizacion10 || !formulario.inmovilizacion.fotoInmovilizacion10) && formulario.inmovilizacion.inmovilizacion10 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 2 cuando su respuesta es No Cumple en la pregunta 10.'); return false }
+        if (!formulario.inmovilizacion.fechaInmovilizacion11 && formulario.inmovilizacion.inmovilizacion11 === 'C') { toast.error('Por favor diligencie la fecha de vencimiento de la pregunta 11 en el capitulo 2.'); return false }
+        if (!formulario.inmovilizacion.cantidadInmovilizacion11 && formulario.inmovilizacion.inmovilizacion11 === 'C') { toast.error('Por favor diligencie la cantidad de la pregunta 11 en el capitulo 2.'); return false }
+        if ((!formulario.inmovilizacion.observacionInmovilizacion11 || !formulario.inmovilizacion.fotoInmovilizacion11) && formulario.inmovilizacion.inmovilizacion11 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 2 cuando su respuesta es No Cumple en la pregunta 11.'); return false }
+        if (!formulario.inmovilizacion.fechaInmovilizacion12 && formulario.inmovilizacion.inmovilizacion12 === 'C') { toast.error('Por favor diligencie la fecha de vencimiento de la pregunta 12 en el capitulo 2.'); return false }
+        if (!formulario.inmovilizacion.cantidadInmovilizacion12 && formulario.inmovilizacion.inmovilizacion12 === 'C') { toast.error('Por favor diligencie la cantidad de la pregunta 12 en el capitulo 2.'); return false }
+        if ((!formulario.inmovilizacion.observacionInmovilizacion12 || !formulario.inmovilizacion.fotoInmovilizacion12) && formulario.inmovilizacion.inmovilizacion12 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 2 cuando su respuesta es No Cumple en la pregunta 12.'); return false }
+        if (!formulario.inmovilizacion.fechaInmovilizacion13 && formulario.inmovilizacion.inmovilizacion13 === 'C') { toast.error('Por favor diligencie la fecha de vencimiento de la pregunta 13 en el capitulo 2.'); return false }
+        if (!formulario.inmovilizacion.cantidadInmovilizacion13 && formulario.inmovilizacion.inmovilizacion13 === 'C') { toast.error('Por favor diligencie la cantidad de la pregunta 13 en el capitulo 2.'); return false }
+        if ((!formulario.inmovilizacion.observacionInmovilizacion13 || !formulario.inmovilizacion.fotoInmovilizacion13) && formulario.inmovilizacion.inmovilizacion13 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 2 cuando su respuesta es No Cumple en la pregunta 13.'); return false }
+        if (!formulario.inmovilizacion.fechaInmovilizacion14 && formulario.inmovilizacion.inmovilizacion14 === 'C') { toast.error('Por favor diligencie la fecha de vencimiento de la pregunta 14 en el capitulo 2.'); return false }
+        if (!formulario.inmovilizacion.cantidadInmovilizacion14 && formulario.inmovilizacion.inmovilizacion14 === 'C') { toast.error('Por favor diligencie la cantidad de la pregunta 14 en el capitulo 2.'); return false }
+        if ((!formulario.inmovilizacion.observacionInmovilizacion14 || !formulario.inmovilizacion.fotoInmovilizacion14) && formulario.inmovilizacion.inmovilizacion14 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 2 cuando su respuesta es No Cumple en la pregunta 14.'); return false }
+        if (!formulario.inmovilizacion.fechaInmovilizacion15 && formulario.inmovilizacion.inmovilizacion15 === 'C') { toast.error('Por favor diligencie la fecha de vencimiento de la pregunta 15 en el capitulo 2.'); return false }
+        if (!formulario.inmovilizacion.cantidadInmovilizacion15 && formulario.inmovilizacion.inmovilizacion15 === 'C') { toast.error('Por favor diligencie la cantidad de la pregunta 15 en el capitulo 2.'); return false }
+        if ((!formulario.inmovilizacion.observacionInmovilizacion15 || !formulario.inmovilizacion.fotoInmovilizacion15) && formulario.inmovilizacion.inmovilizacion15 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 2 cuando su respuesta es No Cumple en la pregunta 15.'); return false }
+        if (!formulario.inmovilizacion.fechaInmovilizacion16 && formulario.inmovilizacion.inmovilizacion16 === 'C') { toast.error('Por favor diligencie la fecha de vencimiento de la pregunta 16 en el capitulo 2.'); return false }
+        if (!formulario.inmovilizacion.cantidadInmovilizacion16 && formulario.inmovilizacion.inmovilizacion16 === 'C') { toast.error('Por favor diligencie la cantidad de la pregunta 16 en el capitulo 2.'); return false }
+        if ((!formulario.inmovilizacion.observacionInmovilizacion16 || !formulario.inmovilizacion.fotoInmovilizacion16) && formulario.inmovilizacion.inmovilizacion16 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 2 cuando su respuesta es No Cumple en la pregunta 16.'); return false }
 
-        if (!formulario.rcd.rcd1 || !formulario.rcd.rcd2 || !formulario.rcd.rcd3 || !formulario.rcd.rcd4 || !formulario.rcd.rcd5 || !formulario.rcd.rcd6 || !formulario.rcd.rcd7) { toast.error('Por favor diligencie el capitulo 3 completo.'); return false }
-        if ((!formulario.rcd.fotoRcd1 && formulario.rcd.rcd1 !== 'NA') || (!formulario.rcd.fotoRcd6 && formulario.rcd.rcd6 !== 'NA') || (!formulario.rcd.fotoRcd7 && formulario.rcd.rcd7 !== 'NA')) { toast.error('Por favor ingrese las fotos obligatorias en el capitulo 3.'); return false }
-        if (!formulario.rcd.observacionRcd1 && formulario.rcd.rcd1 === 'NC') { toast.error('Por favor ingrese la observacion correspondiente en el capitulo 3 cuando su respuesta es No Cumple en la pregunta 1.'); return false }
-        if ((!formulario.rcd.observacionRcd2 || !formulario.rcd.fotoRcd2) && formulario.rcd.rcd2 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 3 cuando su respuesta es No Cumple en la pregunta 2.'); return false }
-        if ((!formulario.rcd.observacionRcd3 || !formulario.rcd.fotoRcd3) && formulario.rcd.rcd3 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 3 cuando su respuesta es No Cumple en la pregunta 3.'); return false }
-        if ((!formulario.rcd.observacionRcd4 || !formulario.rcd.fotoRcd4) && formulario.rcd.rcd4 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 3 cuando su respuesta es No Cumple en la pregunta 4.'); return false }
-        if ((!formulario.rcd.observacionRcd5 || !formulario.rcd.fotoRcd5) && formulario.rcd.rcd5 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 3 cuando su respuesta es No Cumple en la pregunta 5.'); return false }
-        if (!formulario.rcd.observacionRcd6 && formulario.rcd.rcd6 === 'NC') { toast.error('Por favor ingrese la observacion correspondiente en el capitulo 3 cuando su respuesta es No Cumple en la pregunta 6.'); return false }
-        if (!formulario.rcd.observacionRcd7 && formulario.rcd.rcd7 === 'NC') { toast.error('Por favor ingrese la observacion correspondiente en el capitulo 3 cuando su respuesta es No Cumple en la pregunta 7.'); return false }
+        if (!formulario.antisepticos.fechaAntisepticos1 && formulario.antisepticos.antisepticos1 === 'C') { toast.error('Por favor diligencie la fecha de vencimiento de la pregunta 1 en el capitulo 3.'); return false }
+        if (!formulario.antisepticos.cantidadAntisepticos1 && formulario.antisepticos.antisepticos1 === 'C') { toast.error('Por favor diligencie la cantidad de la pregunta 1 en el capitulo 3.'); return false }
+        if ((!formulario.antisepticos.observacionAntisepticos1 || !formulario.antisepticos.fotoAntisepticos1) && formulario.antisepticos.antisepticos1 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 3 cuando su respuesta es No Cumple en la pregunta 1.'); return false }
+        if (!formulario.antisepticos.fechaAntisepticos2 && formulario.antisepticos.antisepticos2 === 'C') { toast.error('Por favor diligencie la fecha de vencimiento de la pregunta 2 en el capitulo 3.'); return false }
+        if (!formulario.antisepticos.cantidadAntisepticos2 && formulario.antisepticos.antisepticos2 === 'C') { toast.error('Por favor diligencie la cantidad de la pregunta 2 en el capitulo 3.'); return false }
+        if ((!formulario.antisepticos.observacionAntisepticos2 || !formulario.antisepticos.fotoAntisepticos2) && formulario.antisepticos.antisepticos2 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 3 cuando su respuesta es No Cumple en la pregunta 2.'); return false }
 
-        if (!formulario.residuosSolidos.residuosSolidos1 || !formulario.residuosSolidos.residuosSolidos2 || !formulario.residuosSolidos.residuosSolidos3 || !formulario.residuosSolidos.residuosSolidos4 || !formulario.residuosSolidos.residuosSolidos5 || !formulario.residuosSolidos.residuosSolidos6 || !formulario.residuosSolidos.residuosSolidos7 || !formulario.residuosSolidos.residuosSolidos8 || !formulario.residuosSolidos.residuosSolidos9 || !formulario.residuosSolidos.residuosSolidos10 || !formulario.residuosSolidos.residuosSolidos11 || !formulario.residuosSolidos.residuosSolidos12) { toast.error('Por favor diligencie el capitulo 4 completo.'); return false }
-        if ((!formulario.residuosSolidos.fotoResiduosSolidos2 && formulario.residuosSolidos.residuosSolidos2 !== 'NA')) { toast.error('Por favor ingrese las fotos obligatorias en el capitulo 4.'); return false }
-        if ((!formulario.residuosSolidos.observacionResiduosSolidos1 || !formulario.residuosSolidos.fotoResiduosSolidos1) && formulario.residuosSolidos.residuosSolidos1 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 4 cuando su respuesta es No Cumple en la pregunta 1.'); return false }
-        if (!formulario.residuosSolidos.observacionResiduosSolidos2 && formulario.residuosSolidos.residuosSolidos2 === 'NC') { toast.error('Por favor ingrese la observacion correspondiente en el capitulo 4 cuando su respuesta es No Cumple en la pregunta 2.'); return false }
-        if ((!formulario.residuosSolidos.observacionResiduosSolidos3 || !formulario.residuosSolidos.fotoResiduosSolidos3) && formulario.residuosSolidos.residuosSolidos3 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 4 cuando su respuesta es No Cumple en la pregunta 3.'); return false }
-        if ((!formulario.residuosSolidos.observacionResiduosSolidos4 || !formulario.residuosSolidos.fotoResiduosSolidos4) && formulario.residuosSolidos.residuosSolidos4 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 4 cuando su respuesta es No Cumple en la pregunta 4.'); return false }
-        if ((!formulario.residuosSolidos.observacionResiduosSolidos5 || !formulario.residuosSolidos.fotoResiduosSolidos5) && formulario.residuosSolidos.residuosSolidos5 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 4 cuando su respuesta es No Cumple en la pregunta 5.'); return false }
-        if ((!formulario.residuosSolidos.observacionResiduosSolidos6 || !formulario.residuosSolidos.fotoResiduosSolidos6) && formulario.residuosSolidos.residuosSolidos6 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 4 cuando su respuesta es No Cumple en la pregunta 6.'); return false }
-        if ((!formulario.residuosSolidos.observacionResiduosSolidos7 || !formulario.residuosSolidos.fotoResiduosSolidos7) && formulario.residuosSolidos.residuosSolidos7 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 4 cuando su respuesta es No Cumple en la pregunta 7.'); return false }
-        if ((!formulario.residuosSolidos.observacionResiduosSolidos8 || !formulario.residuosSolidos.fotoResiduosSolidos8) && formulario.residuosSolidos.residuosSolidos8 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 4 cuando su respuesta es No Cumple en la pregunta 8.'); return false }
-        if ((!formulario.residuosSolidos.observacionResiduosSolidos9 || !formulario.residuosSolidos.fotoResiduosSolidos9) && formulario.residuosSolidos.residuosSolidos9 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 4 cuando su respuesta es No Cumple en la pregunta 9.'); return false }
-        if ((!formulario.residuosSolidos.observacionResiduosSolidos10 || !formulario.residuosSolidos.fotoResiduosSolidos10) && formulario.residuosSolidos.residuosSolidos10 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 4 cuando su respuesta es No Cumple en la pregunta 10.'); return false }
-        if ((!formulario.residuosSolidos.observacionResiduosSolidos11 || !formulario.residuosSolidos.fotoResiduosSolidos11) && formulario.residuosSolidos.residuosSolidos11 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 4 cuando su respuesta es No Cumple en la pregunta 11.'); return false }
-        if ((!formulario.residuosSolidos.observacionResiduosSolidos12 || !formulario.residuosSolidos.fotoResiduosSolidos12) && formulario.residuosSolidos.residuosSolidos12 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 4 cuando su respuesta es No Cumple en la pregunta 12.'); return false }
-
-        if (!formulario.aceites.aceites1 || !formulario.aceites.aceites2 || !formulario.aceites.aceites3 || !formulario.aceites.aceites4 || !formulario.aceites.aceites5) { toast.error('Por favor diligencie el capitulo 5 completo.'); return false }
-        if ((!formulario.aceites.fotoAceites1 && formulario.aceites.aceites1 !== 'NA')) { toast.error('Por favor ingrese las fotos obligatorias en el capitulo 5.'); return false }
-        if (!formulario.aceites.observacionAceites1 && formulario.aceites.aceites1 === 'NC') { toast.error('Por favor ingrese la observacion correspondiente en el capitulo 5 cuando su respuesta es No Cumple en la pregunta 1.'); return false }
-        if ((!formulario.aceites.observacionAceites2 || !formulario.aceites.fotoAceites2) && formulario.aceites.aceites2 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 5 cuando su respuesta es No Cumple en la pregunta 2.'); return false }
-        if ((!formulario.aceites.observacionAceites3 || !formulario.aceites.fotoAceites3) && formulario.aceites.aceites3 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 5 cuando su respuesta es No Cumple en la pregunta 3.'); return false }
-        if ((!formulario.aceites.observacionAceites4 || !formulario.aceites.fotoAceites4) && formulario.aceites.aceites4 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 5 cuando su respuesta es No Cumple en la pregunta 4.'); return false }
-        if ((!formulario.aceites.observacionAceites5 || !formulario.aceites.fotoAceites5) && formulario.aceites.aceites5 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 5 cuando su respuesta es No Cumple en la pregunta 5.'); return false }
-
-        if (!formulario.vertimientos.vertimientos1 || !formulario.vertimientos.vertimientos2 || !formulario.vertimientos.vertimientos3) { toast.error('Por favor diligencie el capitulo 6 completo.'); return false }
-        if ((!formulario.vertimientos.observacionVertimientos1 || !formulario.vertimientos.fotoVertimientos1) && formulario.vertimientos.vertimientos1 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 6 cuando su respuesta es No Cumple en la pregunta 1.'); return false }
-        if ((!formulario.vertimientos.observacionVertimientos2 || !formulario.vertimientos.fotoVertimientos2) && formulario.vertimientos.vertimientos2 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 6 cuando su respuesta es No Cumple en la pregunta 2.'); return false }
-        if ((!formulario.vertimientos.observacionVertimientos3 || !formulario.vertimientos.fotoVertimientos3) && formulario.vertimientos.vertimientos3 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 6 cuando su respuesta es No Cumple en la pregunta 3.'); return false }
-
-        if (!formulario.atmosfericas.atmosfericas1 || !formulario.atmosfericas.atmosfericas2) { toast.error('Por favor diligencie el capitulo 7 completo.'); return false }
-        if ((!formulario.atmosfericas.observacionAtmosfericas1 || !formulario.atmosfericas.fotoAtmosfericas1) && formulario.atmosfericas.atmosfericas1 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 7 cuando su respuesta es No Cumple en la pregunta 1.'); return false }
-        if ((!formulario.atmosfericas.observacionAtmosfericas2 || !formulario.atmosfericas.fotoAtmosfericas2) && formulario.atmosfericas.atmosfericas2 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 7 cuando su respuesta es No Cumple en la pregunta 2.'); return false }
-
-        if (!formulario.seguridadIndustrial.seguridadIndustrial1 || !formulario.seguridadIndustrial.seguridadIndustrial2 || !formulario.seguridadIndustrial.seguridadIndustrial3 || !formulario.seguridadIndustrial.seguridadIndustrial4 || !formulario.seguridadIndustrial.seguridadIndustrial5 || !formulario.seguridadIndustrial.seguridadIndustrial6) { toast.error('Por favor diligencie el capitulo 8 completo.'); return false }
-        if ((!formulario.seguridadIndustrial.fotoSeguridadIndustrial1 && formulario.seguridadIndustrial.seguridadIndustrial1 !== 'NA') || (!formulario.seguridadIndustrial.fotoSeguridadIndustrial4 && formulario.seguridadIndustrial.seguridadIndustrial4 !== 'NA')) { toast.error('Por favor ingrese las fotos obligatorias en el capitulo 8.'); return false }
-        if (!formulario.seguridadIndustrial.observacionSeguridadIndustrial1 && formulario.seguridadIndustrial.seguridadIndustrial1 === 'NC') { toast.error('Por favor ingrese la observacion correspondiente en el capitulo 8 cuando su respuesta es No Cumple en la pregunta 1.'); return false }
-        if ((!formulario.seguridadIndustrial.observacionSeguridadIndustrial2 || !formulario.atmosfericas.fotoSeguridadIndustrial2) && formulario.atmosfericas.seguridadIndustrial2 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 8 cuando su respuesta es No Cumple en la pregunta 2.'); return false }
-        if ((!formulario.seguridadIndustrial.observacionSeguridadIndustrial3 || !formulario.atmosfericas.fotoSeguridadIndustrial3) && formulario.atmosfericas.seguridadIndustrial3 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 8 cuando su respuesta es No Cumple en la pregunta 3.'); return false }
-        if (!formulario.seguridadIndustrial.observacionSeguridadIndustrial4 && formulario.seguridadIndustrial.seguridadIndustrial4 === 'NC') { toast.error('Por favor ingrese la observacion correspondiente en el capitulo 8 cuando su respuesta es No Cumple en la pregunta 4.'); return false }
-        if ((!formulario.seguridadIndustrial.observacionSeguridadIndustrial5 || !formulario.atmosfericas.fotoSeguridadIndustrial5) && formulario.atmosfericas.seguridadIndustrial5 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 8 cuando su respuesta es No Cumple en la pregunta 5.'); return false }
-        if ((!formulario.seguridadIndustrial.observacionSeguridadIndustrial6 || !formulario.atmosfericas.fotoSeguridadIndustrial6) && formulario.atmosfericas.seguridadIndustrial6 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 8 cuando su respuesta es No Cumple en la pregunta 6.'); return false }
+        if (!formulario.instrumental.fechaInstrumental1 && formulario.instrumental.instrumental1 === 'C') { toast.error('Por favor diligencie la fecha de vencimiento de la pregunta 1 en el capitulo 4.'); return false }
+        if (!formulario.instrumental.cantidadInstrumental1 && formulario.instrumental.instrumental1 === 'C') { toast.error('Por favor diligencie la cantidad de la pregunta 1 en el capitulo 4.'); return false }
+        if ((!formulario.instrumental.observacionInstrumental1 || !formulario.instrumental.fotoInstrumental1) && formulario.instrumental.instrumental1 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 4 cuando su respuesta es No Cumple en la pregunta 1.'); return false }
+        if (!formulario.instrumental.fechaInstrumental2 && formulario.instrumental.instrumental2 === 'C') { toast.error('Por favor diligencie la fecha de vencimiento de la pregunta 2 en el capitulo 4.'); return false }
+        if (!formulario.instrumental.cantidadInstrumental2 && formulario.instrumental.instrumental2 === 'C') { toast.error('Por favor diligencie la cantidad de la pregunta 2 en el capitulo 4.'); return false }
+        if ((!formulario.instrumental.observacionInstrumental2 || !formulario.instrumental.fotoInstrumental2) && formulario.instrumental.instrumental2 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 4 cuando su respuesta es No Cumple en la pregunta 2.'); return false }
+        if (!formulario.instrumental.fechaInstrumental3 && formulario.instrumental.instrumental3 === 'C') { toast.error('Por favor diligencie la fecha de vencimiento de la pregunta 3 en el capitulo 4.'); return false }
+        if (!formulario.instrumental.cantidadInstrumental3 && formulario.instrumental.instrumental3 === 'C') { toast.error('Por favor diligencie la cantidad de la pregunta 3 en el capitulo 4.'); return false }
+        if ((!formulario.instrumental.observacionInstrumental3 || !formulario.instrumental.fotoInstrumental3) && formulario.instrumental.instrumental3 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 4 cuando su respuesta es No Cumple en la pregunta 3.'); return false }
+        if (!formulario.instrumental.fechaInstrumental4 && formulario.instrumental.instrumental4 === 'C') { toast.error('Por favor diligencie la fecha de vencimiento de la pregunta 4 en el capitulo 4.'); return false }
+        if (!formulario.instrumental.cantidadInstrumental4 && formulario.instrumental.instrumental4 === 'C') { toast.error('Por favor diligencie la cantidad de la pregunta 4 en el capitulo 4.'); return false }
+        if ((!formulario.instrumental.observacionInstrumental4 || !formulario.instrumental.fotoInstrumental4) && formulario.instrumental.instrumental4 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 4 cuando su respuesta es No Cumple en la pregunta 4.'); return false }
+        if (!formulario.instrumental.fechaInstrumental5 && formulario.instrumental.instrumental5 === 'C') { toast.error('Por favor diligencie la fecha de vencimiento de la pregunta 5 en el capitulo 4.'); return false }
+        if (!formulario.instrumental.cantidadInstrumental5 && formulario.instrumental.instrumental5 === 'C') { toast.error('Por favor diligencie la cantidad de la pregunta 5 en el capitulo 4.'); return false }
+        if ((!formulario.instrumental.observacionInstrumental5 || !formulario.instrumental.fotoInstrumental5) && formulario.instrumental.instrumental5 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 4 cuando su respuesta es No Cumple en la pregunta 5.'); return false }
+        if (!formulario.instrumental.fechaInstrumental6 && formulario.instrumental.instrumental6 === 'C') { toast.error('Por favor diligencie la fecha de vencimiento de la pregunta 6 en el capitulo 4.'); return false }
+        if (!formulario.instrumental.cantidadInstrumental6 && formulario.instrumental.instrumental6 === 'C') { toast.error('Por favor diligencie la cantidad de la pregunta 6 en el capitulo 4.'); return false }
+        if ((!formulario.instrumental.observacionInstrumental6 || !formulario.instrumental.fotoInstrumental6) && formulario.instrumental.instrumental6 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 4 cuando su respuesta es No Cumple en la pregunta 6.'); return false }
+        if (!formulario.instrumental.fechaInstrumental7 && formulario.instrumental.instrumental7 === 'C') { toast.error('Por favor diligencie la fecha de vencimiento de la pregunta 7 en el capitulo 4.'); return false }
+        if (!formulario.instrumental.cantidadInstrumental7 && formulario.instrumental.instrumental7 === 'C') { toast.error('Por favor diligencie la cantidad de la pregunta 7 en el capitulo 4.'); return false }
+        if ((!formulario.instrumental.observacionInstrumental7 || !formulario.instrumental.fotoInstrumental7) && formulario.instrumental.instrumental7 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 4 cuando su respuesta es No Cumple en la pregunta 7.'); return false }
+        if (!formulario.instrumental.fechaInstrumental8 && formulario.instrumental.instrumental8 === 'C') { toast.error('Por favor diligencie la fecha de vencimiento de la pregunta 8 en el capitulo 4.'); return false }
+        if (!formulario.instrumental.cantidadInstrumental8 && formulario.instrumental.instrumental8 === 'C') { toast.error('Por favor diligencie la cantidad de la pregunta 8 en el capitulo 4.'); return false }
+        if ((!formulario.instrumental.observacionInstrumental8 || !formulario.instrumental.fotoInstrumental8) && formulario.instrumental.instrumental8 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 4 cuando su respuesta es No Cumple en la pregunta 8.'); return false }
+        if (!formulario.instrumental.fechaInstrumental9 && formulario.instrumental.instrumental9 === 'C') { toast.error('Por favor diligencie la fecha de vencimiento de la pregunta 9 en el capitulo 4.'); return false }
+        if (!formulario.instrumental.cantidadInstrumental9 && formulario.instrumental.instrumental9 === 'C') { toast.error('Por favor diligencie la cantidad de la pregunta 9 en el capitulo 4.'); return false }
+        if ((!formulario.instrumental.observacionInstrumental9 || !formulario.instrumental.fotoInstrumental9) && formulario.instrumental.instrumental9 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 4 cuando su respuesta es No Cumple en la pregunta 9.'); return false }
+        if (!formulario.instrumental.fechaInstrumental10 && formulario.instrumental.instrumental10 === 'C') { toast.error('Por favor diligencie la fecha de vencimiento de la pregunta 10 en el capitulo 4.'); return false }
+        if (!formulario.instrumental.cantidadInstrumental10 && formulario.instrumental.instrumental10 === 'C') { toast.error('Por favor diligencie la cantidad de la pregunta 10 en el capitulo 4.'); return false }
+        if ((!formulario.instrumental.observacionInstrumental10 || !formulario.instrumental.fotoInstrumental10) && formulario.instrumental.instrumental10 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 4 cuando su respuesta es No Cumple en la pregunta 10.'); return false }
+        if (!formulario.instrumental.fechaInstrumental11 && formulario.instrumental.instrumental11 === 'C') { toast.error('Por favor diligencie la fecha de vencimiento de la pregunta 11 en el capitulo 4.'); return false }
+        if (!formulario.instrumental.cantidadInstrumental11 && formulario.instrumental.instrumental11 === 'C') { toast.error('Por favor diligencie la cantidad de la pregunta 11 en el capitulo 4.'); return false }
+        if ((!formulario.instrumental.observacionInstrumental11 || !formulario.instrumental.fotoInstrumental11) && formulario.instrumental.instrumental11 === 'NC') { toast.error('Por favor ingrese la foto y observacion correspondiente en el capitulo 4 cuando su respuesta es No Cumple en la pregunta 11.'); return false }
 
         if (!formulario.observacion) { toast.error('Por favor diligencie la observacion general.'); return false }
+        if (!formulario.fotoObservacion) { toast.error('Por favor diligencie la foto de la observacion general.'); return false }
     }
 
     const cantidadEstimadaPorClasificacion = {
@@ -1598,7 +1565,7 @@ const SupervisionFormularioEnelBotiquin = () => {
                         </div>
                     </div>
 
-                    <div className='campo zona'>
+                    <div className={`campo zona ${formularioEnelBotiquin.zona === '' ? 'vacio' : ''}`}>
                         <i className="fas fa-tools"></i>
                         <div className='entradaDatos'>
                             <Textos className='subtitulo'>Zona:</Textos>
@@ -1636,23 +1603,17 @@ const SupervisionFormularioEnelBotiquin = () => {
                     }
 
                     {formularioEnelBotiquin.zona === 'Bodega' &&
-                        <div className='campo placa'>
+                        <div className='campo sede'>
                             <i className="fas fa-id-card"></i>
                             <div className='entradaDatos'>
                                 <Textos className='subtitulo'>Sede:</Textos>
                                 <Entradas
                                     type="text"
-                                    placeholder="Placa movil (Ejemplo: ABC123, ABC12A)"
-                                    value={formularioEnelBotiquin.placa}
+                                    placeholder="Sede"
+                                    value={formularioEnelBotiquin.sede}
                                     onChange={(e) => {
-                                        const newValue = e.target.value.toUpperCase();
-                                        if (/^[A-Z]{0,3}[0-9]{0,2}[0-9A-Z]{0,1}$/.test(newValue)) {
-                                            actualizarCampoEnelBotiquin('placa', newValue);
-                                        }
+                                        actualizarCampoEnelBotiquin('sede', e.target.value);
                                     }}
-                                    pattern="[A-Za-z]{3}[0-9]{2}[0-9A-Za-z]{1}"
-                                    maxLength={6}
-                                    title="Debe ser en formato de 3 letras seguidas de 3 números (Ejemplo: ABC123)"
                                     disabled={modo === "editar"}
                                 />
                             </div>
@@ -1789,13 +1750,14 @@ const SupervisionFormularioEnelBotiquin = () => {
                         <div className='entradaDatos'>
                             <Textos className='subtitulo'>Observaciones:</Textos>
                             <AreaTextos disabled={modo === "editar"} type="text" placeholder="Agregue las observacion pertinentes" value={formularioEnelBotiquin.observacion} onChange={(e) => actualizarCampoEnelBotiquin('observacion', e.target.value)} rows={4} />
+                            <Textos className='subtitulo'>Imagen general:</Textos>
+                            <Imagenes disableInput={modo === "editar"} fotoKey={'fotoObservacion'} foto={formularioEnelBotiquin.fotoObservacion} onChange={(fotoKey, data) => actualizarCampoEnelBotiquin(`${fotoKey}`, data)} capture={formularioEnelBotiquin.tipoInspeccion === 'Presencial' ? true : false} setImagen={(data) => setImagenAmpliada(data)} ></Imagenes>
                         </div>
                     </div>
 
                     <div className='enviar'>
                         <Botones disabled={modo === "editar"} className="eliminar" onClick={() => {
                             localStorage.removeItem('formularioEnelBotiquin');
-                            setMiembroEnProceso({})
                             setFormularioEnelBotiquin(estadoInicialFormularioEnelBotiquin);
                         }}>Borrar formulario</Botones>
                         <Botones disabled={modo === "editar"} type="submit" id='Enviar' className="guardar" onClick={enviarFormularioEnelBotiquin}>Enviar</Botones>

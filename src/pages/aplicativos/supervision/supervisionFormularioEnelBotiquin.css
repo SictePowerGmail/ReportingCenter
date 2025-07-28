@@ -255,7 +255,12 @@
                 }
             }
 
-            &.zona {
+            &.zona.vacio {
+                margin-bottom: 40px;
+            }
+
+            &.sede,
+            &.placa {
                 margin-bottom: 40px;
             }
         }

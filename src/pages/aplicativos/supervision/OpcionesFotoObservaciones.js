@@ -60,6 +60,7 @@ export const OpcionesFotoObservaciones = ({
                     placeholder="Seleccione una fecha"
                     value={data[keyPrin][fechaVencimientoKey]}
                     onChange={(e) => onChange(`${keyPrin}.${fechaVencimientoKey}`, e.target.value)}
+                    disabled={data[keyPrin][keyBase] === 'NA'}
                 />
             </div>
             <div className={`opciones cantidad ${cantidadEstimadaBool === false ? 'oculto' : ''}`} >
@@ -82,6 +83,7 @@ export const OpcionesFotoObservaciones = ({
                     }}
                     value={data[keyPrin][cantidadExistenteKey]}
                     onChange={(e) => onChange(`${keyPrin}.${cantidadExistenteKey}`, e.target.value)}
+                    disabled={data[keyPrin][keyBase] === 'NA'}
                 />
             </div>
             <div className='opciones'>

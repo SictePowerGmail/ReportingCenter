@@ -52,6 +52,7 @@ const SupervisionPrincipal = () => {
     const [dataClaro, setDataClaro] = useState('');
     const [dataEnelInspeccionIntegralHSE, setDataEnelInspeccionIntegralHSE] = useState('');
     const [dataEnelInspeccionAmbiental, setDataEnelInspeccionAmbiental] = useState('');
+    const [dataEnelInspeccionBotiquin, setDataEnelInspeccionBotiquin] = useState('');
     const [dataEnelInspecciones, setDataEnelInspecciones] = useState('');
     const [datosParaGrafico1, setDatosParaGrafico1] = useState('');
     const [datosParaGrafico2, setDatosParaGrafico2] = useState('');
@@ -387,6 +388,15 @@ const SupervisionPrincipal = () => {
                     id: `GAAO${String(item.id).padStart(5, '0')}`
                 }));
             setDataEnelInspeccionAmbiental(registrosAmbientalOrdenados);
+
+            const responseBotiquin = await axios.get(`${process.env.REACT_APP_API_URL}/supervision/registrosEnelInspeccionBotiquin`);
+            const registrosBotiquinOrdenados = responseBotiquin.data
+                .sort((a, b) => parseFecha(b.fechaFinal) - parseFecha(a.fechaFinal))
+                .map((item) => ({
+                    ...item,
+                    id: `GAAO${String(item.id).padStart(5, '0')}`
+                }));
+            setDataEnelInspeccionBotiquin(registrosBotiquinOrdenados);
 
             const registrosUnificados = [...registrosIntegralOrdenados, ...registrosAmbientalOrdenados]
                 .sort((a, b) => parseFecha(b.fechaFinal) - parseFecha(a.fechaFinal))
