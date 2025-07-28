@@ -52,6 +52,7 @@ const SupervisionPrincipal = () => {
     const [dataClaro, setDataClaro] = useState('');
     const [dataEnelInspeccionIntegralHSE, setDataEnelInspeccionIntegralHSE] = useState('');
     const [dataEnelInspeccionAmbiental, setDataEnelInspeccionAmbiental] = useState('');
+    const [dataEnelInspecciones, setDataEnelInspecciones] = useState('');
     const [datosParaGrafico1, setDatosParaGrafico1] = useState('');
     const [datosParaGrafico2, setDatosParaGrafico2] = useState('');
 
@@ -374,18 +375,37 @@ const SupervisionPrincipal = () => {
                 .sort((a, b) => parseFecha(b.fechaFinal) - parseFecha(a.fechaFinal))
                 .map((item) => ({
                     ...item,
-                    id: `ENEL-${String(item.id).padStart(5, '0')}`
+                    id: `IHSE${String(item.id).padStart(5, '0')}`
                 }));
             setDataEnelInspeccionIntegralHSE(registrosIntegralOrdenados);
 
-            const responseAmbiental = await axios.get(`${process.env.REACT_APP_API_URL}/supervision/registrosEnelInspeccionIntegralHse`);
-            const registrosAmbientalOrdenados = responseAmbiental.data.sort((a, b) => {
-                return parseFecha(b.fechaFinal) - parseFecha(a.fechaFinal);
-            });
+            const responseAmbiental = await axios.get(`${process.env.REACT_APP_API_URL}/supervision/registrosEnelInspeccionAmbiental`);
+            const registrosAmbientalOrdenados = responseAmbiental.data
+                .sort((a, b) => parseFecha(b.fechaFinal) - parseFecha(a.fechaFinal))
+                .map((item) => ({
+                    ...item,
+                    id: `GAAO${String(item.id).padStart(5, '0')}`
+                }));
             setDataEnelInspeccionAmbiental(registrosAmbientalOrdenados);
 
+            console.log(registrosAmbientalOrdenados)
+            const registrosUnificados = [...registrosIntegralOrdenados, ...registrosAmbientalOrdenados]
+                .sort((a, b) => parseFecha(b.fechaFinal) - parseFecha(a.fechaFinal))
+                .map((item) => ({
+                    id: item.id,
+                    fechaFinal: item.fechaFinal,
+                    opOt: item.opOt,
+                    nombreProyecto: item.nombreProyecto,
+                    nombreQuienInspecciona: item.nombreQuienInspecciona,
+                    nombreSupervisorTecnico: item.nombreSupervisorTecnico,
+                    inspeccion: item.inspeccion,
+                    formulario: item.formulario
+                }));
+
+            setDataEnelInspecciones(registrosUnificados);
+
             const conteoInspecciones = {};
-            registrosIntegralOrdenados.forEach((item) => {
+            registrosUnificados.forEach((item) => {
                 const name = item.inspeccion?.trim() || 'Desconocido';
                 if (conteoInspecciones[name]) {
                     conteoInspecciones[name]++;
@@ -412,7 +432,7 @@ const SupervisionPrincipal = () => {
                     .join(' ');
             };
             const conteoSupervisores = {};
-            registrosIntegralOrdenados.forEach((item) => {
+            registrosUnificados.forEach((item) => {
                 const name = item.nombreQuienInspecciona?.trim() || 'Desconocido';
                 const nombreFormateado = formatearNombre(name);
                 if (conteoSupervisores[nombreFormateado]) {
@@ -701,17 +721,23 @@ const SupervisionPrincipal = () => {
                                 </div>
                             </div>
                             <div className='Datos'>
-                                <Tablas columnas={columnasEnel} datos={dataEnelInspeccionIntegralHSE} editar={true} filasPorPagina={7}
+                                <Tablas columnas={columnasEnel} datos={dataEnelInspecciones} editar={true} filasPorPagina={7}
                                     onEditar={async (fila) => {
                                         if (fila.formulario === "Enel Inspeccion Integral HSE") {
                                             setLoading(true);
-                                            const datosConFotos = await cargarFotosEnBase64(fila);
+                                            const registro = dataEnelInspeccionIntegralHSE.find(item => item.id === fila.id);
+                                            const datosConFotos = await cargarFotosEnBase64(registro);
                                             localStorage.removeItem('formularioEnelInspeccionIntegralHSE');
-                                            localStorage.setItem('formularioEnelInspeccionIntegralHSE', JSON.stringify(fila));
+                                            localStorage.setItem('formularioEnelInspeccionIntegralHSE', JSON.stringify(registro));
                                             navigate('/SupervisionFormularioEnelIntegral', { state: { modo: 'editar' } });
                                         }
                                         if (fila.formulario === "Enel Inspeccion de Gestion Ambiental para Areas Operativas") {
                                             setLoading(true);
+                                            const registro = dataEnelInspeccionAmbiental.find(item => item.id === fila.id);
+                                            const datosConFotos = await cargarFotosEnBase64(registro);
+                                            localStorage.removeItem('formularioEnelAmbiental');
+                                            localStorage.setItem('formularioEnelAmbiental', JSON.stringify(registro));
+
                                             navigate('/SupervisionFormularioEnelAmbiental', { state: { modo: 'editar' } });
                                         }
                                     }}

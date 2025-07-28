@@ -20,11 +20,11 @@ const Tablas = ({
     const [paginaActual, setPaginaActual] = useState(1);
     const [filtro, setFiltro] = useState('');
 
-    const datosFiltrados = datos.filter((fila) =>
+    const datosFiltrados = Array.isArray(datos) ? datos.filter((fila) =>
         columnas.some((col) =>
             String(fila[col.key]).toLowerCase().includes(filtro.toLowerCase())
         )
-    );
+    ) : [];
 
     const totalPaginas = Math.max(1, Math.ceil(datosFiltrados.length / filasPorPagina));
     const inicio = (paginaActual - 1) * filasPorPagina;
