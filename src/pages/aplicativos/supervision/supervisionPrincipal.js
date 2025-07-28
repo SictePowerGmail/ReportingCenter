@@ -394,11 +394,11 @@ const SupervisionPrincipal = () => {
                 .sort((a, b) => parseFecha(b.fechaFinal) - parseFecha(a.fechaFinal))
                 .map((item) => ({
                     ...item,
-                    id: `GAAO${String(item.id).padStart(5, '0')}`
+                    id: `B${String(item.id).padStart(5, '0')}`
                 }));
             setDataEnelInspeccionBotiquin(registrosBotiquinOrdenados);
 
-            const registrosUnificados = [...registrosIntegralOrdenados, ...registrosAmbientalOrdenados]
+            const registrosUnificados = [...registrosIntegralOrdenados, ...registrosAmbientalOrdenados, ...registrosBotiquinOrdenados]
                 .sort((a, b) => parseFecha(b.fechaFinal) - parseFecha(a.fechaFinal))
                 .map((item) => ({
                     id: item.id,
@@ -509,10 +509,9 @@ const SupervisionPrincipal = () => {
     const columnasEnel = [
         { header: 'Consecutivo', key: 'id' },
         { header: 'Fecha Final', key: 'fechaFinal' },
-        { header: 'OP/OT', key: 'opOt' },
         { header: 'Nombre Proyecto', key: 'nombreProyecto' },
         { header: 'Nombre Quien Inspecciona', key: 'nombreQuienInspecciona' },
-        { header: 'Nombre Supervisor Tecnico', key: 'nombreSupervisorTecnico' },
+        { header: 'Formulario', key: 'formulario' },
         { header: 'Inspeccion', key: 'inspeccion' },
     ];
 

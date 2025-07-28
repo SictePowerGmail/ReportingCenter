@@ -320,7 +320,7 @@ const SupervisionFormularioEnelBotiquin = () => {
                 fechaFinal,
                 ubicacion,
                 inspeccion: ncvalido,
-                formulario: "Enel Inspeccion de Gestion Botiquin para Areas Operativas",
+                formulario: "Enel Inspeccion Botiquin",
                 cedulaQuienInspecciona: cedulaUsuario,
                 nombreQuienInspecciona: nombreUsuario,
             };
