@@ -59,6 +59,18 @@
                 display: flex !important;
                 flex-direction: column !important;
 
+                .botonAgregar {
+                    display: flex !important;
+                    justify-content: end;
+                    width: 100%;
+                    margin-top: 10px;
+                    margin-bottom: 10px;
+
+                    .agregar {
+                        max-width: 100px;
+                    }
+                }
+
                 .subtitulo {
                     padding-bottom: 5px;
 
@@ -97,78 +109,96 @@
                     }
                 }
 
-                .foto-label {
-                    border: 1px solid rgb(151, 151, 151);
-                    border-radius: 6px;
-                    padding: 5px 10px;
-                    text-align: center;
-                    color: black;
-                }
-
-                .botonAgregar {
+                .cartas {
+                    width: 100% !important;
                     display: flex !important;
-                    justify-content: end;
-                    width: 100%;
+                    flex-direction: column !important;
 
-                    .agregar {
-                        max-width: 100px;
+                    &.oculto {
+                        display: none;
                     }
-                }
 
-                .opciones {
-                    display: flex;
-                    align-items: center;
-                    justify-content: baseline;
-                    padding-left: 20px;
-                    margin: 5px 0px;
+                    .foto-label {
+                        border: 1px solid rgb(151, 151, 151);
+                        border-radius: 6px;
+                        padding: 5px 10px;
+                        text-align: center;
+                        color: black;
+                    }
 
-                    @media screen and (max-width: 600px) {
-                        &.fotos {
-                            padding: 0;
+                    .opciones {
+                        display: flex;
+                        align-items: center;
+                        justify-content: baseline;
+                        padding-left: 20px;
+                        margin: 5px 0px;
+
+                        .texto {
+                            min-width: max-content;
+
+                            @media screen and (min-width: 601px) {
+                                min-width: 160px;
+                            }
                         }
-                    }
 
-                    &.vehiculo {
-                        padding-left: 0px;
+                        @media screen and (max-width: 600px) {
+                            flex-direction: column;
+                            align-items: start;
+                        }
+
+                        &.imagenElemento {
+                            align-items: center !important;
+                            justify-content: center;
+                            height: 150px;
+                            text-align: center;
+
+                            img {
+                                height: 100% !important;
+                            }
+                        }
+
+                        &.vehiculo {
+                            padding-left: 0px;
+
+                            button {
+                                width: 50px;
+
+                                &:nth-child(5),
+                                &:nth-child(4),
+                                &:nth-child(3),
+                                &:nth-child(2) {
+                                    margin-left: 5px;
+                                }
+                            }
+                        }
+
+                        .image {
+                            width: auto;
+
+                            &:disabled {
+                                display: none;
+                            }
+                        }
 
                         button {
-                            width: 50px;
+                            width: auto !important;
 
                             &:nth-child(5),
                             &:nth-child(4),
                             &:nth-child(3),
                             &:nth-child(2) {
-                                margin-left: 5px;
+                                margin-left: 10px;
                             }
                         }
-                    }
 
-                    .image {
-                        width: auto;
-
-                        &:disabled {
+                        &.oculto {
                             display: none;
                         }
                     }
 
-                    button {
-                        width: 60px !important;
-
-                        &:nth-child(5),
-                        &:nth-child(4),
-                        &:nth-child(3),
-                        &:nth-child(2) {
-                            margin-left: 10px;
-                        }
+                    .comentario {
+                        padding-left: 20px;
                     }
-
-                    &.oculto {
-                        display: none;
-                    }
-                }
-
-                .comentario {
-                    padding-left: 20px;
                 }
             }
 
@@ -225,6 +255,18 @@
                     }
                 }
             }
+
+            &.lider {
+                margin-bottom: 40px;
+            }
+
+            &.ocultar {
+                display: none;
+            }
+        }
+
+        .preguntaInterruptor {
+            margin-top: 20px;
         }
 
         #map2 {
@@ -234,6 +276,10 @@
 
         .Tabla {
             width: 100%;
+
+            &.ocultar {
+                display: none;
+            }
         }
 
         .modal-overlay {
@@ -256,7 +302,7 @@
             z-index: 3000;
             border-radius: 8px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-            height: auto !important;
+            height: 90% !important;
 
             @media (max-width: 500px) {
                 width: 95%;
@@ -282,7 +328,7 @@
                     display: flex;
                     align-items: center;
                     width: calc(100% - 10px);
-                    margin: 5px 0px 5px 10px;
+                    margin: 8px 0px 8px 10px;
 
                     &.vertical {
                         flex-direction: column !important;
@@ -320,20 +366,21 @@
                     }
 
                     span {
-                        width: 80px;
+                        width: 120px;
                     }
 
                     .entrada {
-                        width: calc(100% - 80px);
+                        width: 100%;
                     }
 
                     .opciones {
                         display: flex;
                         align-items: center;
-                        justify-content: baseline;
+                        justify-content: center;
+                        width: calc(100%);
 
                         button {
-                            width: 60px;
+                            width: 60px !important;
 
                             &:nth-child(3),
                             &:nth-child(2) {

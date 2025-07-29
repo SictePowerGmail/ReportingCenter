@@ -24,6 +24,8 @@ export const OpcionesFotoObservaciones = ({
     cantidadEstimadaKey,
     cantidadExistenteBool = false,
     cantidadExistenteKey,
+    tituloOpcionesBotones = 'Inspeccion',
+    opcionesBotones = ["C", "NC", "NA"],
 }) => {
     const fechaVencimientoStr = data[keyPrin]?.[fechaVencimientoKey];
     const hoy = new Date();
@@ -87,9 +89,9 @@ export const OpcionesFotoObservaciones = ({
                 />
             </div>
             <div className='opciones'>
-                <Textos className='parrafo'>Inspeccion</Textos>
+                <Textos className='parrafo'>{tituloOpcionesBotones}</Textos>
                 <div className="Botones">
-                    {["C", "NC", "NA"].map((opcion) => (
+                    {opcionesBotones.map((opcion) => (
                         <Botones
                             key={opcion}
                             onClick={() => onChange(`${keyPrin}.${keyBase}`, opcion)}
@@ -101,11 +103,11 @@ export const OpcionesFotoObservaciones = ({
                     ))}
                 </div>
             </div>
-            <div className={`opciones fotos ${data[keyPrin][keyBase] !== 'NC' ? activarinput !== true ? 'oculto' : '' : ''}`} >
+            <div className={`opciones fotos ${data[keyPrin][keyBase] === 'NC' || data[keyPrin][keyBase] === 'No' ? '' : activarinput === true ? '' : 'oculto'}`} >
                 <Textos className='parrafo'>Imagen(es)</Textos>
                 <Imagenes disableInput={disabled} fotoKey={fotoKey} foto={data[keyPrin][fotoKey]} onChange={(fotoKey, data) => onChange(`${keyPrin}.${fotoKey}`, data)} capture={data.tipoInspeccion === 'Presencial' ? true : false} setImagen={(data) => setImagen(data)} />
             </div>
-            <div className={`opciones ${data[keyPrin][keyBase] !== 'NC' ? 'oculto' : ''}`} >
+            <div className={`opciones ${data[keyPrin][keyBase] === 'NC' || data[keyPrin][keyBase] === 'Malo' || data[keyPrin][keyBase] === 'Regular' || data[keyPrin][keyBase] === 'No' ? '' : 'oculto'}`} >
                 <Textos className='parrafo'>Observacion</Textos>
                 <AreaTextos
                     type="text"

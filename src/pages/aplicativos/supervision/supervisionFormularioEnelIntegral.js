@@ -1648,7 +1648,10 @@ const SupervisionFormularioEnelIntegral = () => {
                             <div className='botonAgregar'>
                                 <Botones disabled={modo === "editar"} className='agregar' onClick={() => {
                                     setAccionModalTabla("crear");
-                                    setMiembroEnProceso({})
+                                    const existe = (formularioEnelInspeccionIntegralHSE.cuadrilla || []).some(m => m.cedula === miembroEnProceso.cedula);
+                                    if (existe) {
+                                        setMiembroEnProceso({});
+                                    }
                                     setMostrarModal(true);
                                 }}>Agregar</Botones>
                             </div>
