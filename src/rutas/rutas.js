@@ -25,6 +25,7 @@ import ChatBot from "../pages/aplicativos/chatbot/ChatBot";
 import Carnetizacion from "../pages/aplicativos/carnetizacion/Carnetizacion";
 import AlumbradoPublico from "../pages/aplicativos/alumbradoPublico/AlumbradoPublico";
 import AlumbradoPublicoDetalle from "../pages/aplicativos/alumbradoPublico/AlumbradoPublicoDetalle";
+import Encuentas from "../pages/aplicativos/encuentas/encuentas";
 /* Facturacion */
 import FacturacionConsolidado from '../pages/facturacion/FacturacionConsolidado';
 import ProyectosFacturacion from "../pages/facturacion/ProyectosFacturacion";
@@ -137,6 +138,7 @@ function RutasApp() {
                     <Route path='/Carnetizacion' exacte element={<Carnetizacion />} />
                     <Route path='/AlumbradoPublico' exacte element={<AlumbradoPublico />} />
                     <Route path='/AlumbradoPublicoDetalle' exacte element={<AlumbradoPublicoDetalle />} />
+                    <Route path='/Encuentas' exacte element={<Encuentas />} />
                     {/* Facturacion */}
                     <Route path='/ConsolidadoNacionalFacturacion' exacte element={<FacturacionConsolidado />} />
                     <Route path='/Proyectos' exacte element={<ProyectosFacturacion />} />

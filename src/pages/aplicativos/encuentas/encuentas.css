@@ -1,0 +1,35 @@
+.Encuentas {
+    display: flex;
+    flex-direction: column;
+    justify-content: baseline;
+    align-items: start;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    padding: 20px;
+
+    @media screen and (max-width: 600px) {
+        margin-left: 0px;
+    }
+
+    .PaginaVolver {
+        max-width: 100px;
+        margin-bottom: 20px;
+
+        .texto {
+            margin-left: 5px;
+            color: white;
+        }
+    }
+
+    .campo {
+        width: 100%;
+        height: auto;
+        margin-bottom: 10px;
+
+        .entrada {
+            height: 40px;
+        }
+
+    }
+}
