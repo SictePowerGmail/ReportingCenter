@@ -53,6 +53,7 @@ const SupervisionPrincipal = () => {
     const [dataEnelInspeccionIntegralHSE, setDataEnelInspeccionIntegralHSE] = useState('');
     const [dataEnelInspeccionAmbiental, setDataEnelInspeccionAmbiental] = useState('');
     const [dataEnelInspeccionBotiquin, setDataEnelInspeccionBotiquin] = useState('');
+    const [dataEnelInspeccionElementosEmergencia, setDataEnelInspeccionElementosEmergencia] = useState('');
     const [dataEnelInspecciones, setDataEnelInspecciones] = useState('');
     const [datosParaGrafico1, setDatosParaGrafico1] = useState('');
     const [datosParaGrafico2, setDatosParaGrafico2] = useState('');
@@ -398,17 +399,25 @@ const SupervisionPrincipal = () => {
                 }));
             setDataEnelInspeccionBotiquin(registrosBotiquinOrdenados);
 
-            const registrosUnificados = [...registrosIntegralOrdenados, ...registrosAmbientalOrdenados, ...registrosBotiquinOrdenados]
+            const responseElementosEmergencia = await axios.get(`${process.env.REACT_APP_API_URL}/supervision/registrosEnelInspeccionElementosEmergencia`);
+            const registrosElementosEmergenciaOrdenados = responseElementosEmergencia.data
+                .sort((a, b) => parseFecha(b.fechaFinal) - parseFecha(a.fechaFinal))
+                .map((item) => ({
+                    ...item,
+                    id: `EEE${String(item.id).padStart(5, '0')}`
+                }));
+            setDataEnelInspeccionElementosEmergencia(registrosElementosEmergenciaOrdenados);
+
+            const registrosUnificados = [...registrosIntegralOrdenados, ...registrosAmbientalOrdenados, ...registrosBotiquinOrdenados, ...registrosElementosEmergenciaOrdenados]
                 .sort((a, b) => parseFecha(b.fechaFinal) - parseFecha(a.fechaFinal))
                 .map((item) => ({
                     id: item.id,
                     fechaFinal: item.fechaFinal,
-                    opOt: item.opOt,
                     nombreProyecto: item.nombreProyecto,
                     nombreQuienInspecciona: item.nombreQuienInspecciona,
-                    nombreSupervisorTecnico: item.nombreSupervisorTecnico,
+                    proceso: item.proceso,
+                    formulario: item.formulario,
                     inspeccion: item.inspeccion,
-                    formulario: item.formulario
                 }));
 
             setDataEnelInspecciones(registrosUnificados);
@@ -511,6 +520,7 @@ const SupervisionPrincipal = () => {
         { header: 'Fecha Final', key: 'fechaFinal' },
         { header: 'Nombre Proyecto', key: 'nombreProyecto' },
         { header: 'Nombre Quien Inspecciona', key: 'nombreQuienInspecciona' },
+        { header: 'Proceso', key: 'proceso' },
         { header: 'Formulario', key: 'formulario' },
         { header: 'Inspeccion', key: 'inspeccion' },
     ];
@@ -769,6 +779,19 @@ const SupervisionPrincipal = () => {
                                             const datosConFotos = await cargarFotosEnBase64(registro);
                                             localStorage.setItem('formularioEnelBotiquin', JSON.stringify(registro));
                                             navigate('/SupervisionFormularioEnelBotiquin', { state: { modo: 'editar' } });
+                                        }
+                                        if (fila.formulario === "Enel Inspeccion Equipos y Elementos de Emergencia") {
+                                            setLoading(true);
+                                            const registro = dataEnelInspeccionElementosEmergencia.find(item => item.id === fila.id);
+                                            Object.keys(localStorage).forEach((key) => {
+                                                if (key.startsWith('formulario')) {
+                                                    localStorage.removeItem(key);
+                                                }
+                                            });
+                                            localStorage.removeItem('miembroEnProceso');
+                                            const datosConFotos = await cargarFotosEnBase64(registro);
+                                            localStorage.setItem('formularioEnelElementosEmergencia', JSON.stringify(registro));
+                                            navigate('/SupervisionFormularioEnelElementosEmergencia', { state: { modo: 'editar' } });
                                         }
                                     }}
                                 />

@@ -1557,9 +1557,9 @@ const SupervisionFormularioEnelBotiquin = () => {
                             <Textos className='subtitulo'>Proceso:</Textos>
                             <Selectores disabled={modo === "editar"} value={formularioEnelBotiquin.proceso} onChange={(e) => actualizarCampoEnelBotiquin('proceso', e.target.value)}
                                 options={[
-                                    { value: 'Civil', label: 'Civil' },
-                                    { value: 'Electrico', label: 'Electrico' },
-                                    { value: 'Electrico - Civil', label: 'Electrico - Civil' },
+                                    { value: 'Obra civil', label: 'Obra civil' },
+                                    { value: 'Obra electrica', label: 'Obra electrica' },
+                                    { value: 'B2C', label: 'B2C' },
                                 ]} className="primary">
                             </Selectores>
                         </div>

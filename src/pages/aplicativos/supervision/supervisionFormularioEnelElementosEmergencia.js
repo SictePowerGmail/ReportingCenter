@@ -223,7 +223,7 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
 
             else if (
                 typeof valor === 'string' &&
-                valor === 'NC' &&
+                (valor === 'No' || valor === 'Malo' || valor === 'Regular') &&
                 !key.toLowerCase().startsWith('foto') &&
                 !key.toLowerCase().startsWith('observacion')
             ) {
@@ -356,6 +356,7 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
         centroTrabajo: "",
         cedulaResponsableCuadrilla: "",
         nombreResponsableCuadrilla: "",
+        proceso: "",
         extintores: [],
         controlDerrames: {
             controlDerrames1: "",
@@ -813,6 +814,7 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
         if (!formulario.centroTrabajo) { toast.error('Por favor diligencie el centro de trabajo.'); return false }
         if (!formulario.cedulaResponsableCuadrilla) { toast.error('Por favor diligencie la cedula del cuadrillero.'); return false }
         if (!formulario.nombreResponsableCuadrilla || formulario.nombreResponsableCuadrilla === 'Usuario no encontrado') { toast.error('Por favor ingrese un usuario valido para el responsable del cuadrillero.'); return false }
+        if (!formulario.proceso) { toast.error('Por favor diligencie el proceso.'); return false }
         if (mostrarPreguntasExtintores === true && !Array.isArray(formulario.extintores)) { toast.error('Por favor diligencie el formulario de extintores.'); return false }
         if (mostrarPreguntasDerrames === true && !formulario.controlDerrames.controlDerrames1) { toast.error('Por favor diligencie el estado de la pregunta 1 del capitulo 2.'); return false }
         if (mostrarPreguntasDerrames === true && !formulario.controlDerrames.cantidadControlDerrames1) { toast.error('Por favor diligencie la cantidad de la pregunta 1 del capitulo 2.'); return false }
@@ -1121,6 +1123,20 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
                                 }
                             }} />
                             <Entradas type="text" placeholder="Nombre" value={formularioEnelElementosEmergencia.nombreResponsableCuadrilla} disabled={true} />
+                        </div>
+                    </div>
+
+                    <div className='campo proceso'>
+                        <i className="fas fa-tools"></i>
+                        <div className='entradaDatos'>
+                            <Textos className='subtitulo'>Proceso:</Textos>
+                            <Selectores disabled={modo === "editar"} value={formularioEnelElementosEmergencia.proceso} onChange={(e) => actualizarCampoEnelElementosEmergencia('proceso', e.target.value)}
+                                options={[
+                                    { value: 'Obra civil', label: 'Obra civil' },
+                                    { value: 'Obra electrica', label: 'Obra electrica' },
+                                    { value: 'B2C', label: 'B2C' },
+                                ]} className="primary">
+                            </Selectores>
                         </div>
                     </div>
 
