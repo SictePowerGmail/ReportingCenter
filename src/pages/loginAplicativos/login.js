@@ -28,7 +28,7 @@ const Login = () => {
         setEnviando(true);
 
         try {
-            const usuarios = await fetch(`${process.env.REACT_APP_API_URL}/user`, {
+            const usuarios = await fetch(`${process.env.REACT_APP_API_URL}/usuarios/users`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -39,7 +39,7 @@ const Login = () => {
             const emailExiste = usuariosData.some(usuario => usuario.correo === email);
 
             if (emailExiste) {
-                const response = await fetch(`${process.env.REACT_APP_API_URL}/user/enviarToken`, {
+                const response = await fetch(`${process.env.REACT_APP_API_URL}/usuarios/enviarToken`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
