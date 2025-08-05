@@ -218,15 +218,15 @@ const Encuentas = () => {
                             <Textos className='subtitulo'>Opciones:</Textos>
                             <div className="galeria">
                                 {imagenesFiltradas.map((img) => (
-                                    <div key={img.public_id} className={`card ${encuesta.imagen === img.public_id.substring(0, img.display_name.lastIndexOf('_')) ? 'seleccionada' : ''}`}
+                                    <div key={img.public_id} className={`card ${encuesta.imagen === img.display_name ? 'seleccionada' : ''}`}
                                         onClick={() => {
-                                            actualizarEncuesta('imagen', img.display_name.substring(0, img.display_name.lastIndexOf('_')));
+                                            actualizarEncuesta('imagen', img.display_name);
                                         }}>
                                         <div className='imagenes'>
                                             <img src={img.secure_url} alt={img.display_name} />
                                         </div>
                                         <div className='nombre'>
-                                            <p>{img.display_name.substring(0, img.display_name.lastIndexOf('_'))}</p>
+                                            <p>{img.display_name}</p>
                                         </div>
                                     </div>
                                 ))}
