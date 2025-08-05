@@ -353,6 +353,7 @@ const SupervisionFormularioEnelBotiquin = () => {
         cedulaQuienInspecciona: "",
         nombreQuienInspecciona: "",
         nombreProyecto: "",
+        direccion: "",
         cedulaResponsableBotiquin: "",
         nombreResponsableBotiquin: "",
         proceso: "",
@@ -1059,6 +1060,7 @@ const SupervisionFormularioEnelBotiquin = () => {
         if (!cedulaUsuario) { toast.error('Por favor diligencie inicie sesion ya que no existe usuario.'); return false }
         if (!nombreUsuario) { toast.error('Por favor diligencie inicie sesion ya que no existe usuario.'); return false }
         if (!formulario.nombreProyecto) { toast.error('Por favor diligencie el nombre del proyecto.'); return false }
+        if (!formulario.direccion) { toast.error('Por favor diligencie la direccion.'); return false }
         if (!formulario.cedulaResponsableBotiquin) { toast.error('Por favor diligencie la cedula del responsable del botiquin.'); return false }
         if (!formulario.nombreResponsableBotiquin || formulario.nombreResponsableBotiquin === 'Usuario no encontrado') { toast.error('Por favor ingrese un usuario valido para el responsable del botiquin.'); return false }
         if (!formulario.proceso) { toast.error('Por favor diligencie el proceso.'); return false }
@@ -1183,35 +1185,30 @@ const SupervisionFormularioEnelBotiquin = () => {
                 'Vehicular / Carros Tipo 1': "2",
                 'Vehicular / Cuadrillas Tipo 2': "3",
                 'Moto Tipo 3': "1",
-                'Vehicular / Cuadrillas Tipo 3': "",
             },
             cantidadEstimadaBioseguridad2: {
                 'Fijo / Portatil': "4",
                 'Vehicular / Carros Tipo 1': "2",
                 'Vehicular / Cuadrillas Tipo 2': "3",
                 'Moto Tipo 3': "1",
-                'Vehicular / Cuadrillas Tipo 3': "",
             },
             cantidadEstimadaBioseguridad3: {
                 'Fijo / Portatil': "1",
                 'Vehicular / Carros Tipo 1': "1",
                 'Vehicular / Cuadrillas Tipo 2': "1",
                 'Moto Tipo 3': "0",
-                'Vehicular / Cuadrillas Tipo 3': "",
             },
             cantidadEstimadaBioseguridad4: {
                 'Fijo / Portatil': "1",
                 'Vehicular / Carros Tipo 1': "1",
                 'Vehicular / Cuadrillas Tipo 2': "1",
                 'Moto Tipo 3': "0",
-                'Vehicular / Cuadrillas Tipo 3': "",
             },
             cantidadEstimadaBioseguridad5: {
                 'Fijo / Portatil': "4",
                 'Vehicular / Carros Tipo 1': "1",
                 'Vehicular / Cuadrillas Tipo 2': "2",
                 'Moto Tipo 3': "1",
-                'Vehicular / Cuadrillas Tipo 3': "",
             },
         },
         inmovilizacion: {
@@ -1220,112 +1217,96 @@ const SupervisionFormularioEnelBotiquin = () => {
                 'Vehicular / Carros Tipo 1': "10",
                 'Vehicular / Cuadrillas Tipo 2': "10",
                 'Moto Tipo 3': "5",
-                'Vehicular / Cuadrillas Tipo 3': "",
             },
             cantidadEstimadaInmovilizacion2: {
                 'Fijo / Portatil': "6",
                 'Vehicular / Carros Tipo 1': "2",
                 'Vehicular / Cuadrillas Tipo 2': "5",
                 'Moto Tipo 3': "2",
-                'Vehicular / Cuadrillas Tipo 3': "",
             },
             cantidadEstimadaInmovilizacion3: {
                 'Fijo / Portatil': "3",
                 'Vehicular / Carros Tipo 1': "2",
                 'Vehicular / Cuadrillas Tipo 2': "2",
                 'Moto Tipo 3': "1",
-                'Vehicular / Cuadrillas Tipo 3': "",
             },
             cantidadEstimadaInmovilizacion4: {
                 'Fijo / Portatil': "20",
                 'Vehicular / Carros Tipo 1': "20",
                 'Vehicular / Cuadrillas Tipo 2': "20",
                 'Moto Tipo 3': "5",
-                'Vehicular / Cuadrillas Tipo 3': "",
             },
             cantidadEstimadaInmovilizacion5: {
                 'Fijo / Portatil': "40",
                 'Vehicular / Carros Tipo 1': "10",
                 'Vehicular / Cuadrillas Tipo 2': "30",
                 'Moto Tipo 3': "5",
-                'Vehicular / Cuadrillas Tipo 3': "",
             },
             cantidadEstimadaInmovilizacion6: {
                 'Fijo / Portatil': "1",
                 'Vehicular / Carros Tipo 1': "1",
                 'Vehicular / Cuadrillas Tipo 2': "1",
-                'Moto Tipo 3': "0",
-                'Vehicular / Cuadrillas Tipo 3': "",
+                'Moto Tipo 3': "1",
             },
             cantidadEstimadaInmovilizacion7: {
                 'Fijo / Portatil': "1",
                 'Vehicular / Carros Tipo 1': "1",
                 'Vehicular / Cuadrillas Tipo 2': "1",
                 'Moto Tipo 3': "1",
-                'Vehicular / Cuadrillas Tipo 3': "",
             },
             cantidadEstimadaInmovilizacion8: {
                 'Fijo / Portatil': "15",
                 'Vehicular / Carros Tipo 1': "5",
                 'Vehicular / Cuadrillas Tipo 2': "10",
                 'Moto Tipo 3': "5",
-                'Vehicular / Cuadrillas Tipo 3': "",
             },
             cantidadEstimadaInmovilizacion9: {
                 'Fijo / Portatil': "1",
                 'Vehicular / Carros Tipo 1': "1",
                 'Vehicular / Cuadrillas Tipo 2': "1",
                 'Moto Tipo 3': "0",
-                'Vehicular / Cuadrillas Tipo 3': "",
             },
             cantidadEstimadaInmovilizacion10: {
                 'Fijo / Portatil': "1",
                 'Vehicular / Carros Tipo 1': "1",
                 'Vehicular / Cuadrillas Tipo 2': "1",
                 'Moto Tipo 3': "1",
-                'Vehicular / Cuadrillas Tipo 3': "",
             },
             cantidadEstimadaInmovilizacion11: {
                 'Fijo / Portatil': "2",
                 'Vehicular / Carros Tipo 1': "1",
                 'Vehicular / Cuadrillas Tipo 2': "2",
-                'Moto Tipo 3': "2",
-                'Vehicular / Cuadrillas Tipo 3': "",
+                'Moto Tipo 3': "1",
             },
             cantidadEstimadaInmovilizacion12: {
                 'Fijo / Portatil': "1",
                 'Vehicular / Carros Tipo 1': "1",
                 'Vehicular / Cuadrillas Tipo 2': "1",
                 'Moto Tipo 3': "1",
-                'Vehicular / Cuadrillas Tipo 3': "",
             },
             cantidadEstimadaInmovilizacion13: {
                 'Fijo / Portatil': "2",
                 'Vehicular / Carros Tipo 1': "0",
                 'Vehicular / Cuadrillas Tipo 2': "1",
                 'Moto Tipo 3': "0",
-                'Vehicular / Cuadrillas Tipo 3': "",
             },
             cantidadEstimadaInmovilizacion14: {
                 'Fijo / Portatil': "2",
                 'Vehicular / Carros Tipo 1': "2",
                 'Vehicular / Cuadrillas Tipo 2': "1",
                 'Moto Tipo 3': "1",
-                'Vehicular / Cuadrillas Tipo 3': "",
             },
             cantidadEstimadaInmovilizacion15: {
                 'Fijo / Portatil': "2",
                 'Vehicular / Carros Tipo 1': "0",
                 'Vehicular / Cuadrillas Tipo 2': "1",
                 'Moto Tipo 3': "0",
-                'Vehicular / Cuadrillas Tipo 3': "",
             },
             cantidadEstimadaInmovilizacion16: {
                 'Fijo / Portatil': "4",
                 'Vehicular / Carros Tipo 1': "2",
                 'Vehicular / Cuadrillas Tipo 2': "2",
                 'Moto Tipo 3': "1",
-                'Vehicular / Cuadrillas Tipo 3': "",
             },
         },
         antisepticos: {
@@ -1334,14 +1315,12 @@ const SupervisionFormularioEnelBotiquin = () => {
                 'Vehicular / Carros Tipo 1': "1",
                 'Vehicular / Cuadrillas Tipo 2': "1",
                 'Moto Tipo 3': "1",
-                'Vehicular / Cuadrillas Tipo 3': "",
             },
             cantidadEstimadaAntisepticos2: {
                 'Fijo / Portatil': "1",
                 'Vehicular / Carros Tipo 1': "1",
                 'Vehicular / Cuadrillas Tipo 2': "1",
                 'Moto Tipo 3': "0",
-                'Vehicular / Cuadrillas Tipo 3': "",
             },
         },
         instrumental: {
@@ -1350,77 +1329,66 @@ const SupervisionFormularioEnelBotiquin = () => {
                 'Vehicular / Carros Tipo 1': "0",
                 'Vehicular / Cuadrillas Tipo 2': "0",
                 'Moto Tipo 3': "0",
-                'Vehicular / Cuadrillas Tipo 3': "",
             },
             cantidadEstimadaInstrumental2: {
                 'Fijo / Portatil': "1",
                 'Vehicular / Carros Tipo 1': "1",
                 'Vehicular / Cuadrillas Tipo 2': "1",
                 'Moto Tipo 3': "1",
-                'Vehicular / Cuadrillas Tipo 3': "",
             },
             cantidadEstimadaInstrumental3: {
                 'Fijo / Portatil': "4",
                 'Vehicular / Carros Tipo 1': "2",
                 'Vehicular / Cuadrillas Tipo 2': "4",
                 'Moto Tipo 3': "2",
-                'Vehicular / Cuadrillas Tipo 3': "",
             },
             cantidadEstimadaInstrumental4: {
                 'Fijo / Portatil': "1",
                 'Vehicular / Carros Tipo 1': "1",
                 'Vehicular / Cuadrillas Tipo 2': "1",
                 'Moto Tipo 3': "1",
-                'Vehicular / Cuadrillas Tipo 3': "",
             },
             cantidadEstimadaInstrumental5: {
                 'Fijo / Portatil': "1",
                 'Vehicular / Carros Tipo 1': "1",
                 'Vehicular / Cuadrillas Tipo 2': "1",
                 'Moto Tipo 3': "1",
-                'Vehicular / Cuadrillas Tipo 3': "",
             },
             cantidadEstimadaInstrumental6: {
                 'Fijo / Portatil': "1",
                 'Vehicular / Carros Tipo 1': "1",
                 'Vehicular / Cuadrillas Tipo 2': "1",
                 'Moto Tipo 3': "1",
-                'Vehicular / Cuadrillas Tipo 3': "",
             },
             cantidadEstimadaInstrumental7: {
                 'Fijo / Portatil': "1",
                 'Vehicular / Carros Tipo 1': "1",
                 'Vehicular / Cuadrillas Tipo 2': "1",
                 'Moto Tipo 3': "1",
-                'Vehicular / Cuadrillas Tipo 3': "",
             },
             cantidadEstimadaInstrumental8: {
                 'Fijo / Portatil': "1",
                 'Vehicular / Carros Tipo 1': "1",
                 'Vehicular / Cuadrillas Tipo 2': "1",
                 'Moto Tipo 3': "1",
-                'Vehicular / Cuadrillas Tipo 3': "",
             },
             cantidadEstimadaInstrumental9: {
                 'Fijo / Portatil': "1",
                 'Vehicular / Carros Tipo 1': "1",
                 'Vehicular / Cuadrillas Tipo 2': "1",
                 'Moto Tipo 3': "1",
-                'Vehicular / Cuadrillas Tipo 3': "",
             },
             cantidadEstimadaInstrumental10: {
                 'Fijo / Portatil': "1",
                 'Vehicular / Carros Tipo 1': "0",
                 'Vehicular / Cuadrillas Tipo 2': "1",
                 'Moto Tipo 3': "0",
-                'Vehicular / Cuadrillas Tipo 3': "",
             },
             cantidadEstimadaInstrumental11: {
                 'Fijo / Portatil': "1",
                 'Vehicular / Carros Tipo 1': "1",
                 'Vehicular / Cuadrillas Tipo 2': "1",
                 'Moto Tipo 3': "1",
-                'Vehicular / Cuadrillas Tipo 3': "",
             },
         }
     };
@@ -1499,7 +1467,6 @@ const SupervisionFormularioEnelBotiquin = () => {
                                     { value: 'Fijo / Portatil', label: 'Fijo / Portatil' },
                                     { value: 'Vehicular / Carros Tipo 1', label: 'Vehicular / Carros Tipo 1' },
                                     { value: 'Vehicular / Cuadrillas Tipo 2', label: 'Vehicular / Cuadrillas Tipo 2' },
-                                    { value: 'Vehicular / Cuadrillas Tipo 3', label: 'Vehicular / Cuadrillas Tipo 3' },
                                     { value: 'Moto Tipo 3', label: 'Moto Tipo 3' },
                                 ]} className="primary"
                                 disabled={modo === "editar"}
@@ -1532,6 +1499,15 @@ const SupervisionFormularioEnelBotiquin = () => {
                     </div>
 
                     <div id="map2"></div>
+
+                    <div className='campo direccion'>
+                        <i className="fas fa-tools"></i>
+                        <div className='entradaDatos'>
+                            <Textos className='subtitulo'>Direccion:</Textos>
+                            <Entradas disabled={modo === "editar"} type="text" placeholder="Ingrese la direccion" value={formularioEnelBotiquin.direccion}
+                                onChange={(e) => actualizarCampoEnelBotiquin('direccion', e.target.value)} />
+                        </div>
+                    </div>
 
                     <div className='campo lider'>
                         <i className="fas fa-users-cog"></i>

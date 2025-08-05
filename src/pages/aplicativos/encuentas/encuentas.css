@@ -23,13 +23,79 @@
     }
 
     .campo {
+        display: flex;
         width: 100%;
         height: auto;
-        margin-bottom: 10px;
+        margin-bottom: 15px;
 
-        .entrada {
-            height: 40px;
+        .fas {
+            margin-right: 5px;
+            margin-top: 4px;
         }
 
+        .entradaDatos {
+            width: 100%;
+
+            .entrada,
+            .selector {
+                height: 40px;
+            }
+        }
+
+        .botones {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+    }
+
+    .galeria {
+        display: grid;
+        gap: 1rem;
+        padding: 1rem 0;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+
+        .card {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            padding: 1rem;
+            text-align: center;
+            transition: transform 0.2s;
+            transition: border 0.3s ease;
+            cursor: pointer;
+
+            &:hover {
+                transform: translateY(-4px);
+            }
+
+            &.seleccionada {
+                border: 3px solid #007bff;
+                box-shadow: 0 0 10px rgba(0, 123, 255, 0.4);
+            }
+
+            .imagenes {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 90%;
+
+                img {
+                    width: 100%;
+                    height: auto;
+                    max-height: 100%;
+                    border-radius: 4px;
+                    object-fit: cover;
+                }
+            }
+
+            .nombre {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 10%;
+            }
+        }
     }
 }
