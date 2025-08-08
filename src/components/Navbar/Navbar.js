@@ -523,6 +523,17 @@ function Navbar() {
                                 }
                             </li>
 
+                            <li className={`SubMenu ${showMobileMenu ? 'abierto' : 'cerrado'}`}>
+                                {subChecksAplicativos.Chatbot === true &&
+                                    (<Link className={`SubMenu-Titulo-Solo ${showMobileMenu ? 'abierto' : 'cerrado'}`} to={{ pathname: "/Login", search: "?tipo=GestionOts" }} >
+                                        <span className='SubMenu-Titulo-Icono'><FaPoll /></span>
+                                        {showMobileMenu && (
+                                            <span className="SubMenu-Titulo-Texto">Gestion de OTs</span>
+                                        )}
+                                    </Link>)
+                                }
+                            </li>
+
                             {/* <li className={`SubMenu ${showMobileMenu ? 'abierto' : 'cerrado'}`}>
                                 {subChecksAplicativos.Carnetizacion === true &&
                                     (<Link className={`SubMenu-Titulo-Solo ${showMobileMenu ? 'abierto' : 'cerrado'}`} to={{ pathname: "/Login", search: "?tipo=AlumbradoPublico" }} >
@@ -853,7 +864,7 @@ function Navbar() {
                                 </div>
                             </li>
 
-                            <span className={`sub-titulo ${showMobileMenu ? 'abierto' : 'cerrado'}`}>Version 2.0.34</span>
+                            <span className={`sub-titulo ${showMobileMenu ? 'abierto' : 'cerrado'}`}>Version 2.0.35</span>
                         </ul>
 
                         {/* <div className='Logo2'>

@@ -84,6 +84,8 @@ const Login = () => {
             navigate('/Capacidades');
         } else if (tipo === 'AlumbradoPublico') {
             navigate('/AlumbradoPublico');
+        } else if (tipo === 'GestionOts') {
+            navigate('/GestionOts');
         }
     }
 

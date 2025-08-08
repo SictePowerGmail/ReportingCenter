@@ -48,6 +48,8 @@ export const getPageTitle = (pathname) => {
             return 'Alumbrado Publico'
         case '/Encuentas':
             return 'Encuentas' 
+        case '/GestionOts':
+            return 'Gestion de OTs'
         /* Facturacion */
         case '/ConsolidadoNacionalFacturacion':
             return 'Consolidado Nacional Facturacion';
