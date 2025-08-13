@@ -31,7 +31,6 @@ const GestionOts = () => {
     const [cuadrilla, setCuadrilla] = useState('');
     const [observacion, setObservacion] = useState('');
     let selectionMode = false;
-    const [selectionMode2, setSelectionMode2] = useState(false);
     const [selectedMarkers, setSelectedMarkers] = useState([]);
     const [infoVisibleVarios, setInfoVisibleVarios] = useState(false);
     const allMarkersRef = useRef([]);
@@ -91,6 +90,8 @@ const GestionOts = () => {
             addMarkerToMap(item);
         });
 
+        actualizarTotalItems(data.length);
+
         if (data.length > 1) {
             const bounds = L.latLngBounds(data.map(item => [item.x, item.y]));
             mapRef.current.fitBounds(bounds, { padding: [50, 50] });
@@ -114,10 +115,55 @@ const GestionOts = () => {
         };
         locationButton.addTo(mapRef.current);
 
-        // Input para filtrar
+        function aplicarFiltros() {
+            const valorTexto = document.querySelector('.filterText')?.value.trim().toLowerCase() || "";
+            const valorCiudad = document.querySelector('.filterCity')?.value.trim() || "";
+            const startDate = document.querySelector('.startDate')?.value || "";
+            const endDate = document.querySelector('.endDate')?.value || "";
+
+            infoFiltrada = data.filter(item => {
+                const pasaTexto = valorTexto === "" || Object.values(item).some(value =>
+                    String(value).toLowerCase().includes(valorTexto)
+                );
+
+                let ciudadValor = "";
+                if (valorCiudad === "Cundinamarca") {
+                    ciudadValor = "MICOL CUNDINAMARCA";
+                } else if (valorCiudad === "Bogota") {
+                    ciudadValor = "MICOL";
+                }
+                const pasaCiudad = ciudadValor === "" || String(item.asignado).toLowerCase() === ciudadValor.toLowerCase();
+
+                const fechaItem = item.fecha_ingreso.split(' ')[0];
+                const pasaFecha =
+                    (!startDate || fechaItem >= startDate) &&
+                    (!endDate || fechaItem <= endDate);
+
+                const pasaSeleccion = !selectionMode || (!item.cuadrilla || item.cuadrilla.trim() === "");
+
+                return pasaTexto && pasaCiudad && pasaFecha && pasaSeleccion;
+            });
+
+            mapRef.current.eachLayer(layer => {
+                if (layer instanceof L.Marker) {
+                    mapRef.current.removeLayer(layer);
+                }
+            });
+
+            infoFiltrada.forEach(item => addMarkerToMap(item));
+
+            actualizarTotalItems(infoFiltrada.length);
+
+            if (infoFiltrada.length > 0) {
+                const bounds = L.latLngBounds(infoFiltrada.map(item => [item.x, item.y]));
+                mapRef.current.fitBounds(bounds, { padding: [50, 50] });
+            }
+        }
+
+        // Input para filtrar texto
         const filterInput = L.control({ position: 'topright' });
         filterInput.onAdd = function () {
-            const div = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
+            const div = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom filtro-texto');
 
             div.innerHTML = `
                 <input 
@@ -131,32 +177,7 @@ const GestionOts = () => {
             L.DomEvent.disableClickPropagation(div);
 
             setTimeout(() => {
-                const input = div.querySelector('.filterText');
-                input.addEventListener('change', function () {
-                    const selectCity = document.querySelector('.filterCity');
-                    if (selectCity) selectCity.value = "";
-
-                    const valor = this.value.trim();
-                    const filtrados = data.filter(item =>
-                        Object.values(item).some(value =>
-                            String(value).toLowerCase().includes(valor.toLowerCase())
-                        )
-                    );
-
-                    mapRef.current.eachLayer(layer => {
-                        if (layer instanceof L.Marker) {
-                            mapRef.current.removeLayer(layer);
-                        }
-                    });
-
-                    filtrados.forEach(item => addMarkerToMap(item));
-                    infoFiltrada = filtrados;
-
-                    if (infoFiltrada.length > 0) {
-                        const bounds = L.latLngBounds(infoFiltrada.map(item => [item.x, item.y]));
-                        mapRef.current.fitBounds(bounds, { padding: [50, 50] });
-                    }
-                });
+                div.querySelector('.filterText').addEventListener('input', aplicarFiltros);
             });
 
             return div;
@@ -166,7 +187,7 @@ const GestionOts = () => {
         // Select para filtrar por ciudad
         const filterSelect = L.control({ position: 'topright' });
         filterSelect.onAdd = function () {
-            const div = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
+            const div = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom filtro-ciudad');
 
             div.innerHTML = `
                 <select class="filterCity">
@@ -179,37 +200,7 @@ const GestionOts = () => {
             L.DomEvent.disableClickPropagation(div);
 
             setTimeout(() => {
-                const select = div.querySelector('.filterCity');
-                select.addEventListener('change', function () {
-                    const textInput = document.querySelector('.filterText');
-                    if (textInput) textInput.value = "";
-
-                    let valor;
-
-                    if (this.value.trim() === "Cundinamarca") {
-                        valor = "MICOL CUNDINAMARCA"
-                    } else if (this.value.trim() === "Bogota") {
-                        valor = "MICOL"
-                    } else {
-                        valor = ""
-                    }
-
-                    const filtrados = valor ? data.filter(item => String(item.asignado).toLowerCase() === valor.toLowerCase()) : data;
-
-                    mapRef.current.eachLayer(layer => {
-                        if (layer instanceof L.Marker) {
-                            mapRef.current.removeLayer(layer);
-                        }
-                    });
-
-                    filtrados.forEach(item => addMarkerToMap(item));
-                    infoFiltrada = filtrados;
-
-                    if (infoFiltrada.length > 0) {
-                        const bounds = L.latLngBounds(infoFiltrada.map(item => [item.x, item.y]));
-                        mapRef.current.fitBounds(bounds, { padding: [50, 50] });
-                    }
-                });
+                div.querySelector('.filterCity').addEventListener('change', aplicarFiltros);
             });
 
             return div;
@@ -219,7 +210,7 @@ const GestionOts = () => {
         // Select con lista de items que abre un modal
         const modalButton = L.control({ position: 'topright' });
         modalButton.onAdd = function () {
-            const div = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
+            const div = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom lista-ots-invalidas');
             let optionsHTML = `<option value="">OTs invalidas ...</option>`;
             dataInvalida.forEach((item, index) => {
                 optionsHTML += `<option value="${item.nro_orden}">${item.nro_orden} - ${item.localidad_giap}</option>`;
@@ -255,7 +246,7 @@ const GestionOts = () => {
         // Checkbox para activar selección múltiple
         const selectionControl = L.control({ position: 'topright' });
         selectionControl.onAdd = function () {
-            const div = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
+            const div = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom checkbox-seleccion');
             div.innerHTML = `
                 <label class="checkControl">
                     <div class="texto">
@@ -276,21 +267,42 @@ const GestionOts = () => {
                 selectionCheckbox = div.querySelector('#selectionModeCheckbox');
                 applySelectionBtn = div.querySelector('#applySelectionBtn').parentNode;
 
-                selectionCheckbox.addEventListener('change', function () {
-                    toggleSelectionMode(this.checked);
-                    if (!this.checked) {
-                        selectionCheckbox.style.display = 'none';
-                    }
-                });
+                selectionCheckbox.checked = selectionMode === true;
 
                 applySelectionBtn.querySelector('#applySelectionBtn').addEventListener('click', () => {
                     setInfoVisibleVarios(true);
+                });
+
+                selectionCheckbox.addEventListener('change', function () {
+                    toggleSelectionMode(this.checked);
+                    aplicarFiltros();
                 });
             });
 
             return div;
         };
         selectionControl.addTo(mapRef.current);
+
+        // Botón para filtrar por rango de fechas (solo año-mes-día)
+        const dateRangeFilterControl = L.control({ position: 'topright' });
+        dateRangeFilterControl.onAdd = function () {
+            const div = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom boton-fecha-rango');
+
+            div.innerHTML = `
+                <input type="date" class="startDate" />
+                <input type="date" class="endDate" />
+            `;
+
+            L.DomEvent.disableClickPropagation(div);
+
+            setTimeout(() => {
+                div.querySelector('.startDate').addEventListener('change', aplicarFiltros);
+                div.querySelector('.endDate').addEventListener('change', aplicarFiltros);
+            });
+
+            return div;
+        };
+        dateRangeFilterControl.addTo(mapRef.current);
 
         // Boton para borrar filtros
         const clearButton = L.control({ position: 'topright' });
@@ -305,34 +317,44 @@ const GestionOts = () => {
                 const selectCity = document.querySelector('.filterCity');
                 if (selectCity) selectCity.value = "";
 
-                mapRef.current.eachLayer(layer => {
-                    if (layer instanceof L.Marker) {
-                        mapRef.current.removeLayer(layer);
-                    }
-                });
+                const startDate = document.querySelector('.startDate');
+                if (startDate) startDate.value = "";
+                const endDate = document.querySelector('.endDate');
+                if (endDate) endDate.value = "";
 
                 infoFiltrada = data;
+                aplicarFiltros();
+                actualizarTotalItems(infoFiltrada.length);
 
-                infoFiltrada.forEach(item => addMarkerToMap(item));
-
-                if (infoFiltrada.length > 0) {
-                    const bounds = L.latLngBounds(infoFiltrada.map(item => [item.x, item.y]));
-                    mapRef.current.fitBounds(bounds, { padding: [50, 50] });
-                }
-
-                if (selectionCheckbox) {
+                if (typeof selectionCheckbox !== 'undefined' && selectionCheckbox) {
                     selectionCheckbox.checked = false;
                 }
-                if (applySelectionBtn) {
+                if (typeof applySelectionBtn !== 'undefined' && applySelectionBtn) {
                     applySelectionBtn.style.display = 'none';
                 }
-
-                toggleSelectionMode(false);
+                if (typeof toggleSelectionMode === 'function') {
+                    toggleSelectionMode(false);
+                }
             };
 
             return div;
         };
         clearButton.addTo(mapRef.current);
+
+        function actualizarTotalItems(cantidad) {
+            const controlDiv = document.querySelector('.total-items-control');
+            if (controlDiv) {
+                controlDiv.innerHTML = `Total: ${cantidad}`;
+            }
+        }
+
+        let totalItemsControl = L.control({ position: 'bottomleft' });
+        totalItemsControl.onAdd = function () {
+            const div = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom total-items-control');
+            div.innerHTML = `Total items: ${data.length}`;
+            return div;
+        };
+        totalItemsControl.addTo(mapRef.current);
     };
 
     const addMarkerToMap = (item) => {
@@ -356,7 +378,8 @@ const GestionOts = () => {
         allMarkersRef.current.push({ marker, data: item });
 
         marker.on("click", () => {
-            if (selectionMode2) {
+
+            if (selectionMode) {
                 setSelectedMarkers((prev) => {
                     const exists = prev.find(m => m.id === item.id);
 
@@ -379,37 +402,11 @@ const GestionOts = () => {
     };
 
     const toggleSelectionMode = () => {
-        selectionMode = !selectionMode
-        setSelectionMode2(selectionMode);
+        selectionMode = !selectionMode;
         if (selectionMode === false) {
             setSelectedMarkers([]);
         }
     };
-
-    const clearAllMarkers = () => {
-        allMarkersRef.current.forEach(({ marker }) => {
-            mapRef.current.removeLayer(marker);
-        });
-        allMarkersRef.current = [];
-    };
-
-    useEffect(() => {
-        if (selectionMode2 === false && data) {
-            clearAllMarkers();
-
-            data.forEach(item => {
-                addMarkerToMap(item);
-            });
-        } else if (selectionMode2 === true && data) {
-            clearAllMarkers();
-
-            data
-                .filter(item => !item.cuadrilla || item.cuadrilla.trim() === '')
-                .forEach(item => {
-                    addMarkerToMap(item);
-                });
-        }
-    }, [selectionMode2]);
 
     useEffect(() => {
         const applyBtn = document.querySelector('#applySelectionBtn');
@@ -463,6 +460,7 @@ const GestionOts = () => {
     }, [infoVisible, infoVisibleVarios]);
 
     const enviarActualizacionDeOT = async (ids) => {
+        console.log(ids)
 
         if (!tipoMovil) { toast.error('Por favor ingrese el tipo de inspeccion.'); return }
         if (!cuadrilla) { toast.error('Por favor ingrese la cuadrilla.'); return }
@@ -666,7 +664,7 @@ const GestionOts = () => {
                                     setCuadrilla('');
                                     setObservacion('');
                                 }}>Cancelar</Botones>
-                                <Botones className='guardar' onClick={() => enviarActualizacionDeOT(info.map(item => item.id))}>Aceptar</Botones>
+                                <Botones className='guardar' onClick={() => enviarActualizacionDeOT([info.id])}>Aceptar</Botones>
                             </div>
                             <div className={`campo historico ${!info?.historico?.length ? 'ocultar' : ''}`}>
                                 <Textos className='titulo'>Histórico</Textos>
