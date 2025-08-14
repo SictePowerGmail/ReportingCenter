@@ -44,6 +44,10 @@
                 font-size: 12px;
                 margin: 8px 0px;
             }
+
+            &.ocultar {
+                display: none;
+            }
         }
 
         .parrafo {

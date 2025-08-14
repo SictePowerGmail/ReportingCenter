@@ -90,7 +90,7 @@ const Imagenes = ({
 
                 <div className={`grupo-imagen`}>
                     {capture === true && (
-                        <Botones onClick={() => setUsarCamara(true)} className="image activarCamara">
+                        <Botones onClick={() => setUsarCamara(true)} className={`image activarCamara ${disableInput ? 'ocultar' : ''}`}>
                             Activar cámara
                         </Botones>
                     )}

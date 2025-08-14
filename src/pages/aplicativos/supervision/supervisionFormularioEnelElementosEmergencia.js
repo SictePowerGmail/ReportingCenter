@@ -18,7 +18,7 @@ import Entradas from '../../../components/entradas/entradas';
 import AreaTextos from '../../../components/areaTextos/areaTextos';
 import Tablas from '../../../components/tablas/tablas';
 import Imagenes from '../../../components/imagenes/imagenes';
-import { OpcionesFotoObservaciones } from './OpcionesFotoObservaciones';
+import { OpcionesFotoObservaciones } from './opcionesFotoObservaciones';
 import Cookies from 'js-cookie';
 import Interruptor from '../../../components/interruptor/interruptor';
 
