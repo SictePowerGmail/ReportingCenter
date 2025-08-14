@@ -850,7 +850,7 @@ const SupervisionFormularioEnelIntegral = () => {
         if (valor[0].name && valor[0].data) {
             setFormularioEnelInspeccionIntegralHSE((prev) => {
                 const actualizado = { ...prev };
-                actualizado[nivel1][nivel2][nivel3] = valor;
+                if (nivel3) { actualizado[nivel1][nivel2][nivel3] = valor; } else if (nivel2) { actualizado[nivel1][nivel2] = valor; } else { actualizado[nivel1] = valor; }
                 localStorage.setItem(
                     "formularioEnelInspeccionIntegralHSE",
                     JSON.stringify(actualizado)
