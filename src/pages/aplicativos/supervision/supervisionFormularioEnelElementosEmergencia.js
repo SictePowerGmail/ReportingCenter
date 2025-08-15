@@ -21,6 +21,7 @@ import Imagenes from '../../../components/imagenes/imagenes';
 import { OpcionesFotoObservaciones } from './opcionesFotoObservaciones';
 import Cookies from 'js-cookie';
 import Interruptor from '../../../components/interruptor/interruptor';
+import _ from "lodash";
 
 const SupervisionFormularioEnelElementosEmergencia = () => {
     const navigate = useNavigate();
@@ -234,6 +235,48 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
         return false;
     };
 
+    const hayNCValidoSegundoFiltro = (obj, solucion) => {
+        let hayPendiente = false;
+
+        for (const key in obj) {
+            if (!obj.hasOwnProperty(key)) continue;
+
+            const valor = obj[key];
+
+            if (typeof valor === 'object' && valor !== null) {
+                if (hayNCValidoSegundoFiltro(valor, solucion?.[key])) {
+                    hayPendiente = true;
+                }
+            } else if (
+                typeof valor === 'string' &&
+                valor === 'NC' &&
+                !key.toLowerCase().startsWith('foto') &&
+                !key.toLowerCase().startsWith('observacion')
+            ) {
+                const fotoKey = `foto${key.charAt(0).toUpperCase()}${key.slice(1)}`;
+                const obsKey = `observacion${key.charAt(0).toUpperCase()}${key.slice(1)}`;
+
+                const fotoSol = solucion?.[fotoKey] || "";
+                const obsSol = solucion?.[obsKey] || "";
+
+                const solucionada =
+                    (
+                        (typeof fotoSol === "string" && fotoSol.trim() !== "") ||
+                        (Array.isArray(fotoSol) && fotoSol.length > 0)
+                    ) ||
+                    (
+                        (typeof obsSol === "string" && obsSol.trim() !== "")
+                    );
+
+                if (!solucionada) {
+                    hayPendiente = true;
+                }
+            }
+        }
+
+        return hayPendiente;
+    };
+
     const subirTodasLasFotos = async (obj, fecha, ruta = []) => {
         const formattedDate = formatDate(fecha);
 
@@ -298,37 +341,60 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
     };
 
     const enviarFormularioEnelElementosEmergencia = async (event) => {
-
         event.preventDefault();
-        const resultadoValidador = validarFormularioEnelElementosEmergencia(formularioEnelElementosEmergencia);
-        if (resultadoValidador === false) { return }
-        if (!ubicacion) { toast.error('Por favor dar permisos de ubicacion.'); return false }
+
+        if (modo === "editar") {
+            const resultadoValidador = validarSolucion(formularioEnelElementosEmergencia.solucion)
+            if (resultadoValidador === false) { return }
+        } else {
+            const resultadoValidador = validarFormularioEnelElementosEmergencia(formularioEnelElementosEmergencia);
+            if (resultadoValidador === false) { return }
+            if (!ubicacion) { toast.error('Por favor dar permisos de ubicacion.'); return false }
+        }
 
         setEnviando(true)
 
         try {
-            const fechaInicial = fecha.toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' });
-            const fechaFinal = new Date().toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            let response2;
+            if (modo === "editar") {
+                const formularioEnelElementosEmergenciaModificado = await subirTodasLasFotos(formularioEnelElementosEmergencia.solucion, fecha);
+                const ncvalido = hayNCValidoSegundoFiltro(formularioEnelElementosEmergencia, formularioEnelElementosEmergencia.solucion) === true ? "No Conforme" : "Conforme"
+                const id = parseInt(formularioEnelElementosEmergencia.id.replace(/\D/g, ""), 10);
+                const formularioNuevoSinFotos = eliminarDataEnFotos(formularioEnelElementosEmergenciaModificado)
 
-            const formularioEnelElementosEmergenciaModificado = await subirTodasLasFotos(formularioEnelElementosEmergencia, fecha);
+                const data = {
+                    id: id,
+                    solucion: formularioNuevoSinFotos,
+                    inspeccionFinal: ncvalido,
+                };
 
-            const ncvalido = hayNCValido(formularioEnelElementosEmergenciaModificado) === true ? "No Conforme" : "Conforme"
+                response2 = await axios.post(`${process.env.REACT_APP_API_URL}/supervision/solucionRegistroEnelInspeccionElementosEmergencia`, data);
 
-            const { id, ...formularioSinId } = formularioEnelElementosEmergenciaModificado;
-            const formularioConTiempos = {
-                ...formularioSinId,
-                fechaInicial,
-                fechaFinal,
-                ubicacion,
-                inspeccion: ncvalido,
-                formulario: "Enel Inspeccion Equipos y Elementos de Emergencia",
-                cedulaQuienInspecciona: cedulaUsuario,
-                nombreQuienInspecciona: nombreUsuario,
-            };
+            } else {
+                const fechaInicial = fecha.toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                const fechaFinal = new Date().toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
-            const formularioNuevoSinFotos = eliminarDataEnFotos(formularioConTiempos)
-            const formularioNuevoSerializado = serializarCamposComplejos(formularioNuevoSinFotos)
-            const response2 = await axios.post(`${process.env.REACT_APP_API_URL}/supervision/crearRegistrosEnelInspeccionElementosEmergencia`, formularioNuevoSerializado);
+                const formularioEnelElementosEmergenciaModificado = await subirTodasLasFotos(formularioEnelElementosEmergencia, fecha);
+
+                const ncvalido = hayNCValido(formularioEnelElementosEmergenciaModificado) === true ? "No Conforme" : "Conforme"
+
+                const { id, ...formularioSinId } = formularioEnelElementosEmergenciaModificado;
+                const formularioConTiempos = {
+                    ...formularioSinId,
+                    fechaInicial,
+                    fechaFinal,
+                    ubicacion,
+                    inspeccion: ncvalido,
+                    inspeccionFinal: ncvalido,
+                    formulario: "Enel Inspeccion Equipos y Elementos de Emergencia",
+                    cedulaQuienInspecciona: cedulaUsuario,
+                    nombreQuienInspecciona: nombreUsuario,
+                };
+
+                const formularioNuevoSinFotos = eliminarDataEnFotos(formularioConTiempos)
+                const formularioNuevoSerializado = serializarCamposComplejos(formularioNuevoSinFotos)
+                response2 = await axios.post(`${process.env.REACT_APP_API_URL}/supervision/crearRegistrosEnelInspeccionElementosEmergencia`, formularioNuevoSerializado);
+            }
 
             if (response2.status >= 200 && response2.status < 300) {
                 setEnviando(false)
@@ -464,6 +530,59 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
         },
         observacion: "",
         inspeccion: "",
+        solucion: {
+            controlDerrames: {
+                observacionControlDerrames1: "",
+                observacionControlDerrames2: "",
+                observacionControlDerrames3: "",
+                observacionControlDerrames4: "",
+                observacionControlDerrames5: "",
+                observacionControlDerrames6: "",
+                observacionControlDerrames7: "",
+                observacionControlDerrames8: "",
+                observacionControlDerrames9: "",
+                observacionControlDerrames10: "",
+                observacionControlDerrames11: "",
+                observacionControlDerrames12: "",
+                observacionControlDerrames13: "",
+                observacionControlDerrames14: "",
+                observacionControlDerrames15: "",
+                observacionControlDerrames16: "",
+                observacionControlDerrames17: "",
+                observacionControlDerrames18: "",
+                observacionControlDerrames19: "",
+                observacionControlDerrames20: "",
+                fotoControlDerrames: "",
+            },
+            elementosEmergencia: {
+                fotoElementosEmergencia1: "",
+                observacionElementosEmergencia1: "",
+                fotoElementosEmergencia2: "",
+                observacionElementosEmergencia2: "",
+                fotoElementosEmergencia3: "",
+                observacionElementosEmergencia3: "",
+                fotoElementosEmergencia4: "",
+                observacionElementosEmergencia4: "",
+                fotoElementosEmergencia5: "",
+                observacionElementosEmergencia5: "",
+                fotoElementosEmergencia6: "",
+                observacionElementosEmergencia6: "",
+                fotoElementosEmergencia7: "",
+                observacionElementosEmergencia7: "",
+                fotoElementosEmergencia8: "",
+                observacionElementosEmergencia8: "",
+                fotoElementosEmergencia9: "",
+                observacionElementosEmergencia9: "",
+                fotoElementosEmergencia10: "",
+                observacionElementosEmergencia10: "",
+                fotoElementosEmergencia11: "",
+                observacionElementosEmergencia11: "",
+                fotoElementosEmergencia12: "",
+                observacionElementosEmergencia12: "",
+                fotoElementosEmergencia13: "",
+                observacionElementosEmergencia13: "",
+            },
+        }
     };
 
     const [formularioEnelElementosEmergencia, setFormularioEnelElementosEmergencia] = useState(() => {
@@ -472,12 +591,12 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
     });
 
     const actualizarCampoEnelElementosEmergencia = async (campo, valor) => {
-        const [nivel1, nivel2] = campo.split('.');
+        const [nivel1, nivel2, nivel3] = campo.split('.');
 
         if (Array.isArray(valor) && valor.length === 0) {
             setFormularioEnelElementosEmergencia((prev) => {
                 const actualizado = { ...prev };
-                actualizado[nivel1][nivel2] = "";
+                if (nivel3) { actualizado[nivel1][nivel2][nivel3] = ""; } else if (nivel2) { actualizado[nivel1][nivel2] = ""; } else { actualizado[nivel1] = ""; }
                 localStorage.setItem(
                     "formularioEnelElementosEmergencia",
                     JSON.stringify(actualizado)
@@ -510,7 +629,7 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
         if (typeof valor === 'string') {
             setFormularioEnelElementosEmergencia(prev => {
                 const actualizado = { ...prev };
-                if (nivel2) { actualizado[nivel1][nivel2] = valor; } else { actualizado[nivel1] = valor; }
+                if (nivel3) { actualizado[nivel1][nivel2][nivel3] = valor; } else if (nivel2) { actualizado[nivel1][nivel2] = valor; } else { actualizado[nivel1] = valor; }
                 localStorage.setItem('formularioEnelElementosEmergencia', JSON.stringify(actualizado));
                 return actualizado;
             });
@@ -520,11 +639,7 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
         if (valor[0].name && valor[0].data) {
             setFormularioEnelElementosEmergencia((prev) => {
                 const actualizado = { ...prev };
-                if (nivel2 !== undefined) {
-                    actualizado[nivel1][nivel2] = valor;
-                } else {
-                    actualizado[nivel1] = valor;
-                }
+                if (nivel3) { actualizado[nivel1][nivel2][nivel3] = valor; } else if (nivel2) { actualizado[nivel1][nivel2] = valor; } else { actualizado[nivel1] = valor; }
                 localStorage.setItem(
                     "formularioEnelElementosEmergencia",
                     JSON.stringify(actualizado)
@@ -706,14 +821,6 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
         },
 
         {
-            key: "controlDerrames20",
-            texto: "Otros ¿cuáles?",
-            cantidadExistenteKey: "cantidadControlDerrames20",
-            observacionKey: "observacionControlDerrames20",
-            activarinput: false,
-        },
-
-        {
             key: "elementosEmergencia1",
             texto: "Los extintores se encuentran señalizados",
             fotoKey: "fotoElementosEmergencia1",
@@ -804,6 +911,159 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
             observacionKey: "observacionElementosEmergencia13",
             activarinput: false,
         },
+        {
+            solucion: {
+                controlDerrames: [
+                    {
+                        key: "controlDerrames1",
+                        observacionKey: "observacionControlDerrames1",
+                    },
+                    {
+                        key: "controlDerrames2",
+                        observacionKey: "observacionControlDerrames2",
+                    },
+                    {
+                        key: "controlDerrames3",
+                        observacionKey: "observacionControlDerrames3",
+                    },
+                    {
+                        key: "controlDerrames4",
+                        observacionKey: "observacionControlDerrames4",
+                    },
+                    {
+                        key: "controlDerrames5",
+                        observacionKey: "observacionControlDerrames5",
+                    },
+                    {
+                        key: "controlDerrames6",
+                        observacionKey: "observacionControlDerrames6",
+                    },
+                    {
+                        key: "controlDerrames7",
+                        observacionKey: "observacionControlDerrames7",
+                    },
+                    {
+                        key: "controlDerrames8",
+                        observacionKey: "observacionControlDerrames8",
+                    },
+                    {
+                        key: "controlDerrames9",
+                        observacionKey: "observacionControlDerrames9",
+                    },
+                    {
+                        key: "controlDerrames10",
+                        observacionKey: "observacionControlDerrames10",
+                    },
+                    {
+                        key: "controlDerrames11",
+                        observacionKey: "observacionControlDerrames11",
+                    },
+                    {
+                        key: "controlDerrames12",
+                        observacionKey: "observacionControlDerrames12",
+                    },
+                    {
+                        key: "controlDerrames13",
+                        observacionKey: "observacionControlDerrames13",
+                    },
+                    {
+                        key: "controlDerrames14",
+                        observacionKey: "observacionControlDerrames14",
+                    },
+                    {
+                        key: "controlDerrames15",
+                        observacionKey: "observacionControlDerrames15",
+                    },
+                    {
+                        key: "controlDerrames16",
+                        observacionKey: "observacionControlDerrames16",
+                    },
+                    {
+                        key: "controlDerrames17",
+                        observacionKey: "observacionControlDerrames17",
+                    },
+                    {
+                        key: "controlDerrames18",
+                        observacionKey: "observacionControlDerrames18",
+                    },
+                    {
+                        key: "controlDerrames19",
+                        observacionKey: "observacionControlDerrames19",
+                    },
+                    {
+                        key: "controlDerrames20",
+                        observacionKey: "observacionControlDerrames20",
+                    },
+                ],
+                elementosEmergencia: [
+                    {
+                        key: "elementosEmergencia1",
+                        fotoKey: "fotoElementosEmergencia1",
+                        observacionKey: "observacionElementosEmergencia1",
+                    },
+                    {
+                        key: "elementosEmergencia2",
+                        fotoKey: "fotoElementosEmergencia2",
+                        observacionKey: "observacionElementosEmergencia2",
+                    },
+                    {
+                        key: "elementosEmergencia3",
+                        fotoKey: "fotoElementosEmergencia3",
+                        observacionKey: "observacionElementosEmergencia3",
+                    },
+                    {
+                        key: "elementosEmergencia4",
+                        fotoKey: "fotoElementosEmergencia4",
+                        observacionKey: "observacionElementosEmergencia4",
+                    },
+                    {
+                        key: "elementosEmergencia5",
+                        fotoKey: "fotoElementosEmergencia5",
+                        observacionKey: "observacionElementosEmergencia5",
+                    },
+                    {
+                        key: "elementosEmergencia6",
+                        fotoKey: "fotoElementosEmergencia6",
+                        observacionKey: "observacionElementosEmergencia6",
+                    },
+                    {
+                        key: "elementosEmergencia7",
+                        fotoKey: "fotoElementosEmergencia7",
+                        observacionKey: "observacionElementosEmergencia7",
+                    },
+                    {
+                        key: "elementosEmergencia8",
+                        fotoKey: "fotoElementosEmergencia8",
+                        observacionKey: "observacionElementosEmergencia8",
+                    },
+                    {
+                        key: "elementosEmergencia9",
+                        fotoKey: "fotoElementosEmergencia9",
+                        observacionKey: "observacionElementosEmergencia9",
+                    },
+                    {
+                        key: "elementosEmergencia10",
+                        fotoKey: "fotoElementosEmergencia10",
+                        observacionKey: "observacionElementosEmergencia10",
+                    },
+                    {
+                        key: "elementosEmergencia11",
+                        fotoKey: "fotoElementosEmergencia11",
+                        observacionKey: "observacionElementosEmergencia11",
+                    },
+                    {
+                        key: "elementosEmergencia12",
+                        fotoKey: "fotoElementosEmergencia12",
+                        observacionKey: "observacionElementosEmergencia12",
+                    },
+                    {
+                        key: "elementosEmergencia13",
+                        fotoKey: "fotoElementosEmergencia13",
+                        observacionKey: "observacionElementosEmergencia13",
+                    },
+                ],
+            }
+        }
     ];
 
     const validarFormularioEnelElementosEmergencia = (formulario) => {
@@ -996,6 +1256,36 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
     const [mostrarPreguntasDerrames, setMostrarPreguntasDerrames] = useState(true);
     const [mostrarPreguntasEmergencia, setMostrarPreguntasEmergencia] = useState(true);
 
+    const solucionInicial = useRef(_.cloneDeep(formularioEnelElementosEmergencia.solucion));
+    const [hayCambiosEnSolucion, setHayCambiosEnSolucion] = useState(false);
+
+    useEffect(() => {
+        const cambio = !_.isEqual(solucionInicial.current, formularioEnelElementosEmergencia.solucion);
+        setHayCambiosEnSolucion(cambio);
+    }, [formularioEnelElementosEmergencia]);
+
+    const validarSolucion = (solucion) => {
+        for (const categoria in solucion) {
+            const campos = solucion[categoria];
+
+            for (const key in campos) {
+                if (key.startsWith("foto")) {
+                    const fotoKey = key;
+                    const obsKey = key.replace("foto", "observacion").replace("Obligatoria", "");
+
+                    const valorFoto = campos[fotoKey];
+                    const valorObs = campos[obsKey];
+
+                    if ((valorFoto && !valorObs) || (!valorFoto && valorObs)) {
+                        toast.error(`Falta completar campos en la solución al hallazgo encontrado`);
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    };
+
     return (
         <div className="SupervisionFormularioEnelElementosEmergencia">
             {loading ? (
@@ -1032,7 +1322,7 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
                         <i className="fas fa-calendar-alt"></i>
                         <div className='entradaDatos'>
                             <Textos className='subtitulo'>Fecha inspeccion, hora inicio:</Textos>
-                            <Textos className='parrafo'>{fecha.toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' })}</Textos>
+                            <Textos className='parrafo'>{modo === "editar" ? formularioEnelElementosEmergencia.fechaFinal : fecha.toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' })}</Textos>
                         </div>
                     </div>
 
@@ -1054,8 +1344,8 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
                         <i className="fas fa-users-cog"></i>
                         <div className='entradaDatos'>
                             <Textos disabled className='subtitulo'>Nombre de quien inspecciona:</Textos>
-                            <Entradas disabled type="text" placeholder="Ingrese la cedula de quien inspecciona" value={cedulaUsuario} />
-                            <Entradas type="text" placeholder="Nombre" value={nombreUsuario} disabled={true} />
+                            <Entradas disabled type="text" placeholder="Ingrese la cedula de quien inspecciona" value={modo === "editar" ? formularioEnelElementosEmergencia.cedulaQuienInspecciona : cedulaUsuario} />
+                            <Entradas type="text" placeholder="Nombre" value={modo === "editar" ? formularioEnelElementosEmergencia.nombreQuienInspecciona : nombreUsuario} disabled={true} />
                         </div>
                     </div>
 
@@ -1395,6 +1685,9 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
                                     cantidadExistenteKey={preg.cantidadExistenteKey}
                                     tituloOpcionesBotones={'Estado'}
                                     opcionesBotones={["Bueno", "Malo", "Regular"]}
+                                    keySolucion="solucion"
+                                    fotoKeySolucion={preg.fotoKey}
+                                    observacionKeySolucion={preg.observacionKey}
                                 />
                             ))}
                             <div className='cartas'>
@@ -1433,6 +1726,9 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
                                     disabled={modo === "editar"}
                                     tituloOpcionesBotones={'Verificacion'}
                                     opcionesBotones={["Si", "No"]}
+                                    keySolucion="solucion"
+                                    fotoKeySolucion={preg.fotoKey}
+                                    observacionKeySolucion={preg.observacionKey}
                                 />
                             ))}
                         </div>
@@ -1451,7 +1747,7 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
                             localStorage.removeItem('formularioEnelElementosEmergencia');
                             setFormularioEnelElementosEmergencia(estadoInicialFormularioEnelElementosEmergencia);
                         }}>Borrar formulario</Botones>
-                        <Botones disabled={modo === "editar"} type="submit" id='Enviar' className="guardar" onClick={enviarFormularioEnelElementosEmergencia}>Enviar</Botones>
+                        <Botones disabled={modo === "editar" && hayCambiosEnSolucion === false} type="submit" id='Enviar' className="guardar" onClick={enviarFormularioEnelElementosEmergencia}>{hayCambiosEnSolucion ? 'Actualizar' : 'Enviar'}</Botones>
                     </div>
                 </form>
             )}

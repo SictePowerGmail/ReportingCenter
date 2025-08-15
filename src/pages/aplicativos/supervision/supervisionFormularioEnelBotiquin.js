@@ -20,6 +20,7 @@ import Tablas from '../../../components/tablas/tablas';
 import Imagenes from '../../../components/imagenes/imagenes';
 import { OpcionesFotoObservaciones } from './opcionesFotoObservaciones';
 import Cookies from 'js-cookie';
+import _ from "lodash";
 
 const SupervisionFormularioEnelBotiquin = () => {
     const navigate = useNavigate();
@@ -233,6 +234,48 @@ const SupervisionFormularioEnelBotiquin = () => {
         return false;
     };
 
+    const hayNCValidoSegundoFiltro = (obj, solucion) => {
+        let hayPendiente = false;
+
+        for (const key in obj) {
+            if (!obj.hasOwnProperty(key)) continue;
+
+            const valor = obj[key];
+
+            if (typeof valor === 'object' && valor !== null) {
+                if (hayNCValidoSegundoFiltro(valor, solucion?.[key])) {
+                    hayPendiente = true;
+                }
+            } else if (
+                typeof valor === 'string' &&
+                valor === 'NC' &&
+                !key.toLowerCase().startsWith('foto') &&
+                !key.toLowerCase().startsWith('observacion')
+            ) {
+                const fotoKey = `foto${key.charAt(0).toUpperCase()}${key.slice(1)}`;
+                const obsKey = `observacion${key.charAt(0).toUpperCase()}${key.slice(1)}`;
+
+                const fotoSol = solucion?.[fotoKey] || "";
+                const obsSol = solucion?.[obsKey] || "";
+
+                const solucionada =
+                    (
+                        (typeof fotoSol === "string" && fotoSol.trim() !== "") ||
+                        (Array.isArray(fotoSol) && fotoSol.length > 0)
+                    ) ||
+                    (
+                        (typeof obsSol === "string" && obsSol.trim() !== "")
+                    );
+
+                if (!solucionada) {
+                    hayPendiente = true;
+                }
+            }
+        }
+
+        return hayPendiente;
+    };
+
     const subirTodasLasFotos = async (obj, fecha, ruta = []) => {
         const formattedDate = formatDate(fecha);
 
@@ -297,37 +340,60 @@ const SupervisionFormularioEnelBotiquin = () => {
     };
 
     const enviarFormularioEnelBotiquin = async (event) => {
-
         event.preventDefault();
-        const resultadoValidador = validarFormularioEnelBotiquin(formularioEnelBotiquin);
-        if (resultadoValidador === false) { return }
-        if (!ubicacion) { toast.error('Por favor dar permisos de ubicacion.'); return false }
+
+        if (modo === "editar") {
+            const resultadoValidador = validarSolucion(formularioEnelBotiquin.solucion)
+            if (resultadoValidador === false) { return }
+        } else {
+            const resultadoValidador = validarFormularioEnelBotiquin(formularioEnelBotiquin);
+            if (resultadoValidador === false) { return }
+            if (!ubicacion) { toast.error('Por favor dar permisos de ubicacion.'); return false }
+        }
 
         setEnviando(true)
 
         try {
-            const fechaInicial = fecha.toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' });
-            const fechaFinal = new Date().toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            let response2;
+            if (modo === "editar") {
+                const formularioEnelBotiquinModificado = await subirTodasLasFotos(formularioEnelBotiquin.solucion, fecha);
+                const ncvalido = hayNCValidoSegundoFiltro(formularioEnelBotiquin, formularioEnelBotiquin.solucion) === true ? "No Conforme" : "Conforme"
+                const id = parseInt(formularioEnelBotiquin.id.replace(/\D/g, ""), 10);
+                const formularioNuevoSinFotos = eliminarDataEnFotos(formularioEnelBotiquinModificado)
 
-            const formularioEnelBotiquinModificado = await subirTodasLasFotos(formularioEnelBotiquin, fecha);
+                const data = {
+                    id: id,
+                    solucion: formularioNuevoSinFotos,
+                    inspeccionFinal: ncvalido,
+                };
 
-            const ncvalido = hayNCValido(formularioEnelBotiquinModificado) === true ? "No Conforme" : "Conforme"
+                response2 = await axios.post(`${process.env.REACT_APP_API_URL}/supervision/solucionRegistroEnelInspeccionBotiquin`, data);
 
-            const { id, ...formularioSinId } = formularioEnelBotiquinModificado;
-            const formularioConTiempos = {
-                ...formularioSinId,
-                fechaInicial,
-                fechaFinal,
-                ubicacion,
-                inspeccion: ncvalido,
-                formulario: "Enel Inspeccion Botiquin",
-                cedulaQuienInspecciona: cedulaUsuario,
-                nombreQuienInspecciona: nombreUsuario,
-            };
+            } else {
+                const fechaInicial = fecha.toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                const fechaFinal = new Date().toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
-            const formularioNuevoSinFotos = eliminarDataEnFotos(formularioConTiempos)
-            const formularioNuevoSerializado = serializarCamposComplejos(formularioNuevoSinFotos)
-            const response2 = await axios.post(`${process.env.REACT_APP_API_URL}/supervision/crearRegistrosEnelInspeccionBotiquin`, formularioNuevoSerializado);
+                const formularioEnelBotiquinModificado = await subirTodasLasFotos(formularioEnelBotiquin, fecha);
+
+                const ncvalido = hayNCValido(formularioEnelBotiquinModificado) === true ? "No Conforme" : "Conforme"
+
+                const { id, ...formularioSinId } = formularioEnelBotiquinModificado;
+                const formularioConTiempos = {
+                    ...formularioSinId,
+                    fechaInicial,
+                    fechaFinal,
+                    ubicacion,
+                    inspeccion: ncvalido,
+                    inspeccionFinal: ncvalido,
+                    formulario: "Enel Inspeccion Botiquin",
+                    cedulaQuienInspecciona: cedulaUsuario,
+                    nombreQuienInspecciona: nombreUsuario,
+                };
+
+                const formularioNuevoSinFotos = eliminarDataEnFotos(formularioConTiempos)
+                const formularioNuevoSerializado = serializarCamposComplejos(formularioNuevoSinFotos)
+                response2 = await axios.post(`${process.env.REACT_APP_API_URL}/supervision/crearRegistrosEnelInspeccionBotiquin`, formularioNuevoSerializado);
+            }
 
             if (response2.status >= 200 && response2.status < 300) {
                 setEnviando(false)
@@ -575,6 +641,84 @@ const SupervisionFormularioEnelBotiquin = () => {
         observacion: "",
         fotoObservacion: "",
         inspeccion: "",
+        solucion: {
+            bioseguridad: {
+                fotoBioseguridad1: "",
+                observacionBioseguridad1: "",
+                fotoBioseguridad2: "",
+                observacionBioseguridad2: "",
+                fotoBioseguridad3: "",
+                observacionBioseguridad3: "",
+                fotoBioseguridad4: "",
+                observacionBioseguridad4: "",
+                fotoBioseguridad5: "",
+                observacionBioseguridad5: "",
+            },
+            inmovilizacion: {
+                fotoInmovilizacion1: "",
+                observacionInmovilizacion1: "",
+                fotoInmovilizacion2: "",
+                observacionInmovilizacion2: "",
+                fotoInmovilizacion3: "",
+                observacionInmovilizacion3: "",
+                fotoInmovilizacion4: "",
+                observacionInmovilizacion4: "",
+                fotoInmovilizacion5: "",
+                observacionInmovilizacion5: "",
+                fotoInmovilizacion6: "",
+                observacionInmovilizacion6: "",
+                fotoInmovilizacion7: "",
+                observacionInmovilizacion7: "",
+                fotoInmovilizacion8: "",
+                observacionInmovilizacion8: "",
+                fotoInmovilizacion9: "",
+                observacionInmovilizacion9: "",
+                fotoInmovilizacion10: "",
+                observacionInmovilizacion10: "",
+                fotoInmovilizacion11: "",
+                observacionInmovilizacion11: "",
+                fotoInmovilizacion12: "",
+                observacionInmovilizacion12: "",
+                fotoInmovilizacion13: "",
+                observacionInmovilizacion13: "",
+                fotoInmovilizacion14: "",
+                observacionInmovilizacion14: "",
+                fotoInmovilizacion15: "",
+                observacionInmovilizacion15: "",
+                fotoInmovilizacion16: "",
+                observacionInmovilizacion16: "",
+            },
+            antisepticos: {
+                fotoAntisepticos1: "",
+                observacionAntisepticos1: "",
+                fotoAntisepticos2: "",
+                observacionAntisepticos2: "",
+            },
+            instrumental: {
+                fotoInstrumental1: "",
+                observacionInstrumental1: "",
+                fotoInstrumental2: "",
+                observacionInstrumental2: "",
+                fotoInstrumental3: "",
+                observacionInstrumental3: "",
+                fotoInstrumental4: "",
+                observacionInstrumental4: "",
+                fotoInstrumental5: "",
+                observacionInstrumental5: "",
+                fotoInstrumental6: "",
+                observacionInstrumental6: "",
+                fotoInstrumental7: "",
+                observacionInstrumental7: "",
+                fotoInstrumental8: "",
+                observacionInstrumental8: "",
+                fotoInstrumental9: "",
+                observacionInstrumental9: "",
+                fotoInstrumental10: "",
+                observacionInstrumental10: "",
+                fotoInstrumental11: "",
+                observacionInstrumental11: "",
+            },
+        }
     };
 
     const [formularioEnelBotiquin, setFormularioEnelBotiquin] = useState(() => {
@@ -583,12 +727,12 @@ const SupervisionFormularioEnelBotiquin = () => {
     });
 
     const actualizarCampoEnelBotiquin = async (campo, valor) => {
-        const [nivel1, nivel2] = campo.split('.');
+        const [nivel1, nivel2, nivel3] = campo.split('.');
 
         if (Array.isArray(valor) && valor.length === 0) {
             setFormularioEnelBotiquin((prev) => {
                 const actualizado = { ...prev };
-                actualizado[nivel1][nivel2] = "";
+                if (nivel3) { actualizado[nivel1][nivel2][nivel3] = ""; } else if (nivel2) { actualizado[nivel1][nivel2] = ""; } else { actualizado[nivel1] = ""; }
                 localStorage.setItem(
                     "formularioEnelBotiquin",
                     JSON.stringify(actualizado)
@@ -621,7 +765,7 @@ const SupervisionFormularioEnelBotiquin = () => {
         if (typeof valor === 'string') {
             setFormularioEnelBotiquin(prev => {
                 const actualizado = { ...prev };
-                if (nivel2) { actualizado[nivel1][nivel2] = valor; } else { actualizado[nivel1] = valor; }
+                if (nivel3) { actualizado[nivel1][nivel2][nivel3] = valor; } else if (nivel2) { actualizado[nivel1][nivel2] = valor; } else { actualizado[nivel1] = valor; }
                 localStorage.setItem('formularioEnelBotiquin', JSON.stringify(actualizado));
                 return actualizado;
             });
@@ -631,11 +775,7 @@ const SupervisionFormularioEnelBotiquin = () => {
         if (valor[0].name && valor[0].data) {
             setFormularioEnelBotiquin((prev) => {
                 const actualizado = { ...prev };
-                if (nivel2 !== undefined) {
-                    actualizado[nivel1][nivel2] = valor;
-                } else {
-                    actualizado[nivel1] = valor;
-                }
+                if (nivel3) { actualizado[nivel1][nivel2][nivel3] = valor; } else if (nivel2) { actualizado[nivel1][nivel2] = valor; } else { actualizado[nivel1] = valor; }
                 localStorage.setItem(
                     "formularioEnelBotiquin",
                     JSON.stringify(actualizado)
@@ -1052,6 +1192,188 @@ const SupervisionFormularioEnelBotiquin = () => {
             observacionKey: "observacionInstrumental11",
             activarinput: false,
         },
+        {
+            solucion: {
+                bioseguridad: [
+                    {
+                        key: "bioseguridad1",
+                        fotoKey: "fotoBioseguridad1",
+                        observacionKey: "observacionBioseguridad1",
+                    },
+                    {
+                        key: "bioseguridad2",
+                        fotoKey: "fotoBioseguridad2",
+                        observacionKey: "observacionBioseguridad2",
+                    },
+                    {
+                        key: "bioseguridad3",
+                        fotoKey: "fotoBioseguridad3",
+                        observacionKey: "observacionBioseguridad3",
+                    },
+                    {
+                        key: "bioseguridad4",
+                        fotoKey: "fotoBioseguridad4",
+                        observacionKey: "observacionBioseguridad4",
+                    },
+                    {
+                        key: "bioseguridad5",
+                        fotoKey: "fotoBioseguridad5",
+                        observacionKey: "observacionBioseguridad5",
+                    },
+                ],
+                inmovilizacion: [
+                    {
+                        key: "inmovilizacion1",
+                        fotoKey: "fotoInmovilizacion1",
+                        observacionKey: "observacionInmovilizacion1",
+                    },
+                    {
+                        key: "inmovilizacion2",
+                        fotoKey: "fotoInmovilizacion2",
+                        observacionKey: "observacionInmovilizacion2",
+                    },
+                    {
+                        key: "inmovilizacion3",
+                        fotoKey: "fotoInmovilizacion3",
+                        observacionKey: "observacionInmovilizacion3",
+                    },
+                    {
+                        key: "inmovilizacion4",
+                        fotoKey: "fotoInmovilizacion4",
+                        observacionKey: "observacionInmovilizacion4",
+                    },
+                    {
+                        key: "inmovilizacion5",
+                        fotoKey: "fotoInmovilizacion5",
+                        observacionKey: "observacionInmovilizacion5",
+                    },
+                    {
+                        key: "inmovilizacion6",
+                        fotoKey: "fotoInmovilizacion6",
+                        observacionKey: "observacionInmovilizacion6",
+                    },
+                    {
+                        key: "inmovilizacion7",
+                        fotoKey: "fotoInmovilizacion7",
+                        observacionKey: "observacionInmovilizacion7",
+                    },
+                    {
+                        key: "inmovilizacion8",
+                        fotoKey: "fotoInmovilizacion8",
+                        observacionKey: "observacionInmovilizacion8",
+                    },
+                    {
+                        key: "inmovilizacion9",
+                        fotoKey: "fotoInmovilizacion9",
+                        observacionKey: "observacionInmovilizacion9",
+                    },
+                    {
+                        key: "inmovilizacion10",
+                        fotoKey: "fotoInmovilizacion10",
+                        observacionKey: "observacionInmovilizacion10",
+                    },
+                    {
+                        key: "inmovilizacion11",
+                        fotoKey: "fotoInmovilizacion11",
+                        observacionKey: "observacionInmovilizacion11",
+                    },
+                    {
+                        key: "inmovilizacion12",
+                        fotoKey: "fotoInmovilizacion12",
+                        observacionKey: "observacionInmovilizacion12",
+                    },
+                    {
+                        key: "inmovilizacion13",
+                        fotoKey: "fotoInmovilizacion13",
+                        observacionKey: "observacionInmovilizacion13",
+                    },
+                    {
+                        key: "inmovilizacion14",
+                        fotoKey: "fotoInmovilizacion14",
+                        observacionKey: "observacionInmovilizacion14",
+                    },
+                    {
+                        key: "inmovilizacion15",
+                        fotoKey: "fotoInmovilizacion15",
+                        observacionKey: "observacionInmovilizacion15",
+                    },
+                    {
+                        key: "inmovilizacion16",
+                        fotoKey: "fotoInmovilizacion16",
+                        observacionKey: "observacionInmovilizacion16",
+                    },
+                ],
+                antisepticos: [
+                    {
+                        key: "antisepticos1",
+                        fotoKey: "fotoAntisepticos1",
+                        observacionKey: "observacionAntisepticos1",
+                    },
+                    {
+                        key: "antisepticos2",
+                        fotoKey: "fotoAntisepticos2",
+                        observacionKey: "observacionAntisepticos2",
+                    },
+                ],
+                instrumental: [
+                    {
+                        key: "instrumental1",
+                        fotoKey: "fotoInstrumental1",
+                        observacionKey: "observacionInstrumental1",
+                    },
+                    {
+                        key: "instrumental2",
+                        fotoKey: "fotoInstrumental2",
+                        observacionKey: "observacionInstrumental2",
+                    },
+                    {
+                        key: "instrumental3",
+                        fotoKey: "fotoInstrumental3",
+                        observacionKey: "observacionInstrumental3",
+                    },
+                    {
+                        key: "instrumental4",
+                        fotoKey: "fotoInstrumental4",
+                        observacionKey: "observacionInstrumental4",
+                    },
+                    {
+                        key: "instrumental5",
+                        fotoKey: "fotoInstrumental5",
+                        observacionKey: "observacionInstrumental5",
+                    },
+                    {
+                        key: "instrumental6",
+                        fotoKey: "fotoInstrumental6",
+                        observacionKey: "observacionInstrumental6",
+                    },
+                    {
+                        key: "instrumental7",
+                        fotoKey: "fotoInstrumental7",
+                        observacionKey: "observacionInstrumental7",
+                    },
+                    {
+                        key: "instrumental8",
+                        fotoKey: "fotoInstrumental8",
+                        observacionKey: "observacionInstrumental8",
+                    },
+                    {
+                        key: "instrumental9",
+                        fotoKey: "fotoInstrumental9",
+                        observacionKey: "observacionInstrumental9",
+                    },
+                    {
+                        key: "instrumental10",
+                        fotoKey: "fotoInstrumental10",
+                        observacionKey: "observacionInstrumental10",
+                    },
+                    {
+                        key: "instrumental11",
+                        fotoKey: "fotoInstrumental11",
+                        observacionKey: "observacionInstrumental11",
+                    },
+                ],
+            }
+        }
     ];
 
     const validarFormularioEnelBotiquin = (formulario) => {
@@ -1393,6 +1715,36 @@ const SupervisionFormularioEnelBotiquin = () => {
         }
     };
 
+    const solucionInicial = useRef(_.cloneDeep(formularioEnelBotiquin.solucion));
+    const [hayCambiosEnSolucion, setHayCambiosEnSolucion] = useState(false);
+
+    useEffect(() => {
+        const cambio = !_.isEqual(solucionInicial.current, formularioEnelBotiquin.solucion);
+        setHayCambiosEnSolucion(cambio);
+    }, [formularioEnelBotiquin]);
+
+    const validarSolucion = (solucion) => {
+        for (const categoria in solucion) {
+            const campos = solucion[categoria];
+
+            for (const key in campos) {
+                if (key.startsWith("foto")) {
+                    const fotoKey = key;
+                    const obsKey = key.replace("foto", "observacion").replace("Obligatoria", "");
+
+                    const valorFoto = campos[fotoKey];
+                    const valorObs = campos[obsKey];
+
+                    if ((valorFoto && !valorObs) || (!valorFoto && valorObs)) {
+                        toast.error(`Falta completar campos en la solución al hallazgo encontrado`);
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    };
+
     return (
         <div className="SupervisionFormularioEnelBotiquin">
             {loading ? (
@@ -1429,7 +1781,7 @@ const SupervisionFormularioEnelBotiquin = () => {
                         <i className="fas fa-calendar-alt"></i>
                         <div className='entradaDatos'>
                             <Textos className='subtitulo'>Fecha inspeccion, hora inicio:</Textos>
-                            <Textos className='parrafo'>{fecha.toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' })}</Textos>
+                            <Textos className='parrafo'>{modo === "editar" ? formularioEnelBotiquin.fechaFinal : fecha.toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' })}</Textos>
                         </div>
                     </div>
 
@@ -1478,8 +1830,8 @@ const SupervisionFormularioEnelBotiquin = () => {
                         <i className="fas fa-users-cog"></i>
                         <div className='entradaDatos'>
                             <Textos disabled className='subtitulo'>Nombre de quien inspecciona:</Textos>
-                            <Entradas disabled type="text" placeholder="Ingrese la cedula de quien inspecciona" value={cedulaUsuario} />
-                            <Entradas type="text" placeholder="Nombre" value={nombreUsuario} disabled={true} />
+                            <Entradas disabled type="text" placeholder="Ingrese la cedula de quien inspecciona" value={modo === "editar" ? formularioEnelBotiquin.cedulaQuienInspecciona : cedulaUsuario} />
+                            <Entradas type="text" placeholder="Nombre" value={modo === "editar" ? formularioEnelBotiquin.nombreQuienInspecciona : nombreUsuario} disabled={true} />
                         </div>
                     </div>
 
@@ -1629,6 +1981,9 @@ const SupervisionFormularioEnelBotiquin = () => {
                                     cantidadEstimadaKey={preg.cantidadEstimadaKey}
                                     cantidadExistenteBool={true}
                                     cantidadExistenteKey={preg.cantidadExistenteKey}
+                                    keySolucion="solucion"
+                                    fotoKeySolucion={preg.fotoKey}
+                                    observacionKeySolucion={preg.observacionKey}
                                 />
                             ))}
                         </div>
@@ -1658,6 +2013,9 @@ const SupervisionFormularioEnelBotiquin = () => {
                                     cantidadEstimadaKey={preg.cantidadEstimadaKey}
                                     cantidadExistenteBool={true}
                                     cantidadExistenteKey={preg.cantidadExistenteKey}
+                                    keySolucion="solucion"
+                                    fotoKeySolucion={preg.fotoKey}
+                                    observacionKeySolucion={preg.observacionKey}
                                 />
                             ))}
                         </div>
@@ -1687,6 +2045,9 @@ const SupervisionFormularioEnelBotiquin = () => {
                                     cantidadEstimadaKey={preg.cantidadEstimadaKey}
                                     cantidadExistenteBool={true}
                                     cantidadExistenteKey={preg.cantidadExistenteKey}
+                                    keySolucion="solucion"
+                                    fotoKeySolucion={preg.fotoKey}
+                                    observacionKeySolucion={preg.observacionKey}
                                 />
                             ))}
                         </div>
@@ -1716,6 +2077,9 @@ const SupervisionFormularioEnelBotiquin = () => {
                                     cantidadEstimadaKey={preg.cantidadEstimadaKey}
                                     cantidadExistenteBool={true}
                                     cantidadExistenteKey={preg.cantidadExistenteKey}
+                                    keySolucion="solucion"
+                                    fotoKeySolucion={preg.fotoKey}
+                                    observacionKeySolucion={preg.observacionKey}
                                 />
                             ))}
                         </div>
@@ -1736,7 +2100,7 @@ const SupervisionFormularioEnelBotiquin = () => {
                             localStorage.removeItem('formularioEnelBotiquin');
                             setFormularioEnelBotiquin(estadoInicialFormularioEnelBotiquin);
                         }}>Borrar formulario</Botones>
-                        <Botones disabled={modo === "editar"} type="submit" id='Enviar' className="guardar" onClick={enviarFormularioEnelBotiquin}>Enviar</Botones>
+                        <Botones disabled={modo === "editar" && hayCambiosEnSolucion === false} type="submit" id='Enviar' className="guardar" onClick={enviarFormularioEnelBotiquin}>{hayCambiosEnSolucion ? 'Actualizar' : 'Enviar'}</Botones>
                     </div>
                 </form>
             )}

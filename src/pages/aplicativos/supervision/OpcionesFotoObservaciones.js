@@ -54,7 +54,7 @@ export const OpcionesFotoObservaciones = ({
     }, [vencido, data, keyPrin, keyBase, onChange]);
 
     return (
-        <div className={`cartas ${data[keyPrin][cantidadEstimadaKey] === "0" ? 'oculto' : ''} ${disabled && (data[keyPrin][keyBase] === 'NC' || data[keyPrin][keyBase] === 'Malo' || data[keyPrin][keyBase] === 'Regular' || data[keyPrin][keyBase] === 'No') ? 'negativo' : ''} ${data[keySolucion][keyPrin][fotoKeySolucion] ? 'resuelta' : ''}`}>
+        <div className={`cartas ${data[keyPrin][cantidadEstimadaKey] === "0" ? 'oculto' : ''} ${disabled && (data[keyPrin][keyBase] === 'NC' || data[keyPrin][keyBase] === 'Malo' || data[keyPrin][keyBase] === 'Regular' || data[keyPrin][keyBase] === 'No') ? 'negativo' : ''} ${data[keySolucion][keyPrin][fotoKeySolucion] && data[keySolucion][keyPrin][observacionKeySolucion] ? 'resuelta' : ''}`}>
             <Textos className='subtitulo sub'>{texto}</Textos>
             <div className={`opciones imagenElemento ${imagenBool === false ? 'oculto' : ''}`}>
                 <img src={imagenKey} alt={imagenKey} />
@@ -124,13 +124,13 @@ export const OpcionesFotoObservaciones = ({
             </div>
 
             <div className={`solucion ${disabled && (data[keyPrin][keyBase] === 'NC' || data[keyPrin][keyBase] === 'Malo' || data[keyPrin][keyBase] === 'Regular' || data[keyPrin][keyBase] === 'No') ? '' : 'ocultar'}`}>
-                <div className={`lineaHorizontal ${data[keySolucion][keyPrin][fotoKeySolucion] ? 'resuelta' : ''}`}></div>
+                <div className={`lineaHorizontal ${data[keySolucion][keyPrin][fotoKeySolucion] && data[keySolucion][keyPrin][observacionKeySolucion] ? 'resuelta' : ''}`}></div>
                 <div className='subtituloSolucion'>
-                    <Textos className='titulo'>Solucion {data[keySolucion][keyPrin][fotoKeySolucion] ? 'Resuelta' : 'Pendiente'}</Textos>
+                    <Textos className='titulo'>Solucion {data[keySolucion][keyPrin][fotoKeySolucion] && data[keySolucion][keyPrin][observacionKeySolucion] ? 'Resuelta' : 'Pendiente'}</Textos>
                 </div>
                 <div className={`opciones fotos ${data[keyPrin][keyBase] === 'NC' || data[keyPrin][keyBase] === 'No' ? '' : activarinput === true ? '' : 'oculto'}`} >
                     <Textos className='parrafo'>Imagen(es)</Textos>
-                    <Imagenes disableInput={!disabled || data[keySolucion][keyPrin][fotoKeySolucion]} fotoKey={fotoKeySolucion} foto={data[keySolucion][keyPrin][fotoKeySolucion]} onChange={(fotoKeySolucion, data) => onChange(`${keySolucion}.${keyPrin}.${fotoKeySolucion}`, data)} capture={data.tipoInspeccion === 'Presencial' ? true : false} setImagen={(data) => setImagen(data)} />
+                    <Imagenes disableInput={!disabled} fotoKey={fotoKeySolucion} foto={data[keySolucion][keyPrin][fotoKeySolucion]} onChange={(fotoKeySolucion, data) => onChange(`${keySolucion}.${keyPrin}.${fotoKeySolucion}`, data)} capture={data.tipoInspeccion === 'Presencial' ? true : false} setImagen={(data) => setImagen(data)} />
                 </div>
                 <div className={`opciones ${data[keyPrin][keyBase] === 'NC' || data[keyPrin][keyBase] === 'Malo' || data[keyPrin][keyBase] === 'Regular' || data[keyPrin][keyBase] === 'No' ? '' : 'oculto'}`} >
                     <Textos className='parrafo'>Observacion</Textos>
@@ -140,7 +140,7 @@ export const OpcionesFotoObservaciones = ({
                         defaultValue={data[keySolucion][keyPrin][observacionKeySolucion]}
                         onChange={(e) => onChange(`${keySolucion}.${keyPrin}.${observacionKeySolucion}`, e.target.value)}
                         rows={4}
-                        disabled={!disabled || data[keySolucion][keyPrin][observacionKeySolucion]}
+                        disabled={!disabled}
                     />
                 </div>
             </div>

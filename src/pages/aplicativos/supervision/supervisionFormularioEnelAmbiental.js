@@ -20,6 +20,7 @@ import Tablas from '../../../components/tablas/tablas';
 import Imagenes from '../../../components/imagenes/imagenes';
 import { OpcionesFotoObservaciones } from './opcionesFotoObservaciones';
 import Cookies from 'js-cookie';
+import _ from "lodash";
 
 const SupervisionFormularioEnelAmbiental = () => {
     const navigate = useNavigate();
@@ -233,6 +234,48 @@ const SupervisionFormularioEnelAmbiental = () => {
         return false;
     };
 
+    const hayNCValidoSegundoFiltro = (obj, solucion) => {
+        let hayPendiente = false;
+
+        for (const key in obj) {
+            if (!obj.hasOwnProperty(key)) continue;
+
+            const valor = obj[key];
+
+            if (typeof valor === 'object' && valor !== null) {
+                if (hayNCValidoSegundoFiltro(valor, solucion?.[key])) {
+                    hayPendiente = true;
+                }
+            } else if (
+                typeof valor === 'string' &&
+                valor === 'NC' &&
+                !key.toLowerCase().startsWith('foto') &&
+                !key.toLowerCase().startsWith('observacion')
+            ) {
+                const fotoKey = `foto${key.charAt(0).toUpperCase()}${key.slice(1)}`;
+                const obsKey = `observacion${key.charAt(0).toUpperCase()}${key.slice(1)}`;
+
+                const fotoSol = solucion?.[fotoKey] || "";
+                const obsSol = solucion?.[obsKey] || "";
+
+                const solucionada =
+                    (
+                        (typeof fotoSol === "string" && fotoSol.trim() !== "") ||
+                        (Array.isArray(fotoSol) && fotoSol.length > 0)
+                    ) ||
+                    (
+                        (typeof obsSol === "string" && obsSol.trim() !== "")
+                    );
+
+                if (!solucionada) {
+                    hayPendiente = true;
+                }
+            }
+        }
+
+        return hayPendiente;
+    };
+
     const subirTodasLasFotos = async (obj, fecha, ruta = []) => {
         const formattedDate = formatDate(fecha);
 
@@ -297,38 +340,61 @@ const SupervisionFormularioEnelAmbiental = () => {
     };
 
     const enviarFormularioEnelAmbiental = async (event) => {
-
         event.preventDefault();
-        const resultadoValidador = validarFormularioEnelAmbiental(formularioEnelAmbiental);
-        if (resultadoValidador === false) { return }
-        if (!ubicacion) { toast.error('Por favor dar permisos de ubicacion.'); return false }
+
+        if (modo === "editar") {
+            const resultadoValidador = validarSolucion(formularioEnelAmbiental.solucion)
+            if (resultadoValidador === false) { return }
+        } else {
+            const resultadoValidador = validarFormularioEnelAmbiental(formularioEnelAmbiental);
+            if (resultadoValidador === false) { return }
+            if (!ubicacion) { toast.error('Por favor dar permisos de ubicacion.'); return false }
+        }
 
         setEnviando(true)
 
         try {
-            const fechaInicial = fecha.toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' });
-            const fechaFinal = new Date().toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            let response2;
+            if (modo === "editar") {
+                const formularioEnelAmbientalModificado = await subirTodasLasFotos(formularioEnelAmbiental.solucion, fecha);
+                const ncvalido = hayNCValidoSegundoFiltro(formularioEnelAmbiental, formularioEnelAmbiental.solucion) === true ? "No Conforme" : "Conforme"
+                const id = parseInt(formularioEnelAmbiental.id.replace(/\D/g, ""), 10);
+                const formularioNuevoSinFotos = eliminarDataEnFotos(formularioEnelAmbientalModificado)
 
-            const formularioEnelAmbientalModificado = await subirTodasLasFotos(formularioEnelAmbiental, fecha);
+                const data = {
+                    id: id,
+                    solucion: formularioNuevoSinFotos,
+                    inspeccionFinal: ncvalido,
+                };
 
-            const ncvalido = hayNCValido(formularioEnelAmbientalModificado) === true ? "No Conforme" : "Conforme"
+                response2 = await axios.post(`${process.env.REACT_APP_API_URL}/supervision/solucionRegistroEnelInspeccionAmbiental`, data);
 
-            const { id, ...formularioSinId } = formularioEnelAmbientalModificado;
-            const formularioConTiempos = {
-                ...formularioSinId,
-                fechaInicial,
-                fechaFinal,
-                ubicacion,
-                inspeccion: ncvalido,
-                formulario: "Enel Inspeccion de Gestion Ambiental para Areas Operativas",
-                cedulaQuienInspecciona: cedulaUsuario,
-                nombreQuienInspecciona: nombreUsuario,
-            };
+            } else {
+                const fechaInicial = fecha.toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                const fechaFinal = new Date().toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
-            const formularioNuevoSinFotos = eliminarDataEnFotos(formularioConTiempos)
-            const formularioNuevoSerializado = serializarCamposComplejos(formularioNuevoSinFotos)
+                const formularioEnelAmbientalModificado = await subirTodasLasFotos(formularioEnelAmbiental, fecha);
 
-            const response2 = await axios.post(`${process.env.REACT_APP_API_URL}/supervision/crearRegistrosEnelInspeccionAmbiental`, formularioNuevoSerializado);
+                const ncvalido = hayNCValido(formularioEnelAmbientalModificado) === true ? "No Conforme" : "Conforme"
+
+                const { id, ...formularioSinId } = formularioEnelAmbientalModificado;
+                const formularioConTiempos = {
+                    ...formularioSinId,
+                    fechaInicial,
+                    fechaFinal,
+                    ubicacion,
+                    inspeccion: ncvalido,
+                    inspeccionFinal: ncvalido,
+                    formulario: "Enel Inspeccion de Gestion Ambiental para Areas Operativas",
+                    cedulaQuienInspecciona: cedulaUsuario,
+                    nombreQuienInspecciona: nombreUsuario,
+                };
+
+                const formularioNuevoSinFotos = eliminarDataEnFotos(formularioConTiempos)
+                const formularioNuevoSerializado = serializarCamposComplejos(formularioNuevoSinFotos)
+
+                response2 = await axios.post(`${process.env.REACT_APP_API_URL}/supervision/crearRegistrosEnelInspeccionAmbiental`, formularioNuevoSerializado);
+            }
 
             if (response2.status >= 200 && response2.status < 300) {
                 setEnviando(false)
@@ -503,6 +569,104 @@ const SupervisionFormularioEnelAmbiental = () => {
         },
         observacion: "",
         inspeccion: "",
+        solucion: {
+            socioAmbiental: {
+                fotoSocioAmbiental1: "",
+                observacionSocioAmbiental1: "",
+            },
+            materialesConstruccion: {
+                fotoMaterialesConstruccion1: "",
+                observacionMaterialesConstruccion1: "",
+                fotoMaterialesConstruccion2: "",
+                observacionMaterialesConstruccion2: "",
+                fotoMaterialesConstruccion3: "",
+                observacionMaterialesConstruccion3: "",
+                fotoMaterialesConstruccion4: "",
+                observacionMaterialesConstruccion4: "",
+            },
+            rcd: {
+                fotoRcd1: "",
+                observacionRcd1: "",
+                fotoRcd2: "",
+                observacionRcd2: "",
+                fotoRcd3: "",
+                observacionRcd3: "",
+                fotoRcd4: "",
+                observacionRcd4: "",
+                fotoRcd5: "",
+                observacionRcd5: "",
+                fotoRcd6: "",
+                observacionRcd6: "",
+                fotoRcd7: "",
+                observacionRcd7: "",
+            },
+            residuosSolidos: {
+                fotoResiduosSolidos1: "",
+                observacionResiduosSolidos1: "",
+                fotoResiduosSolidos2: "",
+                observacionResiduosSolidos2: "",
+                fotoResiduosSolidos3: "",
+                observacionResiduosSolidos3: "",
+                fotoResiduosSolidos4: "",
+                observacionResiduosSolidos4: "",
+                fotoResiduosSolidos5: "",
+                observacionResiduosSolidos5: "",
+                fotoResiduosSolidos6: "",
+                observacionResiduosSolidos6: "",
+                fotoResiduosSolidos7: "",
+                observacionResiduosSolidos7: "",
+                fotoResiduosSolidos8: "",
+                observacionResiduosSolidos8: "",
+                fotoResiduosSolidos9: "",
+                observacionResiduosSolidos9: "",
+                fotoResiduosSolidos10: "",
+                observacionResiduosSolidos10: "",
+                fotoResiduosSolidos11: "",
+                observacionResiduosSolidos11: "",
+                fotoResiduosSolidos12: "",
+                observacionResiduosSolidos12: "",
+            },
+            aceites: {
+                fotoAceites1: "",
+                observacionAceites1: "",
+                fotoAceites2: "",
+                observacionAceites2: "",
+                fotoAceites3: "",
+                observacionAceites3: "",
+                fotoAceites4: "",
+                observacionAceites4: "",
+                fotoAceites5: "",
+                observacionAceites5: "",
+            },
+            vertimientos: {
+                fotoVertimientos1: "",
+                observacionVertimientos1: "",
+                fotoVertimientos2: "",
+                observacionVertimientos2: "",
+                fotoVertimientos3: "",
+                observacionVertimientos3: "",
+            },
+            atmosfericas: {
+                fotoAtmosfericas1: "",
+                observacionAtmosfericas1: "",
+                fotoAtmosfericas2: "",
+                observacionAtmosfericas2: "",
+            },
+            seguridadIndustrial: {
+                fotoSeguridadIndustrial1: "",
+                observacionSeguridadIndustrial1: "",
+                fotoSeguridadIndustrial2: "",
+                observacionSeguridadIndustrial2: "",
+                fotoSeguridadIndustrial3: "",
+                observacionSeguridadIndustrial3: "",
+                fotoSeguridadIndustrial4: "",
+                observacionSeguridadIndustrial4: "",
+                fotoSeguridadIndustrial5: "",
+                observacionSeguridadIndustrial5: "",
+                fotoSeguridadIndustrial6: "",
+                observacionSeguridadIndustrial6: "",
+            },
+        }
     };
 
     const [formularioEnelAmbiental, setFormularioEnelAmbiental] = useState(() => {
@@ -511,12 +675,12 @@ const SupervisionFormularioEnelAmbiental = () => {
     });
 
     const actualizarCampoEnelAmbiental = async (campo, valor) => {
-        const [nivel1, nivel2] = campo.split('.');
+        const [nivel1, nivel2, nivel3] = campo.split('.');
 
         if (Array.isArray(valor) && valor.length === 0) {
             setFormularioEnelAmbiental((prev) => {
                 const actualizado = { ...prev };
-                actualizado[nivel1][nivel2] = "";
+                if (nivel3) { actualizado[nivel1][nivel2][nivel3] = ""; } else if (nivel2) { actualizado[nivel1][nivel2] = ""; } else { actualizado[nivel1] = ""; }
                 localStorage.setItem(
                     "formularioEnelAmbiental",
                     JSON.stringify(actualizado)
@@ -549,7 +713,7 @@ const SupervisionFormularioEnelAmbiental = () => {
         if (typeof valor === 'string') {
             setFormularioEnelAmbiental(prev => {
                 const actualizado = { ...prev };
-                if (nivel2) { actualizado[nivel1][nivel2] = valor; } else { actualizado[nivel1] = valor; }
+                if (nivel3) { actualizado[nivel1][nivel2][nivel3] = valor; } else if (nivel2) { actualizado[nivel1][nivel2] = valor; } else { actualizado[nivel1] = valor; }
                 localStorage.setItem('formularioEnelAmbiental', JSON.stringify(actualizado));
                 return actualizado;
             });
@@ -559,7 +723,7 @@ const SupervisionFormularioEnelAmbiental = () => {
         if (valor[0].name && valor[0].data) {
             setFormularioEnelAmbiental((prev) => {
                 const actualizado = { ...prev };
-                actualizado[nivel1][nivel2] = valor;
+                if (nivel3) { actualizado[nivel1][nivel2][nivel3] = valor; } else if (nivel2) { actualizado[nivel1][nivel2] = valor; } else { actualizado[nivel1] = valor; }
                 localStorage.setItem(
                     "formularioEnelAmbiental",
                     JSON.stringify(actualizado)
@@ -964,6 +1128,226 @@ const SupervisionFormularioEnelAmbiental = () => {
             observacionKey: "observacionSeguridadIndustrial6",
             activarinput: false,
         },
+        {
+            solucion: {
+                socioAmbiental: [
+                    {
+                        key: "socioAmbiental1",
+                        fotoKey: "fotoSocioAmbiental1",
+                        observacionKey: "observacionSocioAmbiental1",
+                    },
+                ],
+                materialesConstruccion: [
+                    {
+                        key: "materialesConstruccion1",
+                        fotoKey: "fotoMaterialesConstruccion1",
+                        observacionKey: "observacionMaterialesConstruccion1",
+                    },
+                    {
+                        key: "materialesConstruccion2",
+                        fotoKey: "fotoMaterialesConstruccion2",
+                        observacionKey: "observacionMaterialesConstruccion2",
+                    },
+                    {
+                        key: "materialesConstruccion3",
+                        fotoKey: "fotoMaterialesConstruccion3",
+                        observacionKey: "observacionMaterialesConstruccion3",
+                    },
+                    {
+                        key: "materialesConstruccion4",
+                        fotoKey: "fotoMaterialesConstruccion4",
+                        observacionKey: "observacionMaterialesConstruccion4",
+                    },
+                ],
+                rcd: [
+                    {
+                        key: "rcd1",
+                        fotoKey: "fotoRcd1",
+                        observacionKey: "observacionRcd1",
+                    },
+                    {
+                        key: "rcd2",
+                        fotoKey: "fotoRcd2",
+                        observacionKey: "observacionRcd2",
+                    },
+                    {
+                        key: "rcd3",
+                        fotoKey: "fotoRcd3",
+                        observacionKey: "observacionRcd3",
+                    },
+                    {
+                        key: "rcd4",
+                        fotoKey: "fotoRcd4",
+                        observacionKey: "observacionRcd4",
+                    },
+                    {
+                        key: "rcd5",
+                        fotoKey: "fotoRcd5",
+                        observacionKey: "observacionRcd5",
+                    },
+                    {
+                        key: "rcd6",
+                        fotoKey: "fotoRcd6",
+                        observacionKey: "observacionRcd6",
+                    },
+                    {
+                        key: "rcd7",
+                        fotoKey: "fotoRcd7",
+                        observacionKey: "observacionRcd7",
+                    },
+                ],
+                residuosSolidos: [
+                    {
+                        key: "residuosSolidos1",
+                        fotoKey: "fotoResiduosSolidos1",
+                        observacionKey: "observacionResiduosSolidos1",
+                    },
+                    {
+                        key: "residuosSolidos2",
+                        fotoKey: "fotoResiduosSolidos2",
+                        observacionKey: "observacionResiduosSolidos2",
+                    },
+                    {
+                        key: "residuosSolidos3",
+                        fotoKey: "fotoResiduosSolidos3",
+                        observacionKey: "observacionResiduosSolidos3",
+                    },
+                    {
+                        key: "residuosSolidos4",
+                        fotoKey: "fotoResiduosSolidos4",
+                        observacionKey: "observacionResiduosSolidos4",
+                    },
+                    {
+                        key: "residuosSolidos5",
+                        fotoKey: "fotoResiduosSolidos5",
+                        observacionKey: "observacionResiduosSolidos5",
+                    },
+                    {
+                        key: "residuosSolidos6",
+                        fotoKey: "fotoResiduosSolidos6",
+                        observacionKey: "observacionResiduosSolidos6",
+                    },
+                    {
+                        key: "residuosSolidos7",
+                        fotoKey: "fotoResiduosSolidos7",
+                        observacionKey: "observacionResiduosSolidos7",
+                    },
+                    {
+                        key: "residuosSolidos8",
+                        fotoKey: "fotoResiduosSolidos8",
+                        observacionKey: "observacionResiduosSolidos8",
+                    },
+                    {
+                        key: "residuosSolidos9",
+                        fotoKey: "fotoResiduosSolidos9",
+                        observacionKey: "observacionResiduosSolidos9",
+                    },
+                    {
+                        key: "residuosSolidos10",
+                        fotoKey: "fotoResiduosSolidos10",
+                        observacionKey: "observacionResiduosSolidos10",
+                    },
+                    {
+                        key: "residuosSolidos11",
+                        fotoKey: "fotoResiduosSolidos11",
+                        observacionKey: "observacionResiduosSolidos11",
+                    },
+                    {
+                        key: "residuosSolidos12",
+                        fotoKey: "fotoResiduosSolidos12",
+                        observacionKey: "observacionResiduosSolidos12",
+                    },
+                ],
+                aceites: [
+                    {
+                        key: "aceites1",
+                        fotoKey: "fotoAceites1",
+                        observacionKey: "observacionAceites1",
+                    },
+                    {
+                        key: "aceites2",
+                        fotoKey: "fotoAceites2",
+                        observacionKey: "observacionAceites2",
+                    },
+                    {
+                        key: "aceites3",
+                        fotoKey: "fotoAceites3",
+                        observacionKey: "observacionAceites3",
+                    },
+                    {
+                        key: "aceites4",
+                        fotoKey: "fotoAceites4",
+                        observacionKey: "observacionAceites4",
+                    },
+                    {
+                        key: "aceites5",
+                        fotoKey: "fotoAceites5",
+                        observacionKey: "observacionAceites5",
+                    },
+                ],
+                vertimientos: [
+                    {
+                        key: "vertimientos1",
+                        fotoKey: "fotoVertimientos1",
+                        observacionKey: "observacionVertimientos1",
+                    },
+                    {
+                        key: "vertimientos2",
+                        fotoKey: "fotoVertimientos2",
+                        observacionKey: "observacionVertimientos2",
+                    },
+                    {
+                        key: "vertimientos3",
+                        fotoKey: "fotoVertimientos3",
+                        observacionKey: "observacionVertimientos3",
+                    },
+                ],
+                atmosfericas: [
+                    {
+                        key: "atmosfericas1",
+                        fotoKey: "fotoAtmosfericas1",
+                        observacionKey: "observacionAtmosfericas1",
+                    },
+                    {
+                        key: "atmosfericas2",
+                        fotoKey: "fotoAtmosfericas2",
+                        observacionKey: "observacionAtmosfericas2",
+                    },
+                ],
+                seguridadIndustrial: [
+                    {
+                        key: "seguridadIndustrial1",
+                        fotoKey: "fotoSeguridadIndustrial1",
+                        observacionKey: "observacionSeguridadIndustrial1",
+                    },
+                    {
+                        key: "seguridadIndustrial2",
+                        fotoKey: "fotoSeguridadIndustrial2",
+                        observacionKey: "observacionSeguridadIndustrial2",
+                    },
+                    {
+                        key: "seguridadIndustrial3",
+                        fotoKey: "fotoSeguridadIndustrial3",
+                        observacionKey: "observacionSeguridadIndustrial3",
+                    },
+                    {
+                        key: "seguridadIndustrial4",
+                        fotoKey: "fotoSeguridadIndustrial4",
+                        observacionKey: "observacionSeguridadIndustrial4",
+                    },
+                    {
+                        key: "seguridadIndustrial5",
+                        fotoKey: "fotoSeguridadIndustrial5",
+                        observacionKey: "observacionSeguridadIndustrial5",
+                    },
+                    {
+                        key: "seguridadIndustrial6",
+                        fotoKey: "fotoSeguridadIndustrial6",
+                        observacionKey: "observacionSeguridadIndustrial6",
+                    },
+                ]
+            }
+        }
     ];
 
     const validarMiembroEnProceso = (miembro) => {
@@ -1055,6 +1439,36 @@ const SupervisionFormularioEnelAmbiental = () => {
         if (!formulario.observacion) { toast.error('Por favor diligencie la observacion general.'); return false }
     }
 
+    const solucionInicial = useRef(_.cloneDeep(formularioEnelAmbiental.solucion));
+    const [hayCambiosEnSolucion, setHayCambiosEnSolucion] = useState(false);
+
+    useEffect(() => {
+        const cambio = !_.isEqual(solucionInicial.current, formularioEnelAmbiental.solucion);
+        setHayCambiosEnSolucion(cambio);
+    }, [formularioEnelAmbiental]);
+
+    const validarSolucion = (solucion) => {
+        for (const categoria in solucion) {
+            const campos = solucion[categoria];
+
+            for (const key in campos) {
+                if (key.startsWith("foto")) {
+                    const fotoKey = key;
+                    const obsKey = key.replace("foto", "observacion").replace("Obligatoria", "");
+
+                    const valorFoto = campos[fotoKey];
+                    const valorObs = campos[obsKey];
+
+                    if ((valorFoto && !valorObs) || (!valorFoto && valorObs)) {
+                        toast.error(`Falta completar campos en la solución al hallazgo encontrado`);
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    };
+
     return (
         <div className="SupervisionFormularioEnelAmbiental">
             {loading ? (
@@ -1091,7 +1505,7 @@ const SupervisionFormularioEnelAmbiental = () => {
                         <i className="fas fa-calendar-alt"></i>
                         <div className='entradaDatos'>
                             <Textos className='subtitulo'>Fecha inspeccion, hora inicio:</Textos>
-                            <Textos className='parrafo'>{fecha.toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' })}</Textos>
+                            <Textos className='parrafo'>{modo === "editar" ? formularioEnelAmbiental.fechaFinal : fecha.toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' })}</Textos>
                         </div>
                     </div>
 
@@ -1113,8 +1527,8 @@ const SupervisionFormularioEnelAmbiental = () => {
                         <i className="fas fa-users-cog"></i>
                         <div className='entradaDatos'>
                             <Textos disabled className='subtitulo'>Nombre de quien inspecciona:</Textos>
-                            <Entradas disabled type="text" placeholder="Ingrese la cedula de quien inspecciona" value={cedulaUsuario} />
-                            <Entradas type="text" placeholder="Nombre" value={nombreUsuario} disabled={true} />
+                            <Entradas disabled type="text" placeholder="Ingrese la cedula de quien inspecciona" value={modo === "editar" ? formularioEnelAmbiental.cedulaQuienInspecciona : cedulaUsuario} />
+                            <Entradas type="text" placeholder="Nombre" value={modo === "editar" ? formularioEnelAmbiental.nombreQuienInspecciona : nombreUsuario} disabled={true} />
                         </div>
                     </div>
 
@@ -1414,6 +1828,9 @@ const SupervisionFormularioEnelAmbiental = () => {
                                     onChange={actualizarCampoEnelAmbiental}
                                     setImagen={setImagenAmpliada}
                                     disabled={modo === "editar"}
+                                    keySolucion="solucion"
+                                    fotoKeySolucion={preg.fotoKey}
+                                    observacionKeySolucion={preg.observacionKey}
                                 />
                             ))}
                         </div>
@@ -1435,6 +1852,9 @@ const SupervisionFormularioEnelAmbiental = () => {
                                     onChange={actualizarCampoEnelAmbiental}
                                     setImagen={setImagenAmpliada}
                                     disabled={modo === "editar"}
+                                    keySolucion="solucion"
+                                    fotoKeySolucion={preg.fotoKey}
+                                    observacionKeySolucion={preg.observacionKey}
                                 />
                             ))}
                         </div>
@@ -1456,6 +1876,9 @@ const SupervisionFormularioEnelAmbiental = () => {
                                     onChange={actualizarCampoEnelAmbiental}
                                     setImagen={setImagenAmpliada}
                                     disabled={modo === "editar"}
+                                    keySolucion="solucion"
+                                    fotoKeySolucion={preg.fotoKey}
+                                    observacionKeySolucion={preg.observacionKey}
                                 />
                             ))}
                         </div>
@@ -1477,6 +1900,9 @@ const SupervisionFormularioEnelAmbiental = () => {
                                     onChange={actualizarCampoEnelAmbiental}
                                     setImagen={setImagenAmpliada}
                                     disabled={modo === "editar"}
+                                    keySolucion="solucion"
+                                    fotoKeySolucion={preg.fotoKey}
+                                    observacionKeySolucion={preg.observacionKey}
                                 />
                             ))}
                         </div>
@@ -1498,6 +1924,9 @@ const SupervisionFormularioEnelAmbiental = () => {
                                     onChange={actualizarCampoEnelAmbiental}
                                     setImagen={setImagenAmpliada}
                                     disabled={modo === "editar"}
+                                    keySolucion="solucion"
+                                    fotoKeySolucion={preg.fotoKey}
+                                    observacionKeySolucion={preg.observacionKey}
                                 />
                             ))}
                         </div>
@@ -1519,6 +1948,9 @@ const SupervisionFormularioEnelAmbiental = () => {
                                     onChange={actualizarCampoEnelAmbiental}
                                     setImagen={setImagenAmpliada}
                                     disabled={modo === "editar"}
+                                    keySolucion="solucion"
+                                    fotoKeySolucion={preg.fotoKey}
+                                    observacionKeySolucion={preg.observacionKey}
                                 />
                             ))}
                         </div>
@@ -1540,6 +1972,9 @@ const SupervisionFormularioEnelAmbiental = () => {
                                     onChange={actualizarCampoEnelAmbiental}
                                     setImagen={setImagenAmpliada}
                                     disabled={modo === "editar"}
+                                    keySolucion="solucion"
+                                    fotoKeySolucion={preg.fotoKey}
+                                    observacionKeySolucion={preg.observacionKey}
                                 />
                             ))}
                         </div>
@@ -1561,6 +1996,9 @@ const SupervisionFormularioEnelAmbiental = () => {
                                     onChange={actualizarCampoEnelAmbiental}
                                     setImagen={setImagenAmpliada}
                                     disabled={modo === "editar"}
+                                    keySolucion="solucion"
+                                    fotoKeySolucion={preg.fotoKey}
+                                    observacionKeySolucion={preg.observacionKey}
                                 />
                             ))}
                         </div>
@@ -1580,7 +2018,7 @@ const SupervisionFormularioEnelAmbiental = () => {
                             setMiembroEnProceso({})
                             setFormularioEnelAmbiental(estadoInicialFormularioEnelAmbiental);
                         }}>Borrar formulario</Botones>
-                        <Botones disabled={modo === "editar"} type="submit" id='Enviar' className="guardar" onClick={enviarFormularioEnelAmbiental}>Enviar</Botones>
+                        <Botones disabled={modo === "editar" && hayCambiosEnSolucion === false} type="submit" id='Enviar' className="guardar" onClick={enviarFormularioEnelAmbiental}>{hayCambiosEnSolucion ? 'Actualizar' : 'Enviar'}</Botones>
                     </div>
                 </form>
             )}

@@ -232,36 +232,46 @@ const SupervisionFormularioEnelIntegral = () => {
     };
 
     const hayNCValidoSegundoFiltro = (obj, solucion) => {
+        let hayPendiente = false;
+
         for (const key in obj) {
             if (!obj.hasOwnProperty(key)) continue;
 
             const valor = obj[key];
 
             if (typeof valor === 'object' && valor !== null) {
-                if (hayNCValido(valor, solucion?.[key])) return true;
+                if (hayNCValidoSegundoFiltro(valor, solucion?.[key])) {
+                    hayPendiente = true;
+                }
             } else if (
                 typeof valor === 'string' &&
                 valor === 'NC' &&
                 !key.toLowerCase().startsWith('foto') &&
                 !key.toLowerCase().startsWith('observacion')
             ) {
-                const fotoKey = `foto${key.charAt(0).toUpperCase()}${key.slice(1)}Obligatoria`;
+                const fotoKey = `foto${key.charAt(0).toUpperCase()}${key.slice(1)}`;
                 const obsKey = `observacion${key.charAt(0).toUpperCase()}${key.slice(1)}`;
 
                 const fotoSol = solucion?.[fotoKey] || "";
                 const obsSol = solucion?.[obsKey] || "";
 
-                const solucionada = (fotoSol && fotoSol.trim() !== "") || (obsSol && obsSol.trim() !== "");
+                const solucionada =
+                    (
+                        (typeof fotoSol === "string" && fotoSol.trim() !== "") ||
+                        (Array.isArray(fotoSol) && fotoSol.length > 0)
+                    ) ||
+                    (
+                        (typeof obsSol === "string" && obsSol.trim() !== "")
+                    );
 
                 if (!solucionada) {
-                    return true;
+                    hayPendiente = true;
                 }
             }
         }
 
-        return false;
+        return hayPendiente;
     };
-
 
     const subirTodasLasFotos = async (obj, fecha, ruta = []) => {
         const formattedDate = formatDate(fecha);
@@ -344,7 +354,7 @@ const SupervisionFormularioEnelIntegral = () => {
             let response2;
             if (modo === "editar") {
                 const formularioEnelInspeccionIntegralHSEModificado = await subirTodasLasFotos(formularioEnelInspeccionIntegralHSE.solucion, fecha);
-                const ncvalido = hayNCValidoSegundoFiltro(formularioEnelInspeccionIntegralHSEModificado, formularioEnelInspeccionIntegralHSE.solucion) === true ? "No Conforme" : "Conforme"
+                const ncvalido = hayNCValidoSegundoFiltro(formularioEnelInspeccionIntegralHSE, formularioEnelInspeccionIntegralHSE.solucion) === true ? "No Conforme" : "Conforme"
                 const id = parseInt(formularioEnelInspeccionIntegralHSE.id.replace(/\D/g, ""), 10);
                 const formularioNuevoSinFotos = eliminarDataEnFotos(formularioEnelInspeccionIntegralHSEModificado)
 
@@ -807,7 +817,7 @@ const SupervisionFormularioEnelIntegral = () => {
         if (Array.isArray(valor) && valor.length === 0) {
             setFormularioEnelInspeccionIntegralHSE((prev) => {
                 const actualizado = { ...prev };
-                actualizado[nivel1][nivel2][nivel3] = "";
+                if (nivel3) { actualizado[nivel1][nivel2][nivel3] = ""; } else if (nivel2) { actualizado[nivel1][nivel2] = ""; } else { actualizado[nivel1] = ""; }
                 localStorage.setItem(
                     "formularioEnelInspeccionIntegralHSE",
                     JSON.stringify(actualizado)
