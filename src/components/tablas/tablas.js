@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaPencilAlt, FaTrash } from 'react-icons/fa';
 import './tablas.css';
 import Entradas from '../entradas/entradas';
@@ -53,6 +53,10 @@ const Tablas = ({
             setPaginaActual(nuevaPagina);
         }
     };
+
+    useEffect(() => {
+        setPaginaActual(1);
+    }, [filtros, filtro]);
 
     return (
         <div className={`tabla-contenedor ${className}`}>

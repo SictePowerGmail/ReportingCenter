@@ -418,11 +418,14 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
         tipoInspeccion: "",
         cedulaQuienInspecciona: "",
         nombreQuienInspecciona: "",
+        nombreProyecto: "",
         ciudad: "",
         centroTrabajo: "",
         noContrato: "",
         cedulaResponsableCuadrilla: "",
         nombreResponsableCuadrilla: "",
+        cedulaConductorCuadrilla: "",
+        nombreConductorCuadrilla: "",
         proceso: "",
         extintores: [],
         controlDerrames: {
@@ -1071,11 +1074,14 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
         if (!formulario.tipoInspeccion) { toast.error('Por favor diligencie el tipo de inspeccion.'); return false }
         if (!cedulaUsuario) { toast.error('Por favor diligencie inicie sesion ya que no existe usuario.'); return false }
         if (!nombreUsuario) { toast.error('Por favor diligencie inicie sesion ya que no existe usuario.'); return false }
+        if (!formulario.nombreProyecto) { toast.error('Por favor diligencie el nombre del proyecto.'); return false }
         if (!formulario.ciudad) { toast.error('Por favor diligencie la ciudad.'); return false }
         if (!formulario.centroTrabajo) { toast.error('Por favor diligencie el centro de trabajo.'); return false }
         if (!formulario.noContrato) { toast.error('Por favor diligencie el numero de contrato.'); return false }
         if (!formulario.cedulaResponsableCuadrilla) { toast.error('Por favor diligencie la cedula del cuadrillero.'); return false }
-        if (!formulario.nombreResponsableCuadrilla || formulario.nombreResponsableCuadrilla === 'Usuario no encontrado') { toast.error('Por favor ingrese un usuario valido para el responsable del cuadrillero.'); return false }
+        if (!formulario.nombreResponsableCuadrilla || formulario.nombreResponsableCuadrilla === 'Usuario no encontrado') { toast.error('Por favor ingrese un usuario valido para el lider de la cuadrilla.'); return false }
+        if (!formulario.cedulaConductorCuadrilla) { toast.error('Por favor diligencie la cedula del conductor.'); return false }
+        if (!formulario.nombreConductorCuadrilla || formulario.nombreConductorCuadrilla === 'Usuario no encontrado') { toast.error('Por favor ingrese un usuario valido para el conductor de la cuadrilla.'); return false }
         if (!formulario.proceso) { toast.error('Por favor diligencie el proceso.'); return false }
         if (mostrarPreguntasExtintores === true && !Array.isArray(formulario.extintores)) { toast.error('Por favor diligencie el formulario de extintores.'); return false }
         if (mostrarPreguntasDerrames === true && !formulario.controlDerrames.controlDerrames1) { toast.error('Por favor diligencie el estado de la pregunta 1 del capitulo 2.'); return false }
@@ -1351,6 +1357,14 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
                         </div>
                     </div>
 
+                    <div className='campo nombreProyecto'>
+                        <i className="fas fa-tools"></i>
+                        <div className='entradaDatos'>
+                            <Textos className='subtitulo'>Nombre del proyecto:</Textos>
+                            <Entradas disabled={modo === "editar"} type="text" placeholder="Ingrese el nombre del Proyecto" value={formularioEnelElementosEmergencia.nombreProyecto} onChange={(e) => actualizarCampoEnelElementosEmergencia('nombreProyecto', e.target.value)} />
+                        </div>
+                    </div>
+
                     <div className='campo ciudad'>
                         <i className="fas fa-tools"></i>
                         <div className='entradaDatos'>
@@ -1418,7 +1432,7 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
                     <div className='campo lider'>
                         <i className="fas fa-users-cog"></i>
                         <div className='entradaDatos'>
-                            <Textos className='subtitulo'>Responsable de la Cuadrilla:</Textos>
+                            <Textos className='subtitulo'>Lider de la Cuadrilla:</Textos>
                             <Entradas disabled={modo === "editar"} type="text" placeholder="Ingrese la cedula del lider de cuadrilla" value={formularioEnelElementosEmergencia.cedulaResponsableCuadrilla} onChange={(e) => {
                                 const valor = e.target.value;
                                 actualizarCampoEnelElementosEmergencia('cedulaResponsableCuadrilla', valor);
@@ -1430,6 +1444,24 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
                                 }
                             }} />
                             <Entradas type="text" placeholder="Nombre" value={formularioEnelElementosEmergencia.nombreResponsableCuadrilla} disabled={true} />
+                        </div>
+                    </div>
+
+                    <div className='campo conductor'>
+                        <i className="fas fa-users-cog"></i>
+                        <div className='entradaDatos'>
+                            <Textos className='subtitulo'>Conductor de la Cuadrilla:</Textos>
+                            <Entradas disabled={modo === "editar"} type="text" placeholder="Ingrese la cedula del conductor de cuadrilla" value={formularioEnelElementosEmergencia.cedulaConductorCuadrilla} onChange={(e) => {
+                                const valor = e.target.value;
+                                actualizarCampoEnelElementosEmergencia('cedulaConductorCuadrilla', valor);
+                                const registroEncontrado = datosPlanta.find(item => item.nit === valor);
+                                if (registroEncontrado) {
+                                    actualizarCampoEnelElementosEmergencia('nombreConductorCuadrilla', registroEncontrado.nombre);
+                                } else {
+                                    actualizarCampoEnelElementosEmergencia('nombreConductorCuadrilla', 'Usuario no encontrado');
+                                }
+                            }} />
+                            <Entradas type="text" placeholder="Nombre" value={formularioEnelElementosEmergencia.nombreConductorCuadrilla} disabled={true} />
                         </div>
                     </div>
 

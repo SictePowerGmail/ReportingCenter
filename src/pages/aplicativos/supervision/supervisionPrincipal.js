@@ -425,7 +425,7 @@ const SupervisionPrincipal = () => {
 
             const conteoInspecciones = {};
             registrosUnificados.forEach((item) => {
-                const name = item.inspeccion?.trim() || 'Desconocido';
+                const name = item.inspeccionFinal?.trim() || 'Desconocido';
                 if (conteoInspecciones[name]) {
                     conteoInspecciones[name]++;
                 } else {
@@ -526,7 +526,7 @@ const SupervisionPrincipal = () => {
         { header: 'Inspeccion Inicial', key: 'inspeccionInicial' },
         { header: 'Inspeccion Final', key: 'inspeccionFinal' },
     ];
- 
+
     const [mostrarModal, setMostrarModal] = useState(false);
     const [selectedOption, setSelectedOption] = useState('');
 
@@ -823,42 +823,62 @@ const SupervisionPrincipal = () => {
                                         <Botones onClick={() => setMostrarModal(false)}>Cancelar</Botones>
                                         <Botones className='agregar' onClick={() => {
                                             if (selectedOption === 'ENEL - Inspeccion Integral HSE') {
+                                                Object.keys(localStorage).forEach((key) => {
+                                                    if (key.startsWith('formulario')  && key !== 'formularioEnelInspeccionIntegralHSE') {
+                                                        localStorage.removeItem(key);
+                                                    }
+                                                });
+                                                localStorage.removeItem('miembroEnProceso');
                                                 const dataStr = localStorage.getItem('formularioEnelInspeccionIntegralHSE');
                                                 if (dataStr) {
                                                     const dataLocal = JSON.parse(dataStr);
                                                     if (dataLocal.id) {
                                                         localStorage.removeItem('formularioEnelInspeccionIntegralHSE');
-                                                        localStorage.removeItem('miembroEnProceso');
                                                     }
                                                 }
                                                 navigate('/SupervisionFormularioEnelIntegral', { state: { modo: 'crear' } });
                                             } else if (selectedOption === 'ENEL - Inspección de Gestión Ambiental para Áreas Operativas') {
+                                                Object.keys(localStorage).forEach((key) => {
+                                                    if (key.startsWith('formulario')  && key !== 'formularioEnelAmbiental') {
+                                                        localStorage.removeItem(key);
+                                                    }
+                                                });
+                                                localStorage.removeItem('miembroEnProceso');
                                                 const dataStr = localStorage.getItem('formularioEnelAmbiental');
                                                 if (dataStr) {
                                                     const dataLocal = JSON.parse(dataStr);
                                                     if (dataLocal.id) {
                                                         localStorage.removeItem('formularioEnelAmbiental');
-                                                        localStorage.removeItem('miembroEnProceso');
                                                     }
                                                 }
                                                 navigate('/SupervisionFormularioEnelAmbiental', { state: { modo: 'crear' } });
                                             } else if (selectedOption === 'ENEL - Inspección de Botiquin') {
+                                                Object.keys(localStorage).forEach((key) => {
+                                                    if (key.startsWith('formulario')  && key !== 'formularioEnelBotiquin') {
+                                                        localStorage.removeItem(key);
+                                                    }
+                                                });
+                                                localStorage.removeItem('miembroEnProceso');
                                                 const dataStr = localStorage.getItem('formularioEnelBotiquin');
                                                 if (dataStr) {
                                                     const dataLocal = JSON.parse(dataStr);
                                                     if (dataLocal.id) {
                                                         localStorage.removeItem('formularioEnelBotiquin');
-                                                        localStorage.removeItem('miembroEnProceso');
                                                     }
                                                 }
                                                 navigate('/SupervisionFormularioEnelBotiquin', { state: { modo: 'crear' } });
                                             } else if (selectedOption === 'ENEL - Inspección a Equipos y Elementos de Emergencia') {
+                                                Object.keys(localStorage).forEach((key) => {
+                                                    if (key.startsWith('formulario')  && key !== 'formularioEnelElementosEmergencia') {
+                                                        localStorage.removeItem(key);
+                                                    }
+                                                });
+                                                localStorage.removeItem('miembroEnProceso');
                                                 const dataStr = localStorage.getItem('formularioEnelElementosEmergencia');
                                                 if (dataStr) {
                                                     const dataLocal = JSON.parse(dataStr);
                                                     if (dataLocal.id) {
                                                         localStorage.removeItem('formularioEnelElementosEmergencia');
-                                                        localStorage.removeItem('miembroEnProceso');
                                                     }
                                                 }
                                                 navigate('/SupervisionFormularioEnelElementosEmergencia', { state: { modo: 'crear' } });
