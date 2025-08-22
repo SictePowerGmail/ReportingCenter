@@ -243,13 +243,66 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
 
             const valor = obj[key];
 
-            if (typeof valor === 'object' && valor !== null) {
+            if (key === "extintores" && Array.isArray(valor)) {
+                const solucionExtintores = Array.isArray(solucion?.extintores) ? solucion.extintores : [];
+
+                for (const extintor of valor) {
+                    let tieneNC = false;
+
+                    for (const campo in extintor) {
+                        if (
+                            typeof extintor[campo] === 'string' &&
+                            (extintor[campo] === 'No' || extintor[campo] === 'Malo' || extintor[campo] === 'Regular') &&
+                            !campo.toLowerCase().startsWith('foto') &&
+                            !campo.toLowerCase().startsWith('observacion')
+                        ) {
+                            tieneNC = true;
+                            break;
+                        }
+                    }
+
+                    if (!tieneNC) continue;
+
+                    const solucionExtintor = solucionExtintores.find(p => p.id === extintor.id);
+
+                    if (!solucionExtintor) {
+                        hayPendiente = true;
+                        continue;
+                    }
+
+                    for (const campo in extintor) {
+                        if (
+                            typeof extintor[campo] === 'string' &&
+                            (extintor[campo] === 'No' || extintor[campo] === 'Malo' || extintor[campo] === 'Regular') &&
+                            !campo.toLowerCase().startsWith('foto') &&
+                            !campo.toLowerCase().startsWith('observacion')
+                        ) {
+                            const fotoKey = `foto${campo.charAt(0).toUpperCase()}${campo.slice(1)}`;
+                            const obsKey = `observacion${campo.charAt(0).toUpperCase()}${campo.slice(1)}`;
+
+                            const fotoSol = solucionExtintor[fotoKey] || "";
+                            const obsSol = solucionExtintor[obsKey] || "";
+
+                            const solucionada =
+                                (
+                                    (typeof fotoSol === "string" && fotoSol.trim() !== "") ||
+                                    (Array.isArray(fotoSol) && fotoSol.length > 0)
+                                ) ||
+                                (typeof obsSol === "string" && obsSol.trim() !== "");
+
+                            if (!solucionada) {
+                                hayPendiente = true;
+                            }
+                        }
+                    }
+                }
+            } else if (typeof valor === 'object' && valor !== null) {
                 if (hayNCValidoSegundoFiltro(valor, solucion?.[key])) {
                     hayPendiente = true;
                 }
             } else if (
                 typeof valor === 'string' &&
-                valor === 'NC' &&
+                (valor === 'No' || valor === 'Malo' || valor === 'Regular') &&
                 !key.toLowerCase().startsWith('foto') &&
                 !key.toLowerCase().startsWith('observacion')
             ) {
@@ -536,27 +589,46 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
         inspeccion: "",
         solucion: {
             controlDerrames: {
+                fotoControlDerrames1: "",
                 observacionControlDerrames1: "",
+                fotoControlDerrames2: "",
                 observacionControlDerrames2: "",
+                fotoControlDerrames3: "",
                 observacionControlDerrames3: "",
+                fotoControlDerrames4: "",
                 observacionControlDerrames4: "",
+                fotoControlDerrames5: "",
                 observacionControlDerrames5: "",
+                fotoControlDerrames6: "",
                 observacionControlDerrames6: "",
+                fotoControlDerrames7: "",
                 observacionControlDerrames7: "",
+                fotoControlDerrames8: "",
                 observacionControlDerrames8: "",
+                fotoControlDerrames9: "",
                 observacionControlDerrames9: "",
+                fotoControlDerrames10: "",
                 observacionControlDerrames10: "",
+                fotoControlDerrames11: "",
                 observacionControlDerrames11: "",
+                fotoControlDerrames12: "",
                 observacionControlDerrames12: "",
+                fotoControlDerrames13: "",
                 observacionControlDerrames13: "",
+                fotoControlDerrames14: "",
                 observacionControlDerrames14: "",
+                fotoControlDerrames15: "",
                 observacionControlDerrames15: "",
+                fotoControlDerrames16: "",
                 observacionControlDerrames16: "",
+                fotoControlDerrames17: "",
                 observacionControlDerrames17: "",
+                fotoControlDerrames18: "",
                 observacionControlDerrames18: "",
+                fotoControlDerrames19: "",
                 observacionControlDerrames19: "",
+                fotoControlDerrames20: "",
                 observacionControlDerrames20: "",
-                fotoControlDerrames: "",
             },
             elementosEmergencia: {
                 fotoElementosEmergencia1: "",
@@ -595,11 +667,14 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
     });
 
     const actualizarCampoEnelElementosEmergencia = async (campo, valor) => {
-        const [nivel1, nivel2, nivel3] = campo.split('.');
+        const [nivel1, nivel2, nivel3, nivel4] = campo.split('.');
 
         if (Array.isArray(valor) && valor.length === 0) {
             setFormularioEnelElementosEmergencia((prev) => {
                 const actualizado = { ...prev };
+                if (nivel1 && !actualizado[nivel1]) actualizado[nivel1] = {};
+                if (nivel2 && !actualizado[nivel1][nivel2]) actualizado[nivel1][nivel2] = {};
+                if (nivel3 && !actualizado[nivel1][nivel2][nivel3]) actualizado[nivel1][nivel2][nivel3] = {};
                 if (nivel3) { actualizado[nivel1][nivel2][nivel3] = ""; } else if (nivel2) { actualizado[nivel1][nivel2] = ""; } else { actualizado[nivel1] = ""; }
                 localStorage.setItem(
                     "formularioEnelElementosEmergencia",
@@ -633,7 +708,35 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
         if (typeof valor === 'string') {
             setFormularioEnelElementosEmergencia(prev => {
                 const actualizado = { ...prev };
-                if (nivel3) { actualizado[nivel1][nivel2][nivel3] = valor; } else if (nivel2) { actualizado[nivel1][nivel2] = valor; } else { actualizado[nivel1] = valor; }
+                if (nivel1 && !actualizado[nivel1]) actualizado[nivel1] = {};
+                if (nivel1 === "solucion" && nivel2 === "extintores" && nivel3 === 'id') {
+                    if (!Array.isArray(actualizado.solucion.extintores)) {
+                        actualizado.solucion.extintores = [];
+                    }
+
+                    const yaExiste = actualizado.solucion.extintores.some(
+                        item => item.id === valor
+                    );
+
+                    if (!yaExiste) {
+                        actualizado.solucion.extintores.push({ id: valor });
+                    }
+                } else if (nivel1 === "solucion" && nivel2 === "extintores") {
+                    const indice = actualizado.solucion.extintores.findIndex(
+                        item => item.id === nivel3
+                    );
+
+                    if (indice !== -1) {
+                        actualizado.solucion.extintores[indice] = {
+                            ...actualizado.solucion.extintores[indice],
+                            [nivel4]: valor
+                        };
+                    }
+                } else {
+                    if (nivel2 && !actualizado[nivel1][nivel2]) actualizado[nivel1][nivel2] = {};
+                    if (nivel3 && !actualizado[nivel1][nivel2][nivel3]) actualizado[nivel1][nivel2][nivel3] = {};
+                    if (nivel3) { actualizado[nivel1][nivel2][nivel3] = valor; } else if (nivel2) { actualizado[nivel1][nivel2] = valor; } else { actualizado[nivel1] = valor; }
+                }
                 localStorage.setItem('formularioEnelElementosEmergencia', JSON.stringify(actualizado));
                 return actualizado;
             });
@@ -643,7 +746,23 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
         if (valor[0].name && valor[0].data) {
             setFormularioEnelElementosEmergencia((prev) => {
                 const actualizado = { ...prev };
-                if (nivel3) { actualizado[nivel1][nivel2][nivel3] = valor; } else if (nivel2) { actualizado[nivel1][nivel2] = valor; } else { actualizado[nivel1] = valor; }
+                if (nivel1 && !actualizado[nivel1]) actualizado[nivel1] = {};
+                if (nivel1 === "solucion" && nivel2 === "extintores") {
+                    const indice = actualizado.solucion.extintores.findIndex(
+                        item => item.id === nivel3
+                    );
+
+                    if (indice !== -1) {
+                        actualizado.solucion.extintores[indice] = {
+                            ...actualizado.solucion.extintores[indice],
+                            [nivel4]: valor
+                        };
+                    }
+                } else {
+                    if (nivel2 && !actualizado[nivel1][nivel2]) actualizado[nivel1][nivel2] = {};
+                    if (nivel3 && !actualizado[nivel1][nivel2][nivel3]) actualizado[nivel1][nivel2][nivel3] = {};
+                    if (nivel3) { actualizado[nivel1][nivel2][nivel3] = valor; } else if (nivel2) { actualizado[nivel1][nivel2] = valor; } else { actualizado[nivel1] = valor; }
+                }
                 localStorage.setItem(
                     "formularioEnelElementosEmergencia",
                     JSON.stringify(actualizado)
@@ -687,6 +806,7 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
             key: "controlDerrames1",
             texto: "Paños oleofílicos",
             cantidadExistenteKey: "cantidadControlDerrames1",
+            fotoKey: "fotoControlDerrames1",
             observacionKey: "observacionControlDerrames1",
             activarinput: false,
         },
@@ -694,6 +814,7 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
             key: "controlDerrames2",
             texto: "Almohada oleofílica",
             cantidadExistenteKey: "cantidadControlDerrames2",
+            fotoKey: "fotoControlDerrames2",
             observacionKey: "observacionControlDerrames2",
             activarinput: false,
         },
@@ -701,6 +822,7 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
             key: "controlDerrames3",
             texto: "Barrera oleofílica",
             cantidadExistenteKey: "cantidadControlDerrames3",
+            fotoKey: "fotoControlDerrames3",
             observacionKey: "observacionControlDerrames3",
             activarinput: false,
         },
@@ -708,6 +830,7 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
             key: "controlDerrames4",
             texto: "Material absorbente",
             cantidadExistenteKey: "cantidadControlDerrames4",
+            fotoKey: "fotoControlDerrames4",
             observacionKey: "observacionControlDerrames4",
             activarinput: false,
         },
@@ -715,6 +838,7 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
             key: "controlDerrames5",
             texto: "Cinta de señalización de seguridad",
             cantidadExistenteKey: "cantidadControlDerrames5",
+            fotoKey: "fotoControlDerrames5",
             observacionKey: "observacionControlDerrames5",
             activarinput: false,
         },
@@ -722,6 +846,7 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
             key: "controlDerrames6",
             texto: "Bolsas industriales color rojo",
             cantidadExistenteKey: "cantidadControlDerrames6",
+            fotoKey: "fotoControlDerrames6",
             observacionKey: "observacionControlDerrames6",
             activarinput: false,
         },
@@ -729,6 +854,7 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
             key: "controlDerrames7",
             texto: "Pala y/o recogedor plástico",
             cantidadExistenteKey: "cantidadControlDerrames7",
+            fotoKey: "fotoControlDerrames7",
             observacionKey: "observacionControlDerrames7",
             activarinput: false,
         },
@@ -736,6 +862,7 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
             key: "controlDerrames8",
             texto: "Desengrasante",
             cantidadExistenteKey: "cantidadControlDerrames8",
+            fotoKey: "fotoControlDerrames8",
             observacionKey: "observacionControlDerrames8",
             activarinput: false,
         },
@@ -743,6 +870,7 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
             key: "controlDerrames9",
             texto: "Ficha de datos de seguridad del desengrasante",
             cantidadExistenteKey: "cantidadControlDerrames9",
+            fotoKey: "fotoControlDerrames9",
             observacionKey: "observacionControlDerrames9",
             activarinput: false,
         },
@@ -750,6 +878,7 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
             key: "controlDerrames10",
             texto: "Guantes de nitrilo, gafas de seguridad y protección respiratoria con filtro",
             cantidadExistenteKey: "cantidadControlDerrames10",
+            fotoKey: "fotoControlDerrames10",
             observacionKey: "observacionControlDerrames10",
             activarinput: false,
         },
@@ -757,6 +886,7 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
             key: "controlDerrames11",
             texto: "Chaleco reflectivo",
             cantidadExistenteKey: "cantidadControlDerrames11",
+            fotoKey: "fotoControlDerrames11",
             observacionKey: "observacionControlDerrames11",
             activarinput: false,
         },
@@ -764,6 +894,7 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
             key: "controlDerrames12",
             texto: "Calajanes en madera",
             cantidadExistenteKey: "cantidadControlDerrames12",
+            fotoKey: "fotoControlDerrames12",
             observacionKey: "observacionControlDerrames12",
             activarinput: false,
         },
@@ -771,6 +902,7 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
             key: "controlDerrames13",
             texto: "Masilla epóxica",
             cantidadExistenteKey: "cantidadControlDerrames13",
+            fotoKey: "fotoControlDerrames13",
             observacionKey: "observacionControlDerrames13",
             activarinput: false,
         },
@@ -778,6 +910,7 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
             key: "controlDerrames14",
             texto: "Amarres plásticos y/o manila",
             cantidadExistenteKey: "cantidadControlDerrames14",
+            fotoKey: "fotoControlDerrames14",
             observacionKey: "observacionControlDerrames14",
             activarinput: false,
         },
@@ -785,6 +918,7 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
             key: "controlDerrames15",
             texto: "Martillo de goma",
             cantidadExistenteKey: "cantidadControlDerrames15",
+            fotoKey: "fotoControlDerrames15",
             observacionKey: "observacionControlDerrames15",
             activarinput: false,
         },
@@ -792,6 +926,7 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
             key: "controlDerrames16",
             texto: "Instructivo de uso",
             cantidadExistenteKey: "cantidadControlDerrames16",
+            fotoKey: "fotoControlDerrames16",
             observacionKey: "observacionControlDerrames16",
             activarinput: false,
         },
@@ -799,6 +934,7 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
             key: "controlDerrames17",
             texto: "Linterna",
             cantidadExistenteKey: "cantidadControlDerrames17",
+            fotoKey: "fotoControlDerrames17",
             observacionKey: "observacionControlDerrames17",
             activarinput: false,
         },
@@ -806,6 +942,7 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
             key: "controlDerrames18",
             texto: "Maleta y/o contenedor para almacenamiento de los elementos kit para control de derrames",
             cantidadExistenteKey: "cantidadControlDerrames18",
+            fotoKey: "fotoControlDerrames18",
             observacionKey: "observacionControlDerrames18",
             activarinput: false,
         },
@@ -813,6 +950,7 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
             key: "controlDerrames19",
             texto: "Señalización del sitio de almacenamiento del kit control de derrames",
             cantidadExistenteKey: "cantidadControlDerrames19",
+            fotoKey: "fotoControlDerrames19",
             observacionKey: "observacionControlDerrames19",
             activarinput: false,
         },
@@ -820,6 +958,7 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
             key: "controlDerrames20",
             texto: "Otros ¿cuáles?",
             cantidadExistenteKey: "cantidadControlDerrames20",
+            fotoKey: "fotoControlDerrames20",
             observacionKey: "observacionControlDerrames20",
             activarinput: false,
         },
@@ -920,82 +1059,102 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
                 controlDerrames: [
                     {
                         key: "controlDerrames1",
+                        fotoKey: "fotoControlDerrames1",
                         observacionKey: "observacionControlDerrames1",
                     },
                     {
                         key: "controlDerrames2",
+                        fotoKey: "fotoControlDerrames2",
                         observacionKey: "observacionControlDerrames2",
                     },
                     {
                         key: "controlDerrames3",
+                        fotoKey: "fotoControlDerrames3",
                         observacionKey: "observacionControlDerrames3",
                     },
                     {
                         key: "controlDerrames4",
+                        fotoKey: "fotoControlDerrames4",
                         observacionKey: "observacionControlDerrames4",
                     },
                     {
                         key: "controlDerrames5",
+                        fotoKey: "fotoControlDerrames5",
                         observacionKey: "observacionControlDerrames5",
                     },
                     {
                         key: "controlDerrames6",
+                        fotoKey: "fotoControlDerrames6",
                         observacionKey: "observacionControlDerrames6",
                     },
                     {
                         key: "controlDerrames7",
+                        fotoKey: "fotoControlDerrames7",
                         observacionKey: "observacionControlDerrames7",
                     },
                     {
                         key: "controlDerrames8",
+                        fotoKey: "fotoControlDerrames8",
                         observacionKey: "observacionControlDerrames8",
                     },
                     {
                         key: "controlDerrames9",
+                        fotoKey: "fotoControlDerrames9",
                         observacionKey: "observacionControlDerrames9",
                     },
                     {
                         key: "controlDerrames10",
+                        fotoKey: "fotoControlDerrames10",
                         observacionKey: "observacionControlDerrames10",
                     },
                     {
                         key: "controlDerrames11",
+                        fotoKey: "fotoControlDerrames11",
                         observacionKey: "observacionControlDerrames11",
                     },
                     {
                         key: "controlDerrames12",
+                        fotoKey: "fotoControlDerrames12",
                         observacionKey: "observacionControlDerrames12",
                     },
                     {
                         key: "controlDerrames13",
+                        fotoKey: "fotoControlDerrames13",
                         observacionKey: "observacionControlDerrames13",
                     },
                     {
                         key: "controlDerrames14",
+                        fotoKey: "fotoControlDerrames14",
                         observacionKey: "observacionControlDerrames14",
                     },
                     {
                         key: "controlDerrames15",
+                        fotoKey: "fotoControlDerrames15",
                         observacionKey: "observacionControlDerrames15",
                     },
                     {
                         key: "controlDerrames16",
+                        fotoKey: "fotoControlDerrames16",
                         observacionKey: "observacionControlDerrames16",
                     },
                     {
                         key: "controlDerrames17",
+                        fotoKey: "fotoControlDerrames17",
                         observacionKey: "observacionControlDerrames17",
                     },
                     {
                         key: "controlDerrames18",
+                        fotoKey: "fotoControlDerrames18",
                         observacionKey: "observacionControlDerrames18",
                     },
                     {
                         key: "controlDerrames19",
+                        fotoKey: "fotoControlDerrames19",
                         observacionKey: "observacionControlDerrames19",
                     },
                     {
                         key: "controlDerrames20",
+                        fotoKey: "fotoControlDerrames20",
                         observacionKey: "observacionControlDerrames20",
                     },
                 ],
@@ -1166,6 +1325,7 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
     const [miembroEnProceso, setMiembroEnProceso] = useState(() => {
         const guardado = localStorage.getItem('miembroEnProceso');
         return guardado ? JSON.parse(guardado) : {
+            id: "",
             ubicacion: "",
             agenteExtintor: "",
             tipo: "",
@@ -1293,6 +1453,14 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
         }
         return true;
     };
+
+    const formularioExtintores = formularioEnelElementosEmergencia['extintores']?.find(
+        (item) => item.id === miembroEnProceso.id
+    );
+
+    let formularioExtintoresSolucion = (Array.isArray(formularioEnelElementosEmergencia['solucion']?.['extintores']) ? formularioEnelElementosEmergencia['solucion']?.['extintores'] : []).find(
+        (item) => item.id === miembroEnProceso.id
+    );
 
     return (
         <div className="SupervisionFormularioEnelElementosEmergencia">
@@ -1490,7 +1658,7 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
 
                     <div className='preguntaInterruptor'>
                         <Interruptor
-                            disabled={modo === "leer" || accionModalTabla === "eliminar"}
+                            disabled={modo === "leer" || modo === "eliminar"}
                             checked={mostrarPreguntasExtintores}
                             onChange={() => setMostrarPreguntasExtintores(!mostrarPreguntasExtintores)}
                             pregunta={'¿Preguntas de Extintores?'}
@@ -1518,6 +1686,14 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
                                         setAccionModalTabla("leer");
                                         setMostrarModal(true);
                                         setMiembroEnProceso(fila);
+                                        if (modo === "editar") {
+                                            formularioExtintoresSolucion = (Array.isArray(formularioEnelElementosEmergencia['solucion']?.['extintores']) ? formularioEnelElementosEmergencia['solucion']?.['extintores'] : []).find(
+                                                (item) => item.id === fila.id
+                                            );
+                                            if (!formularioExtintoresSolucion || formularioExtintoresSolucion === undefined) {
+                                                actualizarCampoEnelElementosEmergencia('solucion.extintores.id', fila.id)
+                                            }
+                                        }
                                     }}
                                     onEditar={(fila) => {
                                         setAccionModalTabla("editar");
@@ -1570,46 +1746,172 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
                                             <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembro('tipo', 'P')} className={miembroEnProceso.tipo === 'P' ? 'formulario selected' : ''}>P</Botones>
                                         </div>
                                     </div>
-                                    <div className='entradaDatos vertical'>
+                                    <div className={`entradaDatos vertical ${modo === "editar" && (formularioExtintores?.['cilindro'] === 'No') ? 'negativo' : ''} ${formularioExtintoresSolucion?.['fotoCilindro'] && formularioExtintoresSolucion?.['observacionCilindro'] ? 'resuelta' : ''}`}>
                                         <Textos className='subtitulo'>Cilindro:</Textos>
                                         <div className='opciones'>
                                             <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembro('cilindro', 'Si')} className={miembroEnProceso.cilindro === 'Si' ? 'formulario selected' : ''}>Si</Botones>
                                             <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembro('cilindro', 'No')} className={miembroEnProceso.cilindro === 'No' ? 'formulario selected' : ''}>No</Botones>
                                         </div>
+                                        <div className={`solucion ${modo === "editar" && formularioExtintores?.['cilindro'] === 'No' ? '' : 'ocultar'}`}>
+                                            <div className={`lineaHorizontal ${formularioExtintoresSolucion?.['fotoCilindro'] && formularioExtintoresSolucion?.['observacionCilindro'] ? 'resuelta' : ''}`}></div>
+                                            <div className='subtituloSolucion'>
+                                                <Textos className='titulo'>Solucion {formularioExtintoresSolucion?.['fotoCilindro'] && formularioExtintoresSolucion?.['observacionCilindro'] ? 'Resuelta' : 'Pendiente'}</Textos>
+                                            </div>
+                                            <div className={`opciones fotos ${formularioExtintores?.['cilindro'] === 'No' ? '' : 'oculto'}`} >
+                                                <Textos className='parrafo'>Imagen(es)</Textos>
+                                                <Imagenes disableInput={!(modo === "editar")} fotoKey={'fotoCilindro'} foto={formularioExtintoresSolucion?.['fotoCilindro']} onChange={(fotoKeySolucion, data) => actualizarCampoEnelElementosEmergencia(`${'solucion'}.${'extintores'}.${formularioExtintores.id}.${fotoKeySolucion}`, data)} capture={false} setImagen={(data) => setImagenAmpliada(data)} />
+                                            </div>
+                                            <div className={`opciones ${formularioExtintores?.['cilindro'] === 'No' ? '' : 'oculto'}`} >
+                                                <Textos className='parrafo'>Observacion</Textos>
+                                                <AreaTextos
+                                                    type="text"
+                                                    placeholder="Agregue las observacion pertinentes"
+                                                    defaultValue={formularioExtintoresSolucion?.['observacionCilindro']}
+                                                    onChange={(e) => actualizarCampoEnelElementosEmergencia(`${'solucion'}.${'extintores'}.${formularioExtintores.id}.${'observacionCilindro'}`, e.target.value)}
+                                                    rows={4}
+                                                    disabled={!(modo === "editar")}
+                                                />
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div className='entradaDatos vertical'>
+                                    <div className={`entradaDatos vertical ${modo === "editar" && (formularioExtintores?.['pasador'] === 'No') ? 'negativo' : ''} ${formularioExtintoresSolucion?.['fotoPasador'] && formularioExtintoresSolucion?.['observacionPasador'] ? 'resuelta' : ''}`}>
                                         <Textos className='subtitulo'>Pasador:</Textos>
                                         <div className='opciones'>
                                             <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembro('pasador', 'Si')} className={miembroEnProceso.pasador === 'Si' ? 'formulario selected' : ''}>Si</Botones>
                                             <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembro('pasador', 'No')} className={miembroEnProceso.pasador === 'No' ? 'formulario selected' : ''}>No</Botones>
                                         </div>
+                                        <div className={`solucion ${modo === "editar" && formularioExtintores?.['pasador'] === 'No' ? '' : 'ocultar'}`}>
+                                            <div className={`lineaHorizontal ${formularioExtintoresSolucion?.['fotoPasador'] && formularioExtintoresSolucion?.['observacionPasador'] ? 'resuelta' : ''}`}></div>
+                                            <div className='subtituloSolucion'>
+                                                <Textos className='titulo'>Solucion {formularioExtintoresSolucion?.['fotoPasador'] && formularioExtintoresSolucion?.['observacionPasador'] ? 'Resuelta' : 'Pendiente'}</Textos>
+                                            </div>
+                                            <div className={`opciones fotos ${formularioExtintores?.['pasador'] === 'No' ? '' : 'oculto'}`} >
+                                                <Textos className='parrafo'>Imagen(es)</Textos>
+                                                <Imagenes disableInput={!(modo === "editar")} fotoKey={'fotoPasador'} foto={formularioExtintoresSolucion?.['fotoPasador']} onChange={(fotoKeySolucion, data) => actualizarCampoEnelElementosEmergencia(`${'solucion'}.${'extintores'}.${formularioExtintores.id}.${fotoKeySolucion}`, data)} capture={false} setImagen={(data) => setImagenAmpliada(data)} />
+                                            </div>
+                                            <div className={`opciones ${formularioExtintores?.['pasador'] === 'No' ? '' : 'oculto'}`} >
+                                                <Textos className='parrafo'>Observacion</Textos>
+                                                <AreaTextos
+                                                    type="text"
+                                                    placeholder="Agregue las observacion pertinentes"
+                                                    defaultValue={formularioExtintoresSolucion?.['observacionPasador']}
+                                                    onChange={(e) => actualizarCampoEnelElementosEmergencia(`${'solucion'}.${'extintores'}.${formularioExtintores.id}.${'observacionPasador'}`, e.target.value)}
+                                                    rows={4}
+                                                    disabled={!(modo === "editar")}
+                                                />
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div className='entradaDatos vertical'>
+                                    <div className={`entradaDatos vertical ${modo === "editar" && (formularioExtintores?.['selloSeguridad'] === 'No') ? 'negativo' : ''} ${formularioExtintoresSolucion?.['fotoSelloSeguridad'] && formularioExtintoresSolucion?.['observacionSelloSeguridad'] ? 'resuelta' : ''}`}>
                                         <Textos className='subtitulo'>Sello de Seguridad:</Textos>
                                         <div className='opciones'>
                                             <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembro('selloSeguridad', 'Si')} className={miembroEnProceso.selloSeguridad === 'Si' ? 'formulario selected' : ''}>Si</Botones>
                                             <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembro('selloSeguridad', 'No')} className={miembroEnProceso.selloSeguridad === 'No' ? 'formulario selected' : ''}>No</Botones>
                                         </div>
+                                        <div className={`solucion ${modo === "editar" && formularioExtintores?.['selloSeguridad'] === 'No' ? '' : 'ocultar'}`}>
+                                            <div className={`lineaHorizontal ${formularioExtintoresSolucion?.['fotoSelloSeguridad'] && formularioExtintoresSolucion?.['observacionSelloSeguridad'] ? 'resuelta' : ''}`}></div>
+                                            <div className='subtituloSolucion'>
+                                                <Textos className='titulo'>Solucion {formularioExtintoresSolucion?.['fotoSelloSeguridad'] && formularioExtintoresSolucion?.['observacionSelloSeguridad'] ? 'Resuelta' : 'Pendiente'}</Textos>
+                                            </div>
+                                            <div className={`opciones fotos ${formularioExtintores?.['selloSeguridad'] === 'No' ? '' : 'oculto'}`} >
+                                                <Textos className='parrafo'>Imagen(es)</Textos>
+                                                <Imagenes disableInput={!(modo === "editar")} fotoKey={'fotoSelloSeguridad'} foto={formularioExtintoresSolucion?.['fotoSelloSeguridad']} onChange={(fotoKeySolucion, data) => actualizarCampoEnelElementosEmergencia(`${'solucion'}.${'extintores'}.${formularioExtintores.id}.${fotoKeySolucion}`, data)} capture={false} setImagen={(data) => setImagenAmpliada(data)} />
+                                            </div>
+                                            <div className={`opciones ${formularioExtintores?.['selloSeguridad'] === 'No' ? '' : 'oculto'}`} >
+                                                <Textos className='parrafo'>Observacion</Textos>
+                                                <AreaTextos
+                                                    type="text"
+                                                    placeholder="Agregue las observacion pertinentes"
+                                                    defaultValue={formularioExtintoresSolucion?.['observacionSelloSeguridad']}
+                                                    onChange={(e) => actualizarCampoEnelElementosEmergencia(`${'solucion'}.${'extintores'}.${formularioExtintores.id}.${'observacionSelloSeguridad'}`, e.target.value)}
+                                                    rows={4}
+                                                    disabled={!(modo === "editar")}
+                                                />
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div className='entradaDatos vertical'>
+                                    <div className={`entradaDatos vertical ${modo === "editar" && (formularioExtintores?.['manometro'] === 'No') ? 'negativo' : ''} ${formularioExtintoresSolucion?.['fotoManometro'] && formularioExtintoresSolucion?.['observacionManometro'] ? 'resuelta' : ''}`}>
                                         <Textos className='subtitulo'>Manómetro / Condición de Carga:</Textos>
                                         <div className='opciones'>
                                             <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembro('manometro', 'Si')} className={miembroEnProceso.manometro === 'Si' ? 'formulario selected' : ''}>Si</Botones>
                                             <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembro('manometro', 'No')} className={miembroEnProceso.manometro === 'No' ? 'formulario selected' : ''}>No</Botones>
                                         </div>
+                                        <div className={`solucion ${modo === "editar" && formularioExtintores?.['manometro'] === 'No' ? '' : 'ocultar'}`}>
+                                            <div className={`lineaHorizontal ${formularioExtintoresSolucion?.['fotoManometro'] && formularioExtintoresSolucion?.['observacionManometro'] ? 'resuelta' : ''}`}></div>
+                                            <div className='subtituloSolucion'>
+                                                <Textos className='titulo'>Solucion {formularioExtintoresSolucion?.['fotoManometro'] && formularioExtintoresSolucion?.['observacionManometro'] ? 'Resuelta' : 'Pendiente'}</Textos>
+                                            </div>
+                                            <div className={`opciones fotos ${formularioExtintores?.['manometro'] === 'No' ? '' : 'oculto'}`} >
+                                                <Textos className='parrafo'>Imagen(es)</Textos>
+                                                <Imagenes disableInput={!(modo === "editar")} fotoKey={'fotoManometro'} foto={formularioExtintoresSolucion?.['fotoManometro']} onChange={(fotoKeySolucion, data) => actualizarCampoEnelElementosEmergencia(`${'solucion'}.${'extintores'}.${formularioExtintores.id}.${fotoKeySolucion}`, data)} capture={false} setImagen={(data) => setImagenAmpliada(data)} />
+                                            </div>
+                                            <div className={`opciones ${formularioExtintores?.['manometro'] === 'No' ? '' : 'oculto'}`} >
+                                                <Textos className='parrafo'>Observacion</Textos>
+                                                <AreaTextos
+                                                    type="text"
+                                                    placeholder="Agregue las observacion pertinentes"
+                                                    defaultValue={formularioExtintoresSolucion?.['observacionManometro']}
+                                                    onChange={(e) => actualizarCampoEnelElementosEmergencia(`${'solucion'}.${'extintores'}.${formularioExtintores.id}.${'observacionManometro'}`, e.target.value)}
+                                                    rows={4}
+                                                    disabled={!(modo === "editar")}
+                                                />
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div className='entradaDatos vertical'>
+                                    <div className={`entradaDatos vertical ${modo === "editar" && (formularioExtintores?.['manguera'] === 'No') ? 'negativo' : ''} ${formularioExtintoresSolucion?.['fotoManguera'] && formularioExtintoresSolucion?.['observacionManguera'] ? 'resuelta' : ''}`}>
                                         <Textos className='subtitulo'>Manguera, Boquilla y/o Corneta:</Textos>
                                         <div className='opciones'>
                                             <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembro('manguera', 'Si')} className={miembroEnProceso.manguera === 'Si' ? 'formulario selected' : ''}>Si</Botones>
                                             <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembro('manguera', 'No')} className={miembroEnProceso.manguera === 'No' ? 'formulario selected' : ''}>No</Botones>
                                         </div>
+                                        <div className={`solucion ${modo === "editar" && formularioExtintores?.['manguera'] === 'No' ? '' : 'ocultar'}`}>
+                                            <div className={`lineaHorizontal ${formularioExtintoresSolucion?.['fotoManguera'] && formularioExtintoresSolucion?.['observacionManguera'] ? 'resuelta' : ''}`}></div>
+                                            <div className='subtituloSolucion'>
+                                                <Textos className='titulo'>Solucion {formularioExtintoresSolucion?.['fotoManguera'] && formularioExtintoresSolucion?.['observacionManguera'] ? 'Resuelta' : 'Pendiente'}</Textos>
+                                            </div>
+                                            <div className={`opciones fotos ${formularioExtintores?.['manguera'] === 'No' ? '' : 'oculto'}`} >
+                                                <Textos className='parrafo'>Imagen(es)</Textos>
+                                                <Imagenes disableInput={!(modo === "editar")} fotoKey={'fotoManguera'} foto={formularioExtintoresSolucion?.['fotoManguera']} onChange={(fotoKeySolucion, data) => actualizarCampoEnelElementosEmergencia(`${'solucion'}.${'extintores'}.${formularioExtintores.id}.${fotoKeySolucion}`, data)} capture={false} setImagen={(data) => setImagenAmpliada(data)} />
+                                            </div>
+                                            <div className={`opciones ${formularioExtintores?.['manguera'] === 'No' ? '' : 'oculto'}`} >
+                                                <Textos className='parrafo'>Observacion</Textos>
+                                                <AreaTextos
+                                                    type="text"
+                                                    placeholder="Agregue las observacion pertinentes"
+                                                    defaultValue={formularioExtintoresSolucion?.['observacionManguera']}
+                                                    onChange={(e) => actualizarCampoEnelElementosEmergencia(`${'solucion'}.${'extintores'}.${formularioExtintores.id}.${'observacionManguera'}`, e.target.value)}
+                                                    rows={4}
+                                                    disabled={!(modo === "editar")}
+                                                />
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div className='entradaDatos vertical'>
+                                    <div className={`entradaDatos vertical ${modo === "editar" && (formularioExtintores?.['etiqueta'] === 'No') ? 'negativo' : ''} ${formularioExtintoresSolucion?.['fotoEtiqueta'] && formularioExtintoresSolucion?.['observacionEtiqueta'] ? 'resuelta' : ''}`}>
                                         <Textos className='subtitulo'>Etiqueta de Identificación:</Textos>
                                         <div className='opciones'>
                                             <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembro('etiqueta', 'Si')} className={miembroEnProceso.etiqueta === 'Si' ? 'formulario selected' : ''}>Si</Botones>
                                             <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembro('etiqueta', 'No')} className={miembroEnProceso.etiqueta === 'No' ? 'formulario selected' : ''}>No</Botones>
+                                        </div>
+                                        <div className={`solucion ${modo === "editar" && formularioExtintores?.['etiqueta'] === 'No' ? '' : 'ocultar'}`}>
+                                            <div className={`lineaHorizontal ${formularioExtintoresSolucion?.['fotoEtiqueta'] && formularioExtintoresSolucion?.['observacionEtiqueta'] ? 'resuelta' : ''}`}></div>
+                                            <div className='subtituloSolucion'>
+                                                <Textos className='titulo'>Solucion {formularioExtintoresSolucion?.['fotoEtiqueta'] && formularioExtintoresSolucion?.['observacionEtiqueta'] ? 'Resuelta' : 'Pendiente'}</Textos>
+                                            </div>
+                                            <div className={`opciones fotos ${formularioExtintores?.['etiqueta'] === 'No' ? '' : 'oculto'}`} >
+                                                <Textos className='parrafo'>Imagen(es)</Textos>
+                                                <Imagenes disableInput={!(modo === "editar")} fotoKey={'fotoEtiqueta'} foto={formularioExtintoresSolucion?.['fotoEtiqueta']} onChange={(fotoKeySolucion, data) => actualizarCampoEnelElementosEmergencia(`${'solucion'}.${'extintores'}.${formularioExtintores.id}.${fotoKeySolucion}`, data)} capture={false} setImagen={(data) => setImagenAmpliada(data)} />
+                                            </div>
+                                            <div className={`opciones ${formularioExtintores?.['etiqueta'] === 'No' ? '' : 'oculto'}`} >
+                                                <Textos className='parrafo'>Observacion</Textos>
+                                                <AreaTextos
+                                                    type="text"
+                                                    placeholder="Agregue las observacion pertinentes"
+                                                    defaultValue={formularioExtintoresSolucion?.['observacionEtiqueta']}
+                                                    onChange={(e) => actualizarCampoEnelElementosEmergencia(`${'solucion'}.${'extintores'}.${formularioExtintores.id}.${'observacionEtiqueta'}`, e.target.value)}
+                                                    rows={4}
+                                                    disabled={!(modo === "editar")}
+                                                />
+                                            </div>
                                         </div>
                                     </div>
                                     <div className='entradaDatos vertical'>
@@ -1651,12 +1953,6 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
                                     </div>
                                     <div className={`modal-acciones ${accionModalTabla !== "leer" ? 'visible' : 'oculto'}`}>
                                         <Botones className={`guardar ${accionModalTabla === "crear" ? 'visible' : 'oculto'}`} onClick={() => {
-                                            const existe = (formularioEnelElementosEmergencia.extintores || []).some(m => m.ubicacion === miembroEnProceso.ubicacion);
-                                            if (existe) {
-                                                toast.error('La cédula ya está en la cuadrilla.');
-                                                return
-                                            }
-
                                             const resultadoValidador = validarMiembroEnProceso(miembroEnProceso);
 
                                             if (resultadoValidador === false) {
@@ -1664,7 +1960,18 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
                                             }
 
                                             setFormularioEnelElementosEmergencia(prev => {
-                                                const actualizado = { ...prev, extintores: [...(prev.extintores || []), miembroEnProceso] };
+                                                const extintoresPrev = prev.extintores || [];
+                                                const maxId = extintoresPrev.length > 0
+                                                    ? Math.max(...extintoresPrev.map(e => Number(e.id) || 0))
+                                                    : 0;
+                                                const nuevoExtintor = {
+                                                    ...miembroEnProceso,
+                                                    id: String(maxId + 1)
+                                                };
+                                                const actualizado = {
+                                                    ...prev,
+                                                    extintores: [...extintoresPrev, nuevoExtintor]
+                                                };
                                                 localStorage.setItem('formularioEnelElementosEmergencia', JSON.stringify(actualizado));
                                                 return actualizado;
                                             });
@@ -1708,7 +2015,7 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
 
                     <div className='preguntaInterruptor'>
                         <Interruptor
-                            disabled={modo === "leer" || accionModalTabla === "eliminar"}
+                            disabled={modo === "leer" || modo === "eliminar"}
                             checked={mostrarPreguntasDerrames}
                             onChange={() => setMostrarPreguntasDerrames(!mostrarPreguntasDerrames)}
                             pregunta={'¿Preguntas de Kit para Control de Derrames?'}
@@ -1742,7 +2049,7 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
                             <div className='cartas'>
                                 <Textos className='subtitulo sub'>Imagen(es)</Textos>
                                 <div className='opciones'>
-                                    <Imagenes disableInput={accionModalTabla === "eliminar" || accionModalTabla === "leer"} fotoKey={'fotoControlDerrames'} foto={formularioEnelElementosEmergencia.controlDerrames.fotoControlDerrames} onChange={(fotoKey, data) => actualizarCampoEnelElementosEmergencia(`controlDerrames.fotoControlDerrames`, data)} capture={formularioEnelElementosEmergencia.tipoInspeccion === 'Presencial' ? true : false} setImagen={(data) => setImagenAmpliada(data)} />
+                                    <Imagenes disableInput={modo === "eliminar" || modo === "editar"} fotoKey={'fotoControlDerrames'} foto={formularioEnelElementosEmergencia.controlDerrames.fotoControlDerrames} onChange={(fotoKey, data) => actualizarCampoEnelElementosEmergencia(`controlDerrames.fotoControlDerrames`, data)} capture={formularioEnelElementosEmergencia.tipoInspeccion === 'Presencial' ? true : false} setImagen={(data) => setImagenAmpliada(data)} />
                                 </div>
                             </div>
                         </div>
@@ -1750,7 +2057,7 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
 
                     <div className='preguntaInterruptor'>
                         <Interruptor
-                            disabled={modo === "leer" || accionModalTabla === "eliminar"}
+                            disabled={modo === "leer" || modo === "eliminar"}
                             checked={mostrarPreguntasEmergencia}
                             onChange={() => setMostrarPreguntasEmergencia(!mostrarPreguntasEmergencia)}
                             pregunta={'¿Preguntas de Elementos de Emergencia?'}
@@ -1760,26 +2067,27 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
                     <div className={`campo ${mostrarPreguntasEmergencia ? '' : 'ocultar'}`}>
                         <div className='entradaDatos'>
                             <Textos className='subtitulo prin'>3. Aspectos Generales a Verificar de los Elementos de Emergencia</Textos>
-                            {preguntas.slice(21, 34).map((preg) => (
-                                <OpcionesFotoObservaciones
-                                    key={preg.key}
-                                    texto={preg.texto}
-                                    keyPrin="elementosEmergencia"
-                                    keyBase={preg.key}
-                                    fotoKey={preg.fotoKey}
-                                    observacionKey={preg.observacionKey}
-                                    activarinput={preg.activarinput}
-                                    data={formularioEnelElementosEmergencia}
-                                    onChange={actualizarCampoEnelElementosEmergencia}
-                                    setImagen={setImagenAmpliada}
-                                    disabled={modo === "editar"}
-                                    tituloOpcionesBotones={'Verificacion'}
-                                    opcionesBotones={["Si", "No"]}
-                                    keySolucion="solucion"
-                                    fotoKeySolucion={preg.fotoKey}
-                                    observacionKeySolucion={preg.observacionKey}
-                                />
-                            ))}
+                            {preguntas.slice(21, 33)
+                                .map((preg) => (
+                                    <OpcionesFotoObservaciones
+                                        key={preg.key}
+                                        texto={preg.texto}
+                                        keyPrin="elementosEmergencia"
+                                        keyBase={preg.key}
+                                        fotoKey={preg.fotoKey}
+                                        observacionKey={preg.observacionKey}
+                                        activarinput={preg.activarinput}
+                                        data={formularioEnelElementosEmergencia}
+                                        onChange={actualizarCampoEnelElementosEmergencia}
+                                        setImagen={setImagenAmpliada}
+                                        disabled={modo === "editar"}
+                                        tituloOpcionesBotones={'Verificacion'}
+                                        opcionesBotones={["Si", "No"]}
+                                        keySolucion="solucion"
+                                        fotoKeySolucion={preg.fotoKey}
+                                        observacionKeySolucion={preg.observacionKey}
+                                    />
+                                ))}
                         </div>
                     </div>
 

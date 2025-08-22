@@ -54,7 +54,7 @@ export const OpcionesFotoObservaciones = ({
     }, [vencido, data, keyPrin, keyBase, onChange]);
 
     return (
-        <div className={`cartas ${data[keyPrin][cantidadEstimadaKey] === "0" ? 'oculto' : ''} ${disabled && (data[keyPrin][keyBase] === 'NC' || data[keyPrin][keyBase] === 'Malo' || data[keyPrin][keyBase] === 'Regular' || data[keyPrin][keyBase] === 'No') ? 'negativo' : ''} ${data[keySolucion][keyPrin][fotoKeySolucion] && data[keySolucion][keyPrin][observacionKeySolucion] ? 'resuelta' : ''}`}>
+        <div className={`cartas ${data[keyPrin][cantidadEstimadaKey] === "0" ? 'oculto' : ''} ${disabled && (data[keyPrin][keyBase] === 'NC' || data[keyPrin][keyBase] === 'Malo' || data[keyPrin][keyBase] === 'Regular' || data[keyPrin][keyBase] === 'No') ? 'negativo' : ''} ${data[keySolucion]?.[keyPrin]?.[fotoKeySolucion] && data[keySolucion]?.[keyPrin]?.[observacionKeySolucion] ? 'resuelta' : ''}`}>
             <Textos className='subtitulo sub'>{texto}</Textos>
             <div className={`opciones imagenElemento ${imagenBool === false ? 'oculto' : ''}`}>
                 <img src={imagenKey} alt={imagenKey} />
@@ -89,7 +89,7 @@ export const OpcionesFotoObservaciones = ({
                     }}
                     value={data[keyPrin][cantidadExistenteKey]}
                     onChange={(e) => onChange(`${keyPrin}.${cantidadExistenteKey}`, e.target.value)}
-                    disabled={data[keyPrin][keyBase] === 'NA'}
+                    disabled={data[keyPrin][keyBase] === 'NA' || disabled}
                 />
             </div>
             <div className='opciones'>
@@ -124,20 +124,20 @@ export const OpcionesFotoObservaciones = ({
             </div>
 
             <div className={`solucion ${disabled && (data[keyPrin][keyBase] === 'NC' || data[keyPrin][keyBase] === 'Malo' || data[keyPrin][keyBase] === 'Regular' || data[keyPrin][keyBase] === 'No') ? '' : 'ocultar'}`}>
-                <div className={`lineaHorizontal ${data[keySolucion][keyPrin][fotoKeySolucion] && data[keySolucion][keyPrin][observacionKeySolucion] ? 'resuelta' : ''}`}></div>
+                <div className={`lineaHorizontal ${data[keySolucion]?.[keyPrin]?.[fotoKeySolucion] && data[keySolucion]?.[keyPrin]?.[observacionKeySolucion] ? 'resuelta' : ''}`}></div>
                 <div className='subtituloSolucion'>
-                    <Textos className='titulo'>Solucion {data[keySolucion][keyPrin][fotoKeySolucion] && data[keySolucion][keyPrin][observacionKeySolucion] ? 'Resuelta' : 'Pendiente'}</Textos>
+                    <Textos className='titulo'>Solucion {data[keySolucion]?.[keyPrin]?.[fotoKeySolucion] && data[keySolucion]?.[keyPrin]?.[observacionKeySolucion] ? 'Resuelta' : 'Pendiente'}</Textos>
                 </div>
-                <div className={`opciones fotos ${data[keyPrin][keyBase] === 'NC' || data[keyPrin][keyBase] === 'No' ? '' : activarinput === true ? '' : 'oculto'}`} >
+                <div className={`opciones fotos ${data[keyPrin][keyBase] === 'NC' || data[keyPrin][keyBase] === 'No' || data[keyPrin][keyBase] === 'Malo' || data[keyPrin][keyBase] === 'Regular' ? '' : activarinput === true ? '' : 'oculto'}`} >
                     <Textos className='parrafo'>Imagen(es)</Textos>
-                    <Imagenes disableInput={!disabled} fotoKey={fotoKeySolucion} foto={data[keySolucion][keyPrin][fotoKeySolucion]} onChange={(fotoKeySolucion, data) => onChange(`${keySolucion}.${keyPrin}.${fotoKeySolucion}`, data)} capture={false} setImagen={(data) => setImagen(data)} />
+                    <Imagenes disableInput={!disabled} fotoKey={fotoKeySolucion} foto={data[keySolucion]?.[keyPrin]?.[fotoKeySolucion]} onChange={(fotoKeySolucion, data) => onChange(`${keySolucion}.${keyPrin}.${fotoKeySolucion}`, data)} capture={false} setImagen={(data) => setImagen(data)} />
                 </div>
                 <div className={`opciones ${data[keyPrin][keyBase] === 'NC' || data[keyPrin][keyBase] === 'Malo' || data[keyPrin][keyBase] === 'Regular' || data[keyPrin][keyBase] === 'No' ? '' : 'oculto'}`} >
                     <Textos className='parrafo'>Observacion</Textos>
                     <AreaTextos
                         type="text"
                         placeholder="Agregue las observacion pertinentes"
-                        defaultValue={data[keySolucion][keyPrin][observacionKeySolucion]}
+                        defaultValue={data[keySolucion]?.[keyPrin]?.[observacionKeySolucion]}
                         onChange={(e) => onChange(`${keySolucion}.${keyPrin}.${observacionKeySolucion}`, e.target.value)}
                         rows={4}
                         disabled={!disabled}

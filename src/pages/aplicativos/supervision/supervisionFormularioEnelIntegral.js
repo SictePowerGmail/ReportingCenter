@@ -2406,11 +2406,13 @@ const SupervisionFormularioEnelIntegral = () => {
                                 setAccionModalTabla("leer");
                                 setMostrarModal(true);
                                 setMiembroEnProceso(fila);
-                                formularioMiembroCuadrillaSolucion = (Array.isArray(formularioEnelInspeccionIntegralHSE['solucion']?.['cuadrilla']) ? formularioEnelInspeccionIntegralHSE['solucion']?.['cuadrilla'] : []).find(
-                                    (item) => item.cedula === fila.cedula
-                                );
-                                if (!formularioMiembroCuadrillaSolucion || formularioMiembroCuadrillaSolucion === undefined) {
-                                    actualizarCampoEnelInspeccionIntegralHSE('solucion.cuadrilla.cedula', fila.cedula)
+                                if (modo === "editar") {
+                                    formularioMiembroCuadrillaSolucion = (Array.isArray(formularioEnelInspeccionIntegralHSE['solucion']?.['cuadrilla']) ? formularioEnelInspeccionIntegralHSE['solucion']?.['cuadrilla'] : []).find(
+                                        (item) => item.cedula === fila.cedula
+                                    );
+                                    if (!formularioMiembroCuadrillaSolucion || formularioMiembroCuadrillaSolucion === undefined) {
+                                        actualizarCampoEnelInspeccionIntegralHSE('solucion.cuadrilla.cedula', fila.cedula)
+                                    }
                                 }
                             }}
                             onEditar={(fila) => {
