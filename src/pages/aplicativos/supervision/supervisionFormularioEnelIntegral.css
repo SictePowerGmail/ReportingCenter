@@ -305,7 +305,7 @@
                     &.vertical {
                         flex-direction: column !important;
                         align-items: baseline;
-                        margin: 0px 0px 10px 10px;
+                        padding: 0px 0px 10px 10px;
 
                         span {
                             width: auto;
@@ -330,6 +330,68 @@
                             &:has(.ocultar) {
                                 margin: 0;
                             }
+                        }
+                    }
+
+                    &.resuelta {
+                        border: 3px solid rgb(24, 141, 50) !important;
+                        background-color: rgba(23, 165, 54, 0.1) !important;
+                    }
+
+                    &.negativo {
+                        margin-bottom: 10px;
+                        padding: 10px 10px 10px 10px;
+                        border: 3px solid red;
+                        background-color: rgba(255, 0, 0, 0.100);
+                        border-radius: 8px;
+                    }
+
+                    .solucion {
+                        width: 100%;
+
+                        .lineaHorizontal {
+                            margin: 10px 0px 10px 10px;
+                            align-items: end;
+                            width: calc(100% - 10px);
+                            height: 2px;
+                            background-color: red;
+
+                            &.resuelta {
+                                background-color: rgb(24, 141, 50) !important;
+                            }
+                        }
+
+                        .subtituloSolucion {
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            width: 100%;
+                            padding-left: 10px;
+                        }
+
+                        .opciones {
+                            display: flex;
+                            flex-direction: column;
+                            align-items: baseline;
+                            justify-content: center;
+
+                            .imagen {
+                                background-color: rgba(252, 252, 252, 0.897);
+
+                                .grupo-imagen {
+                                    .entrada {
+                                        background-color: rgba(252, 252, 252, 0.897);
+                                    }
+                                }
+                            }
+
+                            .areaTexto {
+                                background-color: rgba(252, 252, 252, 0.897);
+                            }
+                        }
+
+                        &.ocultar {
+                            display: none;
                         }
                     }
 

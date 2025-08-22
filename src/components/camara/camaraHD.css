@@ -10,7 +10,7 @@
     align-items: center;
     z-index: 4000;
 
-    .modal-contenido {
+    .modal-contenido-foto {
         background-color: var(--background-menu-cuerpo);
         border-radius: 10px;
         padding: 20px;
@@ -18,12 +18,21 @@
         width: 90%;
         box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
         position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        @media (max-width: 500px) {
+            width: 100%;
+            padding: 10px;
+        }
 
         .botonesCamara {
             margin-top: 10px;
             display: flex;
             justify-content: space-between;
-            
+
             #botonCamara {
                 width: auto !important;
             }

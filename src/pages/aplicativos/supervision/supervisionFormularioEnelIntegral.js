@@ -239,7 +239,60 @@ const SupervisionFormularioEnelIntegral = () => {
 
             const valor = obj[key];
 
-            if (typeof valor === 'object' && valor !== null) {
+            if (key === "cuadrilla" && Array.isArray(valor)) {
+                const solucionCuadrilla = Array.isArray(solucion?.cuadrilla) ? solucion.cuadrilla : [];
+
+                for (const persona of valor) {
+                    let tieneNC = false;
+
+                    for (const campo in persona) {
+                        if (
+                            typeof persona[campo] === 'string' &&
+                            persona[campo] === 'NC' &&
+                            !campo.toLowerCase().startsWith('foto') &&
+                            !campo.toLowerCase().startsWith('observacion')
+                        ) {
+                            tieneNC = true;
+                            break;
+                        }
+                    }
+
+                    if (!tieneNC) continue;
+
+                    const solucionPersona = solucionCuadrilla.find(p => p.cedula === persona.cedula);
+
+                    if (!solucionPersona) {
+                        hayPendiente = true;
+                        continue;
+                    }
+
+                    for (const campo in persona) {
+                        if (
+                            typeof persona[campo] === 'string' &&
+                            persona[campo] === 'NC' &&
+                            !campo.toLowerCase().startsWith('foto') &&
+                            !campo.toLowerCase().startsWith('observacion')
+                        ) {
+                            const fotoKey = `foto${campo.charAt(0).toUpperCase()}${campo.slice(1)}`;
+                            const obsKey = `observacion${campo.charAt(0).toUpperCase()}${campo.slice(1)}`;
+
+                            const fotoSol = solucionPersona[fotoKey] || "";
+                            const obsSol = solucionPersona[obsKey] || "";
+
+                            const solucionada =
+                                (
+                                    (typeof fotoSol === "string" && fotoSol.trim() !== "") ||
+                                    (Array.isArray(fotoSol) && fotoSol.length > 0)
+                                ) ||
+                                (typeof obsSol === "string" && obsSol.trim() !== "");
+
+                            if (!solucionada) {
+                                hayPendiente = true;
+                            }
+                        }
+                    }
+                }
+            } else if (typeof valor === 'object' && valor !== null) {
                 if (hayNCValidoSegundoFiltro(valor, solucion?.[key])) {
                     hayPendiente = true;
                 }
@@ -812,11 +865,14 @@ const SupervisionFormularioEnelIntegral = () => {
     });
 
     const actualizarCampoEnelInspeccionIntegralHSE = async (campo, valor) => {
-        const [nivel1, nivel2, nivel3] = campo.split('.');
+        const [nivel1, nivel2, nivel3, nivel4] = campo.split('.');
 
         if (Array.isArray(valor) && valor.length === 0) {
             setFormularioEnelInspeccionIntegralHSE((prev) => {
                 const actualizado = { ...prev };
+                if (nivel1 && !actualizado[nivel1]) actualizado[nivel1] = {};
+                if (nivel2 && !actualizado[nivel1][nivel2]) actualizado[nivel1][nivel2] = {};
+                if (nivel3 && !actualizado[nivel1][nivel2][nivel3]) actualizado[nivel1][nivel2][nivel3] = {};
                 if (nivel3) { actualizado[nivel1][nivel2][nivel3] = ""; } else if (nivel2) { actualizado[nivel1][nivel2] = ""; } else { actualizado[nivel1] = ""; }
                 localStorage.setItem(
                     "formularioEnelInspeccionIntegralHSE",
@@ -850,7 +906,35 @@ const SupervisionFormularioEnelIntegral = () => {
         if (typeof valor === 'string') {
             setFormularioEnelInspeccionIntegralHSE(prev => {
                 const actualizado = { ...prev };
-                if (nivel3) { actualizado[nivel1][nivel2][nivel3] = valor; } else if (nivel2) { actualizado[nivel1][nivel2] = valor; } else { actualizado[nivel1] = valor; }
+                if (nivel1 && !actualizado[nivel1]) actualizado[nivel1] = {};
+                if (nivel1 === "solucion" && nivel2 === "cuadrilla" && nivel3 === 'cedula') {
+                    if (!Array.isArray(actualizado.solucion.cuadrilla)) {
+                        actualizado.solucion.cuadrilla = [];
+                    }
+
+                    const yaExiste = actualizado.solucion.cuadrilla.some(
+                        item => item.cedula === valor
+                    );
+
+                    if (!yaExiste) {
+                        actualizado.solucion.cuadrilla.push({ cedula: valor });
+                    }
+                } else if (nivel1 === "solucion" && nivel2 === "cuadrilla") {
+                    const indice = actualizado.solucion.cuadrilla.findIndex(
+                        item => item.cedula === nivel3
+                    );
+
+                    if (indice !== -1) {
+                        actualizado.solucion.cuadrilla[indice] = {
+                            ...actualizado.solucion.cuadrilla[indice],
+                            [nivel4]: valor
+                        };
+                    }
+                } else {
+                    if (nivel2 && !actualizado[nivel1][nivel2]) actualizado[nivel1][nivel2] = {};
+                    if (nivel3 && !actualizado[nivel1][nivel2][nivel3]) actualizado[nivel1][nivel2][nivel3] = {};
+                    if (nivel3) { actualizado[nivel1][nivel2][nivel3] = valor; } else if (nivel2) { actualizado[nivel1][nivel2] = valor; } else { actualizado[nivel1] = valor; }
+                }
                 localStorage.setItem('formularioEnelInspeccionIntegralHSE', JSON.stringify(actualizado));
                 return actualizado;
             });
@@ -860,7 +944,23 @@ const SupervisionFormularioEnelIntegral = () => {
         if (valor[0].name && valor[0].data) {
             setFormularioEnelInspeccionIntegralHSE((prev) => {
                 const actualizado = { ...prev };
-                if (nivel3) { actualizado[nivel1][nivel2][nivel3] = valor; } else if (nivel2) { actualizado[nivel1][nivel2] = valor; } else { actualizado[nivel1] = valor; }
+                if (nivel1 && !actualizado[nivel1]) actualizado[nivel1] = {};
+                if (nivel1 === "solucion" && nivel2 === "cuadrilla") {
+                    const indice = actualizado.solucion.cuadrilla.findIndex(
+                        item => item.cedula === nivel3
+                    );
+
+                    if (indice !== -1) {
+                        actualizado.solucion.cuadrilla[indice] = {
+                            ...actualizado.solucion.cuadrilla[indice],
+                            [nivel4]: valor
+                        };
+                    }
+                } else {
+                    if (nivel2 && !actualizado[nivel1][nivel2]) actualizado[nivel1][nivel2] = {};
+                    if (nivel3 && !actualizado[nivel1][nivel2][nivel3]) actualizado[nivel1][nivel2][nivel3] = {};
+                    if (nivel3) { actualizado[nivel1][nivel2][nivel3] = valor; } else if (nivel2) { actualizado[nivel1][nivel2] = valor; } else { actualizado[nivel1] = valor; }
+                }
                 localStorage.setItem(
                     "formularioEnelInspeccionIntegralHSE",
                     JSON.stringify(actualizado)
@@ -1989,23 +2089,61 @@ const SupervisionFormularioEnelIntegral = () => {
         for (const categoria in solucion) {
             const campos = solucion[categoria];
 
-            for (const key in campos) {
-                if (key.startsWith("foto")) {
-                    const fotoKey = key;
-                    const obsKey = key.replace("foto", "observacion").replace("Obligatoria", "");
+            if (categoria === "cuadrilla" && Array.isArray(campos)) {
+                for (const persona of campos) {
+                    for (const key in persona) {
+                        if (key.startsWith("foto")) {
+                            const fotoKey = key;
+                            const obsKey = key.replace("foto", "observacion").replace("Obligatoria", "");
 
-                    const valorFoto = campos[fotoKey];
-                    const valorObs = campos[obsKey];
+                            const valorFoto = persona[fotoKey];
+                            const valorObs = persona[obsKey];
 
-                    if ((valorFoto && !valorObs) || (!valorFoto && valorObs)) {
-                        toast.error(`Falta completar campos en la solución al hallazgo encontrado`);
-                        return false;
+                            if ((valorFoto && !valorObs) || (!valorFoto && valorObs)) {
+                                toast.error(`Falta completar campos en la solución para el miembro con cédula ${persona.cedula}`);
+                                return false;
+                            }
+                        } else if (key.startsWith("observacion")) {
+                            const obsKey = key;
+                            const fotoKey = key.replace("observacion", "foto").replace("Obligatoria", "");
+
+                            const valorFoto = persona[fotoKey];
+                            const valorObs = persona[obsKey];
+
+                            if ((valorFoto && !valorObs) || (!valorFoto && valorObs)) {
+                                toast.error(`Falta completar campos en la solución para el miembro con cédula ${persona.cedula}`);
+                                return false;
+                            }
+                        }
+                    }
+                }
+            } else if (typeof campos === "object" && campos !== null) {
+                for (const key in campos) {
+                    if (key.startsWith("foto")) {
+                        const fotoKey = key;
+                        const obsKey = key.replace("foto", "observacion").replace("Obligatoria", "");
+
+                        const valorFoto = campos[fotoKey];
+                        const valorObs = campos[obsKey];
+
+                        if ((valorFoto && !valorObs) || (!valorFoto && valorObs)) {
+                            toast.error(`Falta completar campos en la solución al hallazgo encontrado`);
+                            return false;
+                        }
                     }
                 }
             }
         }
         return true;
     };
+
+    const formularioMiembroCuadrilla = formularioEnelInspeccionIntegralHSE['cuadrilla']?.find(
+        (item) => item.cedula === miembroEnProceso.cedula
+    );
+
+    let formularioMiembroCuadrillaSolucion = (Array.isArray(formularioEnelInspeccionIntegralHSE['solucion']?.['cuadrilla']) ? formularioEnelInspeccionIntegralHSE['solucion']?.['cuadrilla'] : []).find(
+        (item) => item.cedula === miembroEnProceso.cedula
+    );
 
     return (
         <div className="SupervisionFormularioEnelIntegral">
@@ -2086,6 +2224,7 @@ const SupervisionFormularioEnelIntegral = () => {
                                 options={[
                                     { value: 'JA10123037/JA10123045', label: 'JA10123037 / JA10123045' },
                                     { value: 'JA10123400', label: 'JA10123400' },
+                                    { value: 'JA10176840', label: 'JA10176840' },
                                 ]} className="primary"
                                 disabled={modo === "editar"}
                             ></Selectores>
@@ -2267,11 +2406,17 @@ const SupervisionFormularioEnelIntegral = () => {
                                 setAccionModalTabla("leer");
                                 setMostrarModal(true);
                                 setMiembroEnProceso(fila);
+                                formularioMiembroCuadrillaSolucion = (Array.isArray(formularioEnelInspeccionIntegralHSE['solucion']?.['cuadrilla']) ? formularioEnelInspeccionIntegralHSE['solucion']?.['cuadrilla'] : []).find(
+                                    (item) => item.cedula === fila.cedula
+                                );
+                                if (!formularioMiembroCuadrillaSolucion || formularioMiembroCuadrillaSolucion === undefined) {
+                                    actualizarCampoEnelInspeccionIntegralHSE('solucion.cuadrilla.cedula', fila.cedula)
+                                }
                             }}
                             onEditar={(fila) => {
+                                setMiembroEnProceso(fila);
                                 setAccionModalTabla("editar");
                                 setMostrarModal(true);
-                                setMiembroEnProceso(fila);
                             }}
                             onEliminar={(fila) => {
                                 setAccionModalTabla("eliminar");
@@ -2309,32 +2454,116 @@ const SupervisionFormularioEnelIntegral = () => {
                                         <Entradas type="text" placeholder="Cargo" value={miembroEnProceso.cargo} disabled={true} />
                                     </div>
                                     <Textos className='subtitulo encabezado'>2. Documentos:</Textos>
-                                    <div className='entradaDatos'>
+                                    <div className={`entradaDatos vertical ${modo === "editar" && (formularioMiembroCuadrilla?.['arl'] === 'NC') ? 'negativo' : ''} ${formularioMiembroCuadrillaSolucion?.['fotoArl'] && formularioMiembroCuadrillaSolucion?.['observacionArl'] ? 'resuelta' : ''}`}>
                                         <Textos className='subtitulo'>ARL:</Textos>
                                         <div className='opciones'>
                                             <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('arl', 'C')} className={miembroEnProceso.arl === 'C' ? 'formulario selected' : ''}>C</Botones>
                                             <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('arl', 'NC')} className={miembroEnProceso.arl === 'NC' ? 'formulario selected' : ''}>NC</Botones>
                                         </div>
+                                        <div className={`solucion ${modo === "editar" && formularioMiembroCuadrilla?.['arl'] === 'NC' ? '' : 'ocultar'}`}>
+                                            <div className={`lineaHorizontal ${formularioMiembroCuadrillaSolucion?.['fotoArl'] && formularioMiembroCuadrillaSolucion?.['observacionArl'] ? 'resuelta' : ''}`}></div>
+                                            <div className='subtituloSolucion'>
+                                                <Textos className='titulo'>Solucion {formularioMiembroCuadrillaSolucion?.['fotoArl'] && formularioMiembroCuadrillaSolucion?.['observacionArl'] ? 'Resuelta' : 'Pendiente'}</Textos>
+                                            </div>
+                                            <div className={`opciones fotos ${formularioMiembroCuadrilla?.['arl'] === 'NC' ? '' : 'oculto'}`} >
+                                                <Textos className='parrafo'>Imagen(es)</Textos>
+                                                <Imagenes disableInput={!(modo === "editar")} fotoKey={'fotoArl'} foto={formularioMiembroCuadrillaSolucion?.['fotoArl']} onChange={(fotoKeySolucion, data) => actualizarCampoEnelInspeccionIntegralHSE(`${'solucion'}.${'cuadrilla'}.${formularioMiembroCuadrilla.cedula}.${fotoKeySolucion}`, data)} capture={false} setImagen={(data) => setImagenAmpliada(data)} />
+                                            </div>
+                                            <div className={`opciones ${formularioMiembroCuadrilla?.['arl'] === 'NC' ? '' : 'oculto'}`} >
+                                                <Textos className='parrafo'>Observacion</Textos>
+                                                <AreaTextos
+                                                    type="text"
+                                                    placeholder="Agregue las observacion pertinentes"
+                                                    defaultValue={formularioMiembroCuadrillaSolucion?.['observacionArl']}
+                                                    onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE(`${'solucion'}.${'cuadrilla'}.${formularioMiembroCuadrilla.cedula}.${'observacionArl'}`, e.target.value)}
+                                                    rows={4}
+                                                    disabled={!(modo === "editar")}
+                                                />
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div className='entradaDatos'>
+                                    <div className={`entradaDatos vertical ${modo === "editar" && (formularioMiembroCuadrilla?.['tarjetaDeVida'] === 'NC') ? 'negativo' : ''} ${formularioMiembroCuadrillaSolucion?.['fotoTarjetaDeVida'] && formularioMiembroCuadrillaSolucion?.['observacionTarjetaDeVida'] ? 'resuelta' : ''}`}>
                                         <Textos className='subtitulo'>Tarjeta de vida:</Textos>
                                         <div className='opciones'>
                                             <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('tarjetaDeVida', 'C')} className={miembroEnProceso.tarjetaDeVida === 'C' ? 'formulario selected' : ''}>C</Botones>
                                             <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('tarjetaDeVida', 'NC')} className={miembroEnProceso.tarjetaDeVida === 'NC' ? 'formulario selected' : ''}>NC</Botones>
                                         </div>
+                                        <div className={`solucion ${modo === "editar" && formularioMiembroCuadrilla?.['tarjetaDeVida'] === 'NC' ? '' : 'ocultar'}`}>
+                                            <div className={`lineaHorizontal ${formularioMiembroCuadrillaSolucion?.['fotoTarjetaDeVida'] && formularioMiembroCuadrillaSolucion?.['observacionTarjetaDeVida'] ? 'resuelta' : ''}`}></div>
+                                            <div className='subtituloSolucion'>
+                                                <Textos className='titulo'>Solucion {formularioMiembroCuadrillaSolucion?.['fotoTarjetaDeVida'] && formularioMiembroCuadrillaSolucion?.['observacionTarjetaDeVida'] ? 'Resuelta' : 'Pendiente'}</Textos>
+                                            </div>
+                                            <div className={`opciones fotos ${formularioMiembroCuadrilla?.['tarjetaDeVida'] === 'NC' ? '' : 'oculto'}`} >
+                                                <Textos className='parrafo'>Imagen(es)</Textos>
+                                                <Imagenes disableInput={!(modo === "editar")} fotoKey={'fotoTarjetaDeVida'} foto={formularioMiembroCuadrillaSolucion?.['fotoTarjetaDeVida']} onChange={(fotoKeySolucion, data) => actualizarCampoEnelInspeccionIntegralHSE(`${'solucion'}.${'cuadrilla'}.${formularioMiembroCuadrilla.cedula}.${fotoKeySolucion}`, data)} capture={false} setImagen={(data) => setImagenAmpliada(data)} />
+                                            </div>
+                                            <div className={`opciones ${formularioMiembroCuadrilla?.['tarjetaDeVida'] === 'NC' ? '' : 'oculto'}`} >
+                                                <Textos className='parrafo'>Observacion</Textos>
+                                                <AreaTextos
+                                                    type="text"
+                                                    placeholder="Agregue las observacion pertinentes"
+                                                    defaultValue={formularioMiembroCuadrillaSolucion?.['observacionTarjetaDeVida']}
+                                                    onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE(`${'solucion'}.${'cuadrilla'}.${formularioMiembroCuadrilla.cedula}.${'observacionTarjetaDeVida'}`, e.target.value)}
+                                                    rows={4}
+                                                    disabled={!(modo === "editar")}
+                                                />
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div className='entradaDatos'>
+                                    <div className={`entradaDatos vertical ${modo === "editar" && (formularioMiembroCuadrilla?.['carneCliente'] === 'NC') ? 'negativo' : ''} ${formularioMiembroCuadrillaSolucion?.['fotoCarneCliente'] && formularioMiembroCuadrillaSolucion?.['observacionCarneCliente'] ? 'resuelta' : ''}`}>
                                         <Textos className='subtitulo'>Carné Cliente:</Textos>
                                         <div className='opciones'>
                                             <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('carneCliente', 'C')} className={miembroEnProceso.carneCliente === 'C' ? 'formulario selected' : ''}>C</Botones>
                                             <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('carneCliente', 'NC')} className={miembroEnProceso.carneCliente === 'NC' ? 'formulario selected' : ''}>NC</Botones>
                                         </div>
+                                        <div className={`solucion ${modo === "editar" && formularioMiembroCuadrilla?.['carneCliente'] === 'NC' ? '' : 'ocultar'}`}>
+                                            <div className={`lineaHorizontal ${formularioMiembroCuadrillaSolucion?.['fotoCarneCliente'] && formularioMiembroCuadrillaSolucion?.['observacionCarneCliente'] ? 'resuelta' : ''}`}></div>
+                                            <div className='subtituloSolucion'>
+                                                <Textos className='titulo'>Solucion {formularioMiembroCuadrillaSolucion?.['fotoCarneCliente'] && formularioMiembroCuadrillaSolucion?.['observacionCarneCliente'] ? 'Resuelta' : 'Pendiente'}</Textos>
+                                            </div>
+                                            <div className={`opciones fotos ${formularioMiembroCuadrilla?.['carneCliente'] === 'NC' ? '' : 'oculto'}`} >
+                                                <Textos className='parrafo'>Imagen(es)</Textos>
+                                                <Imagenes disableInput={!(modo === "editar")} fotoKey={'fotoCarneCliente'} foto={formularioMiembroCuadrillaSolucion?.['fotoCarneCliente']} onChange={(fotoKeySolucion, data) => actualizarCampoEnelInspeccionIntegralHSE(`${'solucion'}.${'cuadrilla'}.${formularioMiembroCuadrilla.cedula}.${fotoKeySolucion}`, data)} capture={false} setImagen={(data) => setImagenAmpliada(data)} />
+                                            </div>
+                                            <div className={`opciones ${formularioMiembroCuadrilla?.['carneCliente'] === 'NC' ? '' : 'oculto'}`} >
+                                                <Textos className='parrafo'>Observacion</Textos>
+                                                <AreaTextos
+                                                    type="text"
+                                                    placeholder="Agregue las observacion pertinentes"
+                                                    defaultValue={formularioMiembroCuadrillaSolucion?.['observacionCarneCliente']}
+                                                    onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE(`${'solucion'}.${'cuadrilla'}.${formularioMiembroCuadrilla.cedula}.${'observacionCarneCliente'}`, e.target.value)}
+                                                    rows={4}
+                                                    disabled={!(modo === "editar")}
+                                                />
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div className='entradaDatos'>
+                                    <div className={`entradaDatos vertical ${modo === "editar" && (formularioMiembroCuadrilla?.['carneSicte'] === 'NC') ? 'negativo' : ''} ${formularioMiembroCuadrillaSolucion?.['fotoCarneSicte'] && formularioMiembroCuadrillaSolucion?.['observacionCarneSicte'] ? 'resuelta' : ''}`}>
                                         <Textos className='subtitulo'>Carné Sicte:</Textos>
                                         <div className='opciones'>
                                             <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('carneSicte', 'C')} className={miembroEnProceso.carneSicte === 'C' ? 'formulario selected' : ''}>C</Botones>
                                             <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('carneSicte', 'NC')} className={miembroEnProceso.carneSicte === 'NC' ? 'formulario selected' : ''}>NC</Botones>
+                                        </div>
+                                        <div className={`solucion ${modo === "editar" && formularioMiembroCuadrilla?.['carneSicte'] === 'NC' ? '' : 'ocultar'}`}>
+                                            <div className={`lineaHorizontal ${formularioMiembroCuadrillaSolucion?.['fotoCarneSicte'] && formularioMiembroCuadrillaSolucion?.['observacionCarneSicte'] ? 'resuelta' : ''}`}></div>
+                                            <div className='subtituloSolucion'>
+                                                <Textos className='titulo'>Solucion {formularioMiembroCuadrillaSolucion?.['fotoCarneSicte'] && formularioMiembroCuadrillaSolucion?.['observacionCarneSicte'] ? 'Resuelta' : 'Pendiente'}</Textos>
+                                            </div>
+                                            <div className={`opciones fotos ${formularioMiembroCuadrilla?.['carneSicte'] === 'NC' ? '' : 'oculto'}`} >
+                                                <Textos className='parrafo'>Imagen(es)</Textos>
+                                                <Imagenes disableInput={!(modo === "editar")} fotoKey={'fotoCarneSicte'} foto={formularioMiembroCuadrillaSolucion?.['fotoCarneSicte']} onChange={(fotoKeySolucion, data) => actualizarCampoEnelInspeccionIntegralHSE(`${'solucion'}.${'cuadrilla'}.${formularioMiembroCuadrilla.cedula}.${fotoKeySolucion}`, data)} capture={false} setImagen={(data) => setImagenAmpliada(data)} />
+                                            </div>
+                                            <div className={`opciones ${formularioMiembroCuadrilla?.['carneSicte'] === 'NC' ? '' : 'oculto'}`} >
+                                                <Textos className='parrafo'>Observacion</Textos>
+                                                <AreaTextos
+                                                    type="text"
+                                                    placeholder="Agregue las observacion pertinentes"
+                                                    defaultValue={formularioMiembroCuadrillaSolucion?.['observacionCarneSicte']}
+                                                    onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE(`${'solucion'}.${'cuadrilla'}.${formularioMiembroCuadrilla.cedula}.${'observacionCarneSicte'}`, e.target.value)}
+                                                    rows={4}
+                                                    disabled={!(modo === "editar")}
+                                                />
+                                            </div>
                                         </div>
                                     </div>
                                     <div className='entradaDatos vertical'>
@@ -2350,7 +2579,7 @@ const SupervisionFormularioEnelIntegral = () => {
                                         </div>
                                     </div>
                                     <Textos className='subtitulo encabezado'>3. Dotacion EPP y EPCC:</Textos>
-                                    <div className='entradaDatos vertical'>
+                                    <div className={`entradaDatos vertical ${modo === "editar" && (formularioMiembroCuadrilla?.['eppCasco'] === 'NC') ? 'negativo' : ''} ${formularioMiembroCuadrillaSolucion?.['fotoEppCasco'] && formularioMiembroCuadrillaSolucion?.['observacionEppCasco'] ? 'resuelta' : ''}`}>
                                         <Textos className='subtitulo' title="Utiliza casco de seguridad TIPO II con barbuquejo en buen estado.">Casco:</Textos>
                                         <div className='opciones'>
                                             <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppCasco', 'C')} className={miembroEnProceso.eppCasco === 'C' ? 'formulario selected' : ''}>C</Botones>
@@ -2360,8 +2589,29 @@ const SupervisionFormularioEnelIntegral = () => {
                                         <div className='opciones'>
                                             <Imagenes disableInput={accionModalTabla === "eliminar" || accionModalTabla === "leer"} ocultarDiv={miembroEnProceso.eppCasco !== 'NC'} fotoKey={'fotoEppCasco'} foto={miembroEnProceso.fotoEppCasco} onChange={(fotoKey, data) => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE(fotoKey, data)} capture={formularioEnelInspeccionIntegralHSE.tipoInspeccion === 'Presencial' ? true : false} setImagen={(data) => setImagenAmpliada(data)} />
                                         </div>
+                                        <div className={`solucion ${modo === "editar" && formularioMiembroCuadrilla?.['eppCasco'] === 'NC' ? '' : 'ocultar'}`}>
+                                            <div className={`lineaHorizontal ${formularioMiembroCuadrillaSolucion?.['fotoEppCasco'] && formularioMiembroCuadrillaSolucion?.['observacionEppCasco'] ? 'resuelta' : ''}`}></div>
+                                            <div className='subtituloSolucion'>
+                                                <Textos className='titulo'>Solucion {formularioMiembroCuadrillaSolucion?.['fotoEppCasco'] && formularioMiembroCuadrillaSolucion?.['observacionEppCasco'] ? 'Resuelta' : 'Pendiente'}</Textos>
+                                            </div>
+                                            <div className={`opciones fotos ${formularioMiembroCuadrilla?.['eppCasco'] === 'NC' ? '' : 'oculto'}`} >
+                                                <Textos className='parrafo'>Imagen(es)</Textos>
+                                                <Imagenes disableInput={!(modo === "editar")} fotoKey={'fotoEppCasco'} foto={formularioMiembroCuadrillaSolucion?.['fotoEppCasco']} onChange={(fotoKeySolucion, data) => actualizarCampoEnelInspeccionIntegralHSE(`${'solucion'}.${'cuadrilla'}.${formularioMiembroCuadrilla.cedula}.${fotoKeySolucion}`, data)} capture={false} setImagen={(data) => setImagenAmpliada(data)} />
+                                            </div>
+                                            <div className={`opciones ${formularioMiembroCuadrilla?.['eppCasco'] === 'NC' ? '' : 'oculto'}`} >
+                                                <Textos className='parrafo'>Observacion</Textos>
+                                                <AreaTextos
+                                                    type="text"
+                                                    placeholder="Agregue las observacion pertinentes"
+                                                    defaultValue={formularioMiembroCuadrillaSolucion?.['observacionEppCasco']}
+                                                    onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE(`${'solucion'}.${'cuadrilla'}.${formularioMiembroCuadrilla.cedula}.${'observacionEppCasco'}`, e.target.value)}
+                                                    rows={4}
+                                                    disabled={!(modo === "editar")}
+                                                />
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div className='entradaDatos vertical'>
+                                    <div className={`entradaDatos vertical ${modo === "editar" && (formularioMiembroCuadrilla?.['eppGuantes'] === 'NC') ? 'negativo' : ''} ${formularioMiembroCuadrillaSolucion?.['fotoEppGuantes'] && formularioMiembroCuadrillaSolucion?.['observacionEppGuantes'] ? 'resuelta' : ''}`}>
                                         <Textos className='subtitulo' title="Utiliza guantes de seguridad  de acuerdo a la labor ejecutada según corresponda y están en buen estado.">Guantes:</Textos>
                                         <div className='opciones'>
                                             <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppGuantes', 'C')} className={miembroEnProceso.eppGuantes === 'C' ? 'formulario selected' : ''}>C</Botones>
@@ -2371,8 +2621,29 @@ const SupervisionFormularioEnelIntegral = () => {
                                         <div className='opciones'>
                                             <Imagenes disableInput={accionModalTabla === "eliminar" || accionModalTabla === "leer"} ocultarDiv={miembroEnProceso.eppGuantes !== 'NC'} fotoKey={'fotoEppGuantes'} foto={miembroEnProceso.fotoEppGuantes} onChange={(fotoKey, data) => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE(fotoKey, data)} capture={formularioEnelInspeccionIntegralHSE.tipoInspeccion === 'Presencial' ? true : false} setImagen={(data) => setImagenAmpliada(data)} />
                                         </div>
+                                        <div className={`solucion ${modo === "editar" && formularioMiembroCuadrilla?.['eppGuantes'] === 'NC' ? '' : 'ocultar'}`}>
+                                            <div className={`lineaHorizontal ${formularioMiembroCuadrillaSolucion?.['fotoEppGuantes'] && formularioMiembroCuadrillaSolucion?.['observacionEppGuantes'] ? 'resuelta' : ''}`}></div>
+                                            <div className='subtituloSolucion'>
+                                                <Textos className='titulo'>Solucion {formularioMiembroCuadrillaSolucion?.['fotoEppGuantes'] && formularioMiembroCuadrillaSolucion?.['observacionEppGuantes'] ? 'Resuelta' : 'Pendiente'}</Textos>
+                                            </div>
+                                            <div className={`opciones fotos ${formularioMiembroCuadrilla?.['eppGuantes'] === 'NC' ? '' : 'oculto'}`} >
+                                                <Textos className='parrafo'>Imagen(es)</Textos>
+                                                <Imagenes disableInput={!(modo === "editar")} fotoKey={'fotoEppGuantes'} foto={formularioMiembroCuadrillaSolucion?.['fotoEppGuantes']} onChange={(fotoKeySolucion, data) => actualizarCampoEnelInspeccionIntegralHSE(`${'solucion'}.${'cuadrilla'}.${formularioMiembroCuadrilla.cedula}.${fotoKeySolucion}`, data)} capture={false} setImagen={(data) => setImagenAmpliada(data)} />
+                                            </div>
+                                            <div className={`opciones ${formularioMiembroCuadrilla?.['eppGuantes'] === 'NC' ? '' : 'oculto'}`} >
+                                                <Textos className='parrafo'>Observacion</Textos>
+                                                <AreaTextos
+                                                    type="text"
+                                                    placeholder="Agregue las observacion pertinentes"
+                                                    defaultValue={formularioMiembroCuadrillaSolucion?.['observacionEppGuantes']}
+                                                    onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE(`${'solucion'}.${'cuadrilla'}.${formularioMiembroCuadrilla.cedula}.${'observacionEppGuantes'}`, e.target.value)}
+                                                    rows={4}
+                                                    disabled={!(modo === "editar")}
+                                                />
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div className='entradaDatos vertical'>
+                                    <div className={`entradaDatos vertical ${modo === "editar" && (formularioMiembroCuadrilla?.['eppGuantesDielectricos'] === 'NC') ? 'negativo' : ''} ${formularioMiembroCuadrillaSolucion?.['fotoEppGuantesDielectricos'] && formularioMiembroCuadrillaSolucion?.['observacionEppGuantesDielectricos'] ? 'resuelta' : ''}`}>
                                         <Textos className='subtitulo' title="Utiliza  guantes  de  seguridad  dieléctricos,  clase 0, 2 o 4 según  corresponda,  en  buen estado y osee las pruebas de rigidez vigentes.">Guantes Dielectricos:</Textos>
                                         <div className='opciones'>
                                             <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppGuantesDielectricos', 'C')} className={miembroEnProceso.eppGuantesDielectricos === 'C' ? 'formulario selected' : ''}>C</Botones>
@@ -2382,8 +2653,29 @@ const SupervisionFormularioEnelIntegral = () => {
                                         <div className='opciones'>
                                             <Imagenes disableInput={accionModalTabla === "eliminar" || accionModalTabla === "leer"} ocultarDiv={miembroEnProceso.eppGuantesDielectricos !== 'NC'} fotoKey={'fotoEppGuantesDielectricos'} foto={miembroEnProceso.fotoEppGuantesDielectricos} onChange={(fotoKey, data) => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE(fotoKey, data)} capture={formularioEnelInspeccionIntegralHSE.tipoInspeccion === 'Presencial' ? true : false} setImagen={(data) => setImagenAmpliada(data)} />
                                         </div>
+                                        <div className={`solucion ${modo === "editar" && formularioMiembroCuadrilla?.['eppGuantesDielectricos'] === 'NC' ? '' : 'ocultar'}`}>
+                                            <div className={`lineaHorizontal ${formularioMiembroCuadrillaSolucion?.['fotoEppGuantesDielectricos'] && formularioMiembroCuadrillaSolucion?.['observacionEppGuantesDielectricos'] ? 'resuelta' : ''}`}></div>
+                                            <div className='subtituloSolucion'>
+                                                <Textos className='titulo'>Solucion {formularioMiembroCuadrillaSolucion?.['fotoEppGuantesDielectricos'] && formularioMiembroCuadrillaSolucion?.['observacionEppGuantesDielectricos'] ? 'Resuelta' : 'Pendiente'}</Textos>
+                                            </div>
+                                            <div className={`opciones fotos ${formularioMiembroCuadrilla?.['eppGuantesDielectricos'] === 'NC' ? '' : 'oculto'}`} >
+                                                <Textos className='parrafo'>Imagen(es)</Textos>
+                                                <Imagenes disableInput={!(modo === "editar")} fotoKey={'fotoEppGuantesDielectricos'} foto={formularioMiembroCuadrillaSolucion?.['fotoEppGuantesDielectricos']} onChange={(fotoKeySolucion, data) => actualizarCampoEnelInspeccionIntegralHSE(`${'solucion'}.${'cuadrilla'}.${formularioMiembroCuadrilla.cedula}.${fotoKeySolucion}`, data)} capture={false} setImagen={(data) => setImagenAmpliada(data)} />
+                                            </div>
+                                            <div className={`opciones ${formularioMiembroCuadrilla?.['eppGuantesDielectricos'] === 'NC' ? '' : 'oculto'}`} >
+                                                <Textos className='parrafo'>Observacion</Textos>
+                                                <AreaTextos
+                                                    type="text"
+                                                    placeholder="Agregue las observacion pertinentes"
+                                                    defaultValue={formularioMiembroCuadrillaSolucion?.['observacionEppGuantesDielectricos']}
+                                                    onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE(`${'solucion'}.${'cuadrilla'}.${formularioMiembroCuadrilla.cedula}.${'observacionEppGuantesDielectricos'}`, e.target.value)}
+                                                    rows={4}
+                                                    disabled={!(modo === "editar")}
+                                                />
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div className='entradaDatos vertical'>
+                                    <div className={`entradaDatos vertical ${modo === "editar" && (formularioMiembroCuadrilla?.['eppProteccionFacialAntiArco'] === 'NC') ? 'negativo' : ''} ${formularioMiembroCuadrillaSolucion?.['fotoEppProteccionFacialAntiArco'] && formularioMiembroCuadrillaSolucion?.['observacionEppProteccionFacialAntiArco'] ? 'resuelta' : ''}`}>
                                         <Textos className='subtitulo' title="Utiliza protección facial anti-arco y está en buen estado (visor Arc Flash - Balaclava ignifuga)">Proteccion Facil Anti Arco:</Textos>
                                         <div className='opciones'>
                                             <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppProteccionFacialAntiArco', 'C')} className={miembroEnProceso.eppProteccionFacialAntiArco === 'C' ? 'formulario selected' : ''}>C</Botones>
@@ -2393,8 +2685,29 @@ const SupervisionFormularioEnelIntegral = () => {
                                         <div className='opciones'>
                                             <Imagenes disableInput={accionModalTabla === "eliminar" || accionModalTabla === "leer"} ocultarDiv={miembroEnProceso.eppProteccionFacialAntiArco !== 'NC'} fotoKey={'fotoEppProteccionFacialAntiArco'} foto={miembroEnProceso.fotoEppProteccionFacialAntiArco} onChange={(fotoKey, data) => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE(fotoKey, data)} capture={formularioEnelInspeccionIntegralHSE.tipoInspeccion === 'Presencial' ? true : false} setImagen={(data) => setImagenAmpliada(data)} />
                                         </div>
+                                        <div className={`solucion ${modo === "editar" && formularioMiembroCuadrilla?.['eppProteccionFacialAntiArco'] === 'NC' ? '' : 'ocultar'}`}>
+                                            <div className={`lineaHorizontal ${formularioMiembroCuadrillaSolucion?.['fotoEppProteccionFacialAntiArco'] && formularioMiembroCuadrillaSolucion?.['observacionEppProteccionFacialAntiArco'] ? 'resuelta' : ''}`}></div>
+                                            <div className='subtituloSolucion'>
+                                                <Textos className='titulo'>Solucion {formularioMiembroCuadrillaSolucion?.['fotoEppProteccionFacialAntiArco'] && formularioMiembroCuadrillaSolucion?.['observacionEppProteccionFacialAntiArco'] ? 'Resuelta' : 'Pendiente'}</Textos>
+                                            </div>
+                                            <div className={`opciones fotos ${formularioMiembroCuadrilla?.['eppProteccionFacialAntiArco'] === 'NC' ? '' : 'oculto'}`} >
+                                                <Textos className='parrafo'>Imagen(es)</Textos>
+                                                <Imagenes disableInput={!(modo === "editar")} fotoKey={'fotoEppProteccionFacialAntiArco'} foto={formularioMiembroCuadrillaSolucion?.['fotoEppProteccionFacialAntiArco']} onChange={(fotoKeySolucion, data) => actualizarCampoEnelInspeccionIntegralHSE(`${'solucion'}.${'cuadrilla'}.${formularioMiembroCuadrilla.cedula}.${fotoKeySolucion}`, data)} capture={false} setImagen={(data) => setImagenAmpliada(data)} />
+                                            </div>
+                                            <div className={`opciones ${formularioMiembroCuadrilla?.['eppProteccionFacialAntiArco'] === 'NC' ? '' : 'oculto'}`} >
+                                                <Textos className='parrafo'>Observacion</Textos>
+                                                <AreaTextos
+                                                    type="text"
+                                                    placeholder="Agregue las observacion pertinentes"
+                                                    defaultValue={formularioMiembroCuadrillaSolucion?.['observacionEppProteccionFacialAntiArco']}
+                                                    onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE(`${'solucion'}.${'cuadrilla'}.${formularioMiembroCuadrilla.cedula}.${'observacionEppProteccionFacialAntiArco'}`, e.target.value)}
+                                                    rows={4}
+                                                    disabled={!(modo === "editar")}
+                                                />
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div className='entradaDatos vertical'>
+                                    <div className={`entradaDatos vertical ${modo === "editar" && (formularioMiembroCuadrilla?.['eppEquiposContraCaidas'] === 'NC') ? 'negativo' : ''} ${formularioMiembroCuadrillaSolucion?.['fotoEppEquiposContraCaidas'] && formularioMiembroCuadrillaSolucion?.['observacionEppEquiposContraCaidas'] ? 'resuelta' : ''}`}>
                                         <Textos className='subtitulo' title="Utiliza sistema contra caídas de altura completo, en buen estado.">Equipos Contra Caidas:</Textos>
                                         <div className='opciones'>
                                             <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppEquiposContraCaidas', 'C')} className={miembroEnProceso.eppEquiposContraCaidas === 'C' ? 'formulario selected' : ''}>C</Botones>
@@ -2404,8 +2717,29 @@ const SupervisionFormularioEnelIntegral = () => {
                                         <div className='opciones'>
                                             <Imagenes disableInput={accionModalTabla === "eliminar" || accionModalTabla === "leer"} ocultarDiv={miembroEnProceso.eppEquiposContraCaidas !== 'NC'} fotoKey={'fotoEppEquiposContraCaidas'} foto={miembroEnProceso.fotoEppEquiposContraCaidas} onChange={(fotoKey, data) => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE(fotoKey, data)} capture={formularioEnelInspeccionIntegralHSE.tipoInspeccion === 'Presencial' ? true : false} setImagen={(data) => setImagenAmpliada(data)} />
                                         </div>
+                                        <div className={`solucion ${modo === "editar" && formularioMiembroCuadrilla?.['eppEquiposContraCaidas'] === 'NC' ? '' : 'ocultar'}`}>
+                                            <div className={`lineaHorizontal ${formularioMiembroCuadrillaSolucion?.['fotoEppEquiposContraCaidas'] && formularioMiembroCuadrillaSolucion?.['observacionEppEquiposContraCaidas'] ? 'resuelta' : ''}`}></div>
+                                            <div className='subtituloSolucion'>
+                                                <Textos className='titulo'>Solucion {formularioMiembroCuadrillaSolucion?.['fotoEppEquiposContraCaidas'] && formularioMiembroCuadrillaSolucion?.['observacionEppEquiposContraCaidas'] ? 'Resuelta' : 'Pendiente'}</Textos>
+                                            </div>
+                                            <div className={`opciones fotos ${formularioMiembroCuadrilla?.['eppEquiposContraCaidas'] === 'NC' ? '' : 'oculto'}`} >
+                                                <Textos className='parrafo'>Imagen(es)</Textos>
+                                                <Imagenes disableInput={!(modo === "editar")} fotoKey={'fotoEppEquiposContraCaidas'} foto={formularioMiembroCuadrillaSolucion?.['fotoEppEquiposContraCaidas']} onChange={(fotoKeySolucion, data) => actualizarCampoEnelInspeccionIntegralHSE(`${'solucion'}.${'cuadrilla'}.${formularioMiembroCuadrilla.cedula}.${fotoKeySolucion}`, data)} capture={false} setImagen={(data) => setImagenAmpliada(data)} />
+                                            </div>
+                                            <div className={`opciones ${formularioMiembroCuadrilla?.['eppEquiposContraCaidas'] === 'NC' ? '' : 'oculto'}`} >
+                                                <Textos className='parrafo'>Observacion</Textos>
+                                                <AreaTextos
+                                                    type="text"
+                                                    placeholder="Agregue las observacion pertinentes"
+                                                    defaultValue={formularioMiembroCuadrillaSolucion?.['observacionEppEquiposContraCaidas']}
+                                                    onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE(`${'solucion'}.${'cuadrilla'}.${formularioMiembroCuadrilla.cedula}.${'observacionEppEquiposContraCaidas'}`, e.target.value)}
+                                                    rows={4}
+                                                    disabled={!(modo === "editar")}
+                                                />
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div className='entradaDatos vertical'>
+                                    <div className={`entradaDatos vertical ${modo === "editar" && (formularioMiembroCuadrilla?.['eppOverolObraCivil'] === 'NC') ? 'negativo' : ''} ${formularioMiembroCuadrillaSolucion?.['fotoEppOverolObraCivil'] && formularioMiembroCuadrillaSolucion?.['observacionEppOverolObraCivil'] ? 'resuelta' : ''}`}>
                                         <Textos className='subtitulo' title="Utiliza ropa de trabajo adecuada para la tarea, en buen estado y normalizada">Overol Obra Civil:</Textos>
                                         <div className='opciones'>
                                             <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppOverolObraCivil', 'C')} className={miembroEnProceso.eppOverolObraCivil === 'C' ? 'formulario selected' : ''}>C</Botones>
@@ -2415,8 +2749,29 @@ const SupervisionFormularioEnelIntegral = () => {
                                         <div className='opciones'>
                                             <Imagenes disableInput={accionModalTabla === "eliminar" || accionModalTabla === "leer"} ocultarDiv={miembroEnProceso.eppOverolObraCivil !== 'NC'} fotoKey={'fotoEppOverolObraCivil'} foto={miembroEnProceso.fotoEppOverolObraCivil} onChange={(fotoKey, data) => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE(fotoKey, data)} capture={formularioEnelInspeccionIntegralHSE.tipoInspeccion === 'Presencial' ? true : false} setImagen={(data) => setImagenAmpliada(data)} />
                                         </div>
+                                        <div className={`solucion ${modo === "editar" && formularioMiembroCuadrilla?.['eppOverolObraCivil'] === 'NC' ? '' : 'ocultar'}`}>
+                                            <div className={`lineaHorizontal ${formularioMiembroCuadrillaSolucion?.['fotoEppOverolObraCivil'] && formularioMiembroCuadrillaSolucion?.['observacionEppOverolObraCivil'] ? 'resuelta' : ''}`}></div>
+                                            <div className='subtituloSolucion'>
+                                                <Textos className='titulo'>Solucion {formularioMiembroCuadrillaSolucion?.['fotoEppOverolObraCivil'] && formularioMiembroCuadrillaSolucion?.['observacionEppOverolObraCivil'] ? 'Resuelta' : 'Pendiente'}</Textos>
+                                            </div>
+                                            <div className={`opciones fotos ${formularioMiembroCuadrilla?.['eppOverolObraCivil'] === 'NC' ? '' : 'oculto'}`} >
+                                                <Textos className='parrafo'>Imagen(es)</Textos>
+                                                <Imagenes disableInput={!(modo === "editar")} fotoKey={'fotoEppOverolObraCivil'} foto={formularioMiembroCuadrillaSolucion?.['fotoEppOverolObraCivil']} onChange={(fotoKeySolucion, data) => actualizarCampoEnelInspeccionIntegralHSE(`${'solucion'}.${'cuadrilla'}.${formularioMiembroCuadrilla.cedula}.${fotoKeySolucion}`, data)} capture={false} setImagen={(data) => setImagenAmpliada(data)} />
+                                            </div>
+                                            <div className={`opciones ${formularioMiembroCuadrilla?.['eppOverolObraCivil'] === 'NC' ? '' : 'oculto'}`} >
+                                                <Textos className='parrafo'>Observacion</Textos>
+                                                <AreaTextos
+                                                    type="text"
+                                                    placeholder="Agregue las observacion pertinentes"
+                                                    defaultValue={formularioMiembroCuadrillaSolucion?.['observacionEppOverolObraCivil']}
+                                                    onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE(`${'solucion'}.${'cuadrilla'}.${formularioMiembroCuadrilla.cedula}.${'observacionEppOverolObraCivil'}`, e.target.value)}
+                                                    rows={4}
+                                                    disabled={!(modo === "editar")}
+                                                />
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div className='entradaDatos vertical'>
+                                    <div className={`entradaDatos vertical ${modo === "editar" && (formularioMiembroCuadrilla?.['eppOverolIgnifugo'] === 'NC') ? 'negativo' : ''} ${formularioMiembroCuadrillaSolucion?.['fotoEppOverolIgnifugo'] && formularioMiembroCuadrillaSolucion?.['observacionEppOverolIgnifugo'] ? 'resuelta' : ''}`}>
                                         <Textos className='subtitulo' title="Utiliza  overol ignífugo está en buen estado.">Overol Ignifugo:</Textos>
                                         <div className='opciones'>
                                             <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppOverolIgnifugo', 'C')} className={miembroEnProceso.eppOverolIgnifugo === 'C' ? 'formulario selected' : ''}>C</Botones>
@@ -2426,8 +2781,29 @@ const SupervisionFormularioEnelIntegral = () => {
                                         <div className='opciones'>
                                             <Imagenes disableInput={accionModalTabla === "eliminar" || accionModalTabla === "leer"} ocultarDiv={miembroEnProceso.eppOverolIgnifugo !== 'NC'} fotoKey={'fotoEppOverolIgnifugo'} foto={miembroEnProceso.fotoEppOverolIgnifugo} onChange={(fotoKey, data) => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE(fotoKey, data)} capture={formularioEnelInspeccionIntegralHSE.tipoInspeccion === 'Presencial' ? true : false} setImagen={(data) => setImagenAmpliada(data)} />
                                         </div>
+                                        <div className={`solucion ${modo === "editar" && formularioMiembroCuadrilla?.['eppOverolIgnifugo'] === 'NC' ? '' : 'ocultar'}`}>
+                                            <div className={`lineaHorizontal ${formularioMiembroCuadrillaSolucion?.['fotoEppOverolIgnifugo'] && formularioMiembroCuadrillaSolucion?.['observacionEppOverolIgnifugo'] ? 'resuelta' : ''}`}></div>
+                                            <div className='subtituloSolucion'>
+                                                <Textos className='titulo'>Solucion {formularioMiembroCuadrillaSolucion?.['fotoEppOverolIgnifugo'] && formularioMiembroCuadrillaSolucion?.['observacionEppOverolIgnifugo'] ? 'Resuelta' : 'Pendiente'}</Textos>
+                                            </div>
+                                            <div className={`opciones fotos ${formularioMiembroCuadrilla?.['eppOverolIgnifugo'] === 'NC' ? '' : 'oculto'}`} >
+                                                <Textos className='parrafo'>Imagen(es)</Textos>
+                                                <Imagenes disableInput={!(modo === "editar")} fotoKey={'fotoEppOverolIgnifugo'} foto={formularioMiembroCuadrillaSolucion?.['fotoEppOverolIgnifugo']} onChange={(fotoKeySolucion, data) => actualizarCampoEnelInspeccionIntegralHSE(`${'solucion'}.${'cuadrilla'}.${formularioMiembroCuadrilla.cedula}.${fotoKeySolucion}`, data)} capture={false} setImagen={(data) => setImagenAmpliada(data)} />
+                                            </div>
+                                            <div className={`opciones ${formularioMiembroCuadrilla?.['eppOverolIgnifugo'] === 'NC' ? '' : 'oculto'}`} >
+                                                <Textos className='parrafo'>Observacion</Textos>
+                                                <AreaTextos
+                                                    type="text"
+                                                    placeholder="Agregue las observacion pertinentes"
+                                                    defaultValue={formularioMiembroCuadrillaSolucion?.['observacionEppOverolIgnifugo']}
+                                                    onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE(`${'solucion'}.${'cuadrilla'}.${formularioMiembroCuadrilla.cedula}.${'observacionEppOverolIgnifugo'}`, e.target.value)}
+                                                    rows={4}
+                                                    disabled={!(modo === "editar")}
+                                                />
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div className='entradaDatos vertical'>
+                                    <div className={`entradaDatos vertical ${modo === "editar" && (formularioMiembroCuadrilla?.['eppGafasDeSeguridad'] === 'NC') ? 'negativo' : ''} ${formularioMiembroCuadrillaSolucion?.['fotoEppGafasDeSeguridad'] && formularioMiembroCuadrillaSolucion?.['observacionEppGafasDeSeguridad'] ? 'resuelta' : ''}`}>
                                         <Textos className='subtitulo' title="Utiliza protector ocular (gafas) según la actividad y está en buen estado.">Gafas de Seguridad:</Textos>
                                         <div className='opciones'>
                                             <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppGafasDeSeguridad', 'C')} className={miembroEnProceso.eppGafasDeSeguridad === 'C' ? 'formulario selected' : ''}>C</Botones>
@@ -2437,8 +2813,29 @@ const SupervisionFormularioEnelIntegral = () => {
                                         <div className='opciones'>
                                             <Imagenes disableInput={accionModalTabla === "eliminar" || accionModalTabla === "leer"} ocultarDiv={miembroEnProceso.eppGafasDeSeguridad !== 'NC'} fotoKey={'fotoEppGafasDeSeguridad'} foto={miembroEnProceso.fotoEppGafasDeSeguridad} onChange={(fotoKey, data) => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE(fotoKey, data)} capture={formularioEnelInspeccionIntegralHSE.tipoInspeccion === 'Presencial' ? true : false} setImagen={(data) => setImagenAmpliada(data)} />
                                         </div>
+                                        <div className={`solucion ${modo === "editar" && formularioMiembroCuadrilla?.['eppGafasDeSeguridad'] === 'NC' ? '' : 'ocultar'}`}>
+                                            <div className={`lineaHorizontal ${formularioMiembroCuadrillaSolucion?.['fotoEppGafasDeSeguridad'] && formularioMiembroCuadrillaSolucion?.['observacionEppGafasDeSeguridad'] ? 'resuelta' : ''}`}></div>
+                                            <div className='subtituloSolucion'>
+                                                <Textos className='titulo'>Solucion {formularioMiembroCuadrillaSolucion?.['fotoEppGafasDeSeguridad'] && formularioMiembroCuadrillaSolucion?.['observacionEppGafasDeSeguridad'] ? 'Resuelta' : 'Pendiente'}</Textos>
+                                            </div>
+                                            <div className={`opciones fotos ${formularioMiembroCuadrilla?.['eppGafasDeSeguridad'] === 'NC' ? '' : 'oculto'}`} >
+                                                <Textos className='parrafo'>Imagen(es)</Textos>
+                                                <Imagenes disableInput={!(modo === "editar")} fotoKey={'fotoEppGafasDeSeguridad'} foto={formularioMiembroCuadrillaSolucion?.['fotoEppGafasDeSeguridad']} onChange={(fotoKeySolucion, data) => actualizarCampoEnelInspeccionIntegralHSE(`${'solucion'}.${'cuadrilla'}.${formularioMiembroCuadrilla.cedula}.${fotoKeySolucion}`, data)} capture={false} setImagen={(data) => setImagenAmpliada(data)} />
+                                            </div>
+                                            <div className={`opciones ${formularioMiembroCuadrilla?.['eppGafasDeSeguridad'] === 'NC' ? '' : 'oculto'}`} >
+                                                <Textos className='parrafo'>Observacion</Textos>
+                                                <AreaTextos
+                                                    type="text"
+                                                    placeholder="Agregue las observacion pertinentes"
+                                                    defaultValue={formularioMiembroCuadrillaSolucion?.['observacionEppGafasDeSeguridad']}
+                                                    onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE(`${'solucion'}.${'cuadrilla'}.${formularioMiembroCuadrilla.cedula}.${'observacionEppGafasDeSeguridad'}`, e.target.value)}
+                                                    rows={4}
+                                                    disabled={!(modo === "editar")}
+                                                />
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div className='entradaDatos vertical'>
+                                    <div className={`entradaDatos vertical ${modo === "editar" && (formularioMiembroCuadrilla?.['eppTapabocas'] === 'NC') ? 'negativo' : ''} ${formularioMiembroCuadrillaSolucion?.['fotoEppTapabocas'] && formularioMiembroCuadrillaSolucion?.['observacionEppTapabocas'] ? 'resuelta' : ''}`}>
                                         <Textos className='subtitulo' title="Utiliza protección respiratoria en buen estado.">Tapabocas:</Textos>
                                         <div className='opciones'>
                                             <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppTapabocas', 'C')} className={miembroEnProceso.eppTapabocas === 'C' ? 'formulario selected' : ''}>C</Botones>
@@ -2448,8 +2845,29 @@ const SupervisionFormularioEnelIntegral = () => {
                                         <div className='opciones'>
                                             <Imagenes disableInput={accionModalTabla === "eliminar" || accionModalTabla === "leer"} ocultarDiv={miembroEnProceso.eppTapabocas !== 'NC'} fotoKey={'fotoEppTapabocas'} foto={miembroEnProceso.fotoEppTapabocas} onChange={(fotoKey, data) => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE(fotoKey, data)} capture={formularioEnelInspeccionIntegralHSE.tipoInspeccion === 'Presencial' ? true : false} setImagen={(data) => setImagenAmpliada(data)} />
                                         </div>
+                                        <div className={`solucion ${modo === "editar" && formularioMiembroCuadrilla?.['eppTapabocas'] === 'NC' ? '' : 'ocultar'}`}>
+                                            <div className={`lineaHorizontal ${formularioMiembroCuadrillaSolucion?.['fotoEppTapabocas'] && formularioMiembroCuadrillaSolucion?.['observacionEppTapabocas'] ? 'resuelta' : ''}`}></div>
+                                            <div className='subtituloSolucion'>
+                                                <Textos className='titulo'>Solucion {formularioMiembroCuadrillaSolucion?.['fotoEppTapabocas'] && formularioMiembroCuadrillaSolucion?.['observacionEppTapabocas'] ? 'Resuelta' : 'Pendiente'}</Textos>
+                                            </div>
+                                            <div className={`opciones fotos ${formularioMiembroCuadrilla?.['eppTapabocas'] === 'NC' ? '' : 'oculto'}`} >
+                                                <Textos className='parrafo'>Imagen(es)</Textos>
+                                                <Imagenes disableInput={!(modo === "editar")} fotoKey={'fotoEppTapabocas'} foto={formularioMiembroCuadrillaSolucion?.['fotoEppTapabocas']} onChange={(fotoKeySolucion, data) => actualizarCampoEnelInspeccionIntegralHSE(`${'solucion'}.${'cuadrilla'}.${formularioMiembroCuadrilla.cedula}.${fotoKeySolucion}`, data)} capture={false} setImagen={(data) => setImagenAmpliada(data)} />
+                                            </div>
+                                            <div className={`opciones ${formularioMiembroCuadrilla?.['eppTapabocas'] === 'NC' ? '' : 'oculto'}`} >
+                                                <Textos className='parrafo'>Observacion</Textos>
+                                                <AreaTextos
+                                                    type="text"
+                                                    placeholder="Agregue las observacion pertinentes"
+                                                    defaultValue={formularioMiembroCuadrillaSolucion?.['observacionEppTapabocas']}
+                                                    onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE(`${'solucion'}.${'cuadrilla'}.${formularioMiembroCuadrilla.cedula}.${'observacionEppTapabocas'}`, e.target.value)}
+                                                    rows={4}
+                                                    disabled={!(modo === "editar")}
+                                                />
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div className='entradaDatos vertical'>
+                                    <div className={`entradaDatos vertical ${modo === "editar" && (formularioMiembroCuadrilla?.['eppBotas'] === 'NC') ? 'negativo' : ''} ${formularioMiembroCuadrillaSolucion?.['fotoEppBotas'] && formularioMiembroCuadrillaSolucion?.['observacionEppBotas'] ? 'resuelta' : ''}`}>
                                         <Textos className='subtitulo' title="Utiliza calzado de seguridad según corresponda y está en buen estado.">Botas:</Textos>
                                         <div className='opciones'>
                                             <Botones disabled={accionModalTabla === "eliminar" || accionModalTabla === "leer"} onClick={() => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE('eppBotas', 'C')} className={miembroEnProceso.eppBotas === 'C' ? 'formulario selected' : ''}>C</Botones>
@@ -2458,6 +2876,27 @@ const SupervisionFormularioEnelIntegral = () => {
                                         </div>
                                         <div className='opciones'>
                                             <Imagenes disableInput={accionModalTabla === "eliminar" || accionModalTabla === "leer"} ocultarDiv={miembroEnProceso.eppBotas !== 'NC'} fotoKey={'fotoEppBotas'} foto={miembroEnProceso.fotoEppBotas} onChange={(fotoKey, data) => actualizarCampoMiembroACuadrillaEnelInspeccionIntegralHSE(fotoKey, data)} capture={formularioEnelInspeccionIntegralHSE.tipoInspeccion === 'Presencial' ? true : false} setImagen={(data) => setImagenAmpliada(data)} />
+                                        </div>
+                                        <div className={`solucion ${modo === "editar" && formularioMiembroCuadrilla?.['eppBotas'] === 'NC' ? '' : 'ocultar'}`}>
+                                            <div className={`lineaHorizontal ${formularioMiembroCuadrillaSolucion?.['fotoEppBotas'] && formularioMiembroCuadrillaSolucion?.['observacionEppBotas'] ? 'resuelta' : ''}`}></div>
+                                            <div className='subtituloSolucion'>
+                                                <Textos className='titulo'>Solucion {formularioMiembroCuadrillaSolucion?.['fotoEppBotas'] && formularioMiembroCuadrillaSolucion?.['observacionEppBotas'] ? 'Resuelta' : 'Pendiente'}</Textos>
+                                            </div>
+                                            <div className={`opciones fotos ${formularioMiembroCuadrilla?.['eppBotas'] === 'NC' ? '' : 'oculto'}`} >
+                                                <Textos className='parrafo'>Imagen(es)</Textos>
+                                                <Imagenes disableInput={!(modo === "editar")} fotoKey={'fotoEppBotas'} foto={formularioMiembroCuadrillaSolucion?.['fotoEppBotas']} onChange={(fotoKeySolucion, data) => actualizarCampoEnelInspeccionIntegralHSE(`${'solucion'}.${'cuadrilla'}.${formularioMiembroCuadrilla.cedula}.${fotoKeySolucion}`, data)} capture={false} setImagen={(data) => setImagenAmpliada(data)} />
+                                            </div>
+                                            <div className={`opciones ${formularioMiembroCuadrilla?.['eppBotas'] === 'NC' ? '' : 'oculto'}`} >
+                                                <Textos className='parrafo'>Observacion</Textos>
+                                                <AreaTextos
+                                                    type="text"
+                                                    placeholder="Agregue las observacion pertinentes"
+                                                    defaultValue={formularioMiembroCuadrillaSolucion?.['observacionEppBotas']}
+                                                    onChange={(e) => actualizarCampoEnelInspeccionIntegralHSE(`${'solucion'}.${'cuadrilla'}.${formularioMiembroCuadrilla.cedula}.${'observacionEppBotas'}`, e.target.value)}
+                                                    rows={4}
+                                                    disabled={!(modo === "editar")}
+                                                />
+                                            </div>
                                         </div>
                                     </div>
                                     <div className={`entradaDatos vertical observacion' ${miembroEnProceso.eppCasco !== 'NC' && miembroEnProceso.eppGuantes !== 'NC' && miembroEnProceso.eppGuantesDielectricos !== 'NC' && miembroEnProceso.eppProteccionFacialAntiArco !== 'NC'

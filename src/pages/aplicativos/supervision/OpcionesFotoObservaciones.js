@@ -130,7 +130,7 @@ export const OpcionesFotoObservaciones = ({
                 </div>
                 <div className={`opciones fotos ${data[keyPrin][keyBase] === 'NC' || data[keyPrin][keyBase] === 'No' ? '' : activarinput === true ? '' : 'oculto'}`} >
                     <Textos className='parrafo'>Imagen(es)</Textos>
-                    <Imagenes disableInput={!disabled} fotoKey={fotoKeySolucion} foto={data[keySolucion][keyPrin][fotoKeySolucion]} onChange={(fotoKeySolucion, data) => onChange(`${keySolucion}.${keyPrin}.${fotoKeySolucion}`, data)} capture={data.tipoInspeccion === 'Presencial' ? true : false} setImagen={(data) => setImagen(data)} />
+                    <Imagenes disableInput={!disabled} fotoKey={fotoKeySolucion} foto={data[keySolucion][keyPrin][fotoKeySolucion]} onChange={(fotoKeySolucion, data) => onChange(`${keySolucion}.${keyPrin}.${fotoKeySolucion}`, data)} capture={false} setImagen={(data) => setImagen(data)} />
                 </div>
                 <div className={`opciones ${data[keyPrin][keyBase] === 'NC' || data[keyPrin][keyBase] === 'Malo' || data[keyPrin][keyBase] === 'Regular' || data[keyPrin][keyBase] === 'No' ? '' : 'oculto'}`} >
                     <Textos className='parrafo'>Observacion</Textos>

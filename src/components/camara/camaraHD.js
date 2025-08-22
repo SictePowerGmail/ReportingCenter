@@ -57,7 +57,7 @@ const CamaraHD = ({ onCapture, onClose }) => {
 
     return (
         <div className="modal-fondo">
-            <div className="modal-contenido">
+            <div className="modal-contenido-foto">
                 <video ref={videoRef} autoPlay playsInline width="100%" />
                 <div className="botonesCamara">
                     <Botones id="botonCamara" className="guardar" onClick={capturar}>Capturar</Botones>

@@ -70,10 +70,18 @@
             align-items: center;
             padding: 8px 0px;
 
+            @media screen and (max-width: 600px) {
+                flex-direction: column;
+            }
+
             .imagenes {
                 min-width: 125px;
                 width: auto;
                 margin: 0 !important;
+
+                @media screen and (max-width: 600px) {
+                    margin-bottom: 10px !important;
+                }
 
                 &.oculto {
                     display: none;

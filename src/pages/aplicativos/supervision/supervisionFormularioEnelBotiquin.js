@@ -419,6 +419,7 @@ const SupervisionFormularioEnelBotiquin = () => {
         cedulaQuienInspecciona: "",
         nombreQuienInspecciona: "",
         nombreProyecto: "",
+        noContrato: "",
         direccion: "",
         cedulaResponsableBotiquin: "",
         nombreResponsableBotiquin: "",
@@ -1382,6 +1383,7 @@ const SupervisionFormularioEnelBotiquin = () => {
         if (!cedulaUsuario) { toast.error('Por favor diligencie inicie sesion ya que no existe usuario.'); return false }
         if (!nombreUsuario) { toast.error('Por favor diligencie inicie sesion ya que no existe usuario.'); return false }
         if (!formulario.nombreProyecto) { toast.error('Por favor diligencie el nombre del proyecto.'); return false }
+        if (!formulario.noContrato) { toast.error('Por favor diligencie el numero de contrato.'); return false }
         if (!formulario.direccion) { toast.error('Por favor diligencie la direccion.'); return false }
         if (!formulario.cedulaResponsableBotiquin) { toast.error('Por favor diligencie la cedula del responsable del botiquin.'); return false }
         if (!formulario.nombreResponsableBotiquin || formulario.nombreResponsableBotiquin === 'Usuario no encontrado') { toast.error('Por favor ingrese un usuario valido para el responsable del botiquin.'); return false }
@@ -1840,6 +1842,21 @@ const SupervisionFormularioEnelBotiquin = () => {
                         <div className='entradaDatos'>
                             <Textos className='subtitulo'>Nombre del proyecto:</Textos>
                             <Entradas disabled={modo === "editar"} type="text" placeholder="Ingrese el nombre del Proyecto" value={formularioEnelBotiquin.nombreProyecto} onChange={(e) => actualizarCampoEnelBotiquin('nombreProyecto', e.target.value)} />
+                        </div>
+                    </div>
+
+                    <div className='campo contrato'>
+                        <i className="fas fa-tools"></i>
+                        <div className='entradaDatos'>
+                            <Textos className='subtitulo'>No. de contrato:</Textos>
+                            <Selectores value={formularioEnelBotiquin.noContrato} onChange={(e) => actualizarCampoEnelBotiquin('noContrato', e.target.value)}
+                                options={[
+                                    { value: 'JA10123037/JA10123045', label: 'JA10123037 / JA10123045' },
+                                    { value: 'JA10123400', label: 'JA10123400' },
+                                    { value: 'JA10176840', label: 'JA10176840' },
+                                ]} className="primary"
+                                disabled={modo === "editar"}
+                            ></Selectores>
                         </div>
                     </div>
 

@@ -74,7 +74,11 @@ const Imagenes = ({
                             onChange={(e) => handleImagenChange(e, index)}
                             disabled={disableInput}
                         />
-                        <Textos className='parrafo'>{img?.name || 'Ningún archivo ingresado'}</Textos>
+                        <Textos className='parrafo'>
+                            {img?.name
+                                ? (img.name.length > 30 ? img.name.slice(0, 30) + " ..." : img.name)
+                                : 'Ningún archivo ingresado'}
+                        </Textos>
                         <div className="botones-imagen">
                             {img?.data && (
                                 <Botones className='imagenes' onClick={() => setImagen(img.data)}>
@@ -103,7 +107,7 @@ const Imagenes = ({
                                 onChange(fotoKey, nuevasImagenes);
                                 setUsarCamara(false);
                             }}
-                            onClose={() => setUsarCamara(false)} 
+                            onClose={() => setUsarCamara(false)}
                         />
                     )}
                     {capture === false && usarCamara === false && (

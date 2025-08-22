@@ -417,7 +417,8 @@ const SupervisionPrincipal = () => {
                     nombreQuienInspecciona: item.nombreQuienInspecciona,
                     proceso: item.proceso,
                     formulario: item.formulario,
-                    inspeccion: item.inspeccion,
+                    inspeccionInicial: item.inspeccion,
+                    inspeccionFinal: item.inspeccionFinal,
                 }));
 
             setDataEnelInspecciones(registrosUnificados);
@@ -522,9 +523,10 @@ const SupervisionPrincipal = () => {
         { header: 'Nombre Quien Inspecciona', key: 'nombreQuienInspecciona' },
         { header: 'Proceso', key: 'proceso' },
         { header: 'Formulario', key: 'formulario' },
-        { header: 'Inspeccion', key: 'inspeccion' },
+        { header: 'Inspeccion Inicial', key: 'inspeccionInicial' },
+        { header: 'Inspeccion Final', key: 'inspeccionFinal' },
     ];
-
+ 
     const [mostrarModal, setMostrarModal] = useState(false);
     const [selectedOption, setSelectedOption] = useState('');
 

@@ -45,6 +45,16 @@
                 font-size: 14px;
                 margin: 0;
 
+                .titulo {
+                    padding: 8px 12px 5px 12px !important;
+                    border-bottom: none !important;
+                }
+
+                .filtros {
+                    padding: 5px 12px 8px 12px !important;
+                    border-top: none !important;
+                }
+
                 th,
                 td {
                     border-top: 1px solid #ccc;
@@ -120,7 +130,7 @@
             max-width: 100px;
         }
 
-        @media screen and (max-width: 460px) {
+        @media screen and (max-width: 699px) {
             span {
                 display: none;
             }

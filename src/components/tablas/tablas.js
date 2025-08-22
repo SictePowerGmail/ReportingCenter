@@ -19,12 +19,30 @@ const Tablas = ({
 }) => {
     const [paginaActual, setPaginaActual] = useState(1);
     const [filtro, setFiltro] = useState('');
+    const [filtros, setFiltros] = useState({});
 
-    const datosFiltrados = Array.isArray(datos) ? datos.filter((fila) =>
-        columnas.some((col) =>
-            String(fila[col.key]).toLowerCase().includes(filtro.toLowerCase())
-        )
-    ) : [];
+    const datosFiltrados = Array.isArray(datos)
+        ? datos.filter((fila) => {
+            const coincideFiltrosColumna = columnas.every((col) => {
+                const filtroValor = filtros[col.key] || "";
+                if (!filtroValor) return true;
+                return String(fila[col.key] || "")
+                    .toLowerCase()
+                    .includes(filtroValor.toLowerCase());
+            });
+
+            const coincideFiltroGeneral = !filtro
+                ? true
+                : columnas.some((col) =>
+                    String(fila[col.key] || "")
+                        .toLowerCase()
+                        .includes(filtro.toLowerCase())
+                );
+
+            return coincideFiltrosColumna && coincideFiltroGeneral;
+        })
+        : [];
+
 
     const totalPaginas = Math.max(1, Math.ceil(datosFiltrados.length / filasPorPagina));
     const inicio = (paginaActual - 1) * filasPorPagina;
@@ -47,7 +65,7 @@ const Tablas = ({
                 ></i>
                 <Entradas
                     type="text"
-                    placeholder="Buscar..."
+                    placeholder="Filtro General ..."
                     value={filtro}
                     onChange={(e) => {
                         setFiltro(e.target.value);
@@ -64,15 +82,29 @@ const Tablas = ({
                                 {columnas.length > 0 ? (
                                     <>
                                         {columnas.map((col) => (
-                                            <th key={col.key}>{col.header}</th>
+                                            <th key={col.key} className='titulo'>{col.header}</th>
                                         ))}
                                         {(editar || eliminar) && (
-                                            <th key={'acciones'}>Acciones</th>
+                                            <th key={'acciones'} className='titulo'>Acciones</th>
                                         )}
                                     </>
                                 ) : (
                                     <th>No hay columnas definidas</th>
                                 )}
+                            </tr>
+                            <tr>
+                                {columnas.map((col) => (
+                                    <th key={col.key} className='filtros'>
+                                        <Entradas
+                                            type="text"
+                                            value={filtros[col.key] || ""}
+                                            onChange={(e) =>
+                                                setFiltros({ ...filtros, [col.key]: e.target.value })
+                                            }
+                                        />
+                                    </th>
+                                ))}
+                                {(editar || eliminar) && <th></th>}
                             </tr>
                         </thead>
                         <tbody>
@@ -125,7 +157,12 @@ const Tablas = ({
                 >
                     Anterior
                 </Botones>
-                <Textos className='parrafo'>Página {paginaActual} de {totalPaginas} &nbsp;|&nbsp; Total: {datosPagina.length} ítem{datosPagina.length !== 1 ? 's' : ''}</Textos>
+                <Textos className='parrafo'>
+                    Página {paginaActual} de {totalPaginas}
+                    &nbsp;|&nbsp; Mostrando {datosPagina.length} ítem{datosPagina.length !== 1 ? 's' : ''}
+                    &nbsp;de {datosFiltrados.length} filtrado{datosFiltrados.length !== 1 ? 's' : ''}
+                    &nbsp;|&nbsp; Total: {datos.length} ítem{datos.length !== 1 ? 's' : ''}
+                </Textos>
                 <Botones
                     onClick={() => cambiarPagina(paginaActual + 1)}
                     disabled={paginaActual === totalPaginas}

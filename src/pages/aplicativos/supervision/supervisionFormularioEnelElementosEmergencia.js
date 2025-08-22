@@ -420,6 +420,7 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
         nombreQuienInspecciona: "",
         ciudad: "",
         centroTrabajo: "",
+        noContrato: "",
         cedulaResponsableCuadrilla: "",
         nombreResponsableCuadrilla: "",
         proceso: "",
@@ -1072,6 +1073,7 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
         if (!nombreUsuario) { toast.error('Por favor diligencie inicie sesion ya que no existe usuario.'); return false }
         if (!formulario.ciudad) { toast.error('Por favor diligencie la ciudad.'); return false }
         if (!formulario.centroTrabajo) { toast.error('Por favor diligencie el centro de trabajo.'); return false }
+        if (!formulario.noContrato) { toast.error('Por favor diligencie el numero de contrato.'); return false }
         if (!formulario.cedulaResponsableCuadrilla) { toast.error('Por favor diligencie la cedula del cuadrillero.'); return false }
         if (!formulario.nombreResponsableCuadrilla || formulario.nombreResponsableCuadrilla === 'Usuario no encontrado') { toast.error('Por favor ingrese un usuario valido para el responsable del cuadrillero.'); return false }
         if (!formulario.proceso) { toast.error('Por favor diligencie el proceso.'); return false }
@@ -1386,6 +1388,21 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
                         <div className='entradaDatos'>
                             <Textos className='subtitulo'>Centro de Trabajo:</Textos>
                             <Entradas disabled={modo === "editar"} type="text" placeholder="Ingrese el centro de trabajo" value={formularioEnelElementosEmergencia.centroTrabajo} onChange={(e) => actualizarCampoEnelElementosEmergencia('centroTrabajo', e.target.value)} />
+                        </div>
+                    </div>
+
+                    <div className='campo contrato'>
+                        <i className="fas fa-tools"></i>
+                        <div className='entradaDatos'>
+                            <Textos className='subtitulo'>No. de contrato:</Textos>
+                            <Selectores value={formularioEnelElementosEmergencia.noContrato} onChange={(e) => actualizarCampoEnelElementosEmergencia('noContrato', e.target.value)}
+                                options={[
+                                    { value: 'JA10123037/JA10123045', label: 'JA10123037 / JA10123045' },
+                                    { value: 'JA10123400', label: 'JA10123400' },
+                                    { value: 'JA10176840', label: 'JA10176840' },
+                                ]} className="primary"
+                                disabled={modo === "editar"}
+                            ></Selectores>
                         </div>
                     </div>
 
