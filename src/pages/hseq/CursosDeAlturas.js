@@ -7,7 +7,7 @@ function CursosDeAlturas() {
     <div className='powerbi'>
       <iframe
         title="Cursos de Alturas"
-        src="https://app.powerbi.com/view?r=eyJrIjoiNWM4NGZiZDAtZTJiNi00MTA0LTg1NDItMmU2MzAxMzg0MThjIiwidCI6ImUwYmZlOTBkLTIwZTAtNDEwYi1iNmYxLTQyOWIwNDNkMzYwOCJ9"
+        src="https://app.powerbi.com/view?r=eyJrIjoiYzUzY2I0ZGMtNzMyZC00MWZhLThmYzItMGMzMDM0YzUzODc4IiwidCI6ImUwYmZlOTBkLTIwZTAtNDEwYi1iNmYxLTQyOWIwNDNkMzYwOCJ9"
       ></iframe>
     </div>
   );

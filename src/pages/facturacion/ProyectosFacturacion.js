@@ -7,7 +7,7 @@ function ProyectosFacturacion() {
     <div className='powerbi'>
       <iframe
         title="Proyectos Facturacion"
-        src="https://app.powerbi.com/view?r=eyJrIjoiNTA1ZGRmNjMtZmY1Ni00N2MwLWJiODMtMmU2MDU5Zjk1MWJmIiwidCI6ImUwYmZlOTBkLTIwZTAtNDEwYi1iNmYxLTQyOWIwNDNkMzYwOCJ9&pageName=ReportSection0eab5c17151ab8d764ff"
+        src="https://app.powerbi.com/view?r=eyJrIjoiNzUxODY4NjctMTk5Yi00NDZmLWE1OWEtNjVkNjlkYjVjNDk3IiwidCI6ImUwYmZlOTBkLTIwZTAtNDEwYi1iNmYxLTQyOWIwNDNkMzYwOCJ9"
       ></iframe>
     </div>
   );

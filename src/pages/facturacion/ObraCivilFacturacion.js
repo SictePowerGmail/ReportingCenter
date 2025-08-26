@@ -7,7 +7,7 @@ function ObraCivilFacturacion() {
     <div className='powerbi'>
       <iframe
         title="Obra Civil facturación"
-        src="https://app.powerbi.com/view?r=eyJrIjoiMTJjOWZmNWEtYTQyZC00NTI1LWJhODUtZjEwZjdiMjQyYWI2IiwidCI6ImUwYmZlOTBkLTIwZTAtNDEwYi1iNmYxLTQyOWIwNDNkMzYwOCJ9"
+        src="https://app.powerbi.com/view?r=eyJrIjoiMjNmYjAxOTAtYmE3ZS00ZDI4LWI5NjYtOWI1ODlhZWUyMzRiIiwidCI6ImUwYmZlOTBkLTIwZTAtNDEwYi1iNmYxLTQyOWIwNDNkMzYwOCJ9"
       ></iframe>
     </div>
   );

@@ -7,7 +7,7 @@ function ImplementacionesFacturacion() {
     <div className='powerbi'>
       <iframe
         title="Implementaciones facturación"
-        src="https://app.powerbi.com/view?r=eyJrIjoiNGIxMDc4ZGQtZTc2Ny00YjY0LWFlOGUtMDA3NjU3OTc1NmM4IiwidCI6ImUwYmZlOTBkLTIwZTAtNDEwYi1iNmYxLTQyOWIwNDNkMzYwOCJ9"
+        src="https://app.powerbi.com/view?r=eyJrIjoiZTJiZjA1NjYtMTE0My00OTExLWFiMzUtNDliZmJmOWZhMDQ1IiwidCI6ImUwYmZlOTBkLTIwZTAtNDEwYi1iNmYxLTQyOWIwNDNkMzYwOCJ9"
       ></iframe>
     </div>
   );

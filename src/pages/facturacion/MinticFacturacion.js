@@ -7,7 +7,7 @@ function MinticFacturacion() {
     <div className='powerbi'>
       <iframe
         title="Mintic Facturacion"
-        src="https://app.powerbi.com/view?r=eyJrIjoiOWEyZGE5YTEtOTVkNC00ODQyLTkyYzItNjgzZmYwNTRmN2Y3IiwidCI6ImUwYmZlOTBkLTIwZTAtNDEwYi1iNmYxLTQyOWIwNDNkMzYwOCJ9"
+        src="https://app.powerbi.com/view?r=eyJrIjoiMjM5OTg2NGMtMThhYS00YmE3LThmMjQtNzkwOTZiYzExYjc4IiwidCI6ImUwYmZlOTBkLTIwZTAtNDEwYi1iNmYxLTQyOWIwNDNkMzYwOCJ9"
       ></iframe>
     </div>
   );

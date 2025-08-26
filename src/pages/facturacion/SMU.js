@@ -7,7 +7,7 @@ function SeguimientoSMU() {
     <div className='powerbi'>
       <iframe
         title="SMU"
-        src="https://app.powerbi.com/view?r=eyJrIjoiMTMwNzMwNWMtMWMyNS00NmI5LTk4OGUtYjJmNjUzNjI4MjdlIiwidCI6ImUwYmZlOTBkLTIwZTAtNDEwYi1iNmYxLTQyOWIwNDNkMzYwOCJ9"
+        src="https://app.powerbi.com/view?r=eyJrIjoiNDE4NGQzN2YtNWY3ZS00ZDY3LTljODAtMDhlNGNkNjExYzQzIiwidCI6ImUwYmZlOTBkLTIwZTAtNDEwYi1iNmYxLTQyOWIwNDNkMzYwOCJ9"
       ></iframe>
     </div>
   );

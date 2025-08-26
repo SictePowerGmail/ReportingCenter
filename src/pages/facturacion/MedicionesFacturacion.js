@@ -7,7 +7,7 @@ function MedicionesFacturacion() {
     <div className='powerbi'>
       <iframe
         title="Mediciones facturación"
-        src="https://app.powerbi.com/view?r=eyJrIjoiMGZjOGM3MDItY2RiOC00NmEzLWJhZDktZmEzMjRhZWU3ZTY0IiwidCI6ImUwYmZlOTBkLTIwZTAtNDEwYi1iNmYxLTQyOWIwNDNkMzYwOCJ9"
+        src="https://app.powerbi.com/view?r=eyJrIjoiOGE2M2MxMjItZDdmNC00NDIzLTg0NDEtY2FjYTJjYjIzZmExIiwidCI6ImUwYmZlOTBkLTIwZTAtNDEwYi1iNmYxLTQyOWIwNDNkMzYwOCJ9"
       ></iframe>
     </div>
   );
