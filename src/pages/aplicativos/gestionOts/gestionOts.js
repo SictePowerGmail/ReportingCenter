@@ -24,6 +24,7 @@ const GestionOts = () => {
     const [loading, setLoading] = useState(true);
     const [enviando, setEnviando] = useState(false);
     const [data, setData] = useState('');
+    const [dataDisponible, setDataDisponible] = useState('');
     const [dataInvalida, setDataInvalida] = useState('');
     const [info, setInfo] = useState({});
     const [infoVisible, setInfoVisible] = useState(false);
@@ -31,7 +32,6 @@ const GestionOts = () => {
     const [tipoMovil, setTipoMovil] = useState('');
     const [cuadrilla, setCuadrilla] = useState('');
     const [observacion, setObservacion] = useState('');
-    let selectionMode = false;
     const [selectedMarkers, setSelectedMarkers] = useState([]);
     const [infoVisibleVarios, setInfoVisibleVarios] = useState(false);
     const allMarkersRef = useRef([]);
@@ -58,6 +58,10 @@ const GestionOts = () => {
 
                 setLoading(false);
                 setData(coordenadasValidas);
+
+                const dataDisponible = coordenadasValidas
+                    .filter(item => item.estado_actual === 'DISPONIBLE_PROGRAMAR' )
+                setDataDisponible(dataDisponible);
             })
             .catch(error => {
                 console.error('Error fetching data:', error);
@@ -66,9 +70,63 @@ const GestionOts = () => {
     }
 
     let infoFiltrada = "";
+    function aplicarFiltros() {
+        const valorTexto = filtroTexto.trim().toLowerCase() || "";
+        const valorCiudad = filtroCiudad.trim() || "";
+        const startDate = filtroFechaInicio || "";
+        const endDate = filtroFechaFinal || "";
+        const valorCuadrilla = filtroCuadrilla.trim() || "";
+        const valorEstado = filtroEstadoOT.trim() || "";
+
+        infoFiltrada = dataDisponible.filter(item => {
+            const pasaTexto = valorTexto === "" || Object.values(item).some(value =>
+                String(value).toLowerCase().includes(valorTexto)
+            );
+
+            let ciudadValor = "";
+            if (valorCiudad === "Cundinamarca") {
+                ciudadValor = "MICOL CUNDINAMARCA";
+            } else if (valorCiudad === "Bogota") {
+                ciudadValor = "MICOL";
+            }
+            const pasaCiudad = ciudadValor === "" || String(item.asignado).toLowerCase() === ciudadValor.toLowerCase();
+
+            const fechaItem = item.fecha_ingreso.split(' ')[0];
+            const pasaFecha =
+                (!startDate || fechaItem >= startDate) &&
+                (!endDate || fechaItem <= endDate);
+
+            const pasaCuadrilla = valorCuadrilla === "" || String(item.cuadrilla).toLowerCase() === valorCuadrilla.toLowerCase();
+
+            const pasaEstado = valorEstado === "Asignado" ? item.cuadrilla != null : valorEstado === "Pendiente" ? !item.cuadrilla : true;
+
+            return pasaTexto && pasaCiudad && pasaFecha && pasaCuadrilla && pasaEstado;
+        });
+
+        mapRef.current.eachLayer(layer => {
+            if (layer instanceof L.Marker) {
+                mapRef.current.removeLayer(layer);
+            }
+        });
+
+        infoFiltrada.forEach(item => addMarkerToMap(item));
+
+        actualizarTotalItems(infoFiltrada.length);
+
+        if (infoFiltrada.length > 0) {
+            const bounds = L.latLngBounds(infoFiltrada.map(item => [item.x, item.y]));
+            mapRef.current.fitBounds(bounds, { padding: [50, 50] });
+        }
+    }
+
+    function actualizarTotalItems(cantidad) {
+        const controlDiv = document.querySelector('.total-items-control');
+        if (controlDiv) {
+            controlDiv.innerHTML = `Total: ${cantidad}`;
+        }
+    }
+
     const generarMapa = async (data) => {
-        let selectionCheckbox = null;
-        let applySelectionBtn = null;
 
         if (mapRef.current) {
             mapRef.current.remove();
@@ -105,315 +163,15 @@ const GestionOts = () => {
                 if (infoFiltrada.length > 0) {
                     const bounds = L.latLngBounds(infoFiltrada.map(item => [item.x, item.y]));
                     mapRef.current.fitBounds(bounds, { padding: [50, 50] });
+                } else {
+                    const bounds = L.latLngBounds(data.map(item => [item.x, item.y]));
+                    mapRef.current.fitBounds(bounds, { padding: [50, 50] });
                 }
             };
 
             return div;
         };
         locationButton.addTo(mapRef.current);
-
-        function aplicarFiltros() {
-            const valorTexto = document.querySelector('.filterText')?.value.trim().toLowerCase() || "";
-            const valorCiudad = document.querySelector('.filterCity')?.value.trim() || "";
-            const startDate = document.querySelector('.startDate')?.value || "";
-            const endDate = document.querySelector('.endDate')?.value || "";
-            const valorCuadrilla = document.querySelector('.filterMovil')?.value.trim() || "";
-            const valorEstado = document.querySelector('.filterEstado')?.value.trim() || "";
-
-            infoFiltrada = data.filter(item => {
-                const pasaTexto = valorTexto === "" || Object.values(item).some(value =>
-                    String(value).toLowerCase().includes(valorTexto)
-                );
-
-                let ciudadValor = "";
-                if (valorCiudad === "Cundinamarca") {
-                    ciudadValor = "MICOL CUNDINAMARCA";
-                } else if (valorCiudad === "Bogota") {
-                    ciudadValor = "MICOL";
-                }
-                const pasaCiudad = ciudadValor === "" || String(item.asignado).toLowerCase() === ciudadValor.toLowerCase();
-
-                const fechaItem = item.fecha_ingreso.split(' ')[0];
-                const pasaFecha =
-                    (!startDate || fechaItem >= startDate) &&
-                    (!endDate || fechaItem <= endDate);
-
-                const pasaCuadrilla = valorCuadrilla === "" || String(item.cuadrilla).toLowerCase() === valorCuadrilla.toLowerCase();
-
-                const pasaEstado = valorEstado === "Asignado" ? item.cuadrilla != null : valorEstado === "Pendiente" ? !item.cuadrilla : true;
-
-                return pasaTexto && pasaCiudad && pasaFecha && pasaCuadrilla && pasaEstado;
-            });
-
-            mapRef.current.eachLayer(layer => {
-                if (layer instanceof L.Marker) {
-                    mapRef.current.removeLayer(layer);
-                }
-            });
-
-            infoFiltrada.forEach(item => addMarkerToMap(item));
-
-            actualizarTotalItems(infoFiltrada.length);
-
-            if (infoFiltrada.length > 0) {
-                const bounds = L.latLngBounds(infoFiltrada.map(item => [item.x, item.y]));
-                mapRef.current.fitBounds(bounds, { padding: [50, 50] });
-            }
-        }
-
-        // Select con lista de items que abre un modal
-        if (dataInvalida.length > 0) {
-            const modalButton = L.control({ position: 'topright' });
-            modalButton.onAdd = function () {
-                const div = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom lista-ots-invalidas');
-                let optionsHTML = `<option value="">OTs invalidas</option>`;
-                dataInvalida.forEach((item, index) => {
-                    optionsHTML += `<option value="${item.nro_orden}">${item.nro_orden} - ${item.localidad_giap}</option>`;
-                });
-
-                div.innerHTML = `
-                <i class="fa fa-list"></i>
-                <select class="itemList">
-                    ${optionsHTML}
-                </select>
-            `;
-
-                L.DomEvent.disableClickPropagation(div);
-
-                setTimeout(() => {
-                    const select = div.querySelector('.itemList');
-                    select.addEventListener('change', function () {
-                        const value = this.value;
-
-                        const itemSeleccionado = dataInvalida
-                            .filter(item => item.nro_orden === value)
-
-                        if (itemSeleccionado) {
-                            mostrarInfoEnPanel(itemSeleccionado[0]);
-                            this.value = "";
-                        }
-                    });
-                });
-
-                return div;
-            };
-            modalButton.addTo(mapRef.current);
-        }
-
-        // Input para filtrar texto
-        const filterInput = L.control({ position: 'topright' });
-        filterInput.onAdd = function () {
-            const div = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom filtro-texto');
-
-            div.innerHTML = `
-                <i class="fa fa-pencil"></i>
-                <input 
-                    type="text" 
-                    class="filterText" 
-                    placeholder="Filtrar por texto ..." 
-                    value=""
-                />
-            `;
-
-            L.DomEvent.disableClickPropagation(div);
-
-            setTimeout(() => {
-                div.querySelector('.filterText').addEventListener('input', aplicarFiltros);
-            });
-
-            return div;
-        };
-        filterInput.addTo(mapRef.current)
-
-        // Checkbox para activar selección múltiple
-        const selectionControl = L.control({ position: 'topright' });
-        selectionControl.onAdd = function () {
-            const div = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom checkbox-seleccion');
-            div.innerHTML = `
-                <label class="checkControl">
-                    <div class="texto">
-                        <i class="fa fa-check-double"></i>
-                        <input type="checkbox" id="selectionModeCheckbox" />
-                        <span>Seleccion multiple</span>
-                    </div>
-                    <div class="botonMapa">
-                        <button id="applySelectionBtn">
-                            &#10003;
-                        </button>
-                    </div>
-                </label>
-            `;
-
-            L.DomEvent.disableClickPropagation(div);
-
-            setTimeout(() => {
-                selectionCheckbox = div.querySelector('#selectionModeCheckbox');
-                applySelectionBtn = div.querySelector('#applySelectionBtn').parentNode;
-
-                selectionCheckbox.checked = selectionMode === true;
-
-                applySelectionBtn.querySelector('#applySelectionBtn').addEventListener('click', () => {
-                    setInfoVisibleVarios(true);
-                });
-
-                selectionCheckbox.addEventListener('change', function () {
-                    toggleSelectionMode(this.checked);
-                    aplicarFiltros();
-                });
-            });
-
-            return div;
-        };
-        selectionControl.addTo(mapRef.current);;
-
-        // Botón para filtrar por rango de fechas (solo año-mes-día)
-        const dateRangeFilterControl = L.control({ position: 'topright' });
-        dateRangeFilterControl.onAdd = function () {
-            const div = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom boton-fecha-rango');
-
-            div.innerHTML = `
-                <i class="fa fa-calendar"></i>
-                <input type="date" class="startDate" />
-                <input type="date" class="endDate" />
-            `;
-
-            L.DomEvent.disableClickPropagation(div);
-
-            setTimeout(() => {
-                div.querySelector('.startDate').addEventListener('change', aplicarFiltros);
-                div.querySelector('.endDate').addEventListener('change', aplicarFiltros);
-            });
-
-            return div;
-        };
-        dateRangeFilterControl.addTo(mapRef.current);
-
-        // Select para filtrar por ciudad
-        const filterSelect = L.control({ position: 'topright' });
-        filterSelect.onAdd = function () {
-            const div = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom filtro-ciudad');
-
-            div.innerHTML = `
-                <i class="fa fa-city"></i>
-                <select class="filterCity">
-                    <option value="">Ciudad</option>
-                    <option value="Bogota">Bogotá</option>
-                    <option value="Cundinamarca">Cundinamarca</option>
-                </select>
-            `;
-
-            L.DomEvent.disableClickPropagation(div);
-
-            setTimeout(() => {
-                div.querySelector('.filterCity').addEventListener('change', aplicarFiltros);
-            });
-
-            return div;
-        };
-        filterSelect.addTo(mapRef.current);
-
-        // Select para filtrar por cuadrilla
-        const filterSelectCuadrilla = L.control({ position: 'topright' });
-        filterSelectCuadrilla.onAdd = function () {
-            const div = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom filtro-cuadrilla');
-
-            div.innerHTML = `
-                <i class="fa fa-users"></i>
-                <select class="filterMovil">
-                    <option value="">Cuadrilla</option>
-                    <option value="Cuadrilla 1">Cuadrilla 1</option>
-                    <option value="Cuadrilla 2">Cuadrilla 2</option>
-                </select>
-            `;
-
-            L.DomEvent.disableClickPropagation(div);
-
-            setTimeout(() => {
-                div.querySelector('.filterMovil').addEventListener('change', aplicarFiltros);
-            });
-
-            return div;
-        };
-        filterSelectCuadrilla.addTo(mapRef.current);
-
-        // Select para filtrar por estado OTs
-        const filterSelectEstado = L.control({ position: 'topright' });
-        filterSelectEstado.onAdd = function () {
-            const div = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom filtro-estado');
-
-            div.innerHTML = `
-                <i class="fa fa-hourglass-half"></i>
-                <select class="filterEstado">
-                    <option value="">Estado OTs</option>
-                    <option value="Asignado">Asignado</option>
-                    <option value="Pendiente">Pendiente</option>
-                </select>
-            `;
-
-            L.DomEvent.disableClickPropagation(div);
-
-            setTimeout(() => {
-                div.querySelector('.filterEstado').addEventListener('change', aplicarFiltros);
-            });
-
-            return div;
-        };
-        filterSelectEstado.addTo(mapRef.current);
-
-        // Boton para borrar filtros
-        const clearButton = L.control({ position: 'topright' });
-        clearButton.onAdd = function () {
-            const div = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom mi-boton-limpiar');
-            div.innerHTML = `
-                <div class="botonBorrar">
-                    <i class="fa fa-trash"></i>
-                    <span>Borrar filtros</span>
-                </div>
-            `;
-
-            div.onclick = function () {
-                const textInput = document.querySelector('.filterText');
-                if (textInput) textInput.value = "";
-
-                const selectCity = document.querySelector('.filterCity');
-                if (selectCity) selectCity.value = "";
-
-                const selectMovil = document.querySelector('.filterMovil');
-                if (selectMovil) selectMovil.value = "";
-
-                const selectEstado = document.querySelector('.filterEstado');
-                if (selectEstado) selectEstado.value = "";
-
-                const startDate = document.querySelector('.startDate');
-                if (startDate) startDate.value = "";
-                const endDate = document.querySelector('.endDate');
-                if (endDate) endDate.value = "";
-
-                infoFiltrada = data;
-                aplicarFiltros();
-                actualizarTotalItems(infoFiltrada.length);
-
-                if (typeof selectionCheckbox !== 'undefined' && selectionCheckbox) {
-                    selectionCheckbox.checked = false;
-                }
-                if (typeof applySelectionBtn !== 'undefined' && applySelectionBtn) {
-                    applySelectionBtn.style.display = 'none';
-                }
-                if (typeof toggleSelectionMode === 'function') {
-                    toggleSelectionMode(false);
-                }
-            };
-
-            return div;
-        };
-        clearButton.addTo(mapRef.current);
-
-        function actualizarTotalItems(cantidad) {
-            const controlDiv = document.querySelector('.total-items-control');
-            if (controlDiv) {
-                controlDiv.innerHTML = `Total: ${cantidad}`;
-            }
-        }
 
         let totalItemsControl = L.control({ position: 'bottomleft' });
         totalItemsControl.onAdd = function () {
@@ -422,138 +180,6 @@ const GestionOts = () => {
             return div;
         };
         totalItemsControl.addTo(mapRef.current);
-
-        // Botón para exportar a Excel
-        const exportExcelButton = L.control({ position: 'bottomleft' });
-        exportExcelButton.onAdd = function () {
-            const div = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom mi-boton-exportar');
-            div.innerHTML = `
-                <div class="botonExportar">
-                    <i class="fa fa-file-excel"></i>
-                    <span>Exportar</span>
-                </div>
-            `;
-
-            div.onclick = function () {
-                if (!data || data.length === 0) {
-                    alert("No hay datos para exportar.");
-                    return;
-                }
-
-                const ws = XLSX.utils.json_to_sheet(data);
-                const wb = XLSX.utils.book_new();
-                XLSX.utils.book_append_sheet(wb, ws, "Datos");
-                XLSX.writeFile(wb, "Gestion_OTs.xlsx");
-            };
-
-            return div;
-        };
-        exportExcelButton.addTo(mapRef.current);
-
-        // Botón para importar Excel Nuevas
-        const importExcelButtonNuevas = L.control({ position: 'bottomleft' });
-        importExcelButtonNuevas.onAdd = function () {
-            const div = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom mi-boton-importar');
-            div.innerHTML = `
-                <div class="botonImportar">
-                    <i class="fa fa-upload"></i>
-                    <span>Nuevas</span>
-                    <input type="file" accept=".xlsx,.xls" style="display:none" />
-                </div>
-            `;
-
-            const fileInput = div.querySelector("input");
-
-            div.onclick = function () {
-                fileInput.click();
-            };
-
-            fileInput.onchange = function (e) {
-                const file = e.target.files[0];
-                if (!file) return;
-
-                const reader = new FileReader();
-                reader.onload = function (evt) {
-                    const data = new Uint8Array(evt.target.result);
-                    const workbook = XLSX.read(data, { type: 'array' });
-                    const sheetName = workbook.SheetNames[0];
-                    const worksheet = workbook.Sheets[sheetName];
-                    const jsonData = XLSX.utils.sheet_to_json(worksheet);
-
-                    jsonData.forEach(row => {
-                        if (typeof row["Fecha Ingreso"] === "number") {
-                            const fechaJS = XLSX.SSF.format("yyyy-mm-dd", row["Fecha Ingreso"]);
-                            row["Fecha Ingreso"] = fechaJS;
-                        }
-                    });
-
-                    enviarActualizacionDeOtsNuevas(jsonData)
-                };
-                reader.readAsArrayBuffer(file);
-            };
-
-            return div;
-        };
-        importExcelButtonNuevas.addTo(mapRef.current);
-
-        // Botón para importar Excel Atentidas
-        const importExcelButtonAtentidas = L.control({ position: 'bottomleft' });
-        importExcelButtonAtentidas.onAdd = function () {
-            const div = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom mi-boton-importar');
-            div.innerHTML = `
-                <div class="botonImportar">
-                    <i class="fa fa-upload"></i>
-                    <span>Atendidas</span>
-                    <input type="file" accept=".xlsx,.xls" style="display:none" />
-                </div>
-            `;
-
-            const fileInput = div.querySelector("input");
-
-            div.onclick = function () {
-                fileInput.click();
-            };
-
-            fileInput.onchange = function (e) {
-                const file = e.target.files[0];
-                if (!file) return;
-
-                const reader = new FileReader();
-                reader.onload = function (evt) {
-                    const data = new Uint8Array(evt.target.result);
-                    const workbook = XLSX.read(data, { type: 'array' });
-
-                    const hojasYColumnas = {
-                        "Atendidas": "Orden",
-                        "Relacion OTR SISDA": "OTR",
-                        "Error descargue": "Orden"
-                    };
-
-                    let valoresColumna = [];
-
-                    Object.entries(hojasYColumnas).forEach(([nombreHoja, nombreColumna]) => {
-                        if (workbook.SheetNames.includes(nombreHoja)) {
-                            const worksheet = workbook.Sheets[nombreHoja];
-                            const jsonData = XLSX.utils.sheet_to_json(worksheet);
-
-                            jsonData.forEach(fila => {
-                                if (fila[nombreColumna] !== undefined && fila[nombreColumna] !== null) {
-                                    valoresColumna.push(fila[nombreColumna]);
-                                }
-                            });
-                        } else {
-                            console.warn(`La hoja "${nombreHoja}" no existe en el archivo.`);
-                        }
-                    });
-
-                    enviarActualizacionDeAtencion(valoresColumna)
-                };
-                reader.readAsArrayBuffer(file);
-            };
-
-            return div;
-        };
-        importExcelButtonAtentidas.addTo(mapRef.current);
     };
 
     const addMarkerToMap = (item) => {
@@ -577,8 +203,7 @@ const GestionOts = () => {
         allMarkersRef.current.push({ marker, data: item });
 
         marker.on("click", () => {
-
-            if (selectionMode) {
+            if (seleccionMultiple) {
                 setSelectedMarkers((prev) => {
                     const exists = prev.find(m => m.id === item.id);
 
@@ -598,13 +223,6 @@ const GestionOts = () => {
                 mostrarInfoEnPanel(item);
             }
         });
-    };
-
-    const toggleSelectionMode = () => {
-        selectionMode = !selectionMode;
-        if (selectionMode === false) {
-            setSelectedMarkers([]);
-        }
     };
 
     useEffect(() => {
@@ -644,13 +262,13 @@ const GestionOts = () => {
     }, []);
 
     useEffect(() => {
-        if (data && data.length > 0) {
+        if (dataDisponible && dataDisponible.length > 0) {
             const mapElement = document.getElementById('map');
             if (mapElement) {
-                generarMapa(data);
+                generarMapa(dataDisponible);
             }
         }
-    }, [data]);
+    }, [dataDisponible]);
 
     useEffect(() => {
         if ((infoVisible || infoVisibleVarios) && contenidoRef.current) {
@@ -768,6 +386,21 @@ const GestionOts = () => {
         }
     };
 
+    const [filtroCuadrilla, setFiltroCuadrilla] = useState('');
+    const [filtroCiudad, setFiltroCiudad] = useState('');
+    const [filtroEstadoOT, setFiltroEstadoOT] = useState('');
+    const [filtroTexto, setFiltroTexto] = useState('');
+    const [filtroFechaInicio, setFiltroFechaInicio] = useState('');
+    const [filtroFechaFinal, setFiltroFechaFinal] = useState('');
+    const [filtroOtsInvalidas, setFiltroOtsInvalidas] = useState('');
+    const [seleccionMultiple, setSeleccionMultiple] = useState(false);
+
+    useEffect(() => {
+        if (dataDisponible) {
+            aplicarFiltros();
+        }
+    }, [filtroCuadrilla, filtroCiudad, filtroEstadoOT, filtroTexto, filtroFechaInicio, filtroFechaFinal, filtroOtsInvalidas, seleccionMultiple]);
+
     return (
         <div className="GestionOts">
             {loading ? (
@@ -776,6 +409,260 @@ const GestionOts = () => {
                 <CargandoDatos text={'Enviando Datos'} />
             ) : (
                 <>
+                    <div className='Filtros'>
+                        <div className={`campo ${dataInvalida.length > 0 ? '' : 'ocultar'}`}>
+                            <div className='titulo'>
+                                <i className="fa fa-list"></i>
+                                <Textos className='subtitulo'>OTs Invalidas</Textos>
+                            </div>
+                            <div className='opcion'>
+                                <Selectores value={filtroOtsInvalidas}
+                                    onChange={(e) => {
+                                        const valor = e.target.value;
+                                        setFiltroOtsInvalidas(valor);
+                                        if (valor !== '') {
+                                            const itemSeleccionado = dataInvalida
+                                                .filter(item => item.nro_orden === valor)
+                                            if (itemSeleccionado) {
+                                                mostrarInfoEnPanel(itemSeleccionado[0]);
+                                            }
+                                        }
+                                    }}
+                                    options={dataInvalida.map((item) => ({
+                                        value: item.nro_orden,
+                                        label: `${item.nro_orden} - ${item.localidad_descrip}`
+                                    }))}
+                                    className="primary">
+                                </Selectores>
+                            </div>
+                        </div>
+                        <div className={`linea ${dataInvalida.length > 0 ? '' : 'ocultar'}`}></div>
+                        <div className="campo">
+                            <div className='titulo'>
+                                <i className="fa fa-calendar"></i>
+                                <Textos className='subtitulo'>Calentario</Textos>
+                            </div>
+                            <div className='fechas'>
+                                <Textos className='parrafo'>Fecha Inicio</Textos>
+                            </div>
+                            <div className='opcion'>
+                                <Entradas type="date" value={filtroFechaInicio} onChange={(e) => { setFiltroFechaInicio(e.target.value) }}></Entradas>
+                            </div>
+                            <div className='fechas'>
+                                <Textos className='parrafo'>Fecha Final</Textos>
+                            </div>
+                            <div className='opcion'>
+                                <Entradas type="date" value={filtroFechaFinal} onChange={(e) => { setFiltroFechaFinal(e.target.value) }}></Entradas>
+                            </div>
+                        </div>
+                        <div className='linea'></div>
+                        <div className="campo">
+                            <div className='titulo'>
+                                <i className="fa fa-pencil"></i>
+                                <Textos className='subtitulo'>Texto</Textos>
+                            </div>
+                            <div className='opcion'>
+                                <Entradas value={filtroTexto} placeholder="Filtro ..." onChange={(e) => { setFiltroTexto(e.target.value) }}></Entradas>
+                            </div>
+                        </div>
+                        <div className='linea'></div>
+                        <div className="campo">
+                            <div className='titulo'>
+                                <i className="fa fa-city"></i>
+                                <Textos className='subtitulo'>Ciudad</Textos>
+                            </div>
+                            <div className='opcion'>
+                                <Selectores value={filtroCiudad} onChange={(e) => { setFiltroCiudad(e.target.value) }}
+                                    options={[
+                                        { value: 'Bogota', label: 'Bogota' },
+                                        { value: 'Cundinamarca', label: 'Cundinamarca' },
+                                    ]} className="primary">
+                                </Selectores>
+                            </div>
+                        </div>
+                        <div className='linea'></div>
+                        <div className="campo">
+                            <div className='titulo'>
+                                <i className="fa fa-users"></i>
+                                <Textos className='subtitulo'>Cuadrilla</Textos>
+                            </div>
+                            <div className='opcion'>
+                                <Selectores value={filtroCuadrilla} onChange={(e) => { setFiltroCuadrilla(e.target.value) }}
+                                    options={[
+                                        { value: 'Cuadrilla 1', label: 'Cuadrilla 1' },
+                                        { value: 'Cuadrilla 2', label: 'Cuadrilla 2' },
+                                    ]} className="primary">
+                                </Selectores>
+                            </div>
+                        </div>
+                        <div className='linea'></div>
+                        <div className="campo">
+                            <div className='titulo'>
+                                <i className="fa fa-hourglass-half"></i>
+                                <Textos className='subtitulo'>Estado OT</Textos>
+                            </div>
+                            <div className='opcion'>
+                                <Selectores value={filtroEstadoOT} onChange={(e) => { setFiltroEstadoOT(e.target.value) }}
+                                    options={[
+                                        { value: 'Asignado', label: 'Asignado' },
+                                        { value: 'Pendiente', label: 'Pendiente' },
+                                    ]} className="primary">
+                                </Selectores>
+                            </div>
+                        </div>
+                        <div className='linea'></div>
+                        <div className="campo">
+                            <div className='opcion'>
+                                <div className="checkControl">
+                                    <div className="texto">
+                                        <i className="fa fa-check-double"></i>
+                                        <Entradas type="checkbox" value={seleccionMultiple} onChange={(e) => {
+                                            const valor = e.target.checked;
+                                            setSeleccionMultiple(valor);
+                                            if (valor === false) {
+                                                setSelectedMarkers([]);
+                                            }
+                                        }} />
+                                        <Textos className='parrafo'>Seleccion multiple</Textos>
+                                    </div>
+                                    <div className={`botonMapa`} style={{ display: selectedMarkers.length > 0 ? "block" : "" }}>
+                                        <Botones className="guardar icono">
+                                            &#10003;
+                                        </Botones>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className='linea'></div>
+                        <div className="campo">
+                            <div className='opcion'>
+                                <i className="fa fa-trash"></i>
+                                <Botones className='agregar'
+                                    onClick={() => {
+                                        setFiltroTexto('');
+                                        setFiltroCiudad('');
+                                        setFiltroCuadrilla('');
+                                        setFiltroEstadoOT('');
+                                        setFiltroFechaInicio('');
+                                        setFiltroFechaFinal('');
+                                        setSeleccionMultiple(false);
+                                        setSelectedMarkers([]);
+                                        infoFiltrada = dataDisponible;
+                                        aplicarFiltros();
+                                        actualizarTotalItems(infoFiltrada.length);
+                                    }}
+                                >Borrar filtros</Botones>
+                            </div>
+                        </div>
+                        <div className='linea'></div>
+                        <div className="campo">
+                            <div className='opcion'>
+                                <i className="fa fa-trash"></i>
+                                <Botones className='imagenes'
+                                    onClick={() => {
+                                        allMarkersRef.current.forEach(({ marker }) => marker.remove());
+                                        allMarkersRef.current = [];
+                                    }}
+                                >Borrar Marcadores</Botones>
+                            </div>
+                        </div>
+                        <div className='linea'></div>
+                        <div className="campo">
+                            <div className='opcion'>
+                                <i className="fa fa-file-excel"></i>
+                                <Botones className='guardar'
+                                    onClick={() => {
+                                        let dataExport
+                                        if (!infoFiltrada || infoFiltrada.length === 0) {
+                                            dataExport = dataDisponible;
+                                        } else {
+                                            dataExport = infoFiltrada;
+                                        }
+                                        const ws = XLSX.utils.json_to_sheet(dataExport);
+                                        const wb = XLSX.utils.book_new();
+                                        XLSX.utils.book_append_sheet(wb, ws, "Datos");
+                                        XLSX.writeFile(wb, "Gestion_OTs.xlsx");
+                                    }}
+                                >Exportar</Botones>
+                            </div>
+                        </div>
+                        <div className='linea'></div>
+                        <div className="campo">
+                            <div className='titulo'>
+                                <i className="fa fa-upload"></i>
+                                <Textos className='subtitulo'>Nuevas</Textos>
+                            </div>
+                            <div className='opcion'>
+                                <Entradas type="file" accept=".xlsx,.xls" onChange={(e) => {
+                                    const file = e.target.files[0];
+                                    if (!file) return;
+
+                                    const reader = new FileReader();
+                                    reader.onload = function (evt) {
+                                        const data = new Uint8Array(evt.target.result);
+                                        const workbook = XLSX.read(data, { type: 'array' });
+                                        const sheetName = workbook.SheetNames[0];
+                                        const worksheet = workbook.Sheets[sheetName];
+                                        const jsonData = XLSX.utils.sheet_to_json(worksheet);
+                                        jsonData.forEach(row => {
+                                            if (typeof row["Fecha Ingreso"] === "number") {
+                                                const fechaJS = XLSX.SSF.format("yyyy-mm-dd", row["Fecha Ingreso"]);
+                                                row["Fecha Ingreso"] = fechaJS;
+                                            }
+                                        });
+                                        enviarActualizacionDeOtsNuevas(jsonData)
+                                    };
+                                    reader.readAsArrayBuffer(file);
+                                }}></Entradas>
+                            </div>
+                        </div>
+                        <div className='linea'></div>
+                        <div className="campo">
+                            <div className='titulo'>
+                                <i className="fa fa-upload"></i>
+                                <Textos className='subtitulo'>Atendidas</Textos>
+                            </div>
+                            <div className='opcion'>
+                                <Entradas type="file" accept=".xlsx,.xls" onChange={(e) => {
+                                    const file = e.target.files[0];
+                                    if (!file) return;
+
+                                    const reader = new FileReader();
+                                    reader.onload = function (evt) {
+                                        const data = new Uint8Array(evt.target.result);
+                                        const workbook = XLSX.read(data, { type: 'array' });
+
+                                        const hojasYColumnas = {
+                                            "Atendidas": "Orden",
+                                            "Relacion OTR SISDA": "OTR",
+                                            "Error descargue": "Orden"
+                                        };
+
+                                        let valoresColumna = [];
+
+                                        Object.entries(hojasYColumnas).forEach(([nombreHoja, nombreColumna]) => {
+                                            if (workbook.SheetNames.includes(nombreHoja)) {
+                                                const worksheet = workbook.Sheets[nombreHoja];
+                                                const jsonData = XLSX.utils.sheet_to_json(worksheet);
+
+                                                jsonData.forEach(fila => {
+                                                    if (fila[nombreColumna] !== undefined && fila[nombreColumna] !== null) {
+                                                        valoresColumna.push(fila[nombreColumna]);
+                                                    }
+                                                });
+                                            } else {
+                                                console.warn(`La hoja "${nombreHoja}" no existe en el archivo.`);
+                                            }
+                                        });
+
+                                        enviarActualizacionDeAtencion(valoresColumna)
+                                    };
+                                    reader.readAsArrayBuffer(file);
+                                }}></Entradas>
+                            </div>
+                        </div>
+                    </div>
+
                     <div className='Mapa'>
                         <div id="map" className='Mapa'></div>
                     </div>

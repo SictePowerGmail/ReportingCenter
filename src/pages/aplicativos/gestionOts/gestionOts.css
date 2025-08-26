@@ -1,14 +1,131 @@
 .GestionOts {
     display: flex;
-    flex-direction: column;
     justify-content: start;
     align-items: center;
     width: 100%;
     height: 100%;
     overflow-y: auto;
 
+    .Filtros {
+        width: 250px;
+        height: 100%;
+        border-right: 2px solid var(--background-lineas);
+        overflow-y: auto;
+
+        .campo {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: start;
+            margin: 10px 5px;
+            width: calc(100% - 10px);
+            font-size: 15px;
+            font-weight: 100;
+
+            &.ocultar {
+                display: none;
+            }
+
+            .titulo {
+                display: flex;
+                justify-content: baseline;
+                align-items: center;
+                width: 100%;
+                padding-top: 5px;
+                padding-bottom: 3px;
+
+                i,
+                span {
+                    padding-left: 5px;
+                }
+            }
+
+            .fechas {
+                display: flex;
+                justify-content: end;
+                align-items: center;
+                width: 100%;
+                padding-top: 3px;
+                padding-bottom: 2px;
+
+                span {
+                    padding-right: 5px;
+                }
+            }
+
+            .opcion {
+                display: flex;
+                justify-content: baseline;
+                align-items: center;
+                width: 100%;
+
+                i {
+                    padding-right: 5px;
+                }
+
+                .boton {
+                    padding: 5px 20px;
+                }
+
+                .entrada {
+                    padding: 5px;
+                }
+
+                .checkControl {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    width: 220px;
+                    height: 100%;
+                    cursor: pointer;
+                    margin: 0;
+
+                    .texto {
+                        display: flex !important;
+                        align-items: center !important;
+                        justify-content: start;
+                        width: 80%;
+                        font-weight: 100;
+
+                        input {
+                            margin: 0;
+                            width: auto;
+                        }
+
+                        span {
+                            margin-left: 5px;
+                        }
+                    }
+
+                    .botonMapa {
+                        display: none;
+                        align-items: center;
+                        justify-content: center;
+                        width: 20%;
+                        height: 30px;
+
+                        .icono {
+                            width: 100%;
+                            height: 100%;
+                            padding: 0;
+                        }
+                    }
+                }
+            }
+        }
+
+        .linea {
+            width: 100%;
+            border-bottom: 2px dashed var(--background-lineas);
+
+            &.ocultar {
+                display: none;
+            }
+        }
+    }
+
     .Mapa {
-        width: 100%;
+        width: calc(100% - 250px);
         height: 100%;
 
         #map {
@@ -47,8 +164,7 @@
             }
 
             .mi-boton-importar,
-            .mi-boton-exportar,
-            .mi-boton-limpiar {
+            .mi-boton-exportar {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
@@ -73,108 +189,6 @@
                     span {
                         padding-left: 5px;
                     }
-                }
-            }
-
-            .filtro-estado,
-            .filtro-texto,
-            .filtro-cuadrilla,
-            .filtro-ciudad,
-            .lista-ots-invalidas,
-            .checkbox-seleccion,
-            .boton-fecha-rango {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                width: auto;
-                height: 30px;
-                background-color: rgb(255, 255, 255);
-                border: 0.1px solid rgb(163, 163, 163);
-                border-radius: 5px;
-                font-size: 15px;
-                font-weight: 100;
-                cursor: pointer;
-                box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
-
-                i {
-                    margin-left: 5px;
-                }
-
-                .endDate,
-                .startDate {
-                    width: 92px;
-                    height: 20px;
-                    padding: 2px;
-                    margin: 3px;
-                    border: 0.1px solid rgb(163, 163, 163);
-                    border-radius: 5px;
-                    cursor: pointer;
-                }
-
-                .startDate {
-                    margin-left: 5px;
-                }
-
-                .checkControl {
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-                    width: 220px;
-                    height: 100%;
-                    margin: 0;
-                    padding: 3px;
-                    cursor: pointer;
-
-                    .texto {
-                        display: flex !important;
-                        align-items: center !important;
-                        justify-content: start;
-                        width: 80%;
-                        font-weight: 100;
-
-                        input {
-                            margin: 0;
-                            margin-left: 5px;
-                        }
-
-                        span {
-                            margin-left: 5px;
-                        }
-                    }
-
-                    .botonMapa {
-                        display: none;
-                        align-items: center;
-                        justify-content: center;
-                        width: 20%;
-                        height: 100% !important;
-
-                        #applySelectionBtn {
-                            display: none;
-                            cursor: pointer;
-                            background-color: #28a745;
-                            border: none;
-                            color: white;
-                            border-radius: 3px;
-                            width: 100% !important;
-                            height: 100% !important;
-                        }
-                    }
-                }
-
-                .filterEstado,
-                .filterMovil,
-                .filterText,
-                .filterCity,
-                .itemList {
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    height: 100%;
-                    width: 100%;
-                    margin: 3px;
-                    border: 0;
-                    cursor: pointer;
                 }
             }
 
