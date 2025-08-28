@@ -32,6 +32,7 @@ const GestionOts = () => {
     const [tipoMovil, setTipoMovil] = useState('');
     const [cuadrilla, setCuadrilla] = useState('');
     const [observacion, setObservacion] = useState('');
+    const [turnoAsignado, setTurnoAsignado] = useState('');
     const [selectedMarkers, setSelectedMarkers] = useState([]);
     const [infoVisibleVarios, setInfoVisibleVarios] = useState(false);
     const allMarkersRef = useRef([]);
@@ -60,7 +61,7 @@ const GestionOts = () => {
                 setData(coordenadasValidas);
 
                 const dataDisponible = coordenadasValidas
-                    .filter(item => item.estado_actual === 'DISPONIBLE_PROGRAMAR' )
+                    .filter(item => item.estado_actual === 'DISPONIBLE_PROGRAMAR')
                 setDataDisponible(dataDisponible);
             })
             .catch(error => {
@@ -76,20 +77,17 @@ const GestionOts = () => {
         const startDate = filtroFechaInicio || "";
         const endDate = filtroFechaFinal || "";
         const valorCuadrilla = filtroCuadrilla.trim() || "";
-        const valorEstado = filtroEstadoOT.trim() || "";
+        const valorEstado = filtroAsignacion.trim() || "";
+        const valorEstadoActualOT = filtroEstadoActualOT.trim() || "";
+        const valorTurno = filtroTurno.trim() || "";
+        const valorSeleccionMultiple = seleccionMultiple;
 
-        infoFiltrada = dataDisponible.filter(item => {
+        infoFiltrada = data.filter(item => {
             const pasaTexto = valorTexto === "" || Object.values(item).some(value =>
                 String(value).toLowerCase().includes(valorTexto)
             );
 
-            let ciudadValor = "";
-            if (valorCiudad === "Cundinamarca") {
-                ciudadValor = "MICOL CUNDINAMARCA";
-            } else if (valorCiudad === "Bogota") {
-                ciudadValor = "MICOL";
-            }
-            const pasaCiudad = ciudadValor === "" || String(item.asignado).toLowerCase() === ciudadValor.toLowerCase();
+            const pasaCiudad = valorCiudad === "" || String(item.proyecto).toLowerCase() === valorCiudad.toLowerCase();
 
             const fechaItem = item.fecha_ingreso.split(' ')[0];
             const pasaFecha =
@@ -98,9 +96,15 @@ const GestionOts = () => {
 
             const pasaCuadrilla = valorCuadrilla === "" || String(item.cuadrilla).toLowerCase() === valorCuadrilla.toLowerCase();
 
-            const pasaEstado = valorEstado === "Asignado" ? item.cuadrilla != null : valorEstado === "Pendiente" ? !item.cuadrilla : true;
+            const pasaEstado = valorEstado === "Asignado" ? item.cuadrilla != null : valorEstado === "Pendiente" ? !item.cuadrilla && item.atendida !== "OK" : valorEstado === "Atendido" ? item.atendida === "OK" : true;
 
-            return pasaTexto && pasaCiudad && pasaFecha && pasaCuadrilla && pasaEstado;
+            const pasaEstadoActualOT = valorEstadoActualOT === "" || String(item.estado_actual).toLowerCase() === valorEstadoActualOT.toLowerCase();
+
+            const pasaTurno = valorTurno === "" || String(item.turnoAsignado).toLowerCase() === valorTurno.toLowerCase();
+
+            const pasaSeleccionMultiple = valorSeleccionMultiple === true ? item.atendida !== "OK" : true;
+
+            return pasaTexto && pasaCiudad && pasaFecha && pasaCuadrilla && pasaEstado && pasaEstadoActualOT && pasaTurno && pasaSeleccionMultiple;
         });
 
         mapRef.current.eachLayer(layer => {
@@ -183,14 +187,21 @@ const GestionOts = () => {
     };
 
     const addMarkerToMap = (item) => {
-        const { x, y, cuadrilla } = item;
+        const { x, y, cuadrilla, atendida } = item;
 
         if (!x || !y || isNaN(x) || isNaN(y)) {
             console.warn("Coordenadas inválidas para el item:", item);
             return;
         }
 
-        const markerColor = cuadrilla && cuadrilla.trim() !== '' ? 'green' : 'cadetblue';
+        let markerColor;
+        if (atendida === "OK") {
+            markerColor = "black";
+        } else if (cuadrilla && cuadrilla.trim() !== "") {
+            markerColor = "green";
+        } else {
+            markerColor = "cadetblue";
+        }
 
         const awesomeMarker = L.AwesomeMarkers.icon({
             icon: 'lightbulb',
@@ -200,6 +211,26 @@ const GestionOts = () => {
         });
 
         const marker = L.marker([x, y], { icon: awesomeMarker }).addTo(mapRef.current);
+
+        marker.bindPopup(
+            `<p class='titulo'><b>${item.nro_orden || "Sin informacion"}</b></p>Rotulo: ${item.no_rotulo || "Sin informacion"}<br/>Tipo de falla: ${item.tipo_falla || "Sin informacion"}<br/>Ubicacion: <a href="https://www.google.com/maps?q=${item.x},${item.y}" target="_blank">Ver en Google Maps</a>`,
+            { permanent: false, direction: "top", className: "popup-grande", interactive: true }
+        );
+        let hoverTimeout;
+        marker.on("mouseover", function () {
+            hoverTimeout = setTimeout(() => {
+                marker.openPopup();
+                marker.getPopup().getElement().addEventListener("mouseleave", () => {
+                    marker.closePopup();
+                });
+                marker.getPopup().getElement().addEventListener("mouseenter", () => {
+                    clearTimeout(hoverTimeout);
+                });
+            }, 400);
+        });
+        marker.on("mouseout", function () {
+            clearTimeout(hoverTimeout);
+        });
         allMarkersRef.current.push({ marker, data: item });
 
         marker.on("click", () => {
@@ -262,13 +293,13 @@ const GestionOts = () => {
     }, []);
 
     useEffect(() => {
-        if (dataDisponible && dataDisponible.length > 0) {
+        if (data && data.length > 0) {
             const mapElement = document.getElementById('map');
             if (mapElement) {
-                generarMapa(dataDisponible);
+                generarMapa(data);
             }
         }
-    }, [dataDisponible]);
+    }, [data]);
 
     useEffect(() => {
         if ((infoVisible || infoVisibleVarios) && contenidoRef.current) {
@@ -277,41 +308,77 @@ const GestionOts = () => {
     }, [infoVisible, infoVisibleVarios]);
 
     const enviarActualizacionDeOT = async (ids) => {
-        if (!cuadrilla) { toast.error('Por favor ingrese la cuadrilla.'); return }
-        if (!tipoMovil && cuadrilla !== 'Disponible') { toast.error('Por favor ingrese el tipo de inspeccion.'); return }
-
-        if (ids.length === 1 && info.cuadrilla !== null) {
-            if (!observacion) { toast.error('Por favor diligencie la observacion.'); return }
+        if (info.atendida !== 'OK') {
+            if (!cuadrilla) { toast.error('Por favor ingrese la cuadrilla.'); return }
+            if (!turnoAsignado && cuadrilla !== 'Disponible') { toast.error('Por favor ingrese el turno.'); return }
+            if (!tipoMovil && cuadrilla !== 'Disponible') { toast.error('Por favor ingrese el tipo de inspeccion.'); return }
+            if (ids.length === 1 && info.cuadrilla !== null) {
+                if (!observacion) { toast.error('Por favor diligencie la observacion.'); return }
+            }
+        } else if (info.atendida === 'OK') {
+            if (ids.length === 1) {
+                if (!observacion) { toast.error('Por favor diligencie la observacion.'); return }
+            }
         }
 
         setEnviando(true);
 
         try {
             for (const id of ids) {
-                const datos = {
-                    tipoMovil: tipoMovil,
-                    cuadrilla: cuadrilla,
-                    observaciones: observacion,
-                    id: id
-                };
+                if (info.atendida !== 'OK') {
+                    const datos = {
+                        tipoMovil: tipoMovil,
+                        turnoAsignado: turnoAsignado,
+                        cuadrilla: cuadrilla,
+                        observaciones: observacion,
+                        id: id,
+                        nombreUsuario: Cookies.get('userNombre'),
+                    };
 
-                const response2 = await axios.post(`${process.env.REACT_APP_API_URL}/gestionOts/asignarOT`, datos);
+                    const response2 = await axios.post(`${process.env.REACT_APP_API_URL}/gestionOts/asignarOT`, datos);
 
-                if (response2.status >= 200 && response2.status < 300) {
-                    setEnviando(false)
-                    console.log('Datos enviados exitosamente');
-                    toast.success('Datos enviados exitosamente', { className: 'toast-success' });
-                    setInfoVisible(false);
-                    setInfoVisibleVarios(false);
-                    setInfo('');
-                    setTipoMovil('');
-                    setCuadrilla('');
-                    setObservacion('');
-                    setSelectedMarkers([]);
-                    await cargarRegistros();
-                } else {
-                    toast.error('Error al subir el archivo o enviar los datos', { className: 'toast-error' });
-                    setEnviando(false)
+                    if (response2.status >= 200 && response2.status < 300) {
+                        setEnviando(false)
+                        console.log('Datos enviados exitosamente');
+                        toast.success('Datos enviados exitosamente', { className: 'toast-success' });
+                        setInfoVisible(false);
+                        setInfoVisibleVarios(false);
+                        setInfo('');
+                        setTipoMovil('');
+                        setTurnoAsignado('');
+                        setCuadrilla('');
+                        setObservacion('');
+                        setSeleccionMultiple(false);
+                        setSelectedMarkers([]);
+                        await cargarRegistros();
+                    } else {
+                        toast.error('Error al subir el archivo o enviar los datos', { className: 'toast-error' });
+                        setEnviando(false)
+                    }
+                } else if (info.atendida === 'OK') {
+                    const datos = {
+                        observaciones: observacion,
+                        id: id,
+                        nombreUsuario: Cookies.get('userNombre'),
+                    };
+
+                    const response2 = await axios.post(`${process.env.REACT_APP_API_URL}/gestionOts/rehabilitarOT`, datos);
+
+                    if (response2.status >= 200 && response2.status < 300) {
+                        setEnviando(false)
+                        console.log('Datos enviados exitosamente');
+                        toast.success('Datos enviados exitosamente', { className: 'toast-success' });
+                        setInfoVisible(false);
+                        setInfoVisibleVarios(false);
+                        setInfo('');
+                        setObservacion('');
+                        setSeleccionMultiple(false);
+                        setSelectedMarkers([]);
+                        await cargarRegistros();
+                    } else {
+                        toast.error('Error al subir el archivo o enviar los datos', { className: 'toast-error' });
+                        setEnviando(false)
+                    }
                 }
             }
         } catch (error) {
@@ -333,6 +400,7 @@ const GestionOts = () => {
         try {
             const datos = {
                 ordenes: valoresColumna,
+                nombreUsuario: Cookies.get('userNombre'),
             };
 
             const response2 = await axios.post(`${process.env.REACT_APP_API_URL}/gestionOts/marcarAtendidas`, datos);
@@ -365,6 +433,7 @@ const GestionOts = () => {
         try {
             const datos = {
                 data: jsonData,
+                nombreUsuario: Cookies.get('userNombre'),
             };
 
             const response2 = await axios.post(`${process.env.REACT_APP_API_URL}/gestionOts/nuevasOrdenes`, datos);
@@ -388,18 +457,20 @@ const GestionOts = () => {
 
     const [filtroCuadrilla, setFiltroCuadrilla] = useState('');
     const [filtroCiudad, setFiltroCiudad] = useState('');
-    const [filtroEstadoOT, setFiltroEstadoOT] = useState('');
+    const [filtroAsignacion, setFiltroAsignacion] = useState('');
     const [filtroTexto, setFiltroTexto] = useState('');
     const [filtroFechaInicio, setFiltroFechaInicio] = useState('');
     const [filtroFechaFinal, setFiltroFechaFinal] = useState('');
     const [filtroOtsInvalidas, setFiltroOtsInvalidas] = useState('');
     const [seleccionMultiple, setSeleccionMultiple] = useState(false);
+    const [filtroEstadoActualOT, setFiltroEstadoActualOT] = useState('');
+    const [filtroTurno, setFiltroTurno] = useState('');
 
     useEffect(() => {
-        if (dataDisponible) {
+        if (data) {
             aplicarFiltros();
         }
-    }, [filtroCuadrilla, filtroCiudad, filtroEstadoOT, filtroTexto, filtroFechaInicio, filtroFechaFinal, filtroOtsInvalidas, seleccionMultiple]);
+    }, [filtroCuadrilla, filtroCiudad, filtroAsignacion, filtroTexto, filtroFechaInicio, filtroFechaFinal, filtroOtsInvalidas, seleccionMultiple, filtroEstadoActualOT, filtroTurno]);
 
     return (
         <div className="GestionOts">
@@ -473,10 +544,13 @@ const GestionOts = () => {
                             </div>
                             <div className='opcion'>
                                 <Selectores value={filtroCiudad} onChange={(e) => { setFiltroCiudad(e.target.value) }}
-                                    options={[
-                                        { value: 'Bogota', label: 'Bogota' },
-                                        { value: 'Cundinamarca', label: 'Cundinamarca' },
-                                    ]} className="primary">
+                                    options={
+                                        [...new Set(data.map(d => d.proyecto))]
+                                            .filter(Boolean)
+                                            .sort((a, b) => a.localeCompare(b))
+                                            .map(ciudad => ({ value: ciudad, label: ciudad }))
+                                    }
+                                    className="primary">
                                 </Selectores>
                             </div>
                         </div>
@@ -498,15 +572,53 @@ const GestionOts = () => {
                         <div className='linea'></div>
                         <div className="campo">
                             <div className='titulo'>
-                                <i className="fa fa-hourglass-half"></i>
-                                <Textos className='subtitulo'>Estado OT</Textos>
+                                <i className="fa fa-user-clock"></i>
+                                <Textos className='subtitulo'>Turno</Textos>
                             </div>
                             <div className='opcion'>
-                                <Selectores value={filtroEstadoOT} onChange={(e) => { setFiltroEstadoOT(e.target.value) }}
+                                <Selectores value={filtroTurno} onChange={(e) => { setFiltroTurno(e.target.value) }}
+                                    options={
+                                        [...new Set(data.map(d => d.turnoAsignado))]
+                                            .filter(Boolean)
+                                            .sort((a, b) => a.localeCompare(b))
+                                            .map(turno => ({ value: turno, label: turno }))
+                                    }
+                                    className="primary">
+                                </Selectores>
+                            </div>
+                        </div>
+                        <div className='linea'></div>
+                        <div className="campo">
+                            <div className='titulo'>
+                                <i className="fa fa-clipboard-list"></i>
+                                <Textos className='subtitulo'>Estado Actual OT</Textos>
+                            </div>
+                            <div className='opcion'>
+                                <Selectores value={filtroEstadoActualOT} onChange={(e) => { setFiltroEstadoActualOT(e.target.value) }}
+                                    options={
+                                        [...new Set(data.map(d => d.estado_actual))]
+                                            .filter(Boolean)
+                                            .sort((a, b) => a.localeCompare(b))
+                                            .map(estado_actual => ({ value: estado_actual, label: estado_actual }))
+                                    }
+                                    className="primary">
+                                </Selectores>
+                            </div>
+                        </div>
+                        <div className='linea'></div>
+                        <div className="campo">
+                            <div className='titulo'>
+                                <i className="fa fa-hourglass-half"></i>
+                                <Textos className='subtitulo'>Estado Aplicativo</Textos>
+                            </div>
+                            <div className='opcion'>
+                                <Selectores value={filtroAsignacion} onChange={(e) => { setFiltroAsignacion(e.target.value) }}
                                     options={[
                                         { value: 'Asignado', label: 'Asignado' },
                                         { value: 'Pendiente', label: 'Pendiente' },
-                                    ]} className="primary">
+                                        { value: 'Atendido', label: 'Atendido' },
+                                    ]}
+                                    className="primary">
                                 </Selectores>
                             </div>
                         </div>
@@ -519,6 +631,7 @@ const GestionOts = () => {
                                         <Entradas type="checkbox" value={seleccionMultiple} onChange={(e) => {
                                             const valor = e.target.checked;
                                             setSeleccionMultiple(valor);
+                                            aplicarFiltros();
                                             if (valor === false) {
                                                 setSelectedMarkers([]);
                                             }
@@ -526,7 +639,7 @@ const GestionOts = () => {
                                         <Textos className='parrafo'>Seleccion multiple</Textos>
                                     </div>
                                     <div className={`botonMapa`} style={{ display: selectedMarkers.length > 0 ? "block" : "" }}>
-                                        <Botones className="guardar icono">
+                                        <Botones className="guardar icono" onClick={() => setInfoVisibleVarios(true)}>
                                             &#10003;
                                         </Botones>
                                     </div>
@@ -539,15 +652,17 @@ const GestionOts = () => {
                                 <i className="fa fa-trash"></i>
                                 <Botones className='agregar'
                                     onClick={() => {
+                                        setFiltroFechaInicio('');
+                                        setFiltroFechaFinal('');
                                         setFiltroTexto('');
                                         setFiltroCiudad('');
                                         setFiltroCuadrilla('');
-                                        setFiltroEstadoOT('');
-                                        setFiltroFechaInicio('');
-                                        setFiltroFechaFinal('');
+                                        setFiltroTurno('');
+                                        setFiltroEstadoActualOT('');
+                                        setFiltroAsignacion('');
                                         setSeleccionMultiple(false);
                                         setSelectedMarkers([]);
-                                        infoFiltrada = dataDisponible;
+                                        infoFiltrada = data;
                                         aplicarFiltros();
                                         actualizarTotalItems(infoFiltrada.length);
                                     }}
@@ -574,7 +689,7 @@ const GestionOts = () => {
                                     onClick={() => {
                                         let dataExport
                                         if (!infoFiltrada || infoFiltrada.length === 0) {
-                                            dataExport = dataDisponible;
+                                            dataExport = data;
                                         } else {
                                             dataExport = infoFiltrada;
                                         }
@@ -605,9 +720,13 @@ const GestionOts = () => {
                                         const worksheet = workbook.Sheets[sheetName];
                                         const jsonData = XLSX.utils.sheet_to_json(worksheet);
                                         jsonData.forEach(row => {
-                                            if (typeof row["Fecha Ingreso"] === "number") {
-                                                const fechaJS = XLSX.SSF.format("yyyy-mm-dd", row["Fecha Ingreso"]);
-                                                row["Fecha Ingreso"] = fechaJS;
+                                            if (typeof row.fecha_ingreso === "number") {
+                                                const fechaJS = XLSX.SSF.format("yyyy-mm-dd", row.fecha_ingreso);
+                                                row.fecha_ingreso = fechaJS;
+                                            }
+                                            if (typeof row.ahora === "number") {
+                                                const fechaJS = XLSX.SSF.format("yyyy-mm-dd hh:mm", row.ahora);
+                                                row.ahora = fechaJS;
                                             }
                                         });
                                         enviarActualizacionDeOtsNuevas(jsonData)
@@ -672,6 +791,7 @@ const GestionOts = () => {
                         setInfoVisibleVarios(false);
                         setInfo('');
                         setTipoMovil('');
+                        setTurnoAsignado('');
                         setCuadrilla('');
                         setObservacion('');
                     }}></div>
@@ -772,7 +892,7 @@ const GestionOts = () => {
                                     <Entradas disabled type="text" value={info.zona && info.zona.trim() !== "" ? info.zona : "Sin Información"} />
                                 </div>
                             </div>
-                            <div className={`campo ${cuadrilla === 'Disponible' ? 'ocultar' : ''}`}>
+                            <div className={`campo ${cuadrilla === 'Disponible' || info.atendida === 'OK' ? 'ocultar' : ''}`}>
                                 <i className="fas fa-truck"></i>
                                 <div className='entradaDatos'>
                                     <Textos className='subtitulo'>Tipo de Movil:</Textos>
@@ -790,7 +910,21 @@ const GestionOts = () => {
                                     ></Selectores>
                                 </div>
                             </div>
-                            <div className='campo'>
+                            <div className={`campo ${cuadrilla === 'Disponible' || info.atendida === 'OK' ? 'ocultar' : ''}`}>
+                                <i className="fa fa-user-clock"></i>
+                                <div className='entradaDatos'>
+                                    <Textos className='subtitulo'>Turno:</Textos>
+                                    <Selectores value={turnoAsignado || info.turnoAsignado || ""}
+                                        onChange={(e) => { setTurnoAsignado(e.target.value) }}
+                                        options={[
+                                            { value: 'A', label: 'A' },
+                                            { value: 'B', label: 'B' },
+                                            { value: 'C', label: 'C' },
+                                        ]} className="primary"
+                                    ></Selectores>
+                                </div>
+                            </div>
+                            <div className={`campo ${info.atendida === 'OK' ? 'ocultar' : ''}`}>
                                 <i className="fas fa-users"></i>
                                 <div className='entradaDatos'>
                                     <Textos className='subtitulo'>Cuadrilla:</Textos>
@@ -804,7 +938,7 @@ const GestionOts = () => {
                                     ></Selectores>
                                 </div>
                             </div>
-                            <div className={`campo ${info.cuadrilla === null ? 'ocultar' : ''}`}>
+                            <div className={`campo ${info.atendida === 'OK' ? '' : info.cuadrilla !== null ? '' : 'ocultar'}`}>
                                 <i className="fas fa-comment-dots"></i>
                                 <div className='entradaDatos'>
                                     <Textos className='subtitulo'>Observaciones:</Textos>
@@ -816,10 +950,11 @@ const GestionOts = () => {
                                     setInfoVisible(false);
                                     setInfo('');
                                     setTipoMovil('');
+                                    setTurnoAsignado('');
                                     setCuadrilla('');
                                     setObservacion('');
                                 }}>Cancelar</Botones>
-                                <Botones className='guardar' onClick={() => enviarActualizacionDeOT([info.id])}>Aceptar</Botones>
+                                <Botones className='guardar' onClick={() => enviarActualizacionDeOT([info.id])}>{info.atendida === 'OK' ? 'Rehabilitar' : 'Aceptar'}</Botones>
                             </div>
                             <div className={`campo historico ${!info?.historico?.length ? 'ocultar' : ''}`}>
                                 <Textos className='titulo'>Histórico</Textos>
@@ -840,7 +975,8 @@ const GestionOts = () => {
                                             <div className="fecha">
                                                 {new Date(item.fecha).toLocaleString()}
                                             </div>
-                                            <div className="detalle">{item.detalle}</div>
+                                            <div className="detalle">Usuario: {item.usuario}</div>
+                                            <div className="detalle">Detalle: {item.detalle}</div>
                                             {item.observacion && (
                                                 <div className="observacion">
                                                     Observación: {item.observacion}
@@ -889,6 +1025,20 @@ const GestionOts = () => {
                                     ></Selectores>
                                 </div>
                             </div>
+                            <div className={`campo ${cuadrilla === 'Disponible' ? 'ocultar' : ''}`}>
+                                <i className="fa fa-user-clock"></i>
+                                <div className='entradaDatos'>
+                                    <Textos className='subtitulo'>Turno:</Textos>
+                                    <Selectores value={turnoAsignado}
+                                        onChange={(e) => { setTurnoAsignado(e.target.value) }}
+                                        options={[
+                                            { value: 'A', label: 'A' },
+                                            { value: 'B', label: 'B' },
+                                            { value: 'C', label: 'C' },
+                                        ]} className="primary"
+                                    ></Selectores>
+                                </div>
+                            </div>
                             <div className='campo'>
                                 <i className="fas fa-users"></i>
                                 <div className='entradaDatos'>
@@ -913,6 +1063,7 @@ const GestionOts = () => {
                                 <Botones onClick={() => {
                                     setInfoVisibleVarios(false);
                                     setTipoMovil('');
+                                    setTurnoAsignado('');
                                     setCuadrilla('');
                                     setInfo('');
                                     setObservacion('');
