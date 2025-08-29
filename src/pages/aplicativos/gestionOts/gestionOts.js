@@ -75,12 +75,12 @@ const GestionOts = () => {
         const valorTexto = filtroTexto.trim().toLowerCase() || "";
         const valorCiudad = filtroCiudad.trim() || "";
         const startDate = filtroFechaInicio || "";
-        const endDate = filtroFechaFinal || "";
         const valorCuadrilla = filtroCuadrilla.trim() || "";
         const valorEstado = filtroAsignacion.trim() || "";
         const valorEstadoActualOT = filtroEstadoActualOT.trim() || "";
         const valorTurno = filtroTurno.trim() || "";
         const valorSeleccionMultiple = seleccionMultiple;
+        const valorOrdenes = filtroOrdenes;
 
         infoFiltrada = data.filter(item => {
             const pasaTexto = valorTexto === "" || Object.values(item).some(value =>
@@ -89,22 +89,22 @@ const GestionOts = () => {
 
             const pasaCiudad = valorCiudad === "" || String(item.proyecto).toLowerCase() === valorCiudad.toLowerCase();
 
-            const fechaItem = item.fecha_ingreso.split(' ')[0];
-            const pasaFecha =
-                (!startDate || fechaItem >= startDate) &&
-                (!endDate || fechaItem <= endDate);
+            const pasaFecha = startDate === "" || String(item.historico).toLowerCase().includes(startDate.toLowerCase());
 
-            const pasaCuadrilla = valorCuadrilla === "" || String(item.cuadrilla).toLowerCase() === valorCuadrilla.toLowerCase();
+            const pasaCuadrilla = valorCuadrilla === "" || String(item.historico).toLowerCase().includes(valorCuadrilla.toLowerCase());
 
-            const pasaEstado = valorEstado === "Asignado" ? item.cuadrilla != null : valorEstado === "Pendiente" ? !item.cuadrilla && item.atendida !== "OK" : valorEstado === "Atendido" ? item.atendida === "OK" : true;
+            const pasaEstado = valorEstado === "Asignado" ? item.cuadrilla != null && item.atendida !== "OK" : valorEstado === "Pendiente" ? !item.cuadrilla && item.atendida !== "OK" : valorEstado === "Atendido" ? item.atendida === "OK" : true;
 
             const pasaEstadoActualOT = valorEstadoActualOT === "" || String(item.estado_actual).toLowerCase() === valorEstadoActualOT.toLowerCase();
 
-            const pasaTurno = valorTurno === "" || String(item.turnoAsignado).toLowerCase() === valorTurno.toLowerCase();
+            const pasaTurno = valorTurno === "" || String(item.historico).toLowerCase().includes(`y turno ${valorTurno.toLowerCase()}`);
 
             const pasaSeleccionMultiple = valorSeleccionMultiple === true ? item.atendida !== "OK" : true;
 
-            return pasaTexto && pasaCiudad && pasaFecha && pasaCuadrilla && pasaEstado && pasaEstadoActualOT && pasaTurno && pasaSeleccionMultiple;
+            const ordenesPermitidas = valorOrdenes && valorOrdenes.length > 0 ? new Set(valorOrdenes) : null;
+            const pasaOrdenes = !ordenesPermitidas || ordenesPermitidas.has(Number(item.nro_orden));
+
+            return pasaTexto && pasaCiudad && pasaFecha && pasaCuadrilla && pasaEstado && pasaEstadoActualOT && pasaTurno && pasaSeleccionMultiple && pasaOrdenes;
         });
 
         mapRef.current.eachLayer(layer => {
@@ -200,14 +200,17 @@ const GestionOts = () => {
         } else if (cuadrilla && cuadrilla.trim() !== "") {
             markerColor = "green";
         } else {
-            markerColor = "cadetblue";
+            markerColor = "#18409E";
         }
 
-        const awesomeMarker = L.AwesomeMarkers.icon({
-            icon: 'lightbulb',
-            prefix: 'fa',
-            markerColor: markerColor,
-            iconColor: 'white'
+        const awesomeMarker = L.divIcon({
+            html: `<i class="fa fa-location-dot" 
+                        style="color:${markerColor}; 
+                            font-size:16px;"
+                    ></i>`,
+            className: 'transparent-marker',
+            iconSize: [20, 20],
+            popupAnchor: [0, -10]
         });
 
         const marker = L.marker([x, y], { icon: awesomeMarker }).addTo(mapRef.current);
@@ -460,17 +463,18 @@ const GestionOts = () => {
     const [filtroAsignacion, setFiltroAsignacion] = useState('');
     const [filtroTexto, setFiltroTexto] = useState('');
     const [filtroFechaInicio, setFiltroFechaInicio] = useState('');
-    const [filtroFechaFinal, setFiltroFechaFinal] = useState('');
     const [filtroOtsInvalidas, setFiltroOtsInvalidas] = useState('');
     const [seleccionMultiple, setSeleccionMultiple] = useState(false);
     const [filtroEstadoActualOT, setFiltroEstadoActualOT] = useState('');
     const [filtroTurno, setFiltroTurno] = useState('');
+    const [filtroOrdenes, setFiltroOrdenes] = useState('');
+    const [inputFiltroOrdenesKey, setInputFiltroOrdenesKey] = useState('');
 
     useEffect(() => {
         if (data) {
             aplicarFiltros();
         }
-    }, [filtroCuadrilla, filtroCiudad, filtroAsignacion, filtroTexto, filtroFechaInicio, filtroFechaFinal, filtroOtsInvalidas, seleccionMultiple, filtroEstadoActualOT, filtroTurno]);
+    }, [filtroCuadrilla, filtroCiudad, filtroAsignacion, filtroTexto, filtroFechaInicio, filtroOtsInvalidas, seleccionMultiple, filtroEstadoActualOT, filtroTurno, filtroOrdenes]);
 
     return (
         <div className="GestionOts">
@@ -513,17 +517,8 @@ const GestionOts = () => {
                                 <i className="fa fa-calendar"></i>
                                 <Textos className='subtitulo'>Calentario</Textos>
                             </div>
-                            <div className='fechas'>
-                                <Textos className='parrafo'>Fecha Inicio</Textos>
-                            </div>
                             <div className='opcion'>
                                 <Entradas type="date" value={filtroFechaInicio} onChange={(e) => { setFiltroFechaInicio(e.target.value) }}></Entradas>
-                            </div>
-                            <div className='fechas'>
-                                <Textos className='parrafo'>Fecha Final</Textos>
-                            </div>
-                            <div className='opcion'>
-                                <Entradas type="date" value={filtroFechaFinal} onChange={(e) => { setFiltroFechaFinal(e.target.value) }}></Entradas>
                             </div>
                         </div>
                         <div className='linea'></div>
@@ -577,12 +572,11 @@ const GestionOts = () => {
                             </div>
                             <div className='opcion'>
                                 <Selectores value={filtroTurno} onChange={(e) => { setFiltroTurno(e.target.value) }}
-                                    options={
-                                        [...new Set(data.map(d => d.turnoAsignado))]
-                                            .filter(Boolean)
-                                            .sort((a, b) => a.localeCompare(b))
-                                            .map(turno => ({ value: turno, label: turno }))
-                                    }
+                                    options={[
+                                        { value: 'A', label: 'A' },
+                                        { value: 'B', label: 'B' },
+                                        { value: 'C', label: 'C' },
+                                    ]}
                                     className="primary">
                                 </Selectores>
                             </div>
@@ -653,13 +647,14 @@ const GestionOts = () => {
                                 <Botones className='agregar'
                                     onClick={() => {
                                         setFiltroFechaInicio('');
-                                        setFiltroFechaFinal('');
                                         setFiltroTexto('');
                                         setFiltroCiudad('');
                                         setFiltroCuadrilla('');
                                         setFiltroTurno('');
                                         setFiltroEstadoActualOT('');
                                         setFiltroAsignacion('');
+                                        setFiltroOrdenes('');
+                                        setInputFiltroOrdenesKey(Date.now());
                                         setSeleccionMultiple(false);
                                         setSelectedMarkers([]);
                                         infoFiltrada = data;
@@ -713,26 +708,43 @@ const GestionOts = () => {
                                     if (!file) return;
 
                                     const reader = new FileReader();
+
                                     reader.onload = function (evt) {
                                         const data = new Uint8Array(evt.target.result);
                                         const workbook = XLSX.read(data, { type: 'array' });
-                                        const sheetName = workbook.SheetNames[0];
-                                        const worksheet = workbook.Sheets[sheetName];
-                                        const jsonData = XLSX.utils.sheet_to_json(worksheet);
-                                        jsonData.forEach(row => {
-                                            if (typeof row.fecha_ingreso === "number") {
-                                                const fechaJS = XLSX.SSF.format("yyyy-mm-dd", row.fecha_ingreso);
-                                                row.fecha_ingreso = fechaJS;
-                                            }
-                                            if (typeof row.ahora === "number") {
-                                                const fechaJS = XLSX.SSF.format("yyyy-mm-dd hh:mm", row.ahora);
-                                                row.ahora = fechaJS;
+
+                                        const hojas = ["Ordenes"];
+
+                                        hojas.forEach(nombreHoja => {
+                                            if (workbook.SheetNames.includes(nombreHoja)) {
+                                                const worksheet = workbook.Sheets[nombreHoja];
+                                                const jsonData = XLSX.utils.sheet_to_json(worksheet);
+
+                                                jsonData.forEach(row => {
+                                                    if (typeof row.fecha_ingreso === "number") {
+                                                        const fechaJS = XLSX.SSF.format("yyyy-mm-dd", row.fecha_ingreso);
+                                                        row.fecha_ingreso = fechaJS;
+                                                    }
+                                                    if (typeof row.ahora === "number") {
+                                                        const fechaJS = XLSX.SSF.format("yyyy-mm-dd hh:mm", row.ahora);
+                                                        row.ahora = fechaJS;
+                                                    }
+                                                });
+
+                                                enviarActualizacionDeOtsNuevas(jsonData)
+                                            } else {
+                                                toast.warning('Por favor cargar archivo correcto', { className: 'toast-success' });
+                                                console.warn(`La hoja "${nombreHoja}" no existe en el archivo.`);
                                             }
                                         });
-                                        enviarActualizacionDeOtsNuevas(jsonData)
                                     };
                                     reader.readAsArrayBuffer(file);
+
+                                    e.target.value = null;
                                 }}></Entradas>
+                            </div>
+                            <div className="descarga">
+                                <a href="https://drive.google.com/uc?export=download&id=1i-K_aG_bE_Ba83gF_K5DKxce4B-XpiOv" download>Descargar archivo plano</a>
                             </div>
                         </div>
                         <div className='linea'></div>
@@ -752,9 +764,56 @@ const GestionOts = () => {
                                         const workbook = XLSX.read(data, { type: 'array' });
 
                                         const hojasYColumnas = {
-                                            "Atendidas": "Orden",
-                                            "Relacion OTR SISDA": "OTR",
-                                            "Error descargue": "Orden"
+                                            "Atendidas": "nro_orden",
+                                        };
+
+                                        let valoresColumna = [];
+
+                                        Object.entries(hojasYColumnas).forEach(([nombreHoja, nombreColumna]) => {
+                                            if (workbook.SheetNames.includes(nombreHoja)) {
+                                                const worksheet = workbook.Sheets[nombreHoja];
+                                                const jsonData = XLSX.utils.sheet_to_json(worksheet);
+
+                                                jsonData.forEach(fila => {
+                                                    if (fila[nombreColumna] !== undefined && fila[nombreColumna] !== null) {
+                                                        valoresColumna.push(fila[nombreColumna]);
+                                                    }
+                                                });
+
+                                                enviarActualizacionDeAtencion(valoresColumna)
+                                            } else {
+                                                toast.warning('Por favor cargar archivo correcto', { className: 'toast-success' });
+                                                console.warn(`La hoja "${nombreHoja}" no existe en el archivo.`);
+                                            }
+                                        });
+                                    };
+                                    reader.readAsArrayBuffer(file);
+
+                                    e.target.value = null;
+                                }}></Entradas>
+                            </div>
+                            <div className="descarga">
+                                <a href="https://drive.google.com/uc?export=download&id=12l90aMGmivuFDs0uDNl4kZaSjWOq5ZKK" download>Descargar archivo plano</a>
+                            </div>
+                        </div>
+                        <div className='linea'></div>
+                        <div className="campo">
+                            <div className='titulo'>
+                                <i className="fa fa-upload"></i>
+                                <Textos className='subtitulo'>Visualizar Ordenes</Textos>
+                            </div>
+                            <div className='opcion'>
+                                <Entradas key={inputFiltroOrdenesKey} type="file" accept=".xlsx,.xls" onChange={(e) => {
+                                    const file = e.target.files[0];
+                                    if (!file) return;
+
+                                    const reader = new FileReader();
+                                    reader.onload = function (evt) {
+                                        const data = new Uint8Array(evt.target.result);
+                                        const workbook = XLSX.read(data, { type: 'array' });
+
+                                        const hojasYColumnas = {
+                                            "Visualizar": "nro_orden",
                                         };
 
                                         let valoresColumna = [];
@@ -770,14 +829,18 @@ const GestionOts = () => {
                                                     }
                                                 });
                                             } else {
+                                                toast.warning('Por favor cargar archivo correcto', { className: 'toast-success' });
                                                 console.warn(`La hoja "${nombreHoja}" no existe en el archivo.`);
                                             }
                                         });
 
-                                        enviarActualizacionDeAtencion(valoresColumna)
+                                        setFiltroOrdenes(valoresColumna);
                                     };
                                     reader.readAsArrayBuffer(file);
                                 }}></Entradas>
+                            </div>
+                            <div className="descarga">
+                                <a href="https://drive.google.com/uc?export=download&id=1fmNw88ivqSSiUcW3rlSoVPkeevOIkG9-" download>Descargar archivo plano</a>
                             </div>
                         </div>
                     </div>
