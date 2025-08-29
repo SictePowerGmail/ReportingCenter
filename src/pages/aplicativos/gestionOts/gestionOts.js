@@ -36,6 +36,7 @@ const GestionOts = () => {
     const [selectedMarkers, setSelectedMarkers] = useState([]);
     const [infoVisibleVarios, setInfoVisibleVarios] = useState(false);
     const allMarkersRef = useRef([]);
+    const [moviles, setMoviles] = useState('');
 
     const mostrarInfoEnPanel = (data) => {
         setInfo(data);
@@ -45,29 +46,31 @@ const GestionOts = () => {
     const cargarRegistros = async (event) => {
         setLoading(true);
 
-        axios.get(`${process.env.REACT_APP_API_URL}/gestionOts/registros`)
-            .then(response => {
-                const data = response.data;
+        try {
+            const responseRegistros = await axios.get(`${process.env.REACT_APP_API_URL}/gestionOts/registros`);
+            const data = responseRegistros.data;
+            const coordenadasInvalidas = data.filter(
+                item => !item.x || !item.y || isNaN(item.x) || isNaN(item.y)
+            );
+            setDataInvalida(coordenadasInvalidas);
+            const coordenadasValidas = data
+                .filter(item => item.x && item.y && !isNaN(item.x) && !isNaN(item.y))
 
-                const coordenadasInvalidas = data.filter(
-                    item => !item.x || !item.y || isNaN(item.x) || isNaN(item.y)
-                );
-                setDataInvalida(coordenadasInvalidas);
+            setLoading(false);
+            setData(coordenadasValidas);
+            const dataDisponible = coordenadasValidas
+                .filter(item => item.estado_actual === 'DISPONIBLE_PROGRAMAR')
+            setDataDisponible(dataDisponible);
 
-                const coordenadasValidas = data
-                    .filter(item => item.x && item.y && !isNaN(item.x) && !isNaN(item.y))
+            const responseCuadrillas = await axios.get(`${process.env.REACT_APP_API_URL}/gestionOts/cuadrillasEnelAlumbradoPublico`);
+            setMoviles(responseCuadrillas.data);
 
-                setLoading(false);
-                setData(coordenadasValidas);
+        } catch (error) {
+            console.error("Error al obtener datos:", error);
+        } finally {
+            setLoading(false);
+        }
 
-                const dataDisponible = coordenadasValidas
-                    .filter(item => item.estado_actual === 'DISPONIBLE_PROGRAMAR')
-                setDataDisponible(dataDisponible);
-            })
-            .catch(error => {
-                console.error('Error fetching data:', error);
-                setLoading(false);
-            });
     }
 
     let infoFiltrada = "";
@@ -81,6 +84,7 @@ const GestionOts = () => {
         const valorTurno = filtroTurno.trim() || "";
         const valorSeleccionMultiple = seleccionMultiple;
         const valorOrdenes = filtroOrdenes;
+        const valorLote = filtroLote;
 
         infoFiltrada = data.filter(item => {
             const pasaTexto = valorTexto === "" || Object.values(item).some(value =>
@@ -91,7 +95,7 @@ const GestionOts = () => {
 
             const pasaFecha = startDate === "" || String(item.historico).toLowerCase().includes(startDate.toLowerCase());
 
-            const pasaCuadrilla = valorCuadrilla === "" || String(item.historico).toLowerCase().includes(valorCuadrilla.toLowerCase());
+            const pasaCuadrilla = valorCuadrilla === "" || String(item.historico).toLowerCase().includes(`a la movil ${valorCuadrilla.toLowerCase()}`);
 
             const pasaEstado = valorEstado === "Asignado" ? item.cuadrilla != null && item.atendida !== "OK" : valorEstado === "Pendiente" ? !item.cuadrilla && item.atendida !== "OK" : valorEstado === "Atendido" ? item.atendida === "OK" : true;
 
@@ -104,7 +108,9 @@ const GestionOts = () => {
             const ordenesPermitidas = valorOrdenes && valorOrdenes.length > 0 ? new Set(valorOrdenes) : null;
             const pasaOrdenes = !ordenesPermitidas || ordenesPermitidas.has(Number(item.nro_orden));
 
-            return pasaTexto && pasaCiudad && pasaFecha && pasaCuadrilla && pasaEstado && pasaEstadoActualOT && pasaTurno && pasaSeleccionMultiple && pasaOrdenes;
+            const pasaLotes = valorLote === "" || (Array.isArray(JSON.parse(item.lotes || '[]')) && JSON.parse(item.lotes || '[]').includes(Number(valorLote)));
+
+            return pasaTexto && pasaCiudad && pasaFecha && pasaCuadrilla && pasaEstado && pasaEstadoActualOT && pasaTurno && pasaSeleccionMultiple && pasaOrdenes && pasaLotes;
         });
 
         mapRef.current.eachLayer(layer => {
@@ -241,13 +247,22 @@ const GestionOts = () => {
                 setSelectedMarkers((prev) => {
                     const exists = prev.find(m => m.id === item.id);
 
-                    const newIcon = L.AwesomeMarkers.icon({
-                        icon: 'lightbulb',
-                        prefix: 'fa',
-                        markerColor: exists ? 'cadetblue' : 'orange',
-                        iconColor: 'white'
+                    let markerColor;
+                    if (exists) {
+                        markerColor = "#18409E";
+                    } else {
+                        markerColor = "orange";
+                    }
+                    const awesomeMarker = L.divIcon({
+                        html: `<i class="fa fa-location-dot" 
+                                    style="color:${markerColor}; 
+                                        font-size:16px;"
+                                ></i>`,
+                        className: 'transparent-marker',
+                        iconSize: [20, 20],
+                        popupAnchor: [0, -10]
                     });
-                    marker.setIcon(newIcon);
+                    marker.setIcon(awesomeMarker);
 
                     return exists
                         ? prev.filter(m => m.id !== item.id)
@@ -327,61 +342,59 @@ const GestionOts = () => {
         setEnviando(true);
 
         try {
-            for (const id of ids) {
-                if (info.atendida !== 'OK') {
-                    const datos = {
-                        tipoMovil: tipoMovil,
-                        turnoAsignado: turnoAsignado,
-                        cuadrilla: cuadrilla,
-                        observaciones: observacion,
-                        id: id,
-                        nombreUsuario: Cookies.get('userNombre'),
-                    };
+            if (info.atendida !== 'OK') {
+                const datos = {
+                    tipoMovil: tipoMovil,
+                    turnoAsignado: turnoAsignado,
+                    cuadrilla: cuadrilla,
+                    observaciones: observacion,
+                    ids: ids,
+                    nombreUsuario: Cookies.get('userNombre'),
+                };
 
-                    const response2 = await axios.post(`${process.env.REACT_APP_API_URL}/gestionOts/asignarOT`, datos);
+                const response2 = await axios.post(`${process.env.REACT_APP_API_URL}/gestionOts/asignarOT`, datos);
 
-                    if (response2.status >= 200 && response2.status < 300) {
-                        setEnviando(false)
-                        console.log('Datos enviados exitosamente');
-                        toast.success('Datos enviados exitosamente', { className: 'toast-success' });
-                        setInfoVisible(false);
-                        setInfoVisibleVarios(false);
-                        setInfo('');
-                        setTipoMovil('');
-                        setTurnoAsignado('');
-                        setCuadrilla('');
-                        setObservacion('');
-                        setSeleccionMultiple(false);
-                        setSelectedMarkers([]);
-                        await cargarRegistros();
-                    } else {
-                        toast.error('Error al subir el archivo o enviar los datos', { className: 'toast-error' });
-                        setEnviando(false)
-                    }
-                } else if (info.atendida === 'OK') {
-                    const datos = {
-                        observaciones: observacion,
-                        id: id,
-                        nombreUsuario: Cookies.get('userNombre'),
-                    };
+                if (response2.status >= 200 && response2.status < 300) {
+                    setEnviando(false)
+                    console.log('Datos enviados exitosamente');
+                    toast.success('Datos enviados exitosamente', { className: 'toast-success' });
+                    setInfoVisible(false);
+                    setInfoVisibleVarios(false);
+                    setInfo('');
+                    setTipoMovil('');
+                    setTurnoAsignado('');
+                    setCuadrilla('');
+                    setObservacion('');
+                    setSeleccionMultiple(false);
+                    setSelectedMarkers([]);
+                    await cargarRegistros();
+                } else {
+                    toast.error('Error al subir el archivo o enviar los datos', { className: 'toast-error' });
+                    setEnviando(false)
+                }
+            } else if (info.atendida === 'OK') {
+                const datos = {
+                    observaciones: observacion,
+                    id: ids,
+                    nombreUsuario: Cookies.get('userNombre'),
+                };
 
-                    const response2 = await axios.post(`${process.env.REACT_APP_API_URL}/gestionOts/rehabilitarOT`, datos);
+                const response2 = await axios.post(`${process.env.REACT_APP_API_URL}/gestionOts/rehabilitarOT`, datos);
 
-                    if (response2.status >= 200 && response2.status < 300) {
-                        setEnviando(false)
-                        console.log('Datos enviados exitosamente');
-                        toast.success('Datos enviados exitosamente', { className: 'toast-success' });
-                        setInfoVisible(false);
-                        setInfoVisibleVarios(false);
-                        setInfo('');
-                        setObservacion('');
-                        setSeleccionMultiple(false);
-                        setSelectedMarkers([]);
-                        await cargarRegistros();
-                    } else {
-                        toast.error('Error al subir el archivo o enviar los datos', { className: 'toast-error' });
-                        setEnviando(false)
-                    }
+                if (response2.status >= 200 && response2.status < 300) {
+                    setEnviando(false)
+                    console.log('Datos enviados exitosamente');
+                    toast.success('Datos enviados exitosamente', { className: 'toast-success' });
+                    setInfoVisible(false);
+                    setInfoVisibleVarios(false);
+                    setInfo('');
+                    setObservacion('');
+                    setSeleccionMultiple(false);
+                    setSelectedMarkers([]);
+                    await cargarRegistros();
+                } else {
+                    toast.error('Error al subir el archivo o enviar los datos', { className: 'toast-error' });
+                    setEnviando(false)
                 }
             }
         } catch (error) {
@@ -469,12 +482,13 @@ const GestionOts = () => {
     const [filtroTurno, setFiltroTurno] = useState('');
     const [filtroOrdenes, setFiltroOrdenes] = useState('');
     const [inputFiltroOrdenesKey, setInputFiltroOrdenesKey] = useState('');
+    const [filtroLote, setFiltroLote] = useState('');
 
     useEffect(() => {
         if (data) {
             aplicarFiltros();
         }
-    }, [filtroCuadrilla, filtroCiudad, filtroAsignacion, filtroTexto, filtroFechaInicio, filtroOtsInvalidas, seleccionMultiple, filtroEstadoActualOT, filtroTurno, filtroOrdenes]);
+    }, [filtroCuadrilla, filtroCiudad, filtroAsignacion, filtroTexto, filtroFechaInicio, filtroOtsInvalidas, seleccionMultiple, filtroEstadoActualOT, filtroTurno, filtroOrdenes, filtroLote]);
 
     return (
         <div className="GestionOts">
@@ -557,10 +571,22 @@ const GestionOts = () => {
                             </div>
                             <div className='opcion'>
                                 <Selectores value={filtroCuadrilla} onChange={(e) => { setFiltroCuadrilla(e.target.value) }}
-                                    options={[
-                                        { value: 'Cuadrilla 1', label: 'Cuadrilla 1' },
-                                        { value: 'Cuadrilla 2', label: 'Cuadrilla 2' },
-                                    ]} className="primary">
+                                    options={
+                                        (Array.isArray(moviles) ? moviles : [])
+                                            .filter((item, index, self) =>
+                                                index === self.findIndex((m) => m.nro_movil === item.nro_movil)
+                                            )
+                                            .sort((a, b) => {
+                                                const numA = parseInt(a.nro_movil, 10);
+                                                const numB = parseInt(b.nro_movil, 10);
+                                                return numA - numB;
+                                            })
+                                            .map((item) => ({
+                                                value: item.nro_movil,
+                                                label: `Movil ${item.nro_movil} - ${item.nombres_apellidos}`,
+                                            }))
+                                    }
+                                    className="primary">
                                 </Selectores>
                             </div>
                         </div>
@@ -579,6 +605,28 @@ const GestionOts = () => {
                                     ]}
                                     className="primary">
                                 </Selectores>
+                            </div>
+                        </div>
+                        <div className='linea'></div>
+                        <div className="campo">
+                            <div className='titulo'>
+                                <i className="fa fa-hashtag"></i>
+                                <Textos className='subtitulo'>Lote</Textos>
+                            </div>
+                            <div className='opcion'>
+                                <Entradas
+                                    type="number"
+                                    min="1"
+                                    step="1"
+                                    value={filtroLote}
+                                    placeholder="Filtro ..."
+                                    onChange={(e) => {
+                                        const valor = e.target.value;
+                                        if (valor === '' || /^[1-9]\d*$/.test(valor)) {
+                                            setFiltroLote(valor);
+                                        }
+                                    }}
+                                />
                             </div>
                         </div>
                         <div className='linea'></div>
@@ -654,6 +702,7 @@ const GestionOts = () => {
                                         setFiltroEstadoActualOT('');
                                         setFiltroAsignacion('');
                                         setFiltroOrdenes('');
+                                        setFiltroLote('');
                                         setInputFiltroOrdenesKey(Date.now());
                                         setSeleccionMultiple(false);
                                         setSelectedMarkers([]);
@@ -720,6 +769,15 @@ const GestionOts = () => {
                                                 const worksheet = workbook.Sheets[nombreHoja];
                                                 const jsonData = XLSX.utils.sheet_to_json(worksheet);
 
+                                                if (jsonData.length === 0) {
+                                                    toast.warning(
+                                                        `La hoja "${nombreHoja}" no contiene datos además del encabezado`,
+                                                        { className: "toast-success" }
+                                                    );
+                                                    e.target.value = null;
+                                                    return;
+                                                }
+
                                                 jsonData.forEach(row => {
                                                     if (typeof row.fecha_ingreso === "number") {
                                                         const fechaJS = XLSX.SSF.format("yyyy-mm-dd", row.fecha_ingreso);
@@ -774,6 +832,15 @@ const GestionOts = () => {
                                                 const worksheet = workbook.Sheets[nombreHoja];
                                                 const jsonData = XLSX.utils.sheet_to_json(worksheet);
 
+                                                if (jsonData.length === 0) {
+                                                    toast.warning(
+                                                        `La hoja "${nombreHoja}" no contiene datos además del encabezado`,
+                                                        { className: "toast-success" }
+                                                    );
+                                                    e.target.value = null;
+                                                    return;
+                                                }
+
                                                 jsonData.forEach(fila => {
                                                     if (fila[nombreColumna] !== undefined && fila[nombreColumna] !== null) {
                                                         valoresColumna.push(fila[nombreColumna]);
@@ -822,6 +889,15 @@ const GestionOts = () => {
                                             if (workbook.SheetNames.includes(nombreHoja)) {
                                                 const worksheet = workbook.Sheets[nombreHoja];
                                                 const jsonData = XLSX.utils.sheet_to_json(worksheet);
+
+                                                if (jsonData.length === 0) {
+                                                    toast.warning(
+                                                        `La hoja "${nombreHoja}" no contiene datos además del encabezado`,
+                                                        { className: "toast-success" }
+                                                    );
+                                                    e.target.value = null;
+                                                    return;
+                                                }
 
                                                 jsonData.forEach(fila => {
                                                     if (fila[nombreColumna] !== undefined && fila[nombreColumna] !== null) {
@@ -995,9 +1071,21 @@ const GestionOts = () => {
                                         onChange={(e) => { setCuadrilla(e.target.value) }}
                                         options={[
                                             ...(info.cuadrilla ? [{ value: 'Disponible', label: 'Disponible' }] : []),
-                                            { value: 'Cuadrilla 1', label: 'Cuadrilla 1' },
-                                            { value: 'Cuadrilla 2', label: 'Cuadrilla 2' },
-                                        ]} className="primary"
+                                            ...(Array.isArray(moviles) ? moviles : [])
+                                                .filter((item, index, self) =>
+                                                    index === self.findIndex((m) => m.nro_movil === item.nro_movil)
+                                                )
+                                                .sort((a, b) => {
+                                                    const numA = parseInt(a.nro_movil, 10);
+                                                    const numB = parseInt(b.nro_movil, 10);
+                                                    return numA - numB;
+                                                })
+                                                .map((item) => ({
+                                                    value: item.nro_movil,
+                                                    label: `Movil ${item.nro_movil} - ${item.nombres_apellidos}`,
+                                                }))
+                                        ]}
+                                        className="primary"
                                     ></Selectores>
                                 </div>
                             </div>
@@ -1039,6 +1127,7 @@ const GestionOts = () => {
                                                 {new Date(item.fecha).toLocaleString()}
                                             </div>
                                             <div className="detalle">Usuario: {item.usuario}</div>
+                                            <div className="detalle">Lote: {item.lote}</div>
                                             <div className="detalle">Detalle: {item.detalle}</div>
                                             {item.observacion && (
                                                 <div className="observacion">
@@ -1108,10 +1197,22 @@ const GestionOts = () => {
                                     <Textos className='subtitulo'>Cuadrilla:</Textos>
                                     <Selectores value={cuadrilla} onChange={(e) => setCuadrilla(e.target.value)}
                                         options={[
-                                            { value: 'Disponible', label: 'Disponible' },
-                                            { value: 'Cuadrilla 1', label: 'Cuadrilla 1' },
-                                            { value: 'Cuadrilla 2', label: 'Cuadrilla 2' },
-                                        ]} className="primary"
+                                            ...([{ value: 'Disponible', label: 'Disponible' }]),
+                                            ...(Array.isArray(moviles) ? moviles : [])
+                                                .filter((item, index, self) =>
+                                                    index === self.findIndex((m) => m.nro_movil === item.nro_movil)
+                                                )
+                                                .sort((a, b) => {
+                                                    const numA = parseInt(a.nro_movil, 10);
+                                                    const numB = parseInt(b.nro_movil, 10);
+                                                    return numA - numB;
+                                                })
+                                                .map((item) => ({
+                                                    value: item.nro_movil,
+                                                    label: `Movil ${item.nro_movil} - ${item.nombres_apellidos}`,
+                                                }))
+                                        ]}
+                                        className="primary"
                                     ></Selectores>
                                 </div>
                             </div>

@@ -155,7 +155,7 @@ export const getPageTitle = (pathname) => {
         case '/SSTA':
             return 'SSTA';
         case '/CursosDeAlturas':
-            return 'Cursos de Alturas';
+            return 'Indicadores Capacitacion';
         case '/EntregasPendientesDotacion':
             return 'Entregas Pendientes Dotacion'
         case '/UbicacionDeActividades':
