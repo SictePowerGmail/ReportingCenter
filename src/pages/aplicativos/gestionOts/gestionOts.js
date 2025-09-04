@@ -95,7 +95,8 @@ const GestionOts = () => {
 
             const pasaFecha = startDate === "" || String(item.historico).toLowerCase().includes(startDate.toLowerCase());
 
-            const pasaCuadrilla = valorCuadrilla === "" || String(item.historico).toLowerCase().includes(`a la movil ${valorCuadrilla.toLowerCase()}`);
+            const pasaCuadrilla = valorCuadrilla === "" || String(item.historico).toLowerCase().includes(`a la movil ${valorCuadrilla.toLowerCase()}`) ||
+                String(item.historico).toLowerCase().includes(`a la cuadrilla ${valorCuadrilla.toLowerCase()}`);
 
             const pasaEstado = valorEstado === "Asignado" ? item.cuadrilla != null && item.atendida !== "OK" : valorEstado === "Pendiente" ? !item.cuadrilla && item.atendida !== "OK" : valorEstado === "Atendido" ? item.atendida === "OK" : true;
 
