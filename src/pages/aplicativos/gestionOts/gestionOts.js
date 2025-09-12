@@ -29,6 +29,7 @@ const GestionOts = () => {
     const [info, setInfo] = useState({});
     const [infoVisible, setInfoVisible] = useState(false);
     const contenidoRef = useRef(null);
+    const [fechaProgramacion, setFechaProgramacion] = useState('');
     const [tipoMovil, setTipoMovil] = useState('');
     const [cuadrilla, setCuadrilla] = useState('');
     const [observacion, setObservacion] = useState('');
@@ -40,6 +41,11 @@ const GestionOts = () => {
 
     const mostrarInfoEnPanel = (data) => {
         setInfo(data);
+        setFechaProgramacion('');
+        setTipoMovil('');
+        setTurnoAsignado('');
+        setCuadrilla('');
+        setObservacion('');
         setInfoVisible(true);
     };
 
@@ -93,7 +99,13 @@ const GestionOts = () => {
 
             const pasaCiudad = valorCiudad === "" || String(item.proyecto).toLowerCase() === valorCiudad.toLowerCase();
 
-            const pasaFecha = startDate === "" || String(item.historico).toLowerCase().includes(startDate.toLowerCase());
+            let historicoArray = [];
+            try {
+                historicoArray = JSON.parse(item.historico);
+            } catch (e) {
+                console.warn("No se pudo parsear el histórico:", e);
+            }
+            const pasaFecha = startDate === "" || (Array.isArray(historicoArray) && historicoArray.some(h => h.fechaProgramacion && h.fechaProgramacion === startDate));
 
             const pasaCuadrilla = valorCuadrilla === "" || String(item.historico).toLowerCase().includes(`a la movil ${valorCuadrilla.toLowerCase()}`) ||
                 String(item.historico).toLowerCase().includes(`a la cuadrilla ${valorCuadrilla.toLowerCase()}`);
@@ -193,6 +205,8 @@ const GestionOts = () => {
         totalItemsControl.addTo(mapRef.current);
     };
 
+    const coordCount = {};
+
     const addMarkerToMap = (item) => {
         const { x, y, cuadrilla, atendida } = item;
 
@@ -200,6 +214,21 @@ const GestionOts = () => {
             console.warn("Coordenadas inválidas para el item:", item);
             return;
         }
+
+        let xTemp = parseFloat(x);
+        let yTemp = parseFloat(y);
+
+        const coordKey = `${xTemp.toFixed(6)},${yTemp.toFixed(6)}`;
+
+        if (!coordCount[coordKey]) {
+            coordCount[coordKey] = 0;
+        } else {
+            const offset = (coordCount[coordKey] + 1) * 0.00005;
+            xTemp = xTemp + (Math.random() > 0.5 ? offset : -offset);
+            yTemp = yTemp + (Math.random() > 0.5 ? offset : -offset);
+        }
+
+        coordCount[coordKey]++;
 
         let markerColor;
         if (atendida === "OK") {
@@ -220,7 +249,7 @@ const GestionOts = () => {
             popupAnchor: [0, -10]
         });
 
-        const marker = L.marker([x, y], { icon: awesomeMarker }).addTo(mapRef.current);
+        const marker = L.marker([xTemp, yTemp], { icon: awesomeMarker }).addTo(mapRef.current);
 
         marker.bindPopup(
             `<p class='titulo'><b>${item.nro_orden || "Sin informacion"}</b></p>Rotulo: ${item.no_rotulo || "Sin informacion"}<br/>Tipo de falla: ${item.tipo_falla || "Sin informacion"}<br/>Ubicacion: <a href="https://www.google.com/maps?q=${item.x},${item.y}" target="_blank">Ver en Google Maps</a>`,
@@ -328,6 +357,7 @@ const GestionOts = () => {
 
     const enviarActualizacionDeOT = async (ids) => {
         if (info.atendida !== 'OK') {
+            if (!fechaProgramacion && cuadrilla !== 'Disponible') { toast.error('Por favor ingrese la fecha de programacion.'); return }
             if (!cuadrilla) { toast.error('Por favor ingrese la cuadrilla.'); return }
             if (!turnoAsignado && cuadrilla !== 'Disponible') { toast.error('Por favor ingrese el turno.'); return }
             if (!tipoMovil && cuadrilla !== 'Disponible') { toast.error('Por favor ingrese el tipo de inspeccion.'); return }
@@ -344,10 +374,14 @@ const GestionOts = () => {
 
         try {
             if (info.atendida !== 'OK') {
+                const [nro_movil, cedula_cuadrilla, nombre_cuadrilla] = cuadrilla.split(" - ");
                 const datos = {
+                    fecha_programacion: fechaProgramacion,
                     tipoMovil: tipoMovil,
+                    cuadrilla: nro_movil,
+                    cedula_cuadrilla: cedula_cuadrilla,
+                    nombre_cuadrilla: nombre_cuadrilla,
                     turnoAsignado: turnoAsignado,
-                    cuadrilla: cuadrilla,
                     observaciones: observacion,
                     ids: ids,
                     nombreUsuario: Cookies.get('userNombre'),
@@ -362,6 +396,7 @@ const GestionOts = () => {
                     setInfoVisible(false);
                     setInfoVisibleVarios(false);
                     setInfo('');
+                    setFechaProgramacion('');
                     setTipoMovil('');
                     setTurnoAsignado('');
                     setCuadrilla('');
@@ -530,7 +565,7 @@ const GestionOts = () => {
                         <div className="campo">
                             <div className='titulo'>
                                 <i className="fa fa-calendar"></i>
-                                <Textos className='subtitulo'>Calentario</Textos>
+                                <Textos className='subtitulo'>Fecha Programacion</Textos>
                             </div>
                             <div className='opcion'>
                                 <Entradas type="date" value={filtroFechaInicio} onChange={(e) => { setFiltroFechaInicio(e.target.value) }}></Entradas>
@@ -746,6 +781,21 @@ const GestionOts = () => {
                                 >Exportar</Botones>
                             </div>
                         </div>
+                        <div className="campo">
+                            <div className='opcion'>
+                                <i className="fa fa-undo"></i>
+                                <Botones className='eliminar'
+                                    onClick={() => {
+                                        const ids = data
+                                            .filter(item => item.atendida !== "OK" && item.cuadrilla !== null && item.cuadrilla.trim() !== "")
+                                            .map(item => item.id);
+                                        setCuadrilla('Disponible')
+                                        setObservacion('Se desasigna masivamente las ordenes de trabajo.')
+                                        enviarActualizacionDeOT(ids);
+                                    }}
+                                >Desasignar Ordenes</Botones>
+                            </div>
+                        </div>
                         <div className='linea'></div>
                         <div className="campo">
                             <div className='titulo'>
@@ -930,6 +980,7 @@ const GestionOts = () => {
                         setInfoVisible(false);
                         setInfoVisibleVarios(false);
                         setInfo('');
+                        setFechaProgramacion('');
                         setTipoMovil('');
                         setTurnoAsignado('');
                         setCuadrilla('');
@@ -1032,11 +1083,52 @@ const GestionOts = () => {
                                     <Entradas disabled type="text" value={info.zona && info.zona.trim() !== "" ? info.zona : "Sin Información"} />
                                 </div>
                             </div>
+                            <div className={`campo subtitulo ${info.tipoMovil && info.tipoMovil.trim() !== "" ? '' : 'ocultar'}`}>
+                                <Textos className='subtitulo'>Orden asignada a:</Textos>
+                            </div>
+                            <div className={`campo ${info.atendida === 'OK' ? 'ocultar' : info.fecha_programacion && info.fecha_programacion.trim() !== "" ? '' : 'ocultar'}`}>
+                                <i className="fa fa-calendar"></i>
+                                <div className='entradaDatos'>
+                                    <Textos className='subtitulo'>Fecha Programacion:</Textos>
+                                    <Entradas disabled type="date" value={info.fecha_programacion && info.fecha_programacion.trim() !== "" ? info.fecha_programacion : "Sin Información"}></Entradas>
+                                </div>
+                            </div>
+                            <div className={`campo ${info.atendida === 'OK' ? 'ocultar' : info.tipoMovil && info.tipoMovil.trim() !== "" ? '' : 'ocultar'}`}>
+                                <i className="fas fa-truck"></i>
+                                <div className='entradaDatos'>
+                                    <Textos className='subtitulo'>Tipo de Movil:</Textos>
+                                    <Entradas disabled type="text" value={info.tipoMovil && info.tipoMovil.trim() !== "" ? info.tipoMovil : "Sin Información"} />
+                                </div>
+                            </div>
+                            <div className={`campo ${info.atendida === 'OK' ? 'ocultar' : info.turnoAsignado && info.turnoAsignado.trim() !== "" ? '' : 'ocultar'}`}>
+                                <i className="fa fa-user-clock"></i>
+                                <div className='entradaDatos'>
+                                    <Textos className='subtitulo'>Turno:</Textos>
+                                    <Entradas disabled type="text" value={info.turnoAsignado && info.turnoAsignado.trim() !== "" ? info.turnoAsignado : "Sin Información"} />
+                                </div>
+                            </div>
+                            <div className={`campo ${info.atendida === 'OK' ? 'ocultar' : info.cuadrilla && info.cuadrilla.trim() !== "" ? '' : 'ocultar'}`}>
+                                <i className="fas fa-users"></i>
+                                <div className='entradaDatos'>
+                                    <Textos className='subtitulo'>Cuadrilla:</Textos>
+                                    <Entradas disabled type="text" value={info.cuadrilla && info.cuadrilla.trim() !== "" ? info.cuadrilla : "Sin Información"} />
+                                </div>
+                            </div>
+                            <div className={`campo subtitulo ${info.atendida === 'OK' ? 'ocultar' : ''}`}>
+                                <Textos className='subtitulo'>Asignar orden a:</Textos>
+                            </div>
+                            <div className={`campo ${cuadrilla === 'Disponible' || info.atendida === 'OK' ? 'ocultar' : ''}`}>
+                                <i className="fa fa-calendar"></i>
+                                <div className='entradaDatos'>
+                                    <Textos className='subtitulo'>Fecha Programacion:</Textos>
+                                    <Entradas type="date" value={fechaProgramacion} onChange={(e) => { setFechaProgramacion(e.target.value) }}></Entradas>
+                                </div>
+                            </div>
                             <div className={`campo ${cuadrilla === 'Disponible' || info.atendida === 'OK' ? 'ocultar' : ''}`}>
                                 <i className="fas fa-truck"></i>
                                 <div className='entradaDatos'>
                                     <Textos className='subtitulo'>Tipo de Movil:</Textos>
-                                    <Selectores value={tipoMovil || info.tipoMovil || ""} onChange={(e) => setTipoMovil(e.target.value)}
+                                    <Selectores value={tipoMovil || ""} onChange={(e) => setTipoMovil(e.target.value)}
                                         options={[
                                             { value: 'Canasta Corta', label: 'Canasta Corta' },
                                             { value: 'Canasta Media', label: 'Canasta Media' },
@@ -1054,7 +1146,7 @@ const GestionOts = () => {
                                 <i className="fa fa-user-clock"></i>
                                 <div className='entradaDatos'>
                                     <Textos className='subtitulo'>Turno:</Textos>
-                                    <Selectores value={turnoAsignado || info.turnoAsignado || ""}
+                                    <Selectores value={turnoAsignado || ""}
                                         onChange={(e) => { setTurnoAsignado(e.target.value) }}
                                         options={[
                                             { value: 'A', label: 'A' },
@@ -1068,7 +1160,7 @@ const GestionOts = () => {
                                 <i className="fas fa-users"></i>
                                 <div className='entradaDatos'>
                                     <Textos className='subtitulo'>Cuadrilla:</Textos>
-                                    <Selectores value={cuadrilla || info.cuadrilla || ""}
+                                    <Selectores value={cuadrilla || ""}
                                         onChange={(e) => { setCuadrilla(e.target.value) }}
                                         options={[
                                             ...(info.cuadrilla ? [{ value: 'Disponible', label: 'Disponible' }] : []),
@@ -1082,7 +1174,7 @@ const GestionOts = () => {
                                                     return numA - numB;
                                                 })
                                                 .map((item) => ({
-                                                    value: item.nro_movil,
+                                                    value: `${item.nro_movil} - ${item.nombres_apellidos}`,
                                                     label: `Movil ${item.nro_movil} - ${item.nombres_apellidos}`,
                                                 }))
                                         ]}
@@ -1101,6 +1193,7 @@ const GestionOts = () => {
                                 <Botones onClick={() => {
                                     setInfoVisible(false);
                                     setInfo('');
+                                    setFechaProgramacion('');
                                     setTipoMovil('');
                                     setTurnoAsignado('');
                                     setCuadrilla('');
@@ -1127,9 +1220,15 @@ const GestionOts = () => {
                                             <div className="fecha">
                                                 {new Date(item.fecha).toLocaleString()}
                                             </div>
-                                            <div className="detalle">Usuario: {item.usuario}</div>
-                                            <div className="detalle">Lote: {item.lote}</div>
-                                            <div className="detalle">Detalle: {item.detalle}</div>
+                                            <div className={`detalle ${item.usuario ? '' : 'ocultar'}`}>Usuario: {item.usuario}</div>
+                                            <div className={`detalle ${item.fechaProgramacion ? '' : 'ocultar'}`}>Fecha Programacion: {item.fechaProgramacion ? new Date(item.fechaProgramacion).toLocaleDateString("es-ES") : "Sin fecha"}</div>
+                                            <div className={`detalle ${item.tipoMovil ? '' : 'ocultar'}`}>Tipo de Movil: {item.tipoMovil}</div>
+                                            <div className={`detalle ${item.turno ? '' : 'ocultar'}`}>Turno: {item.turno}</div>
+                                            <div className={`detalle ${item.cuadrilla ? '' : 'ocultar'}`}>Cuadrilla: {item.cuadrilla}</div>
+                                            <div className={`detalle ${item.cedula_cuadrilla ? '' : 'ocultar'}`}>Cedula: {item.cedula_cuadrilla}</div>
+                                            <div className={`detalle ${item.nombre_cuadrilla ? '' : 'ocultar'}`}>Nombre: {item.nombre_cuadrilla}</div>
+                                            <div className={`detalle ${item.lote ? '' : 'ocultar'}`}>Lote: {item.lote}</div>
+                                            <div className={`detalle ${item.detalle ? '' : 'ocultar'}`}>Detalle: {item.detalle}</div>
                                             {item.observacion && (
                                                 <div className="observacion">
                                                     Observación: {item.observacion}
@@ -1160,6 +1259,16 @@ const GestionOts = () => {
                             ) : (
                                 <Textos>No hay órdenes seleccionadas</Textos>
                             )}
+                            <div className={`campo subtitulo ${info.atendida === 'OK' ? 'ocultar' : ''}`}>
+                                <Textos className='subtitulo'>Asignar orden(es) a:</Textos>
+                            </div>
+                            <div className={`campo ${cuadrilla === 'Disponible' ? 'ocultar' : ''}`}>
+                                <i className="fa fa-calendar"></i>
+                                <div className='entradaDatos'>
+                                    <Textos className='subtitulo'>Fecha Programacion:</Textos>
+                                    <Entradas type="date" value={fechaProgramacion} onChange={(e) => { setFechaProgramacion(e.target.value) }}></Entradas>
+                                </div>
+                            </div>
                             <div className={`campo ${cuadrilla === 'Disponible' ? 'ocultar' : ''}`}>
                                 <i className="fas fa-truck"></i>
                                 <div className='entradaDatos'>
@@ -1209,7 +1318,7 @@ const GestionOts = () => {
                                                     return numA - numB;
                                                 })
                                                 .map((item) => ({
-                                                    value: item.nro_movil,
+                                                    value: `${item.nro_movil} - ${item.nombres_apellidos}`,
                                                     label: `Movil ${item.nro_movil} - ${item.nombres_apellidos}`,
                                                 }))
                                         ]}
@@ -1227,6 +1336,7 @@ const GestionOts = () => {
                             <div className='acciones'>
                                 <Botones onClick={() => {
                                     setInfoVisibleVarios(false);
+                                    setFechaProgramacion('');
                                     setTipoMovil('');
                                     setTurnoAsignado('');
                                     setCuadrilla('');

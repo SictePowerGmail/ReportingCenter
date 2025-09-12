@@ -262,6 +262,10 @@
                         .detalle {
                             font-size: 12px;
                             margin-bottom: 6px;
+
+                            &.ocultar {
+                                display: none;
+                            }
                         }
 
                         .observacion {
@@ -291,6 +295,12 @@
                 align-items: center;
                 justify-content: center;
                 width: 100%;
+            }
+
+            &.subtitulo {
+                font-weight: 600;
+                margin-top: 15px;
+                margin-bottom: 5px;
             }
         }
 
