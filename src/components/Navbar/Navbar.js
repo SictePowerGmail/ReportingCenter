@@ -127,6 +127,7 @@ function Navbar() {
         SolicitudDeMaterial: false,
         ReporteMaterialFerretero: false,
         ChatBot: false,
+        GestionOts: false,
         Carnetizacion: false,
         Encuentas: false,
     });
@@ -177,6 +178,7 @@ function Navbar() {
         CumplimientoSlaHfc: false,
         CorrectivoPreventivo: false,
         RecursoOperaciones: false,
+        OperacionesFormacion: false,
         SeguimientoOperacionesCentro: false,
         SeguimientoOperacionesNorte: false,
         SeguimientoSmu: false,
@@ -502,6 +504,17 @@ function Navbar() {
                             </li>
 
                             <li className={`SubMenu ${showMobileMenu ? 'abierto' : 'cerrado'}`}>
+                                {subChecksAplicativos.GestionOts === true &&
+                                    (<Link className={`SubMenu-Titulo-Solo ${showMobileMenu ? 'abierto' : 'cerrado'}`} to={{ pathname: "/Login", search: "?tipo=GestionOts" }} >
+                                        <span className='SubMenu-Titulo-Icono'><FaPoll /></span>
+                                        {showMobileMenu && (
+                                            <span className="SubMenu-Titulo-Texto">Gestion de OTs</span>
+                                        )}
+                                    </Link>)
+                                }
+                            </li>
+
+                            <li className={`SubMenu ${showMobileMenu ? 'abierto' : 'cerrado'}`}>
                                 {subChecksAplicativos.Carnetizacion === true &&
                                     (<Link className={`SubMenu-Titulo-Solo ${showMobileMenu ? 'abierto' : 'cerrado'}`} to={{ pathname: "/Login", search: "?tipo=Carnetizacion" }} >
                                         <span className='SubMenu-Titulo-Icono'><FaIdBadge /></span>
@@ -518,17 +531,6 @@ function Navbar() {
                                         <span className='SubMenu-Titulo-Icono'><FaPoll /></span>
                                         {showMobileMenu && (
                                             <span className="SubMenu-Titulo-Texto">Encuentas</span>
-                                        )}
-                                    </Link>)
-                                }
-                            </li>
-
-                            <li className={`SubMenu ${showMobileMenu ? 'abierto' : 'cerrado'}`}>
-                                {subChecksAplicativos.Chatbot === true &&
-                                    (<Link className={`SubMenu-Titulo-Solo ${showMobileMenu ? 'abierto' : 'cerrado'}`} to={{ pathname: "/Login", search: "?tipo=GestionOts" }} >
-                                        <span className='SubMenu-Titulo-Icono'><FaPoll /></span>
-                                        {showMobileMenu && (
-                                            <span className="SubMenu-Titulo-Texto">Gestion de OTs</span>
                                         )}
                                     </Link>)
                                 }
@@ -671,6 +673,7 @@ function Navbar() {
                                         {subChecksOperacion.CumplimientoSlaHfc === true && (<Link className='SubMenu-Contenido-Titulo' to="/MantenimientoBacklogHFC" ><li>Cumplimiento SLA HFC</li></Link>)}
                                         {subChecksOperacion.CorrectivoPreventivo === true && (<Link className='SubMenu-Contenido-Titulo' to="/MantenimientoPuntuacionTMRF" ><li>Correctivo - Preventivo</li></Link>)}
                                         {subChecksOperacion.RecursoOperaciones === true && (<Link className='SubMenu-Contenido-Titulo' to="/RecursoOperaciones" ><li>Recurso Operaciones</li></Link>)}
+                                        {subChecksOperacion.OperacionesFormacion === true && (<Link className='SubMenu-Contenido-Titulo' to="/OperacionesFormacion" ><li>Operaciones Formacion</li></Link>)}
                                         {subChecksOperacion.SeguimientoOperacionesCentro === true && (<Link className='SubMenu-Contenido-Titulo' to="/SeguimientoOperacionesCentro" ><li>Seguimiento Operaciones Centro</li></Link>)}
                                         {subChecksOperacion.SeguimientoOperacionesNorte === true && (<Link className='SubMenu-Contenido-Titulo' to="/SeguimientoOperacionesNorte" ><li>Seguimiento Operaciones Norte</li></Link>)}
                                         {subChecksOperacion.SeguimientoSmu === true && (<Link className='SubMenu-Contenido-Titulo' to="/SeguimientoSMU" ><li>Seguimiento SMU</li></Link>)}
@@ -864,7 +867,7 @@ function Navbar() {
                                 </div>
                             </li>
 
-                            <span className={`sub-titulo ${showMobileMenu ? 'abierto' : 'cerrado'}`}>Version 2.0.50</span>
+                            <span className={`sub-titulo ${showMobileMenu ? 'abierto' : 'cerrado'}`}>Version 2.0.51</span>
                         </ul>
 
                         {/* <div className='Logo2'>

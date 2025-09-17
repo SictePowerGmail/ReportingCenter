@@ -74,6 +74,7 @@ function ControlUsuarios() {
                 SolicitudDeMaterial: false,
                 ReporteMaterialFerretero: false,
                 ChatBot: false,
+                GestionOts: false,
                 Carnetizacion: false,
             }
         },
@@ -128,6 +129,7 @@ function ControlUsuarios() {
                 CumplimientoSlaHfc: false,
                 CorrectivoPreventivo: false,
                 RecursoOperaciones: false,
+                OperacionesFormacion: false,
                 SeguimientoOperacionesCentro: false,
                 SeguimientoOperacionesNorte: false,
                 SeguimientoSmu: false,
