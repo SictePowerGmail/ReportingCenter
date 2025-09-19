@@ -153,7 +153,8 @@ function Navbar() {
         Corporativo: false,
         Mantenimiento: false,
         Reingenierias: false,
-        Operaciones: false
+        Operaciones: false,
+        EnelAp: false
     });
 
     const [indicadores, setIndicadores] = useState(false);
@@ -612,6 +613,7 @@ function Navbar() {
                                         {subChecksProductividad.Mantenimiento === true && (<Link className='SubMenu-Contenido-Titulo' to="/MantenimientoFinanciero" ><li>Mantenimiento</li></Link>)}
                                         {subChecksProductividad.Reingenierias === true && (<Link className='SubMenu-Contenido-Titulo' to="/ReingenieriaFinanciero" ><li>Reingenierias</li></Link>)}
                                         {subChecksProductividad.Operaciones === true && (<Link className='SubMenu-Contenido-Titulo' to="/OperacionesFinanciero" ><li>Operaciones</li></Link>)}
+                                        {subChecksProductividad.EnelAp === true && (<Link className='SubMenu-Contenido-Titulo' to="/EnelAp" ><li>Enel AP</li></Link>)}
                                     </ul>
                                 </div>
                             </li>
@@ -867,7 +869,7 @@ function Navbar() {
                                 </div>
                             </li>
 
-                            <span className={`sub-titulo ${showMobileMenu ? 'abierto' : 'cerrado'}`}>Version 2.0.51</span>
+                            <span className={`sub-titulo ${showMobileMenu ? 'abierto' : 'cerrado'}`}>Version 2.0.52</span>
                         </ul>
 
                         {/* <div className='Logo2'>

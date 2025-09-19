@@ -45,6 +45,7 @@ import CorporativoFinanciero from '../pages/produccion/CorporativoFinanciero';
 import MantenimientoFinanciero from '../pages/produccion/MantenimientoFinanciero';
 import ReingenieriaFinanciero from '../pages/produccion/ReingenieriaFinanciero';
 import OperacionesFinanciero from '../pages/produccion/OperacionesFinanciero';
+import EnelAp from "../pages/produccion/EnelAp";
 /* Indicadores */
 import HistoricoKPI from '../pages/indicadores/HistoricoKPI';
 import MantenimientoTecnico from '../pages/indicadores/MantenimientoTecnico';
@@ -160,6 +161,7 @@ function RutasApp() {
                     <Route path='/MantenimientoFinanciero' exact element={<MantenimientoFinanciero />} />
                     <Route path='/ReingenieriaFinanciero' exacte element={<ReingenieriaFinanciero />} />
                     <Route path='/OperacionesFinanciero' exacte element={<OperacionesFinanciero />} />
+                    <Route path='/EnelAp' exacte element={<EnelAp />} />
                     {/* Indicadores */}
                     <Route path='/HistoricoKPI' exacte element={<HistoricoKPI />} />
                     <Route path='/MantenimientoTecnico' exact element={<MantenimientoTecnico />} />

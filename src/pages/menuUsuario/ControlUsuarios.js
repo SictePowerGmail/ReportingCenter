@@ -101,7 +101,8 @@ function ControlUsuarios() {
                 Corporativo: false,
                 Mantenimiento: false,
                 Reingenierias: false,
-                Operaciones: false
+                Operaciones: false,
+                EnelAp: false
             }
         },
         indicadores: {

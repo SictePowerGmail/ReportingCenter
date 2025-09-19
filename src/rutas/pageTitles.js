@@ -84,6 +84,8 @@ export const getPageTitle = (pathname) => {
             return 'Reingenieria Financiero';
         case '/OperacionesFinanciero':
             return 'Operaciones Financiero';
+        case '/EnelAp':
+            return 'Enel Alumbrado Publico';
         /* Indicadores */
         case '/HistoricoKPI':
             return 'Historico KPI';
