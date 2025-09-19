@@ -36,6 +36,7 @@ const GestionOts = () => {
     const [turnoAsignado, setTurnoAsignado] = useState('');
     const [selectedMarkers, setSelectedMarkers] = useState([]);
     const [infoVisibleVarios, setInfoVisibleVarios] = useState(false);
+    const [desasignarOrdenes, setDesasignarOrdenes] = useState(false);
     const allMarkersRef = useRef([]);
     const [moviles, setMoviles] = useState('');
 
@@ -105,16 +106,20 @@ const GestionOts = () => {
             } catch (e) {
                 console.warn("No se pudo parsear el histórico:", e);
             }
-            const pasaFecha = startDate === "" || (Array.isArray(historicoArray) && historicoArray.some(h => h.fechaProgramacion && h.fechaProgramacion === startDate));
 
-            const pasaCuadrilla = valorCuadrilla === "" || String(item.historico).toLowerCase().includes(`a la movil ${valorCuadrilla.toLowerCase()}`) ||
-                String(item.historico).toLowerCase().includes(`a la cuadrilla ${valorCuadrilla.toLowerCase()}`);
+            const pasaFiltros = Array.isArray(historicoArray) && historicoArray.some(h => {
+                const cumpleFecha = startDate === "" || (h.fechaProgramacion && h.fechaProgramacion === startDate);
 
-            const pasaEstado = valorEstado === "Asignado" ? item.cuadrilla != null && item.atendida !== "OK" : valorEstado === "Pendiente" ? !item.cuadrilla && item.atendida !== "OK" : valorEstado === "Atendido" ? item.atendida === "OK" : true;
+                const cumpleCuadrilla = valorCuadrilla === "" || (h.cuadrilla && h.cuadrilla === valorCuadrilla);
+
+                const cumpleTurno = valorTurno === "" || (h.turno && h.turno === valorTurno);
+
+                return cumpleFecha && cumpleCuadrilla && cumpleTurno;
+            });
+
+            const pasaEstado = valorEstado === "Asignado" ? item.cuadrilla != null && item.atendida !== "OK" : valorEstado === "Pendiente" ? !item.cuadrilla && item.atendida !== "OK" : valorEstado === "Asignado y pendiente" ? item.atendida !== "OK" : valorEstado === "Atendido" ? item.atendida === "OK" : true;
 
             const pasaEstadoActualOT = valorEstadoActualOT === "" || String(item.estado_actual).toLowerCase() === valorEstadoActualOT.toLowerCase();
-
-            const pasaTurno = valorTurno === "" || String(item.historico).toLowerCase().includes(`y turno ${valorTurno.toLowerCase()}`);
 
             const pasaSeleccionMultiple = valorSeleccionMultiple === true ? item.atendida !== "OK" : true;
 
@@ -123,7 +128,7 @@ const GestionOts = () => {
 
             const pasaLotes = valorLote === "" || (Array.isArray(JSON.parse(item.lotes || '[]')) && JSON.parse(item.lotes || '[]').includes(Number(valorLote)));
 
-            return pasaTexto && pasaCiudad && pasaFecha && pasaCuadrilla && pasaEstado && pasaEstadoActualOT && pasaTurno && pasaSeleccionMultiple && pasaOrdenes && pasaLotes;
+            return pasaTexto && pasaCiudad && pasaEstado && pasaEstadoActualOT && pasaFiltros && pasaSeleccionMultiple && pasaOrdenes && pasaLotes;
         });
 
         mapRef.current.eachLayer(layer => {
@@ -346,14 +351,15 @@ const GestionOts = () => {
             if (mapElement) {
                 generarMapa(data);
             }
+            aplicarFiltros();
         }
     }, [data]);
 
     useEffect(() => {
-        if ((infoVisible || infoVisibleVarios) && contenidoRef.current) {
+        if ((infoVisible || infoVisibleVarios || desasignarOrdenes) && contenidoRef.current) {
             contenidoRef.current.scrollTop = 0;
         }
-    }, [infoVisible, infoVisibleVarios]);
+    }, [infoVisible, infoVisibleVarios, desasignarOrdenes]);
 
     const enviarActualizacionDeOT = async (ids) => {
         if (info.atendida !== 'OK') {
@@ -509,7 +515,7 @@ const GestionOts = () => {
 
     const [filtroCuadrilla, setFiltroCuadrilla] = useState('');
     const [filtroCiudad, setFiltroCiudad] = useState('');
-    const [filtroAsignacion, setFiltroAsignacion] = useState('');
+    const [filtroAsignacion, setFiltroAsignacion] = useState('Asignado y pendiente');
     const [filtroTexto, setFiltroTexto] = useState('');
     const [filtroFechaInicio, setFiltroFechaInicio] = useState('');
     const [filtroOtsInvalidas, setFiltroOtsInvalidas] = useState('');
@@ -694,6 +700,7 @@ const GestionOts = () => {
                                     options={[
                                         { value: 'Asignado', label: 'Asignado' },
                                         { value: 'Pendiente', label: 'Pendiente' },
+                                        { value: 'Asignado y pendiente', label: 'Asignado y pendiente' },
                                         { value: 'Atendido', label: 'Atendido' },
                                     ]}
                                     className="primary">
@@ -781,17 +788,13 @@ const GestionOts = () => {
                                 >Exportar</Botones>
                             </div>
                         </div>
+                        <div className='linea'></div>
                         <div className="campo">
                             <div className='opcion'>
                                 <i className="fa fa-undo"></i>
                                 <Botones className='eliminar'
                                     onClick={() => {
-                                        const ids = data
-                                            .filter(item => item.atendida !== "OK" && item.cuadrilla !== null && item.cuadrilla.trim() !== "")
-                                            .map(item => item.id);
-                                        setCuadrilla('Disponible')
-                                        setObservacion('Se desasigna masivamente las ordenes de trabajo.')
-                                        enviarActualizacionDeOT(ids);
+                                        setDesasignarOrdenes(true);
                                     }}
                                 >Desasignar Ordenes</Botones>
                             </div>
@@ -976,9 +979,10 @@ const GestionOts = () => {
                         <div id="map" className='Mapa'></div>
                     </div>
 
-                    <div className={`overlayGestionOts ${infoVisible || infoVisibleVarios ? '' : 'ocultar'}`} onClick={() => {
+                    <div className={`overlayGestionOts ${infoVisible || infoVisibleVarios || desasignarOrdenes ? '' : 'ocultar'}`} onClick={() => {
                         setInfoVisible(false);
                         setInfoVisibleVarios(false);
+                        setDesasignarOrdenes(false);
                         setInfo('');
                         setFechaProgramacion('');
                         setTipoMovil('');
@@ -1344,6 +1348,44 @@ const GestionOts = () => {
                                     setObservacion('');
                                 }}>Cancelar</Botones>
                                 <Botones className='guardar' onClick={() => enviarActualizacionDeOT(selectedMarkers.map(item => item.id))}>Aceptar</Botones>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className={`panel-info desasignar ${desasignarOrdenes ? '' : 'ocultar'}`}>
+                        <div className='contenido' ref={contenidoRef}>
+                            <div className='campo titulo'>
+                                <Textos className='titulo'>Desasignar Ordenes por Turno</Textos>
+                            </div>
+                            <div className={`campo ${cuadrilla === 'Disponible' ? 'ocultar' : ''}`}>
+                                <i className="fa fa-user-clock"></i>
+                                <div className='entradaDatos'>
+                                    <Textos className='subtitulo'>Turno:</Textos>
+                                    <Selectores value={turnoAsignado}
+                                        onChange={(e) => { setTurnoAsignado(e.target.value) }}
+                                        options={[
+                                            { value: 'A', label: 'A' },
+                                            { value: 'B', label: 'B' },
+                                            { value: 'C', label: 'C' },
+                                        ]} className="primary"
+                                    ></Selectores>
+                                </div>
+                            </div>
+                            <div className='acciones'>
+                                <Botones onClick={() => {
+                                    setDesasignarOrdenes(false);
+                                    setTurnoAsignado('');
+                                }}>Cancelar</Botones>
+                                <Botones className='guardar' onClick={() => {
+                                    if (!turnoAsignado) { toast.error('Por favor ingrese El turno.'); return }
+                                    const ids = data
+                                        .filter(item => item.atendida !== "OK" && item.cuadrilla !== null && item.cuadrilla.trim() !== "" && item.turnoAsignado === turnoAsignado)
+                                        .map(item => item.id);
+                                    setCuadrilla('Disponible')
+                                    setObservacion('Se desasigna masivamente las ordenes de trabajo.')
+                                    enviarActualizacionDeOT(ids);
+                                }}
+                                >Aceptar</Botones>
                             </div>
                         </div>
                     </div>

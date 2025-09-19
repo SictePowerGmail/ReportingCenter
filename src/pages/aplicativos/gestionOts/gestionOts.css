@@ -213,6 +213,11 @@
         display: none;
     }
 
+    &.desasignar {
+        width: auto;
+        height: auto;
+    }
+
     .contenido {
         display: flex;
         flex-direction: column;
