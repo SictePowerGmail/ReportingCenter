@@ -180,7 +180,7 @@ const GestionOts = () => {
         const kml = generarKML(infoFiltrada);
         const blob = new Blob([kml], { type: "application/vnd.google-earth.kml+xml" });
         kmlDownloadUrl = URL.createObjectURL(blob);
-        console.log("URL listo para descargar:", kmlDownloadUrl);
+        console.log("URL lista para descargar:", kmlDownloadUrl);
     }
 
     function actualizarTotalItems(cantidad) {
