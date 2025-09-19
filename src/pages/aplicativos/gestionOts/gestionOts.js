@@ -77,10 +77,41 @@ const GestionOts = () => {
         } finally {
             setLoading(false);
         }
+    }
 
+    function generarKML(infoFiltrada) {
+        const placemarks = infoFiltrada.map(item => `
+            <Placemark>
+            <name>${item.nro_orden || "Sin información"}</name>
+            <description><![CDATA[
+                DIRECCION:<br>${item.direccion || "Sin información"}<br><br>
+                OBSERVACIONES:<br>${item.referencia_barrio || "Sin información"}<br><br>
+                NOMBRE:<br>${item.nombre || "Sin información"}<br><br>
+                TIPO DE FALLA:<br>${item.tipo_falla || "Sin información"}<br><br>
+                ROTULO:<br>${item.no_rotulo || "Sin información"}<br><br>
+                X:<br>${item.x || "Sin información"}<br/><br>
+                Y:<br>${item.y || "Sin información"}<br/><br>
+                MOVIL:<br>${item.cuadrilla || "Sin información"}<br><br>
+                NOMBRE DEL LIDER:<br>${item.nombre_cuadrilla || "Sin información"}
+            ]]></description>
+            <Point>
+                <coordinates>${item.y},${item.x}</coordinates>
+            </Point>
+            </Placemark>
+        `).join("\n");
+
+        return `<?xml version="1.0" encoding="UTF-8"?>
+            <kml xmlns="http://www.opengis.net/kml/2.2">
+                <Document>
+                <name>Puntos filtrados</name>
+                <description>Mapa generado desde mi app</description>
+                ${placemarks}
+                </Document>
+            </kml>`;
     }
 
     let infoFiltrada = "";
+    let kmlDownloadUrl = null;
     function aplicarFiltros() {
         const valorTexto = filtroTexto.trim().toLowerCase() || "";
         const valorCiudad = filtroCiudad.trim() || "";
@@ -145,6 +176,11 @@ const GestionOts = () => {
             const bounds = L.latLngBounds(infoFiltrada.map(item => [item.x, item.y]));
             mapRef.current.fitBounds(bounds, { padding: [50, 50] });
         }
+
+        const kml = generarKML(infoFiltrada);
+        const blob = new Blob([kml], { type: "application/vnd.google-earth.kml+xml" });
+        kmlDownloadUrl = URL.createObjectURL(blob);
+        console.log("URL listo para descargar:", kmlDownloadUrl);
     }
 
     function actualizarTotalItems(cantidad) {
@@ -380,7 +416,14 @@ const GestionOts = () => {
 
         try {
             if (info.atendida !== 'OK') {
-                const [nro_movil, cedula_cuadrilla, nombre_cuadrilla] = cuadrilla.split(" - ");
+                let nro_movil, cedula_cuadrilla, nombre_cuadrilla;
+                if (cuadrilla === "Disponible") {
+                    nro_movil = "Disponible";
+                    cedula_cuadrilla = "";
+                    nombre_cuadrilla = "";
+                } else {
+                    [nro_movil, cedula_cuadrilla, nombre_cuadrilla] = cuadrilla.split(" - ");
+                }
                 const datos = {
                     fecha_programacion: fechaProgramacion,
                     tipoMovil: tipoMovil,
@@ -752,20 +795,13 @@ const GestionOts = () => {
                                         infoFiltrada = data;
                                         aplicarFiltros();
                                         actualizarTotalItems(infoFiltrada.length);
+                                        mapRef.current.eachLayer(layer => {
+                                            if (layer instanceof L.Marker) {
+                                                mapRef.current.removeLayer(layer);
+                                            }
+                                        });
                                     }}
                                 >Borrar filtros</Botones>
-                            </div>
-                        </div>
-                        <div className='linea'></div>
-                        <div className="campo">
-                            <div className='opcion'>
-                                <i className="fa fa-trash"></i>
-                                <Botones className='imagenes'
-                                    onClick={() => {
-                                        allMarkersRef.current.forEach(({ marker }) => marker.remove());
-                                        allMarkersRef.current = [];
-                                    }}
-                                >Borrar Marcadores</Botones>
                             </div>
                         </div>
                         <div className='linea'></div>
@@ -797,6 +833,24 @@ const GestionOts = () => {
                                         setDesasignarOrdenes(true);
                                     }}
                                 >Desasignar Ordenes</Botones>
+                            </div>
+                        </div>
+                        <div className='linea'></div>
+                        <div className="campo">
+                            <div className='opcion'>
+                                <i className="fa fa-download"></i>
+                                <Botones className='imagenes'
+                                    onClick={() => {
+                                        if (!kmlDownloadUrl) {
+                                            toast.warning("Primero aplica los filtros para generar el archivo.", { className: "toast-success" });
+                                            return;
+                                        }
+                                        const link = document.createElement("a");
+                                        link.href = kmlDownloadUrl;
+                                        link.download = "ordenes_filtradas.kml";
+                                        link.click();
+                                    }}
+                                >Descargar KML</Botones>
                             </div>
                         </div>
                         <div className='linea'></div>
@@ -1225,7 +1279,7 @@ const GestionOts = () => {
                                                 {new Date(item.fecha).toLocaleString()}
                                             </div>
                                             <div className={`detalle ${item.usuario ? '' : 'ocultar'}`}>Usuario: {item.usuario}</div>
-                                            <div className={`detalle ${item.fechaProgramacion ? '' : 'ocultar'}`}>Fecha Programacion: {item.fechaProgramacion ? new Date(item.fechaProgramacion).toLocaleDateString("es-ES") : "Sin fecha"}</div>
+                                            <div className={`detalle ${item.fechaProgramacion ? '' : 'ocultar'}`}>Fecha Programacion: {item.fechaProgramacion ? new Date(item.fechaProgramacion + "T00:00:00").toLocaleDateString("es-ES") : "Sin fecha"}</div>
                                             <div className={`detalle ${item.tipoMovil ? '' : 'ocultar'}`}>Tipo de Movil: {item.tipoMovil}</div>
                                             <div className={`detalle ${item.turno ? '' : 'ocultar'}`}>Turno: {item.turno}</div>
                                             <div className={`detalle ${item.cuadrilla ? '' : 'ocultar'}`}>Cuadrilla: {item.cuadrilla}</div>
