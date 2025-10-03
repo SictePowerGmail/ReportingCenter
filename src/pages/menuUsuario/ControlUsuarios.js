@@ -117,9 +117,10 @@ function ControlUsuarios() {
         puntuacion: {
             activo: false,
             subChecks: {
-                Proyectos: false,
                 Corporativo: false,
+                EnelAp: false,
                 Mantenimiento: false,
+                Proyectos: false,
                 Reingenierias: false
             }
         },

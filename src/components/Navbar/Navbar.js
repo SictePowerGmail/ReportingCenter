@@ -167,9 +167,10 @@ function Navbar() {
 
     const [puntuacion, setPuntuacion] = useState(false);
     const [subChecksPuntuacion, setSubChecksPuntuacion] = useState({
-        Proyectos: false,
         Corporativo: false,
+        EnelAp: false,
         Mantenimiento: false,
+        Proyectos: false,
         Reingenierias: false
     });
 
@@ -707,9 +708,10 @@ function Navbar() {
                                 </div>
                                 <div className={`SubMenu-Contenido ${showMobileMenu && showDropdownPuntuacion ? 'visible' : 'oculto'}`}>
                                     <ul>
-                                        {subChecksPuntuacion.Proyectos && (<Link className='SubMenu-Contenido-Titulo' to="/PlaneacionPuntuacion" ><li>Proyectos</li></Link>)}
                                         {subChecksPuntuacion.Corporativo && (<Link className='SubMenu-Contenido-Titulo' to="/CorporativoPuntuacion" ><li>Corporativo</li></Link>)}
+                                        {subChecksPuntuacion.EnelAp && (<Link className='SubMenu-Contenido-Titulo' to="/EnelApPuntuacion" ><li>Enel AP</li></Link>)}
                                         {subChecksPuntuacion.Mantenimiento && (<Link className='SubMenu-Contenido-Titulo' to="/MantenimientoPuntuacion" ><li>Mantenimiento</li></Link>)}
+                                        {subChecksPuntuacion.Proyectos && (<Link className='SubMenu-Contenido-Titulo' to="/PlaneacionPuntuacion" ><li>Proyectos</li></Link>)}
                                         {subChecksPuntuacion.Reingenierias && (<Link className='SubMenu-Contenido-Titulo' to="/ReingenieriasPuntuacion" ><li>Reingenierias</li></Link>)}
                                     </ul>
                                 </div>
@@ -869,7 +871,7 @@ function Navbar() {
                                 </div>
                             </li>
 
-                            <span className={`sub-titulo ${showMobileMenu ? 'abierto' : 'cerrado'}`}>Version 2.0.54</span>
+                            <span className={`sub-titulo ${showMobileMenu ? 'abierto' : 'cerrado'}`}>Version 2.0.55</span>
                         </ul>
 
                         {/* <div className='Logo2'>

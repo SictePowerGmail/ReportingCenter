@@ -100,6 +100,8 @@ export const getPageTitle = (pathname) => {
             return 'Planeacion Puntuacion';
         case '/CorporativoPuntuacion':
             return 'Corporativo Puntuacion';
+        case '/EnelApPuntuacion':
+            return 'Enel AP Puntuacion';
         case '/MantenimientoPuntuacion':
             return 'Mantenimiento Puntuacion';
         case '/ReingenieriasPuntuacion':

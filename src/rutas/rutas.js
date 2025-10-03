@@ -52,9 +52,10 @@ import MantenimientoTecnico from '../pages/indicadores/MantenimientoTecnico';
 import NPS from '../pages/indicadores/NPS';
 import G2G8MasivoCentro from "../pages/indicadores/G2G8MasivoCentro";
 /* Puntuacion */
-import PlaneacionPuntuacion from '../pages/puntuacion/PlaneacionPuntuacion';
 import CorporativoPuntuacion from '../pages/puntuacion/CorporativoPuntuacion';
+import EnelApPuntuacion from "../pages/puntuacion/EnelApPuntuacion";
 import MantenimientoPuntuacion from '../pages/puntuacion/MantenimientoPuntuacion';
+import PlaneacionPuntuacion from '../pages/puntuacion/PlaneacionPuntuacion';
 import ReingenieriasPuntuacion from '../pages/puntuacion/ReingenieriasPuntuacion';
 /* Operacion */
 import BacklogFO from '../pages/operacion/Backlog_FO';
@@ -172,6 +173,7 @@ function RutasApp() {
                     <Route path='/CorporativoPuntuacion' exact element={<CorporativoPuntuacion />} />
                     <Route path='/MantenimientoPuntuacion' exact element={<MantenimientoPuntuacion />} />
                     <Route path='/ReingenieriasPuntuacion' exacte element={<ReingenieriasPuntuacion />} />
+                    <Route path='/EnelApPuntuacion' exacte element={<EnelApPuntuacion />} />
                     {/* Operacion */}
                     <Route path='/MantenimientoBacklogFO' exacte element={<BacklogFO />} />
                     <Route path='/MantenimientoBacklogHFC' exacte element={<BacklogHFC />} />
