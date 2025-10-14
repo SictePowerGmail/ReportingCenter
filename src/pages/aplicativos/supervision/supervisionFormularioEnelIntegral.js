@@ -1235,14 +1235,14 @@ const SupervisionFormularioEnelIntegral = () => {
 
         {
             key: "trabajoAlturas1",
-            texto: "Los sistemas de acceso (escaleras, andamios) disponibles en el sitio son adecuados (completos, marcados, certificados).",
+            texto: "Los sistemas de acceso (escaleras, andamios, canastas) disponibles en el sitio son adecuados (completos, marcados, certificados).",
             fotoKey: "fotoTrabajoAlturas1",
             observacionKey: "observacionTrabajoAlturas1",
             activarinput: false,
         },
         {
             key: "trabajoAlturas2",
-            texto: "Los sistemas de acceso (escaleras, andamios) están instalados correctamente y se utilizan adecuadamente.",
+            texto: "Los sistemas de acceso (escaleras, andamios, canastas) están instalados correctamente y se utilizan adecuadamente.",
             fotoKey: "fotoTrabajoAlturas2",
             observacionKey: "observacionTrabajoAlturas2",
             activarinput: false,

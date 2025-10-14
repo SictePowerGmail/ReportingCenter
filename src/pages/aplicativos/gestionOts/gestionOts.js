@@ -816,7 +816,21 @@ const GestionOts = () => {
                                         } else {
                                             dataExport = infoFiltrada;
                                         }
-                                        const ws = XLSX.utils.json_to_sheet(dataExport);
+                                        const MAX_EXCEL_LENGTH = 32767;
+                                        const sanitizedData = dataExport.map((row) => {
+                                            const newRow = {};
+                                            for (const key in row) {
+                                                const value = row[key];
+
+                                                if (typeof value === "string" && value.length > MAX_EXCEL_LENGTH) {
+                                                    newRow[key] = value.slice(0, MAX_EXCEL_LENGTH-5) + "…";
+                                                } else {
+                                                    newRow[key] = value;
+                                                }
+                                            }
+                                            return newRow;
+                                        });
+                                        const ws = XLSX.utils.json_to_sheet(sanitizedData);
                                         const wb = XLSX.utils.book_new();
                                         XLSX.utils.book_append_sheet(wb, ws, "Datos");
                                         XLSX.writeFile(wb, "Gestion_OTs.xlsx");
