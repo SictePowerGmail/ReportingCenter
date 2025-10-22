@@ -75,7 +75,7 @@ const Encuentas = () => {
         : [];
 
     const fecha = obtenerFechaFormateada();
-    const nombreEncuesta = "Cometas 2025"
+    const nombreEncuesta = "Monstruos de 4 Patas"
 
     const actualizarEncuesta = async (campo, valor) => {
         const [nivel1, nivel2] = campo.split('.');
@@ -113,7 +113,7 @@ const Encuentas = () => {
                 nombreEncuesta,
             };
 
-            const response = await axios.post(`${process.env.REACT_APP_API_URL}/encuestas/crearRegistroCometas`, encuestaCompleta);
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/encuestas/crearRegistro`, encuestaCompleta);
 
             if (response.status >= 200 && response.status < 300) {
                 setEnviando(false)
@@ -226,7 +226,7 @@ const Encuentas = () => {
                                             <img src={img.secure_url} alt={img.display_name} />
                                         </div>
                                         <div className='nombre'>
-                                            <p>{img.display_name}</p>
+                                            <p>{img.display_name.split('_')[1]}</p>
                                         </div>
                                     </div>
                                 ))}

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
-import { FaHardHat, FaTruck, FaBars, FaDatabase, FaUsersCog, FaSignOutAlt, FaChartLine, FaStar, FaTools, FaSearch, FaChevronLeft, FaUser, FaBoxes, FaSun, FaMoon, FaUserCog, FaChartBar, FaUserTie, FaRobot, FaIdBadge, FaPoll } from 'react-icons/fa';
+import { FaHardHat, FaTruck, FaBars, FaDatabase, FaUsersCog, FaSignOutAlt, FaChartLine, FaStar, FaTools, FaSearch, FaChevronLeft, FaUser, FaBoxes, FaSun, FaMoon, FaUserCog, FaChartBar, FaUserTie, FaRobot, FaIdBadge, FaPoll, FaWpforms } from 'react-icons/fa';
 import { HiClipboardList, HiChartBar, HiOfficeBuilding } from "react-icons/hi";
 import { MdInventory2 } from "react-icons/md";
 import { GiToolbox, GiStreetLight } from "react-icons/gi";
@@ -11,7 +11,6 @@ import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 import { getPageTitle } from '../../rutas/pageTitles';
 import Entradas from '../entradas/entradas';
-import Encuentas from '../../pages/aplicativos/encuentas/encuentas';
 
 function Navbar() {
     const [showMobileMenu, setShowMobileMenu] = useState(false);
@@ -530,7 +529,7 @@ function Navbar() {
                             <li className={`SubMenu ${showMobileMenu ? 'abierto' : 'cerrado'}`}>
                                 {subChecksAplicativos.Encuentas === true &&
                                     (<Link className={`SubMenu-Titulo-Solo ${showMobileMenu ? 'abierto' : 'cerrado'}`} to={{ pathname: "/Encuentas" }} >
-                                        <span className='SubMenu-Titulo-Icono'><FaPoll /></span>
+                                        <span className='SubMenu-Titulo-Icono'><FaWpforms /></span>
                                         {showMobileMenu && (
                                             <span className="SubMenu-Titulo-Texto">Encuentas</span>
                                         )}
@@ -871,7 +870,7 @@ function Navbar() {
                                 </div>
                             </li>
 
-                            <span className={`sub-titulo ${showMobileMenu ? 'abierto' : 'cerrado'}`}>Version 2.0.56</span>
+                            <span className={`sub-titulo ${showMobileMenu ? 'abierto' : 'cerrado'}`}>Version 2.0.57</span>
                         </ul>
 
                         {/* <div className='Logo2'>

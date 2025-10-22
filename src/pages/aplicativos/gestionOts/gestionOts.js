@@ -55,7 +55,24 @@ const GestionOts = () => {
 
         try {
             const responseRegistros = await axios.get(`${process.env.REACT_APP_API_URL}/gestionOts/registros`);
-            const data = responseRegistros.data;
+            const hoy = new Date();
+
+            const dataConDiferencia = responseRegistros.data.map(item => {
+                let diffDias = null;
+
+                if (item.atendida !== "OK" && item.fecha_ingreso) {
+                    const fechaIngreso = new Date(item.fecha_ingreso);
+                    const diffMs = hoy - fechaIngreso;
+                    diffDias = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+                }
+
+                return {
+                    ...item,
+                    dias_diferencia: diffDias
+                };
+            });
+
+            const data = dataConDiferencia;
             const coordenadasInvalidas = data.filter(
                 item => !item.x || !item.y || isNaN(item.x) || isNaN(item.y)
             );
@@ -123,6 +140,7 @@ const GestionOts = () => {
         const valorSeleccionMultiple = seleccionMultiple;
         const valorOrdenes = filtroOrdenes;
         const valorLote = filtroLote;
+        const valorTiempos = filtroTiempos;
 
         infoFiltrada = data.filter(item => {
             const pasaTexto = valorTexto === "" || Object.values(item).some(value =>
@@ -159,7 +177,9 @@ const GestionOts = () => {
 
             const pasaLotes = valorLote === "" || (Array.isArray(JSON.parse(item.lotes || '[]')) && JSON.parse(item.lotes || '[]').includes(Number(valorLote)));
 
-            return pasaTexto && pasaCiudad && pasaEstado && pasaEstadoActualOT && pasaFiltros && pasaSeleccionMultiple && pasaOrdenes && pasaLotes;
+            const pasaTiempos = valorTiempos === "Dentro de tiempos" ? item.dias_diferencia === 0 || item.dias_diferencia === 1 : valorTiempos === "Proximo a vencer" ? item.dias_diferencia === 2 : valorTiempos === "Vencido" ? item.dias_diferencia > 2 : true;
+
+            return pasaTexto && pasaCiudad && pasaEstado && pasaEstadoActualOT && pasaFiltros && pasaSeleccionMultiple && pasaOrdenes && pasaLotes && pasaTiempos;
         });
 
         mapRef.current.eachLayer(layer => {
@@ -249,7 +269,7 @@ const GestionOts = () => {
     const coordCount = {};
 
     const addMarkerToMap = (item) => {
-        const { x, y, cuadrilla, atendida } = item;
+        const { x, y, cuadrilla, atendida, dias_diferencia } = item;
 
         if (!x || !y || isNaN(x) || isNaN(y)) {
             console.warn("Coordenadas inválidas para el item:", item);
@@ -276,6 +296,10 @@ const GestionOts = () => {
             markerColor = "black";
         } else if (cuadrilla && cuadrilla.trim() !== "") {
             markerColor = "green";
+        } else if (dias_diferencia === 2 ) {
+            markerColor = "yellow";
+        } else if (dias_diferencia > 2 ) {
+            markerColor = "red";
         } else {
             markerColor = "#18409E";
         }
@@ -568,12 +592,13 @@ const GestionOts = () => {
     const [filtroOrdenes, setFiltroOrdenes] = useState('');
     const [inputFiltroOrdenesKey, setInputFiltroOrdenesKey] = useState('');
     const [filtroLote, setFiltroLote] = useState('');
+    const [filtroTiempos, setFiltroTiempos] = useState('');
 
     useEffect(() => {
         if (data) {
             aplicarFiltros();
         }
-    }, [filtroCuadrilla, filtroCiudad, filtroAsignacion, filtroTexto, filtroFechaInicio, filtroOtsInvalidas, seleccionMultiple, filtroEstadoActualOT, filtroTurno, filtroOrdenes, filtroLote]);
+    }, [filtroCuadrilla, filtroCiudad, filtroAsignacion, filtroTexto, filtroFechaInicio, filtroOtsInvalidas, seleccionMultiple, filtroEstadoActualOT, filtroTurno, filtroOrdenes, filtroLote, filtroTiempos]);
 
     return (
         <div className="GestionOts">
@@ -752,6 +777,23 @@ const GestionOts = () => {
                         </div>
                         <div className='linea'></div>
                         <div className="campo">
+                            <div className='titulo'>
+                                <i className="fa-solid fa-clock"></i>
+                                <Textos className='subtitulo'>Tiempos</Textos>
+                            </div>
+                            <div className='opcion'>
+                                <Selectores value={filtroTiempos} onChange={(e) => { setFiltroTiempos(e.target.value) }}
+                                    options={[
+                                        { value: 'Dentro de tiempos', label: 'Dentro de tiempos' },
+                                        { value: 'Proximo a vencer', label: 'Proximo a vencer' },
+                                        { value: 'Vencido', label: 'Vencido' },
+                                    ]}
+                                    className="primary">
+                                </Selectores>
+                            </div>
+                        </div>
+                        <div className='linea'></div>
+                        <div className="campo">
                             <div className='opcion'>
                                 <div className="checkControl">
                                     <div className="texto">
@@ -789,6 +831,7 @@ const GestionOts = () => {
                                         setFiltroAsignacion('');
                                         setFiltroOrdenes('');
                                         setFiltroLote('');
+                                        setFiltroTiempos('');
                                         setInputFiltroOrdenesKey(Date.now());
                                         setSeleccionMultiple(false);
                                         setSelectedMarkers([]);
@@ -823,7 +866,7 @@ const GestionOts = () => {
                                                 const value = row[key];
 
                                                 if (typeof value === "string" && value.length > MAX_EXCEL_LENGTH) {
-                                                    newRow[key] = value.slice(0, MAX_EXCEL_LENGTH-5) + "…";
+                                                    newRow[key] = value.slice(0, MAX_EXCEL_LENGTH - 5) + "…";
                                                 } else {
                                                     newRow[key] = value;
                                                 }
@@ -902,7 +945,7 @@ const GestionOts = () => {
 
                                                 jsonData.forEach(row => {
                                                     if (typeof row.fecha_ingreso === "number") {
-                                                        const fechaJS = XLSX.SSF.format("yyyy-mm-dd", row.fecha_ingreso);
+                                                        const fechaJS = XLSX.SSF.format("yyyy-mm-dd hh:mm", row.fecha_ingreso);
                                                         row.fecha_ingreso = fechaJS;
                                                     }
                                                     if (typeof row.ahora === "number") {
