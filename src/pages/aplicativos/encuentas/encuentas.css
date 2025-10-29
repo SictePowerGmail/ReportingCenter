@@ -57,7 +57,7 @@
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 
         .card {
-            background: #fff;
+            background: var(--background-menu-superior);
             border-radius: 8px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             padding: 1rem;
@@ -81,7 +81,7 @@
                 justify-content: center;
                 height: 90%;
 
-                img {
+                img, video {
                     width: 100%;
                     height: auto;
                     max-height: 100%;
@@ -95,6 +95,7 @@
                 align-items: center;
                 justify-content: center;
                 height: 10%;
+                color: var(--text);
             }
         }
     }

@@ -32,6 +32,7 @@ const Encuentas = () => {
             setLoading(true)
             const responseImagenes = await axios.get(`${process.env.REACT_APP_API_URL}/imagenes/encuestas`);
             const data = responseImagenes.data;
+            console.log(data)
             setImagenes(data)
         } catch (error) {
             console.log(error);
@@ -94,7 +95,7 @@ const Encuentas = () => {
     const validarEncuesta = (encuenta) => {
         if (!encuenta.nombreCompleto) { toast.error('Por favor diligencie el nombre completo.'); return false }
         if (!encuenta.correo) { toast.error('Por favor diligencie el correo.'); return false }
-        if (!encuenta.segmento) { toast.error('Por favor seleccione el segmento.'); return false }
+        // if (!encuenta.segmento) { toast.error('Por favor seleccione el segmento.'); return false }
         if (!encuenta.imagen) { toast.error('Por favor seleccione una imagen.'); return false }
     }
 
@@ -197,7 +198,7 @@ const Encuentas = () => {
                         </div>
                     </div>
 
-                    <div className='campo'>
+                    {/* <div className='campo'>
                         <i className="fas fa-tools"></i>
                         <div className='entradaDatos'>
                             <Textos className='subtitulo'>Segmento:</Textos>
@@ -210,7 +211,7 @@ const Encuentas = () => {
                                 options={opciones}
                             ></Selectores>
                         </div>
-                    </div>
+                    </div> */}
 
                     <div className='campo'>
                         <i className="fas fa-tools"></i>
@@ -218,15 +219,29 @@ const Encuentas = () => {
                             <Textos className='subtitulo'>Opciones:</Textos>
                             <div className="galeria">
                                 {imagenesFiltradas.map((img) => (
-                                    <div key={img.public_id} className={`card ${encuesta.imagen === img.display_name ? 'seleccionada' : ''}`}
-                                        onClick={() => {
-                                            actualizarEncuesta('imagen', img.display_name);
-                                        }}>
+                                    <div
+                                        key={img.public_id}
+                                        className={`card ${encuesta.imagen === img.display_name ? 'seleccionada' : ''}`}
+                                        onClick={() => actualizarEncuesta('imagen', img.display_name)}
+                                    >
                                         <div className='imagenes'>
-                                            <img src={img.secure_url} alt={img.display_name} />
+                                            {img.resource_type === "video" ? (
+                                                <video
+                                                    src={img.secure_url}
+                                                    controls
+                                                    width="100%"
+                                                    style={{ borderRadius: "8px" }}
+                                                />
+                                            ) : (
+                                                <img
+                                                    src={img.secure_url}
+                                                    alt={img.display_name}
+                                                    style={{ borderRadius: "8px" }}
+                                                />
+                                            )}
                                         </div>
                                         <div className='nombre'>
-                                            <p>{img.display_name.split('_')[1]}</p>
+                                            <p>{img.display_name.replaceAll('_', ' ')}</p>
                                         </div>
                                     </div>
                                 ))}
