@@ -22,6 +22,46 @@
         }
     }
 
+    .Votaciones {
+        display: flex !important;
+        justify-content: center;
+        align-items: baseline;
+        width: 100% !important;
+
+        @media screen and (max-width: 600px) {
+            flex-direction: column !important;
+        }
+
+        .BarraVotaciones {
+            width: 100%;
+
+            @media screen and (max-width: 600px) {
+                width: 100% !important;
+            }
+
+            .TituloBarraVotaciones {
+                color: var(--text);
+
+                i {
+                    padding-right: 10px;
+                }
+            }
+
+            .Grafica {
+                width: 100% !important;
+                height: 300px;
+            }
+        }
+    }
+
+    .Linea {
+        height: 1px;
+        width: 100%;
+        border: 1px solid var(--background-lineas);
+        border-radius: 10px;
+        margin: 10px 0;
+    }
+
     .campo {
         display: flex;
         width: 100%;
@@ -81,7 +121,8 @@
                 justify-content: center;
                 height: 90%;
 
-                img, video {
+                img,
+                video {
                     width: 100%;
                     height: auto;
                     max-height: 100%;

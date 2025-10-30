@@ -38,7 +38,7 @@ const BarHorizontal = ({ xValues, yValues, title }) => {
                 backgroundColor: tooltipBackground,
             },
             grid: {
-                left: 120,
+                left: 135,
                 top: 0,
                 bottom: 0,
             },

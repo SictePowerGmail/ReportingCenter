@@ -9,7 +9,7 @@ import CargandoDatos from '../../../components/cargandoDatos/cargandoDatos';
 import Textos from '../../../components/textos/textos';
 import Entradas from '../../../components/entradas/entradas';
 import Botones from '../../../components/botones/botones';
-import Selectores from '../../../components/selectores/selectores';
+import BarHorizontal from '../../../components/graficas/barHorizontal';
 
 const Encuentas = () => {
     const navigate = useNavigate();
@@ -17,6 +17,7 @@ const Encuentas = () => {
     const [loading, setLoading] = useState(false);
     const [enviando, setEnviando] = useState(false);
     const [imagenes, setImagenes] = useState('');
+    const [resultadoEncuenta, setResultadoEncuenta] = useState([]);
     const [encuesta, setEncuesta] = useState(() => {
         const guardado = localStorage.getItem('encuesta');
         return guardado ? JSON.parse(guardado) : {
@@ -32,8 +33,26 @@ const Encuentas = () => {
             setLoading(true)
             const responseImagenes = await axios.get(`${process.env.REACT_APP_API_URL}/imagenes/encuestas`);
             const data = responseImagenes.data;
-            console.log(data)
             setImagenes(data)
+
+            const responseEncuestas = await axios.get(`${process.env.REACT_APP_API_URL}/encuestas/Registros`);
+
+            const registrosPorCadaUno = responseEncuestas.data.reduce((acc, item) => {
+                if (!acc[item.imagen]) {
+                    acc[item.imagen] = 0;
+                }
+                acc[item.imagen]++;
+                return acc;
+            }, {});
+
+            const registrosPorCadaUno2 = Object.entries(registrosPorCadaUno)
+                .map(([imagen, registros]) => ({
+                    name: imagen.split(" ").slice(0, 2).join(" "),
+                    registros: registros
+                }))
+                .sort((a, b) => a.registros - b.registros);
+
+            setResultadoEncuenta(registrosPorCadaUno2)
         } catch (error) {
             console.log(error);
         } finally {
@@ -146,6 +165,20 @@ const Encuentas = () => {
                     <div className='PaginaVolver'>
                         <Botones className='agregar' onClick={() => navigate('/SupervisionPrincipal')}><FaArrowLeft /><Textos className='parrafo'>Volver</Textos></Botones>
                     </div>
+
+                    <div className='Votaciones'>
+                        <div className='BarraVotaciones'>
+                            <div className='TituloBarraVotaciones'>
+                                <i className="fas fa-chart-bar"></i>
+                                <span>Cantidad de votos a la fecha: {resultadoEncuenta.reduce((sum, item) => sum + item.registros, 0)}</span>
+                            </div>
+                            <div className='Grafica'>
+                                <BarHorizontal xValues={resultadoEncuenta.map(d => d.name)} yValues={resultadoEncuenta.map(d => d.registros)} title={'Votaciones'} />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className='Linea'></div>
 
                     <div className='campo'>
                         <i className="fas fa-tools"></i>
