@@ -531,7 +531,7 @@ function Navbar() {
                                     (<Link className={`SubMenu-Titulo-Solo ${showMobileMenu ? 'abierto' : 'cerrado'}`} to={{ pathname: "/Encuentas" }} >
                                         <span className='SubMenu-Titulo-Icono'><FaWpforms /></span>
                                         {showMobileMenu && (
-                                            <span className="SubMenu-Titulo-Texto">Encuentas</span>
+                                            <span className="SubMenu-Titulo-Texto">Encuestas</span>
                                         )}
                                     </Link>)
                                 }
@@ -870,7 +870,7 @@ function Navbar() {
                                 </div>
                             </li>
 
-                            <span className={`sub-titulo ${showMobileMenu ? 'abierto' : 'cerrado'}`}>Version 2.0.60</span>
+                            <span className={`sub-titulo ${showMobileMenu ? 'abierto' : 'cerrado'}`}>Version 2.0.61</span>
                         </ul>
 
                         {/* <div className='Logo2'>
