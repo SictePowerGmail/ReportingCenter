@@ -55,24 +55,8 @@ const GestionOts = () => {
 
         try {
             const responseRegistros = await axios.get(`${process.env.REACT_APP_API_URL}/gestionOts/registros`);
-            const hoy = new Date();
 
-            const dataConDiferencia = responseRegistros.data.map(item => {
-                let diffDias = null;
-
-                if (item.atendida !== "OK" && item.fecha_ingreso) {
-                    const fechaIngreso = new Date(item.fecha_ingreso);
-                    const diffMs = hoy - fechaIngreso;
-                    diffDias = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-                }
-
-                return {
-                    ...item,
-                    dias_diferencia: diffDias
-                };
-            });
-
-            const data = dataConDiferencia;
+            const data = responseRegistros.data;
             const coordenadasInvalidas = data.filter(
                 item => !item.x || !item.y || isNaN(item.x) || isNaN(item.y)
             );
@@ -587,7 +571,7 @@ const GestionOts = () => {
     const [filtroFechaInicio, setFiltroFechaInicio] = useState('');
     const [filtroOtsInvalidas, setFiltroOtsInvalidas] = useState('');
     const [seleccionMultiple, setSeleccionMultiple] = useState(false);
-    const [filtroEstadoActualOT, setFiltroEstadoActualOT] = useState('');
+    const [filtroEstadoActualOT, setFiltroEstadoActualOT] = useState('DISPONIBLE_PROGRAMAR');
     const [filtroTurno, setFiltroTurno] = useState('');
     const [filtroOrdenes, setFiltroOrdenes] = useState('');
     const [inputFiltroOrdenesKey, setInputFiltroOrdenesKey] = useState('');
