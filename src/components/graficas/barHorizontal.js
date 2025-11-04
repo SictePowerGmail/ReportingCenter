@@ -54,6 +54,26 @@ const BarHorizontal = ({ xValues, yValues, title }) => {
                 data: xValues,
                 axisLabel: {
                     color: textColor,
+                    interval: 0,
+                    width: 120,
+                    overflow: 'break',
+                    formatter: function (value) {
+                        const maxLength = 20;
+                        if (value.length <= maxLength) return value;
+
+                        const lines = [];
+                        let remaining = value;
+
+                        while (remaining.length > maxLength) {
+                            let sliceIndex = remaining.lastIndexOf(' ', maxLength);
+                            if (sliceIndex === -1) sliceIndex = maxLength;
+                            lines.push(remaining.slice(0, sliceIndex).trim());
+                            remaining = remaining.slice(sliceIndex).trim();
+                        }
+
+                        if (remaining.length > 0) lines.push(remaining);
+                        return lines.join('\n');
+                    }
                 },
                 axisLine: {
                     lineStyle: {

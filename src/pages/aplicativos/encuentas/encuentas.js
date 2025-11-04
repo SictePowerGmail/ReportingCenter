@@ -50,7 +50,7 @@ const Encuentas = () => {
 
             const registrosPorCadaUno2 = Object.entries(registrosPorCadaUno)
                 .map(([imagen, registros]) => ({
-                    name: imagen.split(" ").slice(0, 2).join(" "),
+                    name: imagen,
                     registros: registros
                 }))
                 .sort((a, b) => a.registros - b.registros);
