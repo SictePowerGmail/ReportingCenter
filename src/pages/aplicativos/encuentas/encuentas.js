@@ -18,6 +18,7 @@ const Encuentas = () => {
     const [enviando, setEnviando] = useState(false);
     const [imagenes, setImagenes] = useState('');
     const [resultadoEncuenta, setResultadoEncuenta] = useState([]);
+    const nombreEncuesta = "Concurso decoración Halloween 2025"
     const [encuesta, setEncuesta] = useState(() => {
         const guardado = localStorage.getItem('encuesta');
         return guardado ? JSON.parse(guardado) : {
@@ -37,7 +38,9 @@ const Encuentas = () => {
 
             const responseEncuestas = await axios.get(`${process.env.REACT_APP_API_URL}/encuestas/Registros`);
 
-            const registrosPorCadaUno = responseEncuestas.data.reduce((acc, item) => {
+            const filtradosEncuestas = responseEncuestas.data.filter(item => item.nombreEncuesta === nombreEncuesta);
+
+            const registrosPorCadaUno = filtradosEncuestas.reduce((acc, item) => {
                 if (!acc[item.imagen]) {
                     acc[item.imagen] = 0;
                 }
@@ -95,7 +98,6 @@ const Encuentas = () => {
         : [];
 
     const fecha = obtenerFechaFormateada();
-    const nombreEncuesta = "Monstruos de 4 Patas"
 
     const actualizarEncuesta = async (campo, valor) => {
         const [nivel1, nivel2] = campo.split('.');
@@ -163,22 +165,26 @@ const Encuentas = () => {
             ) : (
                 <>
                     <div className='PaginaVolver'>
-                        <Botones className='agregar' onClick={() => navigate('/SupervisionPrincipal')}><FaArrowLeft /><Textos className='parrafo'>Volver</Textos></Botones>
+                        <Botones className='agregar' onClick={() => navigate('/')}><FaArrowLeft /><Textos className='parrafo'>Volver</Textos></Botones>
                     </div>
 
-                    <div className='Votaciones'>
-                        <div className='BarraVotaciones'>
-                            <div className='TituloBarraVotaciones'>
-                                <i className="fas fa-chart-bar"></i>
-                                <span>Cantidad de votos a la fecha: {resultadoEncuenta.reduce((sum, item) => sum + item.registros, 0)}</span>
+                    {resultadoEncuenta.length > 0 && (
+                        <>
+                            <div className='Votaciones'>
+                                <div className='BarraVotaciones'>
+                                    <div className='TituloBarraVotaciones'>
+                                        <i className="fas fa-chart-bar"></i>
+                                        <span>Cantidad de votos a la fecha: {resultadoEncuenta.reduce((sum, item) => sum + item.registros, 0)}</span>
+                                    </div>
+                                    <div className='Grafica'>
+                                        <BarHorizontal xValues={resultadoEncuenta.map(d => d.name)} yValues={resultadoEncuenta.map(d => d.registros)} title={'Votaciones'} />
+                                    </div>
+                                </div>
                             </div>
-                            <div className='Grafica'>
-                                <BarHorizontal xValues={resultadoEncuenta.map(d => d.name)} yValues={resultadoEncuenta.map(d => d.registros)} title={'Votaciones'} />
-                            </div>
-                        </div>
-                    </div>
 
-                    <div className='Linea'></div>
+                            <div className='Linea'></div>
+                        </>
+                    )}
 
                     <div className='campo'>
                         <i className="fas fa-tools"></i>
