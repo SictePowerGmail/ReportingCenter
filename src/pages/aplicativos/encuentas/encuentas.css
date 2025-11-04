@@ -64,7 +64,7 @@
 
     .campo {
         display: flex;
-        width: 100%;
+        width: 100% !important;
         height: auto;
         margin-bottom: 15px;
 
@@ -74,7 +74,7 @@
         }
 
         .entradaDatos {
-            width: 100%;
+            width: 100% !important;
 
             .entrada,
             .selector {
