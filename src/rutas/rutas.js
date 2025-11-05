@@ -58,6 +58,7 @@ import MantenimientoPuntuacion from '../pages/puntuacion/MantenimientoPuntuacion
 import PlaneacionPuntuacion from '../pages/puntuacion/PlaneacionPuntuacion';
 import ReingenieriasPuntuacion from '../pages/puntuacion/ReingenieriasPuntuacion';
 /* Operacion */
+import BacklogAP from "../pages/operacion/Backlog_AP";
 import BacklogFO from '../pages/operacion/Backlog_FO';
 import BacklogHFC from '../pages/operacion/Backlog_HFC';
 import MantenimientoPuntuacionTMRF from '../pages/operacion/MantenimientoPuntuacionTMRF';
@@ -175,6 +176,7 @@ function RutasApp() {
                     <Route path='/ReingenieriasPuntuacion' exacte element={<ReingenieriasPuntuacion />} />
                     <Route path='/EnelApPuntuacion' exacte element={<EnelApPuntuacion />} />
                     {/* Operacion */}
+                    <Route path='/BacklogAP' exacte element={<BacklogAP />} />
                     <Route path='/MantenimientoBacklogFO' exacte element={<BacklogFO />} />
                     <Route path='/MantenimientoBacklogHFC' exacte element={<BacklogHFC />} />
                     <Route path='/MantenimientoPuntuacionTMRF' exact element={<MantenimientoPuntuacionTMRF />} />

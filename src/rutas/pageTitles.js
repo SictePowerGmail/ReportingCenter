@@ -107,6 +107,8 @@ export const getPageTitle = (pathname) => {
         case '/ReingenieriasPuntuacion':
             return 'Reingenierias Puntuacion';
         /* Operacion */
+        case '/BacklogAP':
+            return 'Backlog AP';
         case '/MantenimientoBacklogFO':
             return 'Mantenimiento Backlog FO';
         case '/MantenimientoBacklogHFC':
