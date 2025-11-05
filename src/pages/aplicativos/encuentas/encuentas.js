@@ -16,7 +16,7 @@ const Encuentas = () => {
     const [key, setKey] = useState(0);
     const [loading, setLoading] = useState(false);
     const [enviando, setEnviando] = useState(false);
-    const [imagenes, setImagenes] = useState('');
+    const [imagenesVideos, setImagenesVideos] = useState('');
     const [resultadoEncuenta, setResultadoEncuenta] = useState([]);
     const nombreEncuesta = "Concurso decoración Halloween 2025"
     const [encuesta, setEncuesta] = useState(() => {
@@ -34,7 +34,8 @@ const Encuentas = () => {
             setLoading(true)
             const responseImagenes = await axios.get(`${process.env.REACT_APP_API_URL}/imagenes/encuestas`);
             const data = responseImagenes.data;
-            setImagenes(data)
+            console.log(data)
+            setImagenesVideos(data.archivos)
 
             const responseEncuestas = await axios.get(`${process.env.REACT_APP_API_URL}/encuestas/Registros`);
 
@@ -78,21 +79,9 @@ const Encuentas = () => {
         return `${yyyy}-${mm}-${dd} ${hh}:${min}:${ss}`;
     };
 
-    const opciones = Array.isArray(imagenes)
-        ? Array.from(
-            new Map(
-                imagenes.map((img) => {
-                    const value = img.display_name.split('_')[0];
-                    const label = value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
-                    return [value, { value, label }];
-                })
-            ).values()
-        )
-        : [];
-
-    const imagenesFiltradas = Array.isArray(imagenes)
-        ? imagenes.filter((img) => {
-            const segmento = img.display_name.split('_')[0];
+    const imagenesVideosFiltradas = Array.isArray(imagenesVideos)
+        ? imagenesVideos.filter((img) => {
+            const segmento = img.nombre.split('_')[0];
             return encuesta.segmento ? segmento === encuesta.segmento : true;
         })
         : [];
@@ -257,30 +246,30 @@ const Encuentas = () => {
                         <div className='entradaDatos'>
                             <Textos className='subtitulo'>Opciones:</Textos>
                             <div className="galeria">
-                                {imagenesFiltradas.map((img) => (
+                                {imagenesVideosFiltradas.map((item) => (
                                     <div
-                                        key={img.public_id}
-                                        className={`card ${encuesta.imagen === img.display_name ? 'seleccionada' : ''}`}
-                                        onClick={() => actualizarEncuesta('imagen', img.display_name)}
+                                        key={item.id}
+                                        className={`card ${encuesta.imagen === item.nombre ? 'seleccionada' : ''}`}
+                                        onClick={() => actualizarEncuesta('imagen', item.nombre)}
                                     >
                                         <div className='imagenes'>
-                                            {img.resource_type === "video" ? (
+                                            {item.tipo === "video/mp4" ? (
                                                 <video
-                                                    src={img.secure_url}
+                                                    src={`${process.env.REACT_APP_API_URL}/imagenes/file/${item.id}`}
                                                     controls
                                                     width="100%"
                                                     style={{ borderRadius: "8px" }}
                                                 />
                                             ) : (
                                                 <img
-                                                    src={img.secure_url}
-                                                    alt={img.display_name}
+                                                    src={item.link}
+                                                    alt={item.nombre}
                                                     style={{ borderRadius: "8px" }}
                                                 />
                                             )}
                                         </div>
                                         <div className='nombre'>
-                                            <p>{img.display_name.replaceAll('_', ' ')}</p>
+                                            <p>{item.nombre.replaceAll('_', ' ')}</p>
                                         </div>
                                     </div>
                                 ))}
