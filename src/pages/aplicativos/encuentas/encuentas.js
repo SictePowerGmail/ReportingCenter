@@ -34,7 +34,6 @@ const Encuentas = () => {
             setLoading(true)
             const responseImagenes = await axios.get(`${process.env.REACT_APP_API_URL}/imagenes/encuestas`);
             const data = responseImagenes.data;
-            console.log(data)
             setImagenesVideos(data.archivos)
 
             const responseEncuestas = await axios.get(`${process.env.REACT_APP_API_URL}/encuestas/Registros`);
@@ -249,8 +248,8 @@ const Encuentas = () => {
                                 {imagenesVideosFiltradas.map((item) => (
                                     <div
                                         key={item.id}
-                                        className={`card ${encuesta.imagen === item.nombre ? 'seleccionada' : ''}`}
-                                        onClick={() => actualizarEncuesta('imagen', item.nombre)}
+                                        className={`card ${encuesta.imagen === item.nombre.replace(/\..*$/, '') ? 'seleccionada' : ''}`}
+                                        onClick={() => actualizarEncuesta('imagen', item.nombre.replace(/\..*$/, ''))}
                                     >
                                         <div className='imagenes'>
                                             {item.tipo === "video/mp4" ? (
@@ -269,7 +268,7 @@ const Encuentas = () => {
                                             )}
                                         </div>
                                         <div className='nombre'>
-                                            <p>{item.nombre.replaceAll('_', ' ')}</p>
+                                            <p>{item.nombre.replaceAll('_', ' ').replace(/\..*$/, '')}</p>
                                         </div>
                                     </div>
                                 ))}
