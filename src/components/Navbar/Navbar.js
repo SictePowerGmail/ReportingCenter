@@ -175,6 +175,7 @@ function Navbar() {
 
     const [operacion, setOperacion] = useState(false);
     const [subChecksOperacion, setSubChecksOperacion] = useState({
+        AtencionAP: false,
         BacklogAP: false,
         CumplimientoSlaFo: false,
         CumplimientoSlaHfc: false,
@@ -672,6 +673,7 @@ function Navbar() {
                                 </div>
                                 <div className={`SubMenu-Contenido ${showMobileMenu && showDropdownMantenimiento ? 'visible' : 'oculto'}`}>
                                     <ul>
+                                        {subChecksOperacion.AtencionAP === true && (<Link className='SubMenu-Contenido-Titulo' to="/AtencionAP" ><li>Atencion AP</li></Link>)}
                                         {subChecksOperacion.BacklogAP === true && (<Link className='SubMenu-Contenido-Titulo' to="/BacklogAP" ><li>Backlog AP</li></Link>)}
                                         {subChecksOperacion.CumplimientoSlaFo === true && (<Link className='SubMenu-Contenido-Titulo' to="/MantenimientoBacklogFO" ><li>Cumplimiento SLA FO</li></Link>)}
                                         {subChecksOperacion.CumplimientoSlaHfc === true && (<Link className='SubMenu-Contenido-Titulo' to="/MantenimientoBacklogHFC" ><li>Cumplimiento SLA HFC</li></Link>)}
@@ -872,7 +874,7 @@ function Navbar() {
                                 </div>
                             </li>
 
-                            <span className={`sub-titulo ${showMobileMenu ? 'abierto' : 'cerrado'}`}>Version 2.0.67</span>
+                            <span className={`sub-titulo ${showMobileMenu ? 'abierto' : 'cerrado'}`}>Version 2.0.68</span>
                         </ul>
 
                         {/* <div className='Logo2'>
