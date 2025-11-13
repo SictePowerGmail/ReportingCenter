@@ -179,6 +179,8 @@ export const getPageTitle = (pathname) => {
             return 'Moviles'
         case '/GestionMantenimientos':
             return 'Gestion Mantenimientos'
+        case '/SeguimientoParqueAutomotor':
+            return 'Seguimiento Parque Automotor'
         /* Gestion Humana */
         case '/IndicadoresChatbot':
             return 'Indicadores Chatbot'

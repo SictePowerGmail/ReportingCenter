@@ -96,6 +96,7 @@ import COPASST from "../pages/hseq/COPASST";
 /* Parque Automotor */
 import Moviles from "../pages/parqueAutomotor/Moviles";
 import GestionMantenimientos from "../pages/parqueAutomotor/GestionMantenimientos";
+import SeguimientoParqueAutomotor from "../pages/parqueAutomotor/SeguimientoParqueAutomotor";
 /* Recuperar Contraseña */
 import RecuperarContraseña from "../pages/recuperarContraseña/recuperarContraseña";
 import { getPageTitle } from "./pageTitles";
@@ -215,6 +216,7 @@ function RutasApp() {
                     {/* Parque Automotor */}
                     <Route path='/Moviles' exacte element={<Moviles />} />
                     <Route path='/GestionMantenimientos' exacte element={<GestionMantenimientos />} />
+                    <Route path='/SeguimientoParqueAutomotor' exacte element={<SeguimientoParqueAutomotor />} />
                     {/* Gestion Humana */}
                     <Route path='/IndicadoresChatbot' exacte element={<IndicadoresChatbot />} />
                     {/* Recuperar Contraseña */}

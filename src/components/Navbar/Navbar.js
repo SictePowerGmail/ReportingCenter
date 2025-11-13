@@ -224,6 +224,7 @@ function Navbar() {
     const [subChecksParqueAutomotor, setSubChecksParqueAutomotor] = useState({
         Moviles: false,
         GestionMantenimientos: false,
+        Seguimiento: false,
     });
 
     const [gestionHumana, setGestionHumana] = useState(false);
@@ -810,6 +811,7 @@ function Navbar() {
                                     <ul>
                                         {subChecksParqueAutomotor.Moviles === true && (<Link className='SubMenu-Contenido-Titulo' to="/Moviles" ><li>Moviles</li></Link>)}
                                         {subChecksParqueAutomotor.GestionMantenimientos === true && (<Link className='SubMenu-Contenido-Titulo' to="/GestionMantenimientos" ><li>Gestion Mantenimientos</li></Link>)}
+                                        {subChecksParqueAutomotor.Seguimiento === true && (<Link className='SubMenu-Contenido-Titulo' to="/SeguimientoParqueAutomotor" ><li>Seguimiento</li></Link>)}
                                     </ul>
                                 </div>
                             </li>
@@ -874,7 +876,7 @@ function Navbar() {
                                 </div>
                             </li>
 
-                            <span className={`sub-titulo ${showMobileMenu ? 'abierto' : 'cerrado'}`}>Version 2.0.68</span>
+                            <span className={`sub-titulo ${showMobileMenu ? 'abierto' : 'cerrado'}`}>Version 2.0.69</span>
                         </ul>
 
                         {/* <div className='Logo2'>
