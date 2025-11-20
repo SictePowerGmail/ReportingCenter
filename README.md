@@ -68,3 +68,30 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+
+### Instalar y configurar Capacitor
+npm install @capacitor/core @capacitor/cli --legacy-peer-deps
+npx cap init
+npm install @capacitor/android
+npx cap add android
+
+### Cada vez que se realice algo en react
+npm run build
+npx cap sync
+npx cap open android
+
+### Generar llave para crear APK en android Studio
+keytool -genkey -v -keystore sicte-release-key.keystore -alias sictekey -keyalg RSA -keysize 2048 -validity 10000
+### Ver contenido de la llave
+keytool -list -v -keystore sicte-release-key.keystore
+
+
+Alias → sictekey
+Keystore password → Sicte2025*
+Your first and last name → Brayan Castelblanco
+Organizational Unit → IT
+Organization name → Sicte SAS
+City → Bogota
+State → Cundinamarca
+Country code → CO
