@@ -126,6 +126,7 @@ function RutasApp() {
                     <Route path='/ControlUsuarios' exact element={<ControlUsuarios />} />
                     {/* Inicio */}
                     <Route path='/' exact element={<Inicio />} />
+                    <Route path='/ReportingCenter' exact element={<Inicio />} />
                     {/* Login */}
                     <Route path='/Login' exact element={<Login />} />
                     {/* Aplicativos */}

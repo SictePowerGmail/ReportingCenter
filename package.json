@@ -1,6 +1,7 @@
 {
   "name": "responsivemenu",
   "version": "0.1.0",
+  "homepage": "https://sictepowergmail.github.io/ReportingCenter",
   "private": true,
   "dependencies": {
     "@capacitor/android": "^7.4.4",
