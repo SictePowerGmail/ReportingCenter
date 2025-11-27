@@ -534,50 +534,6 @@ const GestionOts = () => {
         }
     };
 
-    const enviarActualizacionDeOtsNuevas = async (jsonData) => {
-        if (!Array.isArray(jsonData) || jsonData.length === 0) {
-            toast.error('El archivo no tiene información válida.');
-            return;
-        }
-
-        setEnviando(true);
-
-        const CHUNK_SIZE = 200;
-        const totalChunks = Math.ceil(jsonData.length / CHUNK_SIZE);
-        try {
-            for (let i = 0; i < jsonData.length; i += CHUNK_SIZE) {
-                const chunk = jsonData.slice(i, i + CHUNK_SIZE);
-                const datos = {
-                    data: chunk,
-                    nombreUsuario: Cookies.get('userNombre'),
-                };
-
-                console.log(`Enviando paquete ${i/CHUNK_SIZE + 1}: ${chunk.length} items`);
-                toast.success(`Enviando paquete ${i/CHUNK_SIZE + 1}: ${chunk.length} items`, { className: 'toast-success' });
-
-                const response = await axios.post(`${process.env.REACT_APP_API_URL}/gestionOts/nuevasOrdenes`, datos, { timeout: 120000 });
-
-                if (!(response.status >= 200 && response.status < 300)) {
-                    throw new Error('Error al enviar un paquete de datos');
-                }
-
-                console.log(`Paquete ${i / CHUNK_SIZE + 1} de ${totalChunks} enviado correctamente`);
-                toast.success(`Paquete ${i / CHUNK_SIZE + 1} de ${totalChunks} enviado correctamente`, { className: 'toast-success' });
-
-                await new Promise(resolve => setTimeout(resolve, 5000));
-            }
-
-            toast.success('Todos los datos se enviaron exitosamente', { className: 'toast-success' });
-            await cargarRegistros();
-        } catch (error) {
-            const mensaje = error.response?.data?.error || error.message || 'Error al enviar los datos.';
-            console.error('Error al enviar:', mensaje);
-            toast.error(mensaje, { className: 'toast-error' });
-        } finally {
-            setEnviando(false);
-        }
-    };
-
     const [filtroCuadrilla, setFiltroCuadrilla] = useState('');
     const [filtroCiudad, setFiltroCiudad] = useState('');
     const [filtroAsignacion, setFiltroAsignacion] = useState('Asignado y pendiente');
@@ -934,54 +890,37 @@ const GestionOts = () => {
                                 <Textos className='subtitulo'>Nuevas</Textos>
                             </div>
                             <div className='opcion'>
-                                <Entradas type="file" accept=".xlsx,.xls" onChange={(e) => {
-                                    const file = e.target.files[0];
-                                    if (!file) return;
+                                <Entradas
+                                    type="file"
+                                    accept=".xlsx,.xls"
+                                    onChange={async (e) => {
+                                        const file = e.target.files[0];
+                                        if (!file) return;
 
-                                    const reader = new FileReader();
+                                        setLoading(true);
 
-                                    reader.onload = function (evt) {
-                                        const data = new Uint8Array(evt.target.result);
-                                        const workbook = XLSX.read(data, { type: 'array' });
+                                        const formData = new FormData();
+                                        formData.append("file", file);
+                                        formData.append("nombreUsuario", Cookies.get("userNombre"));
 
-                                        const hojas = ["Ordenes"];
+                                        try {
+                                            const resp = await axios.post(
+                                                `${process.env.REACT_APP_API_URL}/gestionOts/subirExcelNuevasOrdenes`,
+                                                formData
+                                            );
 
-                                        hojas.forEach(nombreHoja => {
-                                            if (workbook.SheetNames.includes(nombreHoja)) {
-                                                const worksheet = workbook.Sheets[nombreHoja];
-                                                const jsonData = XLSX.utils.sheet_to_json(worksheet);
+                                            toast.success(resp.data.message || "Archivo enviado correctamente");
 
-                                                if (jsonData.length === 0) {
-                                                    toast.warning(
-                                                        `La hoja "${nombreHoja}" no contiene datos además del encabezado`,
-                                                        { className: "toast-success" }
-                                                    );
-                                                    e.target.value = null;
-                                                    return;
-                                                }
+                                        } catch (err) {
+                                            console.error(err);
+                                            toast.error("Error enviando archivo");
+                                        } finally {
+                                            setLoading(false);
+                                        }
 
-                                                jsonData.forEach(row => {
-                                                    if (typeof row.fecha_ingreso === "number") {
-                                                        const fechaJS = XLSX.SSF.format("yyyy-mm-dd hh:mm", row.fecha_ingreso);
-                                                        row.fecha_ingreso = fechaJS;
-                                                    }
-                                                    if (typeof row.ahora === "number") {
-                                                        const fechaJS = XLSX.SSF.format("yyyy-mm-dd hh:mm", row.ahora);
-                                                        row.ahora = fechaJS;
-                                                    }
-                                                });
-
-                                                enviarActualizacionDeOtsNuevas(jsonData)
-                                            } else {
-                                                toast.warning('Por favor cargar archivo correcto', { className: 'toast-success' });
-                                                console.warn(`La hoja "${nombreHoja}" no existe en el archivo.`);
-                                            }
-                                        });
-                                    };
-                                    reader.readAsArrayBuffer(file);
-
-                                    e.target.value = null;
-                                }}></Entradas>
+                                        e.target.value = null;
+                                    }}
+                                />
                             </div>
                             <div className="descarga">
                                 <a href="https://drive.google.com/uc?export=download&id=1i-K_aG_bE_Ba83gF_K5DKxce4B-XpiOv" download>Descargar archivo plano</a>
