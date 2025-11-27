@@ -1,15 +1,36 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import '../inicio.scss'
+import axios from 'axios';
+import CargandoDatos from '../../components/cargandoDatos/cargandoDatos';
 
 function Inicio() {
   const navigate = useNavigate();
   const cedulaUsuario = Cookies.get('userCedula');
   const nombreUsuario = Cookies.get('userNombre');
+  const [loading, setLoading] = useState(true);
+  const [imagenes, setImagenes] = useState([]);
+
+  const cargarDatos = async (event) => {
+    setLoading(true);
+
+    try {
+      const imagenesData = await axios.get(`${process.env.REACT_APP_API_URL}/imagenes/inicio`);
+      const archivos = imagenesData.data.archivos;
+      console.log(archivos)
+      const urls = archivos.map(a => `https://lh3.googleusercontent.com/d/${a.id}=s0`);
+      console.log(urls)
+      setImagenes(urls);
+    } catch (error) {
+      console.error("Error al obtener datos:", error);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   useEffect(() => {
     const yaRecargado = localStorage.getItem('yaRecargado');
@@ -19,6 +40,8 @@ function Inicio() {
     } else if (!yaRecargado) {
       localStorage.setItem('yaRecargado', 'true');
     }
+
+    cargarDatos();
   }, []);
 
   const settings = {
@@ -31,18 +54,9 @@ function Inicio() {
     autoplaySpeed: 3000,
   };
 
-  const imagenes = [
-    'https://res.cloudinary.com/dcozwbcpi/image/upload/v1753297344/Principal_uionbk.jpg',
-    'https://res.cloudinary.com/dcozwbcpi/image/upload/v1753297345/Telec_2_wmowse.jpg',
-    'https://res.cloudinary.com/dcozwbcpi/image/upload/v1753297342/Obr_Civ_1_cjopsi.jpg',
-    'https://res.cloudinary.com/dcozwbcpi/image/upload/v1753297342/Electr_1_u8w2hw.jpg', 
-    'https://res.cloudinary.com/dcozwbcpi/image/upload/v1753297344/Telec_1_tow9ku.jpg', 
-    'https://res.cloudinary.com/dcozwbcpi/image/upload/v1753297343/Obr_Civ_2_cpxs6n.jpg', 
-    'https://res.cloudinary.com/dcozwbcpi/image/upload/v1753297344/Electr_2_wok2fp.jpg', 
-    'https://res.cloudinary.com/dcozwbcpi/image/upload/v1753297345/Telec_3_qdnbuw.jpg', 
-    'https://res.cloudinary.com/dcozwbcpi/image/upload/v1753297343/Electr_3_xdizwr.jpg', 
-    'https://res.cloudinary.com/dcozwbcpi/image/upload/v1753297347/Telec_4_pkfnpo.jpg'
-  ];
+  if (loading) {
+    <CargandoDatos text={'Cargando Datos'} />
+  }
 
   return (
     <div className="div-Imagen">

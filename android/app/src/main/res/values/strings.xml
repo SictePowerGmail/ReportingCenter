@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='utf-8'?>
-<resources>
-    <string name="app_name">Sicte SAS</string>
-    <string name="title_activity_main">Sicte SAS</string>
-    <string name="package_name">com.sicte.sas.ccot.com</string>
-    <string name="custom_url_scheme">com.sicte.sas.ccot.com</string>
-</resources>

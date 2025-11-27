@@ -125,6 +125,7 @@ const GestionOts = () => {
         const valorOrdenes = filtroOrdenes;
         const valorLote = filtroLote;
         const valorTiempos = filtroTiempos;
+        const valorMovil = filtroMovil;
 
         infoFiltrada = data.filter(item => {
             const pasaTexto = valorTexto === "" || Object.values(item).some(value =>
@@ -163,7 +164,9 @@ const GestionOts = () => {
 
             const pasaTiempos = valorTiempos === "Dentro de tiempos" ? item.dias_diferencia === 0 || item.dias_diferencia === 1 : valorTiempos === "Proximo a vencer" ? item.dias_diferencia === 2 : valorTiempos === "Vencido" ? item.dias_diferencia > 2 : true;
 
-            return pasaTexto && pasaCiudad && pasaEstado && pasaEstadoActualOT && pasaFiltros && pasaSeleccionMultiple && pasaOrdenes && pasaLotes && pasaTiempos;
+            const pasaMovil = valorMovil === "" || (item.movil && item.movil === valorMovil);
+
+            return pasaTexto && pasaCiudad && pasaEstado && pasaEstadoActualOT && pasaFiltros && pasaSeleccionMultiple && pasaOrdenes && pasaLotes && pasaTiempos && pasaMovil;
         });
 
         mapRef.current.eachLayer(layer => {
@@ -280,9 +283,9 @@ const GestionOts = () => {
             markerColor = "black";
         } else if (cuadrilla && cuadrilla.trim() !== "") {
             markerColor = "green";
-        } else if (dias_diferencia === 2 ) {
+        } else if (dias_diferencia === 2) {
             markerColor = "yellow";
-        } else if (dias_diferencia > 2 ) {
+        } else if (dias_diferencia > 2) {
             markerColor = "red";
         } else {
             markerColor = "#18409E";
@@ -539,28 +542,39 @@ const GestionOts = () => {
 
         setEnviando(true);
 
+        const CHUNK_SIZE = 200;
+        const totalChunks = Math.ceil(jsonData.length / CHUNK_SIZE);
         try {
-            const datos = {
-                data: jsonData,
-                nombreUsuario: Cookies.get('userNombre'),
-            };
+            for (let i = 0; i < jsonData.length; i += CHUNK_SIZE) {
+                const chunk = jsonData.slice(i, i + CHUNK_SIZE);
+                const datos = {
+                    data: chunk,
+                    nombreUsuario: Cookies.get('userNombre'),
+                };
 
-            const response2 = await axios.post(`${process.env.REACT_APP_API_URL}/gestionOts/nuevasOrdenes`, datos);
+                console.log(`Enviando paquete ${i/CHUNK_SIZE + 1}: ${chunk.length} items`);
+                toast.success(`Enviando paquete ${i/CHUNK_SIZE + 1}: ${chunk.length} items`, { className: 'toast-success' });
 
-            if (response2.status >= 200 && response2.status < 300) {
-                setEnviando(false)
-                console.log('Datos enviados exitosamente');
-                toast.success('Datos enviados exitosamente', { className: 'toast-success' });
-                await cargarRegistros();
-            } else {
-                toast.error('Error al subir el archivo o enviar los datos', { className: 'toast-error' });
-                setEnviando(false)
+                const response = await axios.post(`${process.env.REACT_APP_API_URL}/gestionOts/nuevasOrdenes`, datos, { timeout: 120000 });
+
+                if (!(response.status >= 200 && response.status < 300)) {
+                    throw new Error('Error al enviar un paquete de datos');
+                }
+
+                console.log(`Paquete ${i / CHUNK_SIZE + 1} de ${totalChunks} enviado correctamente`);
+                toast.success(`Paquete ${i / CHUNK_SIZE + 1} de ${totalChunks} enviado correctamente`, { className: 'toast-success' });
+
+                await new Promise(resolve => setTimeout(resolve, 5000));
             }
+
+            toast.success('Todos los datos se enviaron exitosamente', { className: 'toast-success' });
+            await cargarRegistros();
         } catch (error) {
-            const mensaje = error.response?.data?.error || 'Error al enviar los datos.';
+            const mensaje = error.response?.data?.error || error.message || 'Error al enviar los datos.';
             console.error('Error al enviar:', mensaje);
             toast.error(mensaje, { className: 'toast-error' });
-            setEnviando(false)
+        } finally {
+            setEnviando(false);
         }
     };
 
@@ -577,12 +591,13 @@ const GestionOts = () => {
     const [inputFiltroOrdenesKey, setInputFiltroOrdenesKey] = useState('');
     const [filtroLote, setFiltroLote] = useState('');
     const [filtroTiempos, setFiltroTiempos] = useState('');
+    const [filtroMovil, setFiltroMovil] = useState('');
 
     useEffect(() => {
         if (data) {
             aplicarFiltros();
         }
-    }, [filtroCuadrilla, filtroCiudad, filtroAsignacion, filtroTexto, filtroFechaInicio, filtroOtsInvalidas, seleccionMultiple, filtroEstadoActualOT, filtroTurno, filtroOrdenes, filtroLote, filtroTiempos]);
+    }, [filtroCuadrilla, filtroCiudad, filtroAsignacion, filtroTexto, filtroFechaInicio, filtroOtsInvalidas, seleccionMultiple, filtroEstadoActualOT, filtroTurno, filtroOrdenes, filtroLote, filtroTiempos, filtroMovil]);
 
     return (
         <div className="GestionOts">
@@ -772,6 +787,24 @@ const GestionOts = () => {
                                         { value: 'Proximo a vencer', label: 'Proximo a vencer' },
                                         { value: 'Vencido', label: 'Vencido' },
                                     ]}
+                                    className="primary">
+                                </Selectores>
+                            </div>
+                        </div>
+                        <div className='linea'></div>
+                        <div className="campo">
+                            <div className='titulo'>
+                                <i className="fa-solid fa-bus"></i>
+                                <Textos className='subtitulo'>Movil</Textos>
+                            </div>
+                            <div className='opcion'>
+                                <Selectores value={filtroMovil} onChange={(e) => { setFiltroMovil(e.target.value) }}
+                                    options={
+                                        [...new Set(data.map(d => d.movil))]
+                                            .filter(Boolean)
+                                            .sort((a, b) => a.localeCompare(b))
+                                            .map(movil => ({ value: movil, label: movil }))
+                                    }
                                     className="primary">
                                 </Selectores>
                             </div>
