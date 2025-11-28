@@ -44,8 +44,11 @@ function Navbar() {
     const [mostrarMenuIdioma, setMostrarMenuIdioma] = useState(false);
     const location = useLocation();
     const tituloActual = getPageTitle(location.pathname) || 'Inicio';
-    const Colombia = 'https://res.cloudinary.com/dcozwbcpi/image/upload/v1753297342/Flag_Colombia_cye2bn.png';
-    const EEUU = 'https://res.cloudinary.com/dcozwbcpi/image/upload/v1753297343/Flag_United_States_qq6luc.png';
+    const [imagenes, setImagenes] = useState([]);
+    const idColombia = "1OeqBR-tnErQGD37LXF-FZDdCbJsSY3Uw";
+    const idEEUU = "1rOMH9W0fWqfJyCpJ9Qf2fy5_3RRwZnSD";
+    const idLogoSicte1 = "1opFjvV_HkKsgqQdJB0lhbgxgafqRxx5w";
+    const idLogoSicte2 = "1OQS5GOfKu4bedFrHEbZhltuCcObOHFN4";
 
     const closeAllDropdowns = () => {
         setShowDropdownFacturacion(false);
@@ -59,6 +62,25 @@ function Navbar() {
         setShowDropdownParqueAutomotor(false);
         setShowDropdownGestionHumana(false);
     };
+
+    const cargarDatos = async (event) => {
+        setLoading(true);
+
+        try {
+            const imagenesData = await axios.get(`${process.env.REACT_APP_API_URL}/imagenes/ccot`);
+            const archivos = imagenesData.data.archivos;
+            const urls = archivos.map(a => a.url);
+            setImagenes(urls);
+        } catch (error) {
+            console.error("Error al obtener datos:", error);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    useEffect(() => {
+        cargarDatos();
+    }, []);
 
     useEffect(() => {
         const nombre = Cookies.get('userNombre');
@@ -345,7 +367,7 @@ function Navbar() {
 
                     <Link to="/">
                         <div className={`logo ${showMobileMenu ? 'abierto' : 'cerrado'}`}>
-                            {esModoClaro ? <img src={'https://res.cloudinary.com/dcozwbcpi/image/upload/v1753297342/Logo_Original_homvl9.png'} alt="Logo" /> : <img src={'https://res.cloudinary.com/dcozwbcpi/image/upload/v1753297343/Logo_Original_2_zelyfk.png'} alt="Logo" />}
+                            {esModoClaro ? <img src={imagenes.find(url => url.includes(idLogoSicte1))} alt="Logo" /> : <img src={imagenes.find(url => url.includes(idLogoSicte2))} alt="Logo" />}
                         </div>
                     </Link>
                 </div>
@@ -368,15 +390,15 @@ function Navbar() {
 
                 <div className="idioma-selector">
                     <button onClick={() => setMostrarMenuIdioma(!mostrarMenuIdioma)} className="bandera-btn">
-                        {i18n.language === 'es' && <img src={Colombia} alt="Colombia" />}
-                        {i18n.language === 'en' && <img src={EEUU} alt="USA" />}
+                        {i18n.language === 'es' && <img src={imagenes.find(url => url.includes(idColombia))} alt="Colombia" />}
+                        {i18n.language === 'en' && <img src={imagenes.find(url => url.includes(idEEUU))} alt="USA" />}
                     </button>
                     <div className={`idiomaMenu ${mostrarMenuIdioma ? 'abierto' : ''}`}>
                         <button className="opcionIdioma" onClick={() => cambiarIdioma('es')}>
-                            <img src={Colombia} alt="Colombia" /> Español
+                            <img src={imagenes.find(url => url.includes(idColombia))} alt="Colombia" /> Español
                         </button >
                         <button className="opcionIdioma" onClick={() => cambiarIdioma('en')}>
-                            <img src={EEUU} alt="USA" /> Inglés
+                            <img src={imagenes.find(url => url.includes(idEEUU))} alt="USA" /> Inglés
                         </button >
                     </div>
                 </div>
@@ -876,7 +898,7 @@ function Navbar() {
                                 </div>
                             </li>
 
-                            <span className={`sub-titulo ${showMobileMenu ? 'abierto' : 'cerrado'}`}>Version 2.0.70</span>
+                            <span className={`sub-titulo ${showMobileMenu ? 'abierto' : 'cerrado'}`}>Version 2.0.71</span>
                         </ul>
 
                         {/* <div className='Logo2'>

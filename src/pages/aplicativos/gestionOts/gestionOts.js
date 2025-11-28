@@ -142,7 +142,7 @@ const GestionOts = () => {
             }
 
             const pasaFiltros = Array.isArray(historicoArray) && historicoArray.some(h => {
-                const cumpleFecha = startDate === "" || (h.fechaProgramacion && h.fechaProgramacion === startDate);
+                const cumpleFecha = startDate === "" || (h.fechaProgramacion && h.fechaProgramacion.includes(startDate));
 
                 const cumpleCuadrilla = valorCuadrilla === "" || (h.cuadrilla && h.cuadrilla === valorCuadrilla);
 

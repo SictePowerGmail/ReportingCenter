@@ -21,9 +21,7 @@ function Inicio() {
     try {
       const imagenesData = await axios.get(`${process.env.REACT_APP_API_URL}/imagenes/inicio`);
       const archivos = imagenesData.data.archivos;
-      console.log(archivos)
-      const urls = archivos.map(a => `https://lh3.googleusercontent.com/d/${a.id}=s0`);
-      console.log(urls)
+      const urls = archivos.map(a => a.url);
       setImagenes(urls);
     } catch (error) {
       console.error("Error al obtener datos:", error);
