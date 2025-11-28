@@ -4,6 +4,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ThreeDots } from 'react-loader-spinner';
 import Cookies from 'js-cookie';
+import axios from 'axios';
 import './login.css'
 
 const Login = () => {
@@ -18,6 +19,24 @@ const Login = () => {
     const [showModal, setShowModal] = useState(false);
     const [email, setEmail] = useState("");
     const [enviando, setEnviando] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [imagenes, setImagenes] = useState([]);
+    const idLogoSicte2 = "1OQS5GOfKu4bedFrHEbZhltuCcObOHFN4";
+
+    const cargarDatos = async (event) => {
+        setLoading(true);
+
+        try {
+            const imagenesData = await axios.get(`${process.env.REACT_APP_API_URL}/imagenes/ccot`);
+            const archivos = imagenesData.data.archivos;
+            const urls = archivos.map(a => a.url);
+            setImagenes(urls);
+        } catch (error) {
+            console.error("Error al obtener datos:", error);
+        } finally {
+            setLoading(false);
+        }
+    }
 
     const handleSendToken = async () => {
         if (!email) {
@@ -145,12 +164,14 @@ const Login = () => {
         if (cedulaUsuario !== undefined && nombreUsuario !== undefined) {
             enrutar(tipo);
         }
+
+        cargarDatos();
     }, []);
 
     return (
         <div className="Supervision-Login-App">
             <div className='Login-Contenido_1'>
-                <img src={'https://res.cloudinary.com/dcozwbcpi/image/upload/v1753297344/Sicte_6_plcwjt.png'} alt="Logo Sicte" />
+                <img src={imagenes.find(url => url.includes(idLogoSicte2))} alt="Logo Sicte" />
             </div>
             <div className='Login-Contenido_2'>
                 <div className='Login-Titulo'>

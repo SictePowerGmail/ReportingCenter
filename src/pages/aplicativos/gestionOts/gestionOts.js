@@ -184,10 +184,10 @@ const GestionOts = () => {
             mapRef.current.fitBounds(bounds, { padding: [50, 50] });
         }
 
-        const kml = generarKML(infoFiltrada);
-        const blob = new Blob([kml], { type: "application/vnd.google-earth.kml+xml" });
-        kmlDownloadUrl = URL.createObjectURL(blob);
-        console.log("URL lista para descargar:", kmlDownloadUrl);
+        // const kml = generarKML(infoFiltrada);
+        // const blob = new Blob([kml], { type: "application/vnd.google-earth.kml+xml" });
+        // kmlDownloadUrl = URL.createObjectURL(blob);
+        // console.log("URL lista para descargar:", kmlDownloadUrl);
     }
 
     function actualizarTotalItems(cantidad) {
@@ -223,7 +223,6 @@ const GestionOts = () => {
             mapRef.current.fitBounds(bounds, { padding: [50, 50] });
         }
 
-        // Botón para establecer una ubicacion general
         const locationButton = L.control({ position: 'bottomright' });
         locationButton.onAdd = function () {
             const div = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom mi-boton-ubicacion');
@@ -865,7 +864,7 @@ const GestionOts = () => {
                                 >Desasignar Ordenes</Botones>
                             </div>
                         </div>
-                        <div className='linea'></div>
+                        {/* <div className='linea'></div>
                         <div className="campo">
                             <div className='opcion'>
                                 <i className="fa fa-download"></i>
@@ -882,7 +881,7 @@ const GestionOts = () => {
                                     }}
                                 >Descargar KML</Botones>
                             </div>
-                        </div>
+                        </div> */}
                         <div className='linea'></div>
                         <div className="campo">
                             <div className='titulo'>
