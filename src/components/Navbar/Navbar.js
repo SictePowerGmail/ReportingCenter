@@ -209,6 +209,7 @@ function Navbar() {
         SeguimientoSmu: false,
         TecnicoSmu: false,
         EnelCronograma: false,
+        EnelAPSegumiento: false,
     });
 
     const [logistica, setLogistica] = useState(false);
@@ -708,6 +709,7 @@ function Navbar() {
                                         {subChecksOperacion.SeguimientoSmu === true && (<Link className='SubMenu-Contenido-Titulo' to="/SeguimientoSMU" ><li>Seguimiento SMU</li></Link>)}
                                         {subChecksOperacion.TecnicoSmu === true && (<Link className='SubMenu-Contenido-Titulo' to="/SMU_Tecnico" ><li>Técnico SMU</li></Link>)}
                                         {subChecksOperacion.EnelCronograma === true && (<Link className='SubMenu-Contenido-Titulo' to="/EnelCronograma" ><li>Enel Cronograma</li></Link>)}
+                                        {subChecksOperacion.EnelAPSegumiento === true && (<Link className='SubMenu-Contenido-Titulo' to="/EnelAPSegumiento" ><li>Enel AP Segumiento</li></Link>)}
                                     </ul>
                                 </div>
                             </li>
@@ -898,7 +900,7 @@ function Navbar() {
                                 </div>
                             </li>
 
-                            <span className={`sub-titulo ${showMobileMenu ? 'abierto' : 'cerrado'}`}>Version 2.0.71</span>
+                            <span className={`sub-titulo ${showMobileMenu ? 'abierto' : 'cerrado'}`}>Version 2.0.72</span>
                         </ul>
 
                         {/* <div className='Logo2'>

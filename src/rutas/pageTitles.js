@@ -131,6 +131,8 @@ export const getPageTitle = (pathname) => {
             return 'SMU Tecnico';
         case '/EnelCronograma':
             return 'Enel Cronograma';
+        case '/EnelAPSegumiento':
+            return 'Enel AP Segumiento'
         /* Logistica */
         case '/EquiposMoviles':
             return 'Equipos Moviles';

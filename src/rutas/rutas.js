@@ -69,6 +69,7 @@ import SeguimientoOperacionesNorte from "../pages/operacion/SeguimientoOperacion
 import SeguimientoSMU from '../pages/operacion/SeguimientoSMU';
 import SMU_Tecnico from '../pages/operacion/SMU_Tecnico';
 import EnelCronograma from "../pages/operacion/EnelCronograma";
+import EnelAPSegumiento from "../pages/operacion/EnelAPSegumiento";
 import OperacionesFormacion from "../pages/operacion/OperacionesFormacion";
 /* Logistica */
 import EquiposMoviles from "../pages/logistica/EquiposMoviles";
@@ -190,6 +191,7 @@ function RutasApp() {
                     <Route path='/SeguimientoSMU' exacte element={<SeguimientoSMU />} />
                     <Route path='/SMU_Tecnico' exacte element={<SMU_Tecnico />} />
                     <Route path='/EnelCronograma' exacte element={<EnelCronograma />} />
+                    <Route path='/EnelAPSegumiento' exacte element={<EnelAPSegumiento />} />
                     {/* Logistica */}
                     <Route path='/EquiposMoviles' exacte element={<EquiposMoviles />} />
                     <Route path='/DesmonteMantenimiento' exacte element={<DesmonteMantenimiento />} />
