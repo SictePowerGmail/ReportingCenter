@@ -271,9 +271,19 @@ function Navbar() {
     const cargarDatosPagesUser = async (usuario) => {
         try {
             setLoading(true);
-            const responsePagesUser = await axios.get(`${process.env.REACT_APP_API_URL}/usuarios/pagesUser`);
-            const data = responsePagesUser.data;
             const cedula = Cookies.get('userCedula');
+
+            const datosAEnviar = {
+                cedula: cedula
+            };
+            const responsePagesUser = await axios.post(
+                `${process.env.REACT_APP_API_URL}/usuarios/pagesUser`,
+                datosAEnviar,
+                {
+                    headers: { "Content-Type": "application/json" }
+                }
+            );
+            const data = responsePagesUser.data;
 
             const usuarioEncontrado = data.find(user => user.cedula === cedula);
 
@@ -900,7 +910,7 @@ function Navbar() {
                                 </div>
                             </li>
 
-                            <span className={`sub-titulo ${showMobileMenu ? 'abierto' : 'cerrado'}`}>Version 2.0.72</span>
+                            <span className={`sub-titulo ${showMobileMenu ? 'abierto' : 'cerrado'}`}>Version 2.0.73</span>
                         </ul>
 
                         {/* <div className='Logo2'>
