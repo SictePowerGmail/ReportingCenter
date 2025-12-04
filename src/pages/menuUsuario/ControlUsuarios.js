@@ -280,7 +280,16 @@ function ControlUsuarios() {
         try {
             setLoading(true);
 
-            const responsePagesUser = await axios.get(`${process.env.REACT_APP_API_URL}/usuarios/pagesUser`);
+            const datosAEnviar = {
+                cedula: usuario.cedula
+            };
+            const responsePagesUser = await axios.post(
+                `${process.env.REACT_APP_API_URL}/usuarios/pagesUser`,
+                datosAEnviar,
+                {
+                    headers: { "Content-Type": "application/json" }
+                }
+            );
             const data = responsePagesUser.data;
             const usuarioEncontrado = data.find(user => user.cedula === usuario.cedula);
             setPageUsuarioSeleccionado(usuarioEncontrado);
