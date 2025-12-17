@@ -203,7 +203,8 @@ function Navbar() {
         CumplimientoSlaHfc: false,
         CorrectivoPreventivo: false,
         RecursoOperaciones: false,
-        OperacionesFormacion: false,
+        OperacionesFormacionCentro: false,
+        OperacionesFormacionNorte: false,
         SeguimientoOperacionesCentro: false,
         SeguimientoOperacionesNorte: false,
         SeguimientoSmu: false,
@@ -713,7 +714,8 @@ function Navbar() {
                                         {subChecksOperacion.CumplimientoSlaHfc === true && (<Link className='SubMenu-Contenido-Titulo' to="/MantenimientoBacklogHFC" ><li>Cumplimiento SLA HFC</li></Link>)}
                                         {subChecksOperacion.CorrectivoPreventivo === true && (<Link className='SubMenu-Contenido-Titulo' to="/MantenimientoPuntuacionTMRF" ><li>Correctivo - Preventivo</li></Link>)}
                                         {subChecksOperacion.RecursoOperaciones === true && (<Link className='SubMenu-Contenido-Titulo' to="/RecursoOperaciones" ><li>Recurso Operaciones</li></Link>)}
-                                        {subChecksOperacion.OperacionesFormacion === true && (<Link className='SubMenu-Contenido-Titulo' to="/OperacionesFormacion" ><li>Operaciones Formacion</li></Link>)}
+                                        {subChecksOperacion.OperacionesFormacionCentro === true && (<Link className='SubMenu-Contenido-Titulo' to="/OperacionesFormacionCentro" ><li>Operaciones Formacion Centro</li></Link>)}
+                                        {subChecksOperacion.OperacionesFormacionNorte === true && (<Link className='SubMenu-Contenido-Titulo' to="/OperacionesFormacionNorte" ><li>Operaciones Formacion Norte</li></Link>)}
                                         {subChecksOperacion.SeguimientoOperacionesCentro === true && (<Link className='SubMenu-Contenido-Titulo' to="/SeguimientoOperacionesCentro" ><li>Seguimiento Operaciones Centro</li></Link>)}
                                         {subChecksOperacion.SeguimientoOperacionesNorte === true && (<Link className='SubMenu-Contenido-Titulo' to="/SeguimientoOperacionesNorte" ><li>Seguimiento Operaciones Norte</li></Link>)}
                                         {subChecksOperacion.SeguimientoSmu === true && (<Link className='SubMenu-Contenido-Titulo' to="/SeguimientoSMU" ><li>Seguimiento SMU</li></Link>)}
@@ -910,7 +912,7 @@ function Navbar() {
                                 </div>
                             </li>
 
-                            <span className={`sub-titulo ${showMobileMenu ? 'abierto' : 'cerrado'}`}>Version 2.0.73</span>
+                            <span className={`sub-titulo ${showMobileMenu ? 'abierto' : 'cerrado'}`}>Version 2.0.74</span>
                         </ul>
 
                         {/* <div className='Logo2'>

@@ -70,7 +70,8 @@ import SeguimientoSMU from '../pages/operacion/SeguimientoSMU';
 import SMU_Tecnico from '../pages/operacion/SMU_Tecnico';
 import EnelCronograma from "../pages/operacion/EnelCronograma";
 import EnelAPSegumiento from "../pages/operacion/EnelAPSegumiento";
-import OperacionesFormacion from "../pages/operacion/OperacionesFormacion";
+import OperacionesFormacionCentro from "../pages/operacion/OperacionesFormacionCentro";
+import OperacionesFormacionNorte from "../pages/operacion/OperacionesFormacionNorte";
 /* Logistica */
 import EquiposMoviles from "../pages/logistica/EquiposMoviles";
 import DesmonteMantenimiento from "../pages/logistica/DesmonteMantenimiento";
@@ -185,7 +186,8 @@ function RutasApp() {
                     <Route path='/MantenimientoBacklogHFC' exacte element={<BacklogHFC />} />
                     <Route path='/MantenimientoPuntuacionTMRF' exact element={<MantenimientoPuntuacionTMRF />} />
                     <Route path='/RecursoOperaciones' exact element={<RecursoOperaciones />} />
-                    <Route path='/OperacionesFormacion' exact element={<OperacionesFormacion />} />
+                    <Route path='/OperacionesFormacionCentro' exact element={<OperacionesFormacionCentro />} />
+                    <Route path='/OperacionesFormacionNorte' exact element={<OperacionesFormacionNorte />} />
                     <Route path='/SeguimientoOperacionesCentro' exacte element={<SeguimientoOperacionesCentro />} />
                     <Route path='/SeguimientoOperacionesNorte' exacte element={<SeguimientoOperacionesNorte />} />
                     <Route path='/SeguimientoSMU' exacte element={<SeguimientoSMU />} />

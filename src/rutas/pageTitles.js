@@ -119,8 +119,10 @@ export const getPageTitle = (pathname) => {
             return 'Mantenimiento Puntuacion TMRF';
         case '/RecursoOperaciones':
             return 'Recurso Operaciones';
-        case '/OperacionesFormacion':
-            return 'Operaciones Formacion';
+        case '/OperacionesFormacionCentro':
+            return 'Operaciones Formacion Centro';
+        case '/OperacionesFormacionNorte':
+            return 'Operaciones Formacion Norte';
         case '/SeguimientoOperacionesCentro':
             return 'Seguimiento Operaciones Centro';
         case '/SeguimientoOperacionesNorte':
