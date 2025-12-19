@@ -1549,6 +1549,8 @@ const SupervisionFormularioEnelAmbiental = () => {
                                     { value: 'JA10123037/JA10123045', label: 'JA10123037 / JA10123045' },
                                     { value: 'JA10123400', label: 'JA10123400' },
                                     { value: 'JA10176840', label: 'JA10176840' },
+                                    { value: 'JA10176906', label: 'JA10176906' },
+                                    { value: 'JA10182234', label: 'JA10182234' },
                                 ]} className="primary"
                                 disabled={modo === "editar"}
                             ></Selectores>
