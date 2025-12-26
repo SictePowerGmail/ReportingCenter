@@ -7,7 +7,7 @@ function OperacionesFormacionNorte() {
     <div className='powerbi'>
       <iframe
         title="Operaciones Formacion Norte"
-        src="https://app.powerbi.com/view?r=eyJrIjoiM2JkMWY4OTktMTIxNi00MmRkLWE0NWYtYzg1YzA3ZGIxMjhjIiwidCI6ImUwYmZlOTBkLTIwZTAtNDEwYi1iNmYxLTQyOWIwNDNkMzYwOCJ9"
+        src="https://app.powerbi.com/view?r=eyJrIjoiMjZhYWY3YWYtOWFjYi00YmM2LThhYTEtYjAzOGIzNjQ4NTBkIiwidCI6ImUwYmZlOTBkLTIwZTAtNDEwYi1iNmYxLTQyOWIwNDNkMzYwOCJ9"
       ></iframe>
     </div>
   );
