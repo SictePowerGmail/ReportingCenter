@@ -18,6 +18,8 @@ import Navegacion from '../../../components/navegacion/navegacion';
 import CargandoDatos from '../../../components/cargandoDatos/cargandoDatos';
 import BarWithBackground from '../../../components/graficas/barWithBackground';
 import BarHorizontal from '../../../components/graficas/barHorizontal';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 
 const SupervisionPrincipal = () => {
     const navigate = useNavigate();
@@ -54,6 +56,7 @@ const SupervisionPrincipal = () => {
     const [dataEnelInspeccionAmbiental, setDataEnelInspeccionAmbiental] = useState('');
     const [dataEnelInspeccionBotiquin, setDataEnelInspeccionBotiquin] = useState('');
     const [dataEnelInspeccionElementosEmergencia, setDataEnelInspeccionElementosEmergencia] = useState('');
+    const [dataRegistrosOriginales, setDataRegistrosOriginales] = useState('');
     const [dataEnelInspecciones, setDataEnelInspecciones] = useState('');
     const [datosParaGrafico1, setDatosParaGrafico1] = useState('');
     const [datosParaGrafico2, setDatosParaGrafico2] = useState('');
@@ -408,18 +411,21 @@ const SupervisionPrincipal = () => {
                 }));
             setDataEnelInspeccionElementosEmergencia(registrosElementosEmergenciaOrdenados);
 
-            const registrosUnificados = [...registrosIntegralOrdenados, ...registrosAmbientalOrdenados, ...registrosBotiquinOrdenados, ...registrosElementosEmergenciaOrdenados]
-                .sort((a, b) => parseFecha(b.fechaFinal) - parseFecha(a.fechaFinal))
-                .map((item) => ({
-                    id: item.id,
-                    fechaFinal: item.fechaFinal,
-                    nombreProyecto: item.nombreProyecto,
-                    nombreQuienInspecciona: item.nombreQuienInspecciona,
-                    proceso: item.proceso,
-                    formulario: item.formulario,
-                    inspeccionInicial: item.inspeccion,
-                    inspeccionFinal: item.inspeccionFinal,
-                }));
+            const registrosSinMapear = [...registrosIntegralOrdenados, ...registrosAmbientalOrdenados, ...registrosBotiquinOrdenados, ...registrosElementosEmergenciaOrdenados]
+                .sort((a, b) => parseFecha(b.fechaFinal) - parseFecha(a.fechaFinal));
+
+            setDataRegistrosOriginales(registrosSinMapear);
+
+            const registrosUnificados = registrosSinMapear.map((item) => ({
+                id: item.id,
+                fechaFinal: item.fechaFinal,
+                nombreProyecto: item.nombreProyecto,
+                nombreQuienInspecciona: item.nombreQuienInspecciona,
+                proceso: item.proceso,
+                formulario: item.formulario,
+                inspeccionInicial: item.inspeccion,
+                inspeccionFinal: item.inspeccionFinal,
+            }));
 
             setDataEnelInspecciones(registrosUnificados);
 
@@ -569,6 +575,116 @@ const SupervisionPrincipal = () => {
             reader.onerror = reject;
             reader.readAsDataURL(blob);
         });
+    };
+
+    const descargarArchivo = () => {
+        const datosParaExcel = dataRegistrosOriginales.map(registro => {
+            const fila = { ...registro };
+            if (fila.ubicacion && typeof fila.ubicacion === 'object') {
+                fila.ubicacion = JSON.stringify(fila.ubicacion);
+            }
+            if (Array.isArray(fila.cuadrilla)) {
+                fila.cuadrilla = JSON.stringify(fila.cuadrilla);
+            }
+            if (fila.riesgos && typeof fila.riesgos === 'object') {
+                fila.riesgos = JSON.stringify(fila.riesgos);
+            }
+            if (fila.senaYDemar && typeof fila.senaYDemar === 'object') {
+                fila.senaYDemar = JSON.stringify(fila.senaYDemar);
+            }
+            if (fila.reglasOro && typeof fila.reglasOro === 'object') {
+                fila.reglasOro = JSON.stringify(fila.reglasOro);
+            }
+            if (fila.trabajoAlturas && typeof fila.trabajoAlturas === 'object') {
+                fila.trabajoAlturas = JSON.stringify(fila.trabajoAlturas);
+            }
+            if (fila.espacioConfinado && typeof fila.espacioConfinado === 'object') {
+                fila.espacioConfinado = JSON.stringify(fila.espacioConfinado);
+            }
+            if (fila.vehiculos && typeof fila.vehiculos === 'object') {
+                fila.vehiculos = JSON.stringify(fila.vehiculos);
+            }
+            if (fila.condicionesTrabajo && typeof fila.condicionesTrabajo === 'object') {
+                fila.condicionesTrabajo = JSON.stringify(fila.condicionesTrabajo);
+            }
+            if (fila.materiales && typeof fila.materiales === 'object') {
+                fila.materiales = JSON.stringify(fila.materiales);
+            }
+            if (fila.primerosAuxilios && typeof fila.primerosAuxilios === 'object') {
+                fila.primerosAuxilios = JSON.stringify(fila.primerosAuxilios);
+            }
+            if (fila.biomecanicos && typeof fila.biomecanicos === 'object') {
+                fila.biomecanicos = JSON.stringify(fila.biomecanicos);
+            }
+            if (fila.quimicos && typeof fila.quimicos === 'object') {
+                fila.quimicos = JSON.stringify(fila.quimicos);
+            }
+            if (fila.residuosNoPeligrosos && typeof fila.residuosNoPeligrosos === 'object') {
+                fila.residuosNoPeligrosos = JSON.stringify(fila.residuosNoPeligrosos);
+            }
+            if (fila.residuosConstruccion && typeof fila.residuosConstruccion === 'object') {
+                fila.residuosConstruccion = JSON.stringify(fila.residuosConstruccion);
+            }
+            if (fila.solucion && typeof fila.solucion === 'object') {
+                fila.solucion = JSON.stringify(fila.solucion);
+            }
+            if (Array.isArray(fila.extintores)) {
+                fila.extintores = JSON.stringify(fila.extintores);
+            }
+            if (fila.controlDerrames && typeof fila.controlDerrames === 'object') {
+                fila.controlDerrames = JSON.stringify(fila.controlDerrames);
+            }
+            if (fila.elementosEmergencia && typeof fila.elementosEmergencia === 'object') {
+                fila.elementosEmergencia = JSON.stringify(fila.elementosEmergencia);
+            }
+            if (fila.bioseguridad && typeof fila.bioseguridad === 'object') {
+                fila.bioseguridad = JSON.stringify(fila.bioseguridad);
+            }
+            if (fila.inmovilizacion && typeof fila.inmovilizacion === 'object') {
+                fila.inmovilizacion = JSON.stringify(fila.inmovilizacion);
+            }
+            if (fila.antisepticos && typeof fila.antisepticos === 'object') {
+                fila.antisepticos = JSON.stringify(fila.antisepticos);
+            }
+            if (fila.instrumental && typeof fila.instrumental === 'object') {
+                fila.instrumental = JSON.stringify(fila.instrumental);
+            }
+            if (Array.isArray(fila.fotoObservacion)) {
+                fila.fotoObservacion = JSON.stringify(fila.fotoObservacion);
+            }
+            if (fila.socioAmbiental && typeof fila.socioAmbiental === 'object') {
+                fila.socioAmbiental = JSON.stringify(fila.socioAmbiental);
+            }
+            if (fila.materialesConstruccion && typeof fila.materialesConstruccion === 'object') {
+                fila.materialesConstruccion = JSON.stringify(fila.materialesConstruccion);
+            }
+            if (fila.rcd && typeof fila.rcd === 'object') {
+                fila.rcd = JSON.stringify(fila.rcd);
+            }
+            if (fila.residuosSolidos && typeof fila.residuosSolidos === 'object') {
+                fila.residuosSolidos = JSON.stringify(fila.residuosSolidos);
+            }
+            if (fila.aceites && typeof fila.aceites === 'object') {
+                fila.aceites = JSON.stringify(fila.aceites);
+            }
+            if (fila.vertimientos && typeof fila.vertimientos === 'object') {
+                fila.vertimientos = JSON.stringify(fila.vertimientos);
+            }
+            if (fila.atmosfericas && typeof fila.atmosfericas === 'object') {
+                fila.atmosfericas = JSON.stringify(fila.atmosfericas);
+            }
+            if (fila.seguridadIndustrial && typeof fila.seguridadIndustrial === 'object') {
+                fila.seguridadIndustrial = JSON.stringify(fila.seguridadIndustrial);
+            }
+            return fila;
+        });
+
+        const hoja = XLSX.utils.json_to_sheet(datosParaExcel);
+        const libro = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(libro, hoja, 'Datos');
+        const archivoExcel = XLSX.write(libro, { bookType: 'xlsx', type: 'array' });
+        const blob = new Blob([archivoExcel], { type: 'application/octet-stream' });
+        saveAs(blob, 'Registros inspecciones enel.xlsx');
     };
 
     return (
@@ -730,6 +846,7 @@ const SupervisionPrincipal = () => {
                     {carpeta === "Enel" && (
                         <div className='ContenidoEnel'>
                             <div className='botonAgregar'>
+                                <Botones onClick={descargarArchivo} className='guardar'>Descargar data</Botones>
                                 <Botones onClick={() => setMostrarModal(true)} className='agregar'>Agregar OP/OT</Botones>
                             </div>
                             <div className='Graficas'>
@@ -824,7 +941,7 @@ const SupervisionPrincipal = () => {
                                         <Botones className='agregar' onClick={() => {
                                             if (selectedOption === 'ENEL - Inspeccion Integral HSE') {
                                                 Object.keys(localStorage).forEach((key) => {
-                                                    if (key.startsWith('formulario')  && key !== 'formularioEnelInspeccionIntegralHSE') {
+                                                    if (key.startsWith('formulario') && key !== 'formularioEnelInspeccionIntegralHSE') {
                                                         localStorage.removeItem(key);
                                                     }
                                                 });
@@ -839,7 +956,7 @@ const SupervisionPrincipal = () => {
                                                 navigate('/SupervisionFormularioEnelIntegral', { state: { modo: 'crear' } });
                                             } else if (selectedOption === 'ENEL - Inspección de Gestión Ambiental para Áreas Operativas') {
                                                 Object.keys(localStorage).forEach((key) => {
-                                                    if (key.startsWith('formulario')  && key !== 'formularioEnelAmbiental') {
+                                                    if (key.startsWith('formulario') && key !== 'formularioEnelAmbiental') {
                                                         localStorage.removeItem(key);
                                                     }
                                                 });
@@ -854,7 +971,7 @@ const SupervisionPrincipal = () => {
                                                 navigate('/SupervisionFormularioEnelAmbiental', { state: { modo: 'crear' } });
                                             } else if (selectedOption === 'ENEL - Inspección de Botiquin') {
                                                 Object.keys(localStorage).forEach((key) => {
-                                                    if (key.startsWith('formulario')  && key !== 'formularioEnelBotiquin') {
+                                                    if (key.startsWith('formulario') && key !== 'formularioEnelBotiquin') {
                                                         localStorage.removeItem(key);
                                                     }
                                                 });
@@ -869,7 +986,7 @@ const SupervisionPrincipal = () => {
                                                 navigate('/SupervisionFormularioEnelBotiquin', { state: { modo: 'crear' } });
                                             } else if (selectedOption === 'ENEL - Inspección a Equipos y Elementos de Emergencia') {
                                                 Object.keys(localStorage).forEach((key) => {
-                                                    if (key.startsWith('formulario')  && key !== 'formularioEnelElementosEmergencia') {
+                                                    if (key.startsWith('formulario') && key !== 'formularioEnelElementosEmergencia') {
                                                         localStorage.removeItem(key);
                                                     }
                                                 });

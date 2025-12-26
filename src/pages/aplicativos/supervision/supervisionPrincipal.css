@@ -461,7 +461,7 @@
 
         .botonAgregar {
             display: flex !important;
-            justify-content: end;
+            justify-content: space-between;
             margin-bottom: 20px;
 
             .boton {
