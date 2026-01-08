@@ -7,7 +7,7 @@ function EstadoProyectosR4() {
     <div className='powerbi'>
       <iframe
         title="Estado Proyectos R4"
-        src="https://app.powerbi.com/view?r=eyJrIjoiOTVjYzEyMDEtNDQ1OC00Nzc5LWIyN2QtNDg5NDJiNmQ3YzgxIiwidCI6ImUwYmZlOTBkLTIwZTAtNDEwYi1iNmYxLTQyOWIwNDNkMzYwOCJ9"
+        src="https://app.powerbi.com/view?r=eyJrIjoiZjI4ZTE0OGEtZDQyNC00OWZiLThmNjktOTI1ZDFlZGIxZWZiIiwidCI6ImUwYmZlOTBkLTIwZTAtNDEwYi1iNmYxLTQyOWIwNDNkMzYwOCJ9"
       ></iframe>
     </div>
   );

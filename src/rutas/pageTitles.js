@@ -47,7 +47,7 @@ export const getPageTitle = (pathname) => {
         case '/AlumbradoPublicoDetalle':
             return 'Alumbrado Publico'
         case '/Encuentas':
-            return 'Encuentas' 
+            return 'Encuentas'
         case '/GestionOts':
             return 'Gestion de OTs'
         /* Facturacion */
@@ -95,6 +95,8 @@ export const getPageTitle = (pathname) => {
             return 'NPS';
         case '/G2G8MasivoCentro':
             return 'G2-G8 Masivo Centro'
+        case '/EnelApAns':
+            return 'Enel AP ANS'
         /* Puntuacion */
         case '/PlaneacionPuntuacion':
             return 'Planeacion Puntuacion';
@@ -119,6 +121,8 @@ export const getPageTitle = (pathname) => {
             return 'Mantenimiento Puntuacion TMRF';
         case '/RecursoOperaciones':
             return 'Recurso Operaciones';
+        case '/OperacionesCalidadEquipos':
+            return 'Operaciones Calidad Equipos';
         case '/OperacionesFormacionCentro':
             return 'Operaciones Formacion Centro';
         case '/OperacionesFormacionNorte':

@@ -51,6 +51,7 @@ import HistoricoKPI from '../pages/indicadores/HistoricoKPI';
 import MantenimientoTecnico from '../pages/indicadores/MantenimientoTecnico';
 import NPS from '../pages/indicadores/NPS';
 import G2G8MasivoCentro from "../pages/indicadores/G2G8MasivoCentro";
+import EnelApAns from "../pages/indicadores/EnelApAns";
 /* Puntuacion */
 import CorporativoPuntuacion from '../pages/puntuacion/CorporativoPuntuacion';
 import EnelApPuntuacion from "../pages/puntuacion/EnelApPuntuacion";
@@ -70,6 +71,7 @@ import SeguimientoSMU from '../pages/operacion/SeguimientoSMU';
 import SMU_Tecnico from '../pages/operacion/SMU_Tecnico';
 import EnelCronograma from "../pages/operacion/EnelCronograma";
 import EnelAPSegumiento from "../pages/operacion/EnelAPSegumiento";
+import OperacionesCalidadEquipos from "../pages/operacion/OperacionesCalidadEquipos";
 import OperacionesFormacionCentro from "../pages/operacion/OperacionesFormacionCentro";
 import OperacionesFormacionNorte from "../pages/operacion/OperacionesFormacionNorte";
 /* Logistica */
@@ -173,6 +175,7 @@ function RutasApp() {
                     <Route path='/MantenimientoTecnico' exact element={<MantenimientoTecnico />} />
                     <Route path='/NPS' exacte element={<NPS />} />
                     <Route path='/G2G8MasivoCentro' exacte element={<G2G8MasivoCentro />} />
+                    <Route path='/EnelApAns' exacte element={<EnelApAns />} />
                     {/* Puntuacion */}
                     <Route path='/PlaneacionPuntuacion' exact element={<PlaneacionPuntuacion />} />
                     <Route path='/CorporativoPuntuacion' exact element={<CorporativoPuntuacion />} />
@@ -186,6 +189,7 @@ function RutasApp() {
                     <Route path='/MantenimientoBacklogHFC' exacte element={<BacklogHFC />} />
                     <Route path='/MantenimientoPuntuacionTMRF' exact element={<MantenimientoPuntuacionTMRF />} />
                     <Route path='/RecursoOperaciones' exact element={<RecursoOperaciones />} />
+                    <Route path='/OperacionesCalidadEquipos' exact element={<OperacionesCalidadEquipos />} />
                     <Route path='/OperacionesFormacionCentro' exact element={<OperacionesFormacionCentro />} />
                     <Route path='/OperacionesFormacionNorte' exact element={<OperacionesFormacionNorte />} />
                     <Route path='/SeguimientoOperacionesCentro' exacte element={<SeguimientoOperacionesCentro />} />

@@ -183,7 +183,8 @@ function Navbar() {
         HistoricoKpi: false,
         G1Mantenimiento: false,
         Nps: false,
-        G2G8MasivoCentro: false
+        G2G8MasivoCentro: false,
+        EnelApAns: false
     });
 
     const [puntuacion, setPuntuacion] = useState(false);
@@ -203,6 +204,7 @@ function Navbar() {
         CumplimientoSlaHfc: false,
         CorrectivoPreventivo: false,
         RecursoOperaciones: false,
+        OperacionesCalidadEquipos: false,
         OperacionesFormacionCentro: false,
         OperacionesFormacionNorte: false,
         SeguimientoOperacionesCentro: false,
@@ -677,9 +679,10 @@ function Navbar() {
                                 </div>
                                 <div className={`SubMenu-Contenido ${showMobileMenu && showDropdownIndicadores ? 'visible' : 'oculto'}`}>
                                     <ul>
-                                        {subChecksIndicadores.HistoricoKpi && (<Link className='SubMenu-Contenido-Titulo' to="/HistoricoKPI" ><li>Histórico KPI</li></Link>)}
+                                        {subChecksIndicadores.EnelApAns && (<Link className='SubMenu-Contenido-Titulo' to="/EnelApAns" ><li>Enel AP ANS</li></Link>)}
                                         {subChecksIndicadores.G1Mantenimiento && (<Link className='SubMenu-Contenido-Titulo' to="/MantenimientoTecnico" ><li>G1 Mantenimiento</li></Link>)}
                                         {subChecksIndicadores.G2G8MasivoCentro && (<Link className='SubMenu-Contenido-Titulo' to="/G2G8MasivoCentro" ><li>G2 - G8 Masivo Centro</li></Link>)}
+                                        {subChecksIndicadores.HistoricoKpi && (<Link className='SubMenu-Contenido-Titulo' to="/HistoricoKPI" ><li>Histórico KPI</li></Link>)}
                                         {subChecksIndicadores.Nps && (<Link className='SubMenu-Contenido-Titulo' to="/NPS" ><li>NPS</li></Link>)}
                                     </ul>
                                 </div>
@@ -714,6 +717,7 @@ function Navbar() {
                                         {subChecksOperacion.CumplimientoSlaHfc === true && (<Link className='SubMenu-Contenido-Titulo' to="/MantenimientoBacklogHFC" ><li>Cumplimiento SLA HFC</li></Link>)}
                                         {subChecksOperacion.CorrectivoPreventivo === true && (<Link className='SubMenu-Contenido-Titulo' to="/MantenimientoPuntuacionTMRF" ><li>Correctivo - Preventivo</li></Link>)}
                                         {subChecksOperacion.RecursoOperaciones === true && (<Link className='SubMenu-Contenido-Titulo' to="/RecursoOperaciones" ><li>Recurso Operaciones</li></Link>)}
+                                        {subChecksOperacion.OperacionesCalidadEquipos === true && (<Link className='SubMenu-Contenido-Titulo' to="/OperacionesCalidadEquipos" ><li>Operaciones Calidad Equipos</li></Link>)}
                                         {subChecksOperacion.OperacionesFormacionCentro === true && (<Link className='SubMenu-Contenido-Titulo' to="/OperacionesFormacionCentro" ><li>Operaciones Formacion Centro</li></Link>)}
                                         {subChecksOperacion.OperacionesFormacionNorte === true && (<Link className='SubMenu-Contenido-Titulo' to="/OperacionesFormacionNorte" ><li>Operaciones Formacion Norte</li></Link>)}
                                         {subChecksOperacion.SeguimientoOperacionesCentro === true && (<Link className='SubMenu-Contenido-Titulo' to="/SeguimientoOperacionesCentro" ><li>Seguimiento Operaciones Centro</li></Link>)}
@@ -912,7 +916,7 @@ function Navbar() {
                                 </div>
                             </li>
 
-                            <span className={`sub-titulo ${showMobileMenu ? 'abierto' : 'cerrado'}`}>Version 2.0.77</span>
+                            <span className={`sub-titulo ${showMobileMenu ? 'abierto' : 'cerrado'}`}>Version 2.0.78</span>
                         </ul>
 
                         {/* <div className='Logo2'>
