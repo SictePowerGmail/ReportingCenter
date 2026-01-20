@@ -184,6 +184,7 @@ function Navbar() {
         G1Mantenimiento: false,
         Nps: false,
         G2G8MasivoCentro: false,
+        G2G8MasivoNorte: false,
         EnelApAns: false
     });
 
@@ -682,6 +683,7 @@ function Navbar() {
                                         {subChecksIndicadores.EnelApAns && (<Link className='SubMenu-Contenido-Titulo' to="/EnelApAns" ><li>Enel AP ANS</li></Link>)}
                                         {subChecksIndicadores.G1Mantenimiento && (<Link className='SubMenu-Contenido-Titulo' to="/MantenimientoTecnico" ><li>G1 Mantenimiento</li></Link>)}
                                         {subChecksIndicadores.G2G8MasivoCentro && (<Link className='SubMenu-Contenido-Titulo' to="/G2G8MasivoCentro" ><li>G2 - G8 Masivo Centro</li></Link>)}
+                                        {subChecksIndicadores.G2G8MasivoNorte && (<Link className='SubMenu-Contenido-Titulo' to="/G2G8MasivoNorte" ><li>G2 - G8 Masivo Norte</li></Link>)}
                                         {subChecksIndicadores.HistoricoKpi && (<Link className='SubMenu-Contenido-Titulo' to="/HistoricoKPI" ><li>Histórico KPI</li></Link>)}
                                         {subChecksIndicadores.Nps && (<Link className='SubMenu-Contenido-Titulo' to="/NPS" ><li>NPS</li></Link>)}
                                     </ul>
@@ -916,7 +918,7 @@ function Navbar() {
                                 </div>
                             </li>
 
-                            <span className={`sub-titulo ${showMobileMenu ? 'abierto' : 'cerrado'}`}>Version 2.0.78</span>
+                            <span className={`sub-titulo ${showMobileMenu ? 'abierto' : 'cerrado'}`}>Version 2.0.79</span>
                         </ul>
 
                         {/* <div className='Logo2'>

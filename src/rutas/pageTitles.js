@@ -95,6 +95,8 @@ export const getPageTitle = (pathname) => {
             return 'NPS';
         case '/G2G8MasivoCentro':
             return 'G2-G8 Masivo Centro'
+        case  '/G2G8MasivoNorte':
+            return 'G2-G8 Masivo Norte'
         case '/EnelApAns':
             return 'Enel AP ANS'
         /* Puntuacion */

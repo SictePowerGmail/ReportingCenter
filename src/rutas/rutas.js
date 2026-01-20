@@ -106,6 +106,7 @@ import RecuperarContraseña from "../pages/recuperarContraseña/recuperarContras
 import { getPageTitle } from "./pageTitles";
 /* Gestion Humana */
 import IndicadoresChatbot from "../pages/gestionHumana/IndicadoresChatbot";
+import G2G8MasivoNorte from "../pages/indicadores/G2G8MasivoNorte";
 
 function RutasApp() {
     const location = useLocation();
@@ -175,6 +176,7 @@ function RutasApp() {
                     <Route path='/MantenimientoTecnico' exact element={<MantenimientoTecnico />} />
                     <Route path='/NPS' exacte element={<NPS />} />
                     <Route path='/G2G8MasivoCentro' exacte element={<G2G8MasivoCentro />} />
+                    <Route path='/G2G8MasivoNorte' exacte element={<G2G8MasivoNorte />} />
                     <Route path='/EnelApAns' exacte element={<EnelApAns />} />
                     {/* Puntuacion */}
                     <Route path='/PlaneacionPuntuacion' exact element={<PlaneacionPuntuacion />} />
