@@ -20,6 +20,7 @@ const MaterialAgregar = () => {
     const cedulaUsuario = Cookies.get('userCedula');
     const nombreUsuario = Cookies.get('userNombre');
     const [registrosSolicitudMaterial, setRegistrosSolicitudMaterial] = useState([])
+    const [areaElgida, setAreaElgida] = useState(Cookies.get('solMatArea'));
     const [ciudadesEntradaTexto, setCiudadesEntradaTexto] = useState(Cookies.get('solMatCiudad'));
     const [ciudadesSugerencias, setCiudadesSugerencias] = useState([]);
     const Ciudades = ['Armenia', 'Bogota San Cipriano Corporativo', 'Bogota San Cipriano Red Externa', 'Manizales', 'Pereira Operaciones', 'Pereira Corporativo Red Externa'];
@@ -134,6 +135,11 @@ const MaterialAgregar = () => {
             return;
         }
 
+        if (!areaElgida) {
+            toast.error('Por favor elegir un area', { className: 'toast-error' });
+            return;
+        }
+
         if (!nombreUsuario) {
             toast.error('Por favor agregar la cedula del solicitante', { className: 'toast-error' });
             return;
@@ -156,11 +162,6 @@ const MaterialAgregar = () => {
 
         if (!uuidEntradaTexto) {
             toast.error('Por favor agregar el UUID', { className: 'toast-error' });
-            return;
-        }
-
-        if (!uuidEntradaTexto.includes('-')) {
-            toast.error('El UUID debe contener al menos un guion', { className: 'toast-error' });
             return;
         }
 
@@ -229,8 +230,9 @@ const MaterialAgregar = () => {
         try {
             for (const fila of filasTabla) {
                 const { propiedad, codigoSap, descripcion, unidadMedida, cantidadDisponible, cantidadSolicitada } = fila;
-                
+
                 await axios.post(`${process.env.REACT_APP_API_URL}/solicitudMaterial/cargarDatos`, {
+                    area: areaElgida,
                     fecha: fechaCorregida,
                     cedula: cedulaUsuario,
                     nombre: nombreUsuario,
@@ -254,13 +256,13 @@ const MaterialAgregar = () => {
                     estadoProyecto: "Abierto"
                 });
             }
-            
+
             await axios.post(`${process.env.REACT_APP_API_URL}/solicitudMaterial/cargarKmz`, formDataKmz, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
             });
-            
+
             await axios.post(`${process.env.REACT_APP_API_URL}/solicitudMaterial/cargarDiseno`, formDataDiseño, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
@@ -342,10 +344,10 @@ const MaterialAgregar = () => {
         const uuidRepetidoEnElDia = registrosSolicitudMaterial.some((registro) => {
             const fechaRegistro = new Date(registro.fecha).toISOString().split('T')[0];
             const fechaComparada = new Date(fecha).toISOString().split('T')[0];
-        
+
             return registro.uuid === uuid && fechaRegistro === fechaComparada;
         });
-    
+
         if (uuidRepetidoEnElDia) {
             toast.error(`El UUID "${uuid}" ya fue registrado el dia de hoy.`, { className: 'toast-error' });
             setUuidEntradaTexto('');
@@ -379,6 +381,25 @@ const MaterialAgregar = () => {
                     ) : (
                         <form className='Formulario'>
                             <div className='contenido'>
+                                <div className='Area'>
+                                    <div className='Subtitulo'>
+                                        <i className="fas fa-calendar-alt"></i>
+                                        <h5>Area</h5>
+                                    </div>
+                                    <select
+                                        value={areaElgida}
+                                        onChange={(event) => {
+                                            setAreaElgida(event.target.value);
+                                            Cookies.set('solMatArea', event.target.value, { expires: 7 });
+                                        }}
+                                        className="form-select"
+                                    >
+                                        <option value="">Seleccione una opción</option>
+                                        <option value="Proyectos">Proyectos</option>
+                                        <option value="Reingenieria">Reingenieria</option>
+                                    </select>
+                                </div>
+
                                 <div className='Fecha'>
                                     <div className='Subtitulo'>
                                         <i className="fas fa-calendar-alt"></i>
@@ -466,6 +487,9 @@ const MaterialAgregar = () => {
                                         )}
                                     </label>
                                 </div>
+                            </div>
+
+                            <div className='contenido'>
 
                                 <div className='ArchivoKMZ'>
                                     <div className='Subtitulo'>
@@ -494,9 +518,7 @@ const MaterialAgregar = () => {
                                         )}
                                     </label>
                                 </div>
-                            </div>
 
-                            <div className='contenido'>
                                 <div className='UUID'>
                                     <div className='Subtitulo'>
                                         <i className="fas fa-calendar-alt"></i>
@@ -511,11 +533,7 @@ const MaterialAgregar = () => {
                                             Cookies.set('solMatUUID', event.target.value, { expires: 7 });
                                         }}
                                         onBlur={() => {
-                                            if (!uuidEntradaTexto.includes('-')) {
-                                                toast.info('El UUID debe contener al menos un guion', { className: 'toast-error' });
-                                            } else {
-                                                validarUUIDUnico(uuidEntradaTexto, ciudadElgida);
-                                            }
+                                            validarUUIDUnico(uuidEntradaTexto, ciudadElgida);
                                         }}
                                         disabled={!Boolean(ciudadElgida)}
                                     />
@@ -563,8 +581,6 @@ const MaterialAgregar = () => {
                                         placeholder="Seleccione una fecha"
                                     />
                                 </div>
-
-                                <div className='CuadroAjuste'></div>
 
                                 <div className='CuadroAjuste'></div>
                             </div>
@@ -631,11 +647,11 @@ const MaterialAgregar = () => {
                                                                 accionCambioEntradaTextoTabla(index, 'cantidadSolicitada', '');
 
                                                                 const nuevaUnidadMedida = [...unidadMedida];
-                                                                nuevaUnidadMedida[index] = ""; 
+                                                                nuevaUnidadMedida[index] = "";
                                                                 setUnidadMedida(nuevaUnidadMedida);
 
                                                                 const nuevaCantidadDisponible = [...cantidadDisponible];
-                                                                nuevaCantidadDisponible[index] = ""; 
+                                                                nuevaCantidadDisponible[index] = "";
                                                                 setCantidadDisponible(nuevaCantidadDisponible);
                                                             }
                                                         }}
@@ -669,11 +685,11 @@ const MaterialAgregar = () => {
                                                                 accionCambioEntradaTextoTabla(index, 'cantidadSolicitada', '');
 
                                                                 const nuevaUnidadMedida = [...unidadMedida];
-                                                                nuevaUnidadMedida[index] = ""; 
+                                                                nuevaUnidadMedida[index] = "";
                                                                 setUnidadMedida(nuevaUnidadMedida);
 
                                                                 const nuevaCantidadDisponible = [...cantidadDisponible];
-                                                                nuevaCantidadDisponible[index] = ""; 
+                                                                nuevaCantidadDisponible[index] = "";
                                                                 setCantidadDisponible(nuevaCantidadDisponible);
                                                             }
                                                         }}
@@ -750,11 +766,11 @@ const MaterialAgregar = () => {
                                                                 accionCambioEntradaTextoTabla(index, 'cantidadSolicitada', '');
 
                                                                 const nuevaUnidadMedida = [...unidadMedida];
-                                                                nuevaUnidadMedida[index] = ""; 
+                                                                nuevaUnidadMedida[index] = "";
                                                                 setUnidadMedida(nuevaUnidadMedida);
 
                                                                 const nuevaCantidadDisponible = [...cantidadDisponible];
-                                                                nuevaCantidadDisponible[index] = ""; 
+                                                                nuevaCantidadDisponible[index] = "";
                                                                 setCantidadDisponible(nuevaCantidadDisponible);
                                                             }
                                                         }}

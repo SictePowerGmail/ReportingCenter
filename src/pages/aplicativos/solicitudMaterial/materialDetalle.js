@@ -449,6 +449,7 @@ const MaterialDetalle = ({ isOpen, onClose, onApprove, onDeny, fila, observacion
 
                         <div className='Detalles'>
                             <div className='Columna1'>
+                                <span translate="no"><strong>Area:</strong> {fila[0].area || "Sin informacion"}</span>
                                 <span translate="no"><strong>Fecha Soliciud:</strong> {fila[0].fecha}</span>
                                 <span translate="no"><strong>Cedula:</strong> {fila[0].cedula}</span>
                                 <span translate="no"><strong>Nombre:</strong> {fila[0].nombre}</span>
