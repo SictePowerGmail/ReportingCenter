@@ -743,7 +743,7 @@ const SupervisionFormularioEnelBotiquin = () => {
             return;
         }
 
-        if (['C', 'NC', 'NA'].includes(valor) && nivel2) {
+        if (['C', 'NC', 'NA'].includes(valor) && nivel2 && !nivel3) {
             setFormularioEnelBotiquin(prev => {
                 const actualizado = { ...prev };
                 if (nivel2) { actualizado[nivel1][nivel2] = valor; } else { actualizado[nivel1] = valor; }

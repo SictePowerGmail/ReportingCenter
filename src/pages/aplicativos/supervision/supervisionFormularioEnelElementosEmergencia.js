@@ -685,7 +685,7 @@ const SupervisionFormularioEnelElementosEmergencia = () => {
             return;
         }
 
-        if (['C', 'NC', 'NA'].includes(valor) && nivel2) {
+        if (['C', 'NC', 'NA'].includes(valor) && nivel2 && !nivel3) {
             setFormularioEnelElementosEmergencia(prev => {
                 const actualizado = { ...prev };
                 if (nivel2) { actualizado[nivel1][nivel2] = valor; } else { actualizado[nivel1] = valor; }
