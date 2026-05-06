@@ -866,8 +866,6 @@ const SupervisionFormularioEnelIntegral = () => {
 
     const actualizarCampoEnelInspeccionIntegralHSE = async (campo, valor) => {
         const [nivel1, nivel2, nivel3, nivel4] = campo.split('.');
-        console.log(campo)
-        console.log(valor)
 
         if (Array.isArray(valor) && valor.length === 0) {
             setFormularioEnelInspeccionIntegralHSE((prev) => {
