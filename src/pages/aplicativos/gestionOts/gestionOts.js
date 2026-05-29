@@ -5,6 +5,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 import Cookies from 'js-cookie';
 import CargandoDatos from '../../../components/cargandoDatos/cargandoDatos';
 import Botones from '../../../components/botones/botones';
